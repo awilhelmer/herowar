@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     javaCore,
     javaJdbc,
-    javaEbean
+    javaEbean,
+    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final"
   )
 
   val main = play.Project(appName, appVersion, appDependencies).settings(

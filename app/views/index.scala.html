@@ -1,7 +1,15 @@
 @(message: String)
 
-@main("Welcome to Play 2.1") {
+@main("HeroWar") {
     
-    @play20.welcome(message, style = "Java")
+    <script src='@routes.Assets.at("javascripts/index.js")'></script>
+
+    <form action="@routes.Authenticator.login()" method="POST">
+        <input name="username">
+        <input name="password">
+        <input type="submit">
+    </form>
+
+    @message
     
 }
