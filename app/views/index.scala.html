@@ -4,21 +4,31 @@
     
     <script src='@routes.Assets.at("javascripts/index.js")'></script>
 
-	<h1>HeroWar</h1>
+	<div id="header">
+		<h1>HeroWar</h1>
+	</div>
 	
-	<h2>News</h2>
+	<div id="content">
+		<h2>News</h2>
+		
+		<h2>About HeroWar</h2>
 	
-	<h2>About HeroWar</h2>
-
-	<h2>Account Login</h2>
-    <form action="@routes.Authenticator.login()" method="POST">
-        <p>Username</p>
-        <p><input name="username"></p>
-        <p>Password</p>
-        <p><input name="password"></p>
-        <p><input type="checkbox" name="rememberMe" value="true"> Remember Username</p>
-        <input type="submit">
-    </form>
+		<div id="login">
+			<h2>Account Login</h2>
+		    <form action="@routes.Authenticator.login()" method="POST">
+		        <p>Username</p>
+		        <p><input name="username"></p>
+		        <p>Password</p>
+		        <p><input name="password"></p>
+		        <p><input type="checkbox" name="rememberMe" value="true"> Remember Username</p>
+		        <input type="submit">
+		    </form>
+	    </div>
+    </div>
+    
+    <div id="footer">
+    
+    </div>
 
     @message
     
