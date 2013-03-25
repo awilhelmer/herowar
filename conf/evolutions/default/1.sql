@@ -3,6 +3,11 @@
 
 # --- !Ups
 
+create table map (
+  name                      varchar(255),
+  team_size                 integer)
+;
+
 create table user (
   username                  varchar(255),
   password                  varchar(255))
@@ -14,6 +19,8 @@ create table user (
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
+
+drop table if exists map;
 
 drop table if exists user;
 
