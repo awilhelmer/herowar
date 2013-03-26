@@ -1,0 +1,2 @@
+play ~run
+pause
