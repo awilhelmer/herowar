@@ -32,7 +32,7 @@ trait CustomAssetsCompiler {
 		naming: (String, Boolean) => String,
 		compile: (File, Seq[String]) => (String, Option[String], Seq[File]),
 		optionsSettings: sbt.SettingKey[Seq[String]]
-		) =     
+		) = {
 		(state, sourceDirectory in Compile, resourceManaged in Compile, cacheDirectory, optionsSettings, filesSetting, classDirectory in Compile) map { 
 		(state, src, resources, cache, options, files, classDirectory) =>                                                                                                                                                                 
 	
@@ -95,6 +95,7 @@ trait CustomAssetsCompiler {
 	      	}
 	
 		}: sbt.Project.Initialize[sbt.Task[Seq[java.io.File]]]	
+	}
 
 	def CustomCoffeescriptCompiler() = {
 		AdvancedAssetsCompiler("coffeescript", "javascripts", 1, (_ ** "*.coffee"), coffeescriptEntryPoints,
