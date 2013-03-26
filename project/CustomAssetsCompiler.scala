@@ -16,8 +16,10 @@ trait CustomAssetsCompiler {
 	val concatFolders = SettingKey[Seq[File]]("concat-folders")
 	val concatTask = TaskKey[sbt.inc.Analysis]("concat")
 	val concatSettings = concatTask := {
-		println("Concat Task runs now !!!!")
-		//(concatFolders map { f => f -> println(f.getName()) })
+		(concatFolders) map { (folders) =>
+			println("Concat Task runs now !!!!")
+			folders.foreach(f => println(f.getName()))
+		}
 		sbt.inc.Analysis.Empty
 	}
 
@@ -29,8 +31,10 @@ trait CustomAssetsCompiler {
 		filesSetting: sbt.SettingKey[PathFinder],
 		naming: (String, Boolean) => String,
 		compile: (File, Seq[String]) => (String, Option[String], Seq[File]),
-		optionsSettings: sbt.SettingKey[Seq[String]]) =     
-		(state, sourceDirectory in Compile, resourceManaged in Compile, cacheDirectory, optionsSettings, filesSetting, classDirectory in Compile) map { (state, src, resources, cache, options, files, classDirectory) =>                                                                                                                                                                 
+		optionsSettings: sbt.SettingKey[Seq[String]]
+		) =     
+		(state, sourceDirectory in Compile, resourceManaged in Compile, cacheDirectory, optionsSettings, filesSetting, classDirectory in Compile) map { 
+		(state, src, resources, cache, options, files, classDirectory) =>                                                                                                                                                                 
 	
 			state.log.info("AssetsCompiler: " + name)
 		
@@ -58,6 +62,9 @@ trait CustomAssetsCompiler {
 	          					val parentPath = sourcePath.substring(0, sourcePath.lastIndexOf('\\'))
 	          					state.log.info("Concat this folder: " + parentPath)
 	          					concatFolders += new File(parentPath)
+	          					(concatFolders) map { (folders) =>
+									
+								}
 	          				}
 //	          				state.log.info(relativePath + " - found level: " + foundLevel)
 	          			}
