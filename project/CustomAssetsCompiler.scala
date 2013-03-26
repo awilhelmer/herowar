@@ -16,8 +16,8 @@ trait CustomAssetsCompiler {
 	val concatFolders = SettingKey[Seq[File]]("concat-folders")
 	val concatTask = TaskKey[sbt.inc.Analysis]("concat")
 	val concatSettings = concatTask := {
-		(concatFolders) map { (folders) =>
-			println("Concat Task runs now !!!!")
+		(state, concatFolders) map { (state, folders) =>
+			state.log.info("Concat Task runs now !!!!")
 			folders.foreach(f => println(f.getName()))
 		}
 		sbt.inc.Analysis.Empty
