@@ -65,7 +65,7 @@ trait JavascriptTransformer extends FileUtils {
 
     // Write content to file system
     writeCombinedFiles(distPath, content)
-    
+
     if (loader == "" || loaderMin == "") throw new Exception("Couldn't find loader in root javascript folder!")
     Seq.empty[File]
   }
