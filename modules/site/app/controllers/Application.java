@@ -5,6 +5,11 @@ import play.mvc.Result;
 
 import views.html.index;
 
+/**
+ * The Application controller handles request for "/" pattern.
+ * 
+ * @author Sebastian Sachtleben
+ */
 public class Application extends Controller {
 
   public static Result index() {

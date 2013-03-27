@@ -4,4 +4,10 @@
 
 GET     /                           controllers.Application.index()
 POST    /login                      controllers.Authenticator.login()
+GET		/signup						controllers.Signup.index()
+POST	/signup						controllers.Signup.send()
+
+->		/api						api.Routes
+
+# Map static resources from the /public folder
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

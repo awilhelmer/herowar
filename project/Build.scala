@@ -9,8 +9,12 @@ import play.Project._
  */
 object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer {
 
+  ////////// VARIABLES //////////
+
   val appName = "herowar"
   val appVersion = "1.0-SNAPSHOT"
+
+  ////////// DEPENDENCIES //////////
 
   val appDependencies = Seq(
     // Add your project dependencies here,
@@ -19,21 +23,23 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     javaEbean,
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final")
 
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-    //coffeescriptOptions := Seq("bare"),
+  ////////// PROJECTS //////////
 
-    //coffeescriptEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.coffee"),
-    //coffeescriptSettings := Seq.empty[String],
+  val common = play.Project(appName + "-common", appVersion, appDependencies, path = file("modules/common"))
 
+  val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site")).settings(
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
-
-    // Override resource generators and add custom compiler
-    //resourceGenerators in Compile <<= LessCompiler(Seq(_)),
-    //resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
     resourceGenerators in Compile <+= CustomHandlebarsCompiler,
-
     // This will take the current sequence of resources and apply the transformResources method
-    resources in Compile ~= transformResources)
+    resources in Compile ~= transformResources).dependsOn(common)
+
+  val main = play.Project(appName, appVersion, appDependencies).settings( //coffeescriptOptions := Seq("bare"),
+  //coffeescriptEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.coffee"),
+  //coffeescriptSettings := Seq.empty[String],
+  // Override resource generators and add custom compiler
+  //resourceGenerators in Compile <<= LessCompiler(Seq(_)),
+  //resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
+  ).dependsOn(common).dependsOn(common, site).aggregate(common, site)
 
 }

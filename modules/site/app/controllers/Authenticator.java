@@ -1,10 +1,15 @@
 package controllers;
 
-import models.User;
+import models.common.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+/**
+ * The Authenticator controller handles request for "/login" pattern.
+ * 
+ * @author Sebastian Sachtleben
+ */
 public class Authenticator extends Controller {
 
   public static Result login() {
