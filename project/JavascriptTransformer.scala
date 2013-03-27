@@ -52,7 +52,7 @@ trait JavascriptTransformer extends FileUtils {
           if (content contains jsType) {
             // Check if inner map contains key e.g. game or page
             if (content(jsType) contains key) {
-              (content(jsType) get key) ++ fileToString(f, "UTF-8")
+              content(jsType)(key) += fileToString(f, "UTF-8")
             } else {
               content(jsType) = content(jsType) + (key -> fileToString(f, "utf-8"))
             }
