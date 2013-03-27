@@ -15,7 +15,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler {
     	"org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final"
   	)
 
-  	val main = play.Project(appName, appVersion, appDependencies).settings(
+  	val main = play.Project(appName, appVersion, appDependencies).settings(  		
   		coffeescriptEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.coffee"),
       	coffeescriptSettings := Seq.empty[String],
       	
@@ -27,6 +27,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler {
       	resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
       	resourceGenerators in Compile <+= CustomHandlebarsCompiler,
       	
+      	// Start custom concat task after resources task
       	concatFolders := Seq.empty[File],
  		concat <<= concatTask,
     	resources in Compile <<= (resources in Compile).dependsOn(concat)

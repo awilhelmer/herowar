@@ -1,5 +1,4 @@
-package sbt
-
+import sbt._
 import Keys._
 import PlayKeys._
 import PlayExceptions._
@@ -15,8 +14,10 @@ trait CustomAssetsCompiler {
 	
 	val concatFolders = SettingKey[Seq[File]]("concat-folders")
 	val concat = TaskKey[Seq[File]]("concat")
-	val concatTask = (state, concatFolders) map { (state, folders) =>
+	val concatTask = (state, concatFolders, classDirectory in Compile) map { (state, folders, classDirectory) =>
 		state.log.info("Concat Task runs now !!!!")
+		val concatDir = classDirectory.getAbsolutePath + "\\public"
+		state.log.info(concatDir)
 		folders.map(f => println(f.getName()))
 		Seq.empty[File]
 	}
@@ -60,9 +61,6 @@ trait CustomAssetsCompiler {
 	          					val parentPath = sourcePath.substring(0, sourcePath.lastIndexOf('\\'))
 	          					state.log.info("Concat this folder: " + parentPath)
 	          					concatFolders += new File(parentPath)
-	          					(concatFolders) map { (folders) =>
-									
-								}
 	          				}
 //	          				state.log.info(relativePath + " - found level: " + foundLevel)
 	          			}
