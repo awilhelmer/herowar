@@ -4,4 +4,8 @@
 
 GET     /                           controllers.Application.index()
 POST    /login                      controllers.Authenticator.login()
+
+->     /api	                        api.Routes
+
+# Map static resources from the /public folder
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
