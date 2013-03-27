@@ -27,8 +27,9 @@ object ApplicationBuild extends Build with CustomAssetsCompiler {
       	resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
       	resourceGenerators in Compile <+= CustomHandlebarsCompiler,
       	
-      	concatSettings,
-      	compile in Compile <<= (concatTask).dependsOn(compile in Compile)
+      	concatFolders := Seq.empty[File],
+ 		concat <<= concatTask,
+    	resources in Compile <<= (resources in Compile).dependsOn(concat)
   	)
 
 }

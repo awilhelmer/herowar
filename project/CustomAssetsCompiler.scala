@@ -14,13 +14,11 @@ trait CustomAssetsCompiler {
 	val handlebarsEntryPoints = SettingKey[PathFinder]("handlebars-entry-points")
 	
 	val concatFolders = SettingKey[Seq[File]]("concat-folders")
-	val concatTask = TaskKey[sbt.inc.Analysis]("concat")
-	val concatSettings = concatTask := {
-		(state, concatFolders) map { (state, folders) =>
-			state.log.info("Concat Task runs now !!!!")
-			folders.foreach(f => println(f.getName()))
-		}
-		sbt.inc.Analysis.Empty
+	val concat = TaskKey[Seq[File]]("concat")
+	val concatTask = (state, concatFolders) map { (state, folders) =>
+		state.log.info("Concat Task runs now !!!!")
+		folders.map(f => println(f.getName()))
+		Seq.empty[File]
 	}
 
 	def AdvancedAssetsCompiler(
