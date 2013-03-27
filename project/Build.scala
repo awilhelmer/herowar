@@ -27,10 +27,15 @@ object ApplicationBuild extends Build with CustomAssetsCompiler {
       	resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
       	resourceGenerators in Compile <+= CustomHandlebarsCompiler,
       	
+      	// This will take the current sequence of resources and
+		// apply the transformResources method to them
+		// This is the only sbt-specific part.
+      	resources in Compile ~= transformResources
+      	
       	// Start custom concat task after resources task
-      	concatFolders := Seq.empty[File],
- 		concat <<= concatTask,
-    	resources in Compile <<= (resources in Compile).dependsOn(concat)
+      	//concatFolders := Seq.empty[File],
+ 		//concat <<= concatTask,
+    	//resources in Compile <<= (resources in Compile).dependsOn(concat)
   	)
 
 }

@@ -21,6 +21,23 @@ trait CustomAssetsCompiler {
 		folders.map(f => println(f.getName()))
 		Seq.empty[File]
 	}
+	
+	// This takes the raw resources, which are the .css files and
+	//  the .js files from coffeescript and handlebars.  It separates
+	//  the .js files from the .css files and transforms just the .js files.
+	def transformResources(original: Seq[File]): Seq[File] = {
+	   val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
+	   nonJs ++ transformJs(js)
+	}
+	
+	// This takes the list of all .js files.  It should transform them into
+	//  new files, such as by concatenating them and writing them to new files.
+	//  The list of new files should be returned.
+	def transformJs(jsFiles: Seq[File]): Seq[File] = {
+		println("transformJs")
+		jsFiles.map(f => println(f.getAbsolutePath()))
+		Seq.empty[File]
+	}
 
 	def AdvancedAssetsCompiler(
 		name: String,
