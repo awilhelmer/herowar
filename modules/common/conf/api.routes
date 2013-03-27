@@ -4,3 +4,4 @@
 
 GET     /user/all                   controllers.common.UserController.list()
 GET     /user/:id                   controllers.common.UserController.show(id: Long)
+POST	/user						controllers.common.UserController.add()

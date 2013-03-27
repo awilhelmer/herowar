@@ -1,0 +1,31 @@
+@main("HeroWar") {
+    
+    <script src='@routes.Assets.at("javascripts/index.js")'></script>
+
+	<div id="container">
+		<div id="header">
+			<h1>HeroWar</h1>
+		</div>
+		
+		<div id="content" class="clearfix">
+			<div id="main">
+				<fieldset id="login">
+					<h2>Signup</h2>
+					<hr />
+				    <form action="@routes.Signup.send()" method="POST">
+				        <p>Username</p>
+				        <p><input name="username"></p>
+				        <p>Password</p>
+				        <p><input name="password"></p>
+				        <input type="submit">
+				    </form>
+			    </fieldset>
+			</div>
+	    </div>
+	    
+	    <div id="footer">
+	    
+	    </div>
+    </div>
+    
+}

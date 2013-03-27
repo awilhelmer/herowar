@@ -9,9 +9,13 @@ create table map (
 ;
 
 create table user (
+  id                        bigint not null,
   username                  varchar(255),
-  password                  varchar(255))
+  password                  varchar(255),
+  constraint pk_user primary key (id))
 ;
+
+create sequence user_seq;
 
 
 
@@ -25,4 +29,6 @@ drop table if exists map;
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists user_seq;
 

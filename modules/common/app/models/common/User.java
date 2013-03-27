@@ -1,6 +1,7 @@
 package models.common;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import play.db.ebean.Model;
 
@@ -8,7 +9,9 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 public class User extends Model {
 
-    public String username;
-    public String password;
+  @Id
+  public Long id;
+  public String username;
+  public String password;
 
 }
