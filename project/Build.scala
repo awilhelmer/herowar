@@ -10,38 +10,42 @@ import play.Project._
 object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer {
 
   ////////// VARIABLES //////////
-  
+
   val appName = "herowar"
   val appVersion = "0.1-SNAPSHOT"
-    
+
   val handlebarsJS = "handlebars-1.0.0-rc3.js"
   val buildMode = "dev" //TODO read from build.properties...
+
   ////////// DEPENDENCIES //////////
 
-  val appDependencies = Seq(
-    // Add your project dependencies here,
-    javaCore,
-    javaJdbc,
-    javaEbean,
-    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final")
+  val appSettings = Seq[Setting[_]](
+    resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns))
 
-  ////////// PROJECTS //////////
-
-  val common = play.Project(appName + "-common", appVersion, appDependencies, path = file("modules/common"))
-
-  val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site")).settings(
+  val resourceSettings = Seq[Setting[_]](
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
-    resources in Compile ~= transformResources).dependsOn(common)
+    resources in Compile ~= transformResources)
 
-  val main = play.Project(appName, appVersion, appDependencies).settings( //coffeescriptOptions := Seq("bare"),
-  //coffeescriptEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.coffee"),
-  //coffeescriptSettings := Seq.empty[String],
-  // Override resource generators and add custom compiler
-  //resourceGenerators in Compile <<= LessCompiler(Seq(_)),
-  //resourceGenerators in Compile <+= CustomCoffeescriptCompiler,
-  ).dependsOn(common).dependsOn(common, site).aggregate(common, site)
+  ////////// DEPENDENCIES //////////
 
-  
+  val appDependencies = Seq(
+    javaCore,
+    javaJdbc,
+    javaEbean,
+    "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
+    "com.feth" %% "play-authenticate" % "0.2.5-SNAPSHOT")
+
+  val commonDependencies = Seq(
+    "org.apache.commons" % "commons-lang3" % "3.1")
+
+  ////////// PROJECTS //////////
+
+  val common = play.Project(appName + "-common", appVersion, appDependencies ++ commonDependencies, path = file("modules/common"), settings = Defaults.defaultSettings ++ appSettings)
+  val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
+  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common).dependsOn(common, site).aggregate(common, site)
 }
