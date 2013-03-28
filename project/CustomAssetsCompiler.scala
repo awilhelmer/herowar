@@ -85,22 +85,26 @@ trait CustomAssetsCompiler {
     }
   }
 
-  def CustomCoffeescriptCompiler() = {
-    AdvancedAssetsCompiler("coffeescript", "javascripts", 1, (_ ** "*.coffee"), coffeescriptEntryPoints,
-      { (name, min) => name.replace(".coffee", if (min) ".min.js" else ".js") },
-      { (coffeeFile, options) =>
-        import scala.util.control.Exception._
-        val jsSource = play.core.coffeescript.CoffeescriptCompiler.compile(coffeeFile, options)
-        val minified = catching(classOf[CompilationException]).opt(play.core.jscompile.JavascriptCompiler.minify(jsSource, Some(coffeeFile.getName())))
-        (jsSource, minified, Seq(coffeeFile))
-      }, coffeescriptSettings)
-  }
+  /**
+   * def CustomCoffeescriptCompiler() = {
+   * AdvancedAssetsCompiler("coffeescript", "javascripts", 1, (_ ** "*.coffee"), coffeescriptEntryPoints,
+   * { (name, min) => name.replace(".coffee", if (min) ".min.js" else ".js") },
+   * { (coffeeFile, options) =>
+   * import scala.util.control.Exception._
+   * val jsSource = play.core.coffeescript.CoffeescriptCompiler.compile(coffeeFile, options)
+   * val minified = catching(classOf[CompilationException]).opt(play.core.jscompile.JavascriptCompiler.minify(jsSource, Some(coffeeFile.getName())))
+   * (jsSource, minified, Seq(coffeeFile))
+   * }, coffeescriptSettings)
+   * }
+   */
 
-  def CustomHandlebarsCompiler() = {
+  def HandlebarsCompiler(handlebars: String) = {
+    val compiler = new HandlebarsCompiler(handlebars);
     AdvancedAssetsCompiler("handlebars", "templates", 0, (_ ** "*.tmpl"), handlebarsEntryPoints,
-      { (name, min) => "javascripts/" + name + ".pre" + (if (min) ".min.js" else ".js") },
+      { (name, min) => "javascripts/" + name + (if (min) ".min.js" else ".js") },
       { (file, options) =>
-        //println(file)
+        println(file)
+        // val (jsSource, dependencies) = compiler.compileDir(file, options)
         val dependencies = Seq.newBuilder[File]
         ("Test", None, dependencies.result)
       }, handlebarsSettings)

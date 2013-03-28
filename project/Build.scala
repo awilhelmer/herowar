@@ -13,6 +13,8 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   val appName = "herowar"
   val appVersion = "1.0-SNAPSHOT"
+    
+  val handlebarsJS = "handlebars-1.0.0-rc3.js"
 
   ////////// DEPENDENCIES //////////
 
@@ -30,7 +32,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site")).settings(
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
-    resourceGenerators in Compile <+= CustomHandlebarsCompiler,
+    resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
     // This will take the current sequence of resources and apply the transformResources method
     resources in Compile ~= transformResources).dependsOn(common)
 
