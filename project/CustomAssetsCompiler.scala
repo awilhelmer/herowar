@@ -11,8 +11,6 @@ import play.api.PlayException
  */
 trait CustomAssetsCompiler {
 
-  val coffeescriptSettings = SettingKey[Seq[String]]("coffeescript-settings")
-  val coffeescriptEntryPoints = SettingKey[PathFinder]("coffeescript-entry-points")
   val handlebarsSettings = SettingKey[Seq[String]]("handlebars-settings")
   val handlebarsEntryPoints = SettingKey[PathFinder]("handlebars-entry-points")
 
@@ -85,27 +83,12 @@ trait CustomAssetsCompiler {
     }
   }
 
-  /**
-   * def CustomCoffeescriptCompiler() = {
-   * AdvancedAssetsCompiler("coffeescript", "javascripts", 1, (_ ** "*.coffee"), coffeescriptEntryPoints,
-   * { (name, min) => name.replace(".coffee", if (min) ".min.js" else ".js") },
-   * { (coffeeFile, options) =>
-   * import scala.util.control.Exception._
-   * val jsSource = play.core.coffeescript.CoffeescriptCompiler.compile(coffeeFile, options)
-   * val minified = catching(classOf[CompilationException]).opt(play.core.jscompile.JavascriptCompiler.minify(jsSource, Some(coffeeFile.getName())))
-   * (jsSource, minified, Seq(coffeeFile))
-   * }, coffeescriptSettings)
-   * }
-   */
-
   def HandlebarsCompiler(handlebars: String) = {
     val compiler = new HandlebarsCompiler(handlebars);
-    AdvancedAssetsCompiler("handlebars", "templates", 0, (_ ** "*.tmpl"), handlebarsEntryPoints,
+    AdvancedAssetsCompiler("handlebars", "templates", 1, (_ ** "*.tmpl"), handlebarsEntryPoints,
       { (name, min) => "javascripts/" + name + (if (min) ".min.js" else ".js") },
       { (file, options) =>
-        println(file)
          val (jsSource, dependencies) = compiler.compileDir(file, options)
-        //val dependencies = Seq.newBuilder[File]
         (jsSource, None, dependencies)
       }, handlebarsSettings)
   }

@@ -33,7 +33,6 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
-    // This will take the current sequence of resources and apply the transformResources method
     resources in Compile ~= transformResources).dependsOn(common)
 
   val main = play.Project(appName, appVersion, appDependencies).settings( //coffeescriptOptions := Seq("bare"),
