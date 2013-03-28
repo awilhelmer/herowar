@@ -55,7 +55,7 @@ trait JavascriptTransformer extends FileUtils {
           // Check if inner map contains key e.g. game or page
           val fileContent = fileToString(f, "UTF-8")
           for (mode <- buildModes) {
-            content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + fileContent)
+            content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + "\n" + fileContent)
           }
         }
       }
@@ -74,12 +74,10 @@ trait JavascriptTransformer extends FileUtils {
   def writeCombinedFiles(path: String, content: Map[(String, String, String), String]) = {
     for ((tuple, entries) <- content) {
       if (tuple._3 == "prod") {
-        println("Output type: " + tuple._1)
         val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
         println("Write file:" + fileName)
         writeFile(new File(fileName), content(tuple), "UTF-8")
       }
     }
-
   }
 }
