@@ -11,17 +11,17 @@ import collection.mutable.Map
 trait JavascriptTransformer extends FileUtils {
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
-  def transformResources(classFolder: Seq[sbt.File],original: Seq[File]): Seq[File] = {
+  def transformResources(classDirectory: java.io.File, original: Seq[java.io.File]): Seq[java.io.File] = {
     val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
-    nonJs ++ transformJs(classFolder,js)
+    nonJs ++ transformJs(classDirectory, js)
   }
 
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
-  def transformJs(classFolder:  Seq[sbt.File], jsFiles: Seq[File]): Seq[File] = {
-   
-    println(classFolder);
-    
+  def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File]): Seq[java.io.File] = {
+
+    println(classDirectory);
+
     var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 

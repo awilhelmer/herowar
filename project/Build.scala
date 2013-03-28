@@ -30,7 +30,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
     //resources in Compile ~= )
-      resources in Compile <<= (classDirectory in Compile, resources in Compile)(transformResources)
+      resources in Compile ~= (classDirectory in Compile, resources in Compile) { (classDirectory, resources) => transformResources(classDirectory, resources) }
     )
   ////////// DEPENDENCIES //////////
 
