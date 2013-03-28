@@ -1,4 +1,26 @@
-This is your new Play 2.1 application
-=====================================
+HeroWar Webapplication 0.1-Alpha - Framework/Engine
+==========================================================
 
-This file will be packaged with your application, when using `play dist`.
+TODOS:
+
+Section: building and transforming resources
+1. Configuration SBT for dev/prod build mode - on prod only .min.js resources (JavascriptTranformator)
+2. Generate serial ID's for js-resource names, persisting key and id for mapping in client in textfile (JavascriptTranformator)
+
+
+
+Section: page/pagedesign
+
+
+
+Section: Three.js webgl-client engine
+
+
+
+Section: Network (websocket)
+
+
+
+Section: Server game engine
+
+
