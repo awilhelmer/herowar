@@ -9,18 +9,19 @@ import collection.mutable.Map
  * @author Sebastian Sachtleben
  */
 trait JavascriptTransformer extends FileUtils {
-  val buildModes = List("dev", "prod")
-
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
-  def transformResources(original: Seq[File]): Seq[File] = {
+  def transformResources(classFolder: Seq[sbt.File],original: Seq[File]): Seq[File] = {
     val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
-    nonJs ++ transformJs(js)
+    nonJs ++ transformJs(classFolder,js)
   }
 
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
-  def transformJs(jsFiles: Seq[File]): Seq[File] = {
+  def transformJs(classFolder:  Seq[sbt.File], jsFiles: Seq[File]): Seq[File] = {
+   
+    println(classFolder);
+    
     var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
@@ -58,18 +59,14 @@ trait JavascriptTransformer extends FileUtils {
 
           val mappedContent = mapContent(functionName, fileContent);
           if (isModeFile(functionName)) {
-            for (mode <- buildModes) {
-              if (ApplicationBuild.buildMode == mode)
-                content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + mappedContent + "\n")
-            }
+            content.put(((jsType, key, ApplicationBuild.buildMode)), content.get((jsType, key, ApplicationBuild.buildMode)).getOrElse("") + mappedContent + "\n")
           }
-
         }
       }
     })
     if (loader == "") throw new Exception("Couldn't find loader in root javascript folder!")
     // Write content to file system
-    writeCombinedFiles(distPath, content,loader)
+    writeCombinedFiles(distPath, content, loader)
 
     Seq.empty[File]
   }
@@ -77,18 +74,17 @@ trait JavascriptTransformer extends FileUtils {
   /**
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
-  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String ) = {
+  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String) = {
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
       println("Write file: " + fileName)
       var fileContent = ""
-      if (fileName.indexOf("scripts_page.js") > -1) {
+      if (fileName.indexOf("scripts_") > -1) {
         fileContent = loader;
       }
       fileContent += content(tuple);
-      
-      
-      writeFile(new File(fileName),fileContent, "UTF-8")
+
+      writeFile(new File(fileName), fileContent, "UTF-8")
     }
   }
 
@@ -103,12 +99,12 @@ trait JavascriptTransformer extends FileUtils {
     "define('" + module + "', function() {" + replacedValue + "});"
 
   }
-  
-  def isModeFile(name: String):Boolean = {
+
+  def isModeFile(name: String): Boolean = {
     var result = false;
-     if (((ApplicationBuild.buildMode == "dev") && (name.indexOf(".min") == -1)) 
-              || ((ApplicationBuild.buildMode == "prod") && (name.indexOf(".min") > -1))) 
-       result = true;
+    if (((ApplicationBuild.buildMode == "dev") && (name.indexOf(".min") == -1))
+      || ((ApplicationBuild.buildMode == "prod") && (name.indexOf(".min") > -1)))
+      result = true;
     result;
   }
 }
