@@ -97,14 +97,10 @@ class HandlebarsCompiler(handlebars: String) {
   }
 
   def compileDir(file: File, options: Seq[String]): (String, Seq[File]) = {
-    val dependencies = Seq.newBuilder[File]
-    val jsSource = compile(file, options)
-    (jsSource, dependencies.result)
-  }
-
-  private def compile(source: File, options: Seq[String]): String = {
     try {
-      compiler(source)
+      val dependencies = Seq.newBuilder[File]
+      val jsSource = compiler(file)
+      (jsSource, dependencies.result)
     } catch {
       case e: Exception => 
         println("exception caught: " + e)

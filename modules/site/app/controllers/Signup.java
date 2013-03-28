@@ -1,11 +1,9 @@
 package controllers;
 
-import static play.libs.Json.toJson;
 import models.common.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-
 import views.html.signup;
 
 /**
