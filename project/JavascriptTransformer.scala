@@ -21,7 +21,7 @@ trait JavascriptTransformer extends FileUtils {
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
   def transformJs(jsFiles: Seq[File]): Seq[File] = {
-    var (loader, loaderMin, distPath, cutPath, content) = ("", "", "", "javascripts\\", Map[(String, String, String), String]())
+    var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
     jsFiles.map(f => {
@@ -38,12 +38,12 @@ trait JavascriptTransformer extends FileUtils {
       // Match relative path and save content
       relativePath match {
 
-        // Special case for loader.js file, save content to loader variable
-        case "loader.js" => loader = fileContent
-
-        // Special case for loader.min.js file, save content to loaderMin variable
-        case "loader.min.js" => loaderMin = fileContent
-
+        // Special case for loader.js file, save content to loaderMin variable
+        case "loader.js" | "loader.min.js" => {
+          if (isModeFile(relativePath)) {
+            loader = fileContent;
+          }
+        }
         // Parse every file to content map
         case _ => {
           val (isTemplate, isLib, isScript, key) = (
@@ -57,8 +57,7 @@ trait JavascriptTransformer extends FileUtils {
           // Check if inner map contains key e.g. game or page
 
           val mappedContent = mapContent(functionName, fileContent);
-          if (((ApplicationBuild.buildMode == "dev") && (functionName.indexOf(".min") == -1)) 
-              || ((ApplicationBuild.buildMode == "prod") && (functionName.indexOf(".min") > -1))) {
+          if (isModeFile(functionName)) {
             for (mode <- buildModes) {
               if (ApplicationBuild.buildMode == mode)
                 content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + mappedContent + "\n")
@@ -68,22 +67,28 @@ trait JavascriptTransformer extends FileUtils {
         }
       }
     })
-
+    if (loader == "") throw new Exception("Couldn't find loader in root javascript folder!")
     // Write content to file system
-    writeCombinedFiles(distPath, content)
+    writeCombinedFiles(distPath, content,loader)
 
-    if (loader == "" || loaderMin == "") throw new Exception("Couldn't find loader in root javascript folder!")
     Seq.empty[File]
   }
 
   /**
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
-  def writeCombinedFiles(path: String, content: Map[(String, String, String), String]) = {
+  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String ) = {
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
       println("Write file: " + fileName)
-      writeFile(new File(fileName), content(tuple), "UTF-8")
+      var fileContent = ""
+      if (fileName.indexOf("scripts_page.js") > -1) {
+        fileContent = loader;
+      }
+      fileContent += content(tuple);
+      
+      
+      writeFile(new File(fileName),fileContent, "UTF-8")
     }
   }
 
@@ -97,5 +102,13 @@ trait JavascriptTransformer extends FileUtils {
       replacedValue = content;
     "define('" + module + "', function() {" + replacedValue + "});"
 
+  }
+  
+  def isModeFile(name: String):Boolean = {
+    var result = false;
+     if (((ApplicationBuild.buildMode == "dev") && (name.indexOf(".min") == -1)) 
+              || ((ApplicationBuild.buildMode == "prod") && (name.indexOf(".min") > -1))) 
+       result = true;
+    result;
   }
 }
