@@ -9,6 +9,7 @@ import collection.mutable.Map
  * @author Sebastian Sachtleben
  */
 trait JavascriptTransformer extends FileUtils {
+  val buildModes = List("dev", "prod")
 
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
@@ -21,7 +22,9 @@ trait JavascriptTransformer extends FileUtils {
   // them to new files. The list of new files should be returned.
   def transformJs(jsFiles: Seq[File]): Seq[File] = {
     println("transformJs")
-    var (loader, loaderMin, distPath, cutPath, content) = ("", "", "", "javascripts\\", Map[String, Map[String, String]]())
+    var (loader, loaderMin, distPath, cutPath, content) = ("", "", "", "javascripts\\", Map[String, Map[String, Map[String, String]]]())
+    //content Map Keyorder: JS-Type, part of application, buildMode  
+
     jsFiles.map(f => {
       val relativePath = f.getAbsolutePath().substring(f.getAbsolutePath().indexOf(cutPath) + cutPath.length)
 
@@ -49,15 +52,19 @@ trait JavascriptTransformer extends FileUtils {
             relativePath.substring(0, relativePath.indexOf('\\')))
           val jsType = if (isTemplate) "templates" else if (isLib) "vendors" else if (isScript) "scripts" else "unknowned"
           // Check if map contains js type e.g. templates, vendors or scripts
-          if (content contains jsType) {
-            // Check if inner map contains key e.g. game or page
-            if (content(jsType) contains key) {
-              content(jsType)(key) += fileToString(f, "UTF-8")
-            } else {
-              content(jsType) = content(jsType) + (key -> fileToString(f, "utf-8"))
-            }
-          } else {
-            content = content + (jsType -> Map[String, String]())
+          // Check if inner map contains key e.g. game or page
+          val fileContent = fileToString(f, "UTF-8");
+          if (!(content contains jsType))
+            content += (jsType -> Map.empty)
+          if (!(content(jsType) contains key))
+            content(jsType) += (key -> Map.empty)
+            
+          for (mode <- buildModes) {
+            println("Concat content key " + key + " to BuildMode " + mode)
+            if (!(content(jsType)(key) contains mode))
+              content(jsType)(key) += (mode -> "")
+            content(jsType)(key)(mode) += fileContent
+
           }
         }
       }
@@ -73,15 +80,16 @@ trait JavascriptTransformer extends FileUtils {
   /**
    * Write combined files to output generated from Map[String, Map[String, String]].
    */
-  def writeCombinedFiles(path: String, content: Map[String, Map[String, String]]) = {
+  def writeCombinedFiles(path: String, content: Map[String, Map[String, Map[String, String]]]) = {
     for ((jsType, entries) <- content) {
       println("Output type: " + jsType)
-      for ((key, fileContent) <- entries) {
+
+      for ((key, buildMap) <- entries) {
         val fileName = path + jsType + "_" + key + ".js"
         println("Write file:" + fileName)
-        writeFile(new File(fileName), fileContent, "UTF-8")
+        //TODO getting buildMode
+        writeFile(new File(fileName), buildMap("prod"), "UTF-8")
       }
     }
   }
-
 }
