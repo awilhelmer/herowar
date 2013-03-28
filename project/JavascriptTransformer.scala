@@ -21,7 +21,6 @@ trait JavascriptTransformer extends FileUtils {
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
   def transformJs(jsFiles: Seq[File]): Seq[File] = {
-    println("transformJs")
     var (loader, loaderMin, distPath, cutPath, content) = ("", "", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
@@ -53,15 +52,19 @@ trait JavascriptTransformer extends FileUtils {
             relativePath.indexOf("templates") != 0 && relativePath.indexOf("libs") != 0,
             relativePath.substring(0, relativePath.indexOf('\\')))
           val jsType = if (isTemplate) "templates" else if (isLib) "vendors" else if (isScript) "scripts" else "unknowned"
-          val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."));
+          val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."))
           // Check if map contains js type e.g. templates, vendors or scripts
           // Check if inner map contains key e.g. game or page
 
-          //TODO Filecontent as starting functions - replacing
           val mappedContent = mapContent(functionName, fileContent);
-          for (mode <- buildModes) {
-            content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + mappedContent + "\n")
+          if (((ApplicationBuild.buildMode == "dev") && (functionName.indexOf(".min") == -1)) 
+              || ((ApplicationBuild.buildMode == "prod") && (functionName.indexOf(".min") > -1))) {
+            for (mode <- buildModes) {
+              if (ApplicationBuild.buildMode == mode)
+                content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + mappedContent + "\n")
+            }
           }
+
         }
       }
     })
@@ -78,12 +81,9 @@ trait JavascriptTransformer extends FileUtils {
    */
   def writeCombinedFiles(path: String, content: Map[(String, String, String), String]) = {
     for ((tuple, entries) <- content) {
-      //TODO handle prod and dev
-      if (tuple._3 == "prod") {
-        val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
-        println("Write file: " + fileName)
-        writeFile(new File(fileName), content(tuple), "UTF-8")
-      }
+      val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
+      println("Write file: " + fileName)
+      writeFile(new File(fileName), content(tuple), "UTF-8")
     }
   }
 
