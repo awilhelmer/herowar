@@ -96,5 +96,6 @@ trait JavascriptTransformer extends FileUtils {
     if (replacedValue == "")
       replacedValue = content;
     "define('" + module + "', function() {" + replacedValue + "});"
+
   }
 }
