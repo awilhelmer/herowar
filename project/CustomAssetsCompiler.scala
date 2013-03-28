@@ -104,9 +104,9 @@ trait CustomAssetsCompiler {
       { (name, min) => "javascripts/" + name + (if (min) ".min.js" else ".js") },
       { (file, options) =>
         println(file)
-        // val (jsSource, dependencies) = compiler.compileDir(file, options)
-        val dependencies = Seq.newBuilder[File]
-        ("Test", None, dependencies.result)
+         val (jsSource, dependencies) = compiler.compileDir(file, options)
+        //val dependencies = Seq.newBuilder[File]
+        (jsSource, None, dependencies)
       }, handlebarsSettings)
   }
 

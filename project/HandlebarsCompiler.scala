@@ -96,34 +96,10 @@ class HandlebarsCompiler(handlebars: String) {
     }
   }
 
-  def compileDir(root: File, options: Seq[String]): (String, Seq[File]) = {
+  def compileDir(file: File, options: Seq[String]): (String, Seq[File]) = {
     val dependencies = Seq.newBuilder[File]
-
-    val output = new StringBuilder
-    output ++= "(function() {\n" +
-      "var template = Ember.Handlebars.template,\n" +
-      "    templates = Ember.TEMPLATES = Ember.TEMPLATES || {};\n\n"
-
-    def addTemplateDir(dir: File, path: String) {
-      for {
-        file <- dir.listFiles.toSeq.sortBy(_.getName)
-        name = file.getName
-      } {
-        if (file.isDirectory) {
-          addTemplateDir(file, path + name + "/")
-        } else if (file.isFile && name.endsWith(".handlebars")) {
-          val templateName = path + name.replace(".handlebars", "")
-          println("ember: processing template %s".format(templateName))
-          val jsSource = compile(file, options)
-          dependencies += file
-          output ++= "templates['%s'] = template(%s);\n\n".format(templateName, jsSource)
-        }
-      }
-    }
-    addTemplateDir(root, "")
-
-    output ++= "})();\n"
-    (output.toString, dependencies.result)
+    val jsSource = compile(file, options)
+    (jsSource, dependencies.result)
   }
 
   private def compile(source: File, options: Seq[String]): String = {
