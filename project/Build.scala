@@ -12,7 +12,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   ////////// VARIABLES //////////
 
   val appName = "herowar"
-  val appVersion = "1.0-SNAPSHOT"
+  val appVersion = "0.1-ALPHA"
     
   val handlebarsJS = "handlebars-1.0.0-rc3.js"
 
