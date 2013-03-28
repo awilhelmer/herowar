@@ -91,7 +91,7 @@ trait JavascriptTransformer extends FileUtils {
    * Wraps content into a define
    */
   def mapContent(module: String, content: String): String = {
-    val pattern = """(\A\(function\(\)[\s]?\{)|(\.call\(this\)\;\z)"""
+    val pattern = """(\A\(function\(\)[\s]?\{)|(\.call\(this\)\;[\n+|\s+]*\z)"""
     var replacedValue = content.replaceAll(pattern, "")
     if (replacedValue == "")
       replacedValue = content;
