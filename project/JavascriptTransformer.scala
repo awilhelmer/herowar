@@ -26,22 +26,24 @@ trait JavascriptTransformer extends FileUtils {
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
     jsFiles.map(f => {
+      //TODO: getting Path of actual Module from Build Task ?  
       val relativePath = f.getAbsolutePath().substring(f.getAbsolutePath().indexOf(cutPath) + cutPath.length)
 
-      // TODO: This is ugly !!! Start
+      // TODO: This is ugly !!! Start --Problem worng distPath
       if (distPath == "") {
         distPath = f.getAbsolutePath().substring(0, f.getAbsolutePath().indexOf(cutPath) + cutPath.length)
       }
       // TODO: This is ugly !!! End
 
+      val fileContent = fileToString(f, "UTF-8")
       // Match relative path and save content
       relativePath match {
 
         // Special case for loader.js file, save content to loader variable
-        case "loader.js" => loader = fileToString(f, "utf-8")
+        case "loader.js" => loader = fileContent
 
         // Special case for loader.min.js file, save content to loaderMin variable
-        case "loader.min.js" => loaderMin = fileToString(f, "utf-8")
+        case "loader.min.js" => loaderMin = fileContent
 
         // Parse every file to content map
         case _ => {
@@ -51,11 +53,14 @@ trait JavascriptTransformer extends FileUtils {
             relativePath.indexOf("templates") != 0 && relativePath.indexOf("libs") != 0,
             relativePath.substring(0, relativePath.indexOf('\\')))
           val jsType = if (isTemplate) "templates" else if (isLib) "vendors" else if (isScript) "scripts" else "unknowned"
+          val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."));
           // Check if map contains js type e.g. templates, vendors or scripts
           // Check if inner map contains key e.g. game or page
-          val fileContent = fileToString(f, "UTF-8")
+
+          //TODO Filecontent as starting functions - replacing
+          val mappedContent = mapContent(functionName, fileContent);
           for (mode <- buildModes) {
-            content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + "\n" + fileContent)
+            content.put(((jsType, key, mode)), content.get((jsType, key, mode)).getOrElse("") + mappedContent + "\n")
           }
         }
       }
@@ -69,15 +74,27 @@ trait JavascriptTransformer extends FileUtils {
   }
 
   /**
-   * Write combined files to output generated from Map[String, Map[String, String]].
+   * Write combined files to output generated from Map[(String, String, String), String]].
    */
   def writeCombinedFiles(path: String, content: Map[(String, String, String), String]) = {
     for ((tuple, entries) <- content) {
+      //TODO handle prod and dev
       if (tuple._3 == "prod") {
         val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
-        println("Write file:" + fileName)
+        println("Write file: " + fileName)
         writeFile(new File(fileName), content(tuple), "UTF-8")
       }
     }
+  }
+
+  /**
+   * Wraps content into a define
+   */
+  def mapContent(module: String, content: String): String = {
+    val pattern = """(^\(function\(\)[\s]?\{)|(.*.)(\.call\(this\)\;$)"""
+    var replacedValue = content.replaceAll(pattern, "")
+    if (replacedValue == "")
+      replacedValue = content;
+    "define('" + module + "', function() {" + replacedValue + "};)"
   }
 }
