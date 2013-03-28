@@ -30,7 +30,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
     //resources in Compile ~= )
-      resources in Compile ~= (classDirectory in Compile, resources in Compile) { (classDirectory, resources) => transformResources(classDirectory, resources) }
+      resources in Compile ~= (classDirectory in Compile, resources) { (classDirectory, resources) => transformResources(classDirectory, resources) }
     )
   ////////// DEPENDENCIES //////////
 
@@ -48,5 +48,5 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   val common = play.Project(appName + "-common", appVersion, appDependencies ++ commonDependencies, path = file("modules/common"), settings = Defaults.defaultSettings ++ appSettings)
   val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
-  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common).dependsOn(common, site).aggregate(common, site)
+  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common, site).aggregate(common, site)
 }
