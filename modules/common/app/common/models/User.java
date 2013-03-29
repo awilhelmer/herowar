@@ -1,14 +1,22 @@
 package common.models;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.avaje.ebean.validation.Email;
-
 import play.data.format.Formats;
+import be.objectify.deadbolt.core.models.Subject;
+
+import com.avaje.ebean.validation.Email;
+import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
+import com.feth.play.module.pa.user.AuthUser;
+import com.feth.play.module.pa.user.AuthUserIdentity;
 
 /**
  * The User represents each Player for our application.
@@ -18,21 +26,35 @@ import play.data.format.Formats;
 @Entity
 @Table(name = "users")
 @SuppressWarnings("serial")
-public class User extends BaseModel {
+public class User extends BaseModel implements Subject {
 
   @Id
   private Long id;
-  
+
   @Email
   private String email;
-  
+
   private String username;
   private String password;
   private Boolean newsletter;
 
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date lastLogin;
-  
+
+  private boolean active;
+  private boolean emailValidated;
+
+  @ManyToMany
+  private List<SecurityRole> roles;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<LinkedUser> linkedUsers;
+
+  @ManyToMany
+  private List<UserPermission> permissions;
+
+  private static final Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);
+
   /**
    * Default constructor.
    */
@@ -53,6 +75,46 @@ public class User extends BaseModel {
     this.username = username;
     this.password = password;
   }
+
+  @Override
+  public String getIdentifier() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public static void addLinkedAccount(AuthUser oldUser, AuthUser newUser) {
+    // TODO Auto-generated method stub
+  }
+
+  public static User create(AuthUser authUser) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public static boolean existsByAuthUserIdentity(AuthUser authUser) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public static User findByAuthUserIdentity(AuthUserIdentity u) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public static void merge(AuthUser oldUser, AuthUser newUser) {
+    // TODO Auto-generated method stub
+  }
+
+  public static void setLastLoginDate(AuthUser knownUser) {
+    // TODO Auto-generated method stub
+  }
+  
+  public static User findByUsernamePasswordIdentity(UsernamePasswordAuthUser user) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  // GETTER & SETTER //
 
   public Long getId() {
     return id;
@@ -100,5 +162,45 @@ public class User extends BaseModel {
 
   public void setLastLogin(Date lastLogin) {
     this.lastLogin = lastLogin;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public boolean isEmailValidated() {
+    return emailValidated;
+  }
+
+  public void setEmailValidated(boolean emailValidated) {
+    this.emailValidated = emailValidated;
+  }
+
+  public List<LinkedUser> getLinkedUsers() {
+    return linkedUsers;
+  }
+
+  public void setLinkedUsers(List<LinkedUser> linkedUsers) {
+    this.linkedUsers = linkedUsers;
+  }
+
+  public List<SecurityRole> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<SecurityRole> roles) {
+    this.roles = roles;
+  }
+
+  public List<UserPermission> getPermissions() {
+    return permissions;
+  }
+
+  public void setPermissions(List<UserPermission> permissions) {
+    this.permissions = permissions;
   }
 }

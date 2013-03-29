@@ -34,6 +34,8 @@ public abstract class BaseModel extends Model {
     this.udate = new Date();
   }
 
+  // GETTER & SETTER //
+
   public Date getCdate() {
     return cdate;
   }
