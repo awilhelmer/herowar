@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
  *
  * @author Sebastian Sachtleben
  */
-trait FileUtils {
+object FileUtils {
 
   // Write content to file with encoding
   def writeFile(file: File, content: String, encoding: String) : File = {
@@ -40,5 +40,18 @@ trait FileUtils {
     }
     new String(outStream.toByteArray(), encoding)
   }
-
+  
+  
+  def readProperties(relativePath: String): java.util.Properties = {
+    println(new File("").getAbsolutePath())
+    val prop = new java.util.Properties()
+    try {
+      val in = new java.io.FileInputStream(relativePath)
+      prop.load(in)
+      in.close()
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    prop
+  }
 }

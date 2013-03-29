@@ -8,11 +8,11 @@ import sbtbuildinfo.Plugin._
  *
  * @author Sebastian Sachtleben
  */
-object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber {
+object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber  {
 
   ////////// VARIABLES //////////
 
-  lazy val buildProperties = readProperties()
+  lazy val buildProperties = FileUtils.readProperties("project\\build.properties")
   val (appName, appVersion, handlebarsJS, buildMode) = (buildProperties.getProperty("appName"), buildProperties.getProperty("appVersion"), buildProperties.getProperty("handlebarsJS"), buildProperties.getProperty("buildMode"))
 
   ////////// DEPENDENCIES //////////
@@ -60,17 +60,5 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
   val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common, site).aggregate(common, site)
 
-  def readProperties(): java.util.Properties = {
-    println(new File("").getAbsolutePath())
-    val prop = new java.util.Properties()
-    try {
-      val in = new java.io.FileInputStream("project\\build.properties")
-      prop.load(in)
-      in.close()
-    } catch {
-      case e: Exception => e.printStackTrace()
-    }
-    prop
-  }
 
 }

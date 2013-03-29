@@ -8,7 +8,7 @@ import collection.mutable.Map
  *
  * @author Sebastian Sachtleben
  */
-trait JavascriptTransformer extends FileUtils {
+trait JavascriptTransformer {
 
   val (scripts_folder, templates_folder, vendors_folder) = ("scripts", "templates", "vendors")
   
@@ -35,7 +35,7 @@ trait JavascriptTransformer extends FileUtils {
       }
       // TODO: This is ugly !!! End
 
-      val fileContent = fileToString(f, "UTF-8")
+      val fileContent = FileUtils.fileToString(f, "UTF-8")
       // Match relative path and save content
       relativePath match {
 
@@ -86,7 +86,7 @@ trait JavascriptTransformer extends FileUtils {
         fileContent = loader;
       }
       fileContent += content(tuple);
-      writtenFiles = writtenFiles ++ Seq(writeFile(new File(fileName), fileContent, "UTF-8"))
+      writtenFiles = writtenFiles ++ Seq(FileUtils.writeFile(new File(fileName), fileContent, "UTF-8"))
     }
     writtenFiles
   }
