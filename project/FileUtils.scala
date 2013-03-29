@@ -11,13 +11,14 @@ import java.io.ByteArrayOutputStream;
 trait FileUtils {
 
   // Write content to file with encoding
-  def writeFile(file: File, content: String, encoding: String) = {
+  def writeFile(file: File, content: String, encoding: String) : File = {
     val out = new PrintWriter(file, encoding)
     try {
       out.print(content)
     } finally {
       out.close
     }
+    file
   }
 
   // We create our own fileToString method due using getLines() on scala.io.Source discards what characters were used for 

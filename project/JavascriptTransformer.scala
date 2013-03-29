@@ -64,18 +64,19 @@ trait JavascriptTransformer extends FileUtils {
         }
       }
     })
+    
+    // Check if loader exists
     if (loader == "") throw new Exception("Couldn't find loader in root javascript folder!")
+    
     // Write content to file system
     writeCombinedFiles(distPath, content, loader)
-
-
-    Seq.empty[File]
   }
 
   /**
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
-  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String) = {
+  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
+    var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
       println("Write file: " + fileName)
@@ -84,9 +85,9 @@ trait JavascriptTransformer extends FileUtils {
         fileContent = loader;
       }
       fileContent += content(tuple);
-
-      writeFile(new File(fileName), fileContent, "UTF-8")
+      writtenFiles = writtenFiles ++ Seq(writeFile(new File(fileName), fileContent, "UTF-8"))
     }
+    writtenFiles
   }
 
   /**
