@@ -15,7 +15,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val appName = "herowar"
   val appVersion = "0.1-SNAPSHOT"
 
-  val handlebarsJS = "handlebars-1.0.0-rc3.js"
+  val handlebarsJS = "handlebars.js"
   val buildMode = "dev" //TODO read from build.properties...
 
   ////////// DEPENDENCIES //////////
