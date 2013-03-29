@@ -19,9 +19,9 @@ public class Application extends Controller {
   private final static List<String> jsFiles = new ArrayList<String>();
   static {
     //TODO hardcoded prefix - Analyse from folder... 
+    jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
     jsFiles.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
     jsFiles.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
-    jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
   }
   
   public static Result index() {
