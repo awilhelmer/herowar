@@ -11,7 +11,8 @@ import collection.mutable.Map
 trait JavascriptTransformer {
   val pattern = """(\A\(function\(\)[\s]?\{)|(\}\)\.call\(this\)\;[\n+|\s+]*\z)"""
   val (scripts_folder, templates_folder, vendors_folder) = ("scripts", "templates", "vendors")
-
+  val content = Map[(String, String, String), String]()
+  var loader = ""
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
   def transformResources(classDirectory: java.io.File, original: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
@@ -22,7 +23,7 @@ trait JavascriptTransformer {
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
   def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
-    var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
+    var (distPath, cutPath) = ("", "javascripts\\")
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
     jsFiles.map(f => {
@@ -35,14 +36,13 @@ trait JavascriptTransformer {
       }
       // TODO: This is ugly !!! End
 
-      val fileContent = FileUtils.fileToString(f, "UTF-8")
       // Match relative path and save content
       relativePath match {
 
         // Special case for loader.js file, save content to loaderMin variable
         case "loader.js" | "loader.min.js" => {
-          if (isModeFile(relativePath)) {
-            loader = fileContent.replaceAll(pattern, "")
+          if ((loader == "") && (isModeFile(relativePath))) {
+            loader = FileUtils.fileToString(f, "UTF-8").replaceAll(pattern, "")
           }
         }
         // Parse every file to content map
@@ -58,16 +58,17 @@ trait JavascriptTransformer {
             key = tempPath.substring(0, tempPath.indexOf('\\'))
             preFixFunction = "return"
           }
-          // TODO: end "site\controllers\baseController.js"
-
-          var subfolders = relativePath.substring(relativePath.indexOf(key) + key.length(), relativePath.lastIndexOf('\\'));
-          if (subfolders.length > 0)
-            subfolders = subfolders.substring(1) + '\\'
-          val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
-
-          val mappedContent = mapContent(functionName, fileContent, preFixFunction);
-          if (isModeFile(functionName)) {
-            content.put(((jsType, key, ApplicationBuild.buildMode)), content.get((jsType, key, ApplicationBuild.buildMode)).getOrElse("") + mappedContent + "\n")
+          // TODO: end 
+          if (!(new File( distPath + key.substring(0, 1) + jsType.substring(0, 1) + cacheNumber + ".js").exists())) {
+            var subfolders = relativePath.substring(relativePath.indexOf(key) + key.length(), relativePath.lastIndexOf('\\'));
+            if (subfolders.length > 0)
+              subfolders = subfolders.substring(1) + '\\'
+            val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
+            val mapKey = (jsType, key, ApplicationBuild.buildMode)
+            val mappedContent = mapContent(functionName, FileUtils.fileToString(f, "UTF-8"), preFixFunction);
+            if (isModeFile(functionName)) {
+              content.put((mapKey), content.get(mapKey).getOrElse("") + mappedContent + "\n")
+            }
           }
         }
       }
@@ -87,13 +88,16 @@ trait JavascriptTransformer {
     var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._2.substring(0, 1) + tuple._1.substring(0, 1) + cacheNumber + ".js"
-      println("Write file: " + fileName)
-      var fileContent = ""
-      if (tuple._1 == scripts_folder) {
-        fileContent = loader;
+      val file = new File(fileName)
+      if (!(file.exists())) {
+        println("Write file: " + fileName)
+        var fileContent = ""
+        if (tuple._1 == scripts_folder) {
+          fileContent = loader;
+        }
+        fileContent += content(tuple);
+        writtenFiles = writtenFiles ++ Seq(FileUtils.writeFile(file, fileContent, "UTF-8"))
       }
-      fileContent += content(tuple);
-      writtenFiles = writtenFiles ++ Seq(FileUtils.writeFile(new File(fileName), fileContent, "UTF-8"))
     }
     writtenFiles
   }
