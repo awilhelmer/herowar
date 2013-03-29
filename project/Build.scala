@@ -16,6 +16,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   val handlebarsJS = "handlebars-1.0.0-rc3.js"
   val buildMode = "dev" //TODO read from build.properties...
+ 
 
   ////////// DEPENDENCIES //////////
 
@@ -29,10 +30,12 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
-    //resources in Compile ~= tranformResources
-      //resources in Compile ~= (classDirectory in Compile, Seq.empty[java.io.File])(transformResources)
-      resources in Compile <<= (classDirectory in Compile, resources in Compile) map transformResources
-    )
+    resources in Compile <<= (classDirectory in Compile, resources in Compile) map transformResources,
+    buildInfoSettings,
+    sourceGenerators in Compile <+= buildInfo,
+    buildInfoKeys := Seq[BuildInfoKey](name, version),
+    buildInfoPackage := "hello")
+    
   ////////// DEPENDENCIES //////////
 
   val appDependencies = Seq(

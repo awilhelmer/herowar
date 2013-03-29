@@ -19,9 +19,9 @@ trait JavascriptTransformer extends FileUtils {
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
   def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File]): Seq[java.io.File] = {
+    var buildNo = 0;
 
-    println(classDirectory);
-
+    println("Actual Build Number = " + buildNo);
     var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
@@ -67,6 +67,7 @@ trait JavascriptTransformer extends FileUtils {
     if (loader == "") throw new Exception("Couldn't find loader in root javascript folder!")
     // Write content to file system
     writeCombinedFiles(distPath, content, loader)
+
 
     Seq.empty[File]
   }
