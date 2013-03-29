@@ -11,12 +11,8 @@ import sbtbuildinfo.Plugin._
 object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber {
 
   ////////// VARIABLES //////////
-
-  val appName = "herowar"
-  val appVersion = "0.1-SNAPSHOT"
-
-  val handlebarsJS = "handlebars-1.0.0-rc3.js"
-  val buildMode = "dev" //TODO read from build.properties...
+  lazy val buildProperties = readProperties()
+  val (appName, appVersion, handlebarsJS, buildMode) = (buildProperties.getProperty("appName"), buildProperties.getProperty("appVersion"), buildProperties.getProperty("handlebarsJS"), buildProperties.getProperty("buildMode"))
 
   ////////// DEPENDENCIES //////////
 
@@ -54,4 +50,18 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val common = play.Project(appName + "-common", appVersion, appDependencies ++ commonDependencies, path = file("modules/common"), settings = Defaults.defaultSettings ++ appSettings)
   val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
   val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common, site).aggregate(common, site)
+
+  def readProperties(): java.util.Properties = {
+    println(new File("").getAbsolutePath())
+    val prop = new java.util.Properties()
+    try {
+      val in = new java.io.FileInputStream("project\\build.properties")
+      prop.load(in)
+      in.close()
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    prop
+  }
+
 }
