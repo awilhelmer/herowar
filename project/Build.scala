@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 import play.Project._
+import sbtbuildinfo.Plugin._
 
 /**
  * Main application build definition for our playframework app.
@@ -16,7 +17,6 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   val handlebarsJS = "handlebars-1.0.0-rc3.js"
   val buildMode = "dev" //TODO read from build.properties...
- 
 
   ////////// DEPENDENCIES //////////
 
@@ -31,11 +31,10 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
     resources in Compile <<= (classDirectory in Compile, resources in Compile) map transformResources,
-    buildInfoSettings,
     sourceGenerators in Compile <+= buildInfo,
     buildInfoKeys := Seq[BuildInfoKey](name, version),
-    buildInfoPackage := "hello")
-    
+    buildInfoPackage := "hello") ++ buildInfoSettings
+
   ////////// DEPENDENCIES //////////
 
   val appDependencies = Seq(
