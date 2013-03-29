@@ -1,4 +1,4 @@
-package models.common.game;
+package common.models.game;
 
 import javax.persistence.Entity;
 

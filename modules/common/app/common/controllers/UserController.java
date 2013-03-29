@@ -1,8 +1,9 @@
-package controllers.common;
+package common.controllers;
 
 import java.util.List;
 
-import models.common.User;
+import common.models.User;
+
 
 import play.data.Form;
 import play.db.ebean.Model;

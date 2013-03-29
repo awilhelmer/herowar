@@ -2,6 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /user/all                   controllers.common.UserController.list()
-GET     /user/:id                   controllers.common.UserController.show(id: Long)
-POST	/user						controllers.common.UserController.add()
+GET     /user/all                   common.controllers.UserController.list()
+GET     /user/:id                   common.controllers.UserController.show(id: Long)
+POST	/user						common.controllers.UserController.add()
