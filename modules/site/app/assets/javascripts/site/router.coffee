@@ -29,10 +29,7 @@ Router = Backbone.Router.extend
             @route key, value, (=>
                 options = _.extend {}, arguments, @getQueryVariables()
                 app.state.set "controller", value
-                app.state.set "tag", options[0] if value is "tagFeed"
-                app.state.set "profile", options[0] if value is "user/profile"
-                app.event.trigger 'pageView', key
-                new (require "controller/#{value}")(options))
+                new (require "controllers/#{value}")(options))
             ) for key, value of @routes
         null
 

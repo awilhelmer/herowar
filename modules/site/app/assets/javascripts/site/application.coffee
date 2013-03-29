@@ -1,4 +1,5 @@
 Router = require 'router'
+db = require 'database'
 
 ###
 	The Application start our application (will be called from loader) and contains important informations like

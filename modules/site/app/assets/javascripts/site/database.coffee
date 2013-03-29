@@ -44,7 +44,7 @@ database =
         @param {Object} The attributes if its a model.
     ###
     create: (type, attributes) ->
-        _db[type] = new (require 'model/' + type)(attributes, name: type)
+        _db[type] = new (require 'models/' + type)(attributes, name: type)
 
     ###
         Check if db type exists.
