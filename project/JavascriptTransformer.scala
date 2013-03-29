@@ -58,8 +58,12 @@ trait JavascriptTransformer {
             key = tempPath.substring(0, tempPath.indexOf('\\'))
             preFixFunction = "return"
           }
-          // TODO: end
-          val functionName = f.getName().substring(0, f.getName().lastIndexOf("."))
+          // TODO: end "site\controllers\baseController.js"
+
+          var subfolders = relativePath.substring(relativePath.indexOf(key) + key.length(), relativePath.lastIndexOf('\\'));
+          if (subfolders.length > 0)
+            subfolders = subfolders.substring(1) + '\\'
+          val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
 
           val mappedContent = mapContent(functionName, fileContent, preFixFunction);
           if (isModeFile(functionName)) {
@@ -98,7 +102,7 @@ trait JavascriptTransformer {
    * Wraps content into a define
    */
   def mapContent(module: String, content: String, preFixFunction: String): String = {
-    "define('%s',%s function() {%s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
+    "define('%s',function() {%s %s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
   }
 
   def isModeFile(name: String): Boolean = {
