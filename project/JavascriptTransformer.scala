@@ -102,7 +102,7 @@ trait JavascriptTransformer {
       }
       fileContent += content(tuple);
       writtenFiles :+= (FileUtils.writeFile(new File(fileName), fileContent, "UTF-8"))
-      FileCacheHandler.unchangedModules :+=  tuple
+      // FileCacheHandler.unchangedModules :+=  tuple
     }
     writtenFiles
   }
