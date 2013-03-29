@@ -75,7 +75,7 @@ trait JavascriptTransformer extends FileUtils {
   def writeCombinedFiles(path: String, cacheNumber: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
     var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
-      val fileName = path + tuple._1.substring(0, 1) + tuple._2.substring(0, 1) + cacheNumber + ".js"
+      val fileName = path + tuple._2.substring(0, 1) + tuple._1.substring(0, 1)  + cacheNumber + ".js"
       println("Write file: " + fileName)
       var fileContent = ""
       if (fileName.indexOf("scripts_") > -1) {
