@@ -1,7 +1,14 @@
 package models.common;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.avaje.ebean.validation.Email;
+
+import play.data.format.Formats;
 
 /**
  * The User represents each Player for our application.
@@ -9,16 +16,23 @@ import javax.persistence.Id;
  * @author Sebastian Sachtleben
  */
 @Entity
+@Table(name = "users")
 @SuppressWarnings("serial")
 public class User extends BaseModel {
 
   @Id
   private Long id;
+  
+  @Email
+  private String email;
+  
   private String username;
   private String password;
-  private String email;
   private Boolean newsletter;
 
+  @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+  private Date lastLogin;
+  
   /**
    * Default constructor.
    */
@@ -78,5 +92,13 @@ public class User extends BaseModel {
 
   public void setNewsletter(Boolean newsletter) {
     this.newsletter = newsletter;
+  }
+
+  public Date getLastLogin() {
+    return lastLogin;
+  }
+
+  public void setLastLogin(Date lastLogin) {
+    this.lastLogin = lastLogin;
   }
 }

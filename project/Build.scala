@@ -8,7 +8,7 @@ import sbtbuildinfo.Plugin._
  *
  * @author Sebastian Sachtleben
  */
-object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber  {
+object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber {
 
   ////////// VARIABLES //////////
 
@@ -18,6 +18,8 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   ////////// DEPENDENCIES //////////
 
   val appSettings = Seq[Setting[_]](
+    resolvers += Resolver.url("Objectify Play Repository (release)", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),
+    resolvers += Resolver.url("Objectify Play Repository (snapshot)", url("http://schaloner.github.com/snapshots/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-easymail (snapshot)", url("http://joscha.github.com/play-easymail/repo/snapshots/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
@@ -49,6 +51,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     javaJdbc,
     javaEbean,
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
+    "be.objectify" %% "deadbolt-java" % "2.1-SNAPSHOT",
     "com.feth" %% "play-authenticate" % "0.2.5-SNAPSHOT")
 
   val commonDependencies = Seq(
@@ -59,6 +62,5 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val common = play.Project(appName + "-common", appVersion, appDependencies ++ commonDependencies, path = file("modules/common"), settings = Defaults.defaultSettings ++ appSettings)
   val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
   val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common, site).aggregate(common, site)
-
 
 }
