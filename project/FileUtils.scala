@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 object FileUtils {
 
   // Write content to file with encoding
-  def writeFile(file: File, content: String, encoding: String) : File = {
+  def writeFile(file: File, content: String, encoding: String): File = {
     val out = new PrintWriter(file, encoding)
     try {
       out.print(content)
@@ -40,17 +40,21 @@ object FileUtils {
     }
     new String(outStream.toByteArray(), encoding)
   }
-  
-  
+
   def readProperties(relativePath: String): java.util.Properties = {
-    println(new File("").getAbsolutePath())
+    val in = new FileInputStream(relativePath)
     val prop = new java.util.Properties()
     try {
-      val in = new java.io.FileInputStream(relativePath)
       prop.load(in)
-      in.close()
     } catch {
       case e: Exception => e.printStackTrace()
+    } finally {
+      try {
+        if (in != null)
+          in.close()
+      } catch {
+        case e: Exception => e.printStackTrace()
+      }
     }
     prop
   }
