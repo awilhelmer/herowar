@@ -1,4 +1,5 @@
-import models.common.User;
+import common.models.User;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;

@@ -9,6 +9,34 @@ Section: building and transforming resources
 
 
 
+Section: How to build project
+
+Intial project import
+
+1) Go to the application folder
+2) Run play, the SBT prompt should show up
+3) Type compile to pre-compile the app
+4) Then type eclipse to generate the eclipse project files
+5) Open eclipse
+6) Select File -> Import… -> Existing projects into Workspace
+7) Pick your application folder and click Finish.
+
+Fix compilation issues
+
+1) Right click on the project, select Properties then Java Build Path
+2) In the Libraries tab, click Add Class Folder…
+3) Check target/scala-2.9.1/classes and target/scala-2.9.1/classes_managed
+4) Back in Java Build Path click Add external JARs…
+5) Select play\repository\local\org.scala-lang\scala-library\2.9.1\jars\scala-library.jar
+
+Updated dependencies
+
+1) Go to the application folder
+2) Run play, the SBT prompt should show up
+3) Then type eclipse to generate the eclipse project files
+
+
+
 Section: page/pagedesign
 
 
