@@ -9,14 +9,14 @@ Router = require 'router'
 ###
 app =
 	###
-        Current active views.
-    ###
-    views: {}
+		Current active views.
+	###
+	views: {}
     
-    ###
-        The model that contains which page is open.
-    ###
-    state: db.get 'ui/appState'
+	###
+		The model that contains which page is open.
+	###
+	state: db.get 'ui/appState'
 
 	###
 		Main entry point for our application.
