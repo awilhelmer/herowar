@@ -9,9 +9,9 @@ import collection.mutable.Map
  * @author Sebastian Sachtleben
  */
 trait JavascriptTransformer {
-
+  val pattern = """(\A\(function\(\)[\s]?\{)|(\}\)\.call\(this\)\;[\n+|\s+]*\z)"""
   val (scripts_folder, templates_folder, vendors_folder) = ("scripts", "templates", "vendors")
-  
+
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
   def transformResources(classDirectory: java.io.File, original: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
@@ -42,7 +42,7 @@ trait JavascriptTransformer {
         // Special case for loader.js file, save content to loaderMin variable
         case "loader.js" | "loader.min.js" => {
           if (isModeFile(relativePath)) {
-            loader = fileContent;
+            loader = fileContent.replaceAll(pattern, "")
           }
         }
         // Parse every file to content map
@@ -95,10 +95,7 @@ trait JavascriptTransformer {
    * Wraps content into a define
    */
   def mapContent(module: String, content: String): String = {
-    val pattern = """(\A\(function\(\)[\s]?\{)|(\}\)\.call\(this\)\;[\n+|\s+]*\z)"""
-    var replacedValue = content.replaceAll(pattern, "")
-    if (replacedValue == "")
-      replacedValue = content;
+    val replacedValue = content.replaceAll(pattern, "")
     "define('" + module + "', function() {" + replacedValue + "});"
 
   }
