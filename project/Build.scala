@@ -8,7 +8,7 @@ import sbtbuildinfo.Plugin._
  *
  * @author Sebastian Sachtleben
  */
-object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with CacheNumber {
+object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with JavascriptFilter with CacheNumber {
 
   ////////// VARIABLES //////////
 
@@ -34,7 +34,8 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
-    resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber) map transformResources)
+    resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber) map transformResources,
+    copyResources in Compile <<= (copyResources in Compile, playCopyAssets, cacheNumber) map filterResources)
 
   ////////// DEPENDENCIES //////////
 
