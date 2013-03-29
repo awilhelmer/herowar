@@ -57,7 +57,7 @@ trait JavascriptTransformer {
             key = tempPath.substring(0, tempPath.indexOf('\\'))
           }
           // TODO: end
-          val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."))
+          val functionName = f.getName().substring(0, f.getName().lastIndexOf("."))
           val mappedContent = mapContent(functionName, fileContent);
           if (isModeFile(functionName)) {
             content.put(((jsType, key, ApplicationBuild.buildMode)), content.get((jsType, key, ApplicationBuild.buildMode)).getOrElse("") + mappedContent + "\n")
