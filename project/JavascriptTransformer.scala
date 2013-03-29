@@ -49,16 +49,19 @@ trait JavascriptTransformer {
         case _ => {
           val jsType = if (relativePath.indexOf(templates_folder) == 0) templates_folder else if (relativePath.indexOf(vendors_folder) == 0) vendors_folder else scripts_folder
           var key = ""
+          var preFixFunction = ""
           // TODO: Is it possible to do this better? For templates we need to get the second folder name. Maybe with regex...
           if (jsType != "templates") {
             key = relativePath.substring(0, relativePath.indexOf('\\'))
           } else {
             val tempPath = relativePath.substring(relativePath.indexOf('\\') + 1)
             key = tempPath.substring(0, tempPath.indexOf('\\'))
+            preFixFunction = "return"
           }
           // TODO: end
           val functionName = f.getName().substring(0, f.getName().lastIndexOf("."))
-          val mappedContent = mapContent(functionName, fileContent);
+
+          val mappedContent = mapContent(functionName, fileContent, preFixFunction);
           if (isModeFile(functionName)) {
             content.put(((jsType, key, ApplicationBuild.buildMode)), content.get((jsType, key, ApplicationBuild.buildMode)).getOrElse("") + mappedContent + "\n")
           }
@@ -94,10 +97,8 @@ trait JavascriptTransformer {
   /**
    * Wraps content into a define
    */
-  def mapContent(module: String, content: String): String = {
-    val replacedValue = content.replaceAll(pattern, "")
-    "define('" + module + "', function() {" + replacedValue + "});"
-
+  def mapContent(module: String, content: String, preFixFunction: String): String = {
+    "define('%s',%s function() {%s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
   }
 
   def isModeFile(name: String): Boolean = {
