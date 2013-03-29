@@ -16,17 +16,19 @@ import views.html.index;
  * @author Sebastian Sachtleben
  */
 public class Application extends Controller {
-
-  public static Result index() {
-    return ok(index.render());
-  }
-  
-  public static List<String> getJavascripts() {
-    // TODO: this should be cached somewhere ...
-    List<String> jsFiles = new ArrayList<String>();
+  private final static List<String> jsFiles = new ArrayList<String>();
+  static {
+    //TODO hardcoded prefix - Analyse from folder... 
     jsFiles.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
     jsFiles.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
     jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
+  }
+  
+  public static Result index() {
+    return ok(index.render());
+  }
+
+  public static List<String> getJavascripts() {
     return jsFiles;
   }
 
