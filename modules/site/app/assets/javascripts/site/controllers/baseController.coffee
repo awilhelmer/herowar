@@ -1,3 +1,5 @@
+app = require 'application'
+
 ###
     The BaseController provides basic functionality for our controllers.
 
