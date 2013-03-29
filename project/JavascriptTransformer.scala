@@ -10,6 +10,8 @@ import collection.mutable.Map
  */
 trait JavascriptTransformer extends FileUtils {
 
+  val (scripts_folder, templates_folder, vendors_folder) = ("scripts", "templates", "vendors")
+  
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
   def transformResources(classDirectory: java.io.File, original: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
@@ -19,7 +21,7 @@ trait JavascriptTransformer extends FileUtils {
 
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
-  def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String) : Seq[java.io.File] = {
+  def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
     var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
@@ -45,8 +47,16 @@ trait JavascriptTransformer extends FileUtils {
         }
         // Parse every file to content map
         case _ => {
-          val (key, jsType) = (relativePath.substring(0, relativePath.indexOf('\\')), 
-              if (relativePath.indexOf("templates") == 0) "templates" else if (relativePath.indexOf("libs") == 0) "vendors" else "scripts")
+          val jsType = if (relativePath.indexOf(templates_folder) == 0) templates_folder else if (relativePath.indexOf(vendors_folder) == 0) vendors_folder else scripts_folder
+          var key = ""
+          // TODO: Is it possible to do this better? For templates we need to get the second folder name. Maybe with regex...
+          if (jsType != "templates") {
+            key = relativePath.substring(0, relativePath.indexOf('\\'))
+          } else {
+            val tempPath = relativePath.substring(relativePath.indexOf('\\') + 1)
+            key = tempPath.substring(0, tempPath.indexOf('\\'))
+          }
+          // TODO: end
           val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."))
           val mappedContent = mapContent(functionName, fileContent);
           if (isModeFile(functionName)) {
@@ -66,13 +76,13 @@ trait JavascriptTransformer extends FileUtils {
   /**
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
-  def writeCombinedFiles(path: String, cacheNumber: String, content: Map[(String, String, String), String], loader: String) : Seq[File] = {
+  def writeCombinedFiles(path: String, cacheNumber: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
     var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._2.substring(0, 1) + tuple._1.substring(0, 1) + cacheNumber + ".js"
       println("Write file: " + fileName)
       var fileContent = ""
-      if (tuple._1 == "scripts") {
+      if (tuple._1 == scripts_folder) {
         fileContent = loader;
       }
       fileContent += content(tuple);

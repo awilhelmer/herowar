@@ -24,9 +24,9 @@ public class Application extends Controller {
   public static List<String> getJavascripts() {
     // TODO: this should be cached somewhere ...
     List<String> jsFiles = new ArrayList<String>();
-    jsFiles.add("javascripts/ps" + BuildInfo.cacheNumber() + ".js");
-    jsFiles.add("javascripts/pt" + BuildInfo.cacheNumber() + ".js");
-    jsFiles.add("javascripts/pv" + BuildInfo.cacheNumber() + ".js");
+    jsFiles.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
+    jsFiles.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
+    jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
     return jsFiles;
   }
 
