@@ -45,16 +45,9 @@ trait JavascriptTransformer extends FileUtils {
         }
         // Parse every file to content map
         case _ => {
-          val (isTemplate, isLib, isScript, key) = (
-            relativePath.indexOf("templates") == 0,
-            relativePath.indexOf("libs") == 0,
-            relativePath.indexOf("templates") != 0 && relativePath.indexOf("libs") != 0,
-            relativePath.substring(0, relativePath.indexOf('\\')))
-          val jsType = if (isTemplate) "templates" else if (isLib) "vendors" else if (isScript) "scripts" else "unknowned"
+          val (key, jsType) = (relativePath.substring(0, relativePath.indexOf('\\')), 
+              if (relativePath.indexOf("templates") == 0) "templates" else if (relativePath.indexOf("libs") == 0) "vendors" else "scripts")
           val functionName = key + "." + f.getName().substring(0, f.getName().lastIndexOf("."))
-          // Check if map contains js type e.g. templates, vendors or scripts
-          // Check if inner map contains key e.g. game or page
-
           val mappedContent = mapContent(functionName, fileContent);
           if (isModeFile(functionName)) {
             content.put(((jsType, key, ApplicationBuild.buildMode)), content.get((jsType, key, ApplicationBuild.buildMode)).getOrElse("") + mappedContent + "\n")
