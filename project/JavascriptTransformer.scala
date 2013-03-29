@@ -79,7 +79,7 @@ trait JavascriptTransformer extends FileUtils {
       val fileName = path + tuple._2.substring(0, 1) + tuple._1.substring(0, 1) + cacheNumber + ".js"
       println("Write file: " + fileName)
       var fileContent = ""
-      if (fileName.indexOf("scripts_") > -1) {
+      if (tuple._1 == "scripts") {
         fileContent = loader;
       }
       fileContent += content(tuple);
