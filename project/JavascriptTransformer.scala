@@ -27,11 +27,11 @@ trait JavascriptTransformer {
 
     jsFiles.map(f => {
       //TODO: getting Path of actual Module from Build Task ?  
-      val relativePath = f.getAbsolutePath().substring(f.getAbsolutePath().indexOf(cutPath) + cutPath.length)
+      val relativePath = f.getAbsolutePath.substring(f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
 
       // TODO: This is ugly !!! Start --Problem worng distPath
       if (distPath == "") {
-        distPath = f.getAbsolutePath().substring(0, f.getAbsolutePath().indexOf(cutPath) + cutPath.length)
+        distPath = f.getAbsolutePath.substring(0, f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
       }
       // TODO: This is ugly !!! End
 
