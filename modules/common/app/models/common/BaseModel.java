@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import play.data.format.Formats;
 import play.db.ebean.Model;
 
 /**
@@ -16,7 +17,10 @@ import play.db.ebean.Model;
 @SuppressWarnings("serial")
 public abstract class BaseModel extends Model {
 
+  @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   protected Date cdate;
+
+  @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   protected Date udate;
 
   @Version
@@ -29,7 +33,7 @@ public abstract class BaseModel extends Model {
     this.cdate = new Date();
     this.udate = new Date();
   }
-  
+
   public Date getCdate() {
     return cdate;
   }
