@@ -27,14 +27,22 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns))
 
   val resourceSettings = buildInfoSettings ++ Seq[Setting[_]](
+
+    // Configure build info scala file
     sourceGenerators in Compile <+= buildInfo,
     cacheNumber := generateCacheNumber,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, cacheNumber),
     buildInfoPackage := "info",
+
+    // Configure handlebars compiler
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
+
+    // Add javascript transformer method
     resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber) map transformResources,
+
+    // Add javascript filter method
     copyResources in Compile <<= (copyResources in Compile, playCopyAssets, cacheNumber) map filterResources)
 
   ////////// DEPENDENCIES //////////
