@@ -8,7 +8,7 @@ import sbtbuildinfo.Plugin._
  *
  * @author Sebastian Sachtleben
  */
-object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer {
+object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptTransformer with CacheNumber {
 
   ////////// VARIABLES //////////
 
@@ -26,14 +26,15 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     resolvers += Resolver.url("play-authenticate (release)", url("http://joscha.github.com/play-authenticate/repo/releases/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-authenticate (snapshot)", url("http://joscha.github.com/play-authenticate/repo/snapshots/"))(Resolver.ivyStylePatterns))
 
-  val resourceSettings = Seq[Setting[_]](
+  val resourceSettings = buildInfoSettings ++ Seq[Setting[_]](
+    sourceGenerators in Compile <+= buildInfo,
+    cacheNumber := generateCacheNumber,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, cacheNumber),
+    buildInfoPackage := "info",
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
-    resources in Compile <<= (classDirectory in Compile, resources in Compile) map transformResources,
-    sourceGenerators in Compile <+= buildInfo,
-    buildInfoKeys := Seq[BuildInfoKey](name, version),
-    buildInfoPackage := "hello") ++ buildInfoSettings
+    resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber) map transformResources)
 
   ////////// DEPENDENCIES //////////
 

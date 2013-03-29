@@ -11,17 +11,14 @@ import collection.mutable.Map
 trait JavascriptTransformer extends FileUtils {
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
-  def transformResources(classDirectory: java.io.File, original: Seq[java.io.File]): Seq[java.io.File] = {
+  def transformResources(classDirectory: java.io.File, original: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
     val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
-    nonJs ++ transformJs(classDirectory, js)
+    nonJs ++ transformJs(classDirectory, js, cacheNumber)
   }
 
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
-  def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File]): Seq[java.io.File] = {
-    var buildNo = 0;
-
-    println("Actual Build Number = " + buildNo);
+  def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
     var (loader, distPath, cutPath, content) = ("", "", "javascripts\\", Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
 
@@ -69,16 +66,16 @@ trait JavascriptTransformer extends FileUtils {
     if (loader == "") throw new Exception("Couldn't find loader in root javascript folder!")
     
     // Write content to file system
-    writeCombinedFiles(distPath, content, loader)
+    writeCombinedFiles(distPath, cacheNumber, content, loader)
   }
 
   /**
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
-  def writeCombinedFiles(path: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
+  def writeCombinedFiles(path: String, cacheNumber: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
     var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
-      val fileName = path + tuple._1 + "_" + tuple._2 + ".js"
+      val fileName = path + tuple._1.substring(0, 1) + tuple._2.substring(0, 1) + cacheNumber + ".js"
       println("Write file: " + fileName)
       var fileContent = ""
       if (fileName.indexOf("scripts_") > -1) {
