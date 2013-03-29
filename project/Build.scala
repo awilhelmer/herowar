@@ -36,10 +36,11 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     // Configure handlebars compiler
     handlebarsEntryPoints <<= (sourceDirectory in Compile)(base => base / "assets" ** "*.tmpl"),
     handlebarsSettings := Seq.empty[String],
+    modelchangesetting := Seq.empty[(String, String, String)],
     resourceGenerators in Compile <+= HandlebarsCompiler(handlebars = handlebarsJS),
 
     // Add javascript transformer method
-    resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber) map transformResources,
+    resources in Compile <<= (classDirectory in Compile, resources in Compile, cacheNumber, modelchangesetting in Compile) map transformResources,
 
     // Add javascript filter method
     copyResources in Compile <<= (copyResources in Compile, playCopyAssets, cacheNumber) map filterResources)
