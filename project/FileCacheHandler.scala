@@ -1,4 +1,6 @@
-object FileCacheHandler {
-   var unchangedModules = Seq.empty[(String, String, String)]
+import scala.collection.mutable._
 
+object FileCacheHandler {
+   var unchangedModules = List.empty[(String, String, String)]
+   val filesChanged = Map[String,Long]()
 }

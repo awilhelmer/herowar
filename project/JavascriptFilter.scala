@@ -46,8 +46,12 @@ trait JavascriptFilter {
   def writeVendorsContent(path: String, content: Map[String, String], cacheNumber: String) = {
     for ((key, fileContent) <- content) {
       val fileName = path.replace("\\vendors", "") + "\\" + key.substring(0, 1) + "v" + cacheNumber + ".js"
-      println("Write file: " + fileName)
-      FileUtils.writeFile(new File(fileName), fileContent, "UTF-8")
+      val file = new File(fileName)
+      //TODO Bad expensive check ...
+      if (!(file.exists)) {
+        println("Write file: " + fileName)
+        FileUtils.writeFile(file, fileContent, "UTF-8")
+      }
     }
   }
 

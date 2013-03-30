@@ -37,6 +37,16 @@ trait JavascriptTransformer {
         }
         case _ => {
           val mapKey = getMapKey(relativePath)
+          val index = FileCacheHandler.unchangedModules.indexOf(mapKey)
+          if ((index > -1) && (FileCacheHandler.filesChanged.contains(f.getAbsolutePath))) {
+            val lastTime = FileCacheHandler.filesChanged(f.getAbsolutePath)
+            if (f.lastModified > lastTime) {
+              println("File has changed " + f.getAbsolutePath + " Size of filesChangedList " + FileCacheHandler.unchangedModules.size)
+              FileCacheHandler.unchangedModules = FileCacheHandler.unchangedModules.drop(index)
+              println("New size of filesChangedList " + FileCacheHandler.unchangedModules.size + " dropped index " + index)
+            }
+          }
+          FileCacheHandler.filesChanged.put(f.getAbsolutePath, f.lastModified)
         }
       }
 
@@ -102,7 +112,8 @@ trait JavascriptTransformer {
       }
       fileContent += content(tuple);
       writtenFiles :+= (FileUtils.writeFile(new File(fileName), fileContent, "UTF-8"))
-      // FileCacheHandler.unchangedModules :+=  tuple
+      FileCacheHandler.unchangedModules :+= tuple
+      println(FileCacheHandler.unchangedModules.size)
     }
     writtenFiles
   }
