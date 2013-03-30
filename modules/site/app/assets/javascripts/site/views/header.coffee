@@ -9,7 +9,7 @@ app = require 'application'
 ###
 class Header extends BaseView
 
-	id: 'header'
+	className: 'navbar'
 	
 	template: templates.get 'header.tmpl'
 	

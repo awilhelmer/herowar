@@ -19,11 +19,16 @@
 
 // Components: Buttons & Alerts
 @import "_buttons.less";
-@import "_global.less";
-@import "_helpers.less";
+
+// Components: Nav
+@import "_navbar.less";
 
 
 // MAIN Style
+
+body {
+	padding-bottom: 40px;
+}
 
 #header {
 	color: #fff;
@@ -52,30 +57,4 @@
 	}
 }
 
-#container {
-	width: 1200px;
-	margin: 0 auto;
-	#content {
-		margin-top: 10px;
-		width: 1200px;
-		#main {
-			float: left;
-			width: 900px;
-		}
-
-		#sidebar {
-			float: left;
-			width: 300px;
-			#login {
-				padding: 10px;
-			}
-		}
-
-		.clearfix
-	}
-
-	#footer {
-		width: 1100px;
-	}
-}
 
