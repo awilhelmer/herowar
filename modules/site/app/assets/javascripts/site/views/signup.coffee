@@ -22,9 +22,10 @@ class Signup extends BaseView
 			type: 'POST'
 			url: "http://localhost:9000/api/signup"
 			data:
-				'username' : $("input[name='username']").val()
-				'password' : $("input[name='password']").val()
-				'email'    : $("input[name='email']").val()
+				'username' 			: $("input[name='username']").val()
+				'password' 			: $("input[name='password']").val()
+				'repeatPassword' 	: $("input[name='repeatPassword']").val()
+				'email'    			: $("input[name='email']").val()
 			success: (resp) =>
 				console.log resp
 	

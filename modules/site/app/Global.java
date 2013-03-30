@@ -1,5 +1,3 @@
-import common.models.entity.User;
-
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -16,12 +14,12 @@ public class Global extends GlobalSettings {
     Logger.info("Herowar has stated");
 
     // Create admin user for dev mode
-    if (app.isDev()) {
-      if (User.getFinder().where().eq("username", "admin").findUnique() == null) {
-        User user = new User("admin", "admin");
-        user.save();
-      }
-    }
+//    if (app.isDev()) {
+//      if (User.getFinder().where().eq("username", "admin").findUnique() == null) {
+//        User user = new User("admin", "admin");
+//        user.save();
+//      }
+//    }
   }
 
   @Override

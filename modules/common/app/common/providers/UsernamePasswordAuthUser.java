@@ -10,7 +10,7 @@ public class UsernamePasswordAuthUser extends com.feth.play.module.pa.providers.
 
   public UsernamePasswordAuthUser(final SignupForm signup) {
     super(signup.password, signup.email);
-    this.name = signup.name;
+    this.name = signup.username;
   }
   
   /**

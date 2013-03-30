@@ -72,9 +72,6 @@ public class UsernamePasswordAuthProvider
     @MinLength(5)
     public String repeatPassword;
 
-    @Required
-    public String name;
-
     public String validate() {
       if (password == null || !password.equals(repeatPassword)) {
         return Messages.get("playauthenticate.password.signup.error.passwords_not_same");
