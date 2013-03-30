@@ -28,7 +28,8 @@ trait JavascriptFilter {
           val key = relativePath.substring(0, relativePath.indexOf("\\"))
           vendorsContent.put(key, vendorsContent.get(key).getOrElse("") + FileUtils.fileToString(destFile, "UTF-8") + "\n")
         }
-        destFile.delete
+        if (destFile.delete)
+          println("Deleted File : " + destFile.getAbsolutePath)
       }
     }
     writeVendorsContent(distPath, vendorsContent, cacheNumber);

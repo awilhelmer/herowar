@@ -37,13 +37,10 @@ trait JavascriptTransformer {
         }
         case _ => {
           val mapKey = getMapKey(relativePath)
-          val index = FileCacheHandler.unchangedModules.indexOf(mapKey)
-          if ((index > -1) && (FileCacheHandler.filesChanged.contains(f.getAbsolutePath))) {
+          if ((FileCacheHandler.filesChanged.contains(f.getAbsolutePath))) {
             val lastTime = FileCacheHandler.filesChanged(f.getAbsolutePath)
             if (f.lastModified > lastTime) {
-              println("File has changed " + f.getAbsolutePath + " Size of filesChangedList " + FileCacheHandler.unchangedModules.size)
-              FileCacheHandler.unchangedModules = FileCacheHandler.unchangedModules.drop(index)
-              println("New size of filesChangedList " + FileCacheHandler.unchangedModules.size + " dropped index " + index)
+              FileCacheHandler.unchangedModules -=  mapKey
             }
           }
           FileCacheHandler.filesChanged.put(f.getAbsolutePath, f.lastModified)
