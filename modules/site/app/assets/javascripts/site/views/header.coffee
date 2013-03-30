@@ -9,7 +9,7 @@ app = require 'application'
 ###
 class Header extends BaseView
 
-	className: 'navbar'
+	className: 'navbar navbar-inverse navbar-fixed-top'
 	
 	template: templates.get 'header.tmpl'
 	
