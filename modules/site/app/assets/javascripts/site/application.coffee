@@ -25,5 +25,14 @@ app =
 	start: ->
 		app.router = new Router();
 		Backbone.history.start pushState: true
+
+	###
+		Navigate to path (wrapper for router.navigate).
+
+		@param {String} The path to navigate.
+		@param {Object} The options object.
+	###
+	navigate: (path, options) ->
+		@router.navigate path, options        
         
 return app
