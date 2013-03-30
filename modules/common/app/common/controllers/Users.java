@@ -8,7 +8,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import common.models.User;
+import common.models.entity.User;
 
 /**
  * The UserController handle api requests for the user object.

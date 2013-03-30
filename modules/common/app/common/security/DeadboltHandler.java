@@ -8,7 +8,8 @@ import be.objectify.deadbolt.java.DynamicResourceHandler;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUserIdentity;
-import common.models.User;
+
+import common.models.entity.User;
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
 

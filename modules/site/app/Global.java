@@ -1,4 +1,4 @@
-import common.models.User;
+import common.models.entity.User;
 
 import play.Application;
 import play.GlobalSettings;

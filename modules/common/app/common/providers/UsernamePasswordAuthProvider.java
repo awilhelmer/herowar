@@ -11,26 +11,34 @@ import play.mvc.Call;
 import play.mvc.Http.Context;
 
 import com.feth.play.module.mail.Mailer.Mail.Body;
-import common.models.LinkedAccounts;
-import common.models.User;
 
+import common.models.entity.LinkedAccounts;
+import common.models.entity.User;
+
+/**
+ * The UsernamePasswordAuthProvider implementation handles our username and
+ * password login. Unfortunatly our Play Auth plugin wants to login with email
+ * and password so we changed some values to pass the username as email.
+ * 
+ * @author Sebastian Sachtleben
+ */
 public class UsernamePasswordAuthProvider
     extends
-    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.MyLogin, UsernamePasswordAuthProvider.MySignup> {
+    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.LoginForm, UsernamePasswordAuthProvider.SignupForm> {
 
   public UsernamePasswordAuthProvider(Application app) {
     super(app);
   }
 
-  public static final Form<MySignup> SIGNUP_FORM = form(MySignup.class);
-  public static final Form<MyLogin> LOGIN_FORM = form(MyLogin.class);
+  public static final Form<SignupForm> SIGNUP_FORM = form(SignupForm.class);
+  public static final Form<LoginForm> LOGIN_FORM = form(LoginForm.class);
 
-  public static class MyIdentity {
+  public static class Identity {
 
-    public MyIdentity() {
+    public Identity() {
     }
 
-    public MyIdentity(final String username) {
+    public Identity(final String username) {
       this.username = username;
     }
 
@@ -41,7 +49,7 @@ public class UsernamePasswordAuthProvider
 
   }
 
-  public static class MyLogin extends MyIdentity implements com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.UsernamePassword {
+  public static class LoginForm extends Identity implements com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.UsernamePassword {
 
     @Required
     @MinLength(5)
@@ -58,7 +66,7 @@ public class UsernamePasswordAuthProvider
     }
   }
 
-  public static class MySignup extends MyLogin {
+  public static class SignupForm extends LoginForm {
 
     @Required
     @MinLength(5)
@@ -76,12 +84,12 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(MyLogin login, Context ctx) {
+  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(LoginForm login, Context ctx) {
     return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
   }
 
   @Override
-  protected UsernamePasswordAuthUser buildSignupAuthUser(MySignup signup, Context ctx) {
+  protected UsernamePasswordAuthUser buildSignupAuthUser(SignupForm signup, Context ctx) {
     return new UsernamePasswordAuthUser(signup);
   }
 
@@ -92,12 +100,12 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected Form<MyLogin> getLoginForm() {
+  protected Form<LoginForm> getLoginForm() {
     return LOGIN_FORM;
   }
 
   @Override
-  protected Form<MySignup> getSignupForm() {
+  protected Form<SignupForm> getSignupForm() {
     return SIGNUP_FORM;
   }
 

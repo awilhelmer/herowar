@@ -6,9 +6,10 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import common.models.User;
+import common.models.entity.User;
 import common.providers.UsernamePasswordAuthProvider;
-import common.providers.UsernamePasswordAuthProvider.MyLogin;
+import common.providers.UsernamePasswordAuthProvider.LoginForm;
+import common.providers.UsernamePasswordAuthProvider.SignupForm;
 
 /**
  * The Me controller allows our application to get information about the current logged in user.
@@ -25,17 +26,21 @@ public class Me extends Controller {
   public static Result login() {
     Logger.info("login called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-    final Form<MyLogin> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
+    final Form<LoginForm> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
     if (filledForm.hasErrors()) {
-      return badRequest();
-    } else {
-      return UsernamePasswordAuthProvider.handleLogin(ctx());
+      return badRequest(filledForm.errorsAsJson());
     }
+    return UsernamePasswordAuthProvider.handleLogin(ctx());
   }
   
   public static Result signup() {
     Logger.info("signup called");
-    return badRequest();
+    com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+    final Form<SignupForm> filledForm = UsernamePasswordAuthProvider.SIGNUP_FORM.bindFromRequest();
+    if (filledForm.hasErrors()) {
+      return badRequest(filledForm.errorsAsJson());
+    }
+    return UsernamePasswordAuthProvider.handleSignup(ctx());
   }
   
 }

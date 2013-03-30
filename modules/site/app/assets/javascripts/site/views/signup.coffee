@@ -12,4 +12,20 @@ class Signup extends BaseView
 	
 	template: templates.get 'signup.tmpl'
 	
+	events:
+		"submit .signup-form": 'signup'
+	
+	signup: (event) ->
+		event?.preventDefault()
+		$.ajax
+			dataType: 'json'
+			type: 'POST'
+			url: "http://localhost:9000/api/signup"
+			data:
+				'username' : $("input[name='username']").val()
+				'password' : $("input[name='password']").val()
+				'email'    : $("input[name='email']").val()
+			success: (resp) =>
+				console.log resp
+	
 return Signup

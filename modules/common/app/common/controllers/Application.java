@@ -8,7 +8,8 @@ import play.mvc.Http.Session;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
-import common.models.User;
+
+import common.models.entity.User;
 
 public class Application extends Controller {
 

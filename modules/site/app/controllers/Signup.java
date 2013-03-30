@@ -1,6 +1,6 @@
 package controllers;
 
-import common.models.User;
+import common.models.entity.User;
 
 import play.data.Form;
 import play.mvc.Controller;

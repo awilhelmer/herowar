@@ -4,7 +4,8 @@ import play.Application;
 
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
-import common.models.User;
+
+import common.models.entity.User;
 
 public class UserServicePlugin extends com.feth.play.module.pa.service.UserServicePlugin {
 

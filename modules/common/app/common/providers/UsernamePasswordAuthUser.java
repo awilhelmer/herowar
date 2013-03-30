@@ -1,14 +1,14 @@
 package common.providers;
 
 import com.feth.play.module.pa.user.NameIdentity;
-import common.providers.UsernamePasswordAuthProvider.MySignup;
+import common.providers.UsernamePasswordAuthProvider.SignupForm;
 
 @SuppressWarnings("serial")
 public class UsernamePasswordAuthUser extends com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser implements NameIdentity {
 
   private final String name;
 
-  public UsernamePasswordAuthUser(final MySignup signup) {
+  public UsernamePasswordAuthUser(final SignupForm signup) {
     super(signup.password, signup.email);
     this.name = signup.name;
   }
