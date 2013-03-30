@@ -1,16 +1,14 @@
-// Main.less Stylesheets
+//
+// Main CSS Style
+// --------------------------------------------------
 
+@import "_variables.less";
 @import "_mixins.less";
+@import "_buttons.less";
+@import "_global.less";
 @import "_helpers.less";
 
-* {
-	margin:0;
-	padding:0;
-}
-
-body {
-	font-family: Arial,sans-serif;
-}
+// MAIN Style
 
 a {
 	text-decoration: none;
@@ -19,62 +17,54 @@ a {
 #header {
 	color: #fff;
 	background-color: #2d2d2d;
-	
 	a {
 		color: #fff;
 	}
-	
+
 	a:hover {
 		color: #fff;
 		text-decoration: none;
 	}
-	
+
 	.inner {
-		width:1200px;
-		margin:0 auto;
-		
+		width: 1200px;
+		margin: 0 auto;
 		.content {
-			margin-top:5px;
-			width:1200px;
-			
+			margin-top: 5px;
+			width: 1200px;
 			.home {
 				font-weight: bold;
 			}
-		
+
 			.clearfix
 		}
 	}
 }
 
 #container {
-	width:1200px;
-	margin:0 auto;
-	
+	width: 1200px;
+	margin: 0 auto;
 	#content {
 		margin-top: 10px;
-		width:1200px;
-	
+		width: 1200px;
 		#main {
-			float:left;
+			float: left;
 			width: 900px;
 		}
-		
+
 		#sidebar {
-			float:left;
-			width:300px;
-		
+			float: left;
+			width: 300px;
 			#login {
 				padding: 10px;
-				
-				.rounded-corners;
 			}
 		}
-		
+
 		.clearfix
 	}
-	
-	#footer {
-		width:1100px;
-	}
 
+	#footer {
+		width: 1100px;
+	}
 }
+

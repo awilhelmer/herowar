@@ -1,18 +1,21 @@
 <div id="container">
 	<div id="content">
-		<h2>Join Now</h2>
-		<hr />
 		<form action="/signup" method="POST" class="signup-form">
-		    <p>Username</p>
-		    <p><input name="username"></p>
-		    <p>Password</p>
-		    <p><input name="password" type="password"></p>
-		    <p>Repeat Password</p>
-		    <p><input name="repeatPassword" type="password"></p>
-		    <p>Email Address</p>
-		    <p><input name="email"></p>
-		    <p><input type="checkbox" name="newsletter" value="true"> Sign me up for the Newsletter</p>
-		    <input type="submit">
+			<fieldset>
+				<legend>Join Now</legend>
+				<label>Username</label>
+		    	<input name="username">
+		    	<label>Password</label>
+		    	<input name="password" type="password">
+		    	<label>Repeat Password</label>
+		    	<input name="repeatPassword" type="password">
+		    	<label>Email Address</label>
+		    	<input name="email">
+		    	<label class="checkbox">
+		    		<input type="checkbox" name="newsletter" value="true"> Sign me up for the Newsletter
+		    	</label>
+		    	<button type="submit" class="btn">Submit</button>
+			</fieldset>
 		</form>
 	</div>
 </div>
