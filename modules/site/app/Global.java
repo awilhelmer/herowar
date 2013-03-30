@@ -17,8 +17,10 @@ public class Global extends GlobalSettings {
 
     // Create admin user for dev mode
     if (app.isDev()) {
-      User user = new User("admin", "admin");
-      user.save();
+      if (User.getFinder().where().eq("username", "admin").findUnique() == null) {
+        User user = new User("admin", "admin");
+        user.save();
+      }
     }
   }
 
