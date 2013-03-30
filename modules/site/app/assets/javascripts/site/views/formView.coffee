@@ -26,10 +26,12 @@ class FormView extends BaseView
 	
 	submitForm: (event) ->
 		event?.preventDefault()
-		@$Form = @$el.find 'form'
-		throw "FormView should contain a form" unless @$Form and @$Form.length > 0
+		unless @$Form
+			@$Form = @$el.find 'form' 
+			throw "FormView should contain a form" unless @$Form and @$Form.length > 0
 		if !@requestInProgress
 			@requestInProgress = true
+			@$Form.find('.btn').addClass 'disabled'
 			@onFormSubmit()
 			$.ajax
 				dataType: @dataType
@@ -58,5 +60,6 @@ class FormView extends BaseView
 	
 	onComplete: (jqXHR, textStatus) ->
 		@requestInProgress = false
+		@$Form.find('.btn').removeClass 'disabled'
 	
 return FormView
