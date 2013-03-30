@@ -64,7 +64,11 @@ class FormView extends BaseView
 		
 	setInputState: ($Input, type, text) ->
 		$OptionGroup = $Input.closest '.control-group'
+		$Controls = $OptionGroup.find '.controls'
+		$Help = $Controls.find '.help-inline'
 		$OptionGroup.removeClass('warning').removeClass('error').removeClass('info').removeClass('success')
 		$OptionGroup.addClass(type) if type
+		$Help.remove()
+		$Controls.append('<span class="help-inline">' + text + '</span>') if text
 	
 return FormView
