@@ -1,5 +1,7 @@
 package common.models.entity;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -10,14 +12,21 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import play.Logger;
 import play.data.format.Formats;
 import be.objectify.deadbolt.core.models.Subject;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.validation.Email;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+import com.feth.play.module.pa.user.EmailIdentity;
+import com.feth.play.module.pa.user.NameIdentity;
+import common.controllers.Application;
 
 /**
  * The User represents each Player for our application.
@@ -36,7 +45,6 @@ public class User extends BaseModel implements Subject {
   private String email;
 
   private String username;
-  private String password;
   private Boolean newsletter;
 
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -46,36 +54,18 @@ public class User extends BaseModel implements Subject {
   private boolean emailValidated;
 
   @ManyToMany
+  @JsonIgnore
   private List<SecurityRole> roles;
 
   @OneToMany(cascade = CascadeType.ALL)
-  private List<LinkedAccounts> linkedAccounts;
+  @JsonIgnore
+  private List<LinkedAccount> linkedAccounts;
 
   @ManyToMany
+  @JsonIgnore
   private List<UserPermission> permissions;
 
   private static final Finder<Long, User> finder = new Finder<Long, User>(Long.class, User.class);
-
-  /**
-   * Default constructor.
-   */
-  public User() {
-    super();
-  }
-
-  /**
-   * Constructor with additional username and password.
-   * 
-   * @param username
-   *          The username to set
-   * @param password
-   *          The password to set
-   */
-  public User(String username, String password) {
-    this();
-    this.username = username;
-    this.password = password;
-  }
 
   @Override
   public String getIdentifier() {
@@ -88,8 +78,32 @@ public class User extends BaseModel implements Subject {
   }
 
   public static User create(AuthUser authUser) {
-    // TODO Auto-generated method stub
-    return null;
+    final User user = new User();
+    user.setRoles(Collections.singletonList(SecurityRole.findByRoleName(Application.USER_ROLE)));
+    user.setActive(true);
+    user.setLastLogin(new Date());
+    user.setLinkedAccounts(Collections.singletonList(LinkedAccount.create(authUser)));
+
+    if (authUser instanceof EmailIdentity) {
+      final EmailIdentity identity = (EmailIdentity) authUser;
+      Logger.info("EmailIdentity..." + identity.getEmail());
+      // user.setEmail(identity.getEmail());
+      // user.setEmailValidated(false);
+    }
+
+    if (authUser instanceof NameIdentity) {
+      final NameIdentity identity = (NameIdentity) authUser;
+      Logger.info("NameIdentity..." + identity.getName());
+      final String name = identity.getName();
+      if (name != null) {
+        user.setUsername(name);
+      }
+    }
+
+    user.save();
+    user.saveManyToManyAssociations("roles");
+    Logger.info("Saved new user");
+    return user;
   }
 
   public static boolean existsByAuthUserIdentity(AuthUser authUser) {
@@ -97,17 +111,51 @@ public class User extends BaseModel implements Subject {
     return false;
   }
 
-  public static User findByAuthUserIdentity(AuthUserIdentity u) {
-    // TODO Auto-generated method stub
-    return null;
+  public static boolean existsByAuthUserIdentity(final AuthUserIdentity identity) {
+    final ExpressionList<User> exp;
+    if (identity instanceof UsernamePasswordAuthUser) {
+      exp = getUsernamePasswordAuthUserFind((UsernamePasswordAuthUser) identity);
+    } else {
+      exp = getAuthUserFind(identity);
+    }
+    return exp.findRowCount() > 0;
+  }
+
+  private static ExpressionList<User> getAuthUserFind(final AuthUserIdentity identity) {
+    return getFinder().where().eq("active", true).eq("linkedAccounts.providerUserId", identity.getId())
+        .eq("linkedAccounts.providerKey", identity.getProvider());
+  }
+
+  public static User findByAuthUserIdentity(final AuthUserIdentity identity) {
+    if (identity == null) {
+      return null;
+    }
+    if (identity instanceof UsernamePasswordAuthUser) {
+      return findByUsernamePasswordIdentity((UsernamePasswordAuthUser) identity);
+    } else {
+      return getAuthUserFind(identity).findUnique();
+    }
+  }
+
+  public void merge(final User otherUser) {
+    for (final LinkedAccount acc : otherUser.linkedAccounts) {
+      this.linkedAccounts.add(LinkedAccount.create(acc));
+    }
+    // do all other merging stuff here - like resources, etc.
+
+    // deactivate the merged user that got added to this one
+    otherUser.active = false;
+    Ebean.save(Arrays.asList(new User[] { otherUser, this }));
   }
 
   public static void merge(AuthUser oldUser, AuthUser newUser) {
-    // TODO Auto-generated method stub
+    User.findByAuthUserIdentity(oldUser).merge(User.findByAuthUserIdentity(newUser));
   }
 
   public static void setLastLoginDate(AuthUser knownUser) {
-    // TODO Auto-generated method stub
+    final User u = User.findByAuthUserIdentity(knownUser);
+    u.setLastLogin(new Date());
+    u.save();
   }
 
   public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
@@ -117,7 +165,7 @@ public class User extends BaseModel implements Subject {
   private static ExpressionList<User> getUsernamePasswordAuthUserFind(final UsernamePasswordAuthUser identity) {
     return getUsernameFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
   }
-  
+
   public static User findByUsername(final String username) {
     return getUsernameFind(username).findUnique();
   }
@@ -142,14 +190,6 @@ public class User extends BaseModel implements Subject {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public String getEmail() {
@@ -192,11 +232,11 @@ public class User extends BaseModel implements Subject {
     this.emailValidated = emailValidated;
   }
 
-  public List<LinkedAccounts> getLinkedAccounts() {
+  public List<LinkedAccount> getLinkedAccounts() {
     return linkedAccounts;
   }
 
-  public void setLinkedAccounts(List<LinkedAccounts> linkedAccounts) {
+  public void setLinkedAccounts(List<LinkedAccount> linkedAccounts) {
     this.linkedAccounts = linkedAccounts;
   }
 

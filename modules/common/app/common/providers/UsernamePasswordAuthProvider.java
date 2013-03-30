@@ -11,8 +11,7 @@ import play.mvc.Call;
 import play.mvc.Http.Context;
 
 import com.feth.play.module.mail.Mailer.Mail.Body;
-
-import common.models.entity.LinkedAccounts;
+import common.models.entity.LinkedAccount;
 import common.models.entity.User;
 
 /**
@@ -126,7 +125,7 @@ public class UsernamePasswordAuthProvider
       Logger.info("User not found");
       return LoginResult.NOT_FOUND;
     }
-    for (final LinkedAccounts acc : u.getLinkedAccounts()) {
+    for (final LinkedAccount acc : u.getLinkedAccounts()) {
       if (getKey().equals(acc.getProviderKey())) {
         if (authUser.checkPassword(acc.getProviderUserId(), authUser.getPassword())) {
           // Password was correct
@@ -147,15 +146,18 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected SignupResult signupUser(UsernamePasswordAuthUser arg0) {
-    // TODO Auto-generated method stub
-    return null;
+  protected SignupResult signupUser(UsernamePasswordAuthUser user) {
+    final User u = User.findByUsernamePasswordIdentity(user);
+    if (u != null) {
+      return SignupResult.USER_EXISTS;
+    }
+    User.create(user);
+    return SignupResult.USER_CREATED;
   }
 
   @Override
-  protected LoginUsernamePasswordAuthUser transformAuthUser(UsernamePasswordAuthUser arg0, Context arg1) {
-    // TODO Auto-generated method stub
-    return null;
+  protected LoginUsernamePasswordAuthUser transformAuthUser(UsernamePasswordAuthUser authUser, Context ctx) {
+    return new LoginUsernamePasswordAuthUser(authUser.getEmail());
   }
 
   @Override

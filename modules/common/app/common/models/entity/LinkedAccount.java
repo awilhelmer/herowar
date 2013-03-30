@@ -10,7 +10,7 @@ import com.feth.play.module.pa.user.AuthUser;
 
 @Entity
 @SuppressWarnings("serial")
-public class LinkedAccounts extends Model {
+public class LinkedAccount extends Model {
 
   @Id
   private Long id;
@@ -21,14 +21,14 @@ public class LinkedAccounts extends Model {
   private String providerUserId;
   private String providerKey;
 
-  public static final Finder<Long, LinkedAccounts> finder = new Finder<Long, LinkedAccounts>(Long.class, LinkedAccounts.class);
+  public static final Finder<Long, LinkedAccount> finder = new Finder<Long, LinkedAccount>(Long.class, LinkedAccount.class);
 
-  public static LinkedAccounts findByProviderKey(final User user, String key) {
+  public static LinkedAccount findByProviderKey(final User user, String key) {
     return getFinder().where().eq("user", user).eq("providerKey", key).findUnique();
   }
 
-  public static LinkedAccounts create(final AuthUser authUser) {
-    final LinkedAccounts ret = new LinkedAccounts();
+  public static LinkedAccount create(final AuthUser authUser) {
+    final LinkedAccount ret = new LinkedAccount();
     ret.update(authUser);
     return ret;
   }
@@ -38,8 +38,8 @@ public class LinkedAccounts extends Model {
     this.providerUserId = authUser.getId();
   }
 
-  public static LinkedAccounts create(final LinkedAccounts acc) {
-    final LinkedAccounts ret = new LinkedAccounts();
+  public static LinkedAccount create(final LinkedAccount acc) {
+    final LinkedAccount ret = new LinkedAccount();
     ret.providerKey = acc.providerKey;
     ret.providerUserId = acc.providerUserId;
 
@@ -80,7 +80,7 @@ public class LinkedAccounts extends Model {
     this.providerKey = providerKey;
   }
 
-  public static Finder<Long, LinkedAccounts> getFinder() {
+  public static Finder<Long, LinkedAccount> getFinder() {
     return finder;
   }
 
