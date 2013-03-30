@@ -21,13 +21,13 @@ class FormView extends BaseView
 	
 	initialize: (options) ->
 		@requestInProgress = false
-		@$Form = @$el.find 'form'
-		throw "FormView should contain a form" unless @form and @form.length > 0
 		throw "FormView should contain a url" unless @url
 		super options
 	
 	submitForm: (event) ->
 		event?.preventDefault()
+		@$Form = @$el.find 'form'
+		throw "FormView should contain a form" unless @$Form and @$Form.length > 0
 		if !@requestInProgress
 			@requestInProgress = true
 			@onFormSubmit()
@@ -35,7 +35,7 @@ class FormView extends BaseView
 				dataType: @dataType
 				type: @type
 				url: @url
-				data: @getFormData()
+				data: @getFormData @$Form
 				success: (data, textStatus, jqXHR) =>
 					@onSuccess data, textStatus, jqXHR
 				error: (jqXHR, textStatus, errorThrown) =>
@@ -43,9 +43,12 @@ class FormView extends BaseView
 				complete: (jqXHR, textStatus) =>
 					@onComplete jqXHR, textStatus
 				
-	getFormData: ->
-	   $.map $('form input'), (n, i) ->
-	       Key: n.name, Value: $(n).val()
+	getFormData: ($Form) ->
+		data = {}
+		$.each($Form.find('input'), (i, n) ->
+			data[n.name] = $(n).val()
+		)
+		data
 	
 	onFormSubmit: ->
 	       
@@ -54,5 +57,6 @@ class FormView extends BaseView
 	onError: (jqXHR, textStatus, errorThrown) ->
 	
 	onComplete: (jqXHR, textStatus) ->
+		@requestInProgress = false
 	
-return Signup
+return FormView
