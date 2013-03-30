@@ -3,6 +3,7 @@
 # ~~~~
 
 GET		/me							common.controllers.Me.show()
+POST	/login						common.controllers.Me.login()
 GET     /user/all                   common.controllers.UserController.list()
 GET     /user/:id                   common.controllers.UserController.show(id: Long)
 POST	/user						common.controllers.UserController.add()

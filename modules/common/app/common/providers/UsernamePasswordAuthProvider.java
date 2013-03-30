@@ -11,6 +11,8 @@ import play.mvc.Http.Context;
 import com.avaje.ebean.validation.Email;
 import com.feth.play.module.mail.Mailer.Mail.Body;
 
+import static play.data.Form.form;
+
 public class UsernamePasswordAuthProvider
     extends
     com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, UsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.MyLogin, UsernamePasswordAuthProvider.MySignup> {
@@ -20,6 +22,9 @@ public class UsernamePasswordAuthProvider
     // TODO Auto-generated constructor stub
   }
 
+  public static final Form<MySignup> SIGNUP_FORM = form(MySignup.class);
+  public static final Form<MyLogin> LOGIN_FORM = form(MyLogin.class);
+  
   public static class MyIdentity {
 
     public MyIdentity() {
