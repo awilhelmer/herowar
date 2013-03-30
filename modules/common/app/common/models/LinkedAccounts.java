@@ -10,7 +10,7 @@ import com.feth.play.module.pa.user.AuthUser;
 
 @Entity
 @SuppressWarnings("serial")
-public class LinkedUser extends Model {
+public class LinkedAccounts extends Model {
 
   @Id
   private Long id;
@@ -21,14 +21,14 @@ public class LinkedUser extends Model {
   private String providerUserId;
   private String providerKey;
 
-  public static final Finder<Long, LinkedUser> find = new Finder<Long, LinkedUser>(Long.class, LinkedUser.class);
+  public static final Finder<Long, LinkedAccounts> finder = new Finder<Long, LinkedAccounts>(Long.class, LinkedAccounts.class);
 
-  public static LinkedUser findByProviderKey(final User user, String key) {
-    return find.where().eq("user", user).eq("providerKey", key).findUnique();
+  public static LinkedAccounts findByProviderKey(final User user, String key) {
+    return getFinder().where().eq("user", user).eq("providerKey", key).findUnique();
   }
 
-  public static LinkedUser create(final AuthUser authUser) {
-    final LinkedUser ret = new LinkedUser();
+  public static LinkedAccounts create(final AuthUser authUser) {
+    final LinkedAccounts ret = new LinkedAccounts();
     ret.update(authUser);
     return ret;
   }
@@ -38,8 +38,8 @@ public class LinkedUser extends Model {
     this.providerUserId = authUser.getId();
   }
 
-  public static LinkedUser create(final LinkedUser acc) {
-    final LinkedUser ret = new LinkedUser();
+  public static LinkedAccounts create(final LinkedAccounts acc) {
+    final LinkedAccounts ret = new LinkedAccounts();
     ret.providerKey = acc.providerKey;
     ret.providerUserId = acc.providerUserId;
 
@@ -78,6 +78,10 @@ public class LinkedUser extends Model {
 
   public void setProviderKey(String providerKey) {
     this.providerKey = providerKey;
+  }
+
+  public static Finder<Long, LinkedAccounts> getFinder() {
+    return finder;
   }
 
 }

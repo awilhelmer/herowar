@@ -15,7 +15,7 @@ import common.models.User;
  * 
  * @author Sebastian Sachtleben
  */
-public class UserController extends Controller {
+public class Users extends Controller {
 
   public static Result list() {
     List<User> users = User.getFinder().all();

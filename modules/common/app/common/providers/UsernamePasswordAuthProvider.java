@@ -1,6 +1,8 @@
 package common.providers;
 
+import static play.data.Form.form;
 import play.Application;
+import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
@@ -8,35 +10,34 @@ import play.i18n.Messages;
 import play.mvc.Call;
 import play.mvc.Http.Context;
 
-import com.avaje.ebean.validation.Email;
 import com.feth.play.module.mail.Mailer.Mail.Body;
-
-import static play.data.Form.form;
+import common.models.LinkedAccounts;
+import common.models.User;
 
 public class UsernamePasswordAuthProvider
     extends
-    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, UsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.MyLogin, UsernamePasswordAuthProvider.MySignup> {
+    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.MyLogin, UsernamePasswordAuthProvider.MySignup> {
 
   public UsernamePasswordAuthProvider(Application app) {
     super(app);
-    // TODO Auto-generated constructor stub
   }
 
   public static final Form<MySignup> SIGNUP_FORM = form(MySignup.class);
   public static final Form<MyLogin> LOGIN_FORM = form(MyLogin.class);
-  
+
   public static class MyIdentity {
 
     public MyIdentity() {
     }
 
-    public MyIdentity(final String email) {
-      this.email = email;
+    public MyIdentity(final String username) {
+      this.username = username;
     }
 
-    @Required
-    @Email
     public String email;
+
+    @Required
+    public String username;
 
   }
 
@@ -48,7 +49,7 @@ public class UsernamePasswordAuthProvider
 
     @Override
     public String getEmail() {
-      return email;
+      return username;
     }
 
     @Override
@@ -75,15 +76,13 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected UsernamePasswordAuthUser buildLoginAuthUser(MyLogin arg0, Context arg1) {
-    // TODO Auto-generated method stub
-    return null;
+  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(MyLogin login, Context ctx) {
+    return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
   }
 
   @Override
-  protected UsernamePasswordAuthUser buildSignupAuthUser(MySignup arg0, Context arg1) {
-    // TODO Auto-generated method stub
-    return null;
+  protected UsernamePasswordAuthUser buildSignupAuthUser(MySignup signup, Context ctx) {
+    return new UsernamePasswordAuthUser(signup);
   }
 
   @Override
@@ -94,14 +93,12 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected Form<MyLogin> getLoginForm() {
-    // TODO Auto-generated method stub
-    return null;
+    return LOGIN_FORM;
   }
 
   @Override
   protected Form<MySignup> getSignupForm() {
-    // TODO Auto-generated method stub
-    return null;
+    return SIGNUP_FORM;
   }
 
   @Override
@@ -117,19 +114,41 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.LoginResult loginUser(UsernamePasswordAuthUser arg0) {
+  protected LoginResult loginUser(LoginUsernamePasswordAuthUser authUser) {
+    Logger.info("Login: " + authUser.toString());
+    final User u = User.findByUsernamePasswordIdentity(authUser);
+    if (u == null) {
+      Logger.info("User not found");
+      return LoginResult.NOT_FOUND;
+    }
+    for (final LinkedAccounts acc : u.getLinkedAccounts()) {
+      if (getKey().equals(acc.getProviderKey())) {
+        if (authUser.checkPassword(acc.getProviderUserId(), authUser.getPassword())) {
+          // Password was correct
+          Logger.info("User is logged in");
+          return LoginResult.USER_LOGGED_IN;
+        } else {
+          // if you don't return here,
+          // you would allow the user to have
+          // multiple passwords defined
+          // usually we don't want this
+          Logger.info("Passwort wrong 1");
+          return LoginResult.WRONG_PASSWORD;
+        }
+      }
+    }
+    Logger.info("Passwort wrong 2");
+    return LoginResult.WRONG_PASSWORD;
+  }
+
+  @Override
+  protected SignupResult signupUser(UsernamePasswordAuthUser arg0) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  protected com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.SignupResult signupUser(UsernamePasswordAuthUser arg0) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  protected UsernamePasswordAuthUser transformAuthUser(UsernamePasswordAuthUser arg0, Context arg1) {
+  protected LoginUsernamePasswordAuthUser transformAuthUser(UsernamePasswordAuthUser arg0, Context arg1) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -146,4 +165,9 @@ public class UsernamePasswordAuthProvider
     return null;
   }
 
+  @Override
+  protected String onLoginUserNotFound(Context context) {
+    Logger.warn("User not found");
+    return null;
+  }
 }

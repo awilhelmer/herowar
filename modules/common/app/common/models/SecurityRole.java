@@ -15,7 +15,7 @@ public class SecurityRole extends Model implements Role {
 
   private String roleName;
 
-  private static final Finder<Long, SecurityRole> find = new Finder<Long, SecurityRole>(Long.class, SecurityRole.class);
+  private static final Finder<Long, SecurityRole> finder = new Finder<Long, SecurityRole>(Long.class, SecurityRole.class);
 
   @Override
   public String getName() {
@@ -23,7 +23,7 @@ public class SecurityRole extends Model implements Role {
   }
 
   public static SecurityRole findByRoleName(String roleName) {
-    return find.where().eq("roleName", roleName).findUnique();
+    return getFinder().where().eq("roleName", roleName).findUnique();
   }
 
   // GETTER & SETTER //
@@ -44,4 +44,7 @@ public class SecurityRole extends Model implements Role {
     this.roleName = roleName;
   }
 
+  public static Finder<Long, SecurityRole> getFinder() {
+    return finder;
+  }
 }

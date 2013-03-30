@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import play.data.format.Formats;
 import be.objectify.deadbolt.core.models.Subject;
 
+import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.validation.Email;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.AuthUser;
@@ -48,7 +49,7 @@ public class User extends BaseModel implements Subject {
   private List<SecurityRole> roles;
 
   @OneToMany(cascade = CascadeType.ALL)
-  private List<LinkedUser> linkedUsers;
+  private List<LinkedAccounts> linkedAccounts;
 
   @ManyToMany
   private List<UserPermission> permissions;
@@ -108,10 +109,21 @@ public class User extends BaseModel implements Subject {
   public static void setLastLoginDate(AuthUser knownUser) {
     // TODO Auto-generated method stub
   }
+
+  public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
+    return getUsernamePasswordAuthUserFind(identity).findUnique();
+  }
+
+  private static ExpressionList<User> getUsernamePasswordAuthUserFind(final UsernamePasswordAuthUser identity) {
+    return getUsernameFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
+  }
   
-  public static User findByUsernamePasswordIdentity(UsernamePasswordAuthUser user) {
-    // TODO Auto-generated method stub
-    return null;
+  public static User findByUsername(final String username) {
+    return getUsernameFind(username).findUnique();
+  }
+
+  private static ExpressionList<User> getUsernameFind(final String username) {
+    return getFinder().where().eq("active", true).eq("username", username);
   }
 
   // GETTER & SETTER //
@@ -180,12 +192,12 @@ public class User extends BaseModel implements Subject {
     this.emailValidated = emailValidated;
   }
 
-  public List<LinkedUser> getLinkedUsers() {
-    return linkedUsers;
+  public List<LinkedAccounts> getLinkedAccounts() {
+    return linkedAccounts;
   }
 
-  public void setLinkedUsers(List<LinkedUser> linkedUsers) {
-    this.linkedUsers = linkedUsers;
+  public void setLinkedAccounts(List<LinkedAccounts> linkedAccounts) {
+    this.linkedAccounts = linkedAccounts;
   }
 
   public List<SecurityRole> getRoles() {

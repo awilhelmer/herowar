@@ -1,6 +1,7 @@
 package common.controllers;
 
 import static play.libs.Json.toJson;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -22,6 +23,7 @@ public class Me extends Controller {
   }
   
   public static Result login() {
+    Logger.info("login called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
     final Form<MyLogin> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
     if (filledForm.hasErrors()) {
@@ -29,6 +31,11 @@ public class Me extends Controller {
     } else {
       return UsernamePasswordAuthProvider.handleLogin(ctx());
     }
+  }
+  
+  public static Result signup() {
+    Logger.info("signup called");
+    return badRequest();
   }
   
 }
