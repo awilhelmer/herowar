@@ -4,7 +4,7 @@
 
 GET     /                           controllers.Application.index()
 POST    /login                      controllers.Authenticator.login()
-GET		/signup						controllers.Signup.index()
+GET		/signup						controllers.Application.signup()
 POST	/signup						controllers.Signup.send()
 
 ->		/api						api.Routes

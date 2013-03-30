@@ -15,8 +15,9 @@ Router = Backbone.Router.extend
         The routes in our application.
     ###
     routes:
-        "":                                 "home"
-
+        "":		"home"
+        "signup":	"signup"
+	
     ###
         Overridden Backbone method to dynamically instanciate the controller with the given name
         the arguments given to the route are forwarded.
