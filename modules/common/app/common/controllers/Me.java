@@ -44,12 +44,12 @@ public class Me extends Controller {
     return UsernamePasswordAuthProvider.handleSignup(ctx());
   }
   
-  public static Result checkUsername(String name) {
-    return badRequest();
+  public static Result checkUsername(String username) {
+    return ok(toJson(User.getFinder().where().eq("username", username).findUnique() != null));
   }
   
   public static Result checkEmail(String email) {
-    return badRequest();
+    return ok(toJson(User.getFinder().where().eq("email", email).findUnique() != null));
   }
 
   private static User getLoggedInUser() {

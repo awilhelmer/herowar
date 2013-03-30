@@ -17,7 +17,7 @@ class FormView extends BaseView
 	url: ''
 	
 	events:
-		"submit form": 'submitForm'
+		'submit form': 'submitForm'
 	
 	initialize: (options) ->
 		@requestInProgress = false
@@ -61,5 +61,10 @@ class FormView extends BaseView
 	onComplete: (jqXHR, textStatus) ->
 		@requestInProgress = false
 		@$Form.find('.btn').removeClass 'disabled'
+		
+	setInputState: ($Input, type, text) ->
+		$OptionGroup = $Input.closest '.control-group'
+		$OptionGroup.removeClass('warning').removeClass('error').removeClass('info').removeClass('success')
+		$OptionGroup.addClass(type) if type
 	
 return FormView
