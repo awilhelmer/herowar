@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import common.controllers.routes;
+
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
@@ -47,8 +49,7 @@ public class Global extends GlobalSettings {
       
       @Override
       public Call afterAuth() {
-        // TODO Auto-generated method stub
-        return null;
+        return routes.Me.show();
       }
     });
     

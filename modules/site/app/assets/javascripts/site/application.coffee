@@ -10,6 +10,11 @@ db = require 'database'
 ###
 app =
 	###
+		Get resource path to our json server.
+	###
+	resourcePath: -> "http://localhost:9000/api/"	
+	
+	###
 		Current active views.
 	###
 	views: {}

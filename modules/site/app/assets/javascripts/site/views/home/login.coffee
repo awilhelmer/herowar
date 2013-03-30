@@ -1,5 +1,6 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
+app = require 'application'
 
 ###
     The Home shows our home start view.
@@ -20,11 +21,16 @@ class Login extends BaseView
 		$.ajax
 			dataType: 'json'
 			type: 'POST'
-			url: "http://localhost:9000/api/login"
+			url: "#{app.resourcePath()}login"
 			data:
 				'username' : $("input[name='username']").val()
 				'password' : $("input[name='password']").val()
 			success: (resp) =>
+				console.log 'Success'
 				console.log resp
+			error: (jqXHR, textStatus, errorThrown) =>
+				console.log 'Error'
+				console.log textStatus
+				console.log errorThrown
 	
 return Login

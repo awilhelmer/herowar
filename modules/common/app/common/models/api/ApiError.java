@@ -1,4 +1,4 @@
-package common.models;
+package common.models.api;
 
 /**
  * The ApiError will be shown if something occur what should not happen.
@@ -9,6 +9,8 @@ public class ApiError {
 
   private Integer code;
   private String message;
+  private String description;
+  private Object body;
 
   /**
    * Default constructor with code and message parameters.
@@ -18,9 +20,11 @@ public class ApiError {
    * @param message
    *          The message to set
    */
-  public ApiError(Integer code, String message) {
+  public ApiError(Integer code, String message, String description, Object body) {
     this.code = code;
     this.message = message;
+    this.description = description;
+    this.body = body;
   }
 
   public Integer getCode() {
@@ -37,5 +41,21 @@ public class ApiError {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Object getBody() {
+    return body;
+  }
+
+  public void setBody(Object body) {
+    this.body = body;
   }
 }

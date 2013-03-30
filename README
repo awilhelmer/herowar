@@ -42,6 +42,18 @@ Updated dependencies
 
 
 
+Section: Json API
+
+The json api is located under /api and allows the to get informations from database or put new records.
+
+These api errors could occur:
+
+Code  | Short Message 					| Long Message
+80000 | Form validation failed 	|	The form validation failed for some reason, more detailed information will be send in body object.
+
+
+
+
 Section: page/pagedesign
 
 
