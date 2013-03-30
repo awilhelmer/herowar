@@ -48,7 +48,10 @@ class FormView extends BaseView
 	getFormData: ($Form) ->
 		data = {}
 		$.each($Form.find('input'), (i, n) ->
-			data[n.name] = $(n).val()
+			if n.type == 'checkbox'
+				data[n.name] = $(n).is(':checked')
+			else
+				data[n.name] = $(n).val()
 		)
 		data
 	
