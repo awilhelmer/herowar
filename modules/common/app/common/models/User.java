@@ -53,7 +53,7 @@ public class User extends BaseModel implements Subject {
   @ManyToMany
   private List<UserPermission> permissions;
 
-  private static final Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);
+  private static final Finder<Long, User> finder = new Finder<Long, User>(Long.class, User.class);
 
   /**
    * Default constructor.
@@ -202,5 +202,9 @@ public class User extends BaseModel implements Subject {
 
   public void setPermissions(List<UserPermission> permissions) {
     this.permissions = permissions;
+  }
+
+  public static Finder<Long, User> getFinder() {
+    return finder;
   }
 }
