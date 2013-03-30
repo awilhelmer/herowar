@@ -32,10 +32,11 @@ class Signup extends BaseView
 				type: 'POST'
 				url: "#{app.resourcePath()}signup"
 				data:
-					'username' 				: $Form.find("input[name='username']").val()
-					'password' 				: $Form.find("input[name='password']").val()
-					'repeatPassword' 	: $Form.find("input[name='repeatPassword']").val()
-					'email'    				: $Form.find("input[name='email']").val()
+					'username' 				: $Form.find("#inputUsername").val()
+					'password' 				: $Form.find("#inputPassword").val()
+					'repeatPassword' 	: $Form.find("#inputRepeatPassword").val()
+					'email'    				: $Form.find("#inputEmail").val()
+					'newsletter'			: $Form.find("#newsletter").val()
 				success: (resp) =>
 					console.log 'Success'
 					console.log resp

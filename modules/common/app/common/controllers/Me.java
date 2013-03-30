@@ -43,6 +43,14 @@ public class Me extends Controller {
     }
     return UsernamePasswordAuthProvider.handleSignup(ctx());
   }
+  
+  public static Result checkUsername(String name) {
+    return badRequest();
+  }
+  
+  public static Result checkEmail(String email) {
+    return badRequest();
+  }
 
   private static User getLoggedInUser() {
     return Application.getLocalUser(session());

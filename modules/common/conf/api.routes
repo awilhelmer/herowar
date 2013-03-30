@@ -2,10 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET		/me							common.controllers.Me.show()
-POST	/login						common.controllers.Me.login()
-POST	/signup						common.controllers.Me.signup()
+GET		/me															common.controllers.Me.show()
+POST	/login													common.controllers.Me.login()
+POST	/signup													common.controllers.Me.signup()
+POST	/checkUsername/:name						common.controllers.Me.checkUsername(name: String)
+POST	/checkEmail/:email							common.controllers.Me.checkEmail(email: String)
 
-GET     /user/all                   common.controllers.Users.list()
-GET     /user/:id                   common.controllers.Users.show(id: Long)
-POST	/user						common.controllers.Users.add()
+GET		/user/all												common.controllers.Users.list()
+GET		/user/:id												common.controllers.Users.show(id: Long)
+POST	/user														common.controllers.Users.add()
