@@ -9,6 +9,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import common.models.api.DummyObject;
 import common.models.api.error.FormValidationError;
 import common.models.entity.User;
 import common.providers.UsernamePasswordAuthProvider;
@@ -24,7 +25,11 @@ import common.providers.UsernamePasswordAuthProvider.SignupForm;
 public class Me extends Controller {
 
   public static Result show() {
-    return ok(toJson(getLoggedInUser()));
+    User user = getLoggedInUser();
+    if (user != null) {
+      return ok(toJson(getLoggedInUser()));
+    }
+    return ok("{}");
   }
 
   public static Result login() {

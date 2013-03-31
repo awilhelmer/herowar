@@ -32,7 +32,8 @@ class Login extends BaseView
 				'password' : $("input[name='password']").val()
 			success: (resp) =>
 				console.log 'Success'
-				console.log resp
+				@model.set data
+				@model.validateResponse(data)
 			error: (jqXHR, textStatus, errorThrown) =>
 				console.log 'Error'
 				console.log textStatus

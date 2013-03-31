@@ -28,7 +28,8 @@ class Signup extends FormView
 		
 	onSuccess: (data, textStatus, jqXHR) ->
 		console.log 'Success'
-		console.log data
+		@model.set data
+		@model.validateResponse(data)
 		@redirectToHome()
 			
 	onError: (jqXHR, textStatus, errorThrown) ->
