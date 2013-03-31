@@ -6,11 +6,19 @@ Important:
 In sources its not legal to have non utf-8 characters.
 To scan for, type the following in source folder after clean:
 find . "" -exec grep -I -H --color='auto' -P -n "[\x80-\xFF]" {} \; 
+
+
 TODOS:
 
 Section: building and transforming resources
+
 1. Configuration SBT for dev/prod build mode - on prod only .min.js resources (JavascriptTranformator)
 2. Generate serial ID's for js-resource names, persisting key and id for mapping in client in textfile (JavascriptTranformator)
+
+Section: Site
+
+1. Style gritter message (remove image background and use css3)
+
 
 
 

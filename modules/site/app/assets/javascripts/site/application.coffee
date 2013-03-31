@@ -28,7 +28,7 @@ app =
 		Main entry point for our application.
 	###
 	start: ->
-		app.router = new Router();
+		app.router = new Router()
 		Backbone.history.start pushState: true
 
 	###
