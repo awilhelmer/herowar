@@ -1,7 +1,7 @@
 ###
     The templates helps to load precompiled handlebars templates.
 
-    @uathor Sebastian Sachtleben
+    @author Sebastian Sachtleben
 ###
 templates = 
 

@@ -2,11 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+########## SITE ###########
+
 GET		/																		controllers.Application.index()
-POST	/login															controllers.Authenticator.login()
 GET		/signup															controllers.Application.signup()
-POST	/signup															controllers.Signup.send()
 GET		/play																controllers.Application.goPlay()
+
+########## API ###########
 
 GET		/api/me															controllers.api.Me.show()
 POST	/api/login													controllers.api.Me.login()
@@ -19,5 +21,10 @@ GET		/api/user/all												controllers.api.Users.list()
 GET		/api/user/:id												controllers.api.Users.show(id: Long)
 POST	/api/user														controllers.api.Users.add()
 
-# Map static resources from the /public folder
+########## API ###########
+
+GET		/admin															controllers.Admin.index()
+
+########## OTHER ###########
+
 GET     /assets/*file               			controllers.Assets.at(path="/public", file)
