@@ -22,16 +22,14 @@ class Settings extends BaseView
 		'click .logout-link': 'logout'
 		
 	logout: (event) ->
-		event?.preventDefault()
+		if event
+			event.preventDefault()
+			$CurrentTarget = $ event.currentTarget
+			$CurrentTarget.addClass 'disabled'
 		$.ajax
 			type: 'POST'
 			url: "#{app.resourcePath()}logout"
 			success: (data, textStatus, jqXHR) =>
 				@model.reset()
-		
-	render: () ->
-		console.log 'Render Settings...'
-		console.log @getTemplateData()
-		super()
-	
+
 return Settings

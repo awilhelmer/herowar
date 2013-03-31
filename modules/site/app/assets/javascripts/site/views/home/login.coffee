@@ -30,10 +30,13 @@ class Login extends BaseView
 			data:
 				'username' : $("input[name='username']").val()
 				'password' : $("input[name='password']").val()
-			success: (resp) =>
+			success: (data) =>
 				console.log 'Success'
 				@model.set data
 				@model.validateResponse(data)
+				$('html, body').animate
+					scrollTop : 0
+					,'fast'
 			error: (jqXHR, textStatus, errorThrown) =>
 				console.log 'Error'
 				console.log textStatus
