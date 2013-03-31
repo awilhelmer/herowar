@@ -29,7 +29,7 @@ class FormView extends BaseView
 		unless @$Form
 			@$Form = @$el.find 'form' 
 			throw "FormView should contain a form" unless @$Form and @$Form.length > 0
-		if !@requestInProgress
+		if !@requestInProgress && @validateForm(@$Form)
 			@requestInProgress = true
 			@$Form.find('.btn').addClass 'disabled'
 			@onFormSubmit()
@@ -44,6 +44,9 @@ class FormView extends BaseView
 					@onError jqXHR, textStatus, errorThrown
 				complete: (jqXHR, textStatus) =>
 					@onComplete jqXHR, textStatus
+	
+	validateForm: ($Form) ->
+		true
 				
 	getFormData: ($Form) ->
 		data = {}

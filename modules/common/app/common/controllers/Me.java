@@ -1,15 +1,13 @@
 package common.controllers;
 
 import static play.libs.Json.toJson;
-
-import com.feth.play.module.pa.controllers.Authenticate;
-
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import common.models.api.DummyObject;
+import com.feth.play.module.pa.controllers.Authenticate;
+import common.models.api.error.AuthenticationError;
 import common.models.api.error.FormValidationError;
 import common.models.entity.User;
 import common.providers.UsernamePasswordAuthProvider;
@@ -36,10 +34,25 @@ public class Me extends Controller {
     Logger.info("login called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
     final Form<LoginForm> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
+    
+    // Validate form data
     if (filledForm.hasErrors()) {
       return badRequest(toJson(new FormValidationError(filledForm.errorsAsJson())));
     }
-    return UsernamePasswordAuthProvider.handleLogin(ctx());
+    
+    // Check if user exists
+    if (User.getFinder().where().eq("username", filledForm.get().email).findUnique() == null) {
+      return badRequest(toJson(new AuthenticationError()));
+    }
+    
+    // Handle login
+    Result loginResult = UsernamePasswordAuthProvider.handleLogin(ctx());
+    
+    // Check if user really logged in
+    if (getLoggedInUser() == null) {
+      return badRequest(toJson(new AuthenticationError()));
+    }
+    return loginResult;
   }
   
   public static Result logout() {

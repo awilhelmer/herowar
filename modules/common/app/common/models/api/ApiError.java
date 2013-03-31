@@ -13,18 +13,36 @@ public class ApiError {
   private Object body;
 
   /**
-   * Default constructor with code and message parameters.
+   * Default constructor with code, message, description and body parameters.
    * 
    * @param code
    *          The code to set
    * @param message
    *          The message to set
+   * @param description
+   *          The description to set
+   * @param body
+   *          The body to set
    */
   public ApiError(Integer code, String message, String description, Object body) {
     this.code = code;
     this.message = message;
     this.description = description;
     this.body = body;
+  }
+
+  /**
+   * Default constructor with code, message and description parameters.
+   * 
+   * @param code
+   *          The code to set
+   * @param message
+   *          The message to set
+   * @param description
+   *          The description to set
+   */
+  public ApiError(Integer code, String message, String description) {
+    this(code, message, description, null);
   }
 
   public Integer getCode() {

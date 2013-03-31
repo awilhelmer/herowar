@@ -19,11 +19,20 @@
 @import "_code.less";
 @import "_forms.less";
 
+// Components: common
+@import "_dropdowns.less";
+
 // Components: Buttons & Alerts
 @import "_buttons.less";
 
 // Components: Nav
 @import "_navbar.less";
+
+// Components: Popovers
+@import "_tooltip.less";
+
+// JQuery Gritter
+@import "_gritter.less";
 
 // Utility classes
 @import "_utilities.less"; // Has to be last to override when necessary
@@ -37,50 +46,31 @@ body {
 
 #home {
 	.hero {
-		padding: 30px 0 40px;
-		background: url(../../images/index-background.jpg) repeat center center;
-		color: #fff;
-		text-align: center;
-		text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
+		padding:30px 0 40px;
+		background:url(../../images/index-background.jpg) repeat center center;
+		color:#fff;
+		text-align:center;
+		text-shadow:0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
 		
 		h1 {
-			font-size: 120px;
-			line-height: 1;
-			letter-spacing: -2px;
+			font-size:120px;
+			line-height:1;
+			letter-spacing:-2px;
 		}
 		
 		p {
-			font-size: 40px;
-			font-weight: 200;
-			line-height: 1.25;
+			font-size:40px;
+			font-weight:200;
+			line-height:1.25;
 		}
 	}
 }
 
-#header {
-	color: #fff;
-	background-color: #2d2d2d;
-	a {
-		color: #fff;
-	}
-
-	a:hover {
-		color: #fff;
-		text-decoration: none;
-	}
-
-	.inner {
-		width: 1200px;
-		margin: 0 auto;
-		.content {
-			margin-top: 5px;
-			width: 1200px;
-			.home {
-				font-weight: bold;
-			}
-
-			.clearfix
-		}
+.login-form {
+	margin:0;
+	
+	.control-group {
+		margin:0;
 	}
 }
 
@@ -95,4 +85,8 @@ body {
 .loader {
 	text-align:center;
 	margin-top:70px;
+}
+
+.visible {
+	opacity: 1;
 }

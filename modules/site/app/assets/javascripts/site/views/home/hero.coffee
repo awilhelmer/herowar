@@ -10,8 +10,6 @@ app = require 'application'
 class Hero extends BaseView
 
 	entity: 'ui/me'
-
-	id: 'login'
 	
 	template: templates.get 'home/hero.tmpl'
 		

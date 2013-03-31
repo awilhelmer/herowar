@@ -1,6 +1,7 @@
 <div>
 	{{#if isGuest}}
-		<a href="#sidebar" class="btn">Login</a>
+		<a class="btn login-link">Login</a>
+		<div class="tooltip login-tooltip" data-view="views/header/login"></div>
 	{{/if}}
 	{{#if isUser}}
 		<a class="btn logout-link">Logout</a>

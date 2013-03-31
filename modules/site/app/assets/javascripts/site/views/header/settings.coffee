@@ -10,8 +10,6 @@ app = require 'application'
 class Settings extends BaseView
 
 	entity: 'ui/me'
-
-	className: 'settings'
 	
 	template: templates.get 'header/settings.tmpl'
 	
@@ -19,7 +17,8 @@ class Settings extends BaseView
 		@listenTo @model, 'change:isGuest change:isUser', @render if @model
 	
 	events:
-		'click .logout-link': 'logout'
+		'click .logout-link'	: 'logout'
+		'click .login-link'		: 'toggleTooltip'
 		
 	logout: (event) ->
 		if event
@@ -32,5 +31,11 @@ class Settings extends BaseView
 			success: (data, textStatus, jqXHR) =>
 				console.log 'Reset model'
 				@model.reset()
+
+	toggleTooltip: (event) ->
+		$Tooltip = $ '.login-tooltip'
+		$Tooltip.toggleClass 'visible'
+		$UsernameInput = $ '.login-form input[name="username"]'
+		$UsernameInput.focus() if $UsernameInput?.length > 0
 
 return Settings

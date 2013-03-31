@@ -48,9 +48,9 @@ The json api is located under /api and allows the to get informations from datab
 
 These api errors could occur:
 
-Code  | Short Message 					| Long Message
-80000 | Form validation failed 	|	The form validation failed for some reason, more detailed information will be send in body object.
-
+Code  | Short Message 									| Long Message
+80000 | Form validation failed 					|	The form validation failed for some reason, more detailed information will be send in body object.
+80010 | Username/Password is incorrect 	| This error can be caused by an incorrect username or password.
 
 
 
