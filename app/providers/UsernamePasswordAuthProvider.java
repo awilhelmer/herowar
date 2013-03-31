@@ -20,7 +20,7 @@ import com.feth.play.module.mail.Mailer.Mail.Body;
  */
 public class UsernamePasswordAuthProvider
     extends
-    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, FormLogin, FormSignup> {
+    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, SignupUsernamePasswordAuthUser, FormLogin, FormSignup> {
 
   public UsernamePasswordAuthProvider(Application app) {
     super(app);
@@ -35,12 +35,12 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected UsernamePasswordAuthUser buildSignupAuthUser(FormSignup signup, Context ctx) {
-    return new UsernamePasswordAuthUser(signup);
+  protected SignupUsernamePasswordAuthUser buildSignupAuthUser(FormSignup signup, Context ctx) {
+    return new SignupUsernamePasswordAuthUser(signup);
   }
 
   @Override
-  protected String generateVerificationRecord(UsernamePasswordAuthUser arg0) {
+  protected String generateVerificationRecord(SignupUsernamePasswordAuthUser arg0) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -56,13 +56,13 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected Body getVerifyEmailMailingBody(String arg0, UsernamePasswordAuthUser arg1, Context arg2) {
+  protected Body getVerifyEmailMailingBody(String arg0, SignupUsernamePasswordAuthUser arg1, Context arg2) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  protected String getVerifyEmailMailingSubject(UsernamePasswordAuthUser arg0, Context arg1) {
+  protected String getVerifyEmailMailingSubject(SignupUsernamePasswordAuthUser arg0, Context arg1) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -96,7 +96,7 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected SignupResult signupUser(UsernamePasswordAuthUser user) {
+  protected SignupResult signupUser(SignupUsernamePasswordAuthUser user) {
     final User u = User.findByUsernamePasswordIdentity(user);
     if (u != null) {
       return SignupResult.USER_EXISTS;
@@ -106,7 +106,7 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected LoginUsernamePasswordAuthUser transformAuthUser(UsernamePasswordAuthUser authUser, Context ctx) {
+  protected LoginUsernamePasswordAuthUser transformAuthUser(SignupUsernamePasswordAuthUser authUser, Context ctx) {
     return new LoginUsernamePasswordAuthUser(authUser.getEmail());
   }
 

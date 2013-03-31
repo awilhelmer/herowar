@@ -16,6 +16,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import play.Logger;
 import play.data.format.Formats;
+import providers.FormSignup;
+import providers.SignupUsernamePasswordAuthUser;
 import be.objectify.deadbolt.core.models.Subject;
 
 import com.avaje.ebean.Ebean;
@@ -105,6 +107,15 @@ public class User extends BaseModel implements Subject {
     user.saveManyToManyAssociations("roles");
     Logger.info("Saved new user");
     return user;
+  }
+
+  public static User create(String username, String clearPassword, String email) {
+    FormSignup form = new FormSignup();
+    form.username = username;
+    form.password = clearPassword;
+    form.email = email;
+    SignupUsernamePasswordAuthUser authUser = new SignupUsernamePasswordAuthUser(form);
+    return create(authUser);
   }
 
   public static boolean existsByAuthUserIdentity(AuthUser authUser) {

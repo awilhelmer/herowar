@@ -1,16 +1,16 @@
 import java.util.Arrays;
 
 import models.entity.SecurityRole;
+import models.entity.User;
+import play.Application;
+import play.GlobalSettings;
+import play.Logger;
+import play.mvc.Call;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
-
-import play.Application;
-import play.GlobalSettings;
-import play.Logger;
-import play.mvc.Call;
 
 /**
  * Handles global settings.
@@ -61,6 +61,7 @@ public class Global extends GlobalSettings {
     });
 
     initialSecurityRoles();
+    createAdminUser();
   }
 
   @Override
@@ -69,13 +70,24 @@ public class Global extends GlobalSettings {
   }
 
   private void initialSecurityRoles() {
-    if (SecurityRole.getFinder().findRowCount() == 0) {
-      for (final String roleName : Arrays.asList(controllers.Application.USER_ROLE, controllers.Application.ADMIN_ROLE)) {
-        final SecurityRole role = new SecurityRole();
-        role.setRoleName(roleName);
-        role.save();
-      }
+    if (SecurityRole.getFinder().findRowCount() != 0) {
+      return;
     }
+    Logger.info("Creating security roles");
+    for (final String roleName : Arrays.asList(controllers.Application.ADMIN_ROLE, controllers.Application.USER_ROLE)) {
+      final SecurityRole role = new SecurityRole();
+      role.setRoleName(roleName);
+      role.save();
+      Logger.info("Save role: " + role.getName());
+    }
+  }
+
+  private void createAdminUser() {
+    if(User.getFinder().where().eq("username", "admin").findUnique() != null) {
+      return;
+    }
+    Logger.info("Creating admin user");
+    User.create("admin", "admin", "admin@herowar.com");
   }
 
 }
