@@ -6,8 +6,6 @@ import models.entity.User;
 import play.Application;
 import play.Logger;
 import play.data.Form;
-import play.data.validation.Constraints.MinLength;
-import play.data.validation.Constraints.Required;
 import play.mvc.Call;
 import play.mvc.Http.Context;
 
@@ -22,61 +20,22 @@ import com.feth.play.module.mail.Mailer.Mail.Body;
  */
 public class UsernamePasswordAuthProvider
     extends
-    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, UsernamePasswordAuthProvider.LoginForm, UsernamePasswordAuthProvider.SignupForm> {
+    com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider<String, LoginUsernamePasswordAuthUser, UsernamePasswordAuthUser, FormLogin, FormSignup> {
 
   public UsernamePasswordAuthProvider(Application app) {
     super(app);
   }
 
-  public static final Form<SignupForm> SIGNUP_FORM = form(SignupForm.class);
-  public static final Form<LoginForm> LOGIN_FORM = form(LoginForm.class);
-
-  public static class Identity {
-
-    public Identity() {
-    }
-
-    public Identity(final String username) {
-      this.username = username;
-    }
-
-    public String email;
-
-    @Required
-    public String username;
-
-  }
-
-  public static class LoginForm extends Identity implements com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider.UsernamePassword {
-
-    @Required
-    @MinLength(5)
-    public String password;
-
-    @Override
-    public String getEmail() {
-      return username;
-    }
-
-    @Override
-    public String getPassword() {
-      return password;
-    }
-  }
-
-  public static class SignupForm extends LoginForm {
-    public String validate() {
-      return null;
-    }
-  }
+  public static final Form<FormSignup> SIGNUP_FORM = form(FormSignup.class);
+  public static final Form<FormLogin> LOGIN_FORM = form(FormLogin.class);
 
   @Override
-  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(LoginForm login, Context ctx) {
+  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
     return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
   }
 
   @Override
-  protected UsernamePasswordAuthUser buildSignupAuthUser(SignupForm signup, Context ctx) {
+  protected UsernamePasswordAuthUser buildSignupAuthUser(FormSignup signup, Context ctx) {
     return new UsernamePasswordAuthUser(signup);
   }
 
@@ -87,12 +46,12 @@ public class UsernamePasswordAuthProvider
   }
 
   @Override
-  protected Form<LoginForm> getLoginForm() {
+  protected Form<FormLogin> getLoginForm() {
     return LOGIN_FORM;
   }
 
   @Override
-  protected Form<SignupForm> getSignupForm() {
+  protected Form<FormSignup> getSignupForm() {
     return SIGNUP_FORM;
   }
 

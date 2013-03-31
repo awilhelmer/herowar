@@ -8,9 +8,9 @@ import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import providers.FormLogin;
+import providers.FormSignup;
 import providers.UsernamePasswordAuthProvider;
-import providers.UsernamePasswordAuthProvider.LoginForm;
-import providers.UsernamePasswordAuthProvider.SignupForm;
 
 import com.feth.play.module.pa.controllers.Authenticate;
 
@@ -35,7 +35,7 @@ public class Me extends Controller {
   public static Result login() {
     Logger.info("login called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-    final Form<LoginForm> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
+    final Form<FormLogin> filledForm = UsernamePasswordAuthProvider.LOGIN_FORM.bindFromRequest();
 
     // Validate form data
     if (filledForm.hasErrors()) {
@@ -65,7 +65,7 @@ public class Me extends Controller {
   public static Result signup() {
     Logger.info("signup called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
-    final Form<SignupForm> filledForm = UsernamePasswordAuthProvider.SIGNUP_FORM.bindFromRequest();
+    final Form<FormSignup> filledForm = UsernamePasswordAuthProvider.SIGNUP_FORM.bindFromRequest();
     if (filledForm.hasErrors()) {
       return badRequest(toJson(new FormValidationError(filledForm.errorsAsJson())));
     }

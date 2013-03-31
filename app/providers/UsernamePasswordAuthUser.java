@@ -1,6 +1,6 @@
 package providers;
 
-import providers.UsernamePasswordAuthProvider.SignupForm;
+import play.Logger;
 
 import com.feth.play.module.pa.user.NameIdentity;
 
@@ -9,8 +9,9 @@ public class UsernamePasswordAuthUser extends com.feth.play.module.pa.providers.
 
   private final String name;
 
-  public UsernamePasswordAuthUser(final SignupForm signup) {
+  public UsernamePasswordAuthUser(final FormSignup signup) {
     super(signup.password, signup.email);
+    Logger.info("Username: " + signup.username + ", password: " + signup.password + ", email: " + signup.email);
     this.name = signup.username;
   }
   
