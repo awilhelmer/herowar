@@ -1,2 +1,0 @@
-$ ->
-	console.log 'Shared works!'
