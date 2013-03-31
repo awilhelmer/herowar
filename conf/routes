@@ -1,0 +1,23 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET		/																		controllers.Application.index()
+POST	/login															controllers.Authenticator.login()
+GET		/signup															controllers.Application.signup()
+POST	/signup															controllers.Signup.send()
+GET		/play																controllers.Application.goPlay()
+
+GET		/api/me															controllers.api.Me.show()
+POST	/api/login													controllers.api.Me.login()
+POST	/api/logout													controllers.api.Me.logout()
+POST	/api/signup													controllers.api.Me.signup()
+POST	/api/checkUsername/:username				controllers.api.Me.checkUsername(username: String)
+POST	/api/checkEmail/:email							controllers.api.Me.checkEmail(email: String)
+
+GET		/api/user/all												controllers.api.Users.list()
+GET		/api/user/:id												controllers.api.Users.show(id: Long)
+POST	/api/user														controllers.api.Users.add()
+
+# Map static resources from the /public folder
+GET     /assets/*file               			controllers.Assets.at(path="/public", file)

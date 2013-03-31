@@ -1,0 +1,92 @@
+//
+// Main CSS Style
+// --------------------------------------------------
+
+// Core variables and mixins
+@import "../_variables.less"; // Modify this for custom colors, font-sizes, etc
+@import "../_mixins.less";
+
+// CSS Reset
+@import "../_reset.less";
+
+// Grid system and page structure
+@import "../_scaffolding.less";
+@import "../_grid.less";
+@import "../_layouts.less";
+
+// Base CSS
+@import "../_type.less";
+@import "../_code.less";
+@import "../_forms.less";
+
+// Components: common
+@import "../_dropdowns.less";
+
+// Components: Buttons & Alerts
+@import "../_buttons.less";
+
+// Components: Nav
+@import "../_navbar.less";
+
+// Components: Popovers
+@import "../_tooltip.less";
+
+// JQuery Gritter
+@import "../_gritter.less";
+
+// Utility classes
+@import "../_utilities.less"; // Has to be last to override when necessary
+
+
+// MAIN Style
+
+body {
+	padding-top:40px;
+}
+
+#home {
+	.hero {
+		padding:30px 0 40px;
+		background:url(../../images/index-background.jpg) repeat center center;
+		color:#fff;
+		text-align:center;
+		text-shadow:0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
+		
+		h1 {
+			font-size:120px;
+			line-height:1;
+			letter-spacing:-2px;
+		}
+		
+		p {
+			font-size:40px;
+			font-weight:200;
+			line-height:1.25;
+		}
+	}
+}
+
+.login-form {
+	margin:0;
+	
+	.control-group {
+		margin:0;
+	}
+}
+
+.footer {
+	text-align:center;
+	padding:30px 0;
+	margin-top:70px;
+	border-top:1px solid #e5e5e5;
+	background-color: #f5f5f5;
+}
+
+.loader {
+	text-align:center;
+	margin-top:70px;
+}
+
+.visible {
+	opacity: 1;
+}

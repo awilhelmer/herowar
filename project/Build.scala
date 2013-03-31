@@ -62,10 +62,6 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   ////////// PROJECTS //////////
 
-  val common = play.Project(appName + "-common", appVersion, appDependencies ++ commonDependencies, path = file("modules/common"), settings = Defaults.defaultSettings ++ appSettings)
-  val admin = play.Project(appName + "-admin", appVersion, appDependencies, path = file("modules/admin"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
-  val game = play.Project(appName + "-game", appVersion, appDependencies, path = file("modules/game"), settings = Defaults.defaultSettings ++ appSettings).dependsOn(common)
-  val site = play.Project(appName + "-site", appVersion, appDependencies, path = file("modules/site"), settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings).dependsOn(common)
-  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings).dependsOn(common, admin, game, site).aggregate(common, admin, game, site)
+  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings)
 
 }
