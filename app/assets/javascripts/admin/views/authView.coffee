@@ -13,6 +13,8 @@ class AuthView extends BaseView
 	
 	authTemplate: templates.get 'auth.tmpl'
 	
+	redirectTo: ''
+	
 	bindEvents: ->
 		@listenTo @model, 'change:isGuest change:isUser change:isFetched', @render if @model
 	
@@ -24,7 +26,7 @@ class AuthView extends BaseView
 		console.log 'Render auth'
 		console.log @model
 		if @model.get('isFetched') && @model.get('isGuest')
-			app.navigate '', true
+			app.navigate @redirectTo, true
 		else
 			if @model.get 'isUser'
 				@template = @realTemplate

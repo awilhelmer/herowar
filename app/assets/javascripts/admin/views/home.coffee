@@ -1,4 +1,4 @@
-BaseView = require 'views/baseView'
+AuthView = require 'views/authView'
 templates = require 'templates'
 app = require 'application'
 
@@ -7,10 +7,12 @@ app = require 'application'
 
     @author Sebastian Sachtleben
 ###
-class Home extends BaseView
+class Home extends AuthView
 
 	id: 'home'
 	
 	template: templates.get 'home.tmpl'
+	
+	redirectTo: 'admin/login'
 	
 return Home
