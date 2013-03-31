@@ -30,6 +30,7 @@ class Settings extends BaseView
 			type: 'POST'
 			url: "#{app.resourcePath()}logout"
 			success: (data, textStatus, jqXHR) =>
+				console.log 'Reset model'
 				@model.reset()
 
 return Settings

@@ -17,6 +17,7 @@ Router = Backbone.Router.extend
     routes:
         "":		"home"
         "signup":	"signup"
+        "play":	        "play"
 	
     ###
         Overridden Backbone method to dynamically instanciate the controller with the given name

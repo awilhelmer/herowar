@@ -13,11 +13,4 @@ class Home extends BaseView
 	
 	template: templates.get 'home.tmpl'
 	
-	events:
-		'click .signup-link': 'signup'
-		
-	signup: (event) ->
-		event?.preventDefault()
-		app.navigate 'signup', true 
-	
 return Home

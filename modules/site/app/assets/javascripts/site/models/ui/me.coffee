@@ -15,10 +15,11 @@ class Me extends Backbone.Model
 		@param {Object} The options parameter.
 	###
 	initialize: (options) ->
-		@set 'isFetched', false
-		@set 'isGuest', true
-		@set 'isUser', false
-		@set 'isAdmin', false
+		@set 
+			'isFetched' : false
+			'isGuest' 	: true
+			'isUser' 		: false
+			'isAdmin'		: false
 		@fetch()
 		super options
 
@@ -53,9 +54,10 @@ class Me extends Backbone.Model
 		@param {Object} The response to parse.
 	###
 	validateResponse: (resp) ->
-		@set 'isFetched', true
-		@set 'isGuest', !resp.id
-		@set 'isUser', !!resp.id
+		@set 
+			'isFetched' : true
+			'isGuest' 	: !resp.id
+			'isUser'		: !!resp.id
 
 	###
 		Parse response and add the current logged in user to the accounts list. It is needed for example to post new
@@ -72,8 +74,10 @@ class Me extends Backbone.Model
 	###	
 	reset: ->
 		@clear()
-		@set 'isGuest', true
-		@set 'isUser', false
-		@set 'isAdmin', false
+		@set 
+			'isFetched' : true
+			'isGuest'		: true
+			'isUser'		: false
+			'isAdmin'		: false
 
 return Me

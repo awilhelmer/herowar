@@ -3,7 +3,7 @@ templates = require 'templates'
 app = require 'application'
 
 ###
-    The Home shows our home start view.
+    The Login shows our login part in home view.
 
     @author Sebastian Sachtleben
 ###
@@ -34,9 +34,7 @@ class Login extends BaseView
 				console.log 'Success'
 				@model.set data
 				@model.validateResponse(data)
-				$('html, body').animate
-					scrollTop : 0
-					,'fast'
+				app.navigate 'play', true 
 			error: (jqXHR, textStatus, errorThrown) =>
 				console.log 'Error'
 				console.log textStatus

@@ -30,7 +30,7 @@ class Signup extends FormView
 		console.log 'Success'
 		@model.set data
 		@model.validateResponse(data)
-		@redirectToHome()
+		app.navigate 'play', true
 			
 	onError: (jqXHR, textStatus, errorThrown) ->
 		console.log 'Error'
