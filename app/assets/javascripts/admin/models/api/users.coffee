@@ -12,7 +12,7 @@ class Users extends Backbone.Collection
         super models, options
 
     url: ->
-        "#{app.resourcePath()}users/all"
+        "#{app.resourcePath()}user/all"
 
     parse: (resp) ->
         return resp

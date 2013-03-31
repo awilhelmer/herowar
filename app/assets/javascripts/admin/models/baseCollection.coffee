@@ -7,24 +7,18 @@ db = require 'database'
 ###
 class BaseCollection extends Backbone.Collection
 
-    ###
-        Fetch content from server and set global id if options contains a id. The credentials will be added before
-        the fetch process starts.
+	initialize: ->
+		@set 'isFetched', false
 
-        @param {Object} The fetch options.
-    ###
-    fetch: (options) ->
-        options = {} unless options?
-        @id = options.id if options.id
-        super options
+	fetch: (options) ->
+		options = {} unless options?
+		@id = options.id if options.id
+		@set 'isFetched', false
+		super options
 
-    ###
-        Parse response and set each attribute of response in the responding db collection.
-
-        @param {Object} The response to parse.
-    ###
-    parse: (resp) ->
-        db.add "db/#{key}", value for own key, value of resp
-        super resp
+	parse: (resp) ->
+		db.add "db/#{key}", value for own key, value of resp
+		@set 'isFetched', true
+		super resp
 
 return BaseCollection
