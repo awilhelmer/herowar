@@ -32,15 +32,15 @@ trait JavascriptTransformer {
       val relativePath = f.getAbsolutePath.substring(f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
       relativePath match {
         case "loader.js" | "loader.min.js" => {
-          //val mapKey = ("loader", "loader", "loader")
           //Loader is static and shouldnt change
         }
         case _ => {
-          val mapKey = getMapKey(relativePath)
+          val mapKeys = getMapKeys(relativePath)
           if ((FileCacheHandler.filesChanged.contains(f.getAbsolutePath))) {
             val lastTime = FileCacheHandler.filesChanged(f.getAbsolutePath)
             if (f.lastModified > lastTime) {
-              FileCacheHandler.unchangedModules -= mapKey
+              for (mapKey <- mapKeys)
+                FileCacheHandler.unchangedModules -= mapKey
             }
           }
           FileCacheHandler.filesChanged.put(f.getAbsolutePath, f.lastModified)
@@ -67,20 +67,21 @@ trait JavascriptTransformer {
         }
         // Parse every file to content map
         case _ => {
-          //val fileName = distPath + key.substring(0, 1) + jsType.substring(0, 1) + cacheNumber + ".js"
-          val mapKey = getMapKey(relativePath)
+          val mapKeys = getMapKeys(relativePath)
           var preFixFunction = ""
-          if (mapKey._1 == "templates") {
-            preFixFunction = "return"
-          }
-          if (!(FileCacheHandler.unchangedModules.contains(mapKey))) {
-            var subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));
-            if (subfolders.length > 0)
-              subfolders = subfolders.substring(1) + '\\'
-            val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
-            val mappedContent = mapContent(functionName, FileUtils.fileToString(f, "UTF-8"), preFixFunction);
-            if (isModeFile(functionName)) {
-              content.put((mapKey), content.get(mapKey).getOrElse("") + mappedContent + "\n")
+          for (mapKey <- mapKeys) {
+            if (mapKey._1 == "templates") {
+              preFixFunction = "return"
+            }
+            if (!(FileCacheHandler.unchangedModules.contains(mapKey))) {
+              var subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));
+              if (subfolders.length > 0)
+                subfolders = subfolders.substring(1) + '\\'
+              val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
+              val mappedContent = mapContent(functionName, FileUtils.fileToString(f, "UTF-8"), preFixFunction);
+              if (isModeFile(functionName)) {
+                content.put((mapKey), content.get(mapKey).getOrElse("") + mappedContent + "\n")
+              }
             }
           }
         }
@@ -98,7 +99,6 @@ trait JavascriptTransformer {
    * Write combined files to output generated from Map[(String, String, String), String]].
    */
   def writeCombinedFiles(path: String, cacheNumber: String, content: Map[(String, String, String), String], loader: String): Seq[File] = {
-    var writtenFiles = Seq.empty[File]
     for ((tuple, entries) <- content) {
       val fileName = path + tuple._2.substring(0, 1) + tuple._1.substring(0, 1) + cacheNumber + ".js"
 
@@ -124,17 +124,25 @@ trait JavascriptTransformer {
     "define('%s',function() {%s %s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
   }
 
-  def getMapKey(path: String): (String, String, String) = {
+  def getMapKeys(path: String): List[(String, String, String)] = {
     // TODO: Is it possible to do this better? For templates we need to get the second folder name. Maybe with regex...
+    var result = List.empty[(String, String, String)]
     val jsType = if (path.indexOf(templates_folder) == 0) templates_folder else if (path.indexOf(vendors_folder) == 0) vendors_folder else scripts_folder
     var key = "";
     if (jsType != "templates") {
       key = path.substring(0, path.indexOf('\\'))
+      if ((jsType == scripts_folder) && (path.indexOf("\\shared\\") > -1)) {
+        //Shared must be written into all areas
+
+        result  :+= (jsType, "admin", ApplicationBuild.buildMode)
+        return result :+ (jsType, "site", ApplicationBuild.buildMode)
+      }
     } else {
       val tempPath = path.substring(path.indexOf('\\') + 1)
       key = tempPath.substring(0, tempPath.indexOf('\\'))
     }
-    (jsType, key, ApplicationBuild.buildMode)
+    result :+ (jsType, key, ApplicationBuild.buildMode)
+    
   }
 
   def isModeFile(name: String): Boolean = {
