@@ -126,7 +126,11 @@ trait JavascriptTransformer {
    * Wraps content into a define
    */
   def mapContent(module: String, content: String, preFixFunction: String): String = {
-    "define('%s',function() {%s %s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
+    var name = module;
+    if (module.indexOf("shared/") == 0) {
+      name = module.substring("shared/".length);
+    }
+    "define('%s',function() {%s %s});".format(name, preFixFunction, content.replaceAll(pattern, ""))
   }
 
   def getMapKeys(path: String): List[(String, String, String)] = {
