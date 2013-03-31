@@ -76,7 +76,7 @@ trait JavascriptTransformer {
             if (!(FileCacheHandler.unchangedModules.contains(mapKey))) {
               var subfolders = ""
               if (relativePath.indexOf(shared_folder) > -1) {
-                subfolders = shared_folder   
+                subfolders = '\\' + shared_folder   
               }else {
                 subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));                
               }
