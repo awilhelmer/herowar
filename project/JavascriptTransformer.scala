@@ -76,7 +76,7 @@ trait JavascriptTransformer {
             if (!(FileCacheHandler.unchangedModules.contains(mapKey))) {
               var subfolders = ""
               if (relativePath.indexOf(shared_folder) > -1) {
-                subfolders = '\\' + relativePath.substring(relativePath.indexOf(shared_folder), relativePath.lastIndexOf('\\'));          
+                subfolders = relativePath.substring(relativePath.indexOf(shared_folder) + shared_folder.length, relativePath.lastIndexOf('\\'));          
               }else {
                 subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));                
               }
@@ -126,11 +126,7 @@ trait JavascriptTransformer {
    * Wraps content into a define
    */
   def mapContent(module: String, content: String, preFixFunction: String): String = {
-    var name = module;
-    if (module.indexOf("shared/") == 0) {
-      name = module.substring("shared/".length);
-    }
-    "define('%s',function() {%s %s});".format(name, preFixFunction, content.replaceAll(pattern, ""))
+    "define('%s',function() {%s %s});".format(module, preFixFunction, content.replaceAll(pattern, ""))
   }
 
   def getMapKeys(path: String): List[(String, String, String)] = {
