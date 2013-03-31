@@ -16,7 +16,9 @@ import views.html.index;
  * @author Sebastian Sachtleben
  */
 public class Application extends Controller {
+  
   private final static List<String> jsFiles = new ArrayList<String>();
+  
   static {
     //TODO hardcoded prefix - Analyse from folder... 
     jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
