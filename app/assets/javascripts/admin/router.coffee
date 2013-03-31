@@ -16,6 +16,7 @@ Router = Backbone.Router.extend
     ###
     routes:
         "admin":	"home"
+        "admin/users/all": "usersAll"
 	
     ###
         Overridden Backbone method to dynamically instanciate the controller with the given name

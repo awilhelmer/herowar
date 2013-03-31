@@ -15,4 +15,11 @@ class Home extends AuthView
 	
 	redirectTo: 'admin/login'
 	
+	events:
+		'click .users-link': 'users'
+		
+	users: (event) ->
+		event?.preventDefault()
+		app.navigate 'admin/users/all', true 
+	
 return Home

@@ -18,6 +18,6 @@ class Header extends BaseView
 		
 	home: (event) ->
 		event?.preventDefault()
-		app.navigate '', true 
+		app.navigate 'admin', true 
 	
 return Header

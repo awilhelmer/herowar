@@ -24,6 +24,7 @@ POST	/api/user														controllers.api.Users.add()
 ########## API ###########
 
 GET		/admin															controllers.Admin.index()
+GET		/admin/users/all										controllers.Admin.usersAll()
 
 ########## OTHER ###########
 
