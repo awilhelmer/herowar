@@ -30,22 +30,6 @@ public class UsernamePasswordAuthProvider
   public static final Form<FormLogin> LOGIN_FORM = form(FormLogin.class);
 
   @Override
-  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
-    return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
-  }
-
-  @Override
-  protected SignupUsernamePasswordAuthUser buildSignupAuthUser(FormSignup signup, Context ctx) {
-    return new SignupUsernamePasswordAuthUser(signup);
-  }
-
-  @Override
-  protected String generateVerificationRecord(SignupUsernamePasswordAuthUser arg0) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   protected Form<FormLogin> getLoginForm() {
     return LOGIN_FORM;
   }
@@ -54,17 +38,15 @@ public class UsernamePasswordAuthProvider
   protected Form<FormSignup> getSignupForm() {
     return SIGNUP_FORM;
   }
-
+  
   @Override
-  protected Body getVerifyEmailMailingBody(String arg0, SignupUsernamePasswordAuthUser arg1, Context arg2) {
-    // TODO Auto-generated method stub
-    return null;
+  protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
+    return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
   }
 
   @Override
-  protected String getVerifyEmailMailingSubject(SignupUsernamePasswordAuthUser arg0, Context arg1) {
-    // TODO Auto-generated method stub
-    return null;
+  protected SignupUsernamePasswordAuthUser buildSignupAuthUser(FormSignup signup, Context ctx) {
+    return new SignupUsernamePasswordAuthUser(signup);
   }
 
   @Override
@@ -78,14 +60,9 @@ public class UsernamePasswordAuthProvider
     for (final LinkedAccount acc : u.getLinkedAccounts()) {
       if (getKey().equals(acc.getProviderKey())) {
         if (authUser.checkPassword(acc.getProviderUserId(), authUser.getPassword())) {
-          // Password was correct
           Logger.info("User is logged in");
           return LoginResult.USER_LOGGED_IN;
         } else {
-          // if you don't return here,
-          // you would allow the user to have
-          // multiple passwords defined
-          // usually we don't want this
           Logger.info("Passwort wrong 1");
           return LoginResult.WRONG_PASSWORD;
         }
@@ -104,27 +81,39 @@ public class UsernamePasswordAuthProvider
     User.create(user);
     return SignupResult.USER_CREATED;
   }
-
+  
   @Override
   protected LoginUsernamePasswordAuthUser transformAuthUser(SignupUsernamePasswordAuthUser authUser, Context ctx) {
     return new LoginUsernamePasswordAuthUser(authUser.getEmail());
   }
+  
+  @Override
+  protected String generateVerificationRecord(SignupUsernamePasswordAuthUser arg0) {
+    return null;
+  }
+  
+  @Override
+  protected Body getVerifyEmailMailingBody(String arg0, SignupUsernamePasswordAuthUser arg1, Context arg2) {
+    return null;
+  }
+
+  @Override
+  protected String getVerifyEmailMailingSubject(SignupUsernamePasswordAuthUser arg0, Context arg1) {
+    return null;
+  }
 
   @Override
   protected Call userExists(com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser arg0) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   protected Call userUnverified(com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser arg0) {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   protected String onLoginUserNotFound(Context context) {
-    Logger.warn("User not found");
     return null;
   }
 }
