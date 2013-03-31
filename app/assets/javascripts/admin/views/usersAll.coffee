@@ -9,10 +9,24 @@ app = require 'application'
 ###
 class UsersAll extends AuthView
 
+	entity: 'api/users'
+
 	id: 'usersAll'
 	
 	template: templates.get 'usersAll.tmpl'
 	
 	redirectTo: 'admin/login'
+	
+	initialize: (options) ->
+		super options
+		@model.fetch()
+		
+	bindEvents: ->
+		@listenTo @model, 'add remove change reset', @render if @model
+
+	render: ->
+		console.log 'Render user all view'
+		console.log @model
+		super()
 
 return UsersAll

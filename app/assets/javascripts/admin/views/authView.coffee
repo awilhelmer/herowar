@@ -1,6 +1,7 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
 app = require 'application'
+db = require 'database'
 
 ###
     The AuthView shows temporarily the auth view untill we know if the user is logged in.
@@ -8,27 +9,27 @@ app = require 'application'
     @author Sebastian Sachtleben
 ###
 class AuthView extends BaseView
-
-	entity: 'ui/me'
 	
 	authTemplate: templates.get 'auth.tmpl'
 	
 	redirectTo: ''
 	
-	bindEvents: ->
-		@listenTo @model, 'change:isGuest change:isUser change:isFetched', @render if @model
-	
 	initialize: (options) ->
+		@me = db.get 'ui/me'
 		@realTemplate = @template
+		@bindMeEvents()
 		super()
+	
+	bindMeEvents: ->
+		@listenTo @me, 'change:isGuest change:isUser change:isFetched', @render if @me
 		
 	render: ->
 		console.log 'Render auth'
-		console.log @model
-		if @model.get('isFetched') && @model.get('isGuest')
+		console.log @me
+		if @me.get('isFetched') && @me.get('isGuest')
 			app.navigate @redirectTo, true
 		else
-			if @model.get 'isUser'
+			if @me.get 'isUser'
 				@template = @realTemplate
 			else 
 				@template = @authTemplate
