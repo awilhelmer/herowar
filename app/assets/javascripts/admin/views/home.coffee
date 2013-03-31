@@ -1,4 +1,4 @@
-AuthView = require 'views/authView'
+AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
 app = require 'application'
 
@@ -7,13 +7,11 @@ app = require 'application'
 
     @author Sebastian Sachtleben
 ###
-class Home extends AuthView
+class Home extends AdminAuthView
 
 	id: 'home'
 	
 	template: templates.get 'home.tmpl'
-	
-	redirectTo: 'admin/login'
 	
 	events:
 		'click .users-link': 'users'

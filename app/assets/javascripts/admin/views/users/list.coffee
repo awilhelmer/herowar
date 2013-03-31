@@ -1,21 +1,19 @@
-AuthView = require 'views/authView'
+AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
 app = require 'application'
 
 ###
-    The UsersAll shows a list of users
+    The UsersList shows a list of users
 
     @author Sebastian Sachtleben
 ###
-class UsersAll extends AuthView
+class UsersList extends AdminAuthView
 
 	entity: 'api/users'
 
 	id: 'usersAll'
 	
-	template: templates.get 'usersAll.tmpl'
-	
-	redirectTo: 'admin/login'
+	template: templates.get 'users/list.tmpl'
 	
 	initialize: (options) ->
 		super options
@@ -24,9 +22,4 @@ class UsersAll extends AuthView
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
 
-	render: ->
-		console.log 'Render user all view'
-		console.log @model
-		super()
-
-return UsersAll
+return UsersList
