@@ -9,12 +9,17 @@ app = require 'application'
 ###
 class Login extends BaseView
 
+	entity: 'ui/me'
+
 	id: 'login'
 	
 	template: templates.get 'home/login.tmpl'
 
 	events:
 		"submit .login-form": 'login'
+		
+	bindEvents: ->
+		@listenTo @model, 'change:isGuest change:isUser', @render if @model
 	
 	login: (event) ->
 		event?.preventDefault()

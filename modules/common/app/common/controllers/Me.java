@@ -1,6 +1,9 @@
 package common.controllers;
 
 import static play.libs.Json.toJson;
+
+import com.feth.play.module.pa.controllers.Authenticate;
+
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -32,6 +35,11 @@ public class Me extends Controller {
       return badRequest(toJson(new FormValidationError(filledForm.errorsAsJson())));
     }
     return UsernamePasswordAuthProvider.handleLogin(ctx());
+  }
+  
+  public static Result logout() {
+    Authenticate.logout();
+    return ok();
   }
 
   public static Result signup() {

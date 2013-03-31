@@ -9,6 +9,8 @@ app = require 'application'
 ###
 class Signup extends FormView
 
+	entity: 'ui/me'
+
 	id: 'signup'
 	
 	template: templates.get 'signup.tmpl'
@@ -21,10 +23,13 @@ class Signup extends FormView
 		'change #inputPassword'				: 'validatePassword'
 		'change #inputEmail'					: 'validateEmail'
 	
+	bindEvents: ->
+		@listenTo @model, 'change:isGuest change:isUser', @redirectToHome if @model
+		
 	onSuccess: (data, textStatus, jqXHR) ->
 		console.log 'Success'
 		console.log data
-		app.navigate '', true
+		@redirectToHome()
 			
 	onError: (jqXHR, textStatus, errorThrown) ->
 		console.log 'Error'
@@ -71,5 +76,13 @@ class Signup extends FormView
 					success: (data, textStatus, jqXHR) =>
 						@setInputState $CurrentTarget, 'success', 'Email is ok' unless data
 						@setInputState $CurrentTarget, 'error', 'Email is taken' if data
+	
+	render: ->
+		@redirectToHome()
+		super()
+	
+	redirectToHome: ->
+		if @model?.get 'isUser'
+			app.navigate '', true
 	
 return Signup

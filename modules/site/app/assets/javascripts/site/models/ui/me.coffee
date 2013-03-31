@@ -1,5 +1,3 @@
-_ = require 'lib/underscore'
-Backbone = require 'lib/backbone'
 app = require 'application'
 db = require 'database'
 
@@ -18,6 +16,9 @@ class Me extends Backbone.Model
 	###
 	initialize: (options) ->
 		@set 'isFetched', false
+		@set 'isGuest', true
+		@set 'isUser', false
+		@set 'isAdmin', false
 		@fetch()
 		super options
 
@@ -54,7 +55,7 @@ class Me extends Backbone.Model
 	validateResponse: (resp) ->
 		@set 'isFetched', true
 		@set 'isGuest', !resp.id
-		@set 'isMember', !!resp.id
+		@set 'isUser', !!resp.id
 
 	###
 		Parse response and add the current logged in user to the accounts list. It is needed for example to post new
@@ -63,7 +64,16 @@ class Me extends Backbone.Model
 		@param {Object} The response to parse.
 	###
 	parse: (resp) ->
-		db.add 'db/users', resp.me if resp.me
-		return resp.me
+		db.add 'db/users', resp if resp
+		return resp
+	
+	###
+		Reseting me object. This is used to login the current user.
+	###	
+	reset: ->
+		@clear()
+		@set 'isGuest', true
+		@set 'isUser', false
+		@set 'isAdmin', false
 
 return Me

@@ -6,7 +6,6 @@ import play.Logger;
 import play.data.Form;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
-import play.i18n.Messages;
 import play.mvc.Call;
 import play.mvc.Http.Context;
 
@@ -66,15 +65,7 @@ public class UsernamePasswordAuthProvider
   }
 
   public static class SignupForm extends LoginForm {
-
-    @Required
-    @MinLength(5)
-    public String repeatPassword;
-
     public String validate() {
-      if (password == null || !password.equals(repeatPassword)) {
-        return Messages.get("playauthenticate.password.signup.error.passwords_not_same");
-      }
       return null;
     }
   }
