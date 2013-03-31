@@ -18,8 +18,9 @@ Section: building and transforming resources
 Section: Site
 
 1. Style gritter message (remove image background and use css3)
-
-
+2. Add Confirm Email to signup
+3. Fix Email regex pattern in js since two double points break the signup
+4. Save newsletter boolean during signup
 
 
 Section: How to build project
