@@ -27,7 +27,7 @@ class Login extends FormView
 		else
 			@setInputState inputUsername, ''
 		passwordUsername = $Form.find 'input[name="password"]'
-		if passwordUsername.val().length <= 5
+		if passwordUsername.val().length <= 4
 			@setInputState passwordUsername, 'error'
 			if isValid
 				$.gritter.add

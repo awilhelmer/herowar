@@ -56,8 +56,8 @@ class Signup extends FormView
 		if event
 			$CurrentTarget = $ event.currentTarget
 			password = $CurrentTarget.val()
-			if password.length <= 5
-				@setInputState $CurrentTarget, 'error', 'Password must be at least 6 characters'
+			if password.length <= 4
+				@setInputState $CurrentTarget, 'error', 'Password must be at least 5 characters'
 			else
 				@setInputState $CurrentTarget, 'success', 'Password is okay'
 
