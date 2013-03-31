@@ -90,8 +90,8 @@ public class User extends BaseModel implements Subject {
     if (authUser instanceof EmailIdentity) {
       final EmailIdentity identity = (EmailIdentity) authUser;
       Logger.info("EmailIdentity..." + identity.getEmail());
-      // user.setEmail(identity.getEmail());
-      // user.setEmailValidated(false);
+      user.setEmail(identity.getEmail());
+      user.setEmailValidated(false);
     }
 
     if (authUser instanceof NameIdentity) {
@@ -111,9 +111,9 @@ public class User extends BaseModel implements Subject {
 
   public static User create(String username, String clearPassword, String email) {
     FormSignup form = new FormSignup();
-    form.username = username;
-    form.password = clearPassword;
-    form.email = email;
+    form.setUsername(username);
+    form.setPassword(clearPassword);
+    form.setEmail(email);
     SignupUsernamePasswordAuthUser authUser = new SignupUsernamePasswordAuthUser(form);
     return create(authUser);
   }
@@ -175,7 +175,8 @@ public class User extends BaseModel implements Subject {
   }
 
   private static ExpressionList<User> getUsernamePasswordAuthUserFind(final UsernamePasswordAuthUser identity) {
-    return getUsernameFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
+    Logger.info(identity.getEmail());
+    return getEmailFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
   }
 
   public static User findByUsername(final String username) {
@@ -184,6 +185,10 @@ public class User extends BaseModel implements Subject {
 
   private static ExpressionList<User> getUsernameFind(final String username) {
     return getFinder().where().eq("active", true).eq("username", username);
+  }
+  
+  private static ExpressionList<User> getEmailFind(final String email) {
+    return getFinder().where().eq("active", true).eq("email", email);
   }
 
   // GETTER & SETTER //

@@ -43,7 +43,7 @@ public class Me extends Controller {
     }
 
     // Check if user exists
-    if (User.getFinder().where().eq("username", filledForm.get().email).findUnique() == null) {
+    if (User.getFinder().where().eq("username", filledForm.get().getEmail()).findUnique() == null) {
       return badRequest(toJson(new AuthenticationError()));
     }
 

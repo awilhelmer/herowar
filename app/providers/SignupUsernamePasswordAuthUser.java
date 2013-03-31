@@ -10,9 +10,9 @@ public class SignupUsernamePasswordAuthUser extends com.feth.play.module.pa.prov
   private final String name;
 
   public SignupUsernamePasswordAuthUser(final FormSignup signup) {
-    super(signup.password, signup.email);
-    Logger.info("Username: " + signup.username + ", password: " + signup.password + ", email: " + signup.email);
-    this.name = signup.username;
+    super(signup.getPassword(), signup.getEmail());
+    Logger.info("Username: " + signup.getUsername() + ", password: " + signup.getPassword() + ", email: " + signup.getEmail());
+    this.name = signup.getUsername();
   }
   
   /**
