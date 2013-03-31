@@ -17,7 +17,7 @@ import play.mvc.Http.Session;
 import views.html.index;
 
 /**
- * The Application controller handles request for "/" pattern.
+ * The Application controller handles all requests for our site and provides js file list for site and admin pages.
  * 
  * @author Sebastian Sachtleben
  */
@@ -29,13 +29,17 @@ public class Application extends Controller {
   public static final String USER_ROLE = "user";
   public static final String ADMIN_ROLE = "admin";
   
-  private final static List<String> jsFiles = new ArrayList<String>();
+  private final static List<String> jsFilesAdmin = new ArrayList<String>();
+  private final static List<String> jsFilesSite = new ArrayList<String>();
   
   static {
     //TODO hardcoded prefix - Analyse from folder... 
-    jsFiles.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
-    jsFiles.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
-    jsFiles.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
+    jsFilesAdmin.add("javascripts/av" + BuildInfo.cacheNumber() + ".js");
+    jsFilesAdmin.add("javascripts/as" + BuildInfo.cacheNumber() + ".js");
+    jsFilesAdmin.add("javascripts/at" + BuildInfo.cacheNumber() + ".js");
+    jsFilesSite.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
+    jsFilesSite.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
+    jsFilesSite.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
   }
   
   public static User getLocalUser(final Session session) {
@@ -56,8 +60,12 @@ public class Application extends Controller {
     return ok(index.render());
   }
 
-  public static List<String> getJavascripts() {
-    return jsFiles;
+  public static List<String> getJsFilesSite() {
+    return jsFilesSite;
+  }
+  
+  public static List<String> getJsFilesAdmin() {
+    return jsFilesAdmin;
   }
 
 }
