@@ -1,13 +1,12 @@
-AdminTableView = require 'views/adminTableView'
+AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
-app = require 'application'
 
 ###
     The UsersList shows a list of users
 
     @author Sebastian Sachtleben
 ###
-class UsersList extends AdminTableView
+class UsersList extends AdminAuthView
 
 	entity: 'api/users'
 
