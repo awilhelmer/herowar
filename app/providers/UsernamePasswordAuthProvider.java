@@ -41,7 +41,9 @@ public class UsernamePasswordAuthProvider
   
   @Override
   protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
-    return new LoginUsernamePasswordAuthUser(login.getPassword(), login.getEmail());
+    // We need to fetch users email here since we login with username instead email
+    User u = User.getFinder().where().eq("username", login.getEmail()).findUnique();
+    return new LoginUsernamePasswordAuthUser(login.getPassword(), u.getEmail());
   }
 
   @Override
@@ -51,24 +53,21 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected LoginResult loginUser(LoginUsernamePasswordAuthUser authUser) {
-    Logger.info("Login: " + authUser.toString());
     final User u = User.findByUsernamePasswordIdentity(authUser);
     if (u == null) {
-      Logger.info("User not found");
+      Logger.info("User " + authUser.getEmail() + " not found");
       return LoginResult.NOT_FOUND;
     }
     for (final LinkedAccount acc : u.getLinkedAccounts()) {
       if (getKey().equals(acc.getProviderKey())) {
         if (authUser.checkPassword(acc.getProviderUserId(), authUser.getPassword())) {
-          Logger.info("User is logged in");
+          Logger.info("User " + authUser.getEmail() + " is logged in");
           return LoginResult.USER_LOGGED_IN;
         } else {
-          Logger.info("Passwort wrong 1");
           return LoginResult.WRONG_PASSWORD;
         }
       }
     }
-    Logger.info("Passwort wrong 2");
     return LoginResult.WRONG_PASSWORD;
   }
 

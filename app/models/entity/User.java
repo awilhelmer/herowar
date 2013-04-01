@@ -89,14 +89,12 @@ public class User extends BaseModel implements Subject {
 
     if (authUser instanceof EmailIdentity) {
       final EmailIdentity identity = (EmailIdentity) authUser;
-      Logger.info("EmailIdentity..." + identity.getEmail());
       user.setEmail(identity.getEmail());
       user.setEmailValidated(false);
     }
 
     if (authUser instanceof NameIdentity) {
       final NameIdentity identity = (NameIdentity) authUser;
-      Logger.info("NameIdentity..." + identity.getName());
       final String name = identity.getName();
       if (name != null) {
         user.setUsername(name);
@@ -105,7 +103,7 @@ public class User extends BaseModel implements Subject {
 
     user.save();
     user.saveManyToManyAssociations("roles");
-    Logger.info("Saved new user");
+    Logger.info("Saved new user " + user.getUsername());
     return user;
   }
 
@@ -175,7 +173,6 @@ public class User extends BaseModel implements Subject {
   }
 
   private static ExpressionList<User> getUsernamePasswordAuthUserFind(final UsernamePasswordAuthUser identity) {
-    Logger.info(identity.getEmail());
     return getEmailFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
   }
 
