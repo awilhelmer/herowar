@@ -7,8 +7,6 @@ app = require 'application'
     @author Sebastian Sachtleben
 ###
 class FormView extends BaseView
-
-	id: 'signup'
 	
 	type: 'POST'
 	
@@ -50,7 +48,7 @@ class FormView extends BaseView
 				
 	getFormData: ($Form) ->
 		data = {}
-		$.each($Form.find('input'), (i, n) ->
+		$.each($Form.find('input, select, textarea'), (i, n) ->
 			if n.type == 'checkbox'
 				data[n.name] = $(n).is(':checked')
 			else
