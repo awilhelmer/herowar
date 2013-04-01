@@ -1,15 +1,21 @@
 TableView = require 'views/tableView'
-templates = require 'templates'
 
 ###
-    The UsersListTable shows a list of users
+    The UsersTable shows a list of users
 
     @author Sebastian Sachtleben
 ###
-class UsersListTable extends TableView
+class UsersTable extends TableView
 
 	entity: 'api/users'
 	
-	template: templates.get 'users/table.tmpl'
+	tableEntity: 'db/users'
+	
+	fields:
+		'#'					: 'id'
+		'Username' 	: 'username'
+		'Email'			: 'email'
+		
+	entryView: 'views/users/tableEntry'
 
-return UsersListTable
+return UsersTable

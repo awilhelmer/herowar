@@ -1,0 +1,12 @@
+<thead>
+	<tr>
+		{{#each tableHeaders}}
+			<th>{{this}}</th>
+		{{/each}}
+	</tr>
+</thead>
+<tbody>
+	{{#each []}}
+		<tr data-view="{{../entryView}}" data-model="{{id}}" data-entity="{{../entity}}" data-fields="{{../tableFields}}"></tr>
+	{{/each}}		
+</tbody>

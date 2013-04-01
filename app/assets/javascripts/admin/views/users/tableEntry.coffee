@@ -1,16 +1,16 @@
 TableEntryView = require 'views/tableEntryView'
-templates = require 'templates'
-app = require 'application'
 
 ###
-    The UsersListTableEntry shows a single entry in users list.
+    The UsersTableEntry shows a row in the user table.
 
     @author Sebastian Sachtleben
 ###
-class UsersListTableEntry extends TableEntryView
+class UsersTableEntry extends TableEntryView
 
-	entity: 'db/users'
-	
-	template: templates.get 'users/tableEntry.tmpl'
+	editEntry: (event) ->
+		console.log "Edit #{@model.id}"
+		
+	deleteEntry: (event) ->
+		console.log "Delete entry #{@model.id}"
 
-return UsersListTableEntry
+return UsersTableEntry

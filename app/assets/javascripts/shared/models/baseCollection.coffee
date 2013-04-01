@@ -1,5 +1,3 @@
-db = require 'database'
-
 ###
     BaseCollection provides basic functionality for our collections.
 
@@ -17,7 +15,6 @@ class BaseCollection extends Backbone.Collection
 		super options
 
 	parse: (resp) ->
-		db.add "db/#{key}", value for own key, value of resp
 		@set 'isFetched', true
 		super resp
 

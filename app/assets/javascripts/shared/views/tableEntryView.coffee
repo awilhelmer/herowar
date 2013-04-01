@@ -1,20 +1,33 @@
 BaseView = require 'views/baseView'
+templates = require 'templates'
 
 ###
     The TableEntryView shows a row inside of a table.
 
     @author Sebastian Sachtleben
 ###
-class TableEntryView extends BaseView
+class TableEntry extends BaseView
+
+	template: templates.get 'tableEntry.tmpl'
 
 	events:
 		'click .edit-link'		: 'editEntry'
 		'click .delete-link'	: 'deleteEntry'
+	
+	initialize: (options) ->
+		@fields = @$el.attr 'data-fields'
+		@entity = @$el.attr 'data-entity'
+		@$el.removeAttr 'data-fields data-entity'
+		super options
+		
+	getTemplateData: ->
+		vals = []
+		parts = @fields.split ','
+		vals.push @model.get entry for entry in parts
+		vals
 		
 	editEntry: (event) ->
-		console.log "Edit #{@model.id}"
 		
 	deleteEntry: (event) ->
-		console.log "Delete entry #{@model.id}"
 
-return TableEntryView
+return TableEntry
