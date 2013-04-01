@@ -4,35 +4,36 @@
 
 ########## SITE ###########
 
-GET		/																		controllers.Application.index()
-GET		/signup															controllers.Application.signup()
-GET		/play																controllers.Application.goPlay()
+GET			/																		controllers.Application.index()
+GET			/signup															controllers.Application.signup()
+GET			/play																controllers.Application.goPlay()
 
 ########## API ###########
 
-GET		/api/me															controllers.api.Me.show()
-POST	/api/login													controllers.api.Me.login()
-POST	/api/logout													controllers.api.Me.logout()
-POST	/api/signup													controllers.api.Me.signup()
-POST	/api/checkUsername/:username				controllers.api.Me.checkUsername(username: String)
-POST	/api/checkEmail/:email							controllers.api.Me.checkEmail(email: String)
+GET			/api/me															controllers.api.Me.show()
+POST		/api/login													controllers.api.Me.login()
+POST		/api/logout													controllers.api.Me.logout()
+POST		/api/signup													controllers.api.Me.signup()
+POST		/api/checkUsername/:username				controllers.api.Me.checkUsername(username: String)
+POST		/api/checkEmail/:email							controllers.api.Me.checkEmail(email: String)
 
-GET		/api/user/all												controllers.api.Users.list()
-GET		/api/user/:id												controllers.api.Users.show(id: Long)
-POST	/api/user														controllers.api.Users.add()
+GET			/api/user/all												controllers.api.Users.list()
+GET			/api/user/:id												controllers.api.Users.show(id: Long)
+POST		/api/user														controllers.api.Users.add()
 
-GET		/api/map/all												controllers.api.Maps.list()
-GET		/api/map/:id												controllers.api.Maps.show(id: Long)
-POST	/api/map														controllers.api.Maps.add()
+GET			/api/map/all												controllers.api.Maps.list()
+GET			/api/map/:id												controllers.api.Maps.show(id: Long)
+DELETE	/api/map/:id												controllers.api.Maps.delete(id: Long)
+POST		/api/map														controllers.api.Maps.add()
 
 ########## ADMIN ###########
 
-GET		/admin															controllers.Admin.index()
-GET		/admin/user/all											controllers.Admin.userAll()
-GET		/admin/user/:id											controllers.Admin.userShow(id: Long)
+GET			/admin															controllers.Admin.index()
+GET			/admin/user/all											controllers.Admin.userAll()
+GET			/admin/user/:id											controllers.Admin.userShow(id: Long)
 
-GET		/admin/map/all											controllers.Admin.mapAll()
-GET		/admin/map/new											controllers.Admin.mapNew()
+GET			/admin/map/all											controllers.Admin.mapAll()
+GET			/admin/map/new											controllers.Admin.mapNew()
 
 ########## OTHER ###########
 

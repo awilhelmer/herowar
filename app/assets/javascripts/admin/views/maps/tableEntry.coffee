@@ -1,12 +1,8 @@
 TableEntryView = require 'views/tableEntryView'
 templates = require 'templates'
 app = require 'application'
+db = require 'database'
 
-###
-    The MapsTableEntry shows a row in the map table.
-
-    @author Sebastian Sachtleben
-###
 class MapsTableEntry extends TableEntryView
 
 	template: templates.get 'maps/tableEntry.tmpl'
@@ -23,7 +19,18 @@ class MapsTableEntry extends TableEntryView
 		
 	deleteEntry: (event) ->
 		event?.preventDefault()
-		console.log "Delete entry #{@model.id}"
+		console.log @model
+		if confirm("Do you really want to delete \"#{@model.get('name')}\"?")
+			console.log "Delete entry #{@model.id}"
+			$.ajax
+				type: 'DELETE'
+				url: "#{app.resourcePath()}map/#{@model.id}"
+				success: (data, textStatus, jqXHR) =>
+					$.gritter.add
+						title: 'Delete Map',
+						text: "The map \"#{@model.get('name')}\" has been successfully deleted."
+					maps = db.get 'api/maps'
+					maps.fetch()
 
 	editorEntry: (event) ->
 		event?.preventDefault()
