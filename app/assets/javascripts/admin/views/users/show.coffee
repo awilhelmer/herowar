@@ -1,5 +1,6 @@
 AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
+app = require 'application'
 
 ###
     The UsersList shows a list of users
@@ -14,8 +15,20 @@ class UserShow extends AdminAuthView
 	
 	template: templates.get 'users/show.tmpl'
 	
+	events:
+		'click .save-button'		: 'saveUser'
+		'click .cancel-button'	: 'cancel'
+	
 	initialize: (options) ->
 		super options
 		console.log @model
+		
+	saveUser: (event) ->
+		event?.preventDefault()
+		console.log 'Save user here'
+		
+	cancel: (event) ->
+		event?.preventDefault()
+		app.navigate 'admin/user/all', true 		
 
 return UserShow
