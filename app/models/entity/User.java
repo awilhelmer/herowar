@@ -106,6 +106,11 @@ public class User extends BaseModel implements Subject {
     Logger.info("Saved new user " + user.getUsername());
     return user;
   }
+  
+  public static void delete(User user) {
+    user.deleteManyToManyAssociations("roles");
+    user.delete();
+  }
 
   public static User create(String username, String clearPassword, String email) {
     FormSignup form = new FormSignup();

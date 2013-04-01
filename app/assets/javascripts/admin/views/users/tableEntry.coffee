@@ -1,5 +1,6 @@
 TableEntryView = require 'views/tableEntryView'
 app = require 'application'
+db = require 'database'
 
 ###
     The UsersTableEntry shows a row in the user table.
@@ -8,13 +9,22 @@ app = require 'application'
 ###
 class UsersTableEntry extends TableEntryView
 
+	entityType: 'user'
+		
+	deleteField: 'username'
+
 	editEntry: (event) ->
 		event?.preventDefault()
-		console.log "Edit #{@model.id}"
 		app.navigate "admin/user/#{@model.id}", true 
 		
 	deleteEntry: (event) ->
 		event?.preventDefault()
-		console.log "Delete entry #{@model.id}"
+		me = db.get 'ui/me'
+		if me.id == @model.id
+			$.gritter.add
+				title: 'Error',
+				text: 'You can\'t delete yourself...'
+		else
+			super event
 
 return UsersTableEntry

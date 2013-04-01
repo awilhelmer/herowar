@@ -1,5 +1,7 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
+app = require 'application'
+db = require 'database'
 
 ###
     The TableEntryView shows a row inside of a table.
@@ -9,6 +11,10 @@ templates = require 'templates'
 class TableEntry extends BaseView
 
 	template: templates.get 'tableEntry.tmpl'
+
+	entityType: ''
+
+	deleteField: 'name'
 
 	events:
 		'click .edit-link'		: 'editEntry'
@@ -31,5 +37,16 @@ class TableEntry extends BaseView
 		
 	deleteEntry: (event) ->
 		event?.preventDefault()
+		throw 'entityType should be set to delete entry' unless @entityType
+		if confirm("Do you really want to delete the #{@entityType} \"#{@model.get(@deleteField)}\"?")
+			$.ajax
+				type: 'DELETE'
+				url: "#{app.resourcePath()}#{@entityType}/#{@model.id}"
+				success: (data, textStatus, jqXHR) =>
+					$.gritter.add
+						title: "Delete #{@entityType}",
+						text: "The #{@entityType} \"#{@model.get(@deleteField)}\" has been successfully deleted."
+					collection = db.get "api/#{@entityType}s"
+					collection.fetch()
 
 return TableEntry

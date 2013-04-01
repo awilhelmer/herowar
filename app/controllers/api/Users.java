@@ -5,7 +5,6 @@ import static play.libs.Json.toJson;
 import java.util.List;
 
 import models.entity.User;
-
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -26,6 +25,12 @@ public class Users extends Controller {
   public static Result show(Long id) {
     User user = User.getFinder().where().eq("id", id).findUnique();
     return ok(toJson(user));
+  }
+  
+  public static Result delete(Long id) {
+    User user = User.getFinder().where().eq("id", id).findUnique();
+    User.delete(user);
+    return ok("{}");
   }
 
   public static Result add() {

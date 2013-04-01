@@ -7,6 +7,8 @@ class MapsTableEntry extends TableEntryView
 
 	template: templates.get 'maps/tableEntry.tmpl'
 
+	entityType: 'map'
+
 	events:
 		'click .edit-link'		: 'editEntry'
 		'click .delete-link'	: 'deleteEntry'
@@ -16,21 +18,6 @@ class MapsTableEntry extends TableEntryView
 		event?.preventDefault()
 		console.log "Edit #{@model.id}"
 		app.navigate "admin/map/#{@model.id}", true 
-		
-	deleteEntry: (event) ->
-		event?.preventDefault()
-		console.log @model
-		if confirm("Do you really want to delete the map \"#{@model.get('name')}\"?")
-			console.log "Delete entry #{@model.id}"
-			$.ajax
-				type: 'DELETE'
-				url: "#{app.resourcePath()}map/#{@model.id}"
-				success: (data, textStatus, jqXHR) =>
-					$.gritter.add
-						title: 'Delete Map',
-						text: "The map \"#{@model.get('name')}\" has been successfully deleted."
-					maps = db.get 'api/maps'
-					maps.fetch()
 
 	editorEntry: (event) ->
 		event?.preventDefault()

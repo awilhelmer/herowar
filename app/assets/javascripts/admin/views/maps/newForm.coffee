@@ -18,7 +18,7 @@ class MapNewForm extends FormView
 
 	onSuccess: (data, textStatus, jqXHR) ->
 		$.gritter.add
-			title: 'New Map',
+			title: 'New map',
 			text: 'The map has been successfully created.'
 		app.navigate 'admin/map/all', true 	
 	
