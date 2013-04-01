@@ -1,4 +1,4 @@
-AdminAuthView = require 'views/adminAuthView'
+AdminTableView = require 'views/adminTableView'
 templates = require 'templates'
 app = require 'application'
 
@@ -7,19 +7,12 @@ app = require 'application'
 
     @author Sebastian Sachtleben
 ###
-class UsersList extends AdminAuthView
+class UsersList extends AdminTableView
 
 	entity: 'api/users'
 
-	id: 'usersAll'
+	id: 'users-list'
 	
 	template: templates.get 'users/list.tmpl'
-	
-	initialize: (options) ->
-		super options
-		@model.fetch()
-		
-	bindEvents: ->
-		@listenTo @model, 'add remove change reset', @render if @model
 
 return UsersList

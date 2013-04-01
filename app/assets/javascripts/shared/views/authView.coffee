@@ -24,8 +24,6 @@ class AuthView extends BaseView
 		@listenTo @me, 'change:isGuest change:isUser change:isFetched', @render if @me
 		
 	render: ->
-		console.log 'Render auth'
-		console.log @me
 		if @me.get('isFetched') && @me.get('isGuest')
 			app.navigate @redirectTo, true
 		else
