@@ -27,7 +27,9 @@ class TableEntry extends BaseView
 		vals
 		
 	editEntry: (event) ->
+		event?.preventDefault()
 		
 	deleteEntry: (event) ->
+		event?.preventDefault()
 
 return TableEntry

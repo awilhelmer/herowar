@@ -12,6 +12,9 @@ class TableView extends BaseView
 	
 	allowCreate: true
 	
+	events:
+		'click .create-link'			: 'createEntry'
+	
 	initialize: (options) ->
 		super options
 		@model.fetch()
@@ -34,5 +37,8 @@ class TableView extends BaseView
 		json.entryView = @entryView
 		json.allowCreate = @allowCreate
 		json
+		
+	createEntry: (event) ->
+		event?.preventDefault()
 
 return TableView

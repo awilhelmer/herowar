@@ -19,4 +19,8 @@ class MapsTable extends TableView
 		
 	entryView: 'views/maps/tableEntry'
 
+	createEntry: (event) ->
+		event?.preventDefault()
+		console.log 'Create new entry'
+
 return MapsTable
