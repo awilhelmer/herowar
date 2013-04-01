@@ -18,6 +18,6 @@ class Home extends AdminAuthView
 		
 	users: (event) ->
 		event?.preventDefault()
-		app.navigate 'admin/users/all', true 
+		app.navigate 'admin/user/all', true 
 	
 return Home

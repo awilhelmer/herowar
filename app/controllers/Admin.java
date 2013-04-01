@@ -10,7 +10,11 @@ public class Admin extends Controller {
     return ok(index.render());
   }
   
-  public static Result usersAll() {
+  public static Result userAll() {
+    return ok(index.render());
+  }
+  
+  public static Result userShow(Long id) {
     return ok(index.render());
   }
   
