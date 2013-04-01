@@ -10,6 +10,8 @@ class TableView extends BaseView
 	
 	template: templates.get 'table.tmpl'
 	
+	allowCreate: true
+	
 	initialize: (options) ->
 		super options
 		@model.fetch()
@@ -30,6 +32,7 @@ class TableView extends BaseView
 			json.tableFields = tableFields.join ','
 		json.entity = @tableEntity
 		json.entryView = @entryView
+		json.allowCreate = @allowCreate
 		json
 
 return TableView

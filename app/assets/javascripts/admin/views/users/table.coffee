@@ -18,4 +18,6 @@ class UsersTable extends TableView
 		
 	entryView: 'views/users/tableEntry'
 
+	allowCreate: false
+
 return UsersTable

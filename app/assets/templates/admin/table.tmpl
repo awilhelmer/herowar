@@ -1,12 +1,17 @@
-<thead>
-	<tr>
-		{{#each tableHeaders}}
-			<th>{{this}}</th>
-		{{/each}}
-	</tr>
-</thead>
-<tbody>
-	{{#each []}}
-		<tr data-view="{{../entryView}}" data-model="{{id}}" data-entity="{{../entity}}" data-fields="{{../tableFields}}"></tr>
-	{{/each}}		
-</tbody>
+<table class="table">
+	<thead>
+		<tr>
+			{{#each tableHeaders}}
+				<th>{{this}}</th>
+			{{/each}}
+		</tr>
+	</thead>
+	<tbody>
+		{{#each []}}
+			<tr data-view="{{../entryView}}" data-model="{{id}}" data-entity="{{../entity}}" data-fields="{{../tableFields}}"></tr>
+		{{/each}}		
+	</tbody>
+</table>
+{{#if allowCreate}}
+	<button type="submit" class="btn btn-primary create-button">Create</button>
+{{/if}}
