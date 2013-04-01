@@ -20,7 +20,7 @@ class MapsTableEntry extends TableEntryView
 	deleteEntry: (event) ->
 		event?.preventDefault()
 		console.log @model
-		if confirm("Do you really want to delete \"#{@model.get('name')}\"?")
+		if confirm("Do you really want to delete the map \"#{@model.get('name')}\"?")
 			console.log "Delete entry #{@model.id}"
 			$.ajax
 				type: 'DELETE'
