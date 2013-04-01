@@ -17,6 +17,6 @@ class MapsTable extends TableView
 		'Description'	: 'description'
 		'Team Size'		: 'teamSize'
 		
-	entryView: 'views/users/tableEntry'
+	entryView: 'views/maps/tableEntry'
 
 return MapsTable
