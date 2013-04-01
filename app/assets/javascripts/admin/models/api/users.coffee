@@ -1,11 +1,6 @@
 app = require 'application'
 db = require 'database'
 
-###
-	APIUsers provides a collection of user fetched by '/api/user/all'.
-
-	@author Sebastian Sachtleben
-###
 class APIUsers extends Backbone.Collection
 
 	initialize: (models, options) ->

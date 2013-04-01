@@ -12,10 +12,6 @@ class UsersTableEntry extends TableEntryView
 	entityType: 'user'
 		
 	deleteField: 'username'
-
-	editEntry: (event) ->
-		event?.preventDefault()
-		app.navigate "admin/user/#{@model.id}", true 
 		
 	deleteEntry: (event) ->
 		event?.preventDefault()

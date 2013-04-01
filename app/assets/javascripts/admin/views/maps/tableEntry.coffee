@@ -14,13 +14,8 @@ class MapsTableEntry extends TableEntryView
 		'click .delete-link'	: 'deleteEntry'
 		'click .editor-link'	: 'editorEntry'
 
-	editEntry: (event) ->
-		event?.preventDefault()
-		console.log "Edit #{@model.id}"
-		app.navigate "admin/map/#{@model.id}", true 
-
 	editorEntry: (event) ->
 		event?.preventDefault()
-		console.log "Jump in editor with #{@model.id}"
+		console.log "Jump in editor with map \"#{@model.get('name')}\""
 
 return MapsTableEntry

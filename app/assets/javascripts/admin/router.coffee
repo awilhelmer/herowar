@@ -16,8 +16,9 @@ Router = Backbone.Router.extend
     ###
     routes:
         "admin"          : "home"
-        "admin/user/:id" : "users/show"
+        "admin/user/:id" : "users/edit"
         "admin/user/all" : "users/list"
+        "admin/map/:id"  : "maps/edit"
         "admin/map/all"  : "maps/list"
         "admin/map/new"  : "maps/new"
 	

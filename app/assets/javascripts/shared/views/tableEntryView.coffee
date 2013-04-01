@@ -34,6 +34,7 @@ class TableEntry extends BaseView
 		
 	editEntry: (event) ->
 		event?.preventDefault()
+		app.navigate "admin/#{@entityType}/#{@model.id}", true
 		
 	deleteEntry: (event) ->
 		event?.preventDefault()

@@ -1,11 +1,6 @@
 app = require 'application'
 db = require 'database'
 
-###
-	APIMaps provides a collection of user fetched by '/api/map/all'.
-
-	@author Sebastian Sachtleben
-###
 class APIMaps extends Backbone.Collection
 
 	initialize: (models, options) ->

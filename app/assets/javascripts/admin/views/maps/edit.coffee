@@ -2,33 +2,26 @@ AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
 app = require 'application'
 
-###
-    The UsersList shows a list of users
+class MapsEdit extends AdminAuthView
 
-    @author Sebastian Sachtleben
-###
-class UserShow extends AdminAuthView
-
-	entity: 'db/users'
-
-	id: 'user-show'
+	entity: 'db/maps'
 	
-	template: templates.get 'users/show.tmpl'
+	template: templates.get 'maps/edit.tmpl'
 	
 	events:
-		'click .save-button'		: 'saveUser'
+		'click .save-button'		: 'saveEntry'
 		'click .cancel-button'	: 'cancel'
 	
 	initialize: (options) ->
 		super options
 		console.log @model
 		
-	saveUser: (event) ->
+	saveEntry: (event) ->
 		event?.preventDefault()
-		console.log 'Save user here'
+		console.log 'Save maps here'
 		
 	cancel: (event) ->
 		event?.preventDefault()
 		app.navigate 'admin/user/all', true 		
 
-return UserShow
+return MapsEdit
