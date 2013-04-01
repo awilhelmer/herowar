@@ -12,8 +12,4 @@ class Users extends BaseCollection
 
 	model: UserModel
 
-	parse: (resp) ->
-		super resp
-		return resp.users
-
 return Users

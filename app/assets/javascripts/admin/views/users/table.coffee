@@ -1,7 +1,7 @@
 TableView = require 'views/tableView'
 
 ###
-    The UsersTable shows a list of users
+    The UsersTable shows a list of users.
 
     @author Sebastian Sachtleben
 ###

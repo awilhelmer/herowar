@@ -14,10 +14,15 @@ class Home extends AdminAuthView
 	template: templates.get 'home.tmpl'
 	
 	events:
-		'click .users-link': 'users'
+		'click .user-link'	: 'user'
+		'click .map-link'		: 'map'
 		
-	users: (event) ->
+	user: (event) ->
 		event?.preventDefault()
-		app.navigate 'admin/user/all', true 
+		app.navigate 'admin/user/all', true
+		
+	map: (event) ->
+		event?.preventDefault()
+		app.navigate 'admin/map/all', true
 	
 return Home

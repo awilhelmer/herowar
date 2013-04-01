@@ -12,7 +12,7 @@ import play.mvc.Result;
 
 
 /**
- * The UserController handle api requests for the user object.
+ * The Users controller handle api requests for the user object.
  * 
  * @author Sebastian Sachtleben
  */

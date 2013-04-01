@@ -21,11 +21,17 @@ GET		/api/user/all												controllers.api.Users.list()
 GET		/api/user/:id												controllers.api.Users.show(id: Long)
 POST	/api/user														controllers.api.Users.add()
 
-########## API ###########
+GET		/api/map/all												controllers.api.Maps.list()
+GET		/api/map/:id												controllers.api.Maps.show(id: Long)
+POST	/api/map														controllers.api.Maps.add()
+
+########## ADMIN ###########
 
 GET		/admin															controllers.Admin.index()
 GET		/admin/user/all											controllers.Admin.userAll()
 GET		/admin/user/:id											controllers.Admin.userShow(id: Long)
+
+GET		/admin/map/all											controllers.Admin.mapAll()
 
 ########## OTHER ###########
 

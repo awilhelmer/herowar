@@ -1,7 +1,7 @@
 BaseController = require 'controllers/baseController'
 
 ###
-    The users list controller shows a list of all users.
+    The UsersListController shows a list of all users.
 
     @author Sebastian Sachtleben
 ###

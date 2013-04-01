@@ -2,7 +2,7 @@ AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
 
 ###
-    The UsersList shows a list of users
+    The UsersList shows a list of users.
 
     @author Sebastian Sachtleben
 ###
