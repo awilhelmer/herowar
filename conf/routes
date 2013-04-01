@@ -32,6 +32,7 @@ GET		/admin/user/all											controllers.Admin.userAll()
 GET		/admin/user/:id											controllers.Admin.userShow(id: Long)
 
 GET		/admin/map/all											controllers.Admin.mapAll()
+GET		/admin/map/new											controllers.Admin.mapNew()
 
 ########## OTHER ###########
 

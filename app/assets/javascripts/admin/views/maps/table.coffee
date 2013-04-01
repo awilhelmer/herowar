@@ -1,4 +1,5 @@
 TableView = require 'views/tableView'
+app = require 'application'
 
 ###
     The MapsTable shows a list of maps.
@@ -21,6 +22,6 @@ class MapsTable extends TableView
 
 	createEntry: (event) ->
 		event?.preventDefault()
-		console.log 'Create new entry'
+		app.navigate "admin/map/new", true 
 
 return MapsTable

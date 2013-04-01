@@ -22,4 +22,8 @@ public class Admin extends Controller {
     return ok(index.render());
   }
   
+  public static Result mapNew() {
+    return ok(index.render());
+  }
+  
 }
