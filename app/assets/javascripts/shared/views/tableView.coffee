@@ -36,6 +36,7 @@ class TableView extends BaseView
 		json.entity = @tableEntity
 		json.entryView = @entryView
 		json.allowCreate = @allowCreate
+		json.colspan = tableFields.length + 1
 		json
 		
 	createEntry: (event) ->

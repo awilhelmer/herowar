@@ -9,7 +9,11 @@
 	<tbody>
 		{{#each []}}
 			<tr data-view="{{../entryView}}" data-model="{{id}}" data-entity="{{../entity}}" data-fields="{{../tableFields}}"></tr>
-		{{/each}}		
+		{{else}}
+			<tr>
+				<td colspan="{{colspan}}">No entries found</td>
+			</tr>
+		{{/each}}
 	</tbody>
 </table>
 {{#if allowCreate}}
