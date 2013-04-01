@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 import models.entity.SecurityRole;
 import models.entity.User;
+import models.entity.game.Map;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -62,6 +63,7 @@ public class Global extends GlobalSettings {
 
     initialSecurityRoles();
     createAdminUser();
+    createTutorialMap();
   }
 
   @Override
@@ -88,6 +90,14 @@ public class Global extends GlobalSettings {
     }
     Logger.info("Creating admin user");
     User.create("admin", "admin", "admin@herowar.com");
+  }
+  
+  private void createTutorialMap() {
+    if(Map.getFinder().where().eq("name", "Tutorial").findUnique() != null) {
+      return;      
+    }
+    Logger.info("Creating tutorial map");
+    Map.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
   }
 
 }

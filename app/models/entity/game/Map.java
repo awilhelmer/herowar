@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import models.entity.BaseModel;
+import models.entity.User;
 
 /**
  * @author Sebastian Sachtleben
@@ -21,6 +22,14 @@ public class Map extends BaseModel {
   
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
+  public static void create(String name, String description, int teamSize) {
+    final Map map = new Map();
+    map.setName(name);
+    map.setDescription(description);
+    map.setTeamSize(teamSize);
+    map.save();
+  }
+  
   // GETTER & SETTER //
   
   public Long getId() {
