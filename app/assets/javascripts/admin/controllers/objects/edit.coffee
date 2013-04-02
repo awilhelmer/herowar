@@ -6,4 +6,6 @@ class ObjectEditController extends EditController
 		'views/header'				: ''
 		'views/objects/edit' 	: 'getEditOptions'
 
+	collection: 'db/objects'
+
 return ObjectEditController

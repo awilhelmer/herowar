@@ -6,4 +6,6 @@ class NewsEditController extends EditController
 		'views/header'				: ''
 		'views/news/edit'		 	: 'getEditOptions'
 
+	collection: 'db/newss'
+
 return NewsEditController

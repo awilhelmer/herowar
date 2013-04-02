@@ -6,4 +6,6 @@ class UsersEditController extends EditController
 		'views/header'			: ''
 		'views/users/edit' 	: 'getEditOptions'
 
+	collection: 'db/users'
+
 return UsersEditController
