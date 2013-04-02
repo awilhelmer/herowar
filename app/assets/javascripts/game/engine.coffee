@@ -1,13 +1,20 @@
 Variables = require 'variables'
 
+###
+Engine is the main entry to initialize the game
+	@author Alexander Wilhelmer
+###
+
 class Engine 
-	console.log "Engine starting..."
 	
-	console.log "Engine started!"
-	
-	
-	
+
 	start: ->
+		console.log "Engine starting..."
+		renderer: @initRenderer
+		console.log "Engine started!"
+		
+		
+	initRenderer: ->
 		renderer = new THREE.WebGLRenderer
 			antialias: true,
 			clearColor: 0x000000
