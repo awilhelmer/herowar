@@ -41,6 +41,7 @@ public class Application extends Controller {
     jsFilesSite.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
     jsFilesSite.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
     jsFilesGame.add("javascripts/gv" + BuildInfo.cacheNumber() + ".js");
+    jsFilesGame.add("javascripts/gs" + BuildInfo.cacheNumber() + ".js");
   }
   
   public static User getLocalUser(final Session session) {
