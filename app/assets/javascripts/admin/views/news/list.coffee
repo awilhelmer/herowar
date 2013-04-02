@@ -3,7 +3,7 @@ templates = require 'templates'
 
 class NewsList extends AdminAuthView
 
-	entity: 'api/news'
+	entity: 'api/newss'
 
 	id: 'news-list'
 	

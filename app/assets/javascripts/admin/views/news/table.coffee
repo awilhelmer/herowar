@@ -3,7 +3,7 @@ app = require 'application'
 
 class NewsTable extends TableView
 
-	entity: 'api/news'
+	entity: 'api/newss'
 	
 	tableEntity: 'db/newss'
 	
