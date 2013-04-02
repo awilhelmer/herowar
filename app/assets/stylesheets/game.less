@@ -1,16 +1,26 @@
 //
 // Game CSS Style
 // --------------------------------------------------
-html,body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	width: 100%;
-	color: #cff;
-	text-shadow: 0 0 0.125em #dff;	
-	font-family: 'Droid Sans Mono', arial, serif;
+body {
+background:#ccc;
+padding:0;
+margin:0;
+overflow:hidden;
+font-family:georgia;
+text-align:center;
+color: #666;
 }
 
-canvas {
-	font-family: Tahoma, sans-serif;
+h1 {color: #666	; }
+
+a { color:skyblue }
+
+canvas { pointer-events:none; }
+
+#overlay{
+position: absolute;
+z-index: 9999;
+top: 0;
+left: 0;
+width: 100%;
 }

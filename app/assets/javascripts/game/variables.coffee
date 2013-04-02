@@ -4,6 +4,6 @@
 
 variables =
 	SCREEN_WIDTH : window.innerWidth
- 	SCREEN_HEIGHT : window.innerHeight
+	SCREEN_HEIGHT : window.innerHeight
  	
 return variables
