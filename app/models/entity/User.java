@@ -151,6 +151,12 @@ public class User extends BaseModel implements Subject {
       return getAuthUserFind(identity).findUnique();
     }
   }
+  
+  public static void merge(User user, User user2) {
+    user.setUsername(user2.getUsername());
+    user.setEmail(user2.getEmail());
+    user.save();
+  }
 
   public void merge(final User otherUser) {
     for (final LinkedAccount acc : otherUser.linkedAccounts) {

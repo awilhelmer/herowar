@@ -27,6 +27,12 @@ public class Users extends Controller {
     return ok(toJson(user));
   }
   
+  public static Result update(Long id) {
+    User user = User.getFinder().where().eq("id", id).findUnique();
+    User.merge(user, Form.form(User.class).bindFromRequest().get());
+    return ok(toJson(user));
+  }
+  
   public static Result delete(Long id) {
     User user = User.getFinder().where().eq("id", id).findUnique();
     User.delete(user);

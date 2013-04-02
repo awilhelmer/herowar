@@ -19,6 +19,7 @@ POST		/api/checkEmail/:email							controllers.api.Me.checkEmail(email: String)
 
 GET			/api/user/all												controllers.api.Users.list()
 GET			/api/user/:id												controllers.api.Users.show(id: Long)
+PUT			/api/user/:id												controllers.api.Users.update(id: Long)
 DELETE	/api/user/:id												controllers.api.Users.delete(id: Long)
 POST		/api/user														controllers.api.Users.add()
 

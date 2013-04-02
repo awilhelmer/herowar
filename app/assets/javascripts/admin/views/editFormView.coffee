@@ -29,7 +29,6 @@ class EditFormView extends FormView
 	getTemplateData: ->
 		json = super()
 		json.isNew = true if @formType is 'new'
-		console.log json
 		json
 	
 	render: ->
