@@ -49,14 +49,18 @@ GET			/admin/user/:id											controllers.Admin.userShow(id: Long)
 
 GET			/admin/map/all											controllers.Admin.mapAll()
 GET			/admin/map/new											controllers.Admin.mapNew()
+GET			/admin/map/:id											controllers.Admin.mapShow(id: Long)
 
 GET			/admin/object/all										controllers.Admin.objectAll()
 GET			/admin/object/new										controllers.Admin.objectNew()
+GET			/admin/object/:id										controllers.Admin.objectShow(id: Long)
 
 GET			/admin/news/all											controllers.Admin.newsAll()
 GET			/admin/news/new											controllers.Admin.newsNew()
+GET			/admin/news/:id											controllers.Admin.newsShow(id: Long)
 
 ########## GAME ###########
+
 GET			/game																controllers.Game.index()
 
 ########## OTHER ###########

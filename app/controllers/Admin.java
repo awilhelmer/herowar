@@ -26,11 +26,19 @@ public class Admin extends Controller {
     return ok(index.render());
   }
   
+  public static Result mapShow(Long id) {
+    return ok(index.render());
+  }
+  
   public static Result objectAll() {
     return ok(index.render());
   }
   
   public static Result objectNew() {
+    return ok(index.render());
+  }
+  
+  public static Result objectShow(Long id) {
     return ok(index.render());
   }
 
@@ -39,6 +47,10 @@ public class Admin extends Controller {
   }
   
   public static Result newsNew() {
+    return ok(index.render());
+  }
+  
+  public static Result newsShow(Long id) {
     return ok(index.render());
   }
 }

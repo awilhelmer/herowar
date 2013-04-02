@@ -94,7 +94,7 @@ class BaseView extends Backbone.View
             @views[key].render()
 
     remove: ->
-        console.log "remove called for #{@entity}"
+        # console.log "remove called for #{@entity}"
         @unbindEvents()
         #remove all subviews
         view.remove() for key,view of @views
