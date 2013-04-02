@@ -12,6 +12,8 @@ class ObjectTable extends TableView
 		'Name' 				: 'name'
 		'Description'	: 'description'
 
+	entryView: 'views/objects/tableEntry'
+
 	createEntry: (event) ->
 		event?.preventDefault()
 		app.navigate "admin/object/new", true 

@@ -23,6 +23,7 @@ public class News extends BaseModel {
   public static void merge(News news, News news2) {
     news.setHeadline(news2.getHeadline());
     news.setText(news2.getText());
+    news.save();
   }
   
   // GETTER & SETTER //

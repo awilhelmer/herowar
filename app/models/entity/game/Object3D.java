@@ -23,6 +23,7 @@ public class Object3D extends BaseModel {
   public static void merge(Object3D object, Object3D object2) {
     object.setName(object2.getName());
     object.setDescription(object2.getDescription());
+    object.save();
   } 
   
   // GETTER & SETTER //

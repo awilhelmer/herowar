@@ -7,7 +7,7 @@ db = require 'database'
 
     @author Sebastian Sachtleben
 ###
-class UsersTableEntry extends TableEntryView
+class UserTableEntry extends TableEntryView
 
 	entityType: 'user'
 		
@@ -23,4 +23,4 @@ class UsersTableEntry extends TableEntryView
 		else
 			super event
 
-return UsersTableEntry
+return UserTableEntry

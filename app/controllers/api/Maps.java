@@ -28,7 +28,7 @@ public class Maps extends BaseAPI<Long, Map> {
   }
 
   public static Result update(Long id) {
-    Map map = Map.getFinder().where().eq("id", id).findUnique();
+    Map map = instance.findUnique(id);
     Map.merge(map, Form.form(Map.class).bindFromRequest().get());
     return ok(toJson(map));
   }

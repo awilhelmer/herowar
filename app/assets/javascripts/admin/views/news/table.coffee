@@ -12,6 +12,8 @@ class NewsTable extends TableView
 		'Headline'		: 'headline'
 		'Text'				: 'text'
 
+	entryView: 'views/news/tableEntry'
+
 	createEntry: (event) ->
 		event?.preventDefault()
 		app.navigate "admin/news/new", true 

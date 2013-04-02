@@ -3,7 +3,7 @@ templates = require 'templates'
 app = require 'application'
 db = require 'database'
 
-class MapsTableEntry extends TableEntryView
+class MapTableEntry extends TableEntryView
 
 	template: templates.get 'maps/tableEntry.tmpl'
 
@@ -18,4 +18,4 @@ class MapsTableEntry extends TableEntryView
 		event?.preventDefault()
 		console.log "Jump in editor with map \"#{@model.get('name')}\""
 
-return MapsTableEntry
+return MapTableEntry

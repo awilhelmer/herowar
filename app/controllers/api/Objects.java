@@ -28,7 +28,7 @@ public class Objects extends BaseAPI<Long, Object3D> {
   }
 
   public static Result update(Long id) {
-    Object3D object = Object3D.getFinder().where().eq("id", id).findUnique();
+    Object3D object = instance.findUnique(id);
     Object3D.merge(object, Form.form(Object3D.class).bindFromRequest().get());
     return ok(toJson(object));
   }
