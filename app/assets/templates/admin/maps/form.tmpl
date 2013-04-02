@@ -1,4 +1,12 @@
 <form class="form-horizontal">
+	{{#unless isNew}}
+		<div class="control-group">
+			<label class="control-label" for="inputId">#</label>
+			<div class="controls">
+				<input type="text" id="inputId" name="id" placeholder="Name" disabled>
+			</div>
+		</div>
+	{{/unless}}
 	<div class="control-group">
 		<label class="control-label" for="inputName">Name</label>
 		<div class="controls">
@@ -24,7 +32,7 @@
 		</div>
 	</div>
 	<div class="form-actions">
-		<button type="submit" class="btn btn-primary">Create</button>
+		<button type="submit" class="btn btn-primary">{{#if isNew}}Create{{else}}Save{{/if}}</button>
 		<button type="submit" class="btn cancel-button">Cancel</button>
 	</div>
 </form>

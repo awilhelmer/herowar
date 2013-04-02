@@ -24,6 +24,7 @@ POST		/api/user														controllers.api.Users.add()
 
 GET			/api/map/all												controllers.api.Maps.list()
 GET			/api/map/:id												controllers.api.Maps.show(id: Long)
+PUT			/api/map/:id												controllers.api.Maps.update(id: Long)
 DELETE	/api/map/:id												controllers.api.Maps.delete(id: Long)
 POST		/api/map														controllers.api.Maps.add()
 

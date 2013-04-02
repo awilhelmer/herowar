@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import models.entity.BaseModel;
-import models.entity.User;
 
 /**
  * @author Sebastian Sachtleben
@@ -27,6 +26,13 @@ public class Map extends BaseModel {
     map.setName(name);
     map.setDescription(description);
     map.setTeamSize(teamSize);
+    map.save();
+  }
+  
+  public static void merge(final Map map, final Map map2) {
+    map.setName(map2.getName());
+    map.setDescription(map2.getDescription());
+    map.setTeamSize(map2.getTeamSize());
     map.save();
   }
   

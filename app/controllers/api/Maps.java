@@ -27,6 +27,12 @@ public class Maps extends Controller {
     return ok(toJson(map));
   }
   
+  public static Result update(Long id) {
+    Map map = Map.getFinder().where().eq("id", id).findUnique();
+    Map.merge(map, Form.form(Map.class).bindFromRequest().get());
+    return ok(toJson(map));
+  }
+  
   public static Result delete(Long id) {
     Map map = Map.getFinder().where().eq("id", id).findUnique();
     map.delete();

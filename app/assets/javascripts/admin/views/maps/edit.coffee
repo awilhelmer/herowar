@@ -11,10 +11,6 @@ class MapsEdit extends AdminAuthView
 	events:
 		'click .save-button'		: 'saveEntry'
 		'click .cancel-button'	: 'cancel'
-	
-	initialize: (options) ->
-		super options
-		console.log @model
 		
 	saveEntry: (event) ->
 		event?.preventDefault()
@@ -22,6 +18,6 @@ class MapsEdit extends AdminAuthView
 		
 	cancel: (event) ->
 		event?.preventDefault()
-		app.navigate 'admin/user/all', true 		
+		app.navigate 'admin/user/all', true
 
 return MapsEdit
