@@ -4,6 +4,7 @@ import static play.libs.Json.toJson;
 
 import java.io.Serializable;
 
+import models.entity.BaseModel;
 import play.db.ebean.Model.Finder;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -13,31 +14,23 @@ import play.mvc.Result;
  * 
  * @author Sebastian Sachtleben
  */
-public abstract class BaseAPI<K extends Serializable, T extends Serializable> extends Controller {
+public class BaseAPI<T extends BaseModel, K extends Serializable> extends Controller {
 
-  private K keyClass;
-  private T entityClass;
+  private Class<T> classEntity;
+  private Class<K> classKey;
 
-  public static <K, T> Result list(Class<K> keyClass, Class<T> entityClass) {
-    final Finder<K, T> finder = new Finder<K, T>(keyClass, entityClass);
+  public BaseAPI(Class<T> classEntity, Class<K> classKey) {
+    super();
+    this.classEntity = classEntity;
+    this.classKey = classKey;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected Result listAll() {
+    final Finder<K, T> finder = new Finder<K, T>(classKey, classEntity);
     return ok(toJson(finder.all()));
   }
-  
+
   // GETTER & SETTER //
-  
-  public K getKeyClass() {
-    return keyClass;
-  }
 
-  public void setKeyClass(K keyClass) {
-    this.keyClass = keyClass;
-  }
-
-  public T getEntityClass() {
-    return entityClass;
-  }
-
-  public void setEntityClass(T entityClass) {
-    this.entityClass = entityClass;
-  }
 }
