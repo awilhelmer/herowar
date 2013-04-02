@@ -48,13 +48,12 @@ public class User extends BaseModel implements Subject {
   private String email;
 
   private String username;
-  private Boolean newsletter;
+  private boolean newsletter = false;
+  private boolean active = true;
+  private boolean emailValidated = false;
 
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date lastLogin;
-
-  private boolean active;
-  private boolean emailValidated;
 
   @ManyToMany
   @JsonIgnore
@@ -155,6 +154,8 @@ public class User extends BaseModel implements Subject {
   public static void merge(User user, User user2) {
     user.setUsername(user2.getUsername());
     user.setEmail(user2.getEmail());
+    user.setActive(user2.isActive());
+    user.setNewsletter(user2.isNewsletter());
     user.save();
   }
 
@@ -225,11 +226,11 @@ public class User extends BaseModel implements Subject {
     this.email = email;
   }
 
-  public Boolean getNewsletter() {
+  public boolean isNewsletter() {
     return newsletter;
   }
 
-  public void setNewsletter(Boolean newsletter) {
+  public void setNewsletter(boolean newsletter) {
     this.newsletter = newsletter;
   }
 
