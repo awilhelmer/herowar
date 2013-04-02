@@ -31,7 +31,7 @@ public class Application extends Controller {
   
   private final static List<String> jsFilesAdmin = new ArrayList<String>();
   private final static List<String> jsFilesSite = new ArrayList<String>();
-  
+  private final static List<String> jsFilesGame = new ArrayList<String>();
   static {
     //TODO hardcoded prefix - Analyse from folder... 
     jsFilesAdmin.add("javascripts/av" + BuildInfo.cacheNumber() + ".js");
@@ -40,6 +40,7 @@ public class Application extends Controller {
     jsFilesSite.add("javascripts/sv" + BuildInfo.cacheNumber() + ".js");
     jsFilesSite.add("javascripts/ss" + BuildInfo.cacheNumber() + ".js");
     jsFilesSite.add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
+    jsFilesGame.add("javascripts/gv" + BuildInfo.cacheNumber() + ".js");
   }
   
   public static User getLocalUser(final Session session) {
@@ -66,6 +67,10 @@ public class Application extends Controller {
   
   public static List<String> getJsFilesAdmin() {
     return jsFilesAdmin;
+  }
+
+  public static List<String> getJsFilesGame() {
+    return jsFilesGame;
   }
 
 }
