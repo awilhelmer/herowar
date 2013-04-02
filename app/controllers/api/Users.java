@@ -10,39 +10,34 @@ import play.mvc.Result;
  * 
  * @author Sebastian Sachtleben
  */
-public class Users extends BaseAPI<User, Long> {
+public class Users extends BaseAPI<Long, User> {
 
   private Users() {
-    super(User.class, Long.class);
+    super(Long.class, User.class);
   }
 
-  public static Users instance = new Users();
+  public static final Users instance = new Users();
 
   public static Result list() {
     return instance.listAll();
   }
 
   public static Result show(Long id) {
-    User user = User.getFinder().where().eq("id", id).findUnique();
-    return ok(toJson(user));
+    return instance.showEntry(id);
   }
 
   public static Result update(Long id) {
-    User user = User.getFinder().where().eq("id", id).findUnique();
+    User user = instance.findUnique(id);
     User.merge(user, Form.form(User.class).bindFromRequest().get());
     return ok(toJson(user));
   }
 
   public static Result delete(Long id) {
-    User user = User.getFinder().where().eq("id", id).findUnique();
-    User.delete(user);
-    return ok("{}");
+    return instance.deleteEntry(id);
   }
 
   public static Result add() {
-    User user = Form.form(User.class).bindFromRequest().get();
-    user.save();
-    return ok(toJson(user));
+    return instance.addEntry();
   }
 
 }

@@ -5,6 +5,7 @@ import static play.libs.Json.toJson;
 import java.io.Serializable;
 
 import models.entity.BaseModel;
+import play.data.Form;
 import play.db.ebean.Model.Finder;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -14,23 +15,45 @@ import play.mvc.Result;
  * 
  * @author Sebastian Sachtleben
  */
-public class BaseAPI<T extends BaseModel, K extends Serializable> extends Controller {
+public abstract class BaseAPI<K extends Serializable, T extends BaseModel> extends Controller {
 
-  private Class<T> classEntity;
-  private Class<K> classKey;
-
-  public BaseAPI(Class<T> classEntity, Class<K> classKey) {
+  @SuppressWarnings("unused")
+  private Class<K> idClass;
+  private Class<T> entityClass;
+  private Finder<K, T> finder;
+  
+  public BaseAPI(Class<K> idClass, Class<T> entityClass) {
     super();
-    this.classEntity = classEntity;
-    this.classKey = classKey;
+    this.finder = new Finder<K, T>(idClass, entityClass);
+    this.idClass = idClass;
+    this.entityClass = entityClass;
   }
 
-  @SuppressWarnings("unchecked")
   protected Result listAll() {
-    final Finder<K, T> finder = new Finder<K, T>(classKey, classEntity);
-    return ok(toJson(finder.all()));
+    return ok(toJson(getFinder().all()));
+  }
+  
+  protected Result showEntry(K id) {
+    return ok(toJson(getFinder().where().eq("id", id).findUnique()));
+  }
+  
+  public Result deleteEntry(K id) {
+    T obj = getFinder().where().eq("id", id).findUnique();
+    obj.delete();
+    return ok("{}");
   }
 
-  // GETTER & SETTER //
+  public Result addEntry() {
+    T obj = Form.form(entityClass).bindFromRequest().get();
+    obj.save();
+    return ok(toJson(obj));
+  }
+  
+  public T findUnique(Long id) {
+    return getFinder().where().eq("id", id).findUnique();
+  }
 
+  public Finder<K, T> getFinder() {
+    return finder;
+  }
 }
