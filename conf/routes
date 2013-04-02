@@ -47,6 +47,11 @@ GET			/admin/map/new											controllers.Admin.mapNew()
 GET			/admin/object/all										controllers.Admin.objectAll()
 GET			/admin/object/new										controllers.Admin.objectNew()
 
+
+
+########## GAME ###########
+GET			/game												controllers.Game.index()
+
 ########## OTHER ###########
 
 GET     /assets/*file               			controllers.Assets.at(path="/public", file)
