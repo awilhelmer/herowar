@@ -83,5 +83,4 @@ public class LinkedAccount extends Model {
   public static Finder<Long, LinkedAccount> getFinder() {
     return finder;
   }
-
 }

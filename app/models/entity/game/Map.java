@@ -73,5 +73,4 @@ public class Map extends BaseModel {
   public static Finder<Long, Map> getFinder() {
     return finder;
   }
-
 }

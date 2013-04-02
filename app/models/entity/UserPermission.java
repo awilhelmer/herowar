@@ -38,5 +38,4 @@ public class UserPermission extends Model implements Permission {
   public void setValue(String value) {
     this.value = value;
   }
-
 }
