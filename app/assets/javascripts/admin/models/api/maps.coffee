@@ -4,7 +4,7 @@ db = require 'database'
 class APIMaps extends Backbone.Collection
 
 	initialize: (models, options) ->
-		@model = require "models/db/map"
+		@model = require 'models/db/map'
 		super models, options
 
 	url: ->

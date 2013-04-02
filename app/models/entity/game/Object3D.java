@@ -20,6 +20,11 @@ public class Object3D extends BaseModel {
   
   private static final Finder<Long, Object3D> finder = new Finder<Long, Object3D>(Long.class, Object3D.class);
   
+  public static void merge(Object3D object, Object3D object2) {
+    object.setName(object2.getName());
+    object.setDescription(object2.getDescription());
+  } 
+  
   // GETTER & SETTER //
   
   public Long getId() {
@@ -48,5 +53,5 @@ public class Object3D extends BaseModel {
 
   public static Finder<Long, Object3D> getFinder() {
     return finder;
-  }  
+  } 
 }

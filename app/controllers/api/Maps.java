@@ -1,9 +1,6 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.game.Map;
 import play.data.Form;
 import play.mvc.Controller;
@@ -11,15 +8,14 @@ import play.mvc.Result;
 
 
 /**
- * The Maps controller handle api requests for the user object.
+ * The Maps controller handle api requests for the Map model.
  * 
  * @author Sebastian Sachtleben
  */
 public class Maps extends Controller {
 
   public static Result list() {
-    List<Map> maps = Map.getFinder().all();
-    return ok(toJson(maps));
+    return ok(toJson(Map.getFinder().all()));
   }
 
   public static Result show(Long id) {

@@ -1,0 +1,11 @@
+<div class="container lazy-content">
+	<div class="headline">
+		<h2>Edit Object</h2>
+		{{#if isFetched}}
+			<img src="/assets/images/loader.gif" />
+		{{/if}}
+	</div>
+	<div data-view="views/objects/form" data-model="{{id}}" data-type="edit"></div>
+</div>
+
+<footer class="footer" data-view="views/footer"></footer>

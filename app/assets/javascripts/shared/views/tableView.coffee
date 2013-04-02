@@ -12,8 +12,10 @@ class TableView extends BaseView
 	
 	allowCreate: true
 	
+	entryView: 'views/tableEntryView'
+	
 	events:
-		'click .create-link'			: 'createEntry'
+		'click .create-link' : 'createEntry'
 	
 	initialize: (options) ->
 		super options

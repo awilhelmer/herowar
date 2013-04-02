@@ -4,7 +4,7 @@ db = require 'database'
 class APIUsers extends Backbone.Collection
 
 	initialize: (models, options) ->
-		@model = require "models/db/user"
+		@model = require 'models/db/user'
 		super models, options
 
 	url: ->

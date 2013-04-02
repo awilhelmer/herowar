@@ -1,22 +1,19 @@
 TableView = require 'views/tableView'
 app = require 'application'
 
-class MapTable extends TableView
+class ObjectTable extends TableView
 
-	entity: 'api/maps'
+	entity: 'api/objects'
 	
-	tableEntity: 'db/maps'
+	tableEntity: 'db/objects'
 	
 	fields:
 		'#'						: 'id'
 		'Name' 				: 'name'
 		'Description'	: 'description'
-		'Team Size'		: 'teamSize'
-		
-	entryView: 'views/maps/tableEntry'
 
 	createEntry: (event) ->
 		event?.preventDefault()
-		app.navigate "admin/map/new", true 
+		app.navigate "admin/object/new", true 
 
-return MapTable
+return ObjectTable

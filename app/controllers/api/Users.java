@@ -1,9 +1,6 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -11,15 +8,14 @@ import play.mvc.Result;
 
 
 /**
- * The Users controller handle api requests for the user object.
+ * The Users controller handle api requests for the User model.
  * 
  * @author Sebastian Sachtleben
  */
 public class Users extends Controller {
 
   public static Result list() {
-    List<User> users = User.getFinder().all();
-    return ok(toJson(users));
+    return ok(toJson(User.getFinder().all()));
   }
 
   public static Result show(Long id) {

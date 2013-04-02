@@ -2,11 +2,6 @@ AdminAuthView = require 'views/adminAuthView'
 templates = require 'templates'
 app = require 'application'
 
-###
-    The Home shows our home start view.
-
-    @author Sebastian Sachtleben
-###
 class Home extends AdminAuthView
 
 	id: 'home'
@@ -14,8 +9,9 @@ class Home extends AdminAuthView
 	template: templates.get 'home.tmpl'
 	
 	events:
-		'click .user-link'	: 'user'
-		'click .map-link'		: 'map'
+		'click .user-link'		: 'user'
+		'click .map-link'			: 'map'
+		'click .object-link'	: 'object'
 		
 	user: (event) ->
 		event?.preventDefault()
@@ -24,5 +20,9 @@ class Home extends AdminAuthView
 	map: (event) ->
 		event?.preventDefault()
 		app.navigate 'admin/map/all', true
+		
+	object: (event) ->
+		event?.preventDefault()
+		app.navigate 'admin/object/all', true
 	
 return Home
