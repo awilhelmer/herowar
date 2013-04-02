@@ -3,7 +3,6 @@ package controllers.api;
 import static play.libs.Json.toJson;
 import models.entity.User;
 import play.data.Form;
-import play.mvc.Controller;
 import play.mvc.Result;
 
 
@@ -12,7 +11,7 @@ import play.mvc.Result;
  * 
  * @author Sebastian Sachtleben
  */
-public class Users extends Controller {
+public class Users extends BaseAPI<Long, User> {
 
   public static Result list() {
     return ok(toJson(User.getFinder().all()));
