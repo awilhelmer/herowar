@@ -35,6 +35,12 @@ PUT			/api/object/:id											controllers.api.Objects.update(id: Long)
 DELETE	/api/object/:id											controllers.api.Objects.delete(id: Long)
 POST		/api/object													controllers.api.Objects.add()
 
+GET			/api/news/all												controllers.api.News.list()
+GET			/api/news/:id												controllers.api.News.show(id: Long)
+PUT			/api/news/:id												controllers.api.News.update(id: Long)
+DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
+POST		/api/news														controllers.api.News.add()
+
 ########## ADMIN ###########
 
 GET			/admin															controllers.Admin.index()
@@ -47,11 +53,12 @@ GET			/admin/map/new											controllers.Admin.mapNew()
 GET			/admin/object/all										controllers.Admin.objectAll()
 GET			/admin/object/new										controllers.Admin.objectNew()
 
-
+GET			/admin/news/all											controllers.Admin.newsAll()
+GET			/admin/news/new											controllers.Admin.newsNew()
 
 ########## GAME ###########
-GET			/game												controllers.Game.index()
+GET			/game																controllers.Game.index()
 
 ########## OTHER ###########
 
-GET     /assets/*file               			controllers.Assets.at(path="/public", file)
+GET     /assets/*file												controllers.Assets.at(path="/public", file)

@@ -33,5 +33,12 @@ public class Admin extends Controller {
   public static Result objectNew() {
     return ok(index.render());
   }
+
+  public static Result newsAll() {
+    return ok(index.render());
+  }
   
+  public static Result newsNew() {
+    return ok(index.render());
+  }
 }

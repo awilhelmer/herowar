@@ -21,8 +21,12 @@ Router = Backbone.Router.extend
         "admin/map/:id"    : "maps/edit"
         "admin/map/all"    : "maps/list"
         "admin/map/new"    : "maps/new"
+        "admin/object/:id" : "objects/edit"
         "admin/object/all" : "objects/list"
         "admin/object/new" : "objects/new"
+        "admin/news/:id"   : "news/edit"
+        "admin/news/all"   : "news/list"
+        "admin/news/new"   : "news/new"
 	
     ###
         Overridden Backbone method to dynamically instanciate the controller with the given name

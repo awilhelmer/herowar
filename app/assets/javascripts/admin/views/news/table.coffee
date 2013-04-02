@@ -3,9 +3,9 @@ app = require 'application'
 
 class NewsTable extends TableView
 
-	entity: 'api/objects'
+	entity: 'api/news'
 	
-	tableEntity: 'db/objects'
+	tableEntity: 'db/newss'
 	
 	fields:
 		'#'						: 'id'

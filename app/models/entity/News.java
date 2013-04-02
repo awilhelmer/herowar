@@ -20,6 +20,11 @@ public class News extends BaseModel {
   @ManyToOne
   private User author;
 
+  public static void merge(News news, News news2) {
+    news.setHeadline(news2.getHeadline());
+    news.setText(news2.getText());
+  }
+  
   // GETTER & SETTER //
   
   public Long getId() {
