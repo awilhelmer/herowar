@@ -5,7 +5,7 @@
 <html>
 <head>
 <title>@title</title>
-<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/game.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/editor.css")">
 <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 @for(jsFile <- Application.getJsFilesEditor()) {
@@ -13,7 +13,20 @@
 }
 </head>
 <body>
-	<div id="overlay"></div>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<ul class="nav">
+				<li><a href="#">File</a></li>
+				<li class="dropdown">
+					<a href="#"  data-toggle="dropdown">Add</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a tabindex="-1" href="#">Item 1</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="sidebar"></div>
 	<div id="main"></div>
 	@content
 </body>
