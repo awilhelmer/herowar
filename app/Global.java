@@ -103,7 +103,7 @@ public class Global extends GlobalSettings {
   }
 
   private void createDummyNews(Application app) {
-    if (!app.isDev()) {
+    if (!app.isDev() || News.getFinder().findRowCount() != 0) {
       return;
     }
     Logger.info("Creating dummy news");

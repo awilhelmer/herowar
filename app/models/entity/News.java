@@ -24,6 +24,8 @@ public class News extends BaseModel {
 
   @ManyToOne
   private User author;
+  
+  private static final Finder<Long, News> finder = new Finder<Long, News>(Long.class, News.class);
 
   public static void merge(News news, News news2) {
     news.setHeadline(news2.getHeadline());
@@ -75,5 +77,9 @@ public class News extends BaseModel {
 
   public void setAuthor(User author) {
     this.author = author;
+  }
+
+  public static Finder<Long, News> getFinder() {
+    return finder;
   }
 }

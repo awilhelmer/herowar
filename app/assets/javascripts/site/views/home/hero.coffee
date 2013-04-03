@@ -2,12 +2,7 @@ BaseView = require 'views/baseView'
 templates = require 'templates'
 app = require 'application'
 
-###
-    The Hero shows our hero part in home view.
-
-    @author Sebastian Sachtleben
-###
-class Hero extends BaseView
+class HomeHero extends BaseView
 
 	entity: 'ui/me'
 	
@@ -28,4 +23,4 @@ class Hero extends BaseView
 		event?.preventDefault()
 		app.navigate 'play', true 
 	
-return Hero
+return HomeHero

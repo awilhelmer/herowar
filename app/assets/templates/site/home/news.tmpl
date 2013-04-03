@@ -1,0 +1,10 @@
+{{#if []}}
+	<h2>News</h2>
+	{{#each []}}
+		<div class="news-entry">
+			<h3>{{headline}}</h3>
+			<span class="details">Posted by	{{author.username}} on {{cdate}}</span>
+			<p>{{text}}</p>
+		</div>
+	{{/each}}
+{{/if}}
