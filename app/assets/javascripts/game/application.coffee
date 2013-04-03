@@ -10,7 +10,7 @@ app =
 		background: { r: 0, g: 0, b: 0, a: 1 },
 		eye: [ 0, 0, 400 ],
 		up: [ 0, 0, 0 ],
-		fov: 70,
+		fov: 75,
 		updateCamera: (camera, scene, mouseX, mouseY) ->  
 			#camera.position.x += mouseX * 0.05;
 			#camera.position.x = Math.max Math.min camera.position.x, 2000, -2000
