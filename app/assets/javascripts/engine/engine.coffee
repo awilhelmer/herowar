@@ -21,10 +21,12 @@ class Engine
 		@mouseY = 0
 		@scenegraph.init()
 		document.addEventListener 'mousemove', @onDocumentMouseMove, false
+		window.addEventListener 'resize', @onWindowResize, false 
 		console.log "Engine started!"
 		
 	initRenderer: ->
-		renderer = new THREE.WebGLRenderer()
+		renderer = new THREE.WebGLRenderer 
+			antialias: true
 		
 		renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
 		renderer.domElement.style.position = "relative"
@@ -58,18 +60,25 @@ class Engine
 				@renderer.setScissor left, bottom, width, height 
 				@renderer.enableScissorTest  true 
 				@renderer.setClearColor view.background, view.background.a 
-				view.camera.aspect = width / height;
-				view.camera.updateProjectionMatrix
+				view.camera.aspect = width / height
+				view.camera.updateProjectionMatrix()
 				@renderer.render(@scenegraph.scene, view.camera)
+		null
 		
-	
 	animate: =>
-		@scenegraph.update
+		@scenegraph.update()
 		@render()
 		requestAnimationFrame(@animate)
 	
-	onDocumentMouseMove : (event) ->
-		@mouseX = ( event.clientX - Variables.SCREEN_WIDTH / 2 );
-		@mouseY = ( event.clientY - Variables.SCREEN_HEIGHT / 2 );
+	onDocumentMouseMove : (event) =>
+		@mouseX = event.clientX - Variables.SCREEN_WIDTH / 2 
+		@mouseY = event.clientY - Variables.SCREEN_HEIGHT / 2 
+		null
+		
+	onWindowResize: () =>
+		Variables.SCREEN_WIDTH = window.innerWidth
+		Variables.SCREEN_HEIGHT = window.innerHeight
+		@renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
+		null
 		
 return Engine
