@@ -5,7 +5,18 @@ class Engine
 	start: ->
 		console.log "Engine starting..."
 		@renderer = @initRenderer()
+		@scene = new THREE.Scene()
+		@camera = @initCamera()
 		console.log "Engine started!"
+		@animate()
+	
+	render: ->
+		console.log 'Render'
+		@renderer.render(@scene, @camera)
+	
+	animate: =>
+		@render()
+		requestAnimationFrame(animate)
 		
 	initRenderer: ->
 		renderer = new THREE.WebGLRenderer
@@ -24,5 +35,8 @@ class Engine
 
 		$('#main').append renderer.domElement
 		renderer
+		
+	initCamera: ->
+		new THREE.PerspectiveCamera view.fov, @renderer.domElement.innerWidth / @renderer.domElement.innerHeight, 1, 10000
 		
 return Engine
