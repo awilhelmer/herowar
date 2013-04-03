@@ -10,7 +10,7 @@ import collection.mutable.Map
  */
 trait JavascriptTransformer {
   val pattern = """(\A\(function\(\)[\s]?\{)|(\}\)\.call\(this\)\;[\n+|\s+]*\z)"""
-  val (scripts_folder, templates_folder, vendors_folder, shared_folder) = ("scripts", "templates", "vendors", "shared")
+  val (scripts_folder, templates_folder, vendors_folder, shared_folder, engine_folder) = ("scripts", "templates", "vendors", "shared", "engine")
   var loader = ""
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
@@ -77,7 +77,9 @@ trait JavascriptTransformer {
               var subfolders = ""
               if (relativePath.indexOf(shared_folder) > -1) {
                 subfolders = relativePath.substring(relativePath.indexOf(shared_folder) + shared_folder.length, relativePath.lastIndexOf('\\'));          
-              }else {
+              } else if (relativePath.indexOf(engine_folder) > -1) { 
+                subfolders = relativePath.substring(relativePath.indexOf(engine_folder) + engine_folder.length, relativePath.lastIndexOf('\\')); 
+              } else {
                 subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));                
               }
               if (subfolders.length > 0)
@@ -140,6 +142,11 @@ trait JavascriptTransformer {
         //Shared must be written into all areas
         result  :+= (jsType, "admin", ApplicationBuild.buildMode)
         return result :+ (jsType, "site", ApplicationBuild.buildMode)
+      }
+      if ((jsType == scripts_folder) && (key.indexOf(engine_folder) > -1)) {
+        //Shared must be written into all areas
+        result  :+= (jsType, "editor", ApplicationBuild.buildMode)
+        return result :+ (jsType, "game", ApplicationBuild.buildMode)
       }
     } else {
       val tempPath = path.substring(path.indexOf('\\') + 1)
