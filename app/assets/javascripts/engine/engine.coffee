@@ -20,7 +20,7 @@ class Engine
 		@mouseX = 0
 		@mouseY = 0
 		@scenegraph.init()
-		document.addEventListener 'mousemove', @onDocumentMouseMove, false
+		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		window.addEventListener 'resize', @onWindowResize, false 
 		console.log "Engine started!"
 		

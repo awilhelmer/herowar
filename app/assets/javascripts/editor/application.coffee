@@ -1,4 +1,5 @@
 Engine = require 'engine'
+EditorBindings = require 'editorBindings'
 
 app =
 	
@@ -20,5 +21,7 @@ app =
 	start: ->
 		app.engine = new Engine(app)
 		app.engine.start()
+		app.bindings = new EditorBindings(app)
+		app.bindings.init()
     
 return app
