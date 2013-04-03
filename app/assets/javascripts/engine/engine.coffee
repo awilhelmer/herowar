@@ -1,22 +1,27 @@
 Variables = require 'variables'
+SceneGraph = require 'scenegraph'
 
 class Engine 
 
 	constructor: (@app) ->
 		throw 'No View declared' unless @app.views
-		@init()
 		
 		
 	init: ->
+		console.log "Engine starting..."
+		@main = $('#main')
+		@canvas = document.createElement 'canvas'
+		@canvas.width = 128
+		@canvas.height = 128
 		@renderer = @initRenderer()
-		@scene = new THREE.Scene()
-		light = new THREE.DirectionalLight 0xffffff 
-		light.position.set 0, 0, 1
-		@scene.add light
+		@scenegraph = new SceneGraph(@)
+		
 		@initCameras()
 		@mouseX = 0
 		@mouseY = 0
-		document.addEventListener 'mousemove', @onDocumentMouseMove, false 
+		document.addEventListener 'mousemove', @onDocumentMouseMove, false
+		@scenegraph.init()
+		console.log "Engine started!"
 		
 	initRenderer: ->
 		renderer = new THREE.WebGLRenderer
@@ -33,7 +38,7 @@ class Engine
 		renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
 		renderer.domElement.style.position = "relative"
 
-		$('#main').append renderer.domElement
+		@main.append renderer.domElement
 		renderer
 		
 	initCameras: ->
@@ -41,13 +46,13 @@ class Engine
 			view.camera = new THREE.PerspectiveCamera view.fov, @renderer.domElement.innerWidth / @renderer.domElement.innerHeight, 1, 10000
 		
 	start: ->
-		console.log "Engine starting..."
-		console.log "Engine started!"
+		@init()
+		console.log "Starting main loop..."
 		@animate()
 	
 	render: ->
 		for view in @app.views
-				view.updateCamera( view.camera, @scene, @mouseX, @mouseY );
+				view.updateCamera( view.camera, @scenegraph.scene, @mouseX, @mouseY );
 				left = Math.floor Variables.SCREEN_WIDTH * view.left 
 				bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
 				width = Math.floor Variables.SCREEN_WIDTH * view.width 
@@ -58,10 +63,11 @@ class Engine
 				@renderer.setClearColor view.background, view.background.a 
 				view.camera.aspect = width / height;
 				view.camera.updateProjectionMatrix
-				@renderer.render(@scene, view.camera)
+				@renderer.render(@scenegraph.scene, view.camera)
 		
 	
 	animate: =>
+		@scenegraph.update
 		@render()
 		requestAnimationFrame(@animate)
 	
