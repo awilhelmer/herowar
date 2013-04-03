@@ -29,10 +29,38 @@
 	<div class="sidebar sidebar-right">
 		<div class="sidebar-inner">
 			<div class="panel">
-				<span>Scene</span>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#scene" data-toggle="tab">Scene Explorer</a>
+					<li><a href="#settings" data-toggle="tab">Map Settings</a>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="scene">
+						<div class="sidebar-headline">Scene Explorer</div>
+						<div class="tree"></div>
+					</div>
+					<div class="tab-pane" id="settings">
+						<div class="sidebar-headline">Map Settings</div>
+						<div>
+							<form class="form-horizontal">
+								<div class="control-group">
+									<label class="control-label" for="inputHeadline">Headline</label>
+									<div class="controls">
+										<input type="text" id="inputHeadline" class="input-medium" name="headline" placeholder="Headline">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="inputDescription">Description</label>
+									<div class="controls">
+										<textarea rows="5" id="inputDescription" class="input-medium" name="description" placeholder="Description"></textarea>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="panel">
-				<span>Mesh</span>
+				<div class="sidebar-headline">Object Explorer</div>
 			</div>
 		</div>
 	</div>

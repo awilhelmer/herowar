@@ -12,19 +12,93 @@
 
 .sidebar-left {
 	left: 0px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #a0a7ad;	
 }
 
 .sidebar-right {
 	right: 0px;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #a0a7ad;	
 }
 
 .sidebar-inner {
 	height: 100%;
-  padding: 5px;
   background-color: #474747;
-  border: 1px solid @navbarBorder;
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
 
   // Prevent floats from breaking the navbar
   .clearfix();
+}
+
+.sidebar-headline {
+	margin-bottom: 10px;
+	padding-left: 5px;
+	background-color: #333333;
+	font-weight: bold;
+}
+
+.sidebar .form-horizontal {
+	.control-label	{
+		width: 100px;
+		text-align: left;
+	}
+	.controls {
+		margin-left: 105px;
+	}
+}
+
+.sidebar .nav {
+	margin-bottom: 10px;
+}
+
+.sidebar .nav-tabs {
+	border-bottom: none;
+}
+
+.sidebar .nav-tabs > li > a {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin-right: 0px;
+	.border-radius(0 0 0 0);
+}
+
+.sidebar .nav-tabs > li > a {
+  color: #a0a7ad;
+  background-color: #6b6b6b;
+  border: 1px solid #333333;
+  border-left-width: 0px;
+}
+
+.sidebar .nav-tabs > li:first-child > a {
+	border-left-width: 1px;
+}
+
+.sidebar .nav-tabs > .active > a, 
+.sidebar .nav-tabs > .active > a:hover, 
+.sidebar .nav-tabs > .active > a:focus {
+	color: #333333;
+	background-color: #8da7cc;
+	border: 1px solid #333333;
+	border-left-width: 0px;
+}
+
+.sidebar .nav-tabs > .active:first-child > a, 
+.sidebar .nav-tabs > .active:first-child > a:hover, 
+.sidebar .nav-tabs > .active:first-child > a:focus {
+	border-left-width: 1px;
+}
+
+.sidebar .panel {
+	padding: 10px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #a0a7ad;	
+}
+
+.sidebar .tree {
+	min-height: 200px;
+	border: 1px solid #a0a7ad;
 }
