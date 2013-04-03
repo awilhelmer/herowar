@@ -18,6 +18,7 @@ public class Map extends BaseModel {
   private String name;
   private String description;
   private Integer teamSize;
+  private Integer prepareTime;
   
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
@@ -72,5 +73,13 @@ public class Map extends BaseModel {
 
   public static Finder<Long, Map> getFinder() {
     return finder;
+  }
+ 
+  public Integer getPrepareTime() {
+    return prepareTime;
+  }
+
+  public void setPrepareTime(Integer prepareTime) {
+    this.prepareTime = prepareTime;
   }
 }
