@@ -19,8 +19,8 @@ class Engine
 		@initCameras()
 		@mouseX = 0
 		@mouseY = 0
-		document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		@scenegraph.init()
+		document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		console.log "Engine started!"
 		
 	initRenderer: ->
@@ -44,7 +44,13 @@ class Engine
 	initCameras: ->
 		for view in @app.views
 			view.camera = new THREE.PerspectiveCamera view.fov, @renderer.domElement.innerWidth / @renderer.domElement.innerHeight, 1, 10000
-		
+			view.camera.position.x = view.eye[ 0 ]
+			view.camera.position.y = view.eye[ 1 ]
+			view.camera.position.z = view.eye[ 2 ]
+			view.camera.up.x = view.up[ 0 ]
+			view.camera.up.y = view.up[ 1 ]
+			view.camera.up.z = view.up[ 2 ]
+
 	start: ->
 		@init()
 		console.log "Starting main loop..."
