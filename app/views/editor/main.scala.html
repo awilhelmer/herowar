@@ -29,16 +29,17 @@
 	<div class="sidebar sidebar-right">
 		<div class="sidebar-inner">
 			<div class="panel">
+				<div class="sidebar-headline">Scene Explorer</div>
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#scene" data-toggle="tab">Scene Explorer</a>
-					<li><a href="#settings" data-toggle="tab">Map Settings</a>
+					<li class="active"><a href="#scenegraph" data-toggle="tab">Scenegraph</a>
+					<li><a href="#map-settings" data-toggle="tab">Map Settings</a>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane active" id="scene">
-						<div class="sidebar-headline">Scene Explorer</div>
+					<div class="tab-pane active" id="scenegraph">
+						<div class="sidebar-headline">Scenegraph</div>
 						<div class="tree"></div>
 					</div>
-					<div class="tab-pane" id="settings">
+					<div class="tab-pane" id="map-settings">
 						<div class="sidebar-headline">Map Settings</div>
 						<div>
 							<form class="form-horizontal">
@@ -61,6 +62,40 @@
 			</div>
 			<div class="panel">
 				<div class="sidebar-headline">Object Explorer</div>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#basis" data-toggle="tab">Basis</a>
+					<li><a href="#coords" data-toggle="tab">Coords.</a>
+					<li><a href="#materials" data-toggle="tab">Material</a>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="basis">
+						<div class="sidebar-headline">Basis Settings</div>
+						<div>
+							<form class="form-horizontal">
+								<div class="control-group">
+									<label class="control-label" for="inputHeadline">Name</label>
+									<div class="controls">
+										<input type="text" id="inputHeadline" class="input-medium" name="headline" placeholder="Headline">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="inputVisible">Visible</label>
+									<div class="controls">
+										<input type="checkbox" id="inputVisible" name="visible" value="true">
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="tab-pane" id="coords">
+						<div class="sidebar-headline">Coordinates</div>
+						<span>Nothing here...</span>
+					</div>
+					<div class="tab-pane" id="materials">
+						<div class="sidebar-headline">Materials</div>
+						<span>Nothing here...</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
