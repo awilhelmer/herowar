@@ -40,15 +40,14 @@
 	font-weight: bold;
 }
 
-.sidebar .form-horizontal {
-	.control-label	{
-		width: 100px;
-		text-align: left;
-	}
-	.controls {
-		margin-left: 105px;
-	}
+.sidebar .panel {
+	padding: 10px;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #a0a7ad;	
 }
+
+// COMPONENT: TABS
 
 .sidebar .nav {
 	margin-bottom: 10px;
@@ -91,14 +90,30 @@
 	border-left-width: 1px;
 }
 
-.sidebar .panel {
-	padding: 10px;
-	border-top-width: 1px;
-	border-top-style: solid;
-	border-top-color: #a0a7ad;	
-}
+// COMPONENT: TREE
 
 .sidebar .tree {
 	min-height: 200px;
 	border: 1px solid #a0a7ad;
+}
+
+// COMPONENT: FORM
+
+.sidebar .form-horizontal {
+	.control-label	{
+		width: 100px;
+		text-align: left;
+	}
+	.controls {
+		margin-left: 105px;
+	}
+}
+
+.sidebar textarea, .sidebar	input[type="text"], .sidebar	input[type="checkbox"] {
+	background-color: #333333;
+	border: 1px solid #a0a7ad;
+}
+
+.sidebar .form-horizontal .control-group {
+	margin-bottom: 0px;
 }

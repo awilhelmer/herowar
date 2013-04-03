@@ -27,7 +27,7 @@ class SceneGraph
 			
 			
 	addDummyObject: ->
-			cube = new THREE.Mesh new THREE.CubeGeometry( 200, 200, 200 ), new THREE.MeshNormalMaterial()
+			cube = new THREE.Mesh new THREE.CubeGeometry( 200, 200, 200 ), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 			@addObject cube,1
 			
 			 
