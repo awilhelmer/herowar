@@ -9,10 +9,10 @@ class Engine
 		
 	init: ->
 		console.log "Engine starting..."
-		@main = $('#main')
+		@main = $ '#main'
 		@canvas = document.createElement 'canvas'
-		@canvas.width = 128
-		@canvas.height = 128
+		Variables.SCREEN_WIDTH = @main.width()
+		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph(@)
 		

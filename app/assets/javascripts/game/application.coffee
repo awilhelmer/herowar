@@ -16,6 +16,7 @@ app =
 			camera.position.x = Math.max Math.min camera.position.x, 2000, -2000
 			camera.lookAt scene.position 
 		]
+		
 	start: ->
 		app.engine = new Engine(app)
 		app.engine.start()
