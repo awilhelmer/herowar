@@ -26,7 +26,7 @@ trait CustomAssetsCompiler {
     (state, sourceDirectory in Compile, resourceManaged in Compile, cacheDirectory, optionsSettings, filesSetting, classDirectory in Compile) map {
       (state, src, resources, cache, options, files, classDirectory) =>
 
-        state.log.info("AssetsCompiler: " + name)
+        //state.log.info("AssetsCompiler: " + name)
 
         import java.io._
 
