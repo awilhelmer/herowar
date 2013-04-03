@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.User;
 import models.entity.game.Map;
@@ -64,6 +65,7 @@ public class Global extends GlobalSettings {
     initialSecurityRoles();
     createAdminUser();
     createTutorialMap();
+    createDummyNews(app);
   }
 
   @Override
@@ -85,19 +87,30 @@ public class Global extends GlobalSettings {
   }
 
   private void createAdminUser() {
-    if(User.getFinder().where().eq("username", "admin").findUnique() != null) {
+    if (User.getFinder().where().eq("username", "admin").findUnique() != null) {
       return;
     }
     Logger.info("Creating admin user");
     User.create("admin", "admin", "admin@herowar.com");
   }
-  
+
   private void createTutorialMap() {
-    if(Map.getFinder().where().eq("name", "Tutorial").findUnique() != null) {
-      return;      
+    if (Map.getFinder().where().eq("name", "Tutorial").findUnique() != null) {
+      return;
     }
     Logger.info("Creating tutorial map");
     Map.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
+  }
+
+  private void createDummyNews(Application app) {
+    if (!app.isDev()) {
+      return;
+    }
+    Logger.info("Creating dummy news");
+    News.create(
+        "Lorem ipsum dolor sit amet",
+        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+        User.findByUsername("admin"));
   }
 
 }

@@ -44,6 +44,10 @@ public class Application extends Controller {
     jsFilesGame.add("javascripts/gs" + BuildInfo.cacheNumber() + ".js");
   }
   
+  public static User getLocalUser() {
+    return getLocalUser(session());
+  }
+  
   public static User getLocalUser(final Session session) {
     final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
     final User localUser = User.findByAuthUserIdentity(currentAuthUser);

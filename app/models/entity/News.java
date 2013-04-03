@@ -1,8 +1,11 @@
 package models.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import controllers.Application;
 
 /**
  * @author Sebastian Sachtleben
@@ -13,10 +16,12 @@ public class News extends BaseModel {
 
   @Id
   private Long id;
-  
+
   private String headline;
+
+  @Column(length = 2000)
   private String text;
-  
+
   @ManyToOne
   private User author;
 
@@ -25,9 +30,21 @@ public class News extends BaseModel {
     news.setText(news2.getText());
     news.save();
   }
-  
+
+  public static void create(String headline, String text) {
+    create(headline, text, Application.getLocalUser());
+  }
+
+  public static void create(String headline, String text, User author) {
+    final News news = new News();
+    news.setHeadline(headline);
+    news.setText(text);
+    news.setAuthor(author);
+    news.save();
+  }
+
   // GETTER & SETTER //
-  
+
   public Long getId() {
     return id;
   }
