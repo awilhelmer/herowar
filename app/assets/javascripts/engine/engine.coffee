@@ -76,8 +76,8 @@ class Engine
 		null
 		
 	onWindowResize: () =>
-		Variables.SCREEN_WIDTH = window.innerWidth
-		Variables.SCREEN_HEIGHT = window.innerHeight
+		Variables.SCREEN_WIDTH = @main.width()
+		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
 		null
 		
