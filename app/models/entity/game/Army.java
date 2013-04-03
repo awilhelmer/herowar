@@ -15,21 +15,21 @@ import models.entity.BaseModel;
  */
 @Entity
 @SuppressWarnings("serial")
-public class Wave extends BaseModel {
+public class Army extends BaseModel {
 
   @Id
   private Long id;
-  
+
   @ManyToOne
-  private Map map;
-  
+  private Wave wave;
+
   @OneToMany(cascade = CascadeType.ALL)
-  private List<Army> armies;
+  private List<Unit> units;
 
   private static final Finder<Long, Army> finder = new Finder<Long, Army>(Long.class, Army.class);
-  
-  // GETTER & SETTER //  
-  
+
+  // GETTER & SETTER //
+
   public Long getId() {
     return id;
   }
@@ -38,20 +38,20 @@ public class Wave extends BaseModel {
     this.id = id;
   }
 
-  public Map getMap() {
-    return map;
+  public Wave getWave() {
+    return wave;
   }
 
-  public void setMap(Map map) {
-    this.map = map;
+  public void setWave(Wave wave) {
+    this.wave = wave;
   }
 
-  public List<Army> getArmies() {
-    return armies;
+  public List<Unit> getUnits() {
+    return units;
   }
 
-  public void setArmies(List<Army> armies) {
-    this.armies = armies;
+  public void setUnits(List<Unit> units) {
+    this.units = units;
   }
 
   public static Finder<Long, Army> getFinder() {

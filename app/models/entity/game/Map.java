@@ -1,7 +1,11 @@
 package models.entity.game;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import models.entity.BaseModel;
 
@@ -19,6 +23,12 @@ public class Map extends BaseModel {
   private String description;
   private Integer teamSize;
   private Integer prepareTime;
+  private Integer lives;
+  private Integer goldStart;
+  private Integer goldPerTick;
+  
+  @OneToMany(cascade = CascadeType.ALL)
+  private List<Wave> waves;
   
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
@@ -70,10 +80,6 @@ public class Map extends BaseModel {
   public void setTeamSize(Integer teamSize) {
     this.teamSize = teamSize;
   }
-
-  public static Finder<Long, Map> getFinder() {
-    return finder;
-  }
  
   public Integer getPrepareTime() {
     return prepareTime;
@@ -81,5 +87,41 @@ public class Map extends BaseModel {
 
   public void setPrepareTime(Integer prepareTime) {
     this.prepareTime = prepareTime;
+  }
+
+  public Integer getLives() {
+    return lives;
+  }
+
+  public void setLives(Integer lives) {
+    this.lives = lives;
+  }
+
+  public Integer getGoldStart() {
+    return goldStart;
+  }
+
+  public void setGoldStart(Integer goldStart) {
+    this.goldStart = goldStart;
+  }
+
+  public Integer getGoldPerTick() {
+    return goldPerTick;
+  }
+
+  public void setGoldPerTick(Integer goldPerTick) {
+    this.goldPerTick = goldPerTick;
+  }
+
+  public List<Wave> getWaves() {
+    return waves;
+  }
+
+  public void setWaves(List<Wave> waves) {
+    this.waves = waves;
+  }
+  
+  public static Finder<Long, Map> getFinder() {
+    return finder;
   }
 }
