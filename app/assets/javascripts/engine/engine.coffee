@@ -2,6 +2,10 @@ Variables = require 'variables'
 
 class Engine 
 
+	constructor: (@app) ->
+		throw 'No View declared' unless @app.view
+
+	
 	start: ->
 		console.log "Engine starting..."
 		@renderer = @initRenderer()
@@ -11,8 +15,8 @@ class Engine
 		@animate()
 	
 	render: ->
-		console.log 'Render'
 		@renderer.render(@scene, @camera)
+		
 	
 	animate: =>
 		@render()
