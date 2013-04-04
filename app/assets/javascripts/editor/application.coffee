@@ -1,5 +1,6 @@
 Engine = require 'engine'
 EditorBindings = require 'editorBindings'
+EditorScenegraph = require 'editorScenegraph'
 
 app =
 	
@@ -21,7 +22,9 @@ app =
 	start: ->
 		app.engine = new Engine(app)
 		app.engine.start()
-		app.bindings = new EditorBindings(app)
-		app.bindings.init()
+		app.editorBindings = new EditorBindings(app)
+		app.editorBindings.init()
+		app.editorScenegraph = new EditorScenegraph(app)
+		app.editorScenegraph.init()
     
 return app

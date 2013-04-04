@@ -4,7 +4,7 @@ class EditorBindings
 		@app = app
 
 	init: ->
-		console.log 'Adding editor bindings'
+		console.log 'Initialize editor bindings'
 		body = $ 'body'
 		body.on 'click', '#addTerrain', @addTerrain
 		body.on 'click', '#addCube', @addCube
