@@ -13,7 +13,7 @@ class SceneGraph
 	init: ->
 		@scene = new THREE.Scene()
 		@dynamicObjects = {}
-		@setMap(@createDefaultTerrain())
+		@setMap(@createDefaultTerrain(2000, 2000))
 		@currentId = 1
 			
 		 
@@ -45,8 +45,9 @@ class SceneGraph
 		obj = new BaseModel(mesh)
 		@addDynObject obj, @getNextId()
 
-	createDefaultTerrain: ->
-		new THREE.Mesh new THREE.PlaneGeometry(2000, 2000, 20, 20), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+	createDefaultTerrain: (width, height) ->
+		THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(width, height, width / 100, height / 100), 
+		[ new THREE.MeshBasicMaterial(color: 0x006600), new THREE.MeshBasicMaterial(color: 0xFFFFFF, wireframe: true) ]
 			
 
 return SceneGraph
