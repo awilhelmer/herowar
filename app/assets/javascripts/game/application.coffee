@@ -17,5 +17,10 @@ app =
 	start: ->
 		app.engine = new Engine(app)
 		app.engine.start()
+		window.addEventListener('resize',  ->
+					console.log 'Window resize ...'
+					Eventbus.windowResize.dispatch false
+					null
+				,false) 
         
 return app

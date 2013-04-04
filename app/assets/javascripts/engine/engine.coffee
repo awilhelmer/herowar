@@ -1,6 +1,7 @@
 Variables = require 'variables'
 SceneGraph = require 'scenegraph'
 ViewHandler = require 'handler/viewhandler'
+Eventbus = require 'eventbus'
 
 class Engine 
 
@@ -16,12 +17,12 @@ class Engine
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph(@)
-		@viewhandler = new ViewHandler(@app.views)
+		@viewhandler = new ViewHandler(@, @app.views)
 		@mouseX = 0
 		@mouseY = 0
 		@scenegraph.init()
 		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
-		window.addEventListener 'resize', @onWindowResize, false 
+		@initListener()
 		console.log "Engine started!"
 		
 	initRenderer: ->
@@ -34,7 +35,10 @@ class Engine
 		@main.append renderer.domElement
 		renderer
 		
-	
+	initListener:  ->
+		Eventbus.cameraChanged.add(@cameraChanged)
+		Eventbus.windowResize.add(@onWindowResize)
+		
 	start: ->
 		if (@main == undefined)
 			@init()
@@ -42,10 +46,11 @@ class Engine
 		@animate()
 	
 	render: ->
+		@scenegraph.update()
 		@viewhandler.render(@renderer, @scenegraph.scene, @mouseX, @mouseY)
 		
+
 	animate: =>
-		@scenegraph.update()
 		@render()
 		requestAnimationFrame(@animate)
 	
@@ -54,10 +59,16 @@ class Engine
 		@mouseY = event.clientY - Variables.SCREEN_HEIGHT / 2 
 		null
 		
-	onWindowResize: () =>
+	onWindowResize: (withReRender) =>
 		Variables.SCREEN_WIDTH = @main.width()
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
+		if (withReRender) 
+			@render()
 		null
+
+	cameraChanged: (camera) =>
+		console.log 'Rendering engine camera event ... '
+		@viewhandler.render(@renderer, @scenegraph.scene, @mouseX, @mouseY)
 		
 return Engine

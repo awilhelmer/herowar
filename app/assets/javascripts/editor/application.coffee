@@ -2,6 +2,7 @@ Engine = require 'engine'
 Variables = require 'variables'
 EditorBindings = require 'editorBindings'
 EditorScenegraph = require 'editorScenegraph'
+Eventbus = require 'eventbus'
 
 app =
 	
@@ -29,7 +30,12 @@ app =
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
 		app.editorScenegraph.init()
-	
+		window.addEventListener('resize',  ->
+					console.log 'Window resize ...'
+					Eventbus.windowResize.dispatch true
+					null
+				,false) 
+
 	scenegraph: ->
 		app.engine.scenegraph
 	

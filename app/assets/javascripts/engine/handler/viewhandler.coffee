@@ -1,12 +1,14 @@
 Variables = require 'variables'
+Eventbus = require 'eventbus'
 ###
 	@author Alexander Wilhelmer
 ###
 
 class ViewHandler
 
-	constructor: (@views) ->
+	constructor: (@engine, @views) ->
 		@initCameras()
+		@rendering = false
 
 	initCameras: ->
 		for view in @views
@@ -26,8 +28,7 @@ class ViewHandler
 				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 			when Variables.CAMERA_TYPE_FREE
 				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
-				main = $ '#main'
-				@controls = new THREE.TrackballControls camera, main.get(0) 
+				@controls = new THREE.TrackballControls camera, @engine.main.get(0) 
 				@controls.rotateSpeed = 1.0
 				@controls.zoomSpeed = 1.2
 				@controls.panSpeed = 0.8
@@ -36,28 +37,35 @@ class ViewHandler
 				@controls.staticMoving = true
 				@controls.dynamicDampingFactor = 0.3 
 				@controls.enabled = true
+				@controls.addEventListener( 'change', =>
+					console.log 'Controls changed ...'
+					Eventbus.cameraChanged.dispatch camera
+					null
+				) 
 			else 
 				throw 'No camera type setted!'
 		camera
 	
 	render: (renderer, scene, mouseX, mouseY) ->
-		for view in @views
-				@updateCamera view, mouseX, mouseY
-				if view.isUpdate
-					view.updateCamera view.camera, scene, mouseX, mouseY 		
-				left = Math.floor Variables.SCREEN_WIDTH * view.left 
-				bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
-				width = Math.floor Variables.SCREEN_WIDTH * view.width 
-				height = Math.floor Variables.SCREEN_HEIGHT * view.height 
-				renderer.setViewport left, bottom, width, height
-				renderer.setScissor left, bottom, width, height 
-				renderer.enableScissorTest  true 
-				renderer.setClearColor view.background, view.background.a 
-				view.camera.aspect = width / height
-				view.camera.updateProjectionMatrix()		 
-				renderer.render(scene, view.camera)
+		if (@rendering == false) 
+			@rendering = true
+			for view in @views
+					@updateCamera view, mouseX, mouseY
+					if view.isUpdate
+						view.updateCamera view.camera, scene, mouseX, mouseY 		
+					left = Math.floor Variables.SCREEN_WIDTH * view.left 
+					bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
+					width = Math.floor Variables.SCREEN_WIDTH * view.width 
+					height = Math.floor Variables.SCREEN_HEIGHT * view.height 
+					renderer.setViewport left, bottom, width, height
+					renderer.setScissor left, bottom, width, height 
+					renderer.enableScissorTest  true 
+					renderer.setClearColor view.background, view.background.a 
+					view.camera.aspect = width / height
+					view.camera.updateProjectionMatrix()		 
+					renderer.render(scene, view.camera)
+		@rendering = false
 		null
-	
 	
 	updateCamera: (view, mouseX, mouseY)  ->
 		switch view.type
