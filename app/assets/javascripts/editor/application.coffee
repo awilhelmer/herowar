@@ -1,13 +1,8 @@
 Engine = require 'engine'
 Variables = require 'variables'
-<<<<<<< HEAD
-EditorBindings = require 'editorBindings'
-EditorScenegraph = require 'editorScenegraph'
-Eventbus = require 'eventbus'
-=======
 EditorBindings = require 'ui/bindings'
 EditorScenegraph = require 'ui/panel/scenegraph'
->>>>>>> branch 'master' of git@github.com:ssachtleben/herowar.git
+Eventbus = require 'eventbus'
 
 app =
 	
@@ -35,11 +30,11 @@ app =
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
 		app.editorScenegraph.init()
-		window.addEventListener('resize',  ->
-					console.log 'Window resize ...'
-					Eventbus.windowResize.dispatch true
-					null
-				,false) 
+		window.addEventListener 'resize',  ->
+			console.log 'Window resize ...'
+			Eventbus.windowResize.dispatch true
+			null
+		, false 
 		
 	scenegraph: ->
 		app.engine.scenegraph
