@@ -10,10 +10,9 @@ class SceneGraph
 		@addTerrain()
 		
 	update: ->
-		for key, val of @objects
-			val.rotation.x += 0.005;
-			val.rotation.y += 0.01;
-
+		#for key, val of @objects
+			#val.rotation.x += 0.005;
+			#val.rotation.y += 0.01;
 	
 	addObject: (object, id) ->
 		if !@objects.hasOwnProperty id
