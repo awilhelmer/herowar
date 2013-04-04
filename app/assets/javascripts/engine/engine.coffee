@@ -69,5 +69,6 @@ class Engine
 
 	onCameraChanged: (view) =>
 		@viewhandler.cameraRender(@renderer, @scenegraph.scene, view)
+		null
 		
 return Engine

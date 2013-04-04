@@ -40,10 +40,11 @@ class ViewHandler
 					@controls.dynamicDampingFactor = 0.3 
 					@controls.enabled = true
 					@controls.addEventListener( 'change', =>
-						console.log 'Controls changed ...'
+						console.log 'Controls changed ... force reRender ...'
 						Eventbus.cameraChanged.dispatch view
 						null
 					) 
+					Eventbus.controlsChanged.add(@onControlsChanged)
 			else 
 				throw 'No camera type setted!'
 		camera
@@ -83,5 +84,11 @@ class ViewHandler
 				null
 			else
 				console.log "No camera logic for #{ view.type } setted"
+		null
+
+	onControlsChanged: (event) =>
+		if (@controls)
+			@controls.update()
+		null
 	
 return ViewHandler

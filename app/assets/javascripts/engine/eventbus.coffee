@@ -5,6 +5,7 @@ eventbus as EventBus
 eventbus = 
 	rendererChanged: new signals.Signal()
 	sceneChanged: new signals.Signal()
+	controlsChanged: new signals.Signal()
 	objectAdded: new signals.Signal()
 	objectSelected: new signals.Signal()
 	objectChanged: new signals.Signal()

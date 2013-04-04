@@ -30,10 +30,25 @@ app =
 			null
 		, false 
 		
+		#All listeners must do a reRender!
+		app.engine.main.get(0).addEventListener 'mousedown', @controlsChanged, false 
+		app.engine.main.get(0).addEventListener 'mousewheel', @controlsChanged, false 
+		app.engine.main.get(0).addEventListener 'DOMMouseScroll', @controlsChanged, false 
+		app.engine.main.get(0).addEventListener 'touchstart', @controlsChanged, false 
+		app.engine.main.get(0).addEventListener 'touchend', @controlsChanged, false 
+		app.engine.main.get(0).addEventListener 'touchmove', @controlsChanged, false
+		window.addEventListener( 'keydown', @controlsChanged, false );
+		window.addEventListener( 'keyup', @controlsChanged, false );
+		#End of listeners
+		
 	scenegraph: ->
 		app.engine.scenegraph
 	
 	render: ->
 		app.engine.render()
+	
+	controlsChanged: (event) =>
+		Eventbus.controlsChanged.dispatch event
+		null
     
 return app
