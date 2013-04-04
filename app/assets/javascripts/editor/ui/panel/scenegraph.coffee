@@ -10,9 +10,10 @@ class Scenegraph extends BasePanel
 
 	initialize: ->
 		console.log 'Initialize editor scenegraph'
-		@object = new ObjectProperties @app
-		@terrain = new TerrainProperties @app
-		@world = new WorldProperties @app
+		@subPanels = []
+		@subPanels.push @object = new ObjectProperties @app
+		@subPanels.push @terrain = new TerrainProperties @app
+		@subPanels.push @world = new WorldProperties @app
 		@selectElement @$container.find('.scenegraph-tree-world')
 		super()
 
@@ -29,8 +30,7 @@ class Scenegraph extends BasePanel
 		$Target.addClass 'active'
 		type = $Target.data 'type'
 		if type
-			$('#sidebar-properties-world, #sidebar-properties-terrain, #sidebar-properties-object').addClass 'hidden'
-			propWindow = $ '#sidebar-properties-' + type
-			propWindow.removeClass 'hidden' if propWindow
-	
+			panel.hide() for panel in @subPanels
+			@[type].show()
+
 return Scenegraph

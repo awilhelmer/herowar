@@ -11,10 +11,10 @@ class BasePanel
 
 	bindEvents: ->
 
-	setVisible: (visible) ->
-		if visible
-			@$container.removeClass 'hidden'
-		else
-			@$container.addClass 'hidden'
+	hide: ->
+		@$container.addClass 'hidden'
+
+	show: ->
+		@$container.removeClass 'hidden'
 
 return BasePanel
