@@ -31,7 +31,25 @@ app =
 		, false 
 		
 		#All listeners must do a reRender!
-		app.engine.main.get(0).addEventListener 'mousedown', @controlsChanged, false 
+		mousepressed = false
+		
+		app.engine.main.get(0).addEventListener 'mouseup', (event) -> 
+			console.log 'mouseup'
+			app.controlsChanged(event)
+			app.mousepressed = false
+			null
+		, false 
+		app.engine.main.get(0).addEventListener 'mousedown',(event) ->
+			console.log 'mousedown'
+			app.controlsChanged(event)
+			app.mousepressed = true
+			null
+		, false 
+		app.engine.main.get(0).addEventListener 'mousemove',(event) ->
+			if (app.mousepressed)
+				app.controlsChanged(event)
+			null
+		, false 
 		app.engine.main.get(0).addEventListener 'mousewheel', @controlsChanged, false 
 		app.engine.main.get(0).addEventListener 'DOMMouseScroll', @controlsChanged, false 
 		app.engine.main.get(0).addEventListener 'touchstart', @controlsChanged, false 
