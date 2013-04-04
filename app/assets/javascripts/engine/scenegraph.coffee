@@ -1,3 +1,10 @@
+BaseModel = require 'model/basemodel'
+###
+	SceneGraph handels all object in the actual scene
+	
+	@author Alexander Wilhelmer
+###
+
 class SceneGraph
 
 	constructor: (engine) ->
@@ -5,34 +12,38 @@ class SceneGraph
 
 	init: ->
 		@scene = new THREE.Scene()
-		@objects = {}
+		@dynamicObjects = {}
+		@map = @createDefaultTerrain()
 		@currentId = 1
-		@addTerrain()
-		
+			
+		 
 	update: ->
-		#for key, val of @objects
-			#val.rotation.x += 0.005;
-			#val.rotation.y += 0.01;
+		for key, val of @dynamicObjects
+			val.update
+			
+	start: ->
+		@scene.add @map
 	
-	addObject: (object, id) ->
-		if !@objects.hasOwnProperty id
-			@objects[id] = object
-			@scene.add object
+	addDynObject: (object, id) ->
+		if !@dynamicObjects.hasOwnProperty id
+			@dynamicObjects[id] = object
+			@scene.add object.object3d
 	
-	removeObject: (id) ->
-		if !@objects.hasOwnProperty id
-			@scene.remove @objects[id]
-			delete @objects[id]
+	removeDynObject: (id) ->
+		if !@dynamicObjects.hasOwnProperty id
+			@scene.remove @dynamicObjects[id].object3d
+			delete @dynamicObjects[id]
 
 	getNextId: ->
 		@currentId++
 			
 	addDummyObject: ->
-		cube = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
-		@addObject cube, @getNextId()
+		mesh cube = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+		obj = new BaseModel(mesh)
+		@addDynObject obj, @getNextId()
 
-	addTerrain: ->
-		cube = new THREE.Mesh new THREE.PlaneGeometry(2000, 2000, 20, 20), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
-		@addObject cube, @getNextId()		
+	createDefaultTerrain: ->
+		new THREE.Mesh new THREE.PlaneGeometry(2000, 2000, 20, 20), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+			
 
 return SceneGraph

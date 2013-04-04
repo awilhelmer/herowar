@@ -46,6 +46,7 @@ class Engine
 
 	start: ->
 		@init()
+		@scenegraph.start()
 		console.log "Starting main loop..."
 		@animate()
 	
