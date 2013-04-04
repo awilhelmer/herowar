@@ -21,10 +21,14 @@ app =
 		
 	start: ->
 		app.engine = new Engine(app)
-		app.engine.start()
+		app.engine.init()
+		app.render()
 		app.editorBindings = new EditorBindings(app)
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
 		app.editorScenegraph.init()
+		
+	render: ->
+		app.engine.render()
     
 return app
