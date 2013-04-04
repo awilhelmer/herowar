@@ -1,4 +1,4 @@
-class EditorBindings
+class Bindings
 	
 	constructor: (app) ->
 		@app = app
@@ -46,4 +46,4 @@ class EditorBindings
 		@app.scenegraph().addDummyObject()
 		@app.render()
 	
-return EditorBindings
+return Bindings

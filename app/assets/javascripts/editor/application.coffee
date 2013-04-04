@@ -1,7 +1,7 @@
 Engine = require 'engine'
 Variables = require 'variables'
-EditorBindings = require 'editorBindings'
-EditorScenegraph = require 'editorScenegraph'
+EditorBindings = require 'ui/bindings'
+EditorScenegraph = require 'ui/scenegraph'
 
 app =
 	

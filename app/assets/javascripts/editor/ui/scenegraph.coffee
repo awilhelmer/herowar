@@ -1,4 +1,4 @@
-class EditorScenegraph
+class Scenegraph
 	
 	constructor: (app) ->
 		@app = app
@@ -26,4 +26,4 @@ class EditorScenegraph
 			propWindow = $ '#sidebar-properties-' + type
 			propWindow.removeClass 'hidden' if propWindow
 	
-return EditorScenegraph
+return Scenegraph
