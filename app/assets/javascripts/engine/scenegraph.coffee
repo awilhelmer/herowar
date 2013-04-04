@@ -13,16 +13,13 @@ class SceneGraph
 	init: ->
 		@scene = new THREE.Scene()
 		@dynamicObjects = {}
-		@map = @createDefaultTerrain()
+		@setMap(@createDefaultTerrain())
 		@currentId = 1
 			
 		 
 	update: ->
 		for key, val of @dynamicObjects
 			val.update
-			
-	start: ->
-		@scene.add @map
 	
 	addDynObject: (object, id) ->
 		if !@dynamicObjects.hasOwnProperty id
@@ -36,7 +33,13 @@ class SceneGraph
 
 	getNextId: ->
 		@currentId++
-			
+	
+	setMap: (map) ->
+		if (@map != undefined)
+			scene.remove @map
+		@map = map
+		@scene.add @map
+	
 	addDummyObject: ->
 		mesh cube = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 		obj = new BaseModel(mesh)

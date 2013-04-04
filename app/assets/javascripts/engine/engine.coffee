@@ -45,8 +45,8 @@ class Engine
 			view.camera.up.z = view.up[ 2 ]
 
 	start: ->
-		@init()
-		@scenegraph.start()
+		if (@main == undefined)
+			@init()
 		console.log "Starting main loop..."
 		@animate()
 	
