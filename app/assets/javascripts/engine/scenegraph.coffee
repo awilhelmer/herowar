@@ -15,30 +15,36 @@ class SceneGraph
 		@dynamicObjects = {}
 		@setMap(@createDefaultMap(2000, 2000))
 		@currentId = 1
-			
-		 
+
 	update: ->
-		for key, val of @dynamicObjects
-			val.update
-	
+		for id, obj of @dynamicObjects
+			obj.update()
+
+	clear: ->
+		for id, obj of @dynamicObjects
+			@removeDynObject id
+
 	addDynObject: (object, id) ->
-		if !@dynamicObjects.hasOwnProperty id
+		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
 			@scene.add object.object3d
-	
+
 	removeDynObject: (id) ->
-		if !@dynamicObjects.hasOwnProperty id
+		unless @dynamicObjects.hasOwnProperty id
 			@scene.remove @dynamicObjects[id].object3d
 			delete @dynamicObjects[id]
 
-	getNextId: ->
-		@currentId++
-	
+	getMap: ->
+		@map
+
 	setMap: (map) ->
-		if @map != undefined
+		if @map
 			scene.remove @map
 		@map = map
 		@scene.add @map
+
+	getNextId: ->
+		@currentId++
 	
 	addDummyObject: ->
 		mesh = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
