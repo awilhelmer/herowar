@@ -35,17 +35,17 @@ class SceneGraph
 		@currentId++
 	
 	setMap: (map) ->
-		if (@map != undefined)
+		if @map != undefined
 			scene.remove @map
 		@map = map
 		@scene.add @map
 	
 	addDummyObject: ->
-		mesh cube = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+		mesh = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 		obj = new BaseModel(mesh)
 		@addDynObject obj, @getNextId()
 
-	createDefaultTerrain: ->
+	createDefaultMap: ->
 		new THREE.Mesh new THREE.PlaneGeometry(2000, 2000, 20, 20), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 			
 
