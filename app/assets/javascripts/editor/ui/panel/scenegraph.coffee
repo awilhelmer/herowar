@@ -1,16 +1,17 @@
-class EditorScenegraph
+BasePanel = require 'ui/panel/basePanel'
 	
-	constructor: (app) ->
-		@app = app
+class Scenegraph extends BasePanel
+	
+	constructor: (@app) ->
+		super @app, 'scenegraph'
 
-	init: ->
+	initialize: ->
 		console.log 'Initialize editor scenegraph'
-		@bindEvents()
-		@selectElement $('.scenegraph-tree-world')
+		@selectElement @$container.find('.scenegraph-tree-world')
+		super()
 
 	bindEvents: ->
-		body = $ 'body'
-		body.on 'click', '.scenegraph-tree div', @selectElementClick		
+		@$container.on 'click', '.scenegraph-tree div', @selectElementClick		
 
 	selectElementClick: (event) =>
 		if event
@@ -18,7 +19,7 @@ class EditorScenegraph
 			@selectElement $(event.currentTarget)
 
 	selectElement: ($Target) =>
-		$('.scenegraph-tree div').removeClass 'active'
+		@$container.find('.scenegraph-tree div').removeClass 'active'
 		$Target.addClass 'active'
 		type = $Target.data 'type'
 		if type
@@ -26,4 +27,4 @@ class EditorScenegraph
 			propWindow = $ '#sidebar-properties-' + type
 			propWindow.removeClass 'hidden' if propWindow
 	
-return EditorScenegraph
+return Scenegraph
