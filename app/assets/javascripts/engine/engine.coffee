@@ -36,7 +36,7 @@ class Engine
 		renderer
 		
 	initListener:  ->
-		Eventbus.cameraChanged.add(@cameraChanged)
+		Eventbus.cameraChanged.add(@onCameraChanged)
 		Eventbus.windowResize.add(@onWindowResize)
 		
 	start: ->
@@ -47,7 +47,7 @@ class Engine
 	
 	render: ->
 		@scenegraph.update()
-		@viewhandler.render(@renderer, @scenegraph.scene, @mouseX, @mouseY)
+		@viewhandler.render(@renderer, @scenegraph.scene)
 		
 
 	animate: =>
@@ -67,8 +67,7 @@ class Engine
 			@render()
 		null
 
-	cameraChanged: (camera) =>
-		console.log 'Rendering engine camera event ... '
-		@viewhandler.render(@renderer, @scenegraph.scene, @mouseX, @mouseY)
+	onCameraChanged: (view) =>
+		@viewhandler.cameraRender(@renderer, @scenegraph.scene, view)
 		
 return Engine
