@@ -5,14 +5,25 @@ class EditorScenegraph
 
 	init: ->
 		console.log 'Initialize editor scenegraph'
-		body = $ 'body'
-		body.on 'click', '.scenegraph-tree div', @selectElement
+		@bindEvents()
+		@selectElement $('.scenegraph-tree-world')
 
-	selectElement: (event) =>
+	bindEvents: ->
+		body = $ 'body'
+		body.on 'click', '.scenegraph-tree div', @selectElementClick		
+
+	selectElementClick: (event) =>
 		if event
 			event.preventDefault()
-			$('.scenegraph-tree div').removeClass 'active'
-			$CurrentTarget = $ event.currentTarget
-			$CurrentTarget.addClass 'active'
+			@selectElement $(event.currentTarget)
+
+	selectElement: ($Target) =>
+		$('.scenegraph-tree div').removeClass 'active'
+		$Target.addClass 'active'
+		type = $Target.data 'type'
+		if type
+			$('#sidebar-properties-world, #sidebar-properties-terrain, #sidebar-properties-object').addClass 'hidden'
+			propWindow = $ '#sidebar-properties-' + type
+			propWindow.removeClass 'hidden' if propWindow
 	
 return EditorScenegraph

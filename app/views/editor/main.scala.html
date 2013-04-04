@@ -17,7 +17,17 @@
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<ul class="nav">
-					<li><a href="#">File</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">File</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a tabindex="-1" href="#" id="fileNew">New</a></li>
+							<li><a tabindex="-1" href="#" id="fileOpen">Open Map...</a></li>
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="#" id="fileSave">Save</a></li>
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="#" id="fileExit">Exit</a></li>
+						</ul>
+					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Add</a>
 						<ul class="dropdown-menu" role="menu">
@@ -42,8 +52,8 @@
 						<div class="tab-pane active" id="scenegraph">
 							<div class="sidebar-headline">Scenegraph</div>
 							<div class="scenegraph-tree">
-								<div class="scenegraph-tree-world"><img src="assets/images/editor/world.png" /><span>World</span></div>
-								<div class="scenegraph-tree-terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>
+								<div class="scenegraph-tree-world" data-type="world"><img src="assets/images/editor/world.png" /><span>World</span></div>
+								<div class="scenegraph-tree-terrain" data-type="terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>
 							</div>
 						</div>
 						<div class="tab-pane" id="map-properties">
@@ -68,8 +78,20 @@
 					</div>
 				</div>
 			</div>
-			<div class="sidebar-panel">
-				<div class="sidebar-panel-headline">Object Explorer</div>
+			<div id="sidebar-properties-world" class="sidebar-panel hidden">
+				<div class="sidebar-panel-headline">World Properties</div>
+				<div class="sidebar-panel-content">
+					Nothing here...
+				</div>
+			</div>
+			<div id="sidebar-properties-terrain" class="sidebar-panel hidden">
+				<div class="sidebar-panel-headline">Terrain Properties</div>
+				<div class="sidebar-panel-content">
+					Nothing here...
+				</div>
+			</div>
+			<div id="sidebar-properties-object" class="sidebar-panel hidden">
+				<div class="sidebar-panel-headline">Object Properties</div>
 				<div class="sidebar-panel-content">
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#basis" data-toggle="tab">Basis</a>
