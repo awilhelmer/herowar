@@ -26,14 +26,25 @@ class ViewHandler
 				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 			when Variables.CAMERA_TYPE_FREE
 				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
+				main = $ '#main'
+				@controls = new THREE.TrackballControls camera, main.get(0) 
+				@controls.rotateSpeed = 1.0
+				@controls.zoomSpeed = 1.2
+				@controls.panSpeed = 0.8
+				@controls.noZoom = false
+				@controls.noPan = false
+				@controls.staticMoving = true
+				@controls.dynamicDampingFactor = 0.3 
+				@controls.enabled = true
 			else 
 				throw 'No camera type setted!'
 		camera
 	
 	render: (renderer, scene, mouseX, mouseY) ->
 		for view in @views
+				@updateCamera view, mouseX, mouseY
 				if view.isUpdate
-					view.updateCamera view.camera, scene, mouseX, mouseY 
+					view.updateCamera view.camera, scene, mouseX, mouseY 		
 				left = Math.floor Variables.SCREEN_WIDTH * view.left 
 				bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
 				width = Math.floor Variables.SCREEN_WIDTH * view.width 
@@ -43,8 +54,18 @@ class ViewHandler
 				renderer.enableScissorTest  true 
 				renderer.setClearColor view.background, view.background.a 
 				view.camera.aspect = width / height
-				view.camera.updateProjectionMatrix()
+				view.camera.updateProjectionMatrix()		 
 				renderer.render(scene, view.camera)
 		null
-		
+	
+	
+	updateCamera: (view, mouseX, mouseY)  ->
+		switch view.type
+			when Variables.CAMERA_TYPE_RTS 	
+				null
+			when Variables.CAMERA_TYPE_FREE
+				@controls.update()
+			else
+				console.log "No camera logic for #{ view.type } setted"
+	
 return ViewHandler
