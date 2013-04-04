@@ -1,5 +1,6 @@
 Variables = require 'variables'
 SceneGraph = require 'scenegraph'
+ViewHandler = require 'handler/viewhandler'
 
 class Engine 
 
@@ -15,8 +16,7 @@ class Engine
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph(@)
-		
-		@initCameras()
+		@viewhandler = new ViewHandler(@app.views)
 		@mouseX = 0
 		@mouseY = 0
 		@scenegraph.init()
@@ -34,16 +34,7 @@ class Engine
 		@main.append renderer.domElement
 		renderer
 		
-	initCameras: ->
-		for view in @app.views
-			view.camera = new THREE.PerspectiveCamera view.fov, @renderer.domElement.innerWidth / @renderer.domElement.innerHeight, 1, 10000
-			view.camera.position.x = view.eye[ 0 ]
-			view.camera.position.y = view.eye[ 1 ]
-			view.camera.position.z = view.eye[ 2 ]
-			view.camera.up.x = view.up[ 0 ]
-			view.camera.up.y = view.up[ 1 ]
-			view.camera.up.z = view.up[ 2 ]
-
+	
 	start: ->
 		if (@main == undefined)
 			@init()
@@ -51,20 +42,7 @@ class Engine
 		@animate()
 	
 	render: ->
-		for view in @app.views
-				view.updateCamera( view.camera, @scenegraph.scene, @mouseX, @mouseY );
-				left = Math.floor Variables.SCREEN_WIDTH * view.left 
-				bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
-				width = Math.floor Variables.SCREEN_WIDTH * view.width 
-				height = Math.floor Variables.SCREEN_HEIGHT * view.height 
-				@renderer.setViewport left, bottom, width, height
-				@renderer.setScissor left, bottom, width, height 
-				@renderer.enableScissorTest  true 
-				@renderer.setClearColor view.background, view.background.a 
-				view.camera.aspect = width / height
-				view.camera.updateProjectionMatrix()
-				@renderer.render(@scenegraph.scene, view.camera)
-		null
+		@viewhandler.render(@renderer, @scenegraph.scene, @mouseX, @mouseY)
 		
 	animate: =>
 		@scenegraph.update()

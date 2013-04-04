@@ -13,7 +13,7 @@ class SceneGraph
 	init: ->
 		@scene = new THREE.Scene()
 		@dynamicObjects = {}
-		@setMap(@createDefaultTerrain())
+		@setMap(@createDefaultMap())
 		@currentId = 1
 			
 		 
