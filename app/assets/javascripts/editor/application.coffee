@@ -29,7 +29,6 @@ app =
 		app.editorBindings = new EditorBindings(app)
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
-		app.editorScenegraph.init()
 		window.addEventListener 'resize',  ->
 			console.log 'Window resize ...'
 			Eventbus.windowResize.dispatch true
