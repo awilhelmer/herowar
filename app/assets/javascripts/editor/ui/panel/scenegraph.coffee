@@ -1,15 +1,17 @@
-class Scenegraph
+BasePanel = require 'ui/panel/basePanel'
+	
+class Scenegraph extends BasePanel
 	
 	constructor: (@app) ->
+		super @app, 'scenegraph'
 
-	init: ->
+	initialize: ->
 		console.log 'Initialize editor scenegraph'
-		@bindEvents()
-		@selectElement $('.scenegraph-tree-world')
+		@selectElement @$container.find('.scenegraph-tree-world')
+		super()
 
 	bindEvents: ->
-		body = $ 'body'
-		body.on 'click', '.scenegraph-tree div', @selectElementClick		
+		@$container.on 'click', '.scenegraph-tree div', @selectElementClick		
 
 	selectElementClick: (event) =>
 		if event
@@ -17,7 +19,7 @@ class Scenegraph
 			@selectElement $(event.currentTarget)
 
 	selectElement: ($Target) =>
-		$('.scenegraph-tree div').removeClass 'active'
+		@$container.find('.scenegraph-tree div').removeClass 'active'
 		$Target.addClass 'active'
 		type = $Target.data 'type'
 		if type
