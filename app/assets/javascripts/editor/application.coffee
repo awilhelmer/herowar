@@ -12,14 +12,10 @@ app =
 		width: 1.0,
 		height: 1.0,
 		background: { r: 0, g: 0, b: 0, a: 1 },
-		eye: [ 0, 0, 400 ],
+		eye: [ 0, 0, 2000 ],
 		up: [ 0, 0, 1 ],
 		fov: 75,
-		type: Variables.CAMERA_TYPE_FREE,
-		updateCamera: (camera, scene, mouseX, mouseY) ->  
-			camera.position.x += mouseX * 0.05;
-			camera.position.x = Math.max Math.min camera.position.x, 2000, -2000
-			camera.lookAt scene.position
+		type: Variables.CAMERA_TYPE_FREE		
 		]
 		
 	start: ->
@@ -30,7 +26,6 @@ app =
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
 		window.addEventListener 'resize',  ->
-			console.log 'Window resize ...'
 			Eventbus.windowResize.dispatch true
 			null
 		, false 

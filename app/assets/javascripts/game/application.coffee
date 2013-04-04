@@ -8,7 +8,7 @@ app =
 		width: 1.0,
 		height: 1.0,
 		background: { r: 0, g: 0, b: 0, a: 1 },
-		eye: [ 0, 0, 400 ],
+		eye: [ 0, 0, 2000 ],
 		up: [ 0, 0, 1 ],
 		fov: 75,
 		type: Variables.CAMERA_TYPE_RTS
@@ -18,7 +18,6 @@ app =
 		app.engine = new Engine(app)
 		app.engine.start()
 		window.addEventListener('resize',  ->
-					console.log 'Window resize ...'
 					Eventbus.windowResize.dispatch false
 					null
 				,false) 
