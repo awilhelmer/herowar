@@ -14,7 +14,11 @@ app =
 		eye: [ 0, 0, 400 ],
 		up: [ 0, 0, 1 ],
 		fov: 75,
-		type: Variables.CAMERA_TYPE_RTS
+		type: Variables.CAMERA_TYPE_FREE,
+		updateCamera: (camera, scene, mouseX, mouseY) ->  
+			camera.position.x += mouseX * 0.05;
+			camera.position.x = Math.max Math.min camera.position.x, 2000, -2000
+			camera.lookAt scene.position
 		]
 		
 	start: ->
