@@ -1,7 +1,6 @@
 class Scenegraph
 	
-	constructor: (app) ->
-		@app = app
+	constructor: (@app) ->
 
 	init: ->
 		console.log 'Initialize editor scenegraph'

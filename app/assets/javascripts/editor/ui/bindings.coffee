@@ -1,7 +1,6 @@
 class Bindings
 	
-	constructor: (app) ->
-		@app = app
+	constructor: (@app) ->
 
 	init: ->
 		console.log 'Initialize editor bindings'
