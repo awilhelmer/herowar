@@ -1,4 +1,5 @@
 BasePanel = require 'ui/panel/basePanel'
+TerrainProperties = require 'ui/panel/terrain'
 	
 class Scenegraph extends BasePanel
 	
@@ -7,6 +8,7 @@ class Scenegraph extends BasePanel
 
 	initialize: ->
 		console.log 'Initialize editor scenegraph'
+		@terrain = new TerrainProperties @app
 		@selectElement @$container.find('.scenegraph-tree-world')
 		super()
 

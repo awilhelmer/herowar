@@ -39,7 +39,7 @@ class SceneGraph
 
 	setMap: (map) ->
 		if @map
-			scene.remove @map
+			@scene.remove @map
 		@map = map
 		@scene.add @map
 
