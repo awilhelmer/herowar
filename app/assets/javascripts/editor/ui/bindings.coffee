@@ -10,7 +10,8 @@ class Bindings
 	bindEvents: ->
 		body = $ 'body'
 		# Menu: File
-		body.on 'click', '#fileNew', @fileNew
+		body.on 'click', '#fileNewMapEmpty', @fileNewMapEmpty
+		body.on 'click', '#fileNewMapGenerated', @fileNewMapGenerated
 		body.on 'click', '#fileOpen', @fileOpen
 		body.on 'click', '#fileSave', @fileSave
 		body.on 'click', '#fileExit', @fileExit
@@ -18,7 +19,11 @@ class Bindings
 		body.on 'click', '#addTerrain', @addTerrain
 		body.on 'click', '#addCube', @addCube
 
-	fileNew: (event) =>
+	fileNewMapEmpty: (event) =>
+		event?.preventDefault()
+		alert 'Not implemented yet...'
+
+	fileNewMapGenerated: (event) =>
 		event?.preventDefault()
 		alert 'Not implemented yet...'
 
