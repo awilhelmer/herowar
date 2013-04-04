@@ -37,11 +37,13 @@ class EditorBindings
 	addTerrain: (event) =>
 		event?.preventDefault()
 		console.log 'Adding Terrain'
-		@app.engine.scenegraph.addTerrain()
+		@app.scenegraph().addTerrain()
+		@app.render()
 
 	addCube: (event) =>
 		event?.preventDefault()
 		console.log 'Adding Cube'
-		@app.engine.scenegraph.addDummyObject()
+		@app.scenegraph().addDummyObject()
+		@app.render()
 	
 return EditorBindings

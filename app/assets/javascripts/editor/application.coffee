@@ -27,7 +27,10 @@ app =
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
 		app.editorScenegraph.init()
-		
+	
+	scenegraph: ->
+		app.engine.scenegraph
+	
 	render: ->
 		app.engine.render()
     
