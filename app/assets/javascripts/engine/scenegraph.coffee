@@ -7,7 +7,7 @@ class SceneGraph
 		@scene = new THREE.Scene()
 		@objects = {}
 		@currentId = 1
-		@addDummyObject()
+		@addTerrain()
 		
 	update: ->
 		for key, val of @objects
@@ -29,7 +29,11 @@ class SceneGraph
 		@currentId++
 			
 	addDummyObject: ->
-		cube = new THREE.Mesh new THREE.CubeGeometry( 200, 200, 200 ), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+		cube = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
 		@addObject cube, @getNextId()
+
+	addTerrain: ->
+		cube = new THREE.Mesh new THREE.PlaneGeometry(2000, 2000, 20, 20), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
+		@addObject cube, @getNextId()		
 
 return SceneGraph
