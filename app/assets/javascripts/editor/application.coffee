@@ -13,7 +13,7 @@ app =
 		width: 1.0,
 		height: 1.0,
 		background: { r: 0, g: 0, b: 0, a: 1 },
-		eye: [ 0, 0, 500 ],
+		eye: [ 300, 150, 300 ],
 		up: [ 1, 1, 1 ],
 		fov: 75,
 		type: Variables.CAMERA_TYPE_FREE		

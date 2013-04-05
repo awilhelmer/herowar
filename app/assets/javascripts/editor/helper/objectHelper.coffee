@@ -10,7 +10,9 @@ class ObjectHelper
 
 	addWireframe: (obj, color) ->
 		@app.scenegraph().scene.remove(obj)
-		obj.add new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial(color: color, wireframe: true)
+		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial(color: color, wireframe: true)
+		mesh.rotation.copy obj.children[0].rotation
+		obj.add mesh
 		@app.scenegraph().scene.add(obj)
 
 	removeWireframe: (obj) ->

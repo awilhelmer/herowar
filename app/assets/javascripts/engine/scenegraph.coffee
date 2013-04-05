@@ -3,14 +3,14 @@ Variables = require 'variables'
 
 class SceneGraph
 
-	constructor: (engine) ->
-		@engine = engine
+	constructor: (@engine) ->
+		@init()
 
 	init: ->
 		@scene = new THREE.Scene()
 		@skyboxScene = new THREE.Scene()
 		@dynamicObjects = {}
-		@setMap(@createDefaultMap(2000, 2000))
+		#@setMap(@createDefaultMap(2000, 2000))
 		@addSkybox 'default'
 		@currentId = 1
 

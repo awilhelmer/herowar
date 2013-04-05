@@ -27,6 +27,7 @@ class Terrain
 		obj = THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(@width, @height, @segWidth, @segHeight), @materials
 		obj.name = @name
 		for mesh in obj.children
+			mesh.rotation.x = - Math.PI/2
 			for i in [0..@segHeight]
 				for j in [0..@segWidth]
 					vector = mesh.geometry.vertices[i * @segHeight + j]

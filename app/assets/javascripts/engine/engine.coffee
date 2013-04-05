@@ -19,7 +19,6 @@ class Engine
 		@viewhandler = new ViewHandler(@, @app.views)
 		@mouseX = 0
 		@mouseY = 0
-		@scenegraph.init()
 		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		@initListener()
 		console.log "Engine started!"
