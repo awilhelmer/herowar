@@ -27,6 +27,8 @@ class Engine
 	initRenderer: ->
 		renderer = new THREE.WebGLRenderer 
 			antialias: true
+		renderer.autoClear = false
+		renderer
 		
 		renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
 		renderer.domElement.style.position = "relative"
@@ -46,7 +48,7 @@ class Engine
 	
 	render: ->
 		@scenegraph.update()
-		@viewhandler.render(@renderer, @scenegraph.scene)
+		@viewhandler.render @renderer, @scenegraph.scene, @scenegraph.skyboxScene
 		
 	animate: =>
 		@render()
@@ -66,7 +68,7 @@ class Engine
 		null
 
 	onCameraChanged: (view) =>
-		@viewhandler.cameraRender(@renderer, @scenegraph.scene, view)
+		@viewhandler.cameraRender(@renderer, @scenegraph.scene, @scenegraph.skyboxScene, view)
 		null
 		
 return Engine

@@ -20,6 +20,7 @@ class ViewHandler
 			view.camera.up.y = view.up[ 1 ]
 			view.camera.up.z = view.up[ 2 ]
 			view.isUpdate = _.isFunction(view.updateCamera)
+			view.skyboxCamera = new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 100
 		null
 		
 	createCamera: (view) ->
@@ -49,17 +50,17 @@ class ViewHandler
 				throw 'No camera type setted!'
 		camera
 	
-	render: (renderer, scene) ->
+	render: (renderer, scene, skyboxScene) ->
 		if (@rendering == false) 
 			@rendering = true
 			@controls.enable = false if @controls
 			for view in @views
-					@cameraRender(renderer, scene, view)	
+					@cameraRender(renderer, scene, skyboxScene, view)	
 			@rendering = false
 			@controls.enable = true if @controls
 		null
 
-	cameraRender : (renderer, scene, view) ->
+	cameraRender : (renderer, scene, skyboxScene, view) ->
 		@updateCamera view
 		if view.isUpdate
 			view.updateCamera view.camera, scene
@@ -70,10 +71,12 @@ class ViewHandler
 		renderer.setViewport left, bottom, width, height
 		renderer.setScissor left, bottom, width, height 
 		renderer.enableScissorTest  true 
-		renderer.setClearColor view.background, view.background.a 
+		#renderer.setClearColor view.background, view.background.a 
 		view.camera.aspect = width / height
-		view.camera.updateProjectionMatrix()		 
-		renderer.render(scene, view.camera)
+		view.camera.updateProjectionMatrix()
+		view.skyboxCamera.rotation.copy view.camera.position
+		renderer.render skyboxScene, view.skyboxCamera
+		renderer.render scene, view.camera
 		null
 		
 	updateCamera: (view)  ->
