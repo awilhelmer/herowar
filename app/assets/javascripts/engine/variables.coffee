@@ -1,4 +1,6 @@
 variables =
+	SCREEN_TOP : 0
+	SCREEN_LEFT : 0
 	SCREEN_WIDTH : window.innerWidth
 	SCREEN_HEIGHT : window.innerHeight
 	RENDERER_TYPE_CANVAS : 'canvas'

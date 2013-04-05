@@ -13,6 +13,9 @@ class Engine
 		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @rendererType
 		@main = $ '#main'
 		@canvas = document.createElement 'canvas'
+		position = @main.position()
+		Variables.SCREEN_TOP = position.top
+		Variables.SCREEN_LEFT = position.left
 		Variables.SCREEN_WIDTH = @main.width()
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
