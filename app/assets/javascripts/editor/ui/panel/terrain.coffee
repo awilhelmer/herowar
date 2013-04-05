@@ -29,13 +29,22 @@ class TerrainPropertiesPanel extends BasePanel
 		@$container.on 'change', 'input[name="width"]', @validateTerrainWidth
 		@$container.on 'change', 'input[name="height"]', @validateTerrainHeight
 		@$container.on 'change', 'input[name="wireframe"]', @changeWireframe
+		@$container.on 'click', '#randomizeTerrain', @resetTerrainPool
 	
 	createSliders: ->
 		@createSlider @$container.find('#inputWidth').get(0), Constants.TERRAIN_MIN_WIDTH, Constants.TERRAIN_MAX_WIDTH, Constants.TERRAIN_STEPS_WIDTH, @changeTerrain
 		@createSlider @$container.find('#inputHeight').get(0), Constants.TERRAIN_MIN_HEIGHT, Constants.TERRAIN_MAX_HEIGHT, Constants.TERRAIN_STEPS_HEIGHT, @changeTerrain
 		@createSlider @$container.find('#inputSmoothness').get(0), Constants.TERRAIN_MIN_SMOOTHNESS, Constants.TERRAIN_MAX_SMOOTHNESS, Constants.TERRAIN_STEPS_SMOOTHNESS, @changeTerrain
 		@createSlider @$container.find('#inputZScale').get(0), Constants.TERRAIN_MIN_ZSCALE, Constants.TERRAIN_MAX_ZSCALE, Constants.TERRAIN_STEPS_ZSCALE, @changeTerrain
-	
+
+	buildTerrain: ->
+		console.log "Change terrain: size=#{@terrainWidth}x#{@terrainHeight} smoothness=#{@terrainSmoothness} zscale=#{@terrainZScale}"
+		@randomPool.seek 0
+		map = @model.update @terrainWidth, @terrainHeight, @terrainSmoothness, @terrainZScale
+		@app.scenegraph().setMap map
+		@addSelectionWireframe()
+		@app.render()
+
 	changeTerrain: (event) =>
 		width = @$container.find('input[name="width"]').val()
 		height = @$container.find('input[name="height"]').val()
@@ -48,14 +57,9 @@ class TerrainPropertiesPanel extends BasePanel
 			@terrainZScale = zScale
 			@buildTerrain()
 
-			
-	buildTerrain: ->
-		console.log "Change terrain: size=#{@terrainWidth}x#{@terrainHeight} smoothness=#{@terrainSmoothness} zscale=#{@terrainZScale}"
-		@randomPool.seek 0
-		map = @model.update @terrainWidth, @terrainHeight, @terrainSmoothness, @terrainZScale
-		@app.scenegraph().setMap map
-		@addSelectionWireframe()
-		@app.render()
+	resetTerrainPool: =>
+		@randomPool.reset()
+		@buildTerrain()
 
 	validateTerrainWidth: (event) =>
 		if event
