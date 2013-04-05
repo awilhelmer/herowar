@@ -21,8 +21,6 @@ class Engine
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph(@)
 		@viewhandler = new ViewHandler(@, @app.views)
-		@mouseX = 0
-		@mouseY = 0
 		@pause = false
 		@data = {}
 		#document.addEventListener 'mousemove', @onDocumentMouseMove, false

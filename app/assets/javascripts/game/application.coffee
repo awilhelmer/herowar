@@ -1,5 +1,6 @@
 Engine = require 'engine'
 Variables = require 'variables'
+Eventbus = require 'eventbus'
 app =
 
 	views : [
@@ -8,10 +9,10 @@ app =
 		width: 1.0,
 		height: 1.0,
 		background: { r: 0, g: 0, b: 0, a: 1 },
-		eye: [ 0, 0, 2000 ],
+		eye: [ 0, 0, 200 ],
 		up: [ 0, 0, 1 ],
 		fov: 75,
-		type: Variables.CAMERA_TYPE_RTS
+		type: Variables.CAMERA_TYPE_FREE
 		]
 		
 	start: ->
