@@ -2,6 +2,7 @@ Engine = require 'engine'
 Variables = require 'variables'
 EditorBindings = require 'ui/bindings'
 EditorScenegraph = require 'ui/panel/scenegraph'
+Preloader = require 'preloader'
 Camera = require 'ui/camera'
 Eventbus = require 'eventbus'
 
@@ -17,16 +18,38 @@ app =
 		up: [ 1, 1, 1 ],
 		fov: 75,
 		type: Variables.CAMERA_TYPE_FREE		
-		]
+	]
 		
 	start: ->
-		app.engine = new Engine(app)
-		app.engine.init()
-		app.render()
+		@createEngine app, Variables.RENDERER_TYPE_CANVAS
+		@preload()
+	
+	preload: ->
+		Eventbus.preloadComplete.add @onPreloadComplete
+		app.preloader = new Preloader(app)
+		app.preloader.init
+			texturesCube:
+				'default' : 'assets/images/game/skybox/default/%1.jpg'
+		app.engine.animate()
+
+	onPreloadComplete: (app) =>
+		Eventbus.preloadComplete.remove app.onPreloadComplete
+		app.engine.shutdown()
+		app.createEngine app, Variables.RENDERER_TYPE_WEBGL
+		app.loadEditor(app)
+		
+	loadEditor: (app) ->	
 		app.camera = new Camera(app)
 		app.editorBindings = new EditorBindings(app)
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
+		app.addEventListeners(app)
+	
+	createEngine: (app, type) =>
+		app.engine = new Engine app, type
+		app.engine.init()
+	
+	addEventListeners: (app) ->
 		window.addEventListener 'resize',  ->
 			Eventbus.windowResize.dispatch true
 			null

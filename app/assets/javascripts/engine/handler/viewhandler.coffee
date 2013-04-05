@@ -1,8 +1,5 @@
 Variables = require 'variables'
 Eventbus = require 'eventbus'
-###
-	@author Alexander Wilhelmer
-###
 
 class ViewHandler
 
@@ -51,17 +48,17 @@ class ViewHandler
 				throw 'No camera type setted!'
 		camera
 	
-	render: (renderer, scene, skyboxScene) ->
+	render: (renderer, rendererType, scene, skyboxScene) ->
 		if (@rendering == false) 
 			@rendering = true
 			@controls.enable = false if @controls
 			for view in @views
-					@cameraRender(renderer, scene, skyboxScene, view)	
+					@cameraRender(renderer, rendererType, scene, skyboxScene, view)	
 			@rendering = false
 			@controls.enable = true if @controls
 		null
 
-	cameraRender : (renderer, scene, skyboxScene, view) ->
+	cameraRender : (renderer, rendererType, scene, skyboxScene, view) ->
 		@updateCamera view
 		if view.isUpdate
 			view.updateCamera view.camera, scene
@@ -69,14 +66,15 @@ class ViewHandler
 		bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
 		width = Math.floor Variables.SCREEN_WIDTH * view.width 
 		height = Math.floor Variables.SCREEN_HEIGHT * view.height 
-		renderer.setViewport left, bottom, width, height
-		renderer.setScissor left, bottom, width, height 
-		renderer.enableScissorTest  true 
+		if rendererType is Variables.RENDERER_TYPE_WEBGL
+			renderer.setViewport left, bottom, width, height
+			renderer.setScissor left, bottom, width, height 
+			renderer.enableScissorTest  true 
 		#renderer.setClearColor view.background, view.background.a 
 		#view.camera.aspect = width / height
 		#view.camera.updateProjectionMatrix()
 		view.skyboxCamera.rotation.copy view.camera.rotation
-		renderer.render skyboxScene, view.skyboxCamera
+		#renderer.render skyboxScene, view.skyboxCamera
 		renderer.render scene, view.camera
 		null
 		

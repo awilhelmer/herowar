@@ -1,7 +1,9 @@
 variables =
 	SCREEN_WIDTH : window.innerWidth
 	SCREEN_HEIGHT : window.innerHeight
-	CAMERA_TYPE_RTS: "RTS_CAMERA"
-	CAMERA_TYPE_FREE: "FREE_CAMERA"
- 	
+	RENDERER_TYPE_CANVAS : 'canvas'
+	RENDERER_TYPE_WEBGL : 'webgl'
+	CAMERA_TYPE_RTS: 'RTS_CAMERA'
+	CAMERA_TYPE_FREE: 'FREE_CAMERA'
+
 return variables

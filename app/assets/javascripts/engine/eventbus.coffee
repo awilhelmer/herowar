@@ -1,8 +1,7 @@
-###
-eventbus as EventBus
-	@author Alexander Wilhelmer
-###
 eventbus = 
+	preloadComplete: new signals.Signal()
+	beforeRender: new signals.Signal()
+	afterRender: new signals.Signal()
 	rendererChanged: new signals.Signal()
 	sceneChanged: new signals.Signal()
 	controlsChanged: new signals.Signal()
