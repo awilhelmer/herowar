@@ -6,14 +6,14 @@ Constants = require 'constants'
 
 class TerrainPropertiesPanel extends BasePanel
 
-	constructor: (@app) ->
-		super @app, 'sidebar-properties-terrain'
+	constructor: (@editor) ->
+		super @editor, 'sidebar-properties-terrain'
 
 	initialize: ->
 		console.log 'Initialize editor terrain properties'
 		@randomPool = new RandomPool()
 		@randomPool.hook()
-		@objectHelper = new ObjectHelper @app
+		@objectHelper = new ObjectHelper @editor
 		@terrainWidth = Constants.TERRAIN_DEFAULT_WIDTH
 		@terrainHeight = Constants.TERRAIN_DEFAULT_HEIGHT
 		@terrainSmoothness = Constants.TERRAIN_DEFAULT_SMOOTHNESS
@@ -41,9 +41,9 @@ class TerrainPropertiesPanel extends BasePanel
 		console.log "Change terrain: size=#{@terrainWidth}x#{@terrainHeight} smoothness=#{@terrainSmoothness} zscale=#{@terrainZScale}"
 		@randomPool.seek 0
 		map = @model.update @terrainWidth, @terrainHeight, @terrainSmoothness, @terrainZScale
-		@app.scenegraph().setMap map
+		@editor.scenegraph().setMap map
 		@addSelectionWireframe()
-		@app.render()
+		@editor.render()
 
 	changeTerrain: (event) =>
 		width = @$container.find('input[name="width"]').val()
@@ -85,19 +85,19 @@ class TerrainPropertiesPanel extends BasePanel
 
 	changeWireframe: (event) =>
 		if event
-			map = @app.scenegraph().getMap()
+			map = @editor.scenegraph().getMap()
 			$currentTarget = $ event.currentTarget
 			@wireframe = $currentTarget.is ':checked'
 
 	addSelectionWireframe: ->
-		map = @app.scenegraph().getMap()
+		map = @editor.scenegraph().getMap()
 		if @objectHelper.hasWireframe map
 			@objectHelper.changeWireframeColor map, 0xFFFF00
 		else
 			@objectHelper.addWireframe map, 0xFFFF00
 
 	removeSelectionWireframe: ->
-		map = @app.scenegraph().getMap()
+		map = @editor.scenegraph().getMap()
 		if @wireframe and @objectHelper.hasWireframe map
 			@objectHelper.changeWireframeColor map, 0xFFFFFF
 		else

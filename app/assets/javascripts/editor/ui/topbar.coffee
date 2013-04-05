@@ -2,8 +2,8 @@ Toolbar = require 'ui/toolbar'
 	
 class Topbar extends Toolbar
 
-	constructor: (@app) ->
-		super @app
+	constructor: (@editor) ->
+		super @editor
 		
 	init: ->
 

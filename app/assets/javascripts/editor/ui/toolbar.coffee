@@ -1,5 +1,5 @@
 class Toolbar
 
-	constructor: (@app) ->
+	constructor: (@editor) ->
 
 return Toolbar

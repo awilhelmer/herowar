@@ -3,12 +3,12 @@ Scenegraph = require 'ui/panel/scenegraph'
 	
 class Sidebar extends Toolbar
 
-	constructor: (@app) ->
-		super @app
+	constructor: (@editor) ->
+		super @editor
 
 	init: ->
 		console.log 'Initialize sidebar'
-		@scenepgraph = new Scenegraph @app
+		@scenepgraph = new Scenegraph @editor
 		@scenepgraph.init()
 
 return Sidebar

@@ -1,6 +1,6 @@
 class Bindings
 	
-	constructor: (@app) ->
+	constructor: (@editor) ->
 
 	init: ->
 		console.log 'Initialize editor bindings'
@@ -41,13 +41,13 @@ class Bindings
 	addTerrain: (event) =>
 		event?.preventDefault()
 		console.log 'Adding Terrain'
-		@app.scenegraph().addTerrain()
-		@app.render()
+		@editor.scenegraph().addTerrain()
+		@editor.render()
 
 	addCube: (event) =>
 		event?.preventDefault()
 		console.log 'Adding Cube'
-		@app.scenegraph().addDummyObject()
-		@app.render()
+		@editor.scenegraph().addDummyObject()
+		@editor.render()
 	
 return Bindings

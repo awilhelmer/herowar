@@ -17,7 +17,7 @@ class ViewHandler
 			view.camera.up.y = view.up[ 1 ]
 			view.camera.up.z = view.up[ 2 ]
 			view.isUpdate = _.isFunction(view.updateCamera)
-			view.skyboxCamera = new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 100
+			view.skyboxCamera = new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
 			view.camera.lookAt @engine.scenegraph.scene.position
 		null
 		
@@ -74,7 +74,7 @@ class ViewHandler
 		#view.camera.aspect = width / height
 		#view.camera.updateProjectionMatrix()
 		view.skyboxCamera.rotation.copy view.camera.rotation
-		#renderer.render skyboxScene, view.skyboxCamera
+		renderer.render skyboxScene, view.skyboxCamera
 		renderer.render scene, view.camera
 		null
 		

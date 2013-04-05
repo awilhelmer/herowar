@@ -67,7 +67,7 @@ class Preloader
 					url.replace("%1", "py"), url.replace("%1", "ny"),
 					url.replace("%1", "pz"), url.replace("%1", "nz")
 				]
-				@data.texturesCube[name] = THREE.ImageUtils.loadTextureCube urls, new THREE.CubeRefractionMapping(), =>
+				@data[type][name] = THREE.ImageUtils.loadTextureCube urls, new THREE.CubeRefractionMapping(), =>
 					@updateState type, name, true
 			else 
 				throw "The loader type '#{type}' is not supported"

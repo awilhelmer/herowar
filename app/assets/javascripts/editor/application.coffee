@@ -1,10 +1,8 @@
 Engine = require 'engine'
 Variables = require 'variables'
-EditorBindings = require 'ui/bindings'
-EditorScenegraph = require 'ui/panel/scenegraph'
 Preloader = require 'preloader'
-Camera = require 'ui/camera'
 Eventbus = require 'eventbus'
+Editor = require 'editor'
 
 app =
 	
@@ -36,67 +34,15 @@ app =
 		Eventbus.preloadComplete.remove app.onPreloadComplete
 		app.engine.shutdown()
 		app.createEngine app, Variables.RENDERER_TYPE_WEBGL
+		app.engine.data = app.preloader.data
 		app.loadEditor(app)
 		
 	loadEditor: (app) ->	
-		app.camera = new Camera(app)
-		app.editorBindings = new EditorBindings(app)
-		app.editorBindings.init()
-		app.editorScenegraph = new EditorScenegraph(app)
-		app.addEventListeners(app)
+		app.editor = new Editor app
+		app.editor.init()
 	
 	createEngine: (app, type) =>
 		app.engine = new Engine app, type
 		app.engine.init()
-	
-	addEventListeners: (app) ->
-		window.addEventListener 'resize',  ->
-			Eventbus.windowResize.dispatch true
-			null
-		, false 
-		
-		#All listeners must do a reRender!
-		mousepressed = false
-		app.engine.main.get(0).addEventListener 'mouseup', (event) => 
-			console.log 'mouseup'
-			app.controlsChanged(event)
-			app.camera.update()
-			app.mousepressed = false
-			null
-		, false 
-		app.engine.main.get(0).addEventListener 'mousedown',(event) =>
-			console.log 'mousedown'
-			app.controlsChanged(event)
-			app.camera.update()
-			app.mousepressed = true
-			null
-		, false 
-		app.engine.main.get(0).addEventListener 'mousemove',(event) =>
-			if (app.mousepressed)
-				app.controlsChanged(event)
-				app.camera.update()
-			null
-		, false 
-		app.engine.main.get(0).addEventListener 'mousewheel', @controlsChanged, false 
-		app.engine.main.get(0).addEventListener 'DOMMouseScroll', @controlsChanged, false 
-		app.engine.main.get(0).addEventListener 'touchstart', @controlsChanged, false 
-		app.engine.main.get(0).addEventListener 'touchend', @controlsChanged, false 
-		app.engine.main.get(0).addEventListener 'touchmove', @controlsChanged, false
-		window.addEventListener 'keydown', @controlsChanged, false
-		window.addEventListener 'keyup', @controlsChanged, false
-		#End of listeners
-
-	renderer: ->
-		app.engine.renderer
-
-	scenegraph: ->
-		app.engine.scenegraph
-	
-	render: ->
-		app.engine.render()
-	
-	controlsChanged: (event) =>
-		Eventbus.controlsChanged.dispatch event
-		null
     
 return app

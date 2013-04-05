@@ -11,7 +11,7 @@ class SceneGraph
 		@skyboxScene = new THREE.Scene()
 		@dynamicObjects = {}
 		#@setMap(@createDefaultMap(2000, 2000))
-		@addSkybox 'default'
+		#@addSkybox 'default'
 		@currentId = 1
 
 	update: ->
@@ -54,12 +54,7 @@ class SceneGraph
 		[ new THREE.MeshBasicMaterial(color: 0x006600), new THREE.MeshBasicMaterial(color: 0xFFFFFF, wireframe: true) ]
 
 	addSkybox: (name) ->
-		path = "assets/images/game/skybox/#{name}/"
-		format = '.jpg'
-		urls = [ path + 'px' + format, path + 'nx' + format,
-						 path + 'py' + format, path + 'ny' + format,
-						 path + 'pz' + format, path + 'nz' + format ]
-		cubeTexture = THREE.ImageUtils.loadTextureCube urls
+		cubeTexture = @engine.getData 'texturesCube', name
 		shader = THREE.ShaderLib['cube']
 		shader.uniforms['tCube'].value = cubeTexture
 		skyboxMaterial = new THREE.ShaderMaterial
@@ -68,6 +63,12 @@ class SceneGraph
 			uniforms        : shader.uniforms
 			depthWrite      : false
 			side            : THREE.BackSide
-		@skyboxScene.add new THREE.Mesh new THREE.CubeGeometry(100, 100, 100), skyboxMaterial
+		@skybox = new THREE.Mesh new THREE.CubeGeometry(1000, 1000, 1000), skyboxMaterial
+		@skyboxScene.add @skybox
+
+	removeSkybox: ->
+		if _.isUndefined @skybox
+			@skyboxScene.remove @skybox
+			@skybox = undefined
 
 return SceneGraph

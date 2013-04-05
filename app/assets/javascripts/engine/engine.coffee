@@ -21,6 +21,7 @@ class Engine
 		@mouseX = 0
 		@mouseY = 0
 		@pause = false
+		@data = {}
 		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		@initListener()
 		console.log "Engine started!"
@@ -77,5 +78,9 @@ class Engine
 	onCameraChanged: (view) =>
 		@viewhandler.cameraRender(@renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene, view)
 		null
-		
+
+	getData: (type, name) ->
+		throw "Data of type #{type} with name #{name} not found" unless type of @data and name of @data[type]
+		@data[type][name]
+
 return Engine
