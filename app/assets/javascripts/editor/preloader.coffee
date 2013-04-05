@@ -13,6 +13,7 @@ class Preloader
 		@load data if data
 
 	initLoader: ->
+		@alpha = 1.0
 		@percentage = 0
 		@data = {}
 		@states = {}
@@ -32,7 +33,7 @@ class Preloader
 		
 	initListener: ->
 		Eventbus.beforeRender.add(@onBeforeRender)
-		Eventbus.beforeRender.add(@onAfterRender)
+		Eventbus.afterRender.add(@onAfterRender)
 	
 	load: (data) ->
 		for type in @types
@@ -54,7 +55,7 @@ class Preloader
 			@progress.loaded++
 			@percentage = @progress.loaded / @progress.total  * 100
 		@states[type][name] = state
-		Eventbus.preloadComplete.dispatch @app if @progress.loaded is @progress.total
+		@progress.finish = true if @progress.loaded is @progress.total
 
 	loadItem: (type, name, url) ->
 		console.log "loadItem type=#{type}, name=#{name}, url=#{url}"
@@ -78,8 +79,17 @@ class Preloader
 	onAfterRender: =>
 		@ctx.save()
 		@ctx.font = '24px Arial'
-		@ctx.fillStyle = 'rgb(200, 200, 200)'
+		@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
 		@ctx.fillText "Loading #{Math.round(@percentage)}%", Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
 		@ctx.restore()
+		if @progress.finish
+			@alpha -= 0.05
+			@finish() if @alpha <= 0
+
+	finish: ->
+		console.log 'Preload complete'
+		Eventbus.beforeRender.remove @onBeforeRender
+		Eventbus.afterRender.remove @onAfterRender
+		Eventbus.preloadComplete.dispatch @app
 
 return Preloader
