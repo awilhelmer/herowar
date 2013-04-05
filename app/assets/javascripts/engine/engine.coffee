@@ -75,7 +75,7 @@ class Engine
 		null
 
 	onCameraChanged: (view) =>
-		@viewhandler.cameraRender(@renderer, @scenegraph.scene, @scenegraph.skyboxScene, view)
+		@viewhandler.cameraRender(@renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene, view)
 		null
 		
 return Engine
