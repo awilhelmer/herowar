@@ -16,6 +16,7 @@ class Scenegraph extends BasePanel
 		@subPanels.push @object = new ObjectProperties @app
 		@subPanels.push @terrain = new TerrainProperties @app
 		@subPanels.push @world = new WorldProperties @app
+		@$container.find('.scenegraph-tree').append '<div class="scenegraph-tree-world" data-type="world"><img src="assets/images/editor/world.png" /><span>World</span></div><div class="scenegraph-tree-terrain" data-type="terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>'
 		@selectElement @$container.find('.scenegraph-tree-world')
 		@activeType = 'world'
 		super()
