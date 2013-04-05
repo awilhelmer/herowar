@@ -70,9 +70,6 @@ class ViewHandler
 			renderer.setViewport left, bottom, width, height
 			renderer.setScissor left, bottom, width, height 
 			renderer.enableScissorTest  true 
-		#renderer.setClearColor view.background, view.background.a 
-		#view.camera.aspect = width / height
-		#view.camera.updateProjectionMatrix()
 		view.skyboxCamera.rotation.copy view.camera.rotation
 		renderer.render skyboxScene, view.skyboxCamera
 		renderer.render scene, view.camera
