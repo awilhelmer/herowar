@@ -58,7 +58,10 @@ app =
 		window.addEventListener( 'keydown', @controlsChanged, false );
 		window.addEventListener( 'keyup', @controlsChanged, false );
 		#End of listeners
-		
+
+	renderer: ->
+		app.engine.renderer
+
 	scenegraph: ->
 		app.engine.scenegraph
 	
