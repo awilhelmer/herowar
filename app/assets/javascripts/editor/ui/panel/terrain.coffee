@@ -28,4 +28,18 @@ class TerrainPropertiesPanel extends BasePanel
 			$currentTarget = $ event.currentTarget
 			@wireframe = $currentTarget.is ':checked'
 
+	addSelectionWireframe: ->
+		map = @app.scenegraph().getMap()
+		if @wireframe
+			@objectHelper.changeWireframeColor map, 0xFFFF00
+		else
+			@objectHelper.addWireframe map, 0xFFFF00
+
+	removeSelectionWireframe: ->
+		map = @app.scenegraph().getMap()
+		if @wireframe
+			@objectHelper.changeWireframeColor map, 0xFFFFFF
+		else
+			@objectHelper.removeWireframe map
+
 return TerrainPropertiesPanel

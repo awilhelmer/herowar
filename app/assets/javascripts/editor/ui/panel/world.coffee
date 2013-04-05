@@ -9,4 +9,8 @@ class WorldPropertiesPanel extends BasePanel
 		console.log 'Initialize editor world properties'
 		super()
 
+	addSelectionWireframe: ->
+
+	removeSelectionWireframe: ->
+
 return WorldPropertiesPanel

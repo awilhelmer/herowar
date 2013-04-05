@@ -34,26 +34,10 @@ class Scenegraph extends BasePanel
 		type = $Target.data 'type'
 		if type
 			panel.hide() for panel in @subPanels
+			@[@activeType].removeSelectionWireframe() if @activeType
+			@[type].addSelectionWireframe()
 			@[type].show()
-			oldType = @activeType
 			@activeType = type
-			@setWireframe oldType, @activeType
-
-	setWireframe: (oldType, newType) ->
-		if oldType is 'terrain'
-			console.log 'Old type was terrain'
-			map = @app.scenegraph().getMap()
-			if @terrain.wireframe
-				@objectHelper.changeWireframeColor map, 0xFFFFFF
-			else
-				@objectHelper.removeWireframe map
-		if newType is 'terrain'
-			console.log 'New type is terrain'
-			map = @app.scenegraph().getMap()
-			if @terrain.wireframe
-				@objectHelper.changeWireframeColor map, 0xFFFF00
-			else
-				@objectHelper.addWireframe map, 0xFFFF00
-		@app.render()
+			@app.render()
 
 return Scenegraph

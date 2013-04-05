@@ -9,4 +9,8 @@ class ObjectPropertiesPanel extends BasePanel
 		console.log 'Initialize editor object properties'
 		super()
 
+	addSelectionWireframe: ->
+
+	removeSelectionWireframe: ->
+
 return ObjectPropertiesPanel
