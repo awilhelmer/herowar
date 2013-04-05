@@ -9,6 +9,8 @@ class TerrainPropertiesPanel extends BasePanel
 	initialize: ->
 		console.log 'Initialize editor terrain properties'
 		@objectHelper = new ObjectHelper @app
+		@terrainWidth = 2000
+		@terrainHeight = 2000
 		@wireframe = true
 		super()
 
@@ -25,9 +27,11 @@ class TerrainPropertiesPanel extends BasePanel
 	changeTerrain: =>
 		width = @$container.find('input[name="width"]').val()
 		height = @$container.find('input[name="height"]').val()
-		if width >= 200 and width <= 10000 and height >= 200 and height <= 10000
+		if width >= 200 and width <= 10000 and height >= 200 and height <= 10000 and (width != @terrainWidth or height != @terrainHeight)
 			console.log "Change terrain size: #{width} x #{height}"
 			@app.scenegraph().setMap @app.scenegraph().createDefaultMap width, height
+			@terrainWidth = width
+			@terrainHeight = height
 			@app.render()
 
 	changeWireframe: (event) =>
