@@ -10,13 +10,13 @@ class ObjectHelper
 
 	addWireframe: (obj, color) ->
 		@editor.scenegraph().scene.remove(obj)
-		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial(color: color, wireframe: true)
+		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial color: color, wireframe: true
 		mesh.rotation.copy obj.children[0].rotation
 		obj.add mesh
-		@editor.scenegraph().scene.add(obj)
+		@editor.scenegraph().scene.add obj
 
 	removeWireframe: (obj) ->
-		@editor.scenegraph().scene.remove(obj)
+		@editor.scenegraph().scene.remove obj
 		foundMesh = true
 		while foundMesh
 			foundMesh = false
@@ -30,13 +30,25 @@ class ObjectHelper
 				mesh = obj.children[meshId]
 				mesh.geometry.dispose()
 				mesh.material.dispose()
-				@editor.scenegraph().scene.remove(mesh)
+				@editor.scenegraph().scene.remove mesh
 				# TODO: remove textures too
 				obj.children.splice meshId, 1
-		@editor.scenegraph().scene.add(obj)
+		@editor.scenegraph().scene.add obj
 
 	changeWireframeColor: (obj, color) ->
 			for mesh in obj.children
-				mesh.material.color.set color if mesh.material.wireframe	
+				mesh.material.color.set color if mesh.material.wireframe
+
+	getBaseObject: (obj) ->	
+		if obj
+			while !_.isUndefined obj.parent
+					obj = obj.parent
+					break if obj.parent instanceof THREE.Scene
+		obj
+		
+	isTerrain: (obj) ->
+		if _.isUndefined obj then return false
+		obj = @getBaseObject obj unless obj.parent instanceof THREE.Scene
+		obj.name is 'Terrain'	# TODO: better check here
 
 return ObjectHelper

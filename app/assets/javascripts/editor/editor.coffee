@@ -1,19 +1,27 @@
 EditorBindings = require 'ui/bindings'
 EditorScenegraph = require 'ui/panel/scenegraph'
 EditorMenubar = require 'ui/menubar'
+IntersectHelper = require 'helper/intersectHelper'
+ObjectHelper = require 'helper/objectHelper'
+SelectorArea = require 'helper/selectorArea'
+SelectorObject = require 'helper/selectorObject'
 Camera = require 'ui/camera'
 Eventbus = require 'eventbus'
 Variables = require 'variables'
+Constants = require 'constants'
 	
 class Editor
 
 	constructor: (@app) ->
 
 	init: ->
+		@tool = Constants.TOOL_SELECTION
 		@mousePressed = false
 		@mouseMoved = false
-		@ray = new THREE.Raycaster()
-		@projector = new THREE.Projector()
+		@intersectHelper = new IntersectHelper @
+		@objectHelper = new ObjectHelper @
+		@selectorArea = new SelectorArea @
+		@selectorObject = new SelectorObject @
 		@camera = new Camera @
 		@editorBindings = new EditorBindings @
 		@editorBindings.init()
@@ -33,23 +41,11 @@ class Editor
 		editor.engine().main.get(0).addEventListener 'touchstart', editor.dispatchControlsChangedEvent
 		editor.engine().main.get(0).addEventListener 'touchend', editor.dispatchControlsChangedEvent
 		editor.engine().main.get(0).addEventListener 'touchmove', editor.dispatchControlsChangedEvent
-
-	renderer: ->
-		@app.engine.renderer
-
-	scenegraph: ->
-		@app.engine.scenegraph
-
-	render: ->
-		@app.engine.render()
-
-	engine: ->
-		@app.engine
 	
 	onMouseUp: (event) ->
 		console.log 'mouseup'
-		if event?.button is 0 and !@mouseMoved
-			@handleObjectSelection event
+		if event?.button is 0 and !@mouseMoved and @tool is Constants.TOOL_SELECTION
+			@selectorObject.update()
 		@dispatchControlsChangedEvent event
 		@camera.update()
 		@mousePressed = false
@@ -60,35 +56,33 @@ class Editor
 		@dispatchControlsChangedEvent event
 		@camera.update()
 		@mousePressed = true
+		@mouseMoved = false
 		
 	onMouseMove: (event) ->
+		if event
+			Variables.MOUSE_X = event.clientX
+			Variables.MOUSE_Y = event.clientY
 		if @mousePressed
 			console.log 'mousemove'
 			@dispatchControlsChangedEvent event
 			@camera.update()
 			@mouseMoved = true
-
-	handleObjectSelection: (event) ->
-		objects = @intersectObjects event
-		if objects.length > 0
-			@editorScenegraph.handleSelection objects[0].object
-		else
-			@editorScenegraph.handleSelection()
-
-	intersectObjects: (event) ->
-		vector = new THREE.Vector3(
-		  ((event.clientX - Variables.SCREEN_LEFT) / Variables.SCREEN_WIDTH) * 2 - 1
-		  -((event.clientY - Variables.SCREEN_TOP) / Variables.SCREEN_HEIGHT) * 2 + 1
-		  0.5)
-		camera = @engine().viewhandler.views[0].camera	# TODO: find out from which viewport this click comes
-		@projector.unprojectVector vector, camera
-		@ray.set camera.position, vector.sub(camera.position).normalize()
-		objects = []
-		objects.push obj for id, obj of @engine().scenegraph.dynamicObjects
-		objects.push @engine().scenegraph.getMap()
-		@ray.intersectObjects objects, true
+		else if @tool is Constants.TOOL_BRUSH
+			@selectorArea.update()
 
 	dispatchControlsChangedEvent: (event) ->
 		Eventbus.controlsChanged.dispatch event
+
+	engine: ->
+		@app.engine
+
+	scenegraph: ->
+		@app.engine.scenegraph
+
+	renderer: ->
+		@app.engine.renderer
+
+	render: ->
+		@app.engine.render()
 
 return Editor

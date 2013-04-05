@@ -42,15 +42,9 @@ class Scenegraph extends BasePanel
 			@editor.render()
 
 	handleSelection: (obj) ->
-		if obj
-			while !_.isUndefined obj.parent
-				obj = obj.parent
-				break if obj.parent instanceof THREE.Scene
-			if obj.name is 'Terrain'	# TODO: better check here
-				@selectElement $('.scenegraph-tree-terrain')
-			else
-				@selectElement $('.scenegraph-tree-world') # TODO: add object selection logic
+		if @objectHelper.isTerrain obj
+			@selectElement $('.scenegraph-tree-terrain')
 		else
-			@selectElement $('.scenegraph-tree-world')
+			@selectElement $('.scenegraph-tree-world') # TODO: add object selection logic
 
 return Scenegraph

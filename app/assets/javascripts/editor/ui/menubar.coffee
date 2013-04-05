@@ -1,4 +1,5 @@
 BaseElement = require 'ui/baseElement'
+Constants = require 'constants'
 	
 class Menubar extends BaseElement
 
@@ -20,16 +21,18 @@ class Menubar extends BaseElement
 	onInto: (event) ->
 		event?.preventDefault()
 
-	onToolSelection: (event) ->
+	onToolSelection: (event) =>
 		if event
 			event.preventDefault()
 			$('#editor-menubar-tools a').removeClass 'active'
 			$(event.currentTarget).addClass 'active'
+			@editor.tool = Constants.TOOL_SELECTION
 
-	onToolBrush: (event) ->
+	onToolBrush: (event) =>
 		if event
 			event.preventDefault()
 			$('#editor-menubar-tools a').removeClass 'active'
 			$(event.currentTarget).addClass 'active'
+			@editor.tool = Constants.TOOL_BRUSH
 
 return Menubar
