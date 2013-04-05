@@ -2,6 +2,7 @@ Engine = require 'engine'
 Variables = require 'variables'
 EditorBindings = require 'ui/bindings'
 EditorScenegraph = require 'ui/panel/scenegraph'
+Camera = require 'ui/camera'
 Eventbus = require 'eventbus'
 
 app =
@@ -22,6 +23,7 @@ app =
 		app.engine = new Engine(app)
 		app.engine.init()
 		app.render()
+		app.camera = new Camera(app)
 		app.editorBindings = new EditorBindings(app)
 		app.editorBindings.init()
 		app.editorScenegraph = new EditorScenegraph(app)
@@ -32,21 +34,24 @@ app =
 		
 		#All listeners must do a reRender!
 		mousepressed = false
-		app.engine.main.get(0).addEventListener 'mouseup', (event) -> 
+		app.engine.main.get(0).addEventListener 'mouseup', (event) => 
 			console.log 'mouseup'
 			app.controlsChanged(event)
+			app.camera.update()
 			app.mousepressed = false
 			null
 		, false 
-		app.engine.main.get(0).addEventListener 'mousedown',(event) ->
+		app.engine.main.get(0).addEventListener 'mousedown',(event) =>
 			console.log 'mousedown'
 			app.controlsChanged(event)
+			app.camera.update()
 			app.mousepressed = true
 			null
 		, false 
-		app.engine.main.get(0).addEventListener 'mousemove',(event) ->
+		app.engine.main.get(0).addEventListener 'mousemove',(event) =>
 			if (app.mousepressed)
 				app.controlsChanged(event)
+				app.camera.update()
 			null
 		, false 
 		app.engine.main.get(0).addEventListener 'mousewheel', @controlsChanged, false 
