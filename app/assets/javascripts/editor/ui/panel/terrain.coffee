@@ -1,5 +1,6 @@
 BasePanel = require 'ui/panel/basePanel'
 ObjectHelper = require 'helper/objectHelper'
+RandomPool = require 'helper/randomPool'
 TerrainModel = require 'model/terrain'
 Constants = require 'constants'
 
@@ -10,6 +11,8 @@ class TerrainPropertiesPanel extends BasePanel
 
 	initialize: ->
 		console.log 'Initialize editor terrain properties'
+		@randomPool = new RandomPool()
+		@randomPool.hook()
 		@objectHelper = new ObjectHelper @app
 		@terrainWidth = Constants.TERRAIN_DEFAULT_WIDTH
 		@terrainHeight = Constants.TERRAIN_DEFAULT_HEIGHT
@@ -48,6 +51,7 @@ class TerrainPropertiesPanel extends BasePanel
 			
 	buildTerrain: ->
 		console.log "Change terrain: size=#{@terrainWidth}x#{@terrainHeight} smoothness=#{@terrainSmoothness} zscale=#{@terrainZScale}"
+		@randomPool.seek 0
 		map = @model.update @terrainWidth, @terrainHeight, @terrainSmoothness, @terrainZScale
 		@app.scenegraph().setMap map
 		@addSelectionWireframe()
