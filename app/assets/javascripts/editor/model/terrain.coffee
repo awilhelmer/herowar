@@ -5,41 +5,32 @@ class Terrain
 	materials: [ new THREE.MeshBasicMaterial color: 0x006600 ]
 
 	update: (width, height, smoothness, zScale) ->
-		@model = generateTerrain width, height, smoothness
-		@updateZ zScale
+		@width = width
+		@height = height
+		@smoothness = smoothness
+		@zScale = zScale
+		@segWidth = Math.round(width / 10)
+		@segHeight = Math.round(height / 10)
+		@model = generateTerrain @segWidth, @segHeight, @smoothness
+		@updateZ()
 
-	updateZ: (zScale) ->
-		width = @model[0].length - 1
-		height = @model.length - 1
+	updateZ: () ->
 		terrain = []
-		for i in [0..height]
+		for i in [0..@segHeight]
 			row = []
-			for j in [0..width]
-				row.push @model[i][j] * zScale
+			for j in [0..@segWidth]
+				row.push @model[i][j] * @zScale
 			terrain.push row
 		@getTerrainMesh terrain
 
-	getTerrainMesh: (terrain) ->
-		terrainWidth  = terrain[0].length - 1
-		terrainHeight = terrain.length - 1
-		
-		segLength = @getOptimalSegLength terrainWidth, terrainHeight
-		
-		width = (terrain[0].length - 1) * segLength
-		height = (terrain.length - 1) * segLength
-		
-		console.log width
-		console.log height
-		
-		obj = THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(width, height, terrainHeight, terrainHeight), @materials
+	getTerrainMesh: (terrain) ->		
+		obj = THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(@width, @height, @segWidth, @segHeight), @materials
 		obj.name = @name
 		for mesh in obj.children
-			for i in [0..terrainHeight]
-				for j in [0..terrainHeight]
-					mesh.geometry.vertices[i * terrain.length + j].z = terrain[i][j]
+			for i in [0..@segHeight]
+				for j in [0..@segWidth]
+					vector = mesh.geometry.vertices[i * @segHeight + j]
+					vector.z = terrain[i][j] if vector
 		obj
-
-	getOptimalSegLength: (width, height) ->
-		~~(640 / Math.max(width, height))
 
 return Terrain
