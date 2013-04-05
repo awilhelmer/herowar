@@ -52,7 +52,7 @@ class SceneGraph
 		@addDynObject obj, @getNextId()
 
 	createDefaultMap: (width, height) ->
-		THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(width, height, width / 100, height / 100), 
+		THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(width, height, Math.round(width / 100), Math.round(height / 100)), 
 		[ new THREE.MeshBasicMaterial(color: 0x006600), new THREE.MeshBasicMaterial(color: 0xFFFFFF, wireframe: true) ]
 
 return SceneGraph

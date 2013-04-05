@@ -22,13 +22,15 @@ class BasePanel
 			@showFirstTime = false
 		
 	createSliders: ->
-		sliders = @$container.find 'input.slider'
-		$.each sliders, (index, value) ->
-			$slider = $ value
-			fdSlider.createSlider
-				inp: value
-				min: $slider.attr 'min'
-				max: $slider.attr 'max'
-				step: $slider.attr 'step'
+
+	createSlider: (domElement, min, max, step, callbackFunc) ->
+		fdSlider.createSlider
+			inp: domElement
+			min: min
+			max: max
+			step: step
+			callbacks:
+				update:
+					[callbackFunc]
 
 return BasePanel
