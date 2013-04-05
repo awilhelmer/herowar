@@ -32,7 +32,6 @@ app =
 		
 		#All listeners must do a reRender!
 		mousepressed = false
-		
 		app.engine.main.get(0).addEventListener 'mouseup', (event) -> 
 			console.log 'mouseup'
 			app.controlsChanged(event)
@@ -55,8 +54,8 @@ app =
 		app.engine.main.get(0).addEventListener 'touchstart', @controlsChanged, false 
 		app.engine.main.get(0).addEventListener 'touchend', @controlsChanged, false 
 		app.engine.main.get(0).addEventListener 'touchmove', @controlsChanged, false
-		window.addEventListener( 'keydown', @controlsChanged, false );
-		window.addEventListener( 'keyup', @controlsChanged, false );
+		window.addEventListener 'keydown', @controlsChanged, false
+		window.addEventListener 'keyup', @controlsChanged, false
 		#End of listeners
 
 	renderer: ->

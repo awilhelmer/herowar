@@ -7,8 +7,7 @@ class Engine
 
 	constructor: (@app) ->
 		throw 'No View declared' unless @app.views
-		
-		
+
 	init: ->
 		console.log "Engine starting..."
 		@main = $ '#main'
@@ -49,7 +48,6 @@ class Engine
 		@scenegraph.update()
 		@viewhandler.render(@renderer, @scenegraph.scene)
 		
-
 	animate: =>
 		@render()
 		requestAnimationFrame(@animate)
