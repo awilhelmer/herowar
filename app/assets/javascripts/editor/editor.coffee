@@ -8,6 +8,7 @@ class Editor
 	constructor: (@app) ->
 
 	init: ->
+		@mousepressed = false
 		@camera = new Camera(@)
 		@editorBindings = new EditorBindings(@)
 		@editorBindings.init()
@@ -15,41 +16,17 @@ class Editor
 		@addEventListeners(@)
 
 	addEventListeners: (editor) ->
-		window.addEventListener 'resize',  ->
-			Eventbus.windowResize.dispatch true
-			null
-		, false 
-		
-		#All listeners must do a reRender!
-		mousepressed = false
-		editor.engine().main.get(0).addEventListener 'mouseup', (event) => 
-			console.log 'mouseup'
-			editor.controlsChanged(event)
-			editor.camera.update()
-			editor.engine().mousepressed = false
-			null
-		, false 
-		editor.engine().main.get(0).addEventListener 'mousedown',(event) =>
-			console.log 'mousedown'
-			editor.controlsChanged(event)
-			editor.camera.update()
-			editor.engine().mousepressed = true
-			null
-		, false 
-		editor.engine().main.get(0).addEventListener 'mousemove',(event) =>
-			if (editor.engine().mousepressed)
-				editor.controlsChanged(event)
-				editor.camera.update()
-			null
-		, false 
-		editor.engine().main.get(0).addEventListener 'mousewheel', editor.controlsChanged, false 
-		editor.engine().main.get(0).addEventListener 'DOMMouseScroll', editor.controlsChanged, false 
-		editor.engine().main.get(0).addEventListener 'touchstart', editor.controlsChanged, false 
-		editor.engine().main.get(0).addEventListener 'touchend', editor.controlsChanged, false 
-		editor.engine().main.get(0).addEventListener 'touchmove', editor.controlsChanged, false
-		window.addEventListener 'keydown', @controlsChanged, false
-		window.addEventListener 'keyup', @controlsChanged, false
-		#End of listeners
+		window.addEventListener 'resize',  => Eventbus.windowResize.dispatch true
+		window.addEventListener 'keydown', editor.dispatchControlsChangedEvent
+		window.addEventListener 'keyup', editor.dispatchControlsChangedEvent
+		editor.engine().main.get(0).addEventListener 'mouseup', (event) => editor.onMouseUp event, editor
+		editor.engine().main.get(0).addEventListener 'mousedown', (event) => editor.onMouseDown event, editor
+		editor.engine().main.get(0).addEventListener 'mousemove',(event) => editor.onMouseMove event, editor 
+		editor.engine().main.get(0).addEventListener 'mousewheel', editor.dispatchControlsChangedEvent
+		editor.engine().main.get(0).addEventListener 'DOMMouseScroll', editor.dispatchControlsChangedEvent
+		editor.engine().main.get(0).addEventListener 'touchstart', editor.dispatchControlsChangedEvent
+		editor.engine().main.get(0).addEventListener 'touchend', editor.dispatchControlsChangedEvent
+		editor.engine().main.get(0).addEventListener 'touchmove', editor.dispatchControlsChangedEvent
 
 	renderer: ->
 		@app.engine.renderer
@@ -63,8 +40,24 @@ class Editor
 	engine: ->
 		@app.engine
 	
-	controlsChanged: (event) =>
+	onMouseUp: (event, editor) ->
+		console.log 'mouseup'
+		editor.dispatchControlsChangedEvent event
+		editor.camera.update()
+		editor.mousepressed = false
+	
+	onMouseDown: (event, editor) ->
+		console.log 'mousedown'
+		editor.dispatchControlsChangedEvent event
+		editor.camera.update()
+		editor.mousepressed = true
+		
+	onMouseMove: (event, editor) ->
+		if editor.mousepressed
+			editor.dispatchControlsChangedEvent event
+			editor.camera.update()		
+
+	dispatchControlsChangedEvent: (event) ->
 		Eventbus.controlsChanged.dispatch event
-		null
 
 return Editor
