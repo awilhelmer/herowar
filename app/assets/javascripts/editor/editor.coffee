@@ -1,5 +1,6 @@
 EditorBindings = require 'ui/bindings'
 EditorScenegraph = require 'ui/panel/scenegraph'
+EditorMenubar = require 'ui/menubar'
 Camera = require 'ui/camera'
 Eventbus = require 'eventbus'
 Variables = require 'variables'
@@ -13,11 +14,12 @@ class Editor
 		@mouseMoved = false
 		@ray = new THREE.Raycaster()
 		@projector = new THREE.Projector()
-		@camera = new Camera(@)
-		@editorBindings = new EditorBindings(@)
+		@camera = new Camera @
+		@editorBindings = new EditorBindings @
 		@editorBindings.init()
-		@editorScenegraph = new EditorScenegraph(@)
-		@addEventListeners(@)
+		@editorScenegraph = new EditorScenegraph @
+		@editorMenubar = new EditorMenubar @
+		@addEventListeners @
 
 	addEventListeners: (editor) ->
 		window.addEventListener 'resize',  => Eventbus.windowResize.dispatch true

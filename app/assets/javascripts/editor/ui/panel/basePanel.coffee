@@ -1,16 +1,9 @@
-class BasePanel
+BaseElement = require 'ui/baseElement'
+	
+class BasePanel extends BaseElement
 
 	constructor: (@editor, @id) ->
-		@$container = $ "##{@id}"
-		throw "Dom element with id #{@id} not found" if @$container?.length is 0
-		@container = @$container[0]
-		@showFirstTime = true
-		@initialize()
-		@bindEvents()
-
-	initialize: ->
-
-	bindEvents: ->
+		super @editor, @id
 
 	hide: ->
 		@$container.addClass 'hidden'
