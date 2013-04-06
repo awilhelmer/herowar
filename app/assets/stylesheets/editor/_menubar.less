@@ -1,47 +1,50 @@
 //
-// MENUBAR
+// Topbar
 // --------------------------------------------------
+
+// Dropdowns
+// -------------------------
+@dropdownBackground:            #474747;
+
+@dropdownLinkColor:             #a0a7ad;
+@dropdownLinkColorHover:        #333333;
+@dropdownLinkColorActive:       #333333;
+
+@dropdownLinkBackgroundActive:  #a0a7ad;
 
 // COMPONENT: NAVBAR
 
-#editor-menubar {
-	position: absolute;
-	top: 30px;
-	left: 0px;
-	right: 300px;
-	background: #474747;
-	border-bottom: 1px solid #a0a7ad;
-	.box-shadow(0 1px 4px rgba(0,0,0,.065));
+#menubar.navbar .nav > li > a {
+	padding: 5px 15px 5px;
 }
 
-#editor-menubar .btn-toolbar {
-	margin-top: 0px;
-	margin-left: 15px;
+#menubar .navbar-inner {
+	min-height: 30px;
+	border-width: 0;
+	.box-shadow(0 0 0 rgba(0,0,0,.0));
 }
 
-#editor-menubar [class^="icon-"],
-#editor-menubar [class*=" icon-"] {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  margin-top: 1px;
-  *margin-right: .3em;
-  line-height: 32px;
-  vertical-align: text-top;
+#menubar.navbar .nav li.dropdown.open > .dropdown-toggle,
+#menubar.navbar .nav li.dropdown.active > .dropdown-toggle,
+#menubar.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background-color: #a0a7ad;
+  color: #333333;
 }
 
-.icon-back {
-	  background-image: url("../images/editor/menubar/back.png");
+// Hover/focus
+#menubar.navbar .nav > li > a:focus,
+#menubar.navbar .nav > li > a:hover {
+  background-color: none;
+  color: #a0a7ad;
+  text-decoration: none;
 }
 
-.icon-into {
-	  background-image: url("../images/editor/menubar/into.png");
-}
-
-.icon-select {
-	  background-image: url("../images/editor/menubar/select.png");
-}
-
-.icon-brush {
-	  background-image: url("../images/editor/menubar/brush.png");
+// Active nav items
+#menubar.navbar .nav > .active > a,
+#menubar.navbar .nav > .active > a:hover,
+#menubar.navbar .nav > .active > a:focus {
+  color: #a0a7ad;
+  text-decoration: none;
+  background-color: none;
+  .box-shadow(inset 0 3px 8px rgba(0,0,0,.125));
 }

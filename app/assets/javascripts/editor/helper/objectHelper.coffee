@@ -9,14 +9,14 @@ class ObjectHelper
 		found
 
 	addWireframe: (obj, color) ->
-		@editor.scenegraph().scene.remove(obj)
+		@editor.engine.scenegraph.scene.remove(obj)
 		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial color: color, wireframe: true
 		mesh.rotation.copy obj.children[0].rotation
 		obj.add mesh
-		@editor.scenegraph().scene.add obj
+		@editor.engine.scenegraph.scene.add obj
 
 	removeWireframe: (obj) ->
-		@editor.scenegraph().scene.remove obj
+		@editor.engine.scenegraph.scene.remove obj
 		foundMesh = true
 		while foundMesh
 			foundMesh = false
@@ -33,7 +33,7 @@ class ObjectHelper
 				@editor.scenegraph().scene.remove mesh
 				# TODO: remove textures too
 				obj.children.splice meshId, 1
-		@editor.scenegraph().scene.add obj
+		@editor.engine.scenegraph.scene.add obj
 
 	changeWireframeColor: (obj, color) ->
 			for mesh in obj.children

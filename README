@@ -12,6 +12,10 @@ TODOS:
 
 Section: building and transforming resources
 
+Section: Editor
+
+1. Implement textures, geometries and image loading cases in preloader
+
 Section: Site
 
 1. Style gritter message (remove image background and use css3)

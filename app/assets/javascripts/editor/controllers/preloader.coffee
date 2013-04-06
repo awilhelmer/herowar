@@ -1,18 +1,27 @@
-Variables = require 'variables'
+BaseController = require 'controllers/baseController'
+db = require 'database'
 Eventbus = require 'eventbus'
-	
-class Preloader
+Variables = require 'variables'
 
-	constructor: (@app) ->
+class Preloader extends BaseController
 
-	init: (data) ->
+	views:
+		'views/preloader'	: ''
+
+	initialize: (options) ->
 		console.log 'Initialize preloader...'
+		super options
+		@$container = $ '#preloader'
 		@initLoader()			
-		@initListener()
+		@createRenderer()
 		@initRendererContext()
-		@load data if data
+		@animate()
+		@load
+			texturesCube:
+				'default' : 'assets/images/game/skybox/default/%1.jpg'
 
 	initLoader: ->
+		@preloadComplete = false
 		@alpha = 1.0
 		@percentage = 0
 		@data = {}
@@ -25,16 +34,18 @@ class Preloader
 			total: 0
 			remaining: 0
 			loaded: 0
-			finish: false		
+			finish: false
+
+	createRenderer: ->
+		@renderer = new THREE.CanvasRenderer
+			clearColor: 0x555555
+		@$container.append @renderer.domElement
+		@renderer.setSize @$container.width(), @$container.height()
 
 	initRendererContext: ->
-		@ctx = @app.engine.renderer.domElement.getContext '2d'
+		@ctx = @renderer.domElement.getContext '2d'
 		@ctx.textAlign = 'center'
-		
-	initListener: ->
-		Eventbus.beforeRender.add(@onBeforeRender)
-		Eventbus.afterRender.add(@onAfterRender)
-	
+
 	load: (data) ->
 		for type in @types
 			if type of data
@@ -61,8 +72,8 @@ class Preloader
 		console.log "loadItem type=#{type}, name=#{name}, url=#{url}"
 		@updateState type, name, false
 		switch type
+			# TODO: implement textures, geometries and image loading cases
 			when 'texturesCube'
-				
 				urls = [
 					url.replace("%1", "px"), url.replace("%1", "nx"),
 					url.replace("%1", "py"), url.replace("%1", "ny"),
@@ -73,10 +84,9 @@ class Preloader
 			else 
 				throw "The loader type '#{type}' is not supported"
 
-	onBeforeRender: =>
+	animate: =>
+		requestAnimationFrame @animate unless @preloadComplete
 		@ctx.clearRect 0, 0, Variables.SCREEN_WIDTH, Variables.SCREEN_HEIGHT
-
-	onAfterRender: =>
 		@ctx.save()
 		@ctx.font = '24px Arial'
 		@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
@@ -84,12 +94,13 @@ class Preloader
 		@ctx.restore()
 		if @progress.finish
 			@alpha -= 0.05
-			@finish() if @alpha <= 0
+			@finish() if @alpha <= 0 and !@preloadComplete
 
 	finish: ->
 		console.log 'Preload complete'
-		Eventbus.beforeRender.remove @onBeforeRender
-		Eventbus.afterRender.remove @onAfterRender
-		Eventbus.preloadComplete.dispatch @app
+		@preloadComplete = true
+		@$container.find('canvas').remove()
+		db.data @data
+		Backbone.history.loadUrl 'editor2'
 
 return Preloader

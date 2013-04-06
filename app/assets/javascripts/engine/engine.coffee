@@ -5,14 +5,16 @@ Eventbus = require 'eventbus'
 
 class Engine 
 
-	constructor: (@app, @rendererType) ->
-		throw 'No View declared' unless @app.views
+	constructor: (@opts) ->
+		@opts = @opts || {}
+		throw 'No View declared' unless @opts.views
+		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @opts.rendererType
+		@main = @opts.container
+		@main = $ '#main' unless @main	# TODO: create container if not exists
+		@data = @opts.data || {}
 
 	init: ->
 		console.log 'Engine starting...'
-		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @rendererType
-		@main = $ '#main'
-		@canvas = document.createElement 'canvas'
 		position = @main.position()
 		Variables.SCREEN_TOP = position.top
 		Variables.SCREEN_LEFT = position.left
@@ -20,9 +22,8 @@ class Engine
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph(@)
-		@viewhandler = new ViewHandler(@, @app.views)
+		@viewhandler = new ViewHandler(@, @opts.views)
 		@pause = false
-		@data = {}
 		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		@initListener()
 		console.log "Engine started!"

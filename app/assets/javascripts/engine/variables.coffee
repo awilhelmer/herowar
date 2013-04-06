@@ -4,8 +4,12 @@ variables =
 	SCREEN_WIDTH : window.innerWidth
 	SCREEN_HEIGHT : window.innerHeight
 	
-	MOUSE_X : 0
-	MOUSE_Y : 0
+	MOUSE_POSITION_X : 0
+	MOUSE_POSITION_Y : 0
+	MOUSE_MOVED : false
+	MOUSE_PRESSED_LEFT : false
+	MOUSE_PRESSED_MIDDLE : false
+	MOUSE_PRESSED_RIGHT : false
 	
 	RENDERER_TYPE_CANVAS : 'canvas'
 	RENDERER_TYPE_WEBGL : 'webgl'

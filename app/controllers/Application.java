@@ -48,6 +48,7 @@ public class Application extends Controller {
     jsFiles.get("game").add("javascripts/gs" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("editor").add("javascripts/ev" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("editor").add("javascripts/es" + BuildInfo.cacheNumber() + ".js");
+    jsFiles.get("editor").add("javascripts/et" + BuildInfo.cacheNumber() + ".js");
   }
 
   public static User getLocalUser() {

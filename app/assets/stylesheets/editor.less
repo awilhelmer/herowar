@@ -38,8 +38,8 @@
 @import "_gritter.less";
 
 // Editor Files
-@import "editor/_topbar.less";
 @import "editor/_menubar.less";
+@import "editor/_iconbar.less";
 @import "editor/_sidebar.less";
 @import "editor/_fd-slider.less";
 
@@ -62,7 +62,15 @@ canvas {
 	pointer-events: none;
 }
 
-#main {
+#preloader {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+}
+
+#viewport {
 	position: absolute;
 	right: 300px;
 	top: 86px;
