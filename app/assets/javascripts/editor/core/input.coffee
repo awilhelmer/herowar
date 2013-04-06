@@ -33,7 +33,6 @@ class Input
 		Eventbus.controlsChanged.dispatch event
 
 	onMouseUp: (event) ->
-		console.log 'mouseup'
 		if event
 			Variables.MOUSE_PRESSED_LEFT = false if event.which is 1
 			Variables.MOUSE_PRESSED_MIDDLE = false if event.which is 2
@@ -41,17 +40,8 @@ class Input
 		EditorEventbus.mouseup.dispatch event
 		Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false unless Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_MIDDLE or Variables.MOUSE_PRESSED_RIGHT
-		###
-		if event?.button is 0 and !@mouseMoved and @tool is Constants.TOOL_SELECTION
-			@selectorObject.update()
-		@dispatchControlsChangedEvent event
-		@camera.update()
-		@mousePressed = false
-		@mouseMoved = false
-		###
 		
 	onMouseDown: (event) ->
-		console.log 'mousedown'
 		if event
 			Variables.MOUSE_PRESSED_LEFT = true if event.which is 1
 			Variables.MOUSE_PRESSED_MIDDLE = true if event.which is 2
@@ -59,12 +49,6 @@ class Input
 		EditorEventbus.mousedown.dispatch event
 		Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false
-		###
-		@dispatchControlsChangedEvent event
-		@camera.update()
-		@mousePressed = true
-		@mouseMoved = false
-		###
 		
 	onMouseMove: (event) ->
 		console.log 'mousemove'
@@ -74,18 +58,6 @@ class Input
 		EditorEventbus.mousemove.dispatch event
 		Eventbus.controlsChanged.dispatch event if Variables.MOUSE_PRESSED_LEFT
 		Variables.MOUSE_MOVED = true
-		###
-		if event
-			Variables.MOUSE_X = event.clientX
-			Variables.MOUSE_Y = event.clientY
-		if @mousePressed
-			console.log 'mousemove'
-			@dispatchControlsChangedEvent event
-			@camera.update()
-			@mouseMoved = true
-		else if @tool is Constants.TOOL_BRUSH
-			@selectorArea.update()
-		###
 	
 	onMouseWheel: (event) ->
 		EditorEventbus.mousewheel.dispatch event
