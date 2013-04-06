@@ -12,8 +12,6 @@ class SelectorObject
 		if @selectedObject
 			@removeSelectionWireframe @editor.engine.scenegraph.getMap() if @selectedType is 'terrain'
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
-		console.log 'Found: '
-		console.log objects
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
 			if @objectHelper.isTerrain 

@@ -22,11 +22,15 @@ class Tools
 	addEventListeners: ->
 		EditorEventbus.mouseup.add @onMouseUp
 		EditorEventbus.mousemove.add @onMouseMove
+		EditorEventbus.selectTool.add @selectTool
 	
 	onMouseUp: (event) =>
 		@selectorObject.update() if event.which is 1 and !Variables.MOUSE_MOVED and @active is Constants.TOOL_SELECTION	
 
 	onMouseMove: =>
-		@selectorArea.update() if @active is Constants.TOOL_BRUSH		
+		@selectorArea.update() if @active is Constants.TOOL_BRUSH
+		
+	selectTool: (type) =>
+		@active = type
 
 return Tools

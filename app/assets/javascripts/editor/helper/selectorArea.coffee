@@ -1,12 +1,15 @@
+IntersectHelper = require 'helper/intersectHelper'
+
 class SelectorArea
 
 	constructor: (@editor) ->
+		@intersectHelper = new IntersectHelper @editor
 		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial color: 0xFF0000
 		@selector.rotation.x = - Math.PI/2
 		@isVisible = false
 
 	update: ->
-		intersectList = @editor.intersectHelper.mouseIntersects [ @editor.scenegraph().getMap() ]
+		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ]
 		if intersectList.length > 0
 			@addSel() unless @isVisible
 			@updatePosition intersectList[0]
@@ -15,12 +18,12 @@ class SelectorArea
 
 	addSel: ->
 		@isVisible = true
-		@editor.scenegraph().scene.add @selector
+		@editor.engine.scenegraph.scene.add @selector
 
 	removeSel: ->
 		@isVisible = false
-		@editor.scenegraph().scene.remove @selector
-		@editor.render()
+		@editor.engine.scenegraph.scene.remove @selector
+		@editor.engine.render()
 
 	updatePosition: (intersect) ->
 			position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
@@ -31,6 +34,6 @@ class SelectorArea
 				@selector.position.x = x
 				@selector.position.y = y
 				@selector.position.z = z
-				@editor.render()
+				@editor.engine.render()
 
 return SelectorArea
