@@ -51,7 +51,6 @@ class Input
 		Variables.MOUSE_MOVED = false
 		
 	onMouseMove: (event) ->
-		console.log 'mousemove'
 		if event
 			Variables.MOUSE_POSITION_X = event.clientX
 			Variables.MOUSE_POSITION_Y = event.clientY
