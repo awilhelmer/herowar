@@ -5,7 +5,7 @@ class WorldProperties extends BaseView
 	
 	id: 'sidebar-properties-world'
 	
-	className: 'sidebar-panel hidden'
+	className: 'sidebar-panel'
 	
 	template: templates.get 'sidebar/worldProperties.tmpl'
 	

@@ -1,7 +1,9 @@
 EditorEventbus = require 'editorEventbus'
+ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
 TerrainModel = require 'model/terrain'
 Constants = require 'constants'
+db = require 'database'
 
 class Scene
 
@@ -12,25 +14,25 @@ class Scene
 		console.log 'Initialize scene'
 		EditorEventbus.worldAdded.dispatch
 		EditorEventbus.terrainAdded.dispatch
+		@objectHelper = new ObjectHelper @editor
 		@randomPool = new RandomPool()
 		@randomPool.hook()
-		@model = new TerrainModel()
+		@world = db.get 'world'
+		@terrain = db.get 'terrain'
 		@reset()
 
 	reset: ->
 		console.log 'Reseting scene'
-		@editor.engine.scenegraph.addSkybox 'default'
-		@terrain =
-			width				: Constants.TERRAIN_DEFAULT_WIDTH
-			height			: Constants.TERRAIN_DEFAULT_HEIGHT
-			smoothness	: Constants.TERRAIN_DEFAULT_SMOOTHNESS
-			zScale			: Constants.TERRAIN_DEFAULT_ZSCALE
+		@world.reset()
+		@terrain.reset()
+		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
 	buildTerrain: ->
-		console.log "Change terrain: size=#{@terrain.width}x#{@terrain.height} smoothness=#{@terrain.smoothness} zscale=#{@terrain.zScale}"
+		console.log "Change terrain: size=#{@terrain.get('width')}x#{@terrain.get('height')} smoothness=#{@terrain.get('smoothness')} zscale=#{@terrain.get('zScale')}"
 		@randomPool.seek 0
-		map = @model.update @terrain.width, @terrain.height, @terrain.smoothness, @terrain.zScale
+		map = @terrain.update()
+		@objectHelper.addWireframe map, 0xFFFFFF if !@objectHelper.hasWireframe(map) and @terrain.get 'wireframe'
 		@editor.engine.scenegraph.setMap map
 		@editor.engine.render()
 
