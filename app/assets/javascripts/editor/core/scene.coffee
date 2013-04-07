@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 RandomPool = require 'helper/randomPool'
 TerrainModel = require 'model/terrain'
 Constants = require 'constants'
@@ -9,6 +10,8 @@ class Scene
 	
 	initialize: ->
 		console.log 'Initialize scene'
+		EditorEventbus.worldAdded.dispatch
+		EditorEventbus.terrainAdded.dispatch
 		@randomPool = new RandomPool()
 		@randomPool.hook()
 		@model = new TerrainModel()
