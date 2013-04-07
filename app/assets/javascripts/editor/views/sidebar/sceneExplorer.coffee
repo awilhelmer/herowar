@@ -51,13 +51,16 @@ class SceneExplorer extends BaseView
 	selectWorld: =>
 		@$el.find('.scenegraph-tree div').removeClass 'active'
 		@$el.find('.scenegraph-tree-world').addClass 'active'
+		EditorEventbus.showWorldProperties.dispatch()
 
 	selectTerrain: =>
 		@$el.find('.scenegraph-tree div').removeClass 'active'
 		@$el.find('.scenegraph-tree-terrain').addClass 'active'
+		EditorEventbus.showTerrainProperties.dispatch()
 
 	selectObject: =>
 		@$el.find('.scenegraph-tree div').removeClass 'active'
 		@$el.find('.scenegraph-tree-object').addClass 'active'
+		EditorEventbus.showObjectProperties.dispatch()
 
 return SceneExplorer
