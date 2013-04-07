@@ -13,6 +13,8 @@ editorEventbus =
 	touchend							: new signals.Signal()
 	touchmove							: new signals.Signal()
 	selectTool						: new signals.Signal()
+	selectWorldViewport		: new signals.Signal()
+	selectTerrainViewport	: new signals.Signal()
 	selectObjectViewport	: new signals.Signal()
 	selectObjectUI				: new signals.Signal()
 return editorEventbus

@@ -9,4 +9,8 @@ class World extends Backbone.Model
 		@set 
 			'skybox' : Constants.WORLD_DEFAULT_SKYBOX
 
+	addSelectionWireframe: ->
+
+	removeSelectionWireframe: ->
+
 return World

@@ -1,8 +1,11 @@
+ObjectHelper = require 'helper/objectHelper'
 Constants = require 'constants'
 
 class Terrain extends Backbone.Model
 
 	initialize: (options) ->
+		editor = require 'controllers/editor'
+		@objectHelper = new ObjectHelper editor
 		@reset()
 
 	reset: ->
@@ -54,5 +57,21 @@ class Terrain extends Backbone.Model
 					vector = mesh.geometry.vertices[i * @segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
+
+	addSelectionWireframe: ->
+		editor = require 'controllers/editor'
+		map = editor.engine.scenegraph.getMap()
+		if @objectHelper.hasWireframe map
+			@objectHelper.changeWireframeColor map, 0xFFFF00
+		else
+			@objectHelper.addWireframe map, 0xFFFF00
+
+	removeSelectionWireframe: ->
+		editor = require 'controllers/editor'
+		map = editor.engine.scenegraph.getMap()
+		if @wireframe and @objectHelper.hasWireframe map
+			@objectHelper.changeWireframeColor map, 0xFFFFFF
+		else
+			@objectHelper.removeWireframe map
 
 return Terrain
