@@ -1,0 +1,44 @@
+<div class="sidebar-panel-headline">Terrain Properties</div>
+<div class="sidebar-panel-content">
+	<p><b>Warning:</b> Changing terrain properties will result in generating a complete new terrain.</p>
+	<div class="sidebar-headline">Size</div>
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="inputWidth">Width</label>
+			<div class="controls">
+				<input type="text" id="inputWidth" name="width" value="500">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputHeight">Height</label>
+			<div class="controls">
+				<input type="text" id="inputHeight" name="height" value="500">
+			</div>
+		</div>
+	</form>
+	<div class="sidebar-headline">Options</div>
+	<form id="terrain-options-form" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="inputSmoothness">Smoothness</label>
+			<div class="controls">
+				<input type="text" id="inputSmoothness" name="smoothness" value="0.1">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="inputZScale">Z-Scale</label>
+			<div class="controls">
+				<input type="text" id="inputZScale" name="zScale" value="0">
+			</div>
+		</div>
+		<button id="randomizeTerrain" class="btn" type="button">Randomize</button>
+	</form>
+	<div class="sidebar-headline">Wireframe</div>
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="inputWireframe">Active</label>
+			<div class="controls">
+				<input type="checkbox" id="inputWireframe" name="wireframe" value="true" checked="checked">
+			</div>
+		</div>
+	</form>
+</div>
