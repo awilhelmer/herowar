@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
@@ -39,6 +40,7 @@ public class GamesHandler implements Serializable {
   }
 
   private GamesHandler() {
+    AnnotationProcessor.process(this);
     log.info(this.getClass().getSimpleName() + " initialized");
   }
 

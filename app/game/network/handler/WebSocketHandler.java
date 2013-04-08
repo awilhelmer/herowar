@@ -2,11 +2,14 @@ package game.network.handler;
 
 import game.GameSession;
 import game.GamesHandler;
+import game.event.GameLeaveEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import models.entity.User;
+
+import org.bushe.swing.event.EventBus;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
@@ -32,7 +35,6 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     return instance;
   }
 
-
   public Map<WebSocketConnection, User> getAuthConnections() {
     return authConnections;
   }
@@ -51,7 +53,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     if (authConnections.containsKey(connection)) {
       log.info("Auth connection " + connection.httpRequest().id() + " closed");
       authConnections.remove(connection);
-      // EventBus.publish(new GameLeaveEvent(connection));
+      EventBus.publish(new GameLeaveEvent(connection));
     }
   }
 
@@ -77,5 +79,4 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 
     }
   }
-
 }
