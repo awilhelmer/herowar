@@ -7,6 +7,12 @@ import java.util.List;
 
 import play.Logger;
 
+/**
+ * 
+ * @author Alexander Wilhelmer
+ *
+ * @param <T>
+ */
 public abstract class AbstractProcessorHandler<T> extends AbstractProcessor implements IProcessor {
 
   private final static Logger.ALogger log = Logger.of(AbstractProcessorHandler.class);

@@ -2,7 +2,7 @@ package game.processor.meta;
 
 
 /**
- * @author Sebastian Sachtleben
+ * @author Alexander Wilhelmer
  */
 
 public interface IProcessor {

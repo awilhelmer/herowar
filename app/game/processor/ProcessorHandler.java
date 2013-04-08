@@ -7,7 +7,7 @@ import java.util.List;
 
 import play.Logger;
 /**
- * @author Sebastian Sachtleben
+ * @author Alexander Wilhelmer
  */
 public class ProcessorHandler {
 

@@ -4,13 +4,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import models.entity.game.GameResult;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -67,6 +71,8 @@ public class User extends BaseModel implements Subject {
   @JsonIgnore
   private List<UserPermission> permissions;
 
+  private Set<GameResult> gameResults;
+
   private static final Finder<Long, User> finder = new Finder<Long, User>(Long.class, User.class);
 
   @Override
@@ -105,7 +111,7 @@ public class User extends BaseModel implements Subject {
     Logger.info("Saved new user " + user.getUsername());
     return user;
   }
-  
+
   public static void delete(User user) {
     user.deleteManyToManyAssociations("roles");
     user.delete();
@@ -150,7 +156,7 @@ public class User extends BaseModel implements Subject {
       return getAuthUserFind(identity).findUnique();
     }
   }
-  
+
   public static void merge(User user, User user2) {
     user.setUsername(user2.getUsername());
     user.setEmail(user2.getEmail());
@@ -195,7 +201,7 @@ public class User extends BaseModel implements Subject {
   private static ExpressionList<User> getUsernameFind(final String username) {
     return getFinder().where().eq("active", true).eq("username", username);
   }
-  
+
   private static ExpressionList<User> getEmailFind(final String email) {
     return getFinder().where().eq("active", true).eq("email", email);
   }
@@ -280,6 +286,16 @@ public class User extends BaseModel implements Subject {
 
   public void setPermissions(List<UserPermission> permissions) {
     this.permissions = permissions;
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.ALL })
+  @JsonIgnore
+  public Set<GameResult> getGameResults() {
+    return gameResults;
+  }
+
+  public void setGameResults(Set<GameResult> gameResults) {
+    this.gameResults = gameResults;
   }
 
   public static Finder<Long, User> getFinder() {

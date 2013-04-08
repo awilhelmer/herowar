@@ -13,6 +13,7 @@ import java.util.Set;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.libs.Json;
 
 
 /**
@@ -26,11 +27,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
   private Long objectIdGenerator = null;
+  
 
   public GameProcessor(Long gameId, GameSession session) {
     super("episode-" + gameId);
     this.gameId = gameId;
-
     this.objectIdGenerator = 0l;
     this.addPlayer(session);
   //  this.loadStage();
@@ -55,11 +56,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   }
 
   public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
-//    for (GameSession session : sessions) {
-//      if (sendSelf || !connection.equals(session.getConnection())) {
-//        session.getConnection().send(gson.toJson(message));
-//      }
-//    }
+    for (GameSession session : sessions) {
+      if (sendSelf || !connection.equals(session.getConnection())) {
+        session.getConnection().send(Json.toJson(message).toString());
+      }
+    }
   }
 
   public void broadcast(BasePacket message) {

@@ -11,7 +11,7 @@ import play.Logger;
 /**
  * Abstract processor class to handle multithreaded game backend.
  * 
- * @author Sebastian Sachtleben
+ * @author Alexander Wilhelmer
  */
 public abstract class AbstractProcessor implements Runnable {
   private final static Logger.ALogger log = Logger.of(AbstractProcessor.class);
