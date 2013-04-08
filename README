@@ -66,6 +66,9 @@ Code  | Short Message 									| Long Message
 
 Section: page/pagedesign
 
+Section: Database
+All entities shouldnt us List's, on table generation with Hibernate important indices are missing (List's allows multiple references of same object!)
+The third party lib "deadbolt" uses interfaces with list, this must be changed too
 
 
 Section: Three.js webgl-client engine
@@ -75,7 +78,6 @@ Section: Map-Editor
 
 
 Section: Network (websocket)
-
 
 
 Section: Server game engine

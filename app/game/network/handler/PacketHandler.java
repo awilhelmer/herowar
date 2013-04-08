@@ -1,6 +1,8 @@
-package game.network;
+package game.network.handler;
 
 import game.GamesHandler;
+import game.network.BasePacket;
+import game.network.InputPacket;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -18,10 +20,18 @@ import play.libs.Json;
 public class PacketHandler implements Serializable {
 
   private static final long serialVersionUID = 8096194902543478468L;
-
+  private static PacketHandler instance = new PacketHandler();
   private static final Logger.ALogger log = Logger.of(GamesHandler.class);
 
   private Map<Integer, Class<? extends BasePacket>> packetTypeCache = new HashMap<Integer, Class<? extends BasePacket>>();
+
+  private PacketHandler() {
+    registerTypes();
+  }
+
+  public static PacketHandler getInstance() {
+    return instance;
+  }
 
   public void handle(WebSocketHandler handler, WebSocketConnection connection, String data) {
     BasePacket packetType = Json.fromJson(Json.parse(data), BasePacket.class);
@@ -40,7 +50,7 @@ public class PacketHandler implements Serializable {
     }
   }
 
-  public void registerTypes() {
+  private void registerTypes() {
     // packetTypeCache.put(PacketType.ClientInitPacket, ClientInitPacket.class);
     // packetTypeCache.put(PacketType.ClientPreloadCompletePacket,
     // ClientPreloadCompletePacket.class);
