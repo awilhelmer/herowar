@@ -1,8 +1,8 @@
 EditorEventbus = require 'editorEventbus'
-BaseView = require 'views/baseView'
+BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 
-class WorldProperties extends BaseView
+class WorldProperties extends BasePropertiesView
 	
 	id: 'sidebar-properties-world'
 	
@@ -14,11 +14,5 @@ class WorldProperties extends BaseView
 		EditorEventbus.showWorldProperties.add @showPanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
 		EditorEventbus.showObjectProperties.add @hidePanel
-
-	hidePanel: =>
-		@$el.addClass 'hidden'
-
-	showPanel: =>
-		@$el.removeClass 'hidden'
 
 return WorldProperties

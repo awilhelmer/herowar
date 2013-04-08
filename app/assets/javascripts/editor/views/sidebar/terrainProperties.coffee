@@ -1,8 +1,9 @@
 EditorEventbus = require 'editorEventbus'
-BaseView = require 'views/baseView'
+BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+Constants = require 'constants'
 
-class TerrainProperties extends BaseView
+class TerrainProperties extends BasePropertiesView
 	
 	id: 'sidebar-properties-terrain'
 	
@@ -15,10 +16,14 @@ class TerrainProperties extends BaseView
 		EditorEventbus.showTerrainProperties.add @showPanel
 		EditorEventbus.showObjectProperties.add @hidePanel
 
-	hidePanel: =>
-		@$el.addClass 'hidden'
+	createSliders: ->
+		@createSlider @$el.find('#inputWidth').get(0), Constants.TERRAIN_MIN_WIDTH, Constants.TERRAIN_MAX_WIDTH, Constants.TERRAIN_STEPS_WIDTH, @changeTerrain
+		@createSlider @$el.find('#inputHeight').get(0), Constants.TERRAIN_MIN_HEIGHT, Constants.TERRAIN_MAX_HEIGHT, Constants.TERRAIN_STEPS_HEIGHT, @changeTerrain
+		@createSlider @$el.find('#inputSmoothness').get(0), Constants.TERRAIN_MIN_SMOOTHNESS, Constants.TERRAIN_MAX_SMOOTHNESS, Constants.TERRAIN_STEPS_SMOOTHNESS, @changeTerrain
+		@createSlider @$el.find('#inputZScale').get(0), Constants.TERRAIN_MIN_ZSCALE, Constants.TERRAIN_MAX_ZSCALE, Constants.TERRAIN_STEPS_ZSCALE, @changeTerrain
 
-	showPanel: =>
-		@$el.removeClass 'hidden'
+
+	changeTerrain: (event) =>
+		console.log 'CHANGE TERRAIN !!!!'
 
 return TerrainProperties
