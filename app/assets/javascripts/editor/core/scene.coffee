@@ -26,6 +26,7 @@ class Scene
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
+		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
 
 	changeTerrain: (width, height, smoothness, zScale) =>
@@ -37,6 +38,9 @@ class Scene
 				'smoothness' 	: smoothness
 				'zScale' 			: zScale
 			@buildTerrain()
+
+	changeTerrainWireframe: (value) =>
+		@terrain.set 'wireframe', value
 
 	resetTerrainPool: =>
 		console.log 'Reseting terrain pool'
@@ -65,6 +69,6 @@ class Scene
 		width >= Constants.TERRAIN_MIN_WIDTH and width <= Constants.TERRAIN_MAX_WIDTH and height >= Constants.TERRAIN_MIN_HEIGHT and height <= Constants.TERRAIN_MAX_HEIGHT
 
 	hasChangedSize: (width, height, smoothness, zScale) =>
-		width != @terrain.get('width') or height != @terrain.get('height') or smoothness != @terrain.get('smoothness') or zScale != @terrain.get('zScale')
+		width != parseInt(@terrain.get('width')) or height != parseInt(@terrain.get('height')) or smoothness != parseFloat(@terrain.get('smoothness')) or zScale != parseInt(@terrain.get('zScale'))
 
 return Scene
