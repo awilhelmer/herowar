@@ -20,7 +20,10 @@ class MaterialManagerMenu extends BaseView
 		event?.preventDefault()
 		col = db.get 'materials'
 		mat = new Material()
-		mat.set 'name', "Mat.#{@nextId++}"
+		id = @nextId++
+		mat.set 
+			'id'		: id
+			'name'	: "Mat.#{id}"
 		col.add mat
 
 return MaterialManagerMenu

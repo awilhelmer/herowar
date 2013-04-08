@@ -17,8 +17,10 @@ class MaterialManagerContent extends BaseView
 		@listenTo @model, 'add remove change reset', @render if @model
 	
 	loadMaterial: (event) =>
-		event?.preventDefault()
-		console.log 'Load material'
-		EditorEventbus.showMaterialProperties.dispatch()
+		if event
+			event.preventDefault()
+			$currentTarget = $ event.currentTarget
+			matId = $currentTarget.data 'matid'
+			EditorEventbus.showMaterialProperties.dispatch matId if matId
 
 return MaterialManagerContent
