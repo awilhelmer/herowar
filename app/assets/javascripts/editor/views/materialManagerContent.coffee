@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
@@ -18,5 +19,6 @@ class MaterialManagerContent extends BaseView
 	loadMaterial: (event) =>
 		event?.preventDefault()
 		console.log 'Load material'
+		EditorEventbus.showMaterialProperties.dispatch()
 
 return MaterialManagerContent

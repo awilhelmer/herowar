@@ -25,6 +25,7 @@ class TerrainProperties extends BasePropertiesView
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @showPanel
 		EditorEventbus.showObjectProperties.add @hidePanel
+		EditorEventbus.showMaterialProperties.add @hidePanel
 
 	createSliders: ->
 		@createSlider @$el.find('#inputWidth').get(0), Constants.TERRAIN_MIN_WIDTH, Constants.TERRAIN_MAX_WIDTH, Constants.TERRAIN_STEPS_WIDTH, @changeTerrain

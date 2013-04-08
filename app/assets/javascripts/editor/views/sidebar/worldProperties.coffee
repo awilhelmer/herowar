@@ -14,5 +14,6 @@ class WorldProperties extends BasePropertiesView
 		EditorEventbus.showWorldProperties.add @showPanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
 		EditorEventbus.showObjectProperties.add @hidePanel
+		EditorEventbus.showMaterialProperties.add @hidePanel
 
 return WorldProperties

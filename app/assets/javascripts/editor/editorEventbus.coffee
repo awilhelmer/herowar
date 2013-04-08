@@ -26,6 +26,7 @@ editorEventbus =
 	showWorldProperties			: new signals.Signal()
 	showTerrainProperties		: new signals.Signal()
 	showObjectProperties		: new signals.Signal()
+	showMaterialProperties	: new signals.Signal()
 	
 	changeTerrain						: new signals.Signal()
 	changeTerrainWireframe	: new signals.Signal()

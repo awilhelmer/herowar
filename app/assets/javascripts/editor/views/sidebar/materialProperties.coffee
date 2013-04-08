@@ -2,18 +2,18 @@ EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 
-class ObjectProperties extends BasePropertiesView
+class MaterialProperties extends BasePropertiesView
 	
-	id: 'sidebar-properties-object'
+	id: 'sidebar-properties-material'
 	
 	className: 'sidebar-panel hidden'
 	
-	template: templates.get 'sidebar/objectProperties.tmpl'
+	template: templates.get 'sidebar/materialProperties.tmpl'
 	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @showPanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
+		EditorEventbus.showObjectProperties.add @hidePanel
+		EditorEventbus.showMaterialProperties.add @showPanel
 
-return ObjectProperties
+return MaterialProperties
