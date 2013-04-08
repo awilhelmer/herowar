@@ -1,9 +1,9 @@
 package game.network;
 
 import game.network.handler.PacketHandler;
+import game.network.handler.WebSocketHandler;
 
 import org.webbitserver.WebSocketConnection;
-import org.webbitserver.WebSocketHandler;
 
 /**
  * Marked as input packet received from client.

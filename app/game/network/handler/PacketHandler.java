@@ -3,13 +3,14 @@ package game.network.handler;
 import game.GamesHandler;
 import game.network.BasePacket;
 import game.network.InputPacket;
+import game.network.PacketType;
+import game.network.client.ClientInitPacket;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.webbitserver.WebSocketConnection;
-import org.webbitserver.WebSocketHandler;
 
 import play.Logger;
 import play.libs.Json;
@@ -51,15 +52,9 @@ public class PacketHandler implements Serializable {
   }
 
   private void registerTypes() {
-    // packetTypeCache.put(PacketType.ClientInitPacket, ClientInitPacket.class);
+    packetTypeCache.put(PacketType.ClientInitPacket, ClientInitPacket.class);
     // packetTypeCache.put(PacketType.ClientPreloadCompletePacket,
     // ClientPreloadCompletePacket.class);
-    // packetTypeCache.put(PacketType.ClientRotationPacket,
-    // ClientRotationPacket.class);
-    // packetTypeCache.put(PacketType.ClientShot1Packet,
-    // ClientShot1Packet.class);
-    // packetTypeCache.put(PacketType.ClientInputKeyPacket,
-    // ClientInputKeyPacket.class);
   }
 
   public Map<Integer, Class<? extends BasePacket>> getPacketTypeCache() {
