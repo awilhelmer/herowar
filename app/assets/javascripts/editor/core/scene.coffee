@@ -20,15 +20,19 @@ class Scene
 		@world = db.get 'world'
 		@terrain = db.get 'terrain'
 		@reset()
+		@addEventListeners()
 
-	reset: ->
+	addEventListeners: ->
+		EditorEventbus.resetTerrainPool.add @resetTerrainPool
+
+	reset: =>
 		console.log 'Reseting scene'
 		@world.reset()
 		@terrain.reset()
 		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
-	buildTerrain: ->
+	buildTerrain: =>
 		console.log "Change terrain: size=#{@terrain.get('width')}x#{@terrain.get('height')} smoothness=#{@terrain.get('smoothness')} zscale=#{@terrain.get('zScale')}"
 		@randomPool.seek 0
 		map = @terrain.update()
@@ -36,7 +40,8 @@ class Scene
 		@editor.engine.scenegraph.setMap map
 		@editor.engine.render()
 
-	resetTerrainPool: ->
+	resetTerrainPool: =>
+		console.log 'Reseting terrain pool'
 		@randomPool.reset()
 		@buildTerrain()
 

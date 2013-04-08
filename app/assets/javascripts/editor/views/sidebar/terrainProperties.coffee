@@ -10,6 +10,16 @@ class TerrainProperties extends BasePropertiesView
 	className: 'sidebar-panel hidden'
 	
 	template: templates.get 'sidebar/terrainProperties.tmpl'
+	
+	events:
+		'keyup input[name="width"]' 			: 'changeTerrain'
+		'keyup input[name="height"]' 			: 'changeTerrain'
+		'keyup input[name="smoothness"]' 	: 'changeTerrain'
+		'keyup input[name="zScale"]' 			: 'changeTerrain'
+		'change input[name="width"]' 			: 'validateTerrainWidth'
+		'change input[name="height"]' 		: 'validateTerrainHeight'
+		'change input[name="wireframe"]' 	: 'changeWireframe'
+		'click #randomizeTerrain' 				: 'resetTerrainPool'
 
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -22,8 +32,32 @@ class TerrainProperties extends BasePropertiesView
 		@createSlider @$el.find('#inputSmoothness').get(0), Constants.TERRAIN_MIN_SMOOTHNESS, Constants.TERRAIN_MAX_SMOOTHNESS, Constants.TERRAIN_STEPS_SMOOTHNESS, @changeTerrain
 		@createSlider @$el.find('#inputZScale').get(0), Constants.TERRAIN_MIN_ZSCALE, Constants.TERRAIN_MAX_ZSCALE, Constants.TERRAIN_STEPS_ZSCALE, @changeTerrain
 
-
 	changeTerrain: (event) =>
 		console.log 'CHANGE TERRAIN !!!!'
+
+	validateTerrainWidth: (event) =>
+		if event
+			$currentTarget = $ event.currentTarget
+			val = $currentTarget.val()
+			if val <= Constants.TERRAIN_MIN_WIDTH or val >= Constants.TERRAIN_MAX_WIDTH
+				$currentTarget.val @terrainWidth 
+				fdSlider.updateSlider $currentTarget.attr 'id'
+			
+	validateTerrainHeight: (event) =>
+		if event
+			$currentTarget = $ event.currentTarget
+			val = $currentTarget.val()
+			if val <= Constants.TERRAIN_MIN_HEIGHT or val >= Constants.TERRAIN_MAX_HEIGHT
+				$currentTarget.val @terrainHeight 
+				fdSlider.updateSlider $currentTarget.attr 'id'
+
+	changeWireframe: (event) =>
+		if event
+			map = @editor.scenegraph().getMap()
+			$currentTarget = $ event.currentTarget
+			@wireframe = $currentTarget.is ':checked'
+
+	resetTerrainPool: =>
+		EditorEventbus.resetTerrainPool.dispatch()
 
 return TerrainProperties
