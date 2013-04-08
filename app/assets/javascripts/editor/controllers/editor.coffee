@@ -9,10 +9,11 @@ Variables = require 'variables'
 class Editor extends BaseController
 
 	views:
-		'views/menubar'	  : ''
-		'views/iconbar'	  : ''
-		'views/sidebar'	  : ''
-		'views/viewport'	: ''
+		'views/menubar'	  			: ''
+		'views/iconbar'	  			: ''
+		'views/sidebar'	  			: ''
+		'views/viewport'				: ''
+		'views/materialManager'	: ''
 
 	initialize: (options) ->
 		console.log 'Initialize editor...'
