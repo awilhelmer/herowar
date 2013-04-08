@@ -18,7 +18,7 @@ class SelectorObject
 		EditorEventbus.selectObjectUI.add @selectObject
 
 	update: ->
-		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject and @selectedType is 'terrain'
+		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
@@ -37,7 +37,7 @@ class SelectorObject
 		@editor.engine.render()
 
 	selectWorld: =>
-		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject and @selectedType is 'terrain'
+		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
 		@selectedType = 'world'
 		@selectedObject = null
 		@editor.engine.render()
