@@ -34,6 +34,11 @@ class TerrainProperties extends BasePropertiesView
 
 	changeTerrain: (event) =>
 		console.log 'CHANGE TERRAIN !!!!'
+		width = @$el.find('input[name="width"]').val()
+		height = @$el.find('input[name="height"]').val()
+		smoothness = @$el.find('input[name="smoothness"]').val()
+		zScale = @$el.find('input[name="zScale"]').val()
+		EditorEventbus.changeTerrain.dispatch width, height, smoothness, zScale
 
 	validateTerrainWidth: (event) =>
 		if event

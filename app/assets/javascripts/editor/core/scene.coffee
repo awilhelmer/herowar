@@ -8,7 +8,9 @@ db = require 'database'
 class Scene
 
 	constructor: (@editor) ->
+		@isInitialized = false
 		@initialize()
+		@isInitialized = true
 	
 	initialize: ->
 		console.log 'Initialize scene'
@@ -23,7 +25,23 @@ class Scene
 		@addEventListeners()
 
 	addEventListeners: ->
+		EditorEventbus.changeTerrain.add @changeTerrain
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
+
+	changeTerrain: (width, height, smoothness, zScale) =>
+		if @hasValidSize(width, height) and @hasChangedSize(parseInt(width), parseInt(height), parseFloat(smoothness), parseInt(zScale))
+			console.log 'Terrain has valid changes'
+			@terrain.set
+				'width' 			: width
+				'height' 			: height
+				'smoothness' 	: smoothness
+				'zScale' 			: zScale
+			@buildTerrain()
+
+	resetTerrainPool: =>
+		console.log 'Reseting terrain pool'
+		@randomPool.reset()
+		@buildTerrain()
 
 	reset: =>
 		console.log 'Reseting scene'
@@ -36,13 +54,17 @@ class Scene
 		console.log "Change terrain: size=#{@terrain.get('width')}x#{@terrain.get('height')} smoothness=#{@terrain.get('smoothness')} zscale=#{@terrain.get('zScale')}"
 		@randomPool.seek 0
 		map = @terrain.update()
-		@objectHelper.addWireframe map, 0xFFFFFF if !@objectHelper.hasWireframe(map) and @terrain.get 'wireframe'
+		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @terrain.get 'wireframe'
 		@editor.engine.scenegraph.setMap map
 		@editor.engine.render()
 
-	resetTerrainPool: =>
-		console.log 'Reseting terrain pool'
-		@randomPool.reset()
-		@buildTerrain()
+	getWireframeColor: =>
+		if @isInitialized then 0xFFFF00 else 0xFFFFFF
+
+	hasValidSize: (width, height) =>
+		width >= Constants.TERRAIN_MIN_WIDTH and width <= Constants.TERRAIN_MAX_WIDTH and height >= Constants.TERRAIN_MIN_HEIGHT and height <= Constants.TERRAIN_MAX_HEIGHT
+
+	hasChangedSize: (width, height, smoothness, zScale) =>
+		width != @terrain.get('width') or height != @terrain.get('height') or smoothness != @terrain.get('smoothness') or zScale != @terrain.get('zScale')
 
 return Scene

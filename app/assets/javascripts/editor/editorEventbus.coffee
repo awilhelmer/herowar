@@ -27,5 +27,6 @@ editorEventbus =
 	showTerrainProperties	: new signals.Signal()
 	showObjectProperties	: new signals.Signal()
 	
+	changeTerrain					: new signals.Signal()
 	resetTerrainPool			: new signals.Signal()
 return editorEventbus
