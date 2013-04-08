@@ -8,13 +8,15 @@ class MaterialManagerContent extends BaseView
 	entity: 'materials'
 
 	template: templates.get 'materialManagerContent.tmpl'
+
+	events:
+		'click .mm-material' : 'loadMaterial'
 	
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
 	
-	render: ->
-		console.log 'Render material manager content'
-		console.log @getTemplateData()
-		super()
+	loadMaterial: (event) =>
+		event?.preventDefault()
+		console.log 'Load material'
 
 return MaterialManagerContent

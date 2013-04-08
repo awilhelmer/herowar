@@ -18,7 +18,6 @@ class MaterialManagerMenu extends BaseView
 	
 	newMaterial: (event) =>
 		event?.preventDefault()
-		console.log 'Create new material'
 		col = db.get 'materials'
 		mat = new Material()
 		mat.set 'name', "Mat.#{@nextId++}"
