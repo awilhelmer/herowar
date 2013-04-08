@@ -50,9 +50,9 @@ class Terrain extends Backbone.Model
 		obj.name = @get 'name'
 		for mesh in obj.children
 			mesh.rotation.x = - Math.PI/2
-			for i in [0..@segHeight]
-				for j in [0..@segWidth]
-					vector = mesh.geometry.vertices[i * @segHeight + j]
+			for i in [0..segHeight]
+				for j in [0..segWidth]
+					vector = mesh.geometry.vertices[i * segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
 
