@@ -1,4 +1,10 @@
+import game.GamesHandler;
+import game.network.handler.WebSocketHandler;
+
 import java.util.Arrays;
+
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.ThreadSafeEventService;
 
 import models.entity.News;
 import models.entity.SecurityRole;
@@ -63,14 +69,26 @@ public class Global extends GlobalSettings {
     });
 
     initialSecurityRoles();
+    initEventBus();
+    WebSocketHandler.getInstance();
     createAdminUser();
     createTutorialMap();
     createDummyNews(app);
+
+  }
+
+  private void initEventBus() {
+    System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
+    // Init GameHandler
+    GamesHandler.getInstance();
+    Logger.info("Eventbus initialized...");
   }
 
   @Override
   public void onStop(Application app) {
     Logger.info("Herowar shutdown...");
+    GamesHandler.getInstance().stop();
+    WebSocketHandler.getInstance().destory();
   }
 
   private void initialSecurityRoles() {
