@@ -1,5 +1,6 @@
 package game;
 
+import game.event.GameLeaveEvent;
 import game.processor.GameProcessor;
 import game.processor.ProcessorHandler;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bushe.swing.event.annotation.EventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -86,45 +88,34 @@ public class GamesHandler implements Serializable {
 //        modelNames.toArray(new String[modelNames.size()]))));
 //  }
 //
-//  /**
-//   * Observes player leave event and remove player from game.
-//   * 
-//   * @param event
-//   */
-//  @EventSubscriber
-//  public void observePlayerLeaveEvent(GameLeaveEvent event) {
-//    log.info("Remove player with connection " + event.getConnection().httpRequest().id());
-//    if (!connections.containsKey(event.getConnection())) {
-//      log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
-//      return;
-//    }
-//    GameSession player = connections.get(event.getConnection());
-//    if (player != null) {
-//      removePlayer(player, event.getConnection());
-//    }
-//  }
-//
-//  private void removePlayer(GameSession session, WebSocketConnection connection) {
-//    ProcessorHandler handler = processors.get(session);
-//    if (handler != null && handler.isStarted()) {
-//      handler.stop();
-//    }
-//    GameProcessor game = session.getGame();
-//    game.removePlayer(connection);
-//    if (game.getSessions().size() == 0) {
-//      log.info("Removing game " + game.getTopic() + " due 0 players left");
-//      Iterator<GameProcessor> iter = games.get(game.getEpisode().getId()).iterator();
-//      while (iter.hasNext()) {
-//        GameProcessor curGame = iter.next();
-//        if (curGame.getSessions().size() == 0) {
-//          curGame.stop();
-//          iter.remove();
-//        }
-//      }
-//    }
-//    connections.remove(connection);
-//    processors.remove(session);
-//  }
+  /**
+   * Observes player leave event and remove player from game.
+   * 
+   * @param event
+   */
+  @EventSubscriber
+  public void observePlayerLeaveEvent(GameLeaveEvent event) {
+    log.info("Remove player with connection " + event.getConnection().httpRequest().id());
+    if (!connections.containsKey(event.getConnection())) {
+      log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
+      return;
+    }
+    GameSession player = connections.get(event.getConnection());
+    if (player != null) {
+      removePlayer(player, event.getConnection());
+    }
+  }
+
+  private void removePlayer(GameSession session, WebSocketConnection connection) {
+    ProcessorHandler handler = processors.get(session);
+    if (handler != null && handler.isStarted()) {
+      handler.stop();
+    }
+    GameProcessor game = session.getGame();
+    game.removePlayer(connection);
+    connections.remove(connection);
+    processors.remove(session);
+  }
 
   public void stop() {
     for (ProcessorHandler handler : processors.values()) {

@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.entity.User;
-
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.ThreadSafeEventService;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
