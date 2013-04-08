@@ -58,9 +58,8 @@ class TerrainProperties extends BasePropertiesView
 
 	changeWireframe: (event) =>
 		if event
-			map = @editor.scenegraph().getMap()
 			$currentTarget = $ event.currentTarget
-			@wireframe = $currentTarget.is ':checked'
+			EditorEventbus.changeTerrainWireframe.dispatch $currentTarget.is ':checked'
 
 	resetTerrainPool: =>
 		EditorEventbus.resetTerrainPool.dispatch()

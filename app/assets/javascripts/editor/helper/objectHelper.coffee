@@ -30,7 +30,7 @@ class ObjectHelper
 				mesh = obj.children[meshId]
 				mesh.geometry.dispose()
 				mesh.material.dispose()
-				@editor.scenegraph().scene.remove mesh
+				@editor.engine.scenegraph.scene.remove mesh
 				# TODO: remove textures too
 				obj.children.splice meshId, 1
 		@editor.engine.scenegraph.scene.add obj

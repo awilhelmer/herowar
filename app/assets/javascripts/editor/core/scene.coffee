@@ -26,6 +26,7 @@ class Scene
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
+		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
 
 	changeTerrain: (width, height, smoothness, zScale) =>
@@ -37,6 +38,9 @@ class Scene
 				'smoothness' 	: smoothness
 				'zScale' 			: zScale
 			@buildTerrain()
+
+	changeTerrainWireframe: (value) =>
+		@terrain.set 'wireframe', value
 
 	resetTerrainPool: =>
 		console.log 'Reseting terrain pool'

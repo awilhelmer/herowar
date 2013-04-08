@@ -4,8 +4,6 @@ Constants = require 'constants'
 class Terrain extends Backbone.Model
 
 	initialize: (options) ->
-		editor = require 'controllers/editor'
-		@objectHelper = new ObjectHelper editor
 		@reset()
 
 	reset: ->
@@ -33,7 +31,7 @@ class Terrain extends Backbone.Model
 
 	setMaterials: ->
 		@set 'materials', [ new THREE.MeshBasicMaterial color: @get('color') ]
-	
+
 	update: ->
 		segWidth = Math.round(@get('width') / 10)
 		segHeight = Math.round(@get('height') / 10)
@@ -46,7 +44,7 @@ class Terrain extends Backbone.Model
 				row.push model[i][j] * zScale
 			terrain.push row
 		@getTerrainMesh terrain, segWidth, segHeight
-	
+
 	getTerrainMesh: (terrain, segWidth, segHeight) ->		
 		obj = THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), @get('materials')
 		obj.name = @get 'name'
@@ -57,21 +55,5 @@ class Terrain extends Backbone.Model
 					vector = mesh.geometry.vertices[i * @segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
-
-	addSelectionWireframe: ->
-		editor = require 'controllers/editor'
-		map = editor.engine.scenegraph.getMap()
-		if @objectHelper.hasWireframe map
-			@objectHelper.changeWireframeColor map, 0xFFFF00
-		else
-			@objectHelper.addWireframe map, 0xFFFF00
-
-	removeSelectionWireframe: ->
-		editor = require 'controllers/editor'
-		map = editor.engine.scenegraph.getMap()
-		if @wireframe and @objectHelper.hasWireframe map
-			@objectHelper.changeWireframeColor map, 0xFFFFFF
-		else
-			@objectHelper.removeWireframe map
 
 return Terrain
