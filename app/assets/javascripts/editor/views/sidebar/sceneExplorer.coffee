@@ -40,13 +40,20 @@ class SceneExplorer extends BaseView
 		@terrain = true
 	
 	selectElement: (event) ->
-		@$el.find('.scenegraph-tree div').removeClass 'active'
 		$currentTarget = $ event.currentTarget
-		$currentTarget.addClass 'active'
 		type = $currentTarget.data 'type'
-		if type
-			db.get(@activeType).removeSelectionWireframe() if @activeType
-			db.get(type).addSelectionWireframe()
+		# TODO: this is not cool :/
+		if type is 'world'
+			EditorEventbus.selectWorldUI.dispatch()
+			@selectWorld()
+		else if type is 'terrain'
+			EditorEventbus.selectTerrainUI.dispatch()
+			@selectTerrain()
+		else if type is 'object'
+			EditorEventbus.selectObjectUI.dispatch()
+			@selectObject()
+		else
+			console.log "ERROR type \"#{type}\" is unknowned"
 
 	selectWorld: =>
 		@$el.find('.scenegraph-tree div').removeClass 'active'

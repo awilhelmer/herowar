@@ -19,6 +19,8 @@ editorEventbus =
 	selectWorldViewport		: new signals.Signal()
 	selectTerrainViewport	: new signals.Signal()
 	selectObjectViewport	: new signals.Signal()
+	selectWorldUI					: new signals.Signal()
+	selectTerrainUI				: new signals.Signal()
 	selectObjectUI				: new signals.Signal()
 	
 	showWorldProperties		: new signals.Signal()
