@@ -39,9 +39,6 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     return authConnections;
   }
 
-  public void destory() {
-    GamesHandler.getInstance().stop();
-  }
 
   @Override
   public void onOpen(WebSocketConnection connection) {

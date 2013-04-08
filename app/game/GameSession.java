@@ -1,5 +1,6 @@
 package game;
 
+import game.models.BaseModel;
 import game.processor.GameProcessor;
 import game.processor.PlayerProcessor;
 
@@ -21,6 +22,7 @@ public class GameSession implements Serializable {
   private GameClock clock;
   private GameToken token;
 
+  private BaseModel model;
   private WebSocketConnection connection;
   private GameProcessor game;
 
@@ -33,7 +35,7 @@ public class GameSession implements Serializable {
     this.token = token;
     this.connection = connection;
     this.clock = new GameClock();
-
+    // TODO init model ...
   }
 
   public long getLatency() {
@@ -90,6 +92,14 @@ public class GameSession implements Serializable {
 
   public void setClock(GameClock clock) {
     this.clock = clock;
+  }
+
+  public BaseModel getModel() {
+    return model;
+  }
+
+  public void setModel(BaseModel model) {
+    this.model = model;
   }
 
   @Override

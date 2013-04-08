@@ -71,6 +71,7 @@ public class Global extends GlobalSettings {
     initialSecurityRoles();
     initEventBus();
     WebSocketHandler.getInstance();
+    GamesHandler.getInstance();
     createAdminUser();
     createTutorialMap();
     createDummyNews(app);
@@ -80,15 +81,13 @@ public class Global extends GlobalSettings {
   private void initEventBus() {
     System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
     // Init GameHandler
-    GamesHandler.getInstance();
-    Logger.info("Eventbus initialized...");
+    Logger.info("Eventbus initialized");
   }
 
   @Override
   public void onStop(Application app) {
     Logger.info("Herowar shutdown...");
     GamesHandler.getInstance().stop();
-    WebSocketHandler.getInstance().destory();
   }
 
   private void initialSecurityRoles() {
