@@ -24,6 +24,7 @@ class MaterialManagerMenu extends BaseView
 		mat.set 
 			'id'		: id
 			'name'	: "Mat.#{id}"
+			'color' : '#CCCCCC'
 		col.add mat
 
 return MaterialManagerMenu

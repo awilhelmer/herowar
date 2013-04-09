@@ -13,6 +13,10 @@ class MaterialProperties extends BasePropertiesView
 	
 	template: templates.get 'sidebar/materialProperties.tmpl'
 	
+	events:
+		'change input[name="mp-basis-name"]': 'changeName'
+		'change input[name="mp-color-sel"]'	: 'changeColor'
+	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
@@ -25,5 +29,19 @@ class MaterialProperties extends BasePropertiesView
 		console.log @model
 		@render()
 		@showPanel()
+
+	changeName: (event) =>
+		if event
+			event.preventDefault()
+			$currentTarget = $ event.currentTarget
+			console.log "Name: #{$currentTarget.val()}"
+			@model.set 'name', $currentTarget.val()		
+
+	changeColor: (event) =>
+		if event
+			event.preventDefault()
+			$currentTarget = $ event.currentTarget
+			console.log "Color: #{$currentTarget.val()}"
+			@model.set 'color', $currentTarget.val()
 
 return MaterialProperties
