@@ -28,6 +28,9 @@ editorEventbus =
     showObjectProperties    : new signals.Signal()
     showMaterialProperties  : new signals.Signal()
 	
+    selectMaterial          : new signals.Signal()
+    deselectMaterial        : new signals.Signal()
+	
     changeTerrain           : new signals.Signal()
     changeTerrainWireframe  : new signals.Signal()
     resetTerrainPool        : new signals.Signal()

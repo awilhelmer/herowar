@@ -21,14 +21,15 @@ class MaterialProperties extends BasePropertiesView
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
 		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @loadMaterial
+		EditorEventbus.showMaterialProperties.add @showPanel
+		EditorEventbus.selectMaterial.add @loadMaterial
+		EditorEventbus.deselectMaterial.add @hidePanel
 
 	loadMaterial: (materialId) =>
 		console.log 'Load Material Properties'
 		@model = db.get 'materials', materialId
 		console.log @model
 		@render()
-		@showPanel()
 
 	changeName: (event) =>
 		if event
