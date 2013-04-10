@@ -26,16 +26,12 @@ class Input
 
 	onKeyUp: (event) ->
 		EditorEventbus.keyup.dispatch event
-		@editor.engine.pause = true
-		#Eventbus.controlsChanged.dispatch event not working
+		Eventbus.controlsChanged.dispatch event
 
 	onKeyDown: (event) ->
 		EditorEventbus.keydown.dispatch event
-		if (@editor.engine.pause)
-			@editor.engine.pause = false
-			@editor.engine.start()
+		Eventbus.controlsChanged.dispatch event 
 		null
-		#Eventbus.controlsChanged.dispatch event not working 
 
 	onMouseUp: (event) ->
 		if event
@@ -60,7 +56,8 @@ class Input
 			Variables.MOUSE_POSITION_X = event.clientX
 			Variables.MOUSE_POSITION_Y = event.clientY
 		EditorEventbus.mousemove.dispatch event
-		Eventbus.controlsChanged.dispatch event if Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT
+		if (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
+			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = true
 	
 	onMouseWheel: (event) ->

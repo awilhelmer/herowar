@@ -40,6 +40,7 @@ class ViewHandler
 					@controls.dynamicDampingFactor = 0.3 
 					@controls.enabled = true
 					@controls.controlLoopActive = false
+					#@controls.target.z = 0
 					@controls.addEventListener( 'change', =>
 						if (@engine.pause)
 							Eventbus.cameraChanged.dispatch view
