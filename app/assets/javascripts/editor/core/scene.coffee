@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
 TerrainModel = require 'model/terrain'
+Material = require 'models/material'
 Constants = require 'constants'
 db = require 'database'
 
@@ -51,6 +52,7 @@ class Scene
 		console.log 'Reseting scene'
 		@world.reset()
 		@terrain.reset()
+		@createTerrainMaterial()
 		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
@@ -70,5 +72,14 @@ class Scene
 
 	hasChangedSize: (width, height, smoothness, zScale) =>
 		width != parseInt(@terrain.get('width')) or height != parseInt(@terrain.get('height')) or smoothness != parseFloat(@terrain.get('smoothness')) or zScale != parseInt(@terrain.get('zScale'))
+
+	createTerrainMaterial: ->
+		col = db.get 'materials'
+		mat = new Material()
+		mat.set 
+			'id'	: 1
+			'name'	: "Terrain"
+			'color' : '#006600'
+		col.add mat
 
 return Scene

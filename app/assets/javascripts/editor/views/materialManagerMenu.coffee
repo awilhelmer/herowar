@@ -13,7 +13,7 @@ class MaterialManagerMenu extends BaseView
 		'click .mm-new-material' : 'newMaterial'
 	
 	initialize: (options) ->
-		@nextId = 1
+		@nextId = 2
 		super options
 	
 	newMaterial: (event) =>
