@@ -3,6 +3,7 @@ SelectorArea = require 'helper/selectorArea'
 SelectorObject = require 'helper/selectorObject'
 Constants = require 'constants'
 Variables = require 'variables'
+MaterialHelper = require 'helper/materialHelper'
 
 class Tools
 
@@ -15,7 +16,8 @@ class Tools
 		
 	initialize: ->
 		console.log 'Initialize tools'
-		@selectorArea = new SelectorArea @editor
+		@materialHelper = new MaterialHelper @editor
+		@selectorArea = new SelectorArea @editor, @materialHelper
 		@selectorObject = new SelectorObject @editor
 		@addEventListeners()
 	
