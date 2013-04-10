@@ -13,24 +13,29 @@ class Input
 	addEventListener: ->
 		console.log 'Register input listeners'
 		window.addEventListener 'resize',  => Eventbus.windowResize.dispatch true
-		window.addEventListener 'keyup', @onKeyUp event
-		window.addEventListener 'keydown', @onKeyDown event
+		window.addEventListener 'keyup', (event) => @onKeyUp event
+		window.addEventListener 'keydown', (event) => @onKeyDown event
 		@editor.engine.main.get(0).addEventListener 'mouseup', (event) => @onMouseUp event
 		@editor.engine.main.get(0).addEventListener 'mousedown', (event) => @onMouseDown event
 		@editor.engine.main.get(0).addEventListener 'mousemove',(event) => @onMouseMove event
 		@editor.engine.main.get(0).addEventListener 'mousewheel', (event) => @onMouseWheel event
-		@editor.engine.main.get(0).addEventListener 'DOMMouseScroll', @onDOMMouseScroll event
-		@editor.engine.main.get(0).addEventListener 'touchstart', @onTouchStart event
-		@editor.engine.main.get(0).addEventListener 'touchend', @onTouchEnd event
-		@editor.engine.main.get(0).addEventListener 'touchmove', @onTouchMove event
+		@editor.engine.main.get(0).addEventListener 'DOMMouseScroll', (event) => @onDOMMouseScroll event
+		@editor.engine.main.get(0).addEventListener 'touchstart', (event) => @onTouchStart event
+		@editor.engine.main.get(0).addEventListener 'touchend', (event) => @onTouchEnd event
+		@editor.engine.main.get(0).addEventListener 'touchmove', (event) => @onTouchMove event
 
 	onKeyUp: (event) ->
 		EditorEventbus.keyup.dispatch event
-		Eventbus.controlsChanged.dispatch event
+		@editor.engine.pause = true
+		#Eventbus.controlsChanged.dispatch event not working
 
 	onKeyDown: (event) ->
 		EditorEventbus.keydown.dispatch event
-		Eventbus.controlsChanged.dispatch event
+		if (@editor.engine.pause)
+			@editor.engine.pause = false
+			@editor.engine.start()
+		null
+		#Eventbus.controlsChanged.dispatch event not working 
 
 	onMouseUp: (event) ->
 		if event
@@ -55,7 +60,7 @@ class Input
 			Variables.MOUSE_POSITION_X = event.clientX
 			Variables.MOUSE_POSITION_Y = event.clientY
 		EditorEventbus.mousemove.dispatch event
-		Eventbus.controlsChanged.dispatch event if Variables.MOUSE_PRESSED_LEFT
+		Eventbus.controlsChanged.dispatch event if Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT
 		Variables.MOUSE_MOVED = true
 	
 	onMouseWheel: (event) ->
@@ -77,6 +82,6 @@ class Input
 
 	onTouchMove: (event) ->
 		EditorEventbus.touchmove.dispatch event
-		Eventbus.controlsChanged.dispatch event	
+		Eventbus.controlsChanged.dispatch event
 
 return Input
