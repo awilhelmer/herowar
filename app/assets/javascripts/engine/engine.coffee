@@ -63,6 +63,8 @@ class Engine
 		unless @pause
 			@render()
 			requestAnimationFrame(@animate)
+		else
+			console.log 'Main Loop stopped ...'
 	
 	onDocumentMouseMove : (event) =>
 		@mouseX = event.clientX - Variables.SCREEN_WIDTH / 2 

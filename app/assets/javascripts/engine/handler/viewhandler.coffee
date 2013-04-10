@@ -35,12 +35,15 @@ class ViewHandler
 					@controls.panSpeed = 0.8
 					@controls.noZoom = false
 					@controls.noPan = false
+					@controls.noRotate = false
 					@controls.staticMoving = true
 					@controls.dynamicDampingFactor = 0.3 
 					@controls.enabled = true
+					@controls.controlLoopActive = false
+					#@controls.target.z = 0
 					@controls.addEventListener( 'change', =>
-						console.log 'Controls changed ... force reRender ...'
-						Eventbus.cameraChanged.dispatch view
+						if (@engine.pause)
+							Eventbus.cameraChanged.dispatch view
 						null
 					) 
 					Eventbus.controlsChanged.add(@onControlsChanged)
@@ -80,7 +83,8 @@ class ViewHandler
 			when Variables.CAMERA_TYPE_RTS 	
 				null
 			when Variables.CAMERA_TYPE_FREE
-				null
+				if ((@controls) && !(@engine.pause))
+					@controls.update()
 			else
 				console.log "No camera logic for #{ view.type } setted"
 		null
@@ -89,5 +93,6 @@ class ViewHandler
 		if (@controls)
 			@controls.update()
 		null
+	
 	
 return ViewHandler

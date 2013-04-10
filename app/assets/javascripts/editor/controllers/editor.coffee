@@ -37,6 +37,7 @@ class Editor extends BaseController
 				type: Variables.CAMERA_TYPE_FREE		
 			]
 		@engine.init()
+		@engine.pause = true
 	
 	initCore: ->
 		@input = new Input @
