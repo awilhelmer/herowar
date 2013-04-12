@@ -13,7 +13,7 @@ class MaterialHelper
 			materials = []
 			if object.material
 				materials.push object.material
-			object.material = new THREE.MeshFaceMaterial(materials) 	
+			object.material = new THREE.MeshFaceMaterial(materials)
 		for	value,key in object.material.materials
 			if value and value.name and value.name is materialId
 				foundId = key

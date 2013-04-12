@@ -6,13 +6,13 @@
 		<div class="control-group">
 			<label class="control-label" for="inputWidth">Width</label>
 			<div class="controls">
-				<input type="text" id="inputWidth" name="width" value="500">
+				<input type="text" id="inputWidth" name="width" value="{{width}}">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="inputHeight">Height</label>
 			<div class="controls">
-				<input type="text" id="inputHeight" name="height" value="500">
+				<input type="text" id="inputHeight" name="height" value="{{height}}">
 			</div>
 		</div>
 	</form>
@@ -21,13 +21,13 @@
 		<div class="control-group">
 			<label class="control-label" for="inputSmoothness">Smoothness</label>
 			<div class="controls">
-				<input type="text" id="inputSmoothness" name="smoothness" value="0.1">
+				<input type="text" id="inputSmoothness" name="smoothness" value="{{smoothness}}">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="inputZScale">Z-Scale</label>
 			<div class="controls">
-				<input type="text" id="inputZScale" name="zScale" value="0">
+				<input type="text" id="inputZScale" name="zScale" value="{{zScale}}">
 			</div>
 		</div>
 		<button id="randomizeTerrain" class="btn" type="button">Randomize</button>
@@ -37,8 +37,9 @@
 		<div class="control-group">
 			<label class="control-label" for="inputWireframe">Active</label>
 			<div class="controls">
-				<input type="checkbox" id="inputWireframe" name="wireframe" value="true" checked="checked">
+				<input type="checkbox" id="inputWireframe" name="wireframe" {{#if wireframe}}checked="checked"{{/if}}>
 			</div>
 		</div>
 	</form>
+	<div class="sidebar-headline">Materials</div>
 </div>

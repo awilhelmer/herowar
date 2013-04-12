@@ -13,12 +13,12 @@ class SelectorArea
 		@isVisible = false
 		@model = null
 		@bindEvents()
-			
+		
 	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
 		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
-			
+		
 	update: ->
 		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ]
 		if intersectList.length > 0
@@ -26,16 +26,16 @@ class SelectorArea
 			@updatePosition intersectList[0]
 		else
 			@removeSel() if @isVisible
-	
+
 	addSel: ->
 		@isVisible = true
 		@editor.engine.scenegraph.scene.add @selector
-	
+
 	removeSel: ->
 		@isVisible = false
 		@editor.engine.scenegraph.scene.remove @selector
 		@editor.engine.render()
-	
+
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
 		if Variables.MOUSE_PRESSED_LEFT	
@@ -43,24 +43,20 @@ class SelectorArea
 				@handleBrush intersect.object, intersect.face
 				@removeSel()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
-				console.log 'Terrain Raise'
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
 				intersect.object.geometry.vertices[intersect.face.b].z += 1
 				intersect.object.geometry.vertices[intersect.face.c].z += 1
 				intersect.object.geometry.vertices[intersect.face.d].z += 1
 				intersect.object.geometry.verticesNeedUpdate = true
 				#intersect.object.geometry.computeCentroids()
-				console.log intersect
 				@editor.engine.render()
-			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE
-				console.log 'Terrain Degrade'
+			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
 				intersect.object.geometry.vertices[intersect.face.b].z -= 1
 				intersect.object.geometry.vertices[intersect.face.c].z -= 1
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
 				#intersect.object.geometry.computeCentroids()
-				console.log intersect
 				@editor.engine.render()
 		else
 			x = Math.floor(position.x / 10) * 10 + 5
@@ -72,7 +68,7 @@ class SelectorArea
 				@selector.position.y = y
 				@selector.position.z = z
 				@editor.engine.render()
-	
+
 	handleBrush: (object, face) ->
 		#baseObject = @selectorObject.objectHelper.getBaseObject object
 		#if baseObject == @editor.engine.scenegraph.map and @selectedMatId
@@ -87,16 +83,20 @@ class SelectorArea
 				object.material.needsUpdate = true
 				console.log "setted brush material: materialIndex #{face.materialIndex}"
 		null
-				
+		
+	updateMesh: (object) ->
+		@editor.engine.scenegraph.scene.remove object
+		@editor.engine.scenegraph.scene.add object
+		
 	onMaterialSelected: (materialId) =>
 		console.log 'SelectorArea: Selected ID!'
 		@selectedMatId = materialId
-	
+		
 	onMaterialDeselect: () =>
 		console.log 'SelectorArea: Deselected ID!'
 		@selectedMatId = null
-	
+
 	selectBrush: (tool) =>
 		@brushTool = tool
-	
+
 return SelectorArea
