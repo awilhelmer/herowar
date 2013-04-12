@@ -39,23 +39,27 @@ class IconbarView extends BaseView
         $('#editor-menubar-brush a').removeClass('disabled').first().addClass 'active'
         $(event.currentTarget).addClass 'active'
         EditorEventbus.selectTool.dispatch Constants.TOOL_BRUSH
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
 
     materials: (event) =>
         unless event then return
         event.preventDefault()
         $('#editor-menubar-brush a').removeClass 'active'
         $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
 
     raise: (event) =>
         unless event then return
         event.preventDefault()
         $('#editor-menubar-brush a').removeClass 'active'
         $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_RAISE
 
     degrade: (event) =>
         unless event then return
         event.preventDefault()
         $('#editor-menubar-brush a').removeClass 'active'
         $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_DEGRADE
 
 return IconbarView
