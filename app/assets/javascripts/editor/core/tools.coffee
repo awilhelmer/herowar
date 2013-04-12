@@ -17,8 +17,8 @@ class Tools
 	initialize: ->
 		console.log 'Initialize tools'
 		@materialHelper = new MaterialHelper @editor
-		@selectorArea = new SelectorArea @editor, @materialHelper
 		@selectorObject = new SelectorObject @editor
+		@selectorArea = new SelectorArea @editor, @materialHelper,@selectorObject
 		@addEventListeners()
 	
 	addEventListeners: ->
