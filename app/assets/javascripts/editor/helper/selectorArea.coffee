@@ -4,7 +4,6 @@ Variables = require 'variables'
 Constants = require 'constants'
 MaterialHelper = require 'helper/materialHelper'
 
-
 class SelectorArea
 
   constructor: (@editor, @materialHelper) ->
@@ -54,19 +53,19 @@ class SelectorArea
         @selector.position.z = z
         @editor.engine.render()
 
-	handleBrush: (object, face) ->
-		if @selectedMatId
-			face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
-			console.log "setted brush material: materialIndex #{face.materialIndex}"
-		null
+  handleBrush: (object, face) ->
+    if @selectedMatId
+      face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
+      console.log "setted brush material: materialIndex #{face.materialIndex}"
+    null
 		
-	onMaterialSelected: (materialId) =>
-		console.log 'SelectorArea: Selected ID!'
-		@selectedMatId = materialId
+  onMaterialSelected: (materialId) =>
+    console.log 'SelectorArea: Selected ID!'
+    @selectedMatId = materialId
 		
-	onMaterialDeselect: () =>
-		console.log 'SelectorArea: Deselected ID!'
-		@selectedMatId = null
+  onMaterialDeselect: () =>
+    console.log 'SelectorArea: Deselected ID!'
+    @selectedMatId = null
 
   selectBrush: (tool) =>
     @brushTool = tool
