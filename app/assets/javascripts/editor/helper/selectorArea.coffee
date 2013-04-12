@@ -53,9 +53,8 @@ class SelectorArea
 
 
 	handleBrush: (object, face) ->
-		unless @selectedMatId
-			threeMaterial = @materialHelper.getThreeMaterial(object, @selectedMatId)
-			face.materialIndex = threeMaterial.id #TODO Index != id ... 
+		if @selectedMatId
+			face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
 		null
 		
 		
