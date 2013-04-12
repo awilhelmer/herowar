@@ -51,7 +51,7 @@ class SelectorArea
         intersect.object.geometry.verticesNeedUpdate = true
         intersect.object.geometry.computeCentroids()
         @editor.engine.render()
-      else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE
+      else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
         intersect.object.geometry.vertices[intersect.face.a].z -= 1
         intersect.object.geometry.vertices[intersect.face.b].z -= 1
         intersect.object.geometry.vertices[intersect.face.c].z -= 1
