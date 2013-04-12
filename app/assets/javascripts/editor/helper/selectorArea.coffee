@@ -43,6 +43,26 @@ class SelectorArea
       if @brushTool is Constants.BRUSH_APPLY_MATERIAL
         @handleBrush intersect.object, intersect.face
         @removeSel()
+      else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
+        console.log 'Terrain Raise'
+        intersect.object.geometry.vertices[intersect.face.a].z += 1
+        intersect.object.geometry.vertices[intersect.face.b].z += 1
+        intersect.object.geometry.vertices[intersect.face.c].z += 1
+        intersect.object.geometry.vertices[intersect.face.d].z += 1
+        intersect.object.geometry.verticesNeedUpdate = true
+        intersect.object.geometry.computeCentroids()
+        console.log intersect
+        @editor.engine.render()
+      else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE
+        console.log 'Terrain Degrade'
+        intersect.object.geometry.vertices[intersect.face.a].z -= 1
+        intersect.object.geometry.vertices[intersect.face.b].z -= 1
+        intersect.object.geometry.vertices[intersect.face.c].z -= 1
+        intersect.object.geometry.vertices[intersect.face.d].z -= 1
+        intersect.object.geometry.verticesNeedUpdate = true
+        intersect.object.geometry.computeCentroids()
+        console.log intersect
+        @editor.engine.render()
     else
       x = Math.floor(position.x / 10) * 10 + 5
       y = Math.floor(position.y / 10) * 10 + 1
