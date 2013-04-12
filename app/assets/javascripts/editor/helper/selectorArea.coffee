@@ -74,26 +74,26 @@ class SelectorArea
         @selector.position.z = z
         @editor.engine.render()
 
-	handleBrush: (object, face) ->
-		if @selectedMatId
-			oldIndex = face.materialIndex
-			face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
-			if oldIndex != face.materialIndex
-				updateMesh object
-				console.log "setted brush material: materialIndex #{face.materialIndex}"
-		null
+  handleBrush: (object, face) ->
+    if @selectedMatId
+      oldIndex = face.materialIndex
+      face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
+      if oldIndex != face.materialIndex
+        updateMesh object
+        console.log "setted brush material: materialIndex #{face.materialIndex}"
+    null
 		
-	updateMesh: (object) ->
-		@editor.engine.scenegraph.scene.remove object
-		@editor.engine.scenegraph.scene.add object
+  updateMesh: (object) ->
+    @editor.engine.scenegraph.scene.remove object
+    @editor.engine.scenegraph.scene.add object
 		
-	onMaterialSelected: (materialId) =>
-		console.log 'SelectorArea: Selected ID!'
-		@selectedMatId = materialId
+  onMaterialSelected: (materialId) =>
+    console.log 'SelectorArea: Selected ID!'
+    @selectedMatId = materialId
 		
-	onMaterialDeselect: () =>
-		console.log 'SelectorArea: Deselected ID!'
-		@selectedMatId = null
+  onMaterialDeselect: () =>
+    console.log 'SelectorArea: Deselected ID!'
+    @selectedMatId = null
 
   selectBrush: (tool) =>
     @brushTool = tool
