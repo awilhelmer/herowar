@@ -13,9 +13,9 @@ class MaterialHelper
 			materials = []
 			if object.material
 				materials.push object.material
-			object.material = new THREE.MeshFaceMaterial(materials)
+			object.material = new THREE.MeshFaceMaterial(materials) 	
 		for	value,key in object.material.materials
-			if value and value.name and value.name is materialId
+			if value and value.name and value.name is 'matID' + materialId
 				foundId = key
 				break
 		unless foundId
@@ -30,7 +30,7 @@ class MaterialHelper
 #TODO more mapping here
 	transformMaterial:(material, materialId) ->
 		result = new THREE.MeshBasicMaterial()
-		result.name = materialId
+		result.name = 'matID' + materialId
 		for key,value of material.attributes
 			if key is "color"
 				result.color = new THREE.Color(value)

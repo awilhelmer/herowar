@@ -70,17 +70,14 @@ class SelectorArea
 				@editor.engine.render()
 
 	handleBrush: (object, face) ->
-		#baseObject = @selectorObject.objectHelper.getBaseObject object
-		#if baseObject == @editor.engine.scenegraph.map and @selectedMatId
-		if @selectedMatId
+		baseObject = @selectorObject.objectHelper.getBaseObject object
+		if baseObject == @editor.engine.scenegraph.map and @selectedMatId
 			oldIndex = face.materialIndex
-			face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
+			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
 			if oldIndex isnt face.materialIndex
-				object.geometry.verticesNeedUpdate = true
-				object.geometry.elementsNeedUpdate = true
-				object.geometry.normalsNeedUpdate = true
-				object.geometry.colorsNeedUpdate = true
-				object.material.needsUpdate = true
+				@editor.engine.scenegraph.scene.remove baseObject
+				@editor.engine.render()
+				@editor.engine.scenegraph.scene.add baseObject
 				console.log "setted brush material: materialIndex #{face.materialIndex}"
 		null
 		
