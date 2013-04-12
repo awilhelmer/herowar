@@ -5,34 +5,61 @@ templates = require 'templates'
 
 class IconbarView extends BaseView
 
-	id: 'iconbar'
+    id: 'iconbar'
 	
-	template: templates.get 'iconbar.tmpl'
+    template: templates.get 'iconbar.tmpl'
 	
-	events:
-		'click #editor-menubar-back' : 'back'
-		'click #editor-menubar-into' : 'into'
-		'click #editor-menubar-tool-selection' : 'select'
-		'click #editor-menubar-tool-brush' : 'brush'
+    events:
+        'click #editor-menubar-back'            : 'back'
+        'click #editor-menubar-into'            : 'into'
+        'click #editor-menubar-tool-selection'  : 'select'
+        'click #editor-menubar-tool-brush'      : 'brush'
+        'click #editor-menubar-brush-materials' : 'materials'
+        'click #editor-menubar-brush-raise'     : 'raise'
+        'click #editor-menubar-brush-degrade'   : 'degrade'
 
-	back: (event) ->
-		event?.preventDefault()
+    back: (event) ->
+        event?.preventDefault()
 
-	into: (event) ->
-		event?.preventDefault()
+    into: (event) ->
+        event?.preventDefault()
 
-	select: (event) =>
-		if event
-			event.preventDefault()
-			$('#editor-menubar-tools a').removeClass 'active'
-			$(event.currentTarget).addClass 'active'
-			EditorEventbus.selectTool.dispatch Constants.TOOL_SELECTION
+    select: (event) =>
+        unless event then return
+        event.preventDefault()
+        $('#editor-menubar-tools a').removeClass 'active'
+        $('#editor-menubar-brush a').removeClass('active').addClass 'disabled'
+        $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectTool.dispatch Constants.TOOL_SELECTION
 
-	brush: (event) =>
-		if event
-			event.preventDefault()
-			$('#editor-menubar-tools a').removeClass 'active'
-			$(event.currentTarget).addClass 'active'
-			EditorEventbus.selectTool.dispatch Constants.TOOL_BRUSH
+    brush: (event) =>
+        unless event then return
+        event.preventDefault()
+        $('#editor-menubar-tools a').removeClass 'active'
+        $('#editor-menubar-brush a').removeClass('disabled').first().addClass 'active'
+        $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectTool.dispatch Constants.TOOL_BRUSH
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
+
+    materials: (event) =>
+        unless event then return
+        event.preventDefault()
+        $('#editor-menubar-brush a').removeClass 'active'
+        $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
+
+    raise: (event) =>
+        unless event then return
+        event.preventDefault()
+        $('#editor-menubar-brush a').removeClass 'active'
+        $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_RAISE
+
+    degrade: (event) =>
+        unless event then return
+        event.preventDefault()
+        $('#editor-menubar-brush a').removeClass 'active'
+        $(event.currentTarget).addClass 'active'
+        EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_DEGRADE
 
 return IconbarView
