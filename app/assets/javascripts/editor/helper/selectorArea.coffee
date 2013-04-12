@@ -56,13 +56,16 @@ class SelectorArea
 	handleBrush: (object, face) ->
 		if @selectedMatId
 			face.materialIndex = @materialHelper.getThreeMaterialId(object, @selectedMatId)
+			console.log "setted brush material: materialIndex #{face.materialIndex}"
 		null
 		
 		
 	onMaterialSelected: (materialId) =>
+		console.log 'SelectorArea: Selected ID!'
 		@selectedMatId = materialId
 		
 	onMaterialDeselect: () =>
+		console.log 'SelectorArea: Deselected ID!'
 		@selectedMatId = null
 		
 return SelectorArea
