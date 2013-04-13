@@ -10,8 +10,12 @@ class ObjectHelper
 
 	addWireframe: (obj, color) ->
 		@editor.engine.scenegraph.scene.remove(obj)
-		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshBasicMaterial color: color, wireframe: true
+		#TODO hard coded children access ...
+		materials = []		
+		materials.push new THREE.MeshBasicMaterial color: color, wireframe: true
+		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshFaceMaterial materials
 		mesh.rotation.copy obj.children[0].rotation
+		mesh.name = 'wireframe'
 		obj.add mesh
 		@editor.engine.scenegraph.scene.add obj
 
@@ -47,8 +51,8 @@ class ObjectHelper
 		obj
 		
 	isTerrain: (obj) ->
-		if _.isUndefined obj then return false
+		if _.isUndefined obj or _.isUndefined @editor.engine.scenegraph.map then return false
 		obj = @getBaseObject obj unless obj.parent instanceof THREE.Scene
-		obj.name is 'Terrain'	# TODO: better check here
+		@editor.engine.scenegraph.map.id is obj.id
 
 return ObjectHelper

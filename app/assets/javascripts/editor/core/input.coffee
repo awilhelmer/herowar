@@ -56,6 +56,7 @@ class Input
 			Variables.MOUSE_POSITION_X = event.clientX
 			Variables.MOUSE_POSITION_Y = event.clientY
 		EditorEventbus.mousemove.dispatch event
+		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
 		if (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
 			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = true

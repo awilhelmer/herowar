@@ -40,7 +40,7 @@ class SelectorArea
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
-				@handleBrush intersect.object, intersect.face
+				@handleBrush intersect.object, intersect.faceIndex
 				@removeSel()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
@@ -69,16 +69,27 @@ class SelectorArea
 				@selector.position.z = z
 				@editor.engine.render()
 
-	handleBrush: (object, face) ->
+	handleBrush: (object, faceIndex) ->
 		baseObject = @selectorObject.objectHelper.getBaseObject object
-		if baseObject == @editor.engine.scenegraph.map and @selectedMatId
-			oldIndex = face.materialIndex
-			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
-			if oldIndex isnt face.materialIndex
+		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
+			oldIndex = object.geometry.faces[faceIndex].materialIndex
+			object.geometry.faces[faceIndex].materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
+			if oldIndex isnt object.geometry.faces[faceIndex].materialIndex
 				@editor.engine.scenegraph.scene.remove baseObject
 				@editor.engine.render()
+				object.geometry.verticesNeedUpdate = true
+				object.geometry.elementsNeedUpdate = true
+				object.geometry.morphTargetsNeedUpdate = true
+				object.geometry.uvsNeedUpdate = true
+				object.geometry.normalsNeedUpdate = true
+				object.geometry.colorsNeedUpdate = true
+				object.geometry.tangentsNeedUpdate = true
+				object.material.needsUpdate = true
+				object.geometry.computeCentroids()
+				object.geometry.computeFaceNormals()
+				object.geometry.computeVertexNormals()
 				@editor.engine.scenegraph.scene.add baseObject
-				console.log "setted brush material: materialIndex #{face.materialIndex}"
+				console.log "setted brush material: materialIndex #{object.geometry.faces[faceIndex].materialIndex}"
 		null
 		
 	updateMesh: (object) ->
