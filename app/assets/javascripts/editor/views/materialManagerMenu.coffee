@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 Material = require 'models/material'
