@@ -22,9 +22,10 @@ class MaterialManagerMenu extends BaseView
 		mat = new Material()
 		id = @nextId++
 		mat.set 
-			'id'		: id
-			'name'	: "Mat.#{id}"
-			'color' : '#CCCCCC'
+			'id'					: id
+			'materialId' 	: id
+			'name'				: "Mat.#{id}"
+			'color' 			: '#CCCCCC'
 		col.add mat
 
 return MaterialManagerMenu

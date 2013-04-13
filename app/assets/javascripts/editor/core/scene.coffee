@@ -77,9 +77,10 @@ class Scene
 		col = db.get 'materials'
 		mat = new Material()
 		mat.set 
-			'id'	: 1
-			'name'	: "Terrain"
-			'color' : '#006600'
+			'id'					: 1
+			'materialId' 	: 1
+			'name'				: "Terrain"
+			'color' 			: '#006600'
 		col.add mat
 
 return Scene
