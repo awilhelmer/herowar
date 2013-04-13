@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 Eventbus = require 'eventbus'
 Variables = require 'variables'
+Constants = require 'constants'
 
 class Input
 
@@ -39,7 +40,8 @@ class Input
 			Variables.MOUSE_PRESSED_MIDDLE = false if event.which is 2
 			Variables.MOUSE_PRESSED_RIGHT = false if event.which is 3
 		EditorEventbus.mouseup.dispatch event
-		Eventbus.controlsChanged.dispatch event
+		unless Constants.TOOL_BRUSH_SELECTION
+			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false unless Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_MIDDLE or Variables.MOUSE_PRESSED_RIGHT
 		
 	onMouseDown: (event) ->
@@ -48,7 +50,8 @@ class Input
 			Variables.MOUSE_PRESSED_MIDDLE = true if event.which is 2
 			Variables.MOUSE_PRESSED_RIGHT = true if event.which is 3
 		EditorEventbus.mousedown.dispatch event
-		Eventbus.controlsChanged.dispatch event
+		unless Constants.TOOL_BRUSH_SELECTION
+			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false
 		
 	onMouseMove: (event) ->
@@ -57,7 +60,7 @@ class Input
 			Variables.MOUSE_POSITION_Y = event.clientY
 		EditorEventbus.mousemove.dispatch event
 		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
-		if (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
+		if !Constants.TOOL_BRUSH_SELECTION and (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
 			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = true
 	
