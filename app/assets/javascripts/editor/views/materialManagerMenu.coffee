@@ -12,9 +12,16 @@ class MaterialManagerMenu extends BaseView
 	events:
 		'click .mm-new-material' : 'newMaterial'
 	
+	bindEvents: ->
+		EditorEventbus.changeMaterial.add @changeMaterial
+	
 	initialize: (options) ->
 		@nextId = 2
 		super options
+	
+	changeMaterial: (material) =>
+		id = @nextId++
+		material.set 'materialId', id
 	
 	newMaterial: (event) =>
 		event?.preventDefault()

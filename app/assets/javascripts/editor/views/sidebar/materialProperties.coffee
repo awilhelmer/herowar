@@ -44,5 +44,6 @@ class MaterialProperties extends BasePropertiesView
 			$currentTarget = $ event.currentTarget
 			console.log "Color: #{$currentTarget.val()}"
 			@model.set 'color', $currentTarget.val()
+			EditorEventbus.changeMaterial.dispatch @model
 
 return MaterialProperties
