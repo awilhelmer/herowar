@@ -31,6 +31,7 @@ editorEventbus =
 	
     selectMaterial          : new signals.Signal()
     deselectMaterial        : new signals.Signal()
+    changeMaterial					: new signals.Signal()
 	
     changeTerrain           : new signals.Signal()
     changeTerrainWireframe  : new signals.Signal()
