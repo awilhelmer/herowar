@@ -30,7 +30,8 @@ class Terrain extends Backbone.Model
 		@setMaterials()		
 
 	setMaterials: ->
-		@set 'materials', [ new THREE.MeshBasicMaterial color: @get('color')]
+		materials = [new THREE.MeshBasicMaterial(color: @get('color'))]
+		@set 'materials', materials
 
 	update: ->
 		segWidth = Math.round(@get('width') / 10)
@@ -47,9 +48,9 @@ class Terrain extends Backbone.Model
 
 	getTerrainMesh: (terrain, segWidth, segHeight) ->		
 		obj = new THREE.Object3D()
-		obj.name = @get 'name' + '_group'
+		obj.name = (@get 'name') + '_group'
 		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), new THREE.MeshFaceMaterial @get('materials')
-		mesh.name = @get 'name' + '_mesh'
+		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		obj.add mesh
 		for mesh in obj.children

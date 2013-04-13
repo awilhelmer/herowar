@@ -56,13 +56,13 @@ class SelectorObject
 
 	addSelectionWireframe: (obj, type) ->
 		if @objectHelper.hasWireframe obj
-			@objectHelper.changeWireframeColor obj, 0xFFFF00
+			@objectHelper.changeWireframeColor obj
 		else
-			@objectHelper.addWireframe obj, 0xFFFF00
+			@objectHelper.addWireframe obj
 
 	removeSelectionWireframe: (obj, type) ->
 		if @objectHelper.hasWireframe(obj) and type is 'terrain' and @terrain.get('wireframe')
-			@objectHelper.changeWireframeColor obj, 0xFFFFFF
+			@objectHelper.changeWireframeColor obj
 		else
 			@objectHelper.removeWireframe obj
 

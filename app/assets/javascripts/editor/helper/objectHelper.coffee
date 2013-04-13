@@ -12,7 +12,7 @@ class ObjectHelper
 		@editor.engine.scenegraph.scene.remove(obj)
 		#TODO hard coded children access ...
 		materials = []		
-		materials.push new THREE.MeshBasicMaterial color: color, wireframe: true
+		materials.push new THREE.MeshBasicMaterial transparent: true, opacity: 0.5, wireframe: true
 		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshFaceMaterial materials
 		mesh.rotation.copy obj.children[0].rotation
 		mesh.name = 'wireframe'

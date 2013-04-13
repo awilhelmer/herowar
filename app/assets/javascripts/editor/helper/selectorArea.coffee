@@ -23,7 +23,7 @@ class SelectorArea
 		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ]
 		if intersectList.length > 0
 			@addSel() unless @isVisible
-			@updatePosition intersectList[0]
+			@updatePosition @getIntersectObject(intersectList)
 		else
 			@removeSel() if @isVisible
 
@@ -36,6 +36,15 @@ class SelectorArea
 		@editor.engine.scenegraph.scene.remove @selector
 		@editor.engine.render()
 
+	getIntersectObject: (intersectList) ->
+		for value, key in intersectList
+			if value.object and value.object.name isnt 'wireframe'
+				result = value
+				break
+		unless result
+			result = intersectList[0]
+		result
+		
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
 		if Variables.MOUSE_PRESSED_LEFT	
@@ -48,7 +57,6 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z += 1
 				intersect.object.geometry.vertices[intersect.face.d].z += 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				#intersect.object.geometry.computeCentroids()
 				@editor.engine.render()
 			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
@@ -56,14 +64,12 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z -= 1
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				#intersect.object.geometry.computeCentroids()
 				@editor.engine.render()
 		else
 			x = Math.floor(position.x / 10) * 10 + 5
 			y = Math.floor(position.y / 10) * 10 + 1
 			z = Math.floor(position.z / 10) * 10 + 5
 			if x isnt @selector.position.x or y isnt @selector.position.y or z isnt @selector.position.z
-				# console.log intersect
 				@selector.position.x = x
 				@selector.position.y = y
 				@selector.position.z = z
@@ -72,29 +78,20 @@ class SelectorArea
 	handleBrush: (object, faceIndex) ->
 		baseObject = @selectorObject.objectHelper.getBaseObject object
 		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
-			oldIndex = object.geometry.faces[faceIndex].materialIndex
-			object.geometry.faces[faceIndex].materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
-			if oldIndex isnt object.geometry.faces[faceIndex].materialIndex
-				@editor.engine.scenegraph.scene.remove baseObject
-				@editor.engine.render()
-				object.geometry.verticesNeedUpdate = true
-				object.geometry.elementsNeedUpdate = true
-				object.geometry.morphTargetsNeedUpdate = true
-				object.geometry.uvsNeedUpdate = true
-				object.geometry.normalsNeedUpdate = true
-				object.geometry.colorsNeedUpdate = true
-				object.geometry.tangentsNeedUpdate = true
-				object.material.needsUpdate = true
-				object.geometry.computeCentroids()
-				object.geometry.computeFaceNormals()
-				object.geometry.computeVertexNormals()
-				@editor.engine.scenegraph.scene.add baseObject
-				console.log "setted brush material: materialIndex #{object.geometry.faces[faceIndex].materialIndex}"
+			face = object.geometry.faces[faceIndex]
+			oldIndex = face.materialIndex
+			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
+			if oldIndex isnt face.materialIndex
+				baseObject.remove object
+				#TODO find another way ... 
+				mesh = new THREE.Mesh object.geometry.clone(), object.material
+				mesh.name = object.name
+				mesh.position = object.position
+				mesh.rotation = object.rotation
+				baseObject.add mesh
+				console.log "setted brush material: materialIndex #{face.materialIndex} of objectName #{mesh.name}"
 		null
 		
-	updateMesh: (object) ->
-		@editor.engine.scenegraph.scene.remove object
-		@editor.engine.scenegraph.scene.add object
 		
 	onMaterialSelected: (materialId) =>
 		console.log 'SelectorArea: Selected ID!'
