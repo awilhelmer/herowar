@@ -2,6 +2,12 @@ constants =
 		TOOL_SELECTION									: 'select'
 		TOOL_BRUSH											: 'brush'
 		TOOL_BRUSH_SELECTED							: false
+		TOOL_BRUSH_TYPE									: 'apply_material'
+		TOOL_BRUSH_SIZE									: 'tiny'
+		
+		BRUSH_SIZE_TINY									: 'tiny'
+		BRUSH_SIZE_MEDIUM								: 'medium'
+		BRUSH_SIZE_LARGE								: 'large'
 		
 		BRUSH_APPLY_MATERIAL						: 'apply_material'
 		BRUSH_TERRAIN_RAISE						 	: 'terrain_raise'

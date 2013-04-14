@@ -16,6 +16,7 @@ editorEventbus =
 	
     selectTool              : new signals.Signal()
     selectBrush             : new signals.Signal()
+    selectBrushSize					: new signals.Signal()
 	
     selectWorldViewport     : new signals.Signal()
     selectTerrainViewport   : new signals.Signal()

@@ -50,7 +50,7 @@ class BaseView extends Backbone.View
         @$el.empty()
         html = ''
         if @template
-            html = if @model then @template @getTemplateData() else @template()
+            html = if @getTemplateData() then @template @getTemplateData() else @template()
             html = @_stripWhitespaces html
         $html = $ html
         @_renderSubviews $html
@@ -66,7 +66,8 @@ class BaseView extends Backbone.View
 
     # OVERRIDE allow view dependand modifications of the model
     getTemplateData: ->
-        if _.isFunction @model.toJSON then @model.toJSON() else @model 
+    	unless @model then return {}
+    	if _.isFunction @model.toJSON then @model.toJSON() else @model 
         
     
     _stripWhitespaces: (html) ->
