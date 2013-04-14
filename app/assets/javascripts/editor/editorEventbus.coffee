@@ -37,4 +37,5 @@ editorEventbus =
     changeTerrain           : new signals.Signal()
     changeTerrainWireframe  : new signals.Signal()
     resetTerrainPool        : new signals.Signal()
+    resetWireframe					: new signals.Signal()
 return editorEventbus
