@@ -17,8 +17,11 @@ class Preloader extends BaseController
 		@initRendererContext()
 		@animate()
 		@load
+			textures:
+				'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
+				'stone-rough-001'		: 'assets/images/game/textures/stone/rough-001.jpg'
 			texturesCube:
-				'default' : 'assets/images/game/skybox/default/%1.jpg'
+				'default' 					: 'assets/images/game/skybox/default/%1.jpg'
 
 	initLoader: ->
 		@preloadComplete = false
@@ -72,7 +75,10 @@ class Preloader extends BaseController
 		console.log "loadItem type=#{type}, name=#{name}, url=#{url}"
 		@updateState type, name, false
 		switch type
-			# TODO: implement textures, geometries and image loading cases
+			# TODO: implement geometries and image loading cases
+			when 'textures'
+				@data[type][name] = THREE.ImageUtils.loadTexture url, undefined, =>
+					@updateState type, name, true
 			when 'texturesCube'
 				urls = [
 					url.replace("%1", "px"), url.replace("%1", "nx"),

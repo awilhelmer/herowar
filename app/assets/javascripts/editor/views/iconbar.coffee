@@ -103,7 +103,6 @@ class IconbarView extends BaseView
 		json.brushTypeIsMaterial = Constants.TOOL_BRUSH_TYPE is Constants.BRUSH_APPLY_MATERIAL
 		json.brushTypeIsTerrainRaise = Constants.TOOL_BRUSH_TYPE is Constants.BRUSH_TERRAIN_RAISE
 		json.brushTypeIsTerrainDegrade = Constants.TOOL_BRUSH_TYPE is Constants.BRUSH_TERRAIN_DEGRADE
-		console.log json
 		json
 
 return IconbarView
