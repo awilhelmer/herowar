@@ -1,5 +1,6 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
+Constants = require 'constants'
 templates = require 'templates'
 
 class MaterialManagerContent extends BaseView
@@ -23,6 +24,7 @@ class MaterialManagerContent extends BaseView
 		$('#materialManager .mm-material').removeClass 'active'
 		$currentTarget.addClass 'active'
 		matId = $currentTarget.data 'matid'
+		Constants.MATERIAL_SELECTED = matId
 		@dispatchSelectMaterialEvent matId if matId
 						
 	dispatchSelectMaterialEvent: (materialId) ->

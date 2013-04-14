@@ -12,6 +12,8 @@ constants =
 		BRUSH_APPLY_MATERIAL						: 'apply_material'
 		BRUSH_TERRAIN_RAISE						 	: 'terrain_raise'
 		BRUSH_TERRAIN_DEGRADE					 	: 'terrain_degrade'
+		
+		MATERIAL_SELECTED								: undefined
 
 		WORLD_DEFAULT_SKYBOX						: 'default'
 
