@@ -80,12 +80,4 @@ class TerrainProperties extends BasePropertiesView
 		EditorEventbus.selectMaterial.dispatch materialId
 		EditorEventbus.showMaterialProperties.dispatch()
 
-	getTemplateData: ->
-		json = super()
-		materials = []
-		for material in json.materials
-			materials.push material.toJSON()
-		json.materials = materials
-		json
-
 return TerrainProperties

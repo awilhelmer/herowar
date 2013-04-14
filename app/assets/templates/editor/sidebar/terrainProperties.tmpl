@@ -44,10 +44,7 @@
 	<div class="sidebar-headline">Materials</div>
 	<div>
 		{{#each materials}}
-			<div class="mm-material" data-matid="{{id}}">
-				<div class="mm-material-prev" style="background-color: {{color}}"></div>
-				<span>{{name}}</span>
-			</div>
+			<div class="mm-material" data-view="views/sidebar/terrainMaterial" data-model="{{this}}"></div>
 		{{/each}}
 	</div>
 </div>

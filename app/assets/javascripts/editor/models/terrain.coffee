@@ -1,5 +1,6 @@
 MaterialHelper = require 'helper/materialHelper'
 Constants = require 'constants'
+db = require 'database'
 
 class Terrain extends Backbone.Model
 
@@ -30,8 +31,8 @@ class Terrain extends Backbone.Model
 			'color'						: Constants.TERRAIN_DEFAULT_COLOR
 			'wireframe'				: Constants.TERRAIN_DEFAULT_WIREFRAME
 
-	addMaterial: (material) ->
-		@get('materials').push material
+	addMaterial: (materialId) ->
+		@get('materials').push materialId
 		@trigger 'change'
 		@trigger 'change:materials'
 
@@ -52,7 +53,8 @@ class Terrain extends Backbone.Model
 		obj = new THREE.Object3D()
 		obj.name = (@get 'name') + '_group'
 		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), new THREE.MeshFaceMaterial()
-		@materialHelper.getThreeMaterialId mesh, id: @get('materials')[0].get('id'), materialId: @get('materials')[0].get('materialId')
+		material = db.get 'materials', 1
+		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: material.get('materialId')
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		obj.add mesh

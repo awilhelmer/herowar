@@ -82,6 +82,6 @@ class Scene
 			'name'				: 'Terrain'
 			'color' 			: '#006600'
 		col.add mat
-		@terrain.addMaterial mat
+		@terrain.addMaterial 1
 
 return Scene

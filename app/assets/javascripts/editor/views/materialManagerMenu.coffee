@@ -9,9 +9,7 @@ class MaterialManagerMenu extends BaseView
 	id: 'materialManagerMenu'
 
 	template: templates.get 'materialManagerMenu.tmpl'
-	
-	
-	
+
 	events:
 		'click .mm-new-material' : 'newMaterial'
 	
