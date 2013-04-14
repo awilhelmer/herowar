@@ -22,6 +22,7 @@ class TerrainProperties extends BasePropertiesView
 		'change input[name="height"]' 		: 'validateTerrainHeight'
 		'change input[name="wireframe"]' 	: 'changeWireframe'
 		'click #randomizeTerrain' 				: 'resetTerrainPool'
+		'click .mm-material' 							: 'loadMaterial'
 
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -67,6 +68,17 @@ class TerrainProperties extends BasePropertiesView
 
 	resetTerrainPool: =>
 		EditorEventbus.resetTerrainPool.dispatch()
+
+	loadMaterial: (event) =>
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		matId = $currentTarget.data 'matid'
+		@dispatchSelectMaterialEvent matId if matId
+
+	dispatchSelectMaterialEvent: (materialId) ->
+		EditorEventbus.selectMaterial.dispatch materialId
+		EditorEventbus.showMaterialProperties.dispatch()
 
 	getTemplateData: ->
 		json = super()

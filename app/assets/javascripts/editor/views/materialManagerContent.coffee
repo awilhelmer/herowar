@@ -4,27 +4,27 @@ templates = require 'templates'
 
 class MaterialManagerContent extends BaseView
 
-    id: 'materialManagerContent'
+	id: 'materialManagerContent'
 
-    entity: 'materials'
+	entity: 'materials'
 
-    template: templates.get 'materialManagerContent.tmpl'
+	template: templates.get 'materialManagerContent.tmpl'
 
-    events:
-        'click .mm-material' : 'loadMaterial'
+	events:
+		'click .mm-material' : 'loadMaterial'
 	
-    bindEvents: ->
-        @listenTo @model, 'add remove change reset', @render if @model
+	bindEvents: ->
+		@listenTo @model, 'add remove change reset', @render if @model
 	
-    loadMaterial: (event) =>
-        if event
-            event.preventDefault()
-            $currentTarget = $ event.currentTarget
-            matId = $currentTarget.data 'matid'
-            @dispatchSelectMaterialEvent matId if matId
-            
-    dispatchSelectMaterialEvent: (materialId) ->
-        EditorEventbus.selectMaterial.dispatch materialId
-        EditorEventbus.showMaterialProperties.dispatch()
+	loadMaterial: (event) =>
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		matId = $currentTarget.data 'matid'
+		@dispatchSelectMaterialEvent matId if matId
+						
+	dispatchSelectMaterialEvent: (materialId) ->
+		EditorEventbus.selectMaterial.dispatch materialId
+		EditorEventbus.showMaterialProperties.dispatch()
 
 return MaterialManagerContent
