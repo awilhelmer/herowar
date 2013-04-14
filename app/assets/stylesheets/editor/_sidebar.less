@@ -208,3 +208,35 @@
 #sidebar #randomizeTerrain {
 	float: right;
 }
+
+#sidebar .mp-texture {
+	cursor: pointer;
+	width: 75px;
+	height: 60px;
+	background-color: #a0a7ad;
+	border: 1px solid #333333;
+	color: #333333;
+	float: left;
+	margin-left: 10px;
+	overflow: hidden;
+	
+	&:first-child {
+		margin-left: 0px;
+	}
+}
+
+#sidebar .mp-texture.active {
+	background-color: #ff9933;
+}
+
+#sidebar .mp-texture-prev {
+	width: 75px;
+	height: 40px;
+	background-color: #474747;
+}
+
+#sidebar .mp-texture span {
+	font-size: 9px;
+	margin-left: 5px;
+	margin-top: 5px;
+}

@@ -45,7 +45,9 @@
 		<div class="tab-pane" id="mp-texture">
 			<div class="sidebar-headline">Texture Settings</div>
 			<div>
-				
+				{{#each textures}}
+					<div class="mp-texture" data-view="views/sidebar/materialTexture" data-model="{{this}}"></div>
+				{{/each}}
 			</div>
 		</div>
 	</div>

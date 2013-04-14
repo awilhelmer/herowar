@@ -52,20 +52,10 @@ class MaterialManagerMenu extends BaseView
 		
 	newMaterial: (event) =>
 		event?.preventDefault()
-		col = db.get 'materials'
-		mat = new Material()
 		id = @nextId++
 		matId = @nextMatId++
-		mat.set 
-			'id'					: id
-			'materialId' 	: matId
-			'name'				: "Mat.#{id}"
-			'color' 			: '#CCCCCC'
-			'transparent' : false
-			'opacity'			: 1
-			'map'					: undefined
-			
-		col.add mat
+		col = db.get 'materials'
+		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
 		updateMatId id matId
 		
 return MaterialManagerMenu
