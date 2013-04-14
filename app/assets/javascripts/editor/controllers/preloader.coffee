@@ -58,7 +58,7 @@ class Preloader extends BaseController
 					size++
 				@progress.total += size
 				@progress.remaining += size
-				@loadItem type, key, url for key, url of list for type, list of data		
+		@loadItem type, key, url for key, url of list for type, list of data		
 
 	updateState: (type, name, state) ->
 		unless type of @states
