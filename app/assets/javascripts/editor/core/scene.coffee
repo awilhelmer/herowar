@@ -3,6 +3,7 @@ ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
 TerrainModel = require 'models/terrain'
 Material = require 'models/material'
+Texture = require 'models/texture'
 Constants = require 'constants'
 db = require 'database'
 
@@ -24,11 +25,25 @@ class Scene
 		@terrain = db.get 'terrain'
 		@reset()
 		@addEventListeners()
+		@createTextures()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
 		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
+
+	createTextures: ->
+		@textures = db.get 'textures'
+		@textures.add @createTexture 'Blank', ''
+		@textures.add @createTexture 'Stone Natural 001', 'stone-natural-001'
+		@textures.add @createTexture 'Stone Rough 001', 'stone-rough-001'
+
+	createTexture: (name, path) ->
+		texture = new Texture()
+		texture.set
+			'name' : name
+			'path' : path
+		texture
 
 	changeTerrain: (width, height, smoothness, zScale) =>
 		if @hasValidSize(width, height) and @hasChangedSize(parseInt(width), parseInt(height), parseFloat(smoothness), parseInt(zScale))
