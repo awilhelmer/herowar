@@ -34,16 +34,17 @@ class Scene
 
 	createTextures: ->
 		@textures = db.get 'textures'
-		@textures.add @createTexture 1, 'Blank', ''
-		@textures.add @createTexture 2, 'Stone Natural 001', 'assets/images/game/textures/stone/natural-001.jpg'
-		@textures.add @createTexture 3, 'Stone Rough 001', 'assets/images/game/textures/stone/rough-001.jpg'
+		nextTextureId = 1
+		@textures.add @createTexture nextTextureId++, 'Blank', '', undefined
+		@textures.add @createTexture nextTextureId++, key, val.sourceFile, val for key, val of @editor.data.textures
 
-	createTexture: (id, name, path) ->
+	createTexture: (id, name, sourceFile, threeTexture) ->
 		texture = new Texture()
 		texture.set
-			'id'		: id
-			'name' 	: name
-			'path'	: path
+			'id'						: id
+			'name' 					: name
+			'sourceFile'		: sourceFile
+			'threeTexture'	: threeTexture
 		texture
 
 	changeTerrain: (width, height, smoothness, zScale) =>

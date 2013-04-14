@@ -18,13 +18,14 @@ class Editor extends BaseController
 	initialize: (options) ->
 		console.log 'Initialize editor...'
 		super options
+		@data = db.data()
 		@initEngine()
 		@initCore()
 		
 	initEngine: ->
 		@engine = new Engine
 			container : $ '#viewport'
-			data : db.data()
+			data : @data
 			views :  [
 				left: 0,
 				bottom: 0,
