@@ -22,8 +22,12 @@ class MaterialManagerMenu extends BaseView
 	
 	changeMaterial: (material) =>
 		id = @nextId++
-		material.set 'materialId', id
-	
+		#TODO dont set id - neet mapping between id <-> materialId
+		material.set 
+			'id'					: id
+			'materialId'	: id
+		EditorEventbus.selectMaterial.dispatch id
+		
 	newMaterial: (event) =>
 		event?.preventDefault()
 		col = db.get 'materials'

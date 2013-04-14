@@ -19,7 +19,7 @@ class MaterialHelper
 				foundId = key
 				break
 		unless foundId
-			material = db.get 'materials', materialId
+			material = db.get 'materials', materialId #TODO id<-> materialid
 			threeMaterial = @transformMaterial(material, materialId) 
 			object.material.materials.push threeMaterial
 			foundId = object.material.materials.length - 1
