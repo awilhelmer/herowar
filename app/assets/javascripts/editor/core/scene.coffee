@@ -1,7 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
-TerrainModel = require 'model/terrain'
+TerrainModel = require 'models/terrain'
 Material = require 'models/material'
 Constants = require 'constants'
 db = require 'database'
@@ -79,8 +79,9 @@ class Scene
 		mat.set 
 			'id'					: 1
 			'materialId' 	: 1
-			'name'				: "Terrain"
+			'name'				: 'Terrain'
 			'color' 			: '#006600'
 		col.add mat
+		@terrain.addMaterial mat
 
 return Scene

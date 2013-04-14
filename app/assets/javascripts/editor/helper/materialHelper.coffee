@@ -3,9 +3,6 @@ db = require 'database'
 
 class MaterialHelper
 
-	constructor: (@editor) ->
-
-
 	getThreeMaterialId: (object, materialId) ->
 		unless object.material and object.material.materials
 			materials = []
@@ -26,13 +23,14 @@ class MaterialHelper
 
 	#I dont know why, but the renderer will fail  
 	setOtherChildsMaterial: (object, threeMaterial) ->
-		for value in object.parent.children
-			if value isnt object and value.material and value.material.materials
-				value.material.materials.push threeMaterial
+		if object.parent
+			for value in object.parent.children 
+				if value isnt object and value.material and value.material.materials
+					value.material.materials.push threeMaterial
 				
 
-#Transform own materials (backbone model) to THREE.materials model 
-# @see MaterialManagerMenu for all properties 
+	#Transform own materials (backbone model) to THREE.materials model 
+	# @see MaterialManagerMenu for all properties 
 	transformMaterial:(material, materialId) ->
 		result = new THREE.MeshBasicMaterial()
 		result.name = 'matID' + materialId
