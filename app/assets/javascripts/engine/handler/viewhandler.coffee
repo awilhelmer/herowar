@@ -73,6 +73,12 @@ class ViewHandler
 			renderer.setViewport left, bottom, width, height
 			renderer.setScissor left, bottom, width, height 
 			renderer.enableScissorTest  true 
+		aspect =  width / height
+		if view.camera.aspect isnt aspect
+			view.camera.aspect = aspect
+			view.skyboxCamera.aspect = view.camera.aspect
+			view.camera.updateProjectionMatrix()
+			view.skyboxCamera.updateProjectionMatrix()
 		view.skyboxCamera.rotation.copy view.camera.rotation
 		renderer.render skyboxScene, view.skyboxCamera
 		renderer.render scene, view.camera
@@ -83,7 +89,7 @@ class ViewHandler
 			when Variables.CAMERA_TYPE_RTS 	
 				null
 			when Variables.CAMERA_TYPE_FREE
-				if ((@controls) && !(@engine.pause))
+				if @controls and not @engine.pause
 					@controls.update()
 			else
 				console.log "No camera logic for #{ view.type } setted"
