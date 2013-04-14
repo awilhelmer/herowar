@@ -83,6 +83,5 @@ class Scene
 			'color' 			: '#006600'
 		col.add mat
 		@terrain.addMaterial mat
-		console.log @terrain
 
 return Scene

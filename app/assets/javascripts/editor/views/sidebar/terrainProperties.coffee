@@ -68,9 +68,12 @@ class TerrainProperties extends BasePropertiesView
 	resetTerrainPool: =>
 		EditorEventbus.resetTerrainPool.dispatch()
 
-	render: ->
-		console.log 'Render'
-		console.log @model.get 'materials'
-		super()
+	getTemplateData: ->
+		json = super()
+		materials = []
+		for material in json.materials
+			materials.push material.toJSON()
+		json.materials = materials
+		json
 
 return TerrainProperties
