@@ -1,14 +1,16 @@
-ObjectHelper = require 'helper/objectHelper'
+MaterialHelper = require 'helper/materialHelper'
 Constants = require 'constants'
 
 class Terrain extends Backbone.Model
 
 	initialize: (options) ->
+		@materialHelper = new MaterialHelper()
 		@reset()
 
 	reset: ->
 		@set 
 			'name'						: 'Terrain'
+			'materials'				: []
 			'width' 					: Constants.TERRAIN_DEFAULT_WIDTH
 			'widthMin' 				: Constants.TERRAIN_MIN_WIDTH
 			'widthMax' 				: Constants.TERRAIN_MAX_WIDTH
@@ -27,11 +29,6 @@ class Terrain extends Backbone.Model
 			'zScaleSteps' 		: Constants.TERRAIN_STEPS_ZSCALE
 			'color'						: Constants.TERRAIN_DEFAULT_COLOR
 			'wireframe'				: Constants.TERRAIN_DEFAULT_WIREFRAME
-		@setMaterials()		
-
-	setMaterials: ->
-		materials = [new THREE.MeshBasicMaterial(color: @get('color'))]
-		@set 'materials', materials
 
 	update: ->
 		segWidth = Math.round(@get('width') / 10)
@@ -49,7 +46,8 @@ class Terrain extends Backbone.Model
 	getTerrainMesh: (terrain, segWidth, segHeight) ->		
 		obj = new THREE.Object3D()
 		obj.name = (@get 'name') + '_group'
-		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), new THREE.MeshFaceMaterial @get('materials')
+		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), new THREE.MeshFaceMaterial()
+		@materialHelper.getThreeMaterialId mesh, @get('materials')[0].get 'materialId'
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		obj.add mesh

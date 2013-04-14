@@ -28,6 +28,7 @@ class TerrainProperties extends BasePropertiesView
     EditorEventbus.showTerrainProperties.add @showPanel
     EditorEventbus.showObjectProperties.add @hidePanel
     EditorEventbus.showMaterialProperties.add @hidePanel
+    @listenTo @model, 'change:materials', @render if @model
 
   createSliders: ->
     @createSlider @$el.find('#inputWidth').get(0), Constants.TERRAIN_MIN_WIDTH, Constants.TERRAIN_MAX_WIDTH, Constants.TERRAIN_STEPS_WIDTH, @changeTerrain
@@ -66,5 +67,9 @@ class TerrainProperties extends BasePropertiesView
 
   resetTerrainPool: =>
     EditorEventbus.resetTerrainPool.dispatch()
+
+	render: ->
+		console.log @model
+		super()
 
 return TerrainProperties

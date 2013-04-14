@@ -79,8 +79,10 @@ class Scene
 		mat.set 
 			'id'					: 1
 			'materialId' 	: 1
-			'name'				: "Terrain"
+			'name'				: 'Terrain'
 			'color' 			: '#006600'
 		col.add mat
+		materials = @terrain.get('materials').push mat
+		console.log @terrain
 
 return Scene
