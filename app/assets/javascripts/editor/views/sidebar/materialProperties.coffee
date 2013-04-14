@@ -34,35 +34,42 @@ class MaterialProperties extends BasePropertiesView
 		@render()
 
 	changeName: (event) =>
-		if event
-			event.preventDefault()
-			$currentTarget = $ event.currentTarget
-			console.log "Name: #{$currentTarget.val()}"
-			@model.set 'name', $currentTarget.val()		
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		console.log "Name: #{$currentTarget.val()}"
+		@model.set 'name', $currentTarget.val()		
 
 	changeColor: (event) =>
-		if event
-			event.preventDefault()
-			$currentTarget = $ event.currentTarget
-			console.log "Color: #{$currentTarget.val()}"
-			@model.set 'color', $currentTarget.val()
-			EditorEventbus.changeMaterial.dispatch @model
-			
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		console.log "Color: #{$currentTarget.val()}"
+		@model.set 'color', $currentTarget.val()
+		EditorEventbus.changeMaterial.dispatch @model
+		
 	changeTransparency: (event) =>
-		if event
-			event.preventDefault()
-			$currentTarget = $ event.currentTarget
-			console.log "Transparency: #{$currentTarget.val()}"
-			@model.set 'transparent', $currentTarget.val()
-			EditorEventbus.changeMaterial.dispatch @model
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		console.log "Transparency: #{$currentTarget.val()}"
+		@model.set 'transparent', $currentTarget.val()
+		EditorEventbus.changeMaterial.dispatch @model
 	
 	changeOpacity: (event) =>
-		if event
-			event.preventDefault()
-			$currentTarget = $ event.currentTarget
-			if (@model.get 'opacity') isnt $currentTarget.val()
-				console.log "Opacity: #{$currentTarget.val()}"
-				@model.set 'opacity', $currentTarget.val()
-				EditorEventbus.changeMaterial.dispatch @model
+		unless event then return
+		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		if (@model.get 'opacity') isnt $currentTarget.val()
+			console.log "Opacity: #{$currentTarget.val()}"
+			@model.set 'opacity', $currentTarget.val()
+			EditorEventbus.changeMaterial.dispatch @model
+
+	getTemplateData: ->
+		json = super()
+		textures = []
+		textures.push texture.id for texture in db.get('textures').models
+		json.textures = textures
+		json
 
 return MaterialProperties
