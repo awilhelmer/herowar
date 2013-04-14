@@ -14,6 +14,16 @@
 						<div class="controls">
 							<input type="text" id="mp-basis-name" class="input-medium" name="mp-basis-name" placeholder="Name" value="{{name}}">
 						</div>
+						
+						<label class="control-label" for="mp-basis-transparent">Transparency</label>
+						<div class="controls">
+							<input type="checkbox" id="mp-basis-transparent" name="mp-basis-transparent" {{#if transparent}}checked="checked"{{/if}}">
+						</div>
+						
+						<label class="control-label" for="mp-basis-opacity">Opacity</label>
+						<div class="controls">
+							<input type="text" id="mp-basis-opacity" class="input-medium" name="mp-basis-opacity" placeholder="1" value="{{opacity}}">
+						</div>
 					</div>
 				</form>
 			</div>

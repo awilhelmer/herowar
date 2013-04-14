@@ -14,8 +14,10 @@ class MaterialProperties extends BasePropertiesView
 	template: templates.get 'sidebar/materialProperties.tmpl'
 	
 	events:
-		'change input[name="mp-basis-name"]': 'changeName'
-		'change input[name="mp-color-sel"]'	: 'changeColor'
+		'change input[name="mp-basis-name"]'					: 'changeName'
+		'change input[name="mp-color-sel"]'						: 'changeColor'
+		'change input[name="mp-basis-transparent"]' 	: 'changeTransparency'
+		'change input[name="mp-basis-opacity"]' 			: 'changeOpacity'
 	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -45,5 +47,22 @@ class MaterialProperties extends BasePropertiesView
 			console.log "Color: #{$currentTarget.val()}"
 			@model.set 'color', $currentTarget.val()
 			EditorEventbus.changeMaterial.dispatch @model
+			
+	changeTransparency: (event) =>
+		if event
+			event.preventDefault()
+			$currentTarget = $ event.currentTarget
+			console.log "Transparency: #{$currentTarget.val()}"
+			@model.set 'transparent', $currentTarget.val()
+			EditorEventbus.changeMaterial.dispatch @model
+	
+	changeOpacity: (event) =>
+		if event
+			event.preventDefault()
+			$currentTarget = $ event.currentTarget
+			if (@model.get 'opacity') isnt $currentTarget.val()
+				console.log "Opacity: #{$currentTarget.val()}"
+				@model.set 'opacity', $currentTarget.val()
+				EditorEventbus.changeMaterial.dispatch @model
 
 return MaterialProperties
