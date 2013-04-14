@@ -5,14 +5,15 @@ class ObjectHelper
 	hasWireframe: (obj) ->
 		found = false
 		for mesh in obj.children
-			found = true if mesh.material.wireframe
+			found = true if mesh.name is 'wireframe'
+			
 		found
 
 	addWireframe: (obj, color) ->
 		@editor.engine.scenegraph.scene.remove(obj)
 		#TODO hard coded children access ...
 		materials = []		
-		materials.push new THREE.MeshBasicMaterial wireframe: true
+		materials.push new THREE.MeshBasicMaterial(color: color, wireframe: true)
 		mesh = new THREE.Mesh obj.children[0].geometry, new THREE.MeshFaceMaterial materials
 		mesh.rotation.copy obj.children[0].rotation
 		mesh.name = 'wireframe'
@@ -26,7 +27,7 @@ class ObjectHelper
 			foundMesh = false
 			meshId = 0
 			for mesh in obj.children
-				if mesh.material.wireframe
+				if mesh.name is 'wireframe'
 					foundMesh = true
 					break;
 				meshId++
@@ -41,7 +42,8 @@ class ObjectHelper
 
 	changeWireframeColor: (obj, color) ->
 			for mesh in obj.children
-				mesh.material.color.set color if mesh.material.wireframe
+				if mesh.name is 'wireframe'	and mesh.material.materials
+					mesh.material.materials[0].color.set color if mesh.material.materials[0].wireframe
 
 	getBaseObject: (obj) ->	
 		if obj
