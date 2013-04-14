@@ -40,7 +40,8 @@ class MaterialManagerMenu extends BaseView
 			if entry.id is id
 				result = entry.materialId
 		materialId
-		
+	
+	#this is more like changedUnusedMaterial, we dont have to set new ids
 	changeMaterial: (material) =>
 		matId = @nextMatId++
 		material.set 
