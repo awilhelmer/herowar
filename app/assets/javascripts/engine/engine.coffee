@@ -2,6 +2,7 @@ Variables = require 'variables'
 SceneGraph = require 'scenegraph'
 ViewHandler = require 'handler/viewhandler'
 Eventbus = require 'eventbus'
+EngineRenderer = require 'enginerenderer'
 
 class Engine 
 
@@ -33,7 +34,7 @@ class Engine
 			renderer = new THREE.CanvasRenderer
 				clearColor: 0xffffff
 		else
-			renderer = new THREE.WebGLRenderer 
+			renderer = new EngineRenderer 
 				antialias: true
 			renderer.autoClear = false
 		renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
