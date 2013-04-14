@@ -40,7 +40,7 @@ class Input
 			Variables.MOUSE_PRESSED_MIDDLE = false if event.which is 2
 			Variables.MOUSE_PRESSED_RIGHT = false if event.which is 3
 		EditorEventbus.mouseup.dispatch event
-		unless Constants.TOOL_BRUSH_SELECTION
+		unless Constants.TOOL_BRUSH_SELECTED
 			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false unless Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_MIDDLE or Variables.MOUSE_PRESSED_RIGHT
 		
@@ -50,7 +50,7 @@ class Input
 			Variables.MOUSE_PRESSED_MIDDLE = true if event.which is 2
 			Variables.MOUSE_PRESSED_RIGHT = true if event.which is 3
 		EditorEventbus.mousedown.dispatch event
-		unless Constants.TOOL_BRUSH_SELECTION
+		unless Constants.TOOL_BRUSH_SELECTED
 			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = false
 		
@@ -60,7 +60,7 @@ class Input
 			Variables.MOUSE_POSITION_Y = event.clientY
 		EditorEventbus.mousemove.dispatch event
 		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
-		if !Constants.TOOL_BRUSH_SELECTION and (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
+		if !Constants.TOOL_BRUSH_SELECTED and (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
 			Eventbus.controlsChanged.dispatch event
 		Variables.MOUSE_MOVED = true
 	
