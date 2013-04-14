@@ -38,6 +38,10 @@ class MaterialManagerMenu extends BaseView
 			'materialId' 	: id
 			'name'				: "Mat.#{id}"
 			'color' 			: '#CCCCCC'
+			'transparent' : false
+			'opacity'			: 1
+			'map'					: undefined
+			
 		col.add mat
 
 return MaterialManagerMenu
