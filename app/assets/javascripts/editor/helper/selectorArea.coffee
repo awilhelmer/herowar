@@ -47,6 +47,8 @@ class SelectorArea
 		
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
+		unless @selectorObject.selectedObject
+			@selectorObject.selectedObject = @selectorObject.objectHelper.getBaseObject intersect.object
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				@handleBrush intersect.object, intersect.faceIndex
@@ -83,7 +85,7 @@ class SelectorArea
 			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
 			if oldIndex isnt face.materialIndex
 				scene = @editor.engine.scenegraph.scene
-				baseObject.remove object #TODO better removing and adding to renderer but methods removeObject and addObject of WebGLRenderer arent visible? 
+				baseObject.remove object
 				@editor.engine.render()
 				object.geometry.geometryGroups = undefined
 				object.geometry.geometryGroupsList = undefined
