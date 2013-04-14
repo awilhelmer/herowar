@@ -82,7 +82,7 @@ class Scene
 			'name'				: 'Terrain'
 			'color' 			: '#006600'
 		col.add mat
-		materials = @terrain.get('materials').push mat
+		@terrain.addMaterial mat
 		console.log @terrain
 
 return Scene

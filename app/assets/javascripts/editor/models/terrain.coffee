@@ -30,6 +30,11 @@ class Terrain extends Backbone.Model
 			'color'						: Constants.TERRAIN_DEFAULT_COLOR
 			'wireframe'				: Constants.TERRAIN_DEFAULT_WIREFRAME
 
+	addMaterial: (material) ->
+		materials = @get 'materials'
+		materials.push material
+		@set 'materials', materials
+
 	update: ->
 		segWidth = Math.round(@get('width') / 10)
 		segHeight = Math.round(@get('height') / 10)
