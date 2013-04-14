@@ -20,6 +20,8 @@ class MaterialManagerContent extends BaseView
 		unless event then return
 		event.preventDefault()
 		$currentTarget = $ event.currentTarget
+		$('#materialManager .mm-material').removeClass 'active'
+		$currentTarget.addClass 'active'
 		matId = $currentTarget.data 'matid'
 		@dispatchSelectMaterialEvent matId if matId
 						
