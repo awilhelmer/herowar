@@ -3,19 +3,19 @@ db = require 'database'
 
 class MaterialHelper
 
-	getThreeMaterialId: (object, materialId) ->
+	getThreeMaterialId: (object, idMapper) ->
 		unless object.material and object.material.materials
 			materials = []
 			if object.material
 				materials.push object.material
 			object.material = new THREE.MeshFaceMaterial(materials) 	
 		for value,key in object.material.materials
-			if value and value.name and value.name is 'matID' + materialId
+			if value and value.name and value.name is 'matID' + idMapper.materialId
 				foundId = key
 				break
 		unless foundId
-			material = db.get 'materials', materialId #TODO id<-> materialid
-			threeMaterial = @transformMaterial(material, materialId) 
+			material = db.get 'materials', idMapper.id 
+			threeMaterial = @transformMaterial(material, idMapper.materialId) 
 			object.material.materials.push threeMaterial
 			@setOtherChildsMaterial object, threeMaterial
 			foundId = object.material.materials.length - 1

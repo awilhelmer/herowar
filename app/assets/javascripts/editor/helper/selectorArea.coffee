@@ -95,9 +95,9 @@ class SelectorArea
 		null
 		
 		
-	onMaterialSelected: (materialId) =>
+	onMaterialSelected: (id, materialId) =>
 		console.log "SelectorArea: Selected ID #{materialId}!"
-		@selectedMatId = materialId
+		@selectedMatId = id: id,  materialId: materialId
 		
 	onMaterialDeselect: () =>
 		console.log 'SelectorArea: Deselected ID!'
