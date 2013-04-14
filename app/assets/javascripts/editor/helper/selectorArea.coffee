@@ -82,14 +82,16 @@ class SelectorArea
 			oldIndex = face.materialIndex
 			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
 			if oldIndex isnt face.materialIndex
-				baseObject.remove object
-				#TODO find another way ... 
-				mesh = new THREE.Mesh object.geometry.clone(), object.material
-				mesh.name = object.name
-				mesh.position = object.position
-				mesh.rotation = object.rotation
-				baseObject.add mesh
-				console.log "setted brush material: materialIndex #{face.materialIndex} of objectName #{mesh.name}"
+				scene = @editor.engine.scenegraph.scene
+				baseObject.remove object #TODO better removing and adding to renderer but methods removeObject and addObject of WebGLRenderer arent visible? 
+				@editor.engine.render()
+				object.geometry.geometryGroups = undefined
+				object.geometry.geometryGroupsList = undefined
+				object.__webglInit = false #hack
+				object.__webglActive = false #hack 				
+				baseObject.add object
+				#END HACKS
+				console.log "setted brush material: materialIndex #{face.materialIndex} of objectName #{object.name}"
 		null
 		
 		

@@ -76,8 +76,8 @@ class ViewHandler
 		aspect =  width / height
 		if view.camera.aspect isnt aspect
 			view.camera.aspect = aspect
-			view.skyboxCamera.aspect = view.camera.aspect
 			view.camera.updateProjectionMatrix()
+			view.skyboxCamera.aspect = view.camera.aspect
 			view.skyboxCamera.updateProjectionMatrix()
 		view.skyboxCamera.rotation.copy view.camera.rotation
 		renderer.render skyboxScene, view.skyboxCamera

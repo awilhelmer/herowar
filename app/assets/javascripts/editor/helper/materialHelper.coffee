@@ -20,8 +20,16 @@ class MaterialHelper
 			material = db.get 'materials', materialId #TODO id<-> materialid
 			threeMaterial = @transformMaterial(material, materialId) 
 			object.material.materials.push threeMaterial
+			@setOtherChildsMaterial object, threeMaterial
 			foundId = object.material.materials.length - 1
 		foundId
+
+	#I dont know why, but the renderer will fail  
+	setOtherChildsMaterial: (object, threeMaterial) ->
+		for value in object.parent.children
+			if value isnt object and value.material and value.material.materials
+				value.material.materials.push threeMaterial
+				
 
 #Transform own materials (backbone model) to THREE.materials model 
 # @see MaterialManagerMenu for all properties 
