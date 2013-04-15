@@ -50,13 +50,9 @@ class MaterialManagerMenu extends BaseView
 				result = entry.id
 		result
 
-	selectMaterial: (id, matIdMode) =>
-		if (matIdMode)
-			modelId = @getId(id)
-			matId = id
-		else
-			matId =  @getMaterialId id
-			modelId = id
+	selectMaterial: (id) =>
+		matId =  @getMaterialId id
+		modelId = id
 		console.log "select material id #{modelId} matId #{matId}"
 		idMapper = id: modelId, materialId:matId
 		Constants.MATERIAL_SELECTED = id

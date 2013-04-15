@@ -23,11 +23,11 @@ class MaterialManagerContent extends BaseView
 		$currentTarget = $ event.currentTarget
 		$('#materialManager .mm-material').removeClass 'active'
 		$currentTarget.addClass 'active'
-		matId = $currentTarget.data 'matid'
-		@dispatchSelectMaterialEvent matId if matId
+		modelId = $currentTarget.data 'matid'
+		@dispatchSelectMaterialEvent modelId if modelId
 						
-	dispatchSelectMaterialEvent: (materialId) ->
-		EditorEventbus.menuSelectMaterial.dispatch materialId, true
+	dispatchSelectMaterialEvent: (modelId) ->
+		EditorEventbus.menuSelectMaterial.dispatch modelId
 		EditorEventbus.showMaterialProperties.dispatch()
 
 return MaterialManagerContent

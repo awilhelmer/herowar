@@ -13,7 +13,7 @@ constants =
 		BRUSH_TERRAIN_RAISE						 	: 'terrain_raise'
 		BRUSH_TERRAIN_DEGRADE					 	: 'terrain_degrade'
 		
-		MATERIAL_SELECTED								: undefined
+		MATERIAL_SELECTED								: 1
 
 		WORLD_DEFAULT_SKYBOX						: 'default'
 

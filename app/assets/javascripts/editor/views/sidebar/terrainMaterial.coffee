@@ -18,8 +18,8 @@ class TerrainMaterial extends BaseView
 		event.preventDefault()
 		@dispatchSelectMaterialEvent @options.modelId
 
-	dispatchSelectMaterialEvent: (materialId) ->
-		EditorEventbus.menuSelectMaterial.dispatch materialId, false
+	dispatchSelectMaterialEvent: (modelId) ->
+		EditorEventbus.menuSelectMaterial.dispatch modelId
 		EditorEventbus.showMaterialProperties.dispatch()
 
 return TerrainMaterial

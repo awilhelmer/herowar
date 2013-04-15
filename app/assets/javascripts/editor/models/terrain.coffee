@@ -53,8 +53,8 @@ class Terrain extends Backbone.Model
 		obj = new THREE.Object3D()
 		obj.name = (@get 'name') + '_group'
 		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('width'), @get('height'), segWidth, segHeight), new THREE.MeshFaceMaterial()
-		material = db.get 'materials', 1
-		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: material.get('materialId')
+		material = db.get 'materials', Constants.MATERIAL_SELECTED
+		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: Constants.MATERIAL_SELECTED #TODO MAPPING ... 
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		obj.add mesh
