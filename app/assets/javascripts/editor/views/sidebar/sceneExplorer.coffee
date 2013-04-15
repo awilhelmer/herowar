@@ -30,8 +30,11 @@ class SceneExplorer extends BaseView
 	render: ->
 		super()
 		# TODO: handle this with a model
-		@$el.find('.scenegraph-tree').append '<div class="scenegraph-tree-world active" data-type="world"><img src="assets/images/editor/world.png" /><span>World</span></div>'
-		@$el.find('.scenegraph-tree').append '<div class="scenegraph-tree-terrain" data-type="terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>'
+		$scenegraphTree = @$el.find '.scenegraph-tree'
+		$scenegraphTree.append '<div class="scenegraph-tree-world active" data-type="world"><img src="assets/images/editor/world.png" /><span>World</span></div>'
+		$scenegraphTree.append '<div class="scenegraph-tree-terrain" data-type="terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>'
+		$scenegraphTree.append '<div class="scenegraph-tree-folder" data-type="folder"><img src="assets/images/editor/folder.png" /><span>Environment</span></div>'
+		$scenegraphTree.append '<div class="scenegraph-tree-folder" data-type="folder"><img src="assets/images/editor/folder.png" /><span>Pathing</span></div>'
 	
 	worldAdded: =>
 		@world = true
