@@ -21,6 +21,7 @@ class Scene
 		@world = db.get 'world'
 		@terrain = db.get 'terrain'
 		@addEventListeners()
+		@newMapEmpty()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
