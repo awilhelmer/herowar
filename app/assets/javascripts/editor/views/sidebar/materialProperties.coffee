@@ -27,9 +27,9 @@ class MaterialProperties extends BasePropertiesView
 		EditorEventbus.selectMaterial.add @loadMaterial
 		EditorEventbus.deselectMaterial.add @hidePanel
 
-	loadMaterial: (materialId) =>
+	loadMaterial: (id) =>
 		console.log 'Load Material Properties'
-		@model = db.get 'materials', materialId
+		@model = db.get 'materials', id.id
 		console.log @model
 		@render()
 
@@ -46,7 +46,7 @@ class MaterialProperties extends BasePropertiesView
 		$currentTarget = $ event.currentTarget
 		console.log "Color: #{$currentTarget.val()}"
 		@model.set 'color', $currentTarget.val()
-		EditorEventbus.changeMaterial.dispatch @model
+		EditorEventbus.changeMaterial.dispatch @model.id
 		
 	changeTransparency: (event) =>
 		unless event then return
@@ -54,7 +54,7 @@ class MaterialProperties extends BasePropertiesView
 		$currentTarget = $ event.currentTarget
 		console.log "Transparency: #{$currentTarget.val()}"
 		@model.set 'transparent', $currentTarget.val()
-		EditorEventbus.changeMaterial.dispatch @model
+		EditorEventbus.changeMaterial.dispatch @model.id
 	
 	changeOpacity: (event) =>
 		unless event then return
@@ -63,7 +63,7 @@ class MaterialProperties extends BasePropertiesView
 		if (@model.get 'opacity') isnt $currentTarget.val()
 			console.log "Opacity: #{$currentTarget.val()}"
 			@model.set 'opacity', $currentTarget.val()
-			EditorEventbus.changeMaterial.dispatch @model
+			EditorEventbus.changeMaterial.dispatch @model.id
 
 	getTemplateData: ->
 		json = super()

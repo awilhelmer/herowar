@@ -18,9 +18,10 @@ class MaterialTexture extends BaseView
 	loadTexture: (event) =>
 		unless event then return
 		event.preventDefault()
-		console.log 'Load texture'
-		material = db.get 'materials', Constants.MATERIAL_SELECTED
-		material.set 'map', @model.get 'threeTexture'
-		console.log material
+		if Constants.MATERIAL_SELECTED
+			console.log 'Load texture'
+			material = db.get 'materials', Constants.MATERIAL_SELECTED
+			material.set 'map', @model.get 'threeTexture'
+			EditorEventbus.menuSelectMaterial.dispatch Constants.MATERIAL_SELECTED, false
 
 return MaterialTexture

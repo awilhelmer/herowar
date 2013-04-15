@@ -9,17 +9,31 @@ class MaterialHelper
 			if object.material
 				materials.push object.material
 			object.material = new THREE.MeshFaceMaterial(materials) 	
-		for value,key in object.material.materials
-			if value and value.name and value.name is 'matID' + idMapper.materialId
-				foundId = key
-				break
-		unless foundId
+		index = @getMaterialIndex object, idMapper 
+		unless index
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial(material, idMapper.materialId) 
 			object.material.materials.push threeMaterial
-			foundId = object.material.materials.length - 1
-		foundId
+			index = object.material.materials.length - 1
+		index
 
+
+	updateMaterial:  (object, idMapper) ->
+		index = @getMaterialIndex object, idMapper
+		if index
+			material = db.get 'materials', idMapper.id 
+			threeMaterial = @transformMaterial(material, idMapper.materialId)
+			threeMaterial.needsUpdate = true
+			object.material.materials[index] = threeMaterial
+	
+	getMaterialIndex:(obj, idMapper) ->
+		for value,key in obj.material.materials
+			if value and value.name and value.name is 'matID' + idMapper.materialId
+				foundId = key
+				break
+		foundId
+	
+	
 	#Transform own materials (backbone model) to THREE.materials model 
 	# @see MaterialManagerMenu for all properties 
 	transformMaterial:(material, materialId) ->

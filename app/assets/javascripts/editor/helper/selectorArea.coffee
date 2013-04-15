@@ -48,7 +48,8 @@ class SelectorArea
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
 		unless @selectorObject.selectedObject
-			@selectorObject.selectedObject = @selectorObject.objectHelper.getBaseObject intersect.object
+			console.log "selectiong terrain!"
+			@selectorObject.selectTerrain()
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				@handleBrush intersect.object, intersect.faceIndex
@@ -93,13 +94,13 @@ class SelectorArea
 				object.__webglActive = false #hack 				
 				baseObject.add object
 				#END HACKS
-				console.log "setted brush material: materialIndex #{face.materialIndex} of objectName #{object.name}"
+				#console.log "setted brush material id #{@selectedMatId.id} matId #{@selectedMatId.materialId}: materialIndex #{face.materialIndex} of objectName #{object.name}"
 		null
 		
 		
-	onMaterialSelected: (id, materialId) =>
-		console.log "SelectorArea: Selected ID #{materialId}!"
-		@selectedMatId = id: id,  materialId: materialId
+	onMaterialSelected: (idMapper) =>
+		console.log "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"
+		@selectedMatId = idMapper
 		
 	onMaterialDeselect: () =>
 		console.log 'SelectorArea: Deselected ID!'

@@ -5,7 +5,7 @@ db = require 'database'
 
 class SelectorObject
 
-	constructor: (@editor) ->
+	constructor: (@editor, @materialHelper) ->
 		@objectHelper = new ObjectHelper @editor
 		@intersectHelper = new IntersectHelper @editor
 		@world = db.get 'world'
@@ -16,7 +16,8 @@ class SelectorObject
 		EditorEventbus.selectWorldUI.add @selectWorld
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
-
+		EditorEventbus.updateModelMaterial.add @materialUpdate
+		
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
@@ -65,5 +66,11 @@ class SelectorObject
 			@objectHelper.changeWireframeColor obj, 0xFFFFFF
 		else
 			@objectHelper.removeWireframe obj 
+	
+	materialUpdate: (idMapper) =>
+		if @selectedObject and idMapper
+			mesh = @objectHelper.getModel(@selectedObject)
+			@materialHelper.updateMaterial(mesh, idMapper)
 
+			
 return SelectorObject

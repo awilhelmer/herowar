@@ -77,7 +77,7 @@ class TerrainProperties extends BasePropertiesView
 		@dispatchSelectMaterialEvent matId if matId
 
 	dispatchSelectMaterialEvent: (materialId) ->
-		EditorEventbus.selectMaterial.dispatch materialId
+		EditorEventbus.menuSelectMaterial.dispatch materialId, true
 		EditorEventbus.showMaterialProperties.dispatch()
 
 return TerrainProperties

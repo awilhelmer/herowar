@@ -3,6 +3,7 @@ BaseView = require 'views/baseView'
 templates = require 'templates'
 Material = require 'models/material'
 db = require 'database'
+Constants = require 'constants'
 
 class MaterialManagerMenu extends BaseView
 
@@ -15,13 +16,15 @@ class MaterialManagerMenu extends BaseView
 	
 	bindEvents: ->
 		EditorEventbus.changeMaterial.add @changeMaterial
-	
+		EditorEventbus.menuSelectMaterial.add @selectMaterial
+		
+		
 	initialize: (options) ->
-		@nextId = 2
-		@nextMatId = 2
-		@idmapper = []
+		@nextId = 1
+		@nextMatId = 1
+		@idmapper = [id:@nextId, materialId:@nextMatId]
 		super options
-	
+		
 	updateMatId: (id, materialId) ->
 		for entry in @idmapper
 			unless found	
@@ -39,23 +42,41 @@ class MaterialManagerMenu extends BaseView
 		for entry in @idmapper
 			if entry.id is id
 				result = entry.materialId
-		materialId
+		result
 	
-	#this is more like changedUnusedMaterial, we dont have to set new ids
-	changeMaterial: (material) =>
-		matId = @nextMatId++
-		material.set 
-			'materialId'	: matId
-		id = material.get 'id'
-		@updateMatId id, matId
-		EditorEventbus.selectMaterial.dispatch id, matId 
+	getId: (materialId) ->
+		for entry in @idmapper
+			if entry.materialId is materialId
+				result = entry.id
+		result
+
+	selectMaterial: (id, matIdMode) =>
+		if (matIdMode)
+			modelId = @getId(id)
+			matId = id
+		else
+			matId =  @getMaterialId id
+			modelId = id
+		console.log "select material id #{modelId} matId #{matId}"
+		idMapper = id: modelId, materialId:matId
+		Constants.MATERIAL_SELECTED = id
+		EditorEventbus.selectMaterial.dispatch idMapper
+
+	changeMaterial: (id) =>
+		matId =  @getMaterialId id
+		console.log "changed material id #{id} matId #{matId}"
+		idMapper = id: id, materialId:matId
+		EditorEventbus.selectMaterial.dispatch idMapper
+		EditorEventbus.updateModelMaterial.dispatch idMapper
 		
 	newMaterial: (event) =>
 		event?.preventDefault()
 		id = @nextId++
 		matId = @nextMatId++
+		console.log "new material id #{id} matId #{matId}"
 		col = db.get 'materials'
 		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
-		updateMatId id matId
+		@updateMatId id, matId
+		EditorEventbus.selectMaterial.dispatch id:id, materialId: matId
 		
 return MaterialManagerMenu
