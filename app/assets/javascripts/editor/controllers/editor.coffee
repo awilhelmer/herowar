@@ -14,6 +14,7 @@ class Editor extends BaseController
 		'views/sidebar'	  			: ''
 		'views/viewport'				: ''
 		'views/materialManager'	: ''
+		'views/modal'						: ''
 
 	initialize: (options) ->
 		console.log 'Initialize editor...'
