@@ -9,4 +9,31 @@ class Menubar extends BaseView
 	
 	template: templates.get 'menubar.tmpl'
 	
+	events:
+		'click #fileNewMapEmpty'			: 'fileNewMapEmpty'
+		'click #fileNewMapGenerated'	: 'fileNewMapGenerated'
+		'click #fileOpen'							: 'fileOpen'	
+		'click #fileSave'							: 'fileSave'	
+		'click #fileExit'							: 'fileExit'	
+
+	fileNewMapEmpty: (event) ->
+		event?.preventDefault()
+		alert 'Not implemented yet...'
+
+	fileNewMapGenerated: (event) ->
+		event?.preventDefault()
+		alert 'Not implemented yet...'
+
+	fileOpen: (event) ->
+		event?.preventDefault()
+		alert 'Not implemented yet...'
+
+	fileSave: (event) ->
+		event?.preventDefault()
+		alert 'Not implemented yet...'
+
+	fileExit: (event) ->
+		event?.preventDefault()
+		window.location = '/'
+
 return Menubar
