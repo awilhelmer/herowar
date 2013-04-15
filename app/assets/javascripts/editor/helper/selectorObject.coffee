@@ -71,5 +71,6 @@ class SelectorObject
 		if @selectedObject and idMapper
 			mesh = @objectHelper.getModel @selectedObject
 			@materialHelper.updateMaterial mesh, idMapper
+			console.log mesh
 
 return SelectorObject
