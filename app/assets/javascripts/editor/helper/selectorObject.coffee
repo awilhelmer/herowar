@@ -68,9 +68,10 @@ class SelectorObject
 			@objectHelper.removeWireframe obj
 	
 	materialUpdate: (idMapper) =>
-		if @selectedObject and idMapper
-			mesh = @objectHelper.getModel @selectedObject
+		if idMapper
+			mesh = @objectHelper.getModel @editor.engine.scenegraph.getMap()
 			@materialHelper.updateMaterial mesh, idMapper
+			@editor.engine.render()
 			console.log mesh
 
 return SelectorObject

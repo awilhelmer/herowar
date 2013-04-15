@@ -10,7 +10,7 @@ class MaterialHelper
 				materials.push object.material
 			object.material = new THREE.MeshFaceMaterial materials 	
 		index = @getMaterialIndex object, idMapper 
-		unless index
+		if index == -1
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial material, idMapper.materialId 
 			object.material.materials.push threeMaterial
@@ -20,13 +20,14 @@ class MaterialHelper
 
 	updateMaterial: (object, idMapper) ->
 		index = @getMaterialIndex object, idMapper
-		if index
+		if index > -1
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial material, idMapper.materialId
 			threeMaterial.needsUpdate = true
 			object.material.materials[index] = threeMaterial
 	
 	getMaterialIndex:(obj, idMapper) ->
+		foundId = -1
 		for value,key in obj.material.materials
 			if value and value.name and value.name is 'matID' + idMapper.materialId
 				foundId = key
@@ -47,6 +48,8 @@ class MaterialHelper
 					result.transparent = value
 				when 'map'
 					result.map = value
+					if (result.map)
+						result.map.needsUpdate = true
 				when 'opacity'
 					result.opacity = value
 				when 'vertexColors'
