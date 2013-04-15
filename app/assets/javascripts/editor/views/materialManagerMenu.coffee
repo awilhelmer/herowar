@@ -53,15 +53,15 @@ class MaterialManagerMenu extends BaseView
 	selectMaterial: (id) =>
 		matId =  @getMaterialId id
 		modelId = id
-		console.log "select material id #{modelId} matId #{matId}"
+		console.log "Select material id #{modelId} matId #{matId}"
 		idMapper = id: modelId, materialId:matId
 		Constants.MATERIAL_SELECTED = id
 		EditorEventbus.selectMaterial.dispatch idMapper
 
 	changeMaterial: (id) =>
 		matId =  @getMaterialId id
-		console.log "changed material id #{id} matId #{matId}"
-		idMapper = id: id, materialId:matId
+		console.log "Changed material id #{id} matId #{matId}"
+		idMapper = id: id, materialId: matId
 		EditorEventbus.selectMaterial.dispatch idMapper
 		EditorEventbus.updateModelMaterial.dispatch idMapper
 		
@@ -69,7 +69,7 @@ class MaterialManagerMenu extends BaseView
 		event?.preventDefault()
 		id = @nextId++
 		matId = @nextMatId++
-		console.log "new material id #{id} matId #{matId}"
+		console.log "New material id #{id} matId #{matId}"
 		col = db.get 'materials'
 		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
 		@updateMatId id, matId
