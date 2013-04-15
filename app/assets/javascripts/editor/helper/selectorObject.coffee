@@ -70,8 +70,15 @@ class SelectorObject
 	materialUpdate: (idMapper) =>
 		if idMapper
 			mesh = @objectHelper.getModel @editor.engine.scenegraph.getMap()
-			@materialHelper.updateMaterial mesh, idMapper
+			matIndex = @materialHelper.updateMaterial mesh, idMapper
+			if matIndex > -1 and mesh.material.materials[matIndex].map and mesh.material.materials[matIndex].map.needsUpdate
+				@editor.engine.scenegraph.getMap().remove mesh
+				@editor.engine.render()
+				mesh.geometry.geometryGroups = undefined
+				mesh.geometry.geometryGroupsList = undefined
+				mesh.__webglInit = false
+				mesh.__webglActive = false			
+				@editor.engine.scenegraph.getMap().add mesh
 			@editor.engine.render()
-			console.log mesh
-
+		 null
 return SelectorObject
