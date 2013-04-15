@@ -67,8 +67,8 @@ class MaterialManagerMenu extends BaseView
 		
 	newMaterial: (event) =>
 		event?.preventDefault()
-		id = @nextId++
-		matId = @nextMatId++
+		id = ++@nextId
+		matId = ++@nextMatId
 		console.log "New material id #{id} matId #{matId}"
 		col = db.get 'materials'
 		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
