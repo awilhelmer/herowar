@@ -23,9 +23,11 @@ class MaterialHelper
 		if index > -1
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial material, idMapper.materialId
-			threeMaterial.needsUpdate = true
 			object.material.materials[index] = threeMaterial
-	
+			if threeMaterial.map
+						threeMaterial.map.needsUpdate = true
+		index
+					
 	getMaterialIndex:(obj, idMapper) ->
 		foundId = -1
 		for value,key in obj.material.materials
@@ -48,8 +50,6 @@ class MaterialHelper
 					result.transparent = value
 				when 'map'
 					result.map = value
-					if (result.map)
-						result.map.needsUpdate = true
 				when 'opacity'
 					result.opacity = value
 				when 'vertexColors'
