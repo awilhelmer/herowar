@@ -34,6 +34,6 @@ class Menubar extends BaseView
 
 	fileExit: (event) ->
 		event?.preventDefault()
-		alert 'Not implemented yet...'
+		window.location = '/'
 
 return Menubar
