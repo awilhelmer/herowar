@@ -29,7 +29,7 @@ class Scene
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
 		EditorEventbus.newMapEmpty.add @newMapEmpty
 
-	newMapEmpty: ->
+	newMapEmpty: =>
 		console.log 'Initialize scene'
 		EditorEventbus.worldAdded.dispatch
 		EditorEventbus.terrainAdded.dispatch
