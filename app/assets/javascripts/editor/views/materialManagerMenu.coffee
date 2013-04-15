@@ -28,7 +28,7 @@ class MaterialManagerMenu extends BaseView
 	updateMatId: (id, materialId) ->
 		for entry in @idmapper
 			unless found	
-				for key,value of entry
+				for key, value of entry
 					if key is id
 						value = materialId
 						found = true
@@ -36,7 +36,7 @@ class MaterialManagerMenu extends BaseView
 			else 
 				break
 		unless found
-			@idmapper.push id: id, materialId:materialId
+			@idmapper.push id: id, materialId: materialId
 					
 	getMaterialId: (id) ->
 		for entry in @idmapper
@@ -73,6 +73,6 @@ class MaterialManagerMenu extends BaseView
 		col = db.get 'materials'
 		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
 		@updateMatId id, matId
-		EditorEventbus.selectMaterial.dispatch id:id, materialId: matId
+		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
 		
 return MaterialManagerMenu
