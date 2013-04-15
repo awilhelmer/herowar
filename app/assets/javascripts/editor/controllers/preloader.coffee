@@ -52,7 +52,6 @@ class Preloader extends BaseController
 	load: (data) ->
 		for type in @types
 			if type of data
-				console.log "Load #{type}"
 				size = 0
 				for key, value of data[type]
 					size++
