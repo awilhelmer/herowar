@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
@@ -18,7 +19,7 @@ class Menubar extends BaseView
 
 	fileNewMapEmpty: (event) ->
 		event?.preventDefault()
-		alert 'Not implemented yet...'
+		EditorEventbus.newMapEmpty.dispatch()
 
 	fileNewMapGenerated: (event) ->
 		event?.preventDefault()

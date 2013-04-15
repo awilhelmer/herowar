@@ -1,4 +1,7 @@
 editorEventbus = 
+
+		newMapEmpty							: new signals.Signal()
+		
 		worldAdded							: new signals.Signal()
 		terrainAdded						: new signals.Signal()
 		objectAdded						 	: new signals.Signal()
@@ -40,4 +43,5 @@ editorEventbus =
 		changeTerrainWireframe	: new signals.Signal()
 		resetTerrainPool				: new signals.Signal()
 		resetWireframe					: new signals.Signal()
+
 return editorEventbus

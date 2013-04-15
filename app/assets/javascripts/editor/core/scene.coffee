@@ -15,23 +15,26 @@ class Scene
 		@isInitialized = true
 	
 	initialize: ->
-		console.log 'Initialize scene'
-		EditorEventbus.worldAdded.dispatch
-		EditorEventbus.terrainAdded.dispatch
 		@objectHelper = new ObjectHelper @editor
 		@randomPool = new RandomPool()
 		@randomPool.hook()
 		@world = db.get 'world'
 		@terrain = db.get 'terrain'
-		@reset()
 		@addEventListeners()
-		@createTextures()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
 		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
+		EditorEventbus.newMapEmpty.add @newMapEmpty
 
+	newMapEmpty: ->
+		console.log 'Initialize scene'
+		EditorEventbus.worldAdded.dispatch
+		EditorEventbus.terrainAdded.dispatch
+		@reset()		
+		@createTextures()
+		
 	createTextures: ->
 		@textures = db.get 'textures'
 		nextTextureId = 1
