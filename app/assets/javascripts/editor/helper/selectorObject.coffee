@@ -62,15 +62,14 @@ class SelectorObject
 			@objectHelper.addWireframe obj, 0xFFFF00
 
 	removeSelectionWireframe: (obj, type) ->
-		if @objectHelper.hasWireframe(obj) and type is 'terrain' and @terrain.get('wireframe')
+		if @objectHelper.hasWireframe(obj) and type is 'terrain' and @terrain.get 'wireframe'
 			@objectHelper.changeWireframeColor obj, 0xFFFFFF
 		else
-			@objectHelper.removeWireframe obj 
+			@objectHelper.removeWireframe obj
 	
 	materialUpdate: (idMapper) =>
 		if @selectedObject and idMapper
-			mesh = @objectHelper.getModel(@selectedObject)
-			@materialHelper.updateMaterial(mesh, idMapper)
+			mesh = @objectHelper.getModel @selectedObject
+			@materialHelper.updateMaterial mesh, idMapper
 
-			
 return SelectorObject
