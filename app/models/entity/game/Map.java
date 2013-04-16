@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import models.entity.BaseModel;
 
@@ -26,6 +27,9 @@ public class Map extends BaseModel {
   private Integer lives;
   private Integer goldStart;
   private Integer goldPerTick;
+  
+  @OneToOne
+  private Terrain terrain;
   
   @OneToMany(cascade = CascadeType.ALL)
   private List<Wave> waves;
@@ -111,6 +115,14 @@ public class Map extends BaseModel {
 
   public void setGoldPerTick(Integer goldPerTick) {
     this.goldPerTick = goldPerTick;
+  }
+
+  public Terrain getTerrain() {
+    return terrain;
+  }
+
+  public void setTerrain(Terrain terrain) {
+    this.terrain = terrain;
   }
 
   public List<Wave> getWaves() {

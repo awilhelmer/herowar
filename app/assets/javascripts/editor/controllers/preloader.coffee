@@ -71,7 +71,7 @@ class Preloader extends BaseController
 		@progress.finish = true if @progress.loaded is @progress.total
 
 	loadItem: (type, name, url) ->
-		console.log "loadItem type=#{type}, name=#{name}, url=#{url}"
+		console.log "Load [type=#{type}, name=#{name}, url=#{url}]"
 		@updateState type, name, false
 		switch type
 			# TODO: implement geometries and image loading cases
@@ -102,7 +102,7 @@ class Preloader extends BaseController
 			@finish() if @alpha <= 0 and !@preloadComplete
 
 	finish: ->
-		console.log 'Preload complete'
+		console.log 'Preloading complete'
 		@preloadComplete = true
 		@$container.find('canvas').remove()
 		db.data @data
