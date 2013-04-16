@@ -16,13 +16,13 @@ class BaseModalView extends BaseView
 
 	onHidden: (event) ->
 
-	toggle: ->
+	toggle: =>
 		@$el.modal 'toggle'
 
-	show: ->
+	show: =>
 		@$el.modal 'show'
 
-	hide: ->
+	hide: =>
 		@$el.modal 'hide'
 
 return BaseModalView

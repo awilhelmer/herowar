@@ -41,8 +41,11 @@ class ModalFileMapSave extends BaseModalView
 	onShow: =>
 		@render()
 
+	onShown: =>
+		setTimeout @hide, 1000 if @getErrors().length is 0
+
 	getTemplateData: ->
-		err = @getErrors()
+		err = @getErrors()		
 		errors: err
 		isValid: err.length is 0
 
