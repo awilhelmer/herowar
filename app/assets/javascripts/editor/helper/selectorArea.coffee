@@ -10,7 +10,7 @@ class SelectorArea
 	
 	constructor: (@editor, @materialHelper, @selectorObject) ->
 		@intersectHelper = new IntersectHelper @editor
-		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial color: 0xFF0000
+		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
 		@selector.rotation.x = - Math.PI/2
 		@isVisible = false
 		@model = null
@@ -54,11 +54,12 @@ class SelectorArea
 			@selectorObject.selectTerrain()
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
-				@handleBrush intersect.object, intersect.faceIndex
-				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
-				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
-				@saveMaterials()
-				@removeSel()
+				@selector.material.opacity = 0.3
+				update = @handleBrush intersect.object, intersect.faceIndex
+				if update
+					MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+					MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
+					@saveMaterials()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
 				intersect.object.geometry.vertices[intersect.face.b].z += 1
@@ -67,7 +68,7 @@ class SelectorArea
 				intersect.object.geometry.verticesNeedUpdate = true
 				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
 				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
-				@editor.engine.render()
+				@selector.material.opacity = 0.3
 			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
 				intersect.object.geometry.vertices[intersect.face.b].z -= 1
@@ -76,8 +77,9 @@ class SelectorArea
 				intersect.object.geometry.verticesNeedUpdate = true
 				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
 				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
-				@editor.engine.render()
-		else
+				@selector.material.opacity = 0.3
+			else
+				@selector.material.opacity = 1
 			x = Math.floor(position.x / 10) * 10 + 5
 			y = Math.floor(position.y / 10) * 10 + 1
 			z = Math.floor(position.z / 10) * 10 + 5
@@ -85,7 +87,8 @@ class SelectorArea
 				@selector.position.x = x
 				@selector.position.y = y
 				@selector.position.z = z
-				@editor.engine.render()
+			@editor.engine.render()
+			null
 
 	saveMaterials: ->
 		MapProperties.TERRAIN_MATERIALS = []
@@ -107,9 +110,10 @@ class SelectorArea
 				object.__webglInit = false #hack
 				object.__webglActive = false #hack 				
 				baseObject.add object
+				update = true
 				#END HACKS
 				#console.log "setted brush material id #{@selectedMatId.id} matId #{@selectedMatId.materialId}: materialIndex #{face.materialIndex} of objectName #{object.name}"
-		null
+		update
 		
 	onMaterialSelected: (idMapper) =>
 		console.log "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"
