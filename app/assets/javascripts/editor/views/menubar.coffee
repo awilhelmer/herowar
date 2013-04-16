@@ -11,11 +11,8 @@ class Menubar extends BaseView
 	template: templates.get 'menubar.tmpl'
 	
 	events:
-		'click #fileMapNewEmpty'			: 'showModal'
+		'click [data-modal="true"]'		: 'showModal'
 		'click #fileMapNewGenerated'	: 'fileNewMapGenerated'
-		'click #fileMapOpen'					: 'showModal'	
-		'click #fileMapSave'					: 'showModal'	
-		'click #fileExit'							: 'showModal'	
 
 	showModal: (event) ->
 		unless event then return
