@@ -13,6 +13,11 @@ class SceneExplorer extends BaseView
 
 	events:
 		'click .scenegraph-tree div' 	: 'selectElement'
+		'keyup #inputTitle'						: 'changeTitle'
+		'change #inputTitle'					: 'changeTitle'
+		'keyup #inputDescription'			: 'changeDescription'
+		'change #inputDescription'		: 'changeDescription'
+		'submit form'									: 'ignoreSubmitForm'
 
 	initialize: (options) ->
 		@world = false
@@ -72,5 +77,19 @@ class SceneExplorer extends BaseView
 		@$el.find('.scenegraph-tree div').removeClass 'active'
 		@$el.find('.scenegraph-tree-object').addClass 'active'
 		EditorEventbus.showObjectProperties.dispatch()
+
+	changeTitle: (event) =>
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		MapProperties.MAP_TITLE = $currentTarget.val()
+
+	changeDescription: (event) =>
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		MapProperties.MAP_DESCRIPTION = $currentTarget.val()
+	
+	ignoreSubmitForm: (event) =>
+		unless event then return
+		event.preventDefault()
 
 return SceneExplorer
