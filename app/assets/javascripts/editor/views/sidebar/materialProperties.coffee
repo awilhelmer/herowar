@@ -14,10 +14,8 @@ class MaterialProperties extends BasePropertiesView
 	template: templates.get 'sidebar/materialProperties.tmpl'
 	
 	events:
-		'change input[name="mp-basis-name"]'					: 'changeName'
-		'change input[name="mp-color-sel"]'						: 'changeColor'
-		'change input[name="mp-basis-transparent"]' 	: 'changeTransparency'
-		'change input[name="mp-basis-opacity"]' 			: 'changeOpacity'
+		'change input[name*="mp-color-"]'						: 'changeColor'
+		'change input[name*="mp-basis-"]' 					: 'changeBasis'
 	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -33,38 +31,20 @@ class MaterialProperties extends BasePropertiesView
 		console.log @model
 		@render()
 
-	changeName: (event) =>
+	changeBasis: (event) =>
 		unless event then return
 		event.preventDefault()
-		$currentTarget = $ event.currentTarget
-		console.log "Name: #{$currentTarget.val()}"
-		@model.set 'name', $currentTarget.val()		
-
+		entry = @getEntry event, "mp-basis-"
+		@model.set entry.property, entry.value
+		EditorEventbus.changeMaterial.dispatch @model.id
+		
 	changeColor: (event) =>
 		unless event then return
 		event.preventDefault()
-		$currentTarget = $ event.currentTarget
-		console.log "Color: #{$currentTarget.val()}"
-		@model.set 'color', $currentTarget.val()
+		entry = @getEntry event, "mp-color-"
+		@model.set entry.property, entry.value
 		EditorEventbus.changeMaterial.dispatch @model.id
 		
-	changeTransparency: (event) =>
-		unless event then return
-		event.preventDefault()
-		$currentTarget = $ event.currentTarget
-		console.log "Transparency: #{$currentTarget.val()}"
-		@model.set 'transparent', $currentTarget.val()
-		EditorEventbus.changeMaterial.dispatch @model.id
-	
-	changeOpacity: (event) =>
-		unless event then return
-		event.preventDefault()
-		$currentTarget = $ event.currentTarget
-		if (@model.get 'opacity') isnt $currentTarget.val()
-			console.log "Opacity: #{$currentTarget.val()}"
-			@model.set 'opacity', $currentTarget.val()
-			EditorEventbus.changeMaterial.dispatch @model.id
-
 	getTemplateData: ->
 		json = super()
 		textures = []

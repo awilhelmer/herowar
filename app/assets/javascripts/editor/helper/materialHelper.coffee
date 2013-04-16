@@ -45,7 +45,9 @@ class MaterialHelper
 		for key,value of material.attributes
 			switch key
 				when 'color'
-					result.color = new THREE.Color value
+					nocolor = $(material.attributes).attr('nocolor')
+					unless nocolor and nocolor is true
+						result.color = new THREE.Color value
 				when 'transparent'
 					result.transparent = value
 				when 'map'
@@ -62,7 +64,7 @@ class MaterialHelper
 					result.wireframe = value
 				when 'wireframeLinewidth'
 					result.wireframeLinewidth = value
-				when 'id', 'materialId', 'name'
+				when 'id', 'materialId', 'name', 'nocolor'
 					#ignore
 				else
 					console.log "Material Key #{key} is unknown" 
