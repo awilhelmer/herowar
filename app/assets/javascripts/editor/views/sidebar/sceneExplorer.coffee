@@ -1,4 +1,5 @@
 EditorEventbus = require 'editorEventbus'
+MapProperties = require 'mapProperties'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 db = require 'database'
