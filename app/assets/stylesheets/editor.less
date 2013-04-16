@@ -3,7 +3,7 @@
 // --------------------------------------------------
 
 // Core variables and mixins
-@import "editor/_variables.less";
+@import "_variables.less";
 @import "_mixins.less";
 
 // CSS Reset
@@ -28,6 +28,7 @@
 // Components: Buttons & Alerts
 @import "_buttons.less";
 @import "_button-groups.less";
+@import "_alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
 // Components: Nav
 @import "_navs.less";
@@ -36,11 +37,13 @@
 // Components: Popovers
 @import "_modals.less";
 @import "_tooltip.less";
+@import "_popovers.less";
 
 // JQuery Gritter
 @import "_gritter.less";
 
 // Editor Files
+@import "editor/_variables.less";
 @import "editor/_menubar.less";
 @import "editor/_iconbar.less";
 @import "editor/_sidebar.less";

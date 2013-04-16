@@ -1,7 +1,7 @@
-BaseView = require 'views/baseView'
+BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
 
-class ModalFileMapSave extends BaseView
+class ModalFileMapSave extends BaseModalView
 
 	id: 'modalFileMapSave'
 	

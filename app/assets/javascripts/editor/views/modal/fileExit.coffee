@@ -1,7 +1,7 @@
-BaseView = require 'views/baseView'
+BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
 
-class ModalFileExit extends BaseView
+class ModalFileExit extends BaseModalView
 
 	id: 'modalFileExit'
 	
@@ -14,7 +14,7 @@ class ModalFileExit extends BaseView
 	
 	exit: (event) ->
 		event?.preventDefault()
-		$('#modelFileExit').modal 'hide'
+		@hideModal()
 		window.location = '/'
 	
 return ModalFileExit

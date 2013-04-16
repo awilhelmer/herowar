@@ -1,8 +1,8 @@
 EditorEventbus = require 'editorEventbus'
-BaseView = require 'views/baseView'
+BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
 
-class ModalFileMapNewEmpty extends BaseView
+class ModalFileMapNewEmpty extends BaseModalView
 
 	id: 'modalFileMapNewEmpty'
 	
@@ -15,7 +15,7 @@ class ModalFileMapNewEmpty extends BaseView
 	
 	newMapEmpty: (event) =>
 		event?.preventDefault()
-		$('#modelFileMapNewEmpty').modal 'hide'
+		@hideModal()
 		EditorEventbus.newMapEmpty.dispatch()
 
 return ModalFileMapNewEmpty
