@@ -14,12 +14,14 @@ class SelectorArea
 		@selector.rotation.x = - Math.PI/2
 		@isVisible = false
 		@model = null
+		@brushSizeRadius = 1
 		@bindEvents()
 		
 	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
 		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
+		EditorEventbus.selectBrushSize.add @selectBrushSize
 		
 	update: ->
 		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ]
@@ -98,21 +100,22 @@ class SelectorArea
 	handleBrush: (object, faceIndex) ->
 		baseObject = @selectorObject.objectHelper.getBaseObject object
 		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
-			face = object.geometry.faces[faceIndex]
-			oldIndex = face.materialIndex
-			face.materialIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
-			if oldIndex isnt face.materialIndex
-				scene = @editor.engine.scenegraph.scene
-				baseObject.remove object
-				@editor.engine.render()
-				object.geometry.geometryGroups = undefined
-				object.geometry.geometryGroupsList = undefined
-				object.__webglInit = false #hack
-				object.__webglActive = false #hack 				
-				baseObject.add object
-				update = true
-				#END HACKS
-				#console.log "setted brush material id #{@selectedMatId.id} matId #{@selectedMatId.materialId}: materialIndex #{face.materialIndex} of objectName #{object.name}"
+			newIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
+			for i in [0..@brushSizeRadius-1]
+				if object.geometry.faces.length < faceIndex+i
+					face = object.geometry.faces[faceIndex+i]
+					oldIndex = face.materialIndex
+					if oldIndex isnt newIndex and not update
+						face.materialIndex = newIndex
+						scene = @editor.engine.scenegraph.scene
+						baseObject.remove object
+						@editor.engine.render()
+						object.geometry.geometryGroups = undefined
+						object.geometry.geometryGroupsList = undefined
+						object.__webglInit = false #hack
+						object.__webglActive = false #hack 				
+						baseObject.add object
+						update = true
 		update
 		
 	onMaterialSelected: (idMapper) =>
@@ -125,5 +128,9 @@ class SelectorArea
 
 	selectBrush: (tool) =>
 		@brushTool = tool
-
+		
+	selectBrushSize: (radius) =>
+		@brushSizeRadius = radius
+		@selector.scale.x = radius
+		@selector.scale.y = radius
 return SelectorArea
