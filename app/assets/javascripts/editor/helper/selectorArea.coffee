@@ -78,17 +78,17 @@ class SelectorArea
 				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
 				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@selector.material.opacity = 0.3
-			else
-				@selector.material.opacity = 1
-			x = Math.floor(position.x / 10) * 10 + 5
-			y = Math.floor(position.y / 10) * 10 + 1
-			z = Math.floor(position.z / 10) * 10 + 5
-			if x isnt @selector.position.x or y isnt @selector.position.y or z isnt @selector.position.z
-				@selector.position.x = x
-				@selector.position.y = y
-				@selector.position.z = z
-			@editor.engine.render()
-			null
+		else
+			@selector.material.opacity = 1
+		x = Math.floor(position.x / 10) * 10 + 5
+		y = Math.floor(position.y / 10) * 10 + 1
+		z = Math.floor(position.z / 10) * 10 + 5
+		if x isnt @selector.position.x or y isnt @selector.position.y or z isnt @selector.position.z
+			@selector.position.x = x
+			@selector.position.y = y
+			@selector.position.z = z
+		@editor.engine.render()
+		null
 
 	saveMaterials: ->
 		MapProperties.TERRAIN_MATERIALS = []
