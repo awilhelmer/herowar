@@ -1,4 +1,3 @@
-EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
@@ -19,7 +18,7 @@ class Menubar extends BaseView
 
 	fileNewMapEmpty: (event) ->
 		event?.preventDefault()
-		EditorEventbus.newMapEmpty.dispatch()
+		$('#modelFileNewMapEmpty').modal 'show'
 
 	fileNewMapGenerated: (event) ->
 		event?.preventDefault()
@@ -35,6 +34,6 @@ class Menubar extends BaseView
 
 	fileExit: (event) ->
 		event?.preventDefault()
-		window.location = '/'
+		$('#modelFileExit').modal 'show'
 
 return Menubar
