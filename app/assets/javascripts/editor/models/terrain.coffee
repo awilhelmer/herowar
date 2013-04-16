@@ -1,4 +1,5 @@
 MaterialHelper = require 'helper/materialHelper'
+MapProperties = require 'mapProperties'
 Constants = require 'constants'
 db = require 'database'
 

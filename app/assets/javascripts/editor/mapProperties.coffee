@@ -18,5 +18,6 @@ mapProperties =
 	TERRAIN_ZSCALE			: Constants.TERRAIN_DEFAULT_ZSCALE
 	TERRAIN_FACES				: []
 	TERRAIN_VERTICES		: []
+	TERRAIN_MATERIALS		: []
 
 return mapProperties

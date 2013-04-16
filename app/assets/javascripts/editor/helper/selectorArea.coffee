@@ -4,6 +4,7 @@ EditorEventbus = require 'editorEventbus'
 MapProperties = require 'mapProperties'
 Variables = require 'variables'
 Constants = require 'constants'
+db = require 'database'
 
 class SelectorArea
 	
@@ -56,6 +57,7 @@ class SelectorArea
 				@handleBrush intersect.object, intersect.faceIndex
 				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
 				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
+				@saveMaterials()
 				@removeSel()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
@@ -85,6 +87,11 @@ class SelectorArea
 				@selector.position.z = z
 				@editor.engine.render()
 
+	saveMaterials: ->
+		MapProperties.TERRAIN_MATERIALS = []
+		for material in db.get('materials').models
+			MapProperties.TERRAIN_MATERIALS.push material
+
 	handleBrush: (object, faceIndex) ->
 		baseObject = @selectorObject.objectHelper.getBaseObject object
 		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
@@ -103,7 +110,6 @@ class SelectorArea
 				#END HACKS
 				#console.log "setted brush material id #{@selectedMatId.id} matId #{@selectedMatId.materialId}: materialIndex #{face.materialIndex} of objectName #{object.name}"
 		null
-		
 		
 	onMaterialSelected: (idMapper) =>
 		console.log "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"

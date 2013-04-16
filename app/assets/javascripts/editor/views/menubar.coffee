@@ -56,6 +56,7 @@ class Menubar extends BaseView
 				zScale			: MapProperties.TERRAIN_ZSCALE
 				faces				: MapProperties.TERRAIN_FACES
 				vertices		: MapProperties.TERRAIN_VERTICES
+				materials		: MapProperties.TERRAIN_MATERIALS
 				
 		JSON.stringify exportObj
 
