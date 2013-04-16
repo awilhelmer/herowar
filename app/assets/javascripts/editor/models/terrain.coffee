@@ -1,4 +1,5 @@
 MaterialHelper = require 'helper/materialHelper'
+MapProperties = require 'mapProperties'
 Constants = require 'constants'
 db = require 'database'
 
@@ -65,4 +66,5 @@ class Terrain extends Backbone.Model
 					vector = mesh.geometry.vertices[i * segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
+		
 return Terrain
