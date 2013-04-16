@@ -1,8 +1,9 @@
 IntersectHelper = require 'helper/intersectHelper'
+MaterialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
+MapProperties = require 'mapProperties'
 Variables = require 'variables'
 Constants = require 'constants'
-MaterialHelper = require 'helper/materialHelper'
 
 class SelectorArea
 	
@@ -48,11 +49,13 @@ class SelectorArea
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
 		unless @selectorObject.selectedObject
-			console.log "selectiong terrain!"
+			console.log "Selecting terrain!"
 			@selectorObject.selectTerrain()
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				@handleBrush intersect.object, intersect.faceIndex
+				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@removeSel()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
@@ -60,6 +63,8 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z += 1
 				intersect.object.geometry.vertices[intersect.face.d].z += 1
 				intersect.object.geometry.verticesNeedUpdate = true
+				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@editor.engine.render()
 			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
@@ -67,6 +72,8 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z -= 1
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
+				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@editor.engine.render()
 		else
 			x = Math.floor(position.x / 10) * 10 + 5

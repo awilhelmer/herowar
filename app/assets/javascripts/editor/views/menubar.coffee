@@ -31,21 +31,6 @@ class Menubar extends BaseView
 
 	fileSave: (event) ->
 		event?.preventDefault()
-		exportObj =
-			id						: 0
-			name 					: 'Tutorial'
-			description 	: ''
-			teamSize 			: 1
-			prepareTime		: 500
-			lives 				: 20
-			goldStart 		: 2000
-			goldPerTick 	: 5
-			terrain				:
-				id					: 0
-				width				: 500
-				height			: 500
-				smoothness	: 0.1
-				zScale			: 0
 		console.log @getMapAsJSON()
 		alert 'Not implemented yet...'
 
@@ -69,6 +54,9 @@ class Menubar extends BaseView
 				height			: MapProperties.TERRAIN_HEIGHT
 				smoothness	: MapProperties.TERRAIN_SMOOTHNESS
 				zScale			: MapProperties.TERRAIN_ZSCALE
+				faces				: MapProperties.TERRAIN_FACES
+				vertices		: MapProperties.TERRAIN_VERTICES
+				
 		JSON.stringify exportObj
 
 return Menubar

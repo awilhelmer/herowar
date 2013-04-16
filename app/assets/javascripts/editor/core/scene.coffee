@@ -1,11 +1,11 @@
-EditorEventbus = require 'editorEventbus'
 ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
+EditorEventbus = require 'editorEventbus'
+MapProperties = require 'mapProperties'
 TerrainModel = require 'models/terrain'
 Material = require 'models/material'
 Texture = require 'models/texture'
 Constants = require 'constants'
-MapProperties = require 'mapProperties'
 db = require 'database'
 
 class Scene
@@ -93,6 +93,8 @@ class Scene
 		console.log "Change terrain: size=#{@terrain.get('width')}x#{@terrain.get('height')} smoothness=#{@terrain.get('smoothness')} zscale=#{@terrain.get('zScale')}"
 		@randomPool.seek 0
 		map = @terrain.update()
+		MapProperties.TERRAIN_FACES = map.children[0].geometry.faces
+		MapProperties.TERRAIN_VERTICES = map.children[0].geometry.vertices
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @terrain.get 'wireframe'
 		@editor.engine.scenegraph.setMap map
 		@editor.engine.render()
