@@ -10,12 +10,49 @@ class ModalFileMapSave extends BaseModalView
 		
 	template: templates.get 'modal/fileMapSave.tmpl'
 
-	events:
-		'click .btn-primary' : 'mapSave'
+	initialize: (options) ->
+		@errors = @getErrors()
+		super options
 
-	mapSave: (event) =>
-		unless event then return
-		console.log @getMapAsJSON()
+	onShow: (event) =>
+		@errors = @getErrors()
+		@status = 
+			isSaving 			: false
+			isSuccessful 	: false
+			isError				: false
+		@saveMap() if @errors.length is 0
+		@render()
+		super event
+		
+	onShown: (event) =>
+		setTimeout @hide, 1000 if @errors.length is 0
+		super event
+
+	getTemplateData: ->
+		errors: @errors
+		isValid: @errors.length is 0
+		status: @status
+
+	getErrors: ->
+		errors = []
+		errors.push 'Map title is required' unless MapProperties.MAP_TITLE
+		errors
+
+	saveMap: ->
+		@status.isSaving = true
+		jqxhr = $.ajax
+			url			: '/api/map/save'
+			type		: 'POST'
+			data		:
+				map		: @getMapAsJSON()
+			success	: (data, textStatus, jqXHR) =>
+				console.log 'Save map SUCCESS'
+				@status.isSuccessful = true
+			error		: (jqXHR, textStatus, errorThrown) =>
+				console.log 'Save map ERROR'
+				@status.isError = true
+		jqxhr.done =>
+			@status.isSaving = false		
 
 	getMapAsJSON: ->
 		exportObj =
@@ -37,21 +74,5 @@ class ModalFileMapSave extends BaseModalView
 				vertices		: MapProperties.TERRAIN_VERTICES
 				materials		: MapProperties.TERRAIN_MATERIALS
 		JSON.stringify exportObj
-
-	onShow: =>
-		@render()
-
-	onShown: =>
-		setTimeout @hide, 1000 if @getErrors().length is 0
-
-	getTemplateData: ->
-		err = @getErrors()		
-		errors: err
-		isValid: err.length is 0
-
-	getErrors: ->
-		errors = []
-		errors.push 'Map title is required' unless MapProperties.MAP_TITLE
-		errors
 
 return ModalFileMapSave
