@@ -3,9 +3,16 @@
 	<h3>Save Map</h3>
 </div>
 <div class="modal-body">
-	<p>...</p>
+	{{#if isValid}}
+		<p>The map was saved successfully.</p>
+	{{else}}
+		<p>Please fix the following errors before you can save:</p>
+		{{#each errors}}
+			<p class="error">- {{this}}</p>
+		{{/each}}
+	{{/if}}
 </div>
 <div class="modal-footer">
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Back</button>
-	<button class="btn btn-primary">Save</button>
+	{{#if isValid}}<button class="btn btn-primary">Save</button>{{/if}}
 </div>

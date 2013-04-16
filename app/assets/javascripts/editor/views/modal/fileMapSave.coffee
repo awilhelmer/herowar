@@ -38,4 +38,15 @@ class ModalFileMapSave extends BaseModalView
 				materials		: MapProperties.TERRAIN_MATERIALS
 		JSON.stringify exportObj
 
+	getTemplateData: ->
+		err = @getErrors()
+		errors: err
+		isValid: err.length is 0
+
+	getErrors: ->
+		errors = []
+		errors.push 'Map title is required' unless MapProperties.MAP_TITLE
+		console.log errors
+		errors
+
 return ModalFileMapSave
