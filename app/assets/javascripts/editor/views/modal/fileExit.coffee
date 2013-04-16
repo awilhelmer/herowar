@@ -14,7 +14,7 @@ class ModalFileExit extends BaseModalView
 	
 	exit: (event) ->
 		event?.preventDefault()
-		@hideModal()
+		@hide()
 		window.location = '/'
 	
 return ModalFileExit
