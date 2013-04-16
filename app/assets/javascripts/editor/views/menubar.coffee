@@ -11,32 +11,22 @@ class Menubar extends BaseView
 	template: templates.get 'menubar.tmpl'
 	
 	events:
-		'click #fileNewMapEmpty'			: 'fileNewMapEmpty'
-		'click #fileNewMapGenerated'	: 'fileNewMapGenerated'
-		'click #fileOpen'							: 'fileOpen'	
-		'click #fileSave'							: 'fileSave'	
-		'click #fileExit'							: 'fileExit'	
+		'click #fileMapNewEmpty'			: 'showModal'
+		'click #fileMapNewGenerated'	: 'fileNewMapGenerated'
+		'click #fileMapOpen'					: 'showModal'	
+		'click #fileMapSave'					: 'showModal'	
+		'click #fileExit'							: 'showModal'	
 
-	fileNewMapEmpty: (event) ->
+	showModal: (event) ->
+		unless event then return
 		event?.preventDefault()
-		$('#modelFileNewMapEmpty').modal 'show'
+		$currentTarget = $ event.currentTarget
+		id = $currentTarget.attr 'id'
+		$("#modal#{id.charAt(0).toUpperCase()}#{id.slice(1)}").modal 'show'
 
 	fileNewMapGenerated: (event) ->
 		event?.preventDefault()
 		alert 'Not implemented yet...'
-
-	fileOpen: (event) ->
-		event?.preventDefault()
-		alert 'Not implemented yet...'
-
-	fileSave: (event) ->
-		event?.preventDefault()
-		console.log @getMapAsJSON()
-		alert 'Not implemented yet...'
-
-	fileExit: (event) ->
-		event?.preventDefault()
-		$('#modelFileExit').modal 'show'
 
 	getMapAsJSON: ->
 		exportObj =
