@@ -2,20 +2,20 @@ EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
-class ModalFileNewMapEmpty extends BaseView
+class ModalFileMapNewEmpty extends BaseView
 
-	id: 'modelFileNewMapEmpty'
+	id: 'modalFileMapNewEmpty'
 	
 	className: 'modal hide fade'
 		
-	template: templates.get 'modal/fileNewMapEmpty.tmpl'
+	template: templates.get 'modal/fileMapNewEmpty.tmpl'
 
 	events:
 		'click .btn-primary' : 'newMapEmpty'
 	
 	newMapEmpty: (event) =>
 		event?.preventDefault()
-		$('#modelFileNewMapEmpty').modal 'hide'
+		$('#modelFileMapNewEmpty').modal 'hide'
 		EditorEventbus.newMapEmpty.dispatch()
 
-return ModalFileNewMapEmpty
+return ModalFileMapNewEmpty

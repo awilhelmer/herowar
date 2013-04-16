@@ -3,7 +3,7 @@ templates = require 'templates'
 
 class ModalFileExit extends BaseView
 
-	id: 'modelFileExit'
+	id: 'modalFileExit'
 	
 	className: 'modal hide fade'
 		
