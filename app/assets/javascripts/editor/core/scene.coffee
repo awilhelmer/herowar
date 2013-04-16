@@ -5,6 +5,7 @@ TerrainModel = require 'models/terrain'
 Material = require 'models/material'
 Texture = require 'models/texture'
 Constants = require 'constants'
+MapProperties = require 'mapProperties'
 db = require 'database'
 
 class Scene
@@ -52,14 +53,25 @@ class Scene
 		texture
 
 	changeTerrain: (width, height, smoothness, zScale) =>
-		if @hasValidSize(width, height) and @hasChangedSize(parseInt(width), parseInt(height), parseFloat(smoothness), parseInt(zScale))
+		width = parseInt width
+		height = parseInt height
+		smoothness = parseFloat smoothness
+		zScale = parseInt zScale
+		if @hasValidSize(width, height) and @hasChangedSize(width, height, smoothness, zScale)
 			console.log 'Terrain has valid changes'
+			@saveTerrainValues width, height, smoothness, zScale
 			@terrain.set
 				'width' 			: width
 				'height' 			: height
 				'smoothness' 	: smoothness
 				'zScale' 			: zScale
 			@buildTerrain()
+
+	saveTerrainValues: (width, height, smoothness, zScale) ->
+		MapProperties.TERRAIN_WIDTH = width
+		MapProperties.TERRAIN_HEIGHT = height
+		MapProperties.TERRAIN_SMOOTHNESS = smoothness
+		MapProperties.TERRAIN_ZSCALE = zScale		
 
 	changeTerrainWireframe: (value) =>
 		@terrain.set 'wireframe', value
