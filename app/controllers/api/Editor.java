@@ -36,6 +36,7 @@ public class Editor extends Controller {
     log.info("Map: " + map.toString());
     log.info("Terrain: " + map.getTerrain().toString());
     log.info("Geometry: " + map.getTerrain().getGeometry().toString());
+    log.info("GeoMetadata: " + map.getTerrain().getGeometry().getMetadata().toString());
     return ok();
   }
   

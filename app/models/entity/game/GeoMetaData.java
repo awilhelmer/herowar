@@ -19,7 +19,7 @@ public class GeoMetaData extends BaseModel {
   private Long vertices;
   private Long faces;
   private Long normal;
-  private Long Colors;
+  private Long colors;
   private Long usvs;
   private Long materials;
 
@@ -83,11 +83,11 @@ public class GeoMetaData extends BaseModel {
   }
 
   public Long getColors() {
-    return Colors;
+    return colors;
   }
 
   public void setColors(Long colors) {
-    Colors = colors;
+    this.colors = colors;
   }
 
   public Long getUsvs() {
@@ -117,6 +117,6 @@ public class GeoMetaData extends BaseModel {
   @Override
   public String toString() {
     return "GeoMetaData [id=" + id + ", formatVersion=" + formatVersion + ", sourceFile=" + sourceFile + ", generatedBy=" + generatedBy + ", vertices="
-        + vertices + ", faces=" + faces + ", normal=" + normal + ", Colors=" + Colors + ", usvs=" + usvs + ", materials=" + materials + "]";
+        + vertices + ", faces=" + faces + ", normal=" + normal + ", Colors=" + colors + ", usvs=" + usvs + ", materials=" + materials + "]";
   }
 }
