@@ -45,7 +45,7 @@ class ModalFileMapSave extends BaseModalView
 			type				: 'POST'
 			dataType		: 'json'
 			data				:
-				map				: "'#{@getMapAsJSON()}'"
+				map				: @getMapAsJSON()
 			success			: (data, textStatus, jqXHR) =>
 				console.log 'Save map SUCCESS'
 				@status.isSuccessful = true
@@ -71,9 +71,9 @@ class ModalFileMapSave extends BaseModalView
 				height			: MapProperties.TERRAIN_HEIGHT
 				smoothness	: MapProperties.TERRAIN_SMOOTHNESS
 				zScale			: MapProperties.TERRAIN_ZSCALE
-				# faces				: MapProperties.TERRAIN_FACES
-				# vertices		: MapProperties.TERRAIN_VERTICES
-				# materials		: MapProperties.TERRAIN_MATERIALS
+				faces				: MapProperties.TERRAIN_FACES
+				vertices		: MapProperties.TERRAIN_VERTICES
+				materials		: MapProperties.TERRAIN_MATERIALS
 		JSON.stringify exportObj
 
 return ModalFileMapSave
