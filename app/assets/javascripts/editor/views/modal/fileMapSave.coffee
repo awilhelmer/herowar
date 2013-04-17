@@ -41,14 +41,15 @@ class ModalFileMapSave extends BaseModalView
 	saveMap: ->
 		@status.isSaving = true
 		jqxhr = $.ajax
-			url			: '/api/map/save'
-			type		: 'POST'
-			data		:
-				map		: @getMapAsJSON()
-			success	: (data, textStatus, jqXHR) =>
+			url					: '/api/editor/map'
+			type				: 'POST'
+			dataType		: 'json'
+			data				:
+				map				: "'#{@getMapAsJSON()}'"
+			success			: (data, textStatus, jqXHR) =>
 				console.log 'Save map SUCCESS'
 				@status.isSuccessful = true
-			error		: (jqXHR, textStatus, errorThrown) =>
+			error				: (jqXHR, textStatus, errorThrown) =>
 				console.log 'Save map ERROR'
 				@status.isError = true
 		jqxhr.done =>
@@ -70,9 +71,9 @@ class ModalFileMapSave extends BaseModalView
 				height			: MapProperties.TERRAIN_HEIGHT
 				smoothness	: MapProperties.TERRAIN_SMOOTHNESS
 				zScale			: MapProperties.TERRAIN_ZSCALE
-				faces				: MapProperties.TERRAIN_FACES
-				vertices		: MapProperties.TERRAIN_VERTICES
-				materials		: MapProperties.TERRAIN_MATERIALS
+				# faces				: MapProperties.TERRAIN_FACES
+				# vertices		: MapProperties.TERRAIN_VERTICES
+				# materials		: MapProperties.TERRAIN_MATERIALS
 		JSON.stringify exportObj
 
 return ModalFileMapSave
