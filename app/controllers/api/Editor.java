@@ -65,10 +65,6 @@ public class Editor extends Controller {
     if (map.getId() == null || map.getId() == 0) {
       map.save();
     }
-    if (map.getTerrain().getMap() == null) {
-      map.getTerrain().setMap(map);
-      map.getTerrain().save();
-    }
     if (map.getTerrain().getGeometry().getMetadata().getGeometry() == null) {
       map.getTerrain().getGeometry().getMetadata().setGeometry(map.getTerrain().getGeometry());
       map.getTerrain().getGeometry().getMetadata().save();
@@ -76,6 +72,10 @@ public class Editor extends Controller {
     if (map.getTerrain().getGeometry().getType() == null) {
       map.getTerrain().getGeometry().setType(GeometryType.TERRAIN);
       map.getTerrain().getGeometry().save();
+    }
+    if (map.getTerrain().getMap() == null) {
+      map.getTerrain().setMap(map);
+      map.getTerrain().save();
     }
   }
 
