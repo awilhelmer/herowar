@@ -23,6 +23,7 @@ public class Geometry extends BaseModel {
 
   @Lob
   private String vertices;
+  
   @Lob
   private String faces;
 

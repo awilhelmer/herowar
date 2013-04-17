@@ -9,8 +9,10 @@ import models.entity.BaseModel;
 @Entity
 public class GeoMetaData extends BaseModel {
   private static final long serialVersionUID = -9218495880941499621L;
+  
   @Id
   private Long id;
+  
   private String formatVersion;
   private String sourceFile;
   private String generatedBy;
