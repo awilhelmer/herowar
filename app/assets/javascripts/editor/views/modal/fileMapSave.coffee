@@ -70,8 +70,10 @@ class ModalFileMapSave extends BaseModalView
 			height			: MapProperties.TERRAIN_HEIGHT
 			smoothness	: MapProperties.TERRAIN_SMOOTHNESS
 			zScale			: MapProperties.TERRAIN_ZSCALE
-			faces				: MapProperties.TERRAIN_FACES
-			vertices		: MapProperties.TERRAIN_VERTICES
-			materials		: MapProperties.TERRAIN_MATERIALS
+			geometry		:
+				id				: MapProperties.GEOMETRY_ID
+				faces			: MapProperties.TERRAIN_FACES
+				vertices	: MapProperties.TERRAIN_VERTICES
+				materials	: MapProperties.TERRAIN_MATERIALS
 				
 return ModalFileMapSave
