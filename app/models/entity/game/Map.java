@@ -34,6 +34,7 @@ public class Map extends BaseModel {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Wave> waves;
   
+  
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
   public static void create(String name, String description, int teamSize) {

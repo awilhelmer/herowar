@@ -1,6 +1,8 @@
 package models.entity.game;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -15,7 +17,7 @@ public class Terrain extends BaseModel {
 
   @Id
   private Long id;
-  
+
   private Integer width;
   private Integer height;
   private Float smoothness;
@@ -23,6 +25,9 @@ public class Terrain extends BaseModel {
 
   @OneToOne(mappedBy = "terrain")
   private Map map;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+  private Geometry geometry;
 
   private static final Finder<Long, Terrain> finder = new Finder<Long, Terrain>(Long.class, Terrain.class);
 
@@ -35,7 +40,7 @@ public class Terrain extends BaseModel {
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public Integer getWidth() {
     return width;
   }
@@ -74,6 +79,14 @@ public class Terrain extends BaseModel {
 
   public void setMap(Map map) {
     this.map = map;
+  }
+
+  public Geometry getGeometry() {
+    return geometry;
+  }
+
+  public void setGeometry(Geometry geometry) {
+    this.geometry = geometry;
   }
 
   public static Finder<Long, Terrain> getFinder() {
