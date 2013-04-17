@@ -72,8 +72,8 @@ class ModalFileMapSave extends BaseModalView
 			zScale			: MapProperties.TERRAIN_ZSCALE
 			geometry		:
 				id				: MapProperties.GEOMETRY_ID
-				faces			: MapProperties.TERRAIN_FACES
-				vertices	: MapProperties.TERRAIN_VERTICES
-				materials	: MapProperties.TERRAIN_MATERIALS
+				faces			: "#{JSON.stringify(MapProperties.TERRAIN_FACES)}"
+				vertices	: "#{JSON.stringify(MapProperties.TERRAIN_VERTICES)}"
+				materials	: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}"
 				
 return ModalFileMapSave

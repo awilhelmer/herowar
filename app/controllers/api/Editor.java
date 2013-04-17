@@ -33,7 +33,9 @@ public class Editor extends Controller {
       log.error("Failed to parse request data to entity");
       e.printStackTrace();
     }
-    log.info("Map Id: " + map.toString());
+    log.info("Map: " + map.toString());
+    log.info("Terrain: " + map.getTerrain().toString());
+    log.info("Geometry: " + map.getTerrain().getGeometry().toString());
     return ok();
   }
   

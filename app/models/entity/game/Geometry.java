@@ -178,4 +178,9 @@ public class Geometry extends BaseModel {
     return true;
   }
 
+  @Override
+  public String toString() {
+    return "Geometry [id=" + id + ", vertices=" + vertices + ", faces=" + faces + ", materials=" + materials + ", morphTargets=" + morphTargets
+        + ", morphColors=" + morphColors + ", normals=" + normals + ", colors=" + colors + ", usv=" + usv + ", scale=" + scale + ", type=" + type + "]";
+  }
 }

@@ -114,4 +114,9 @@ public class GeoMetaData extends BaseModel {
     this.geometry = geometry;
   }
 
+  @Override
+  public String toString() {
+    return "GeoMetaData [id=" + id + ", formatVersion=" + formatVersion + ", sourceFile=" + sourceFile + ", generatedBy=" + generatedBy + ", vertices="
+        + vertices + ", faces=" + faces + ", normal=" + normal + ", Colors=" + Colors + ", usvs=" + usvs + ", materials=" + materials + "]";
+  }
 }

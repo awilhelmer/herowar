@@ -92,4 +92,9 @@ public class Terrain extends BaseModel {
   public static Finder<Long, Terrain> getFinder() {
     return finder;
   }
+
+  @Override
+  public String toString() {
+    return "Terrain [id=" + id + ", width=" + width + ", height=" + height + ", smoothness=" + smoothness + ", zScale=" + zScale + "]";
+  }
 }
