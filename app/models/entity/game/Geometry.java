@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -8,12 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import models.entity.BaseModel;
 
+
+@Entity
 public class Geometry extends BaseModel {
   private static final long serialVersionUID = 5730315776315409881L;
 
