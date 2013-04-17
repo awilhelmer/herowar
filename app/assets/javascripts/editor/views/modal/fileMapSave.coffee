@@ -56,24 +56,35 @@ class ModalFileMapSave extends BaseModalView
 			@status.isSaving = false		
 
 	getMapAsJSON: ->
-		id						: MapProperties.MAP_ID
-		name 					: MapProperties.MAP_TITLE
-		description 	: MapProperties.MAP_DESCRIPTION
-		teamSize 			: MapProperties.MAP_TEAM_SIZE
-		prepareTime		: MapProperties.MAP_PREPARE_TIME
-		lives 				: MapProperties.MAP_LIVES
-		goldStart 		: MapProperties.MAP_GOLD_START
-		goldPerTick 	: MapProperties.MAP_GOLD_PER_TICK
-		terrain				:
-			id					: MapProperties.TERRAIN_ID
-			width				: MapProperties.TERRAIN_WIDTH
-			height			: MapProperties.TERRAIN_HEIGHT
-			smoothness	: MapProperties.TERRAIN_SMOOTHNESS
-			zScale			: MapProperties.TERRAIN_ZSCALE
-			geometry		:
-				id				: MapProperties.GEOMETRY_ID
-				faces			: "#{JSON.stringify(MapProperties.TERRAIN_FACES)}"
-				vertices	: "#{JSON.stringify(MapProperties.TERRAIN_VERTICES)}"
-				materials	: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}"
+		id									: MapProperties.MAP_ID
+		name 								: MapProperties.MAP_TITLE
+		description 				: MapProperties.MAP_DESCRIPTION
+		teamSize 						: MapProperties.MAP_TEAM_SIZE
+		prepareTime					: MapProperties.MAP_PREPARE_TIME
+		lives 							: MapProperties.MAP_LIVES
+		goldStart 					: MapProperties.MAP_GOLD_START
+		goldPerTick 				: MapProperties.MAP_GOLD_PER_TICK
+		terrain							:
+			id								: MapProperties.TERRAIN_ID
+			width							: MapProperties.TERRAIN_WIDTH
+			height						: MapProperties.TERRAIN_HEIGHT
+			smoothness				: MapProperties.TERRAIN_SMOOTHNESS
+			zScale						: MapProperties.TERRAIN_ZSCALE
+			geometry					:
+				id							: MapProperties.GEOMETRY_ID
+				faces						: "#{JSON.stringify(MapProperties.TERRAIN_FACES)}"
+				vertices				: "#{JSON.stringify(MapProperties.TERRAIN_VERTICES)}"
+				materials				: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}"
+				metadata				:
+					id						: MapProperties.GEOMETRY_METADATA_ID
+					formatVersion	: 3.1
+					sourceFile		: ''
+					generatedBy		: 'MapEditor'
+					vertices			: MapProperties.TERRAIN_VERTICES.length
+					faces					: MapProperties.TERRAIN_FACES.length
+					normal				: 0
+					colors				: 0
+					usvs					: 0
+					materials			: MapProperties.TERRAIN_MATERIALS.length
 				
 return ModalFileMapSave
