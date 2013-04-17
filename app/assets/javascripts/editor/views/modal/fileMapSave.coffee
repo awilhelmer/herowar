@@ -44,8 +44,8 @@ class ModalFileMapSave extends BaseModalView
 			url					: '/api/editor/map'
 			type				: 'POST'
 			dataType		: 'json'
-			data				:
-				map				: JSON.stringify @getMapAsJSON()
+			contentType	: 'application/json; charset=utf-8'
+			data				: JSON.stringify @getMapAsJSON()
 			success			: (data, textStatus, jqXHR) =>
 				console.log 'Save map SUCCESS'
 				@status.isSuccessful = true
