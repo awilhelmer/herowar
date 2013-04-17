@@ -136,4 +136,10 @@ public class Map extends BaseModel {
   public static Finder<Long, Map> getFinder() {
     return finder;
   }
+
+  @Override
+  public String toString() {
+    return "Map [id=" + id + ", name=" + name + ", description=" + description + ", teamSize=" + teamSize + ", prepareTime=" + prepareTime + ", lives=" + lives
+        + ", goldStart=" + goldStart + ", goldPerTick=" + goldPerTick + "]";
+  }
 }

@@ -1,6 +1,11 @@
 package controllers.api;
 
+import java.io.IOException;
+
+import models.entity.game.Map;
+
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
 import play.mvc.BodyParser;
@@ -16,11 +21,19 @@ public class Editor extends Controller {
     if(request().body().isMaxSizeExceeded()) {
       return badRequest("Too much data!");
     }
-    JsonNode map = request().body().asJson();
-    if (map == null) {
+    JsonNode mapNode = request().body().asJson();
+    if (mapNode == null) {
       return badRequest("Failed to parse json request");
     }
-    log.info("Map Id: " + map.get("id").asInt());
+    ObjectMapper mapper = new ObjectMapper();
+    Map map = null;
+    try {
+      map = mapper.readValue(mapNode, Map.class);
+    } catch (IOException e) {
+      log.error("Failed to parse request data to entity");
+      e.printStackTrace();
+    }
+    log.info("Map Id: " + map.toString());
     return ok();
   }
   
