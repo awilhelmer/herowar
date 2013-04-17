@@ -1,5 +1,7 @@
 package controllers.api;
 
+import static play.libs.Json.toJson;
+
 import java.io.IOException;
 
 import models.entity.game.Map;
@@ -15,10 +17,10 @@ import play.mvc.Result;
 public class Editor extends Controller {
 
   private static final Logger.ALogger log = Logger.of(Editor.class);
-  
+
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
   public static Result addMap() {
-    if(request().body().isMaxSizeExceeded()) {
+    if (request().body().isMaxSizeExceeded()) {
       return badRequest("Too much data!");
     }
     JsonNode mapNode = request().body().asJson();
@@ -30,14 +32,16 @@ public class Editor extends Controller {
     try {
       map = mapper.readValue(mapNode, Map.class);
     } catch (IOException e) {
-      log.error("Failed to parse request data to entity");
-      e.printStackTrace();
+      String errorMessage = "Failed to parse request data to entity";
+      log.error(errorMessage, e);
+      return badRequest(errorMessage);
     }
-    log.info("Map: " + map.toString());
-    log.info("Terrain: " + map.getTerrain().toString());
-    log.info("Geometry: " + map.getTerrain().getGeometry().toString());
-    log.info("GeoMetadata: " + map.getTerrain().getGeometry().getMetadata().toString());
-    return ok();
+    if (map == null) {
+      String errorMessage = "Failed to parse request data to entity";
+      return badRequest(errorMessage);
+    }
+    map.save();
+    return ok(toJson(map));
   }
-  
+
 }
