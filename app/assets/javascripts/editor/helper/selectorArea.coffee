@@ -24,7 +24,7 @@ class SelectorArea
 		EditorEventbus.selectBrushSize.add @selectBrushSize
 		
 	update: ->
-		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ]
+		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], @brushSizeRadius
 		if intersectList.length > 0
 			@addSel() unless @isVisible
 			@updatePosition @getIntersectObject(intersectList)
@@ -57,7 +57,7 @@ class SelectorArea
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				@selector.material.opacity = 0.3
-				update = @handleBrush intersect.object, intersect.faceIndex
+				update = @handleBrush intersect
 				if update
 					MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
 					MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
@@ -97,25 +97,25 @@ class SelectorArea
 		for material in db.get('materials').models
 			MapProperties.TERRAIN_MATERIALS.push material
 
-	handleBrush: (object, faceIndex) ->
+	handleBrush: (intersect) ->
+		object = intersect.object
+		faceIndex = intersect.faceIndex
 		baseObject = @selectorObject.objectHelper.getBaseObject object
 		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
 			newIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
-			for i in [0..@brushSizeRadius-1]
-				if object.geometry.faces.length < faceIndex+i
-					face = object.geometry.faces[faceIndex+i]
-					oldIndex = face.materialIndex
-					if oldIndex isnt newIndex and not update
-						face.materialIndex = newIndex
-						scene = @editor.engine.scenegraph.scene
-						baseObject.remove object
-						@editor.engine.render()
-						object.geometry.geometryGroups = undefined
-						object.geometry.geometryGroupsList = undefined
-						object.__webglInit = false #hack
-						object.__webglActive = false #hack 				
-						baseObject.add object
-						update = true
+			for face in intersect.faces
+				oldIndex = face.materialIndex
+				if oldIndex isnt newIndex and not update
+					face.materialIndex = newIndex
+					scene = @editor.engine.scenegraph.scene
+					baseObject.remove object
+					@editor.engine.render()
+					object.geometry.geometryGroups = undefined
+					object.geometry.geometryGroupsList = undefined
+					object.__webglInit = false #hack
+					object.__webglActive = false #hack 				
+					baseObject.add object
+					update = true
 		update
 		
 	onMaterialSelected: (idMapper) =>
