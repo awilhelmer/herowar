@@ -6,6 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import models.entity.BaseModel;
 
 /**
@@ -23,6 +25,7 @@ public class Terrain extends BaseModel {
   private Float smoothness;
   private Integer zScale;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "terrain")
   private Map map;
 

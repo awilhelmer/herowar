@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import models.entity.BaseModel;
 
 @Entity
@@ -23,6 +25,7 @@ public class GeoMetaData extends BaseModel {
   private Long usvs;
   private Long materials;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "metadata")
   private Geometry geometry;
 
