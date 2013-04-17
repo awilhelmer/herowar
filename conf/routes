@@ -41,6 +41,8 @@ PUT			/api/news/:id												controllers.api.News.update(id: Long)
 DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
 POST		/api/news														controllers.api.News.add()
 
+POST		/api/editor/map											controllers.api.Editor.addMap()
+
 ########## GAME ###########
 
 GET			/game																controllers.Game.index()

@@ -12,7 +12,7 @@ import play.mvc.Result;
  * @author Sebastian Sachtleben
  */
 public class Maps extends BaseAPI<Long, Map> {
-
+  
   private Maps() {
     super(Long.class, Map.class);
   }
