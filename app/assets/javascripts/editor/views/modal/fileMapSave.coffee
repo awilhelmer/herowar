@@ -46,14 +46,9 @@ class ModalFileMapSave extends BaseModalView
 			dataType		: 'json'
 			contentType	: 'application/json; charset=utf-8'
 			data				: JSON.stringify @getMapAsJSON()
-			success			: (data, textStatus, jqXHR) =>
-				console.log 'Save map SUCCESS'
-				@status.isSuccessful = true
-			error				: (jqXHR, textStatus, errorThrown) =>
-				console.log 'Save map ERROR'
-				@status.isError = true
-		jqxhr.done =>
-			@status.isSaving = false		
+			success			: @onSuccess
+			error				: @onError
+		jqxhr.done @onDone
 
 	getMapAsJSON: ->
 		id									: MapProperties.MAP_ID
@@ -86,5 +81,24 @@ class ModalFileMapSave extends BaseModalView
 					colors				: 0
 					usvs					: 0
 					materials			: MapProperties.TERRAIN_MATERIALS.length
-				
+
+	onSuccess: (data, textStatus, jqXHR) =>
+		console.log 'Save map SUCCESS'
+		@parseSuccessResponse data if _.isObject data
+		@status.isSuccessful = true
+
+	onError: (jqXHR, textStatus, errorThrown) =>
+		console.log 'Save map ERROR'
+		@status.isError = true
+
+	onDone: =>
+		console.log 'Save map DONE'
+		@status.isSaving = false
+
+	parseSuccessResponse: (data) ->
+		MapProperties.MAP_ID = data.id
+		MapProperties.TERRAIN_ID = data.terrain.id
+		MapProperties.GEOMETRY_ID = data.terrain.geometry.id
+		MapProperties.GEOMETRY_METADATA_ID = data.terrain.geometry.metadata.id
+
 return ModalFileMapSave
