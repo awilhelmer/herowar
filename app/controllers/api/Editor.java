@@ -9,8 +9,10 @@ public class Editor extends Controller {
 
   private static final Logger.ALogger log = Logger.of(Editor.class);
   
+  
   public static Result addMap() {
-    log.info(Form.form().toString());
+   // log.info("get"  + Form.form().get().toString());
+    log.info("getMap by empty string "  + Form.form().bindFromRequest("").toString());
     return ok();
   }
   
