@@ -1,5 +1,6 @@
 BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
+app = require 'application'
 db = require 'database'
 
 class ModalFileMapOpen extends BaseModalView
@@ -13,21 +14,45 @@ class ModalFileMapOpen extends BaseModalView
 	template: templates.get 'modal/fileMapOpen.tmpl'
 
 	events:
-		'click .btn-primary' : 'mapOpen'
+		'click .modal-body div'	: 'chooseMap'
+		'click .btn-primary' 		: 'mapOpen'
 
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
-	
+
 	initialize: (options) ->
+		@mapId = -1
+		@addPopover()
 		super options
 		@model.fetch()
+
+	addPopover: ->
+		$('.btn-primary').popover
+			placement : 'left'
+			trigger		: 'hover'
+			title 		: 'Error'
+			content		: 'Please choose a map above.'		
+
+	destroyPopover: ->
+		$('.btn-primary').popover 'destroy'
+
+	chooseMap: (event) ->
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		mapId = $currentTarget.data 'mapid'
+		unless mapId then return
+		@mapId = mapId
+		@destroyPopover()
+		$('.modal-body div').removeClass 'active'
+		$currentTarget.addClass 'active'
 
 	mapOpen: (event) ->
 		unless event then return
 		$currentTarget = $ event.currentTarget
-		$currentTarget.popover
-			placement : 'top'
-			title 		: 'Error'
-			content		: 'Please choose a map above.'
+		if @mapId is -1
+			$currentTarget.popover 'show'
+		else
+			console.log "Choose map #{@mapId}"
+			window.location = "/editor?map=#{@mapId}"
 
 return ModalFileMapOpen
