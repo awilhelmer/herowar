@@ -12,9 +12,18 @@ class WorldProperties extends BasePropertiesView
 
 	template: templates.get 'sidebar/worldProperties.tmpl'
 
+	events:
+		'change input[name="name"]'						: 'onChangedString'
+		'change textarea[name="description"]'	: 'onChangedString'
+		'change select[name="skybox"]'				: 'onChangedString'
+		'change select[name="teamSize"]'			: 'onChangedInteger'
+		'change input[name="prepareTime"]'		: 'onChangedInteger'
+		'change input[name="lives"]'					: 'onChangedInteger'
+		'change input[name="goldStart"]'			: 'onChangedInteger'
+		'change input[name="goldPerTick"]'		: 'onChangedInteger'
+
 	initialize: (options) ->
 		super options
-		console.log @model
 
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @showPanel

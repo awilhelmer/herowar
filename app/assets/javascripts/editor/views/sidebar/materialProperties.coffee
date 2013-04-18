@@ -14,8 +14,8 @@ class MaterialProperties extends BasePropertiesView
 	template: templates.get 'sidebar/materialProperties.tmpl'
 	
 	events:
-		'change input[name*="mp-color-"]'						: 'changeColor'
-		'change input[name*="mp-basis-"]' 					: 'changeBasis'
+		'change input[name*="mp-color-"]'	: 'changeColor'
+		'change input[name*="mp-basis-"]'	: 'changeBasis'
 	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel

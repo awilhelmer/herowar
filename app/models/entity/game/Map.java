@@ -39,6 +39,8 @@ public class Map extends BaseModel {
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
   public Map() {
+    this.name = "";
+    this.description = "";
     this.skybox = "default";
     this.teamSize = 1;
     this.prepareTime = 500;
