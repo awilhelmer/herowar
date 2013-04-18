@@ -6,6 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import models.entity.BaseModel;
 
 /**
@@ -22,7 +24,9 @@ public class Terrain extends BaseModel {
   private Integer height;
   private Float smoothness;
   private Integer zScale;
+  private Boolean wireframe;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "terrain")
   private Map map;
 
@@ -30,6 +34,14 @@ public class Terrain extends BaseModel {
   private Geometry geometry;
 
   private static final Finder<Long, Terrain> finder = new Finder<Long, Terrain>(Long.class, Terrain.class);
+
+  public Terrain() {
+    this.width = 500;
+    this.height = 500;
+    this.smoothness = 0.1f;
+    this.zScale = 0;
+    this.wireframe = true;
+  }
 
   // GETTER & SETTER //
 
@@ -89,7 +101,20 @@ public class Terrain extends BaseModel {
     this.geometry = geometry;
   }
 
+  public Boolean getWireframe() {
+    return wireframe;
+  }
+
+  public void setWireframe(Boolean wireframe) {
+    this.wireframe = wireframe;
+  }
+
   public static Finder<Long, Terrain> getFinder() {
     return finder;
+  }
+
+  @Override
+  public String toString() {
+    return "Terrain [id=" + id + ", width=" + width + ", height=" + height + ", smoothness=" + smoothness + ", zScale=" + zScale + "]";
   }
 }

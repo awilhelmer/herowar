@@ -22,6 +22,7 @@ public class Map extends BaseModel {
   
   private String name;
   private String description;
+  private String skybox;
   private Integer teamSize;
   private Integer prepareTime;
   private Integer lives;
@@ -37,12 +38,26 @@ public class Map extends BaseModel {
   
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
-  public static void create(String name, String description, int teamSize) {
+  public Map() {
+    this.name = "";
+    this.description = "";
+    this.skybox = "default";
+    this.teamSize = 1;
+    this.prepareTime = 500;
+    this.lives = 20;
+    this.goldStart = 2000;
+    this.goldPerTick = 5;
+    this.terrain = new Terrain();
+    this.getTerrain().setGeometry(new Geometry());
+    this.getTerrain().getGeometry().setMetadata(new GeoMetaData());
+  }
+
+  public static Map create(String name, String description, int teamSize) {
     final Map map = new Map();
     map.setName(name);
     map.setDescription(description);
     map.setTeamSize(teamSize);
-    map.save();
+    return map;
   }
   
   public static void merge(final Map map, final Map map2) {
@@ -76,6 +91,14 @@ public class Map extends BaseModel {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public String getSkybox() {
+    return skybox;
+  }
+
+  public void setSkybox(String skybox) {
+    this.skybox = skybox;
   }
 
   public Integer getTeamSize() {

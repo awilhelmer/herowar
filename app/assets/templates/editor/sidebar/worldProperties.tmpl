@@ -1,4 +1,60 @@
 <div class="sidebar-panel-headline">World Properties</div>
 <div class="sidebar-panel-content">
-	Nothing here...
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="worldName">Title</label>
+			<div class="controls">
+				<input type="text" id="worldName" class="input-medium" name="name" value="{{name}}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldDescription">Description</label>
+			<div class="controls">
+				<textarea rows="5" id="worldDescription" class="input-medium" name="description">{{description}}</textarea>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldSkybox">Skybox</label>
+			<div class="controls">
+				<select id="worldSkybox" class="input-medium" name="skybox">
+					<option>default</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldTeamSize">Team Size</label>
+			<div class="controls">
+				<select id="worldTeamSize" class="input-medium" name="teamSize">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldPrepareTime">Prepare Time</label>
+			<div class="controls">
+				<input type="text" id="worldPrepareTime" class="input-medium" name="prepareTime" value="{{prepareTime}}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldLives">Lives</label>
+			<div class="controls">
+				<input type="text" id="worldLives" class="input-medium" name="lives" value="{{lives}}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldGoldStart">Gold Start</label>
+			<div class="controls">
+				<input type="text" id="worldGoldStart" class="input-medium" name="goldStart" value="{{goldStart}}">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="worldGoldPerTick">Gold per Tick</label>
+			<div class="controls">
+				<input type="text" id="worldGoldPerTick" class="input-medium" name="goldPerTick" value="{{goldPerTick}}">
+			</div>
+		</div>
+	</form>
 </div>

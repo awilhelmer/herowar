@@ -6,13 +6,13 @@
 		<div class="control-group">
 			<label class="control-label" for="inputWidth">Width</label>
 			<div class="controls">
-				<input type="text" id="inputWidth" name="width" value="{{width}}">
+				<input type="text" id="inputWidth" name="width" value="{{terrain.width}}">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="inputHeight">Height</label>
 			<div class="controls">
-				<input type="text" id="inputHeight" name="height" value="{{height}}">
+				<input type="text" id="inputHeight" name="height" value="{{terrain.height}}">
 			</div>
 		</div>
 	</form>
@@ -21,13 +21,13 @@
 		<div class="control-group">
 			<label class="control-label" for="inputSmoothness">Smoothness</label>
 			<div class="controls">
-				<input type="text" id="inputSmoothness" name="smoothness" value="{{smoothness}}">
+				<input type="text" id="inputSmoothness" name="smoothness" value="{{terrain.smoothness}}">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="inputZScale">Z-Scale</label>
 			<div class="controls">
-				<input type="text" id="inputZScale" name="zScale" value="{{zScale}}">
+				<input type="text" id="inputZScale" name="zScale" value="{{terrain.zScale}}">
 			</div>
 		</div>
 		<button id="randomizeTerrain" class="btn" type="button">Randomize</button>
@@ -37,14 +37,16 @@
 		<div class="control-group">
 			<label class="control-label" for="inputWireframe">Active</label>
 			<div class="controls">
-				<input type="checkbox" id="inputWireframe" name="wireframe" {{#if wireframe}}checked="checked"{{/if}}>
+				<input type="checkbox" id="inputWireframe" name="wireframe" {{#if terrain.wireframe}}checked="checked"{{/if}}>
 			</div>
 		</div>
 	</form>
+	<!--
 	<div class="sidebar-headline">Materials</div>
 	<div>
-		{{#each materials}}
+		{{! #each materials}}
 			<div class="mm-material" data-view="views/sidebar/terrainMaterial" data-model="{{this}}"></div>
-		{{/each}}
+		{{! /each}}
 	</div>
+	-->
 </div>

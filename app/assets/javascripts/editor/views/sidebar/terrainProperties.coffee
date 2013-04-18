@@ -9,7 +9,7 @@ class TerrainProperties extends BasePropertiesView
 	
 	className: 'sidebar-panel hidden'
 	
-	entity: 'terrain'
+	entity: 'world'
 	
 	template: templates.get 'sidebar/terrainProperties.tmpl'
 	

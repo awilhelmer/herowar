@@ -20,23 +20,15 @@ class Scene
 		@randomPool = new RandomPool()
 		@randomPool.hook()
 		@world = db.get 'world'
-		@terrain = db.get 'terrain'
 		@addEventListeners()
-		@newMapEmpty()
+		@reset()		
+		@createTextures()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
 		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
-		EditorEventbus.newMapEmpty.add @newMapEmpty
 
-	newMapEmpty: =>
-		console.log 'Initialize scene'
-		EditorEventbus.worldAdded.dispatch
-		EditorEventbus.terrainAdded.dispatch
-		@reset()		
-		@createTextures()
-		
 	createTextures: ->
 		@textures = db.get 'textures'
 		nextTextureId = 1
@@ -59,22 +51,14 @@ class Scene
 		zScale = parseInt zScale
 		if @hasValidSize(width, height) and @hasChangedSize(width, height, smoothness, zScale)
 			console.log 'Terrain has valid changes'
-			@saveTerrainValues width, height, smoothness, zScale
-			@terrain.set
-				'width' 			: width
-				'height' 			: height
-				'smoothness' 	: smoothness
-				'zScale' 			: zScale
+			@world.get('terrain').width = width
+			@world.get('terrain').height = height
+			@world.get('terrain').smoothness = smoothness
+			@world.get('terrain').zScale = zScale
 			@buildTerrain()
 
-	saveTerrainValues: (width, height, smoothness, zScale) ->
-		MapProperties.TERRAIN_WIDTH = width
-		MapProperties.TERRAIN_HEIGHT = height
-		MapProperties.TERRAIN_SMOOTHNESS = smoothness
-		MapProperties.TERRAIN_ZSCALE = zScale		
-
 	changeTerrainWireframe: (value) =>
-		@terrain.set 'wireframe', value
+		@world.get('terrain').wireframe = value
 
 	resetTerrainPool: =>
 		console.log 'Reseting terrain pool'
@@ -83,19 +67,17 @@ class Scene
 
 	reset: =>
 		console.log 'Reseting scene'
-		@world.reset()
-		@terrain.reset()
 		@createTerrainMaterial()
 		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
 	buildTerrain: =>
-		console.log "Change terrain: size=#{@terrain.get('width')}x#{@terrain.get('height')} smoothness=#{@terrain.get('smoothness')} zscale=#{@terrain.get('zScale')}"
+		console.log "Change terrain: size=#{@world.get('terrain').width}x#{@world.get('terrain').height} smoothness=#{@world.get('terrain').smoothness} zscale=#{@world.get('terrain').zScale}"
 		@randomPool.seek 0
-		map = @terrain.update()
-		MapProperties.TERRAIN_FACES = map.children[0].geometry.faces
-		MapProperties.TERRAIN_VERTICES = map.children[0].geometry.vertices
-		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @terrain.get 'wireframe'
+		map = @world.terrainUpdate()
+		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
+		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
+		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe
 		@editor.engine.scenegraph.setMap map
 		@editor.engine.render()
 
@@ -106,11 +88,11 @@ class Scene
 		width >= Constants.TERRAIN_MIN_WIDTH and width <= Constants.TERRAIN_MAX_WIDTH and height >= Constants.TERRAIN_MIN_HEIGHT and height <= Constants.TERRAIN_MAX_HEIGHT
 
 	hasChangedSize: (width, height, smoothness, zScale) =>
-		width != parseInt(@terrain.get('width')) or height != parseInt(@terrain.get('height')) or smoothness != parseFloat(@terrain.get('smoothness')) or zScale != parseInt(@terrain.get('zScale'))
+		width != parseInt(@world.get('terrain').width) or height != parseInt(@world.get('terrain').height) or smoothness != parseFloat(@world.get('terrain').smoothness) or zScale != parseInt(@world.get('terrain').zScale)
 
 	createTerrainMaterial: ->
 		col = db.get 'materials'
 		col.add new Material 1, 1, 'Terrain', '#006600'
-		@terrain.addMaterial 1
+		@world.addTerrainMaterial 1
 
 return Scene

@@ -16,6 +16,6 @@ class ModalFileMapNewEmpty extends BaseModalView
 	newMapEmpty: (event) =>
 		event?.preventDefault()
 		@hide()
-		EditorEventbus.newMapEmpty.dispatch()
+		window.location = '/editor'
 
 return ModalFileMapNewEmpty

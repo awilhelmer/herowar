@@ -4,23 +4,28 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import models.entity.BaseModel;
 
 @Entity
 public class GeoMetaData extends BaseModel {
   private static final long serialVersionUID = -9218495880941499621L;
+  
   @Id
   private Long id;
+  
   private String formatVersion;
   private String sourceFile;
   private String generatedBy;
   private Long vertices;
   private Long faces;
   private Long normal;
-  private Long Colors;
+  private Long colors;
   private Long usvs;
   private Long materials;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "metadata")
   private Geometry geometry;
 
@@ -81,11 +86,11 @@ public class GeoMetaData extends BaseModel {
   }
 
   public Long getColors() {
-    return Colors;
+    return colors;
   }
 
   public void setColors(Long colors) {
-    Colors = colors;
+    this.colors = colors;
   }
 
   public Long getUsvs() {
@@ -112,4 +117,9 @@ public class GeoMetaData extends BaseModel {
     this.geometry = geometry;
   }
 
+  @Override
+  public String toString() {
+    return "GeoMetaData [id=" + id + ", formatVersion=" + formatVersion + ", sourceFile=" + sourceFile + ", generatedBy=" + generatedBy + ", vertices="
+        + vertices + ", faces=" + faces + ", normal=" + normal + ", Colors=" + colors + ", usvs=" + usvs + ", materials=" + materials + "]";
+  }
 }

@@ -28,4 +28,16 @@ class BasePropertiesView extends BaseView
 				update:
 					[callbackFunc]
 
+	onChangedString: (event) ->
+		unless event then return
+		event.preventDefault()
+		entry = @getEntry event, ''
+		@model.set entry.property, entry.value
+
+	onChangedInteger: (event) ->
+		unless event then return
+		event.preventDefault()
+		entry = @getEntry event, ''
+		@model.set entry.property, parseInt(entry.value)
+
 return BasePropertiesView
