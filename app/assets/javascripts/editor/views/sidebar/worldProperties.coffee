@@ -22,13 +22,12 @@ class WorldProperties extends BasePropertiesView
 		'change input[name="goldStart"]'			: 'onChangedInteger'
 		'change input[name="goldPerTick"]'		: 'onChangedInteger'
 
-	initialize: (options) ->
-		super options
-
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @showPanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
 		EditorEventbus.showObjectProperties.add @hidePanel
 		EditorEventbus.showMaterialProperties.add @hidePanel
+		EditorEventbus.showSidebarEnvironment.add @hidePanel
+		EditorEventbus.showSidebarPathing.add @hidePanel
 
 return WorldProperties

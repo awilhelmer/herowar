@@ -2,20 +2,20 @@ EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 
-class ObjectProperties extends BasePropertiesView
-	
-	id: 'sidebar-properties-object'
-	
-	className: 'sidebar-panel hidden'
-	
-	template: templates.get 'sidebar/objectProperties.tmpl'
-	
+class Pathing extends BasePropertiesView
+
+	id: 'sidebar-pathing'
+
+	className: 'sidebar-panel'
+
+	template: templates.get 'sidebar/pathing.tmpl'
+
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @showPanel
+		EditorEventbus.showObjectProperties.add @hidePanel
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showSidebarPathing.add @showPanel
 
-return ObjectProperties
+return Pathing
