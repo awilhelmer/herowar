@@ -19,6 +19,10 @@ public class Editor extends Controller {
 
   private static final Logger.ALogger log = Logger.of(Editor.class);
 
+  public static Result mapDefault() {
+    return ok(toJson(new Map()));
+  }
+
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
   public static Result addMap() {
     if (request().body().isMaxSizeExceeded()) {

@@ -34,6 +34,13 @@ public class Terrain extends BaseModel {
 
   private static final Finder<Long, Terrain> finder = new Finder<Long, Terrain>(Long.class, Terrain.class);
 
+  public Terrain() {
+    this.width = 500;
+    this.height = 500;
+    this.smoothness = 0.1f;
+    this.zScale = 0;
+  }
+
   // GETTER & SETTER //
 
   public Long getId() {

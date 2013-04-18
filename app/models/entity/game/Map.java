@@ -37,6 +37,17 @@ public class Map extends BaseModel {
   
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
+  public Map() {
+    this.teamSize = 1;
+    this.prepareTime = 500;
+    this.lives = 200;
+    this.goldStart = 2000;
+    this.goldPerTick = 5;
+    this.terrain = new Terrain();
+    this.getTerrain().setGeometry(new Geometry());
+    this.getTerrain().getGeometry().setMetadata(new GeoMetaData());
+  }
+
   public static void create(String name, String description, int teamSize) {
     final Map map = new Map();
     map.setName(name);
