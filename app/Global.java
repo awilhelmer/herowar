@@ -116,7 +116,15 @@ public class Global extends GlobalSettings {
       return;
     }
     Logger.info("Creating tutorial map");
-    Map.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
+    Map tutorialMap = Map.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
+    tutorialMap.getTerrain().getGeometry().getMetadata().save();
+    tutorialMap.getTerrain().getGeometry().save();
+    tutorialMap.getTerrain().setWidth(250);
+    tutorialMap.getTerrain().setHeight(250);
+    tutorialMap.getTerrain().setSmoothness(0.5f);
+    tutorialMap.getTerrain().setzScale(30);
+    tutorialMap.getTerrain().save();
+    tutorialMap.save();
   }
 
   private void createDummyNews(Application app) {

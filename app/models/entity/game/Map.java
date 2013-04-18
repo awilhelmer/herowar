@@ -52,12 +52,12 @@ public class Map extends BaseModel {
     this.getTerrain().getGeometry().setMetadata(new GeoMetaData());
   }
 
-  public static void create(String name, String description, int teamSize) {
+  public static Map create(String name, String description, int teamSize) {
     final Map map = new Map();
     map.setName(name);
     map.setDescription(description);
     map.setTeamSize(teamSize);
-    map.save();
+    return map;
   }
   
   public static void merge(final Map map, final Map map2) {

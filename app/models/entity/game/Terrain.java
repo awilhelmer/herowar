@@ -24,6 +24,7 @@ public class Terrain extends BaseModel {
   private Integer height;
   private Float smoothness;
   private Integer zScale;
+  private Boolean wireframe;
 
   @JsonIgnore
   @OneToOne(mappedBy = "terrain")
@@ -39,6 +40,7 @@ public class Terrain extends BaseModel {
     this.height = 500;
     this.smoothness = 0.1f;
     this.zScale = 0;
+    this.wireframe = true;
   }
 
   // GETTER & SETTER //
@@ -97,6 +99,14 @@ public class Terrain extends BaseModel {
 
   public void setGeometry(Geometry geometry) {
     this.geometry = geometry;
+  }
+
+  public Boolean getWireframe() {
+    return wireframe;
+  }
+
+  public void setWireframe(Boolean wireframe) {
+    this.wireframe = wireframe;
   }
 
   public static Finder<Long, Terrain> getFinder() {
