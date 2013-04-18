@@ -42,7 +42,6 @@ public class LinkedAccount extends Model {
     final LinkedAccount ret = new LinkedAccount();
     ret.providerKey = acc.providerKey;
     ret.providerUserId = acc.providerUserId;
-
     return ret;
   }
 
