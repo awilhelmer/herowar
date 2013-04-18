@@ -23,6 +23,10 @@ public class Editor extends Controller {
     return ok(toJson(new Map()));
   }
 
+  public static Result mapShow(Long id) {
+    return ok(toJson(Map.getFinder().byId(id)));
+  }
+
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
   public static Result addMap() {
     if (request().body().isMaxSizeExceeded()) {
