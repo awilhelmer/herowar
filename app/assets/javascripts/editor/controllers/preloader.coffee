@@ -16,6 +16,7 @@ class Preloader extends BaseController
 		@createRenderer()
 		@initRendererContext()
 		@animate()
+		@state = 1
 		@load
 			textures:
 				'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
@@ -93,13 +94,35 @@ class Preloader extends BaseController
 		requestAnimationFrame @animate unless @preloadComplete
 		@ctx.clearRect 0, 0, Variables.SCREEN_WIDTH, Variables.SCREEN_HEIGHT
 		@ctx.save()
-		@ctx.font = '24px Arial'
-		@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
-		@ctx.fillText "Loading #{Math.round(@percentage)}%", Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
-		@ctx.restore()
-		if @progress.finish
-			@alpha -= 0.05
-			@finish() if @alpha <= 0 and !@preloadComplete
+		if @state is 1
+			@ctx.font = '24px Arial'
+			@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
+			@ctx.fillText "Loading #{Math.round(@percentage)}%", Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
+			@ctx.restore()
+			if @progress.finish
+				@state = 2
+				@loadMap()
+		else 
+			@ctx.font = '24px Arial'
+			@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
+			text = if @options.map then "Creating map #{@options.map}" else 'Creating default map'
+			@ctx.fillText text, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
+			@ctx.restore()
+			if @state is 3
+				@alpha -= 0.05
+				@finish() if @alpha <= 0 and !@preloadComplete
+
+	loadMap: ->
+		jqxhr = $.ajax
+			url					: if @options.map then "/api/editor/map/#{@options.map}" else '/api/editor/map/default'
+			type				: 'GET'
+			dataType		: 'json'
+			success			: @onSuccess
+
+	onSuccess: (data) =>
+		console.log 'Load map SUCCESS'
+		console.log data
+		@state = 3
 
 	finish: ->
 		console.log 'Preloading complete'
