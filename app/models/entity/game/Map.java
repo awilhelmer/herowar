@@ -22,6 +22,7 @@ public class Map extends BaseModel {
   
   private String name;
   private String description;
+  private String skybox;
   private Integer teamSize;
   private Integer prepareTime;
   private Integer lives;
@@ -38,6 +39,7 @@ public class Map extends BaseModel {
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
   public Map() {
+    this.skybox = "default";
     this.teamSize = 1;
     this.prepareTime = 500;
     this.lives = 200;
@@ -87,6 +89,14 @@ public class Map extends BaseModel {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public String getSkybox() {
+    return skybox;
+  }
+
+  public void setSkybox(String skybox) {
+    this.skybox = skybox;
   }
 
   public Integer getTeamSize() {
