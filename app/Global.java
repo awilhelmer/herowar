@@ -122,7 +122,7 @@ public class Global extends GlobalSettings {
     tutorialMap.getTerrain().setWidth(600);
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);
-    tutorialMap.getTerrain().setzScale(30);
+    tutorialMap.getTerrain().setzScale(100);
     tutorialMap.getTerrain().save();
     tutorialMap.save();
   }

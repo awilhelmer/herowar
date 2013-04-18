@@ -44,7 +44,7 @@ public class Map extends BaseModel {
     this.skybox = "default";
     this.teamSize = 1;
     this.prepareTime = 500;
-    this.lives = 200;
+    this.lives = 20;
     this.goldStart = 2000;
     this.goldPerTick = 5;
     this.terrain = new Terrain();
