@@ -83,7 +83,6 @@ class Scene
 
 	reset: =>
 		console.log 'Reseting scene'
-		@world.reset()
 		@terrain.reset()
 		@createTerrainMaterial()
 		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
