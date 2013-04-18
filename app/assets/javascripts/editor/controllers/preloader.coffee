@@ -120,10 +120,8 @@ class Preloader extends BaseController
 			success			: @onSuccess
 
 	onSuccess: (data) =>
-		console.log 'Load map SUCCESS'
 		world = db.get 'world'
 		world.set data
-		console.log world
 		@state = 3
 
 	finish: ->
