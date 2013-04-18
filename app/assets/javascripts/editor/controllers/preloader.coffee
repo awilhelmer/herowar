@@ -1,7 +1,7 @@
 BaseController = require 'controllers/baseController'
-db = require 'database'
-Eventbus = require 'eventbus'
 Variables = require 'variables'
+Eventbus = require 'eventbus'
+db = require 'database'
 
 class Preloader extends BaseController
 
@@ -121,7 +121,9 @@ class Preloader extends BaseController
 
 	onSuccess: (data) =>
 		console.log 'Load map SUCCESS'
-		console.log data
+		world = db.get 'world'
+		world.set data
+		console.log world
 		@state = 3
 
 	finish: ->
