@@ -1,5 +1,7 @@
 package models.entity.game;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,13 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
-import models.entity.BaseModel;
-
 @Entity
-public class Geometry extends BaseModel {
+public class Geometry implements Serializable {
   private static final long serialVersionUID = 5730315776315409881L;
-
-  private static final Finder<Long, Geometry> finder = new Finder<Long, Geometry>(Long.class, Geometry.class);
 
   @Id
   private Long id;
@@ -51,9 +49,11 @@ public class Geometry extends BaseModel {
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private GeoMetaData metadata;
 
-  public Geometry() { }
+  public Geometry() {
+  }
 
-  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
+  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
+      GeometryType type, GeoMetaData metadata) {
     this.vertices = vertices;
     this.faces = faces;
     this.morphTargets = morphTargets;
@@ -162,10 +162,6 @@ public class Geometry extends BaseModel {
 
   public void setType(GeometryType type) {
     this.type = type;
-  }
-
-  public static Finder<Long, Geometry> getFinder() {
-    return finder;
   }
 
   @Override

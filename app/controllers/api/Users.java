@@ -27,8 +27,7 @@ public class Users extends BaseAPI<Long, User> {
   }
 
   public static Result update(Long id) {
-    User user = instance.findUnique(id);
-    User.merge(user, Form.form(User.class).bindFromRequest().get());
+    User user = instance.merge(Form.form(User.class).bindFromRequest().get());
     return ok(toJson(user));
   }
 

@@ -1,5 +1,7 @@
 package models.entity.game;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,14 +11,12 @@ import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import models.entity.BaseModel;
-
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Terrain extends BaseModel {
+public class Terrain implements Serializable {
 
   @Id
   private Long id;
@@ -35,7 +35,6 @@ public class Terrain extends BaseModel {
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
   private Geometry geometry;
 
-  private static final Finder<Long, Terrain> finder = new Finder<Long, Terrain>(Long.class, Terrain.class);
 
   public Terrain() {
     this.width = 500;
@@ -111,9 +110,7 @@ public class Terrain extends BaseModel {
     this.wireframe = wireframe;
   }
 
-  public static Finder<Long, Terrain> getFinder() {
-    return finder;
-  }
+
 
   @Override
   public String toString() {

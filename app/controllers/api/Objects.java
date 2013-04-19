@@ -3,8 +3,9 @@ package controllers.api;
 import static play.libs.Json.toJson;
 import models.entity.game.Object3D;
 import play.data.Form;
+import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
 import play.mvc.Result;
-
 
 /**
  * The Objects controller handle api requests for the Object3D model.
@@ -27,9 +28,10 @@ public class Objects extends BaseAPI<Long, Object3D> {
     return instance.showEntry(id);
   }
 
+  @Transactional
   public static Result update(Long id) {
-    Object3D object = instance.findUnique(id);
-    Object3D.merge(object, Form.form(Object3D.class).bindFromRequest().get());
+    // Object3D object = instance.findUnique(id);
+    Object3D object = JPA.em().merge(Form.form(Object3D.class).bindFromRequest().get());
     return ok(toJson(object));
   }
 

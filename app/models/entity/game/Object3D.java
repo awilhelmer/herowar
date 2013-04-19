@@ -1,33 +1,25 @@
 package models.entity.game;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import models.entity.BaseModel;
 
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Object3D extends BaseModel {
+public class Object3D implements Serializable {
 
   @Id
   private Long id;
-  
+
   private String name;
   private String description;
-  
-  private static final Finder<Long, Object3D> finder = new Finder<Long, Object3D>(Long.class, Object3D.class);
-  
-  public static void merge(Object3D object, Object3D object2) {
-    object.setName(object2.getName());
-    object.setDescription(object2.getDescription());
-    object.save();
-  } 
-  
+
   // GETTER & SETTER //
-  
+
   public Long getId() {
     return id;
   }
@@ -51,8 +43,4 @@ public class Object3D extends BaseModel {
   public void setDescription(String description) {
     this.description = description;
   }
-
-  public static Finder<Long, Object3D> getFinder() {
-    return finder;
-  } 
 }

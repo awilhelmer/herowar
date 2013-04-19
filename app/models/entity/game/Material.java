@@ -10,15 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import play.db.ebean.Model.Finder;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 public class Material implements Serializable {
   private static final long serialVersionUID = 1651915135235L;
 
-  private static final Finder<Long, Material> finder = new Finder<Long, Material>(Long.class, Material.class);
   @Id
   private Long id;
 
@@ -28,14 +27,15 @@ public class Material implements Serializable {
   private String map;
 
   // For mapping while saving
-  private Integer backBoneId;
+  private Long backBoneId;
 
   private String color;
 
   private Boolean transparent;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "materials")
-  private Set<Map> maps;
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonIgnore
+  private Set<MapMaterials> materialsMap;
 
   @Column(precision = 2)
   private Float opacity;
@@ -65,11 +65,11 @@ public class Material implements Serializable {
   }
 
   @Transient
-  public Integer getBackBoneId() {
+  public Long getBackBoneId() {
     return backBoneId;
   }
 
-  public void setBackBoneId(Integer backBoneId) {
+  public void setBackBoneId(Long backBoneId) {
     this.backBoneId = backBoneId;
   }
 
@@ -97,16 +97,12 @@ public class Material implements Serializable {
     this.opacity = opacity;
   }
 
-  public Set<Map> getMaps() {
-    return maps;
+  public Set<MapMaterials> getMaterialsMap() {
+    return materialsMap;
   }
 
-  public void setMaps(Set<Map> maps) {
-    this.maps = maps;
-  }
-
-  public static Finder<Long, Material> getFinder() {
-    return finder;
+  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
+    this.materialsMap = materialsMap;
   }
 
 }

@@ -2,9 +2,8 @@ package controllers.api;
 
 import static play.libs.Json.toJson;
 import models.entity.game.Map;
-import play.data.Form;
+import play.db.jpa.JPA;
 import play.mvc.Result;
-
 
 /**
  * The Maps controller handle api requests for the Map model.
@@ -12,7 +11,7 @@ import play.mvc.Result;
  * @author Sebastian Sachtleben
  */
 public class Maps extends BaseAPI<Long, Map> {
-  
+
   private Maps() {
     super(Long.class, Map.class);
   }
@@ -29,7 +28,7 @@ public class Maps extends BaseAPI<Long, Map> {
 
   public static Result update(Long id) {
     Map map = instance.findUnique(id);
-    Map.merge(map, Form.form(Map.class).bindFromRequest().get());
+    map = JPA.em().merge(map);
     return ok(toJson(map));
   }
 

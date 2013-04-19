@@ -1,25 +1,23 @@
 package models.entity.game;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import models.entity.BaseModel;
 
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Unit extends BaseModel {
+public class Unit implements Serializable {
 
   @Id
   private Long id;
 
   @ManyToOne
   private Army army;
-
-  private static final Finder<Long, Unit> finder = new Finder<Long, Unit>(Long.class, Unit.class);
 
   // GETTER & SETTER //
 
@@ -39,7 +37,4 @@ public class Unit extends BaseModel {
     this.army = army;
   }
 
-  public static Finder<Long, Unit> getFinder() {
-    return finder;
-  }
 }

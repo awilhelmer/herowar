@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,14 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import models.entity.BaseModel;
-
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Wave extends BaseModel {
+public class Wave implements Serializable {
 
   @Id
   private Long id;
@@ -26,7 +25,6 @@ public class Wave extends BaseModel {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Army> armies;
 
-  private static final Finder<Long, Army> finder = new Finder<Long, Army>(Long.class, Army.class);
   
   // GETTER & SETTER //  
   
@@ -54,7 +52,5 @@ public class Wave extends BaseModel {
     this.armies = armies;
   }
 
-  public static Finder<Long, Army> getFinder() {
-    return finder;
-  }
+ 
 }

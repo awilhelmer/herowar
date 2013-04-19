@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -7,20 +8,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
-import models.entity.BaseModel;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Map extends BaseModel {
+public class Map implements Serializable {
 
   @Id
   private Long id;
@@ -40,11 +39,12 @@ public class Map extends BaseModel {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Wave> waves;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinTable(name = "geomaps")
-  private Set<Material> materials;
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.mat")
+  @JsonIgnore
+  private Set<MapMaterials> mapMaterials;
+  // For JSON mapping ...
+  private List<Material> materials;
 
-  private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
   public Map() {
     this.name = "";
@@ -60,20 +60,6 @@ public class Map extends BaseModel {
     this.getTerrain().getGeometry().setMetadata(new GeoMetaData());
   }
 
-  public static Map create(String name, String description, int teamSize) {
-    final Map map = new Map();
-    map.setName(name);
-    map.setDescription(description);
-    map.setTeamSize(teamSize);
-    return map;
-  }
-
-  public static void merge(final Map map, final Map map2) {
-    map.setName(map2.getName());
-    map.setDescription(map2.getDescription());
-    map.setTeamSize(map2.getTeamSize());
-    map.save();
-  }
 
   // GETTER & SETTER //
 
@@ -165,17 +151,23 @@ public class Map extends BaseModel {
     this.waves = waves;
   }
 
-  public Set<Material> getMaterials() {
+  public Set<MapMaterials> getMapMaterials() {
+    return mapMaterials;
+  }
+
+  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
+    this.mapMaterials = mapMaterials;
+  }
+
+  @Transient
+  public List<Material> getMaterials() {
     return materials;
   }
 
-  public void setMaterials(Set<Material> materials) {
+  public void setMaterials(List<Material> materials) {
     this.materials = materials;
   }
 
-  public static Finder<Long, Map> getFinder() {
-    return finder;
-  }
 
   @Override
   public String toString() {

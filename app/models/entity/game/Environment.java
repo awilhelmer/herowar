@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import models.entity.BaseModel;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
@@ -21,7 +20,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 @Entity
 @SuppressWarnings("serial")
-public class Environment extends BaseModel {
+public class Environment  implements Serializable{
 
   @Id
   private Long id;
@@ -40,8 +39,6 @@ public class Environment extends BaseModel {
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Geometry geometry;
-
-  private static final Finder<Long, Environment> finder = new Finder<Long, Environment>(Long.class, Environment.class);
 
   public Environment() {
   }
@@ -90,10 +87,6 @@ public class Environment extends BaseModel {
 
   public void setGeometry(Geometry geometry) {
     this.geometry = geometry;
-  }
-
-  public static Finder<Long, Environment> getFinder() {
-    return finder;
   }
 
   @Override

@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import models.entity.BaseModel;
 import models.entity.User;
 
 
@@ -22,7 +21,7 @@ import models.entity.User;
  */
 @Entity
 @Table(name = "gameresult")
-public class GameResult extends BaseModel implements Serializable {
+public class GameResult  implements Serializable {
 
   private static final long serialVersionUID = 1791158983361934175L;
   

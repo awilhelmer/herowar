@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import models.entity.BaseModel;
 import models.entity.User;
 
 /**
@@ -21,13 +20,10 @@ import models.entity.User;
  */
 @Entity
 @Table(name = "gametoken")
-public class GameToken extends BaseModel implements Serializable {
+public class GameToken implements Serializable {
 
   private static final long serialVersionUID = -5699234192975949575L;
 
-  private static final Finder<String, GameToken> finder = new Finder<String, GameToken>(String.class, GameToken.class);
-  
-  
   private String token;
   private Boolean invalid;
   private User createdByUser;
@@ -89,11 +85,6 @@ public class GameToken extends BaseModel implements Serializable {
     this.result = result;
   }
 
-  public static Finder<String, GameToken> getFinder() {
-    return finder;
-  }
-  
-  
   @Override
   public int hashCode() {
     final int prime = 31;

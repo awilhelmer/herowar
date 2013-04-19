@@ -1,12 +1,12 @@
 package models.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 import play.data.format.Formats;
-import play.db.ebean.Model;
 
 /**
  * The BaseModel contains creation date, update date and version of the model.
@@ -15,7 +15,7 @@ import play.db.ebean.Model;
  */
 @MappedSuperclass
 @SuppressWarnings("serial")
-public abstract class BaseModel extends Model {
+public abstract class BaseModel implements Serializable {
 
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   protected Date cdate;
@@ -33,7 +33,7 @@ public abstract class BaseModel extends Model {
     this.cdate = new Date();
     this.udate = new Date();
   }
-  
+
   // GETTER & SETTER //
 
   public Date getCdate() {

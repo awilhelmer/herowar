@@ -1,8 +1,6 @@
 import java.util.Arrays;
 
-import models.entity.News;
 import models.entity.SecurityRole;
-import models.entity.User;
 import models.entity.game.Map;
 
 import org.bushe.swing.event.EventServiceLocator;
@@ -11,12 +9,15 @@ import org.bushe.swing.event.ThreadSafeEventService;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.db.jpa.JPA;
 import play.mvc.Call;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
+import dao.GameDAO;
+import dao.MainDao;
 import editor.EnvironmentHandler;
 import game.GamesHandler;
 import game.network.handler.WebSocketHandler;
@@ -92,51 +93,50 @@ public class Global extends GlobalSettings {
   }
 
   private void initialSecurityRoles() {
-    if (SecurityRole.getFinder().findRowCount() != 0) {
+    if (MainDao.getSecurityRoleCount() != 0) {
       return;
     }
     Logger.info("Creating security roles");
     for (final String roleName : Arrays.asList(controllers.Application.ADMIN_ROLE, controllers.Application.USER_ROLE)) {
       final SecurityRole role = new SecurityRole();
       role.setRoleName(roleName);
-      role.save();
+      JPA.em().persist(role);
       Logger.info("Save role: " + role.getName());
     }
   }
 
   private void createAdminUser() {
-    if (User.getFinder().where().eq("username", "admin").findUnique() != null) {
+    if (MainDao.findByUsername("admin") == null) {
       return;
     }
     Logger.info("Creating admin user");
-    User.create("admin", "admin", "admin@herowar.com");
+    MainDao.create("admin", "admin", "admin@herowar.com");
   }
 
   private void createTutorialMap() {
-    if (Map.getFinder().where().eq("name", "Tutorial").findUnique() != null) {
+    if (GameDAO.getMapByName("Tutorial") != null) {
       return;
     }
     Logger.info("Creating tutorial map");
-    Map tutorialMap = Map.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
-    tutorialMap.getTerrain().getGeometry().getMetadata().save();
-    tutorialMap.getTerrain().getGeometry().save();
+    Map tutorialMap = GameDAO.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
     tutorialMap.getTerrain().setWidth(600);
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);
     tutorialMap.getTerrain().setzScale(100);
-    tutorialMap.getTerrain().save();
-    tutorialMap.save();
+
+    JPA.em().persist(tutorialMap);
   }
 
   private void createDummyNews(Application app) {
-    if (!app.isDev() || News.getFinder().findRowCount() != 0) {
+    if (!app.isDev() || MainDao.getNewsCount() != 0) {
       return;
     }
     Logger.info("Creating dummy news");
-    News.create(
-        "Lorem ipsum dolor sit amet",
-        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        User.findByUsername("admin"));
+    MainDao
+        .create(
+            "Lorem ipsum dolor sit amet",
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+            MainDao.findByUsername("admin"));
   }
 
 }

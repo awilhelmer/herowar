@@ -11,6 +11,8 @@ import play.mvc.Http.Context;
 
 import com.feth.play.module.mail.Mailer.Mail.Body;
 
+import dao.MainDao;
+
 /**
  * The UsernamePasswordAuthProvider implementation handles our username and
  * password login. Unfortunatly our Play Auth plugin wants to login with email
@@ -38,11 +40,12 @@ public class UsernamePasswordAuthProvider
   protected Form<FormSignup> getSignupForm() {
     return SIGNUP_FORM;
   }
-  
+
   @Override
   protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
-    // We need to fetch users email here since we login with username instead email
-    User u = User.getFinder().where().eq("username", login.getEmail()).findUnique();
+    // We need to fetch users email here since we login with username instead
+    // email
+    User u = MainDao.findByUsername(login.getEmail());
     return new LoginUsernamePasswordAuthUser(login.getPassword(), u.getEmail());
   }
 
@@ -53,7 +56,7 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected LoginResult loginUser(LoginUsernamePasswordAuthUser authUser) {
-    final User u = User.findByUsernamePasswordIdentity(authUser);
+    final User u = MainDao.findByUsernamePasswordIdentity(authUser);
     if (u == null) {
       Logger.info("User " + authUser.getEmail() + " not found");
       return LoginResult.NOT_FOUND;
@@ -73,24 +76,24 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected SignupResult signupUser(SignupUsernamePasswordAuthUser user) {
-    final User u = User.findByUsernamePasswordIdentity(user);
+    final User u = MainDao.findByUsernamePasswordIdentity(user);
     if (u != null) {
       return SignupResult.USER_EXISTS;
     }
-    User.create(user);
+    MainDao.create(user);
     return SignupResult.USER_CREATED;
   }
-  
+
   @Override
   protected LoginUsernamePasswordAuthUser transformAuthUser(SignupUsernamePasswordAuthUser authUser, Context ctx) {
     return new LoginUsernamePasswordAuthUser(authUser.getEmail());
   }
-  
+
   @Override
   protected String generateVerificationRecord(SignupUsernamePasswordAuthUser arg0) {
     return null;
   }
-  
+
   @Override
   protected Body getVerifyEmailMailingBody(String arg0, SignupUsernamePasswordAuthUser arg1, Context arg2) {
     return null;

@@ -15,6 +15,7 @@ import providers.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.controllers.Authenticate;
 
 import controllers.Application;
+import dao.MainDao;
 
 /**
  * The Me controller allows our application to get information about the current
@@ -43,7 +44,8 @@ public class Me extends Controller {
     }
 
     // Check if user exists
-    if (User.getFinder().where().eq("username", filledForm.get().getEmail()).findUnique() == null) {
+
+    if (MainDao.findByUserEmail(filledForm.get().getEmail()) == null) {
       return badRequest(toJson(new AuthenticationError()));
     }
 
@@ -73,11 +75,11 @@ public class Me extends Controller {
   }
 
   public static Result checkUsername(String username) {
-    return ok(toJson(User.getFinder().where().eq("username", username).findUnique() != null));
+    return ok(toJson(MainDao.findByUsername(username) != null));
   }
 
   public static Result checkEmail(String email) {
-    return ok(toJson(User.getFinder().where().eq("email", email).findUnique() != null));
+    return ok(toJson(MainDao.findByUserEmail(email) != null));
   }
 
   private static User getLoggedInUser() {

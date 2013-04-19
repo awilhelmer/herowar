@@ -2,8 +2,8 @@ package controllers.api;
 
 import static play.libs.Json.toJson;
 import play.data.Form;
+import play.db.jpa.JPA;
 import play.mvc.Result;
-
 
 /**
  * The News controller handle api requests for the News model.
@@ -27,8 +27,8 @@ public class News extends BaseAPI<Long, models.entity.News> {
   }
 
   public static Result update(Long id) {
-    models.entity.News news = instance.findUnique(id);
-    models.entity.News.merge(news, Form.form(models.entity.News.class).bindFromRequest().get());
+    //models.entity.News news = instance.findUnique(id);
+    models.entity.News news = JPA.em().merge(Form.form(models.entity.News.class).bindFromRequest().get());
     return ok(toJson(news));
   }
 

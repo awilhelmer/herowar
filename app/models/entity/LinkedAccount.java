@@ -1,16 +1,16 @@
 package models.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import play.db.ebean.Model;
 
 import com.feth.play.module.pa.user.AuthUser;
 
 @Entity
 @SuppressWarnings("serial")
-public class LinkedAccount extends Model {
+public class LinkedAccount implements Serializable {
 
   @Id
   private Long id;
@@ -20,12 +20,6 @@ public class LinkedAccount extends Model {
 
   private String providerUserId;
   private String providerKey;
-
-  public static final Finder<Long, LinkedAccount> finder = new Finder<Long, LinkedAccount>(Long.class, LinkedAccount.class);
-
-  public static LinkedAccount findByProviderKey(final User user, String key) {
-    return getFinder().where().eq("user", user).eq("providerKey", key).findUnique();
-  }
 
   public static LinkedAccount create(final AuthUser authUser) {
     final LinkedAccount ret = new LinkedAccount();
@@ -79,7 +73,4 @@ public class LinkedAccount extends Model {
     this.providerKey = providerKey;
   }
 
-  public static Finder<Long, LinkedAccount> getFinder() {
-    return finder;
-  }
 }

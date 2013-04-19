@@ -1,6 +1,5 @@
 package security;
 
-import models.entity.User;
 import play.mvc.Http;
 import play.mvc.Result;
 import be.objectify.deadbolt.core.models.Subject;
@@ -9,6 +8,8 @@ import be.objectify.deadbolt.java.DynamicResourceHandler;
 
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+
+import dao.MainDao;
 
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
@@ -38,7 +39,7 @@ public class DeadboltHandler extends AbstractDeadboltHandler {
   public Subject getSubject(final Http.Context context) {
     final AuthUserIdentity u = PlayAuthenticate.getUser(context);
     // Caching might be a good idea here
-    return User.findByAuthUserIdentity(u);
+    return MainDao.findByAuthUserIdentity(u);
   }
 
   @Override

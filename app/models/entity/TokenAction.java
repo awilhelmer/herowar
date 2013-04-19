@@ -1,5 +1,6 @@
 package models.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,14 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import play.data.format.Formats;
-import play.db.ebean.Model;
 
-import com.avaje.ebean.Ebean;
 import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
 @SuppressWarnings("serial")
-public class TokenAction extends Model {
+public class TokenAction implements Serializable {
 
   public enum Type {
     @EnumValue("EV")
@@ -48,30 +47,9 @@ public class TokenAction extends Model {
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date expires;
 
-  private static final Finder<Long, TokenAction> find = new Finder<Long, TokenAction>(Long.class, TokenAction.class);
-
-  public static TokenAction findByToken(final String token, final Type type) {
-    return find.where().eq("token", token).eq("type", type).findUnique();
-  }
-
-  public static void deleteByUser(final User u, final Type type) {
-    Ebean.delete(find.where().eq("targetUser.id", u.getId()).eq("type", type).findIterate());
-  }
-
+  @javax.persistence.Transient
   public boolean isValid() {
     return this.expires.after(new Date());
-  }
-
-  public static TokenAction create(final Type type, final String token, final User targetUser) {
-    final TokenAction ua = new TokenAction();
-    ua.targetUser = targetUser;
-    ua.token = token;
-    ua.type = type;
-    final Date created = new Date();
-    ua.created = created;
-    ua.expires = new Date(created.getTime() + VERIFICATION_TIME * 1000);
-    ua.save();
-    return ua;
   }
 
   // GETTER & SETTER //

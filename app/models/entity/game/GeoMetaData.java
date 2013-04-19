@@ -1,21 +1,21 @@
 package models.entity.game;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import models.entity.BaseModel;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
-public class GeoMetaData extends BaseModel {
+public class GeoMetaData implements Serializable {
   private static final long serialVersionUID = -9218495880941499621L;
-  
+
   @Id
   private Long id;
-  
+
   @Column(precision = 1)
   private Float formatVersion;
   private String sourceFile;
@@ -31,7 +31,8 @@ public class GeoMetaData extends BaseModel {
   @OneToOne(mappedBy = "metadata")
   private Geometry geometry;
 
-  public GeoMetaData() { }
+  public GeoMetaData() {
+  }
 
   public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
     this.formatVersion = formatVersion;
@@ -44,7 +45,7 @@ public class GeoMetaData extends BaseModel {
     this.usvs = usvs;
     this.materials = materials;
   }
-  
+
   public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
     this(3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, usvs, materials);
   }

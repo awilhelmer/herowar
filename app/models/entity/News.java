@@ -1,18 +1,18 @@
 package models.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import controllers.Application;
 
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class News extends BaseModel {
+public class News implements Serializable {
 
   @Id
   private Long id;
@@ -24,26 +24,6 @@ public class News extends BaseModel {
 
   @ManyToOne
   private User author;
-  
-  private static final Finder<Long, News> finder = new Finder<Long, News>(Long.class, News.class);
-
-  public static void merge(News news, News news2) {
-    news.setHeadline(news2.getHeadline());
-    news.setText(news2.getText());
-    news.save();
-  }
-
-  public static void create(String headline, String text) {
-    create(headline, text, Application.getLocalUser());
-  }
-
-  public static void create(String headline, String text, User author) {
-    final News news = new News();
-    news.setHeadline(headline);
-    news.setText(text);
-    news.setAuthor(author);
-    news.save();
-  }
 
   // GETTER & SETTER //
 
@@ -79,7 +59,4 @@ public class News extends BaseModel {
     this.author = author;
   }
 
-  public static Finder<Long, News> getFinder() {
-    return finder;
-  }
 }

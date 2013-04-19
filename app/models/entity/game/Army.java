@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,14 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import models.entity.BaseModel;
-
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
-public class Army extends BaseModel {
+public class Army implements Serializable {
 
   @Id
   private Long id;
@@ -26,7 +25,6 @@ public class Army extends BaseModel {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Unit> units;
 
-  private static final Finder<Long, Army> finder = new Finder<Long, Army>(Long.class, Army.class);
 
   // GETTER & SETTER //
 
@@ -54,7 +52,4 @@ public class Army extends BaseModel {
     this.units = units;
   }
 
-  public static Finder<Long, Army> getFinder() {
-    return finder;
-  }
 }
