@@ -3,7 +3,6 @@ import java.util.Arrays;
 import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.User;
-import models.entity.game.Environment;
 import models.entity.game.Map;
 
 import org.bushe.swing.event.EventServiceLocator;
@@ -78,7 +77,6 @@ public class Global extends GlobalSettings {
     createAdminUser();
     createTutorialMap();
     createDummyNews(app);
-    createEnvironment();
   }
 
   private void initEventBus() {
@@ -139,36 +137,6 @@ public class Global extends GlobalSettings {
         "Lorem ipsum dolor sit amet",
         "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
         User.findByUsername("admin"));
-  }
-
-  private void createEnvironment() {
-    if (Environment.getFinder().findRowCount() != 0) {
-      return;
-    }
-    Logger.info("Creating environment");
-    Environment root = new Environment("root");
-    
-    Environment terrain = new Environment("Terrain");
-    terrain.setParent(root);
-    root.getChildren().add(terrain);
-    
-    Environment tree = new Environment("Tree");
-    tree.setParent(terrain);
-    terrain.getChildren().add(tree);
-    
-    Environment tree1 = new Environment("Tree 1");
-    tree1.setParent(tree);
-    tree.getChildren().add(tree1);
-    
-    Environment tree2 = new Environment("Tree 2");
-    tree2.setParent(tree);
-    tree.getChildren().add(tree2);
-    
-    Environment tree3 = new Environment("Tree 3");
-    tree3.setParent(tree);
-    tree.getChildren().add(tree3);
-    
-    root.save();
   }
 
 }

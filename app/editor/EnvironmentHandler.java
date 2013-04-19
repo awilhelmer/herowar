@@ -3,10 +3,16 @@ package editor;
 import java.io.File;
 import java.io.Serializable;
 
+import models.entity.game.Environment;
+
+import org.apache.commons.lang.WordUtils;
+
 import play.Logger;
 import play.Play;
 
 /**
+ * The EnvironmentHandler synchronize between our geometries environment folder and our database.
+ * 
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
@@ -26,21 +32,41 @@ public class EnvironmentHandler implements Serializable {
   }
   
   public void sync() {
-    log.info("Starting syncronize between folder and database");
+    if (Environment.getFinder().findRowCount() != 0) return;
+    log.info("Starting synchronize between folder and database");
     File baseFolder = new File(Play.application().path(), ENVIRONMENT_FOLDER_PATH);
-    readDirectory(baseFolder);
-    log.info("Finish syncronize between folder and database");
+    Environment root = createEnvironment("Root", null);
+    readDirectory(baseFolder, root);
+// JPA.em().persist(root);
+    root.save();
+    log.info("Finish synchronize between folder and database");
   }
   
-  public void readDirectory(File folder) {
+  public void readDirectory(File folder, Environment parent) {
     for (File file : folder.listFiles()) {
+      Environment child = null;
       if (file.isDirectory()) {
         log.info("Found directory: " + file.getAbsolutePath());
-        readDirectory(file);
+        child = createEnvironment(file, parent);
+        readDirectory(file, child);
       } else {
         log.info("Found geometry: " + file.getAbsolutePath());
+        child = createEnvironment(file, parent);
       }
+      parent.getChildren().add(child);
     }
+  }
+  
+  public Environment createEnvironment(File file, Environment parent) {
+    return createEnvironment(WordUtils.capitalize(file.getName()), parent);
+  }
+  
+  public Environment createEnvironment(String name, Environment parent) {
+    Environment environment = new Environment(name);
+    if (parent != null) {
+      environment.setParent(parent);
+    }
+    return environment;
   }
   
 }
