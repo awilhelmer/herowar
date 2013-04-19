@@ -11,7 +11,6 @@ import javax.persistence.OneToOne;
 
 import models.entity.BaseModel;
 
-
 @Entity
 public class Geometry extends BaseModel {
   private static final long serialVersionUID = 5730315776315409881L;
@@ -23,7 +22,7 @@ public class Geometry extends BaseModel {
 
   @Lob
   private String vertices;
-  
+
   @Lob
   private String faces;
 
@@ -43,6 +42,7 @@ public class Geometry extends BaseModel {
   private String uvs;
 
   private Double scale;
+
 
   @Enumerated(EnumType.STRING)
   private GeometryType type;
@@ -90,7 +90,6 @@ public class Geometry extends BaseModel {
   public void setFaces(String faces) {
     this.faces = faces;
   }
-
 
   public String getMorphTargets() {
     return morphTargets;
@@ -184,6 +183,5 @@ public class Geometry extends BaseModel {
       return false;
     return true;
   }
-
 
 }
