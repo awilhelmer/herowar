@@ -1,10 +1,15 @@
 package models.entity.game;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -19,7 +24,7 @@ public class Map extends BaseModel {
 
   @Id
   private Long id;
-  
+
   private String name;
   private String description;
   private String skybox;
@@ -28,14 +33,17 @@ public class Map extends BaseModel {
   private Integer lives;
   private Integer goldStart;
   private Integer goldPerTick;
-  
+
   @OneToOne
   private Terrain terrain;
-  
+
   @OneToMany(cascade = CascadeType.ALL)
   private List<Wave> waves;
-  
-  
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(name = "geomaps")
+  private Set<Material> materials;
+
   private static final Finder<Long, Map> finder = new Finder<Long, Map>(Long.class, Map.class);
 
   public Map() {
@@ -59,16 +67,16 @@ public class Map extends BaseModel {
     map.setTeamSize(teamSize);
     return map;
   }
-  
+
   public static void merge(final Map map, final Map map2) {
     map.setName(map2.getName());
     map.setDescription(map2.getDescription());
     map.setTeamSize(map2.getTeamSize());
     map.save();
   }
-  
+
   // GETTER & SETTER //
-  
+
   public Long getId() {
     return id;
   }
@@ -76,7 +84,7 @@ public class Map extends BaseModel {
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public String getName() {
     return name;
   }
@@ -108,7 +116,7 @@ public class Map extends BaseModel {
   public void setTeamSize(Integer teamSize) {
     this.teamSize = teamSize;
   }
- 
+
   public Integer getPrepareTime() {
     return prepareTime;
   }
@@ -156,7 +164,15 @@ public class Map extends BaseModel {
   public void setWaves(List<Wave> waves) {
     this.waves = waves;
   }
-  
+
+  public Set<Material> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(Set<Material> materials) {
+    this.materials = materials;
+  }
+
   public static Finder<Long, Map> getFinder() {
     return finder;
   }

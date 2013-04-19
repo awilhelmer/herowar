@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -22,6 +23,7 @@ public class Terrain extends BaseModel {
 
   private Integer width;
   private Integer height;
+  @Column(precision = 1)
   private Float smoothness;
   private Integer zScale;
   private Boolean wireframe;
