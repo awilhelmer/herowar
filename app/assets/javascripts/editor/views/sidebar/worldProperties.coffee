@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+MapProperties = require 'mapProperties'
 
 class WorldProperties extends BasePropertiesView
 
@@ -13,7 +14,7 @@ class WorldProperties extends BasePropertiesView
 	template: templates.get 'sidebar/worldProperties.tmpl'
 
 	events:
-		'change input[name="name"]'						: 'onChangedString'
+		'change input[name="name"]'						: 'nameChanged'
 		'change textarea[name="description"]'	: 'onChangedString'
 		'change select[name="skybox"]'				: 'onChangedString'
 		'change select[name="teamSize"]'			: 'onChangedInteger'
@@ -29,5 +30,11 @@ class WorldProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		
+		
+		
+	nameChanged: (event) ->
+		@onChangedString(event)
+		MapProperties.MAP_TITLE = @model.get 'name' 
 
 return WorldProperties

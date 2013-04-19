@@ -69,7 +69,7 @@ class ModalFileMapSave extends BaseModalView
 				id							: MapProperties.GEOMETRY_ID
 				faces						: "#{JSON.stringify(MapProperties.TERRAIN_FACES)}"
 				vertices				: "#{JSON.stringify(MapProperties.TERRAIN_VERTICES)}"
-				materials				: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}"
+				#materials				: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}" TODO
 				metadata				:
 					id						: MapProperties.GEOMETRY_METADATA_ID
 					formatVersion	: 3.1
