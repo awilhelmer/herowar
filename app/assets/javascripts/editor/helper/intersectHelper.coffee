@@ -71,10 +71,9 @@ class IntersectHelper extends THREE.Raycaster
 	getTriangle: (a,b,c,faceRadius) ->
 		tri1 = new THREE.Triangle a,b,c
 		mid1 = tri1.midpoint()
-		negativMid1 = mid1.clone().multiplyScalar(-1)
-		tri1.a = tri1.a.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.b = tri1.b.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.c = tri1.c.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.a = tri1.a.sub(mid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.b = tri1.b.sub(mid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.c = tri1.c.sub(mid1).multiplyScalar(faceRadius).add(mid1)
 		tri1
 			
 return IntersectHelper
