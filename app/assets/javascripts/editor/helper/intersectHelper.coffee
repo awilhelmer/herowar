@@ -31,11 +31,6 @@ class IntersectHelper extends THREE.Raycaster
 			intersect.faces = [intersect.face]
 			if faceRadius and faceRadius > 1 and obj.name isnt 'wireframe'
 				faceIndex = intersect.faceIndex
-				a = obj.geometry.vertices[intersect.face.a].clone().addScalar(faceRadius * 20)
-				b = obj.geometry.vertices[intersect.face.b].clone().addScalar(faceRadius * 20)
-				c = obj.geometry.vertices[intersect.face.c].clone().addScalar(faceRadius * 20)
-				if intersect.face instanceof THREE.Face4
-					d = obj.geometry.vertices[intersect.face.d]
 				@inverseMatrix.getInverse obj.matrixWorld
 				@localRay.copy(@ray).applyMatrix4 @inverseMatrix 
 				for face,key in obj.geometry.faces
@@ -54,23 +49,34 @@ class IntersectHelper extends THREE.Raycaster
 								continue
 						if planeDistance + faceRadius   < this.near or planeDistance  > this.far + faceRadius
 							continue
-						##TODO intersectpoint with radius
-						@intersectPoint = @localRay.at planeDistance-faceRadius, @intersectPoint
-						if key + 1 is faceIndex 
-							console.log "DEBUG INtersection Point <x=#{@intersectPoint.x} y=#{@intersectPoint.y} z=#{@intersectPoint.z}>"
+						@intersectPoint = @localRay.at planeDistance, @intersectPoint
+						a = obj.geometry.vertices[face.a].clone()
+						b = obj.geometry.vertices[face.b].clone()
+						c = obj.geometry.vertices[face.c].clone()
 						if face instanceof THREE.Face3
-							unless THREE.Triangle.containsPoint @intersectPoint, a, b, c
+							tri1 =  @getTriangle(a,b,c, faceRadius)
+							unless THREE.Triangle.containsPoint @intersectPoint, tri1.a, tri1.b, tri1.c
 								continue
 						else 
-							if not THREE.Triangle.containsPoint(@intersectPoint, a, b, d) and not THREE.Triangle.containsPoint(@intersectPoint, b, c, d)
+							d = obj.geometry.vertices[face.d].clone()
+							tri1 =  @getTriangle(a,b,d, faceRadius)
+							tri2 =  @getTriangle(b,c,d, faceRadius)
+							if not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c) and not THREE.Triangle.containsPoint(@intersectPoint,tri1.a, tri1.b, tri1.c)
 								if key + 1 is faceIndex 
 									console.log "no intersection..."
 								continue
 						intersect.faces.push face
-					else
-						console.log "DEBUG Triangles: A <x=#{a.x} y=#{a.y} z=#{a.z}> B <x=#{b.x} y=#{b.y} z=#{b.z}> C <x=#{c.x} y=#{c.y} z=#{c.z}> D <x=#{d.x} y=#{d.y} z=#{d.z}> "
-						
+					
 						
 		intersectList
 				
+	getTriangle: (a,b,c,faceRadius) ->
+		tri1 = new THREE.Triangle a,b,c
+		mid1 = tri1.midpoint()
+		negativMid1 = mid1.clone().multiplyScalar(-1)
+		tri1.a.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.b.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.c.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1
+			
 return IntersectHelper
