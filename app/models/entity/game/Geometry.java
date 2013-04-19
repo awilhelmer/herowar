@@ -28,9 +28,6 @@ public class Geometry extends BaseModel {
   private String faces;
 
   @Lob
-  private String materials;
-
-  @Lob
   private String morphTargets;
 
   @Lob
@@ -77,13 +74,6 @@ public class Geometry extends BaseModel {
     this.faces = faces;
   }
 
-  public String getMaterials() {
-    return materials;
-  }
-
-  public void setMaterials(String materials) {
-    this.materials = materials;
-  }
 
   public String getMorphTargets() {
     return morphTargets;
@@ -178,9 +168,5 @@ public class Geometry extends BaseModel {
     return true;
   }
 
-  @Override
-  public String toString() {
-    return "Geometry [id=" + id + ", vertices=" + vertices + ", faces=" + faces + ", materials=" + materials + ", morphTargets=" + morphTargets
-        + ", morphColors=" + morphColors + ", normals=" + normals + ", colors=" + colors + ", usv=" + usv + ", scale=" + scale + ", type=" + type + "]";
-  }
+
 }
