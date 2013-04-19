@@ -1,19 +1,14 @@
-import game.GamesHandler;
-import game.network.handler.WebSocketHandler;
-
 import java.util.Arrays;
-
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.ThreadSafeEventService;
 
 import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.User;
 import models.entity.game.Environment;
-import models.entity.game.GeoMetaData;
-import models.entity.game.Geometry;
-import models.entity.game.GeometryType;
 import models.entity.game.Map;
+
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.ThreadSafeEventService;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -23,6 +18,9 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
+import editor.EnvironmentHandler;
+import game.GamesHandler;
+import game.network.handler.WebSocketHandler;
 
 /**
  * Handles global settings.
@@ -74,6 +72,7 @@ public class Global extends GlobalSettings {
 
     initialSecurityRoles();
     initEventBus();
+    EnvironmentHandler.getInstance().sync();
     WebSocketHandler.getInstance();
     GamesHandler.getInstance();
     createAdminUser();
