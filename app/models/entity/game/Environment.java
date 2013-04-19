@@ -38,6 +38,9 @@ public class Environment extends BaseModel {
   @JoinColumn(name = "parent_id")
   private Environment parent;
 
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private Geometry geometry;
+
   private static final Finder<Long, Environment> finder = new Finder<Long, Environment>(Long.class, Environment.class);
 
   public Environment() {
@@ -79,6 +82,14 @@ public class Environment extends BaseModel {
 
   public void setParent(Environment parent) {
     this.parent = parent;
+  }
+
+  public Geometry getGeometry() {
+    return geometry;
+  }
+
+  public void setGeometry(Geometry geometry) {
+    this.geometry = geometry;
   }
 
   public static Finder<Long, Environment> getFinder() {

@@ -77,7 +77,7 @@ class ModalFileMapSave extends BaseModalView
 					generatedBy		: 'MapEditor'
 					vertices			: MapProperties.TERRAIN_VERTICES.length
 					faces					: MapProperties.TERRAIN_FACES.length
-					normal				: 0
+					normals				: 0
 					colors				: 0
 					usvs					: 0
 					materials			: MapProperties.TERRAIN_MATERIALS.length

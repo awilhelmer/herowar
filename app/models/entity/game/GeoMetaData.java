@@ -4,9 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import models.entity.BaseModel;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 public class GeoMetaData extends BaseModel {
@@ -20,7 +20,7 @@ public class GeoMetaData extends BaseModel {
   private String generatedBy;
   private Long vertices;
   private Long faces;
-  private Long normal;
+  private Long normals;
   private Long colors;
   private Long usvs;
   private Long materials;
@@ -28,6 +28,26 @@ public class GeoMetaData extends BaseModel {
   @JsonIgnore
   @OneToOne(mappedBy = "metadata")
   private Geometry geometry;
+
+  public GeoMetaData() { }
+
+  public GeoMetaData(String formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
+    this.formatVersion = formatVersion;
+    this.sourceFile = sourceFile;
+    this.generatedBy = generatedBy;
+    this.vertices = vertices;
+    this.faces = faces;
+    this.normals = normals;
+    this.colors = colors;
+    this.usvs = usvs;
+    this.materials = materials;
+  }
+  
+  public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
+    this("3.1", sourceFile, "WorldEditor", vertices, faces, normals, colors, usvs, materials);
+  }
+
+  // GETTER & SETTER //
 
   public Long getId() {
     return id;
@@ -77,12 +97,12 @@ public class GeoMetaData extends BaseModel {
     this.faces = faces;
   }
 
-  public Long getNormal() {
-    return normal;
+  public Long getNormals() {
+    return normals;
   }
 
-  public void setNormal(Long normal) {
-    this.normal = normal;
+  public void setNormals(Long normals) {
+    this.normals = normals;
   }
 
   public Long getColors() {
@@ -120,6 +140,6 @@ public class GeoMetaData extends BaseModel {
   @Override
   public String toString() {
     return "GeoMetaData [id=" + id + ", formatVersion=" + formatVersion + ", sourceFile=" + sourceFile + ", generatedBy=" + generatedBy + ", vertices="
-        + vertices + ", faces=" + faces + ", normal=" + normal + ", Colors=" + colors + ", usvs=" + usvs + ", materials=" + materials + "]";
+        + vertices + ", faces=" + faces + ", normals=" + normals + ", Colors=" + colors + ", usvs=" + usvs + ", materials=" + materials + "]";
   }
 }

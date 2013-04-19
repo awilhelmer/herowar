@@ -10,6 +10,7 @@ import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.User;
 import models.entity.game.Environment;
+import models.entity.game.Geometry;
 import models.entity.game.Map;
 import play.Application;
 import play.GlobalSettings;
@@ -145,12 +146,29 @@ public class Global extends GlobalSettings {
     }
     Logger.info("Creating environment");
     Environment root = new Environment("root");
+    
     Environment terrain = new Environment("Terrain");
     terrain.setParent(root);
-    Environment tree = new Environment("Tree");
-    tree.setParent(root);
-    terrain.getChildren().add(tree);
     root.getChildren().add(terrain);
+    
+    Environment tree = new Environment("Tree");
+    tree.setParent(terrain);
+    terrain.getChildren().add(tree);
+    
+    Environment tree1 = new Environment("Tree 1");
+    tree1.setParent(tree);
+    tree.getChildren().add(tree1);
+    Geometry tree1geo = new Geometry();
+    tree1.setGeometry(tree1geo);
+    
+    Environment tree2 = new Environment("Tree 2");
+    tree2.setParent(tree);
+    tree.getChildren().add(tree2);
+    
+    Environment tree3 = new Environment("Tree 3");
+    tree3.setParent(tree);
+    tree.getChildren().add(tree3);
+    
     root.save();
   }
 

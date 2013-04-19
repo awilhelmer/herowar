@@ -40,7 +40,7 @@ public class Geometry extends BaseModel {
   private String colors;
 
   @Lob
-  private String usv;
+  private String uvs;
 
   private Double scale;
 
@@ -49,6 +49,23 @@ public class Geometry extends BaseModel {
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private GeoMetaData metadata;
+
+  public Geometry() { }
+
+  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
+    this.vertices = vertices;
+    this.faces = faces;
+    this.morphTargets = morphTargets;
+    this.morphColors = morphColors;
+    this.normals = normals;
+    this.colors = colors;
+    this.uvs = uvs;
+    this.scale = scale;
+    this.type = type;
+    this.metadata = metadata;
+  }
+
+  // GETTER & SETTER //
 
   public Long getId() {
     return id;
@@ -107,12 +124,12 @@ public class Geometry extends BaseModel {
     this.colors = colors;
   }
 
-  public String getUsv() {
-    return usv;
+  public String getUvs() {
+    return uvs;
   }
 
-  public void setUsv(String usv) {
-    this.usv = usv;
+  public void setUvs(String uvs) {
+    this.uvs = uvs;
   }
 
   public Double getScale() {
