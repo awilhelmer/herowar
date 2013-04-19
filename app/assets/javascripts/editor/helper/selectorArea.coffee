@@ -14,7 +14,7 @@ class SelectorArea
 		@selector.rotation.x = - Math.PI/2
 		@isVisible = false
 		@model = null
-		@brushSizeRadius = 1
+		@brushSize = 1
 		@bindEvents()
 		
 	bindEvents: ->
@@ -24,7 +24,10 @@ class SelectorArea
 		EditorEventbus.selectBrushSize.add @selectBrushSize
 		
 	update: ->
-		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], @brushSizeRadius
+		radius = @brushSize/2
+		if radius > 1
+			radius += 0.33 #Precision
+		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], radius
 		if intersectList.length > 0
 			@addSel() unless @isVisible
 			@updatePosition @getIntersectObject(intersectList)
@@ -130,8 +133,8 @@ class SelectorArea
 	selectBrush: (tool) =>
 		@brushTool = tool
 		
-	selectBrushSize: (radius) =>
-		@brushSizeRadius = radius
-		@selector.scale.x = radius
-		@selector.scale.y = radius
+	selectBrushSize: (brushSize) =>
+		@brushSize = brushSize
+		@selector.scale.x = brushSize
+		@selector.scale.y = brushSize
 return SelectorArea

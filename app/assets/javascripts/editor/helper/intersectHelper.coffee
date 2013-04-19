@@ -54,13 +54,13 @@ class IntersectHelper extends THREE.Raycaster
 						b = obj.geometry.vertices[face.b].clone()
 						c = obj.geometry.vertices[face.c].clone()
 						if face instanceof THREE.Face3
-							tri1 =  @getTriangle(a,b,c, faceRadius / 2)
+							tri1 =  @getTriangle(a,b,c, faceRadius)
 							unless THREE.Triangle.containsPoint @intersectPoint, tri1.a, tri1.b, tri1.c
 								continue
 						else 
 							d = obj.geometry.vertices[face.d].clone()
-							tri1 =  @getTriangle(a,b,d, faceRadius / 2)
-							tri2 =  @getTriangle(b,c,d, faceRadius / 2)
+							tri1 =  @getTriangle(a,b,d, faceRadius)
+							tri2 =  @getTriangle(b,c,d, faceRadius)
 							if not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c) and not THREE.Triangle.containsPoint(@intersectPoint,tri1.a, tri1.b, tri1.c)
 								continue
 						intersect.faces.push face
