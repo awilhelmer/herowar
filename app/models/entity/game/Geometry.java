@@ -66,6 +66,14 @@ public class Geometry extends BaseModel {
     this.metadata = metadata;
   }
 
+  public Geometry(String vertices, String faces, String normals, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
+    this(vertices, faces, "", "", normals, "", uvs, scale, type, metadata);
+  }
+
+  public Geometry(String vertices, String faces, String normals, String uvs, GeometryType type, GeoMetaData metadata) {
+    this(vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata);
+  }
+
   // GETTER & SETTER //
 
   public Long getId() {
