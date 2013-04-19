@@ -54,16 +54,14 @@ class IntersectHelper extends THREE.Raycaster
 						b = obj.geometry.vertices[face.b].clone()
 						c = obj.geometry.vertices[face.c].clone()
 						if face instanceof THREE.Face3
-							tri1 =  @getTriangle(a,b,c, faceRadius)
+							tri1 =  @getTriangle(a,b,c, faceRadius / 2)
 							unless THREE.Triangle.containsPoint @intersectPoint, tri1.a, tri1.b, tri1.c
 								continue
 						else 
 							d = obj.geometry.vertices[face.d].clone()
-							tri1 =  @getTriangle(a,b,d, faceRadius)
-							tri2 =  @getTriangle(b,c,d, faceRadius)
+							tri1 =  @getTriangle(a,b,d, faceRadius / 2)
+							tri2 =  @getTriangle(b,c,d, faceRadius / 2)
 							if not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c) and not THREE.Triangle.containsPoint(@intersectPoint,tri1.a, tri1.b, tri1.c)
-								if key + 1 is faceIndex 
-									console.log "no intersection..."
 								continue
 						intersect.faces.push face
 					
@@ -74,9 +72,9 @@ class IntersectHelper extends THREE.Raycaster
 		tri1 = new THREE.Triangle a,b,c
 		mid1 = tri1.midpoint()
 		negativMid1 = mid1.clone().multiplyScalar(-1)
-		tri1.a.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.b.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.c.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.a = tri1.a.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.b = tri1.b.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.c = tri1.c.add(negativMid1).multiplyScalar(faceRadius).add(mid1)
 		tri1
 			
 return IntersectHelper

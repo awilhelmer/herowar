@@ -105,17 +105,18 @@ class SelectorArea
 			newIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
 			for face in intersect.faces
 				oldIndex = face.materialIndex
-				if oldIndex isnt newIndex and not update
+				if oldIndex isnt newIndex 
 					face.materialIndex = newIndex
-					scene = @editor.engine.scenegraph.scene
-					baseObject.remove object
-					@editor.engine.render()
-					object.geometry.geometryGroups = undefined
-					object.geometry.geometryGroupsList = undefined
-					object.__webglInit = false #hack
-					object.__webglActive = false #hack 				
-					baseObject.add object
-					update = true
+					unless update
+						scene = @editor.engine.scenegraph.scene
+						baseObject.remove object
+						@editor.engine.render()
+						object.geometry.geometryGroups = undefined
+						object.geometry.geometryGroupsList = undefined
+						object.__webglInit = false #hack
+						object.__webglActive = false #hack 				
+						baseObject.add object
+						update = true
 		update
 		
 	onMaterialSelected: (idMapper) =>
