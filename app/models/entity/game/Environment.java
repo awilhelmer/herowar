@@ -3,6 +3,7 @@ package models.entity.game;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -29,19 +30,20 @@ public class Environment extends BaseModel {
   @NotNull
   private String name;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @OrderColumn
   @JoinColumn(name = "parent_id")
   private List<Environment> children = new LinkedList<Environment>();
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
   @JoinColumn(name = "parent_id", insertable = false, updatable = false)
   private Environment parent;
 
   private static final Finder<Long, Environment> finder = new Finder<Long, Environment>(Long.class, Environment.class);
 
-  public Environment() { }
+  public Environment() {
+  }
 
   public Environment(String name) {
     this.name = name;

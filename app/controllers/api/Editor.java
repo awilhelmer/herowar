@@ -29,6 +29,7 @@ public class Editor extends Controller {
 
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
   public static Result addMap() {
+    log.info("Saving MAP");
     if (request().body().isMaxSizeExceeded()) {
       return badRequest("Too much data!");
     }
