@@ -10,7 +10,9 @@ import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.User;
 import models.entity.game.Environment;
+import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
+import models.entity.game.GeometryType;
 import models.entity.game.Map;
 import play.Application;
 import play.GlobalSettings;
@@ -158,8 +160,6 @@ public class Global extends GlobalSettings {
     Environment tree1 = new Environment("Tree 1");
     tree1.setParent(tree);
     tree.getChildren().add(tree1);
-    Geometry tree1geo = new Geometry();
-    tree1.setGeometry(tree1geo);
     
     Environment tree2 = new Environment("Tree 2");
     tree2.setParent(tree);
