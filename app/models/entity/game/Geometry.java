@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -41,8 +42,8 @@ public class Geometry extends BaseModel {
   @Lob
   private String uvs;
 
+  @Column(precision = 6)
   private Double scale;
-
 
   @Enumerated(EnumType.STRING)
   private GeometryType type;

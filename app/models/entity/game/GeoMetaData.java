@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -15,7 +16,8 @@ public class GeoMetaData extends BaseModel {
   @Id
   private Long id;
   
-  private String formatVersion;
+  @Column(precision = 1)
+  private Float formatVersion;
   private String sourceFile;
   private String generatedBy;
   private Long vertices;
@@ -31,7 +33,7 @@ public class GeoMetaData extends BaseModel {
 
   public GeoMetaData() { }
 
-  public GeoMetaData(String formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
+  public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
     this.formatVersion = formatVersion;
     this.sourceFile = sourceFile;
     this.generatedBy = generatedBy;
@@ -44,7 +46,7 @@ public class GeoMetaData extends BaseModel {
   }
   
   public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
-    this("3.1", sourceFile, "WorldEditor", vertices, faces, normals, colors, usvs, materials);
+    this(3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, usvs, materials);
   }
 
   // GETTER & SETTER //
@@ -57,11 +59,11 @@ public class GeoMetaData extends BaseModel {
     this.id = id;
   }
 
-  public String getFormatVersion() {
+  public Float getFormatVersion() {
     return formatVersion;
   }
 
-  public void setFormatVersion(String formatVersion) {
+  public void setFormatVersion(Float formatVersion) {
     this.formatVersion = formatVersion;
   }
 
