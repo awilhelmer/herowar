@@ -146,7 +146,9 @@ public class Global extends GlobalSettings {
     Logger.info("Creating environment");
     Environment root = new Environment("root");
     Environment terrain = new Environment("Terrain");
+    terrain.setParent(root);
     Environment tree = new Environment("Tree");
+    tree.setParent(root);
     terrain.getChildren().add(tree);
     root.getChildren().add(terrain);
     root.save();
