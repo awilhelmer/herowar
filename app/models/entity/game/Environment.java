@@ -1,7 +1,7 @@
 package models.entity.game;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.validation.constraints.NotNull;
 
 import models.entity.BaseModel;
@@ -31,13 +30,12 @@ public class Environment extends BaseModel {
   private String name;
 
   @OneToMany(cascade = CascadeType.ALL)
-  @OrderColumn
   @JoinColumn(name = "parent_id")
-  private List<Environment> children = new LinkedList<Environment>();
+  private Set<Environment> children = new HashSet<Environment>();
 
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-  @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+  @JoinColumn(name = "parent_id")
   private Environment parent;
 
   private static final Finder<Long, Environment> finder = new Finder<Long, Environment>(Long.class, Environment.class);
@@ -67,11 +65,11 @@ public class Environment extends BaseModel {
     this.name = name;
   }
 
-  public List<Environment> getChildren() {
+  public Set<Environment> getChildren() {
     return children;
   }
 
-  public void setChildren(List<Environment> children) {
+  public void setChildren(Set<Environment> children) {
     this.children = children;
   }
 
