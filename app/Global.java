@@ -115,6 +115,7 @@ public class Global extends GlobalSettings {
 
   private void createAdminUser() {
     if (UserDAO.findByUsername("admin") == null) {
+      Logger.info("Admin already exists!");
       return;
     }
     Logger.info("Creating admin user");
@@ -131,8 +132,8 @@ public class Global extends GlobalSettings {
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);
     tutorialMap.getTerrain().setzScale(100);
-    
-  //  JPA.em().persist(tutorialMap.getTerrain());
+
+    // JPA.em().persist(tutorialMap.getTerrain());
     JPA.em().persist(tutorialMap);
   }
 
