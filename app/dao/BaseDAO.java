@@ -24,8 +24,8 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return getCriteriaBuilder().createQuery(entityClass);
   }
 
-  protected Root<T> getRoot() {
-    return getCriteria().from(entityClass);
+  protected Root<T> getRoot(CriteriaQuery<T> crit) {
+    return crit.from(entityClass);
   }
 
   protected CriteriaBuilder getCriteriaBuilder() {
@@ -35,8 +35,7 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
   protected T getSingleByPropertyValue(String property, Object value) {
     CriteriaBuilder builder = getCriteriaBuilder();
     CriteriaQuery<T> q = getCriteria();
-    Root<T> root = q.from(entityClass);
-    q.where(builder.equal(root.get(property), value));
+    q.where(builder.equal(getRoot(q).get(property), value));
     try {
       return JPA.em().createQuery(q).getSingleResult();
     } catch (NoResultException e) {
