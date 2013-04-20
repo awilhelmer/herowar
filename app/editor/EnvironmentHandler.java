@@ -1,11 +1,14 @@
 package editor;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 import models.entity.game.Environment;
+import models.entity.game.Geometry;
 
 import org.apache.commons.lang.WordUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
 import play.Play;
@@ -27,6 +30,8 @@ public class EnvironmentHandler implements Serializable {
 
   private static EnvironmentHandler instance;
 
+  private static ObjectMapper mapper = new ObjectMapper();
+  
   public static EnvironmentHandler getInstance() {
     if (instance == null) {
       instance = new EnvironmentHandler();
@@ -45,7 +50,7 @@ public class EnvironmentHandler implements Serializable {
     log.info("Finish synchronize between folder and database");
   }
 
-  public void readDirectory(File folder, Environment parent) {
+  private void readDirectory(File folder, Environment parent) {
     for (File file : folder.listFiles()) {
       Environment child = null;
       if (file.isDirectory()) {
@@ -55,21 +60,31 @@ public class EnvironmentHandler implements Serializable {
       } else {
         log.info("Found geometry: " + file.getAbsolutePath());
         child = createEnvironment(file, parent);
+        child.setGeometry(parseGeometryFile(file));
       }
       parent.getChildren().add(child);
     }
   }
 
-  public Environment createEnvironment(File file, Environment parent) {
+  private Environment createEnvironment(File file, Environment parent) {
     return createEnvironment(WordUtils.capitalize(file.getName()), parent);
   }
 
-  public Environment createEnvironment(String name, Environment parent) {
+  private Environment createEnvironment(String name, Environment parent) {
     Environment environment = new Environment(name);
     if (parent != null) {
       environment.setParent(parent);
     }
     return environment;
+  }
+  
+  private Geometry parseGeometryFile(File file) {
+    try {
+      return mapper.readValue(file, Geometry.class);
+    } catch (IOException e) {
+      log.error("Failed to parse geometry file:", e);
+    }
+    return null;
   }
 
 }

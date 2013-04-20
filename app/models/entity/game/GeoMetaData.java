@@ -28,7 +28,7 @@ public class GeoMetaData implements Serializable {
   private Long faces;
   private Long normals;
   private Long colors;
-  private Long usvs;
+  private Long uvs;
   private Long materials;
 
   @JsonIgnore
@@ -38,7 +38,7 @@ public class GeoMetaData implements Serializable {
   public GeoMetaData() {
   }
 
-  public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
+  public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
     this.formatVersion = formatVersion;
     this.sourceFile = sourceFile;
     this.generatedBy = generatedBy;
@@ -46,12 +46,12 @@ public class GeoMetaData implements Serializable {
     this.faces = faces;
     this.normals = normals;
     this.colors = colors;
-    this.usvs = usvs;
+    this.uvs = uvs;
     this.materials = materials;
   }
 
-  public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long usvs, Long materials) {
-    this(3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, usvs, materials);
+  public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
+    this(3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
   }
 
   // GETTER & SETTER //
@@ -120,12 +120,12 @@ public class GeoMetaData implements Serializable {
     this.colors = colors;
   }
 
-  public Long getUsvs() {
-    return usvs;
+  public Long getUvs() {
+    return uvs;
   }
 
-  public void setUsvs(Long usvs) {
-    this.usvs = usvs;
+  public void setUvs(Long uvs) {
+    this.uvs = uvs;
   }
 
   public Long getMaterials() {
@@ -147,6 +147,6 @@ public class GeoMetaData implements Serializable {
   @Override
   public String toString() {
     return "GeoMetaData [id=" + id + ", formatVersion=" + formatVersion + ", sourceFile=" + sourceFile + ", generatedBy=" + generatedBy + ", vertices="
-        + vertices + ", faces=" + faces + ", normals=" + normals + ", Colors=" + colors + ", usvs=" + usvs + ", materials=" + materials + "]";
+        + vertices + ", faces=" + faces + ", normals=" + normals + ", Colors=" + colors + ", uvs=" + uvs + ", materials=" + materials + "]";
   }
 }

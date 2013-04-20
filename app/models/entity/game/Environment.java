@@ -40,7 +40,7 @@ public class Environment implements Serializable {
   @JoinColumn(name = "parent_id")
   private Environment parent;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Geometry geometry;
 
   public Environment() {

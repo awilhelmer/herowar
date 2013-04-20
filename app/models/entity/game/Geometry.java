@@ -1,5 +1,7 @@
 package models.entity.game;
 
+import game.json.GeometryDeserializer;
+
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -16,9 +18,11 @@ import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@JsonDeserialize(using = GeometryDeserializer.class)
 public class Geometry implements Serializable {
   private static final long serialVersionUID = 5730315776315409881L;
 
@@ -45,6 +49,9 @@ public class Geometry implements Serializable {
   private String colors;
 
   @Lob
+  private String materials;
+
+  @Lob
   private String uvs;
 
   @Column(precision = 6)
@@ -60,11 +67,9 @@ public class Geometry implements Serializable {
   @JsonIgnore
   private Terrain terrain;
 
-  public Geometry() {
-  }
-
-  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
+  public Geometry(Long id, String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
       GeometryType type, GeoMetaData metadata) {
+    this.id = id;
     this.vertices = vertices;
     this.faces = faces;
     this.morphTargets = morphTargets;
@@ -77,12 +82,20 @@ public class Geometry implements Serializable {
     this.metadata = metadata;
   }
 
+  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
+      GeometryType type, GeoMetaData metadata) {
+    this(null, vertices, faces, morphTargets, morphColors, normals, colors, uvs, scale, type, metadata);
+  }
+
   public Geometry(String vertices, String faces, String normals, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
-    this(vertices, faces, "", "", normals, "", uvs, scale, type, metadata);
+    this(null, vertices, faces, "", "", normals, "", uvs, scale, type, metadata);
   }
 
   public Geometry(String vertices, String faces, String normals, String uvs, GeometryType type, GeoMetaData metadata) {
-    this(vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata);
+    this(null, vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata);
+  }
+
+  public Geometry() {
   }
 
   // GETTER & SETTER //
@@ -149,6 +162,14 @@ public class Geometry implements Serializable {
 
   public void setUvs(String uvs) {
     this.uvs = uvs;
+  }
+
+  public String getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(String materials) {
+    this.materials = materials;
   }
 
   public Double getScale() {
