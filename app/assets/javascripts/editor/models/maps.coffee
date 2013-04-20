@@ -2,7 +2,7 @@ db = require 'database'
 
 class Maps extends Backbone.Collection
 
-	url: '/api/map/all'
+	url: '/api/game/map/all'
 
 	initialize: (models, options) ->
 		@model = require 'models/map'
