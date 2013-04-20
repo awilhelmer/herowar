@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="map_materials")
 public class MapMaterials implements Serializable {
@@ -45,10 +47,12 @@ public class MapMaterials implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "map_id", referencedColumnName = "id")
+    @JsonIgnore
     private Map map;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "mat_id", referencedColumnName = "id")
+    @JsonIgnore
     private Material material;
 
     public Map getMap() {

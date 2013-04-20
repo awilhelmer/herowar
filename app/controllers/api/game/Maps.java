@@ -4,11 +4,11 @@ import static play.libs.Json.toJson;
 
 import java.util.List;
 
-import controllers.api.BaseAPI;
 import models.entity.game.Map;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
+import controllers.api.BaseAPI;
 
 /**
  * The Maps controller handle api requests for the Map model.
@@ -28,7 +28,8 @@ public class Maps extends BaseAPI<Long, Map> {
     List<Map> maps = instance.listAll();
 
     for (Map map : maps) {
-      map.getTerrain().getGeometry().getMetadata();
+      map.getTerrain().getGeometry().getTerrain();
+      map.getMapMaterials();
     }
     return ok(toJson(maps));
   }

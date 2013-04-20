@@ -15,12 +15,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @SuppressWarnings("serial")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Map implements Serializable {
 
   @Id

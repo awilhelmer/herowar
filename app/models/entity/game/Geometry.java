@@ -15,8 +15,10 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Geometry implements Serializable {
   private static final long serialVersionUID = 5730315776315409881L;
 
