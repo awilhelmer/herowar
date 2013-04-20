@@ -5,22 +5,19 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import play.data.format.Formats;
-
-import com.avaje.ebean.annotation.EnumValue;
 
 @Entity
 @SuppressWarnings("serial")
 public class TokenAction implements Serializable {
 
   public enum Type {
-    @EnumValue("EV")
     EMAIL_VERIFICATION,
-
-    @EnumValue("PR")
     PASSWORD_RESET
   }
 
@@ -39,6 +36,7 @@ public class TokenAction implements Serializable {
   @ManyToOne
   private User targetUser;
 
+  @Enumerated(EnumType.STRING)
   private Type type;
 
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")

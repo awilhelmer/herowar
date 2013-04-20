@@ -1,6 +1,6 @@
 package providers;
 
-import com.avaje.ebean.validation.Email;
+import org.hibernate.validator.constraints.Email;
 
 /**
  * The Form is used for the signup process.

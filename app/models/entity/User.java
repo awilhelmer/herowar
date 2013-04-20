@@ -16,11 +16,10 @@ import javax.persistence.Table;
 import models.entity.game.GameResult;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
 
 import play.data.format.Formats;
 import be.objectify.deadbolt.core.models.Subject;
-
-import com.avaje.ebean.validation.Email;
 
 /**
  * The User represents each Player for our application.
