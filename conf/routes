@@ -29,6 +29,12 @@ PUT			/api/map/:id												controllers.api.Maps.update(id: Long)
 DELETE	/api/map/:id												controllers.api.Maps.delete(id: Long)
 POST		/api/map														controllers.api.Maps.add()
 
+GET			/api/terrain/all										controllers.api.Terrains.list()
+GET			/api/terrain/:id										controllers.api.Terrains.show(id: Long)
+PUT			/api/terrain/:id										controllers.api.Terrains.update(id: Long)
+DELETE	/api/terrain/:id										controllers.api.Terrains.delete(id: Long)
+POST		/api/terrain												controllers.api.Terrains.add()
+
 GET			/api/object/all											controllers.api.Objects.list()
 GET			/api/object/:id											controllers.api.Objects.show(id: Long)
 PUT			/api/object/:id											controllers.api.Objects.update(id: Long)
