@@ -1,6 +1,4 @@
-package controllers.api;
-
-import static play.libs.Json.toJson;
+package dao;
 
 import java.io.Serializable;
 
@@ -9,32 +7,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import play.data.Form;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
-import play.mvc.Result;
 
-/**
- * The BaseAPI provides the basic api functions.
- * 
- * @author Sebastian Sachtleben
- */
-public abstract class BaseAPI<K extends Serializable, T extends Object> extends Controller {
-
+public abstract class BaseDAO<K extends Serializable, T extends Object> {
   @SuppressWarnings("unused")
   private Class<K> idClass;
   private Class<T> entityClass;
 
-  public BaseAPI(Class<K> idClass, Class<T> entityClass) {
-    super();
+  public BaseDAO(Class<K> idClass, Class<T> entityClass) {
     this.idClass = idClass;
     this.entityClass = entityClass;
-  }
-
-  protected Result listAll() {
-    CriteriaQuery<T> crit = getCriteria();
-    return ok(toJson(JPA.em().createQuery(crit).getResultList()));
   }
 
   protected CriteriaQuery<T> getCriteria() {
@@ -48,32 +31,17 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
   protected CriteriaBuilder getCriteriaBuilder() {
     return JPA.em().getCriteriaBuilder();
   }
+  
 
   @Transactional
-  protected Result showEntry(K id) {
-    try {
-      return ok(toJson(JPA.em().find(entityClass, id)));
-    } catch (NoResultException e) {
-      return badRequest("No Result");
-    }
-  }
-
-  @Transactional
-  public Result deleteEntry(K id) {
+  public boolean delete(K id) {
     try {
       T obj = JPA.em().find(entityClass, id);
       JPA.em().remove(obj);
     } catch (NoResultException e) {
-      return badRequest("No Result");
+      return false;
     }
-    return ok("{}");
-  }
-
-  @Transactional
-  public Result addEntry() {
-    T obj = Form.form(entityClass).bindFromRequest().get();
-    JPA.em().persist(obj);
-    return ok(toJson(obj));
+    return true;
   }
 
   @Transactional

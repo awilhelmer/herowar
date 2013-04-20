@@ -7,11 +7,10 @@ import models.entity.game.Environment;
 
 import org.apache.commons.lang.WordUtils;
 
-import dao.GameDAO;
-
 import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
+import dao.game.EnvironmentDAO;
 
 /**
  * The EnvironmentHandler synchronize between our geometries environment folder
@@ -36,7 +35,7 @@ public class EnvironmentHandler implements Serializable {
   }
 
   public void sync() {
-    if (GameDAO.getEnvironmentCount() != 0)
+    if (EnvironmentDAO.getEnvironmentCount() != 0)
       return;
     log.info("Starting synchronize between folder and database");
     File baseFolder = new File(Play.application().path(), ENVIRONMENT_FOLDER_PATH);

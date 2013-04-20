@@ -14,7 +14,7 @@ import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
 import play.libs.Json;
-import dao.GameDAO;
+import dao.game.GameTokenDAO;
 
 /**
  * Initial client packet contains game token.
@@ -33,7 +33,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
 
   @Override
   public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-    GameToken gameToken = GameDAO.getTokenById(token);
+    GameToken gameToken = GameTokenDAO.getTokenById(token);
     if (gameToken != null) {
       socketHandler.getAuthConnections().put(connection, gameToken.getCreatedByUser());
       log.info("Found " + gameToken.toString());

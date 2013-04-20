@@ -16,8 +16,8 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
-import dao.GameDAO;
 import dao.MainDao;
+import dao.game.MapDAO;
 import editor.EnvironmentHandler;
 import game.GamesHandler;
 import game.network.handler.WebSocketHandler;
@@ -114,11 +114,11 @@ public class Global extends GlobalSettings {
   }
 
   private void createTutorialMap() {
-    if (GameDAO.getMapByName("Tutorial") != null) {
+    if (MapDAO.getMapByName("Tutorial") != null) {
       return;
     }
     Logger.info("Creating tutorial map");
-    Map tutorialMap = GameDAO.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
+    Map tutorialMap = MapDAO.create("Tutorial", "The tutorial map shows new user how to play this game.", 1);
     tutorialMap.getTerrain().setWidth(600);
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);

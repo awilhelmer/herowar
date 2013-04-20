@@ -19,8 +19,8 @@ import play.db.jpa.JPA;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import dao.GameDAO;
 import dao.MainDao;
+import dao.game.MaterialDAO;
 
 public class Editor extends Controller {
 
@@ -104,7 +104,7 @@ public class Editor extends Controller {
       map.setMapMaterials(new HashSet<MapMaterials>());
     }
     for (Material mat : map.getMaterials()) {
-      Material dbMat = GameDAO.getMaterialbyId(mat.getId());
+      Material dbMat = MaterialDAO.getMaterialbyId(mat.getId());
       if (dbMat == null) {
         dbMat = mat;
 
