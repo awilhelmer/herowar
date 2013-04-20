@@ -1,9 +1,6 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.game.Map;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -25,13 +22,8 @@ public class Maps extends BaseAPI<Long, Map> {
 
   @Transactional
   public static Result list() {
-    List<Map> maps = instance.listAll();
 
-    for (Map map : maps) {
-      map.getTerrain().getGeometry().getTerrain();
-      map.getMapMaterials();
-    }
-    return ok(toJson(maps));
+    return instance.listAll();
   }
 
   @Transactional

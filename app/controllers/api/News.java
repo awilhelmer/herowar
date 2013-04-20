@@ -1,9 +1,6 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import play.data.Form;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -24,8 +21,7 @@ public class News extends BaseAPI<Long, models.entity.News> {
 
   @Transactional
   public static Result list() {
-    List<models.entity.News> list = instance.listAll(); 
-    return ok(toJson(list));
+    return instance.listAll(); 
   }
 
   @Transactional

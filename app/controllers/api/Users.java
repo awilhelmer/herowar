@@ -1,9 +1,6 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.User;
 import play.data.Form;
 import play.db.jpa.Transactional;
@@ -24,8 +21,7 @@ public class Users extends BaseAPI<Long, User> {
 
   @Transactional
   public static Result list() {
-    List<User> list = instance.listAll(); 
-    return ok(toJson(list));
+    return instance.listAll();
   }
 
   @Transactional

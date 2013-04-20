@@ -1,9 +1,6 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.game.Geometry;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -25,8 +22,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   @Transactional
   public static Result list() {
-    List<Geometry> list = instance.listAll();
-    return ok(toJson(list));
+    return instance.listAll();
   }
 
   @Transactional

@@ -1,9 +1,6 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
 import models.entity.game.Object3D;
 import play.data.Form;
 import play.db.jpa.JPA;
@@ -25,8 +22,7 @@ public class Objects extends BaseAPI<Long, Object3D> {
 
   @Transactional
   public static Result list() {
-    List<Object3D> list = instance.listAll(); 
-    return ok(toJson(list));
+    return instance.listAll(); 
   }
 
   @Transactional

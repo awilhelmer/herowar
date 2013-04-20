@@ -3,7 +3,6 @@ package controllers.api;
 import static play.libs.Json.toJson;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -33,11 +32,10 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     this.entityClass = entityClass;
   }
 
-  protected List<T> listAll() {
+  protected Result listAll() {
     CriteriaQuery<T> query = getCriteria();
     query.from(entityClass);
-    
-    return getEntityManager().createQuery(query).getResultList();
+    return ok(toJson(getEntityManager().createQuery(query).getResultList()));
   }
 
   protected CriteriaQuery<T> getCriteria() {

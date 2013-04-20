@@ -1,14 +1,11 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
-
-import java.util.List;
-
-import controllers.api.BaseAPI;
 import models.entity.game.Terrain;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
+import controllers.api.BaseAPI;
 
 /**
  * The Terrains controller handle api requests for the Terrain model.
@@ -25,8 +22,7 @@ public class Terrains extends BaseAPI<Long, Terrain> {
 
   @Transactional
   public static Result list() {
-    List<Terrain> list = instance.listAll(); 
-    return ok(toJson(list));
+    return  instance.listAll(); 
   }
 
   @Transactional
