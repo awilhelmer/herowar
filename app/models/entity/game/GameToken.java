@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,10 +26,19 @@ public class GameToken implements Serializable {
 
   private static final long serialVersionUID = -5699234192975949575L;
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String token;
   private Boolean invalid;
+  
+  @ManyToOne(cascade = { CascadeType.REFRESH })
+  @JoinColumn(name = "createdbyuser_id")
   private User createdByUser;
+  
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;
+  
+  @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
   private GameResult result;
 
   public GameToken() {
@@ -40,7 +51,6 @@ public class GameToken implements Serializable {
 
   }
 
-  @Id
   public String getToken() {
     return token;
   }
@@ -57,8 +67,6 @@ public class GameToken implements Serializable {
     this.invalid = invalid;
   }
 
-  @ManyToOne(cascade = { CascadeType.REFRESH })
-  @JoinColumn(name = "createdbyuser_id")
   public User getCreatedByUser() {
     return createdByUser;
   }
@@ -67,7 +75,6 @@ public class GameToken implements Serializable {
     this.createdByUser = createdByUser;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
   public Date getCreatedDate() {
     return createdDate;
   }
@@ -76,7 +83,6 @@ public class GameToken implements Serializable {
     this.createdDate = createdDate;
   }
 
-  @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
   public GameResult getResult() {
     return result;
   }

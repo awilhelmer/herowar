@@ -3,6 +3,8 @@ package models.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import be.objectify.deadbolt.core.models.Permission;
@@ -12,6 +14,7 @@ import be.objectify.deadbolt.core.models.Permission;
 public class UserPermission implements Permission, Serializable {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String value;
@@ -19,8 +22,6 @@ public class UserPermission implements Permission, Serializable {
   public String getValue() {
     return value;
   }
-
-
 
   // GETTER & SETTER //
 

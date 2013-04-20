@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -17,8 +19,7 @@ import play.data.format.Formats;
 public class TokenAction implements Serializable {
 
   public enum Type {
-    EMAIL_VERIFICATION,
-    PASSWORD_RESET
+    EMAIL_VERIFICATION, PASSWORD_RESET
   }
 
   /**
@@ -28,6 +29,7 @@ public class TokenAction implements Serializable {
   public final static long VERIFICATION_TIME = 7 * 24 * 3600;
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(unique = true)

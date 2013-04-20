@@ -15,16 +15,17 @@ import javax.persistence.Transient;
 
 import models.entity.User;
 
-
 /**
  * @author Sebastian Sachtleben
  */
 @Entity
 @Table(name = "gameresult")
-public class GameResult  implements Serializable {
+public class GameResult implements Serializable {
 
   private static final long serialVersionUID = 1791158983361934175L;
-  
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Long score;
   private Integer health;
@@ -32,44 +33,46 @@ public class GameResult  implements Serializable {
   private Integer shots;
   private Integer accuracy;
   private Boolean victory;
-  private User user;
-  private GameToken token;
-  
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  @OneToOne(mappedBy = "result", optional = false)
+  private GameToken token;
+
   public Long getId() {
     return id;
   }
-  
+
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public Long getScore() {
     return score;
   }
-  
+
   public void setScore(Long score) {
     this.score = score;
   }
-  
+
   public Integer getHealth() {
     return health;
   }
-  
+
   public void setHealth(Integer health) {
     this.health = health;
   }
-  
+
   public Integer getKills() {
     return kills;
   }
-  
+
   public void setKills(Integer kills) {
     this.kills = kills;
   }
-  
+
   public Integer getShots() {
     return shots;
   }
@@ -81,11 +84,11 @@ public class GameResult  implements Serializable {
   public Integer getAccuracy() {
     return accuracy;
   }
-  
+
   public void setAccuracy(Integer accuracy) {
     this.accuracy = accuracy;
   }
-  
+
   public Boolean getVictory() {
     return victory;
   }
@@ -94,18 +97,14 @@ public class GameResult  implements Serializable {
     this.victory = victory;
   }
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "user_id")
   public User getUser() {
     return user;
   }
-  
+
   public void setUser(User user) {
     this.user = user;
   }
-  
-  
-  @OneToOne(mappedBy="result", optional = false)
+
   public GameToken getToken() {
     return token;
   }
@@ -118,17 +117,17 @@ public class GameResult  implements Serializable {
   public Long getHealthBonus() {
     return ((long) kills * (long) health);
   }
-  
+
   @Transient
   public Long getKillsBonus() {
     return kills * 100l;
   }
-  
+
   @Transient
   public Long getAccuracyBonus() {
-    return ((long) accuracy * (long)kills);
+    return ((long) accuracy * (long) kills);
   }
-  
+
   @Transient
   public Long getTotalScore() {
     return getScore() + getHealthBonus() + getKillsBonus() + getAccuracyBonus();
@@ -200,5 +199,5 @@ public class GameResult  implements Serializable {
     return "GameResult [id=" + id + ", score=" + score + ", health=" + health + ", kills=" + kills + ", shots=" + shots + ", accuracy=" + accuracy
         + ", victory=" + victory + "]";
   }
-  
+
 }
