@@ -28,6 +28,7 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return crit.from(entityClass);
   }
 
+  @Transactional
   protected CriteriaBuilder getCriteriaBuilder() {
     return JPA.em().getCriteriaBuilder();
   }
