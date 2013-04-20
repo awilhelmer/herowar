@@ -28,7 +28,6 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return crit.from(entityClass);
   }
 
-  @Transactional
   protected CriteriaBuilder getCriteriaBuilder() {
     return JPA.em().getCriteriaBuilder();
   }
@@ -52,7 +51,6 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return JPA.em().createQuery(q).getSingleResult();
   }
 
-  @Transactional
   public boolean delete(K id) {
     try {
       T obj = JPA.em().find(entityClass, id);
@@ -63,7 +61,6 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return true;
   }
 
-  @Transactional
   public T findUnique(K id) {
     try {
       return JPA.em().find(entityClass, id);
@@ -72,7 +69,6 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     }
   }
 
-  @Transactional
   public T merge(T obj) {
     return JPA.em().merge(obj);
   }

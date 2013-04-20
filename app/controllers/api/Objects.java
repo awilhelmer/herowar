@@ -20,10 +20,12 @@ public class Objects extends BaseAPI<Long, Object3D> {
 
   public static final Objects instance = new Objects();
 
+  @Transactional
   public static Result list() {
     return instance.listAll();
   }
 
+  @Transactional
   public static Result show(Long id) {
     return instance.showEntry(id);
   }
@@ -35,10 +37,12 @@ public class Objects extends BaseAPI<Long, Object3D> {
     return ok(toJson(object));
   }
 
+  @Transactional
   public static Result delete(Long id) {
     return instance.deleteEntry(id);
   }
 
+  @Transactional
   public static Result add() {
     return instance.addEntry();
   }

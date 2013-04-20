@@ -1,7 +1,6 @@
 package dao;
 
 import models.entity.UserPermission;
-import play.db.jpa.Transactional;
 
 public class UserPermissionDAO extends BaseDAO<Long, UserPermission> {
 
@@ -11,7 +10,6 @@ public class UserPermissionDAO extends BaseDAO<Long, UserPermission> {
 
   private static final UserPermissionDAO instance = new UserPermissionDAO();
 
-  @Transactional
   public static UserPermission findByValue(String value) {
     return instance.getSingleByPropertyValue("value", value);
   }

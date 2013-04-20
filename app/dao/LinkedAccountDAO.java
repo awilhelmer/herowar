@@ -22,7 +22,6 @@ public class LinkedAccountDAO extends BaseDAO<Long, LinkedAccount> {
 
   private static final LinkedAccountDAO instance = new LinkedAccountDAO();
 
-  @Transactional
   public static LinkedAccount findByProviderKey(final User user, String key) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
     CriteriaQuery<LinkedAccount> q = instance.getCriteria();

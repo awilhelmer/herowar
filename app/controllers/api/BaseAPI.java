@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 
 import play.data.Form;
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -49,7 +48,6 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     return JPA.em().getCriteriaBuilder();
   }
 
-  @Transactional
   protected Result showEntry(K id) {
     try {
       return ok(toJson(JPA.em().find(entityClass, id)));
@@ -58,7 +56,6 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     }
   }
 
-  @Transactional
   public Result deleteEntry(K id) {
     try {
       T obj = JPA.em().find(entityClass, id);
@@ -69,14 +66,12 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     return ok("{}");
   }
 
-  @Transactional
   public Result addEntry() {
     T obj = Form.form(entityClass).bindFromRequest().get();
     JPA.em().persist(obj);
     return ok(toJson(obj));
   }
 
-  @Transactional
   public T findUnique(K id) {
     try {
       return JPA.em().find(entityClass, id);
@@ -85,7 +80,6 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     }
   }
 
-  @Transactional
   public T merge(T obj) {
     return JPA.em().merge(obj);
   }

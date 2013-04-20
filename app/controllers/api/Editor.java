@@ -3,24 +3,20 @@ package controllers.api;
 import static play.libs.Json.toJson;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
-import models.entity.game.MapMaterials;
-import models.entity.game.Material;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
 import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import dao.game.MapDAO;
-import dao.game.MaterialDAO;
 
 public class Editor extends Controller {
 
@@ -30,6 +26,7 @@ public class Editor extends Controller {
     return ok(toJson(new Map()));
   }
 
+  @Transactional
   public static Result mapShow(Long id) {
     Map map = MapDAO.getMapById(id);
     mapMaterials(map);
@@ -37,6 +34,7 @@ public class Editor extends Controller {
   }
 
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
+  @Transactional
   public static Result addMap() {
     log.info("Saving MAP");
     if (request().body().isMaxSizeExceeded()) {

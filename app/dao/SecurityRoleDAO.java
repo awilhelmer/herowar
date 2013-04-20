@@ -1,6 +1,5 @@
 package dao;
 
-import play.db.jpa.Transactional;
 import models.entity.SecurityRole;
 
 public class SecurityRoleDAO extends BaseDAO<Long, SecurityRole> {
@@ -10,12 +9,10 @@ public class SecurityRoleDAO extends BaseDAO<Long, SecurityRole> {
 
   private static final SecurityRoleDAO instance = new SecurityRoleDAO();
 
-  @Transactional
   public static long getSecurityRoleCount() {
     return instance.getBaseCount();
   }
 
-  @Transactional
   public static SecurityRole findByRoleName(String roleName) {
     return instance.getSingleByPropertyValue("roleName", roleName);
   }

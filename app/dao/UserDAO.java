@@ -14,7 +14,6 @@ import models.entity.LinkedAccount;
 import models.entity.User;
 import play.Logger;
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 import providers.FormSignup;
 import providers.SignupUsernamePasswordAuthUser;
 
@@ -33,12 +32,10 @@ public class UserDAO extends BaseDAO<Long, User> {
 
   private static final UserDAO instance = new UserDAO();
 
-  @Transactional
   public static void addLinkedAccount(AuthUser oldUser, AuthUser newUser) {
     // TODO Auto-generated method stub
   }
 
-  @Transactional
   public static User create(AuthUser authUser) {
     final User user = new User();
     user.setRoles(Collections.singletonList(SecurityRoleDAO.findByRoleName(Application.USER_ROLE)));
@@ -64,12 +61,10 @@ public class UserDAO extends BaseDAO<Long, User> {
     return user;
   }
 
-  @Transactional
   public static void delete(User user) {
     JPA.em().remove(user);
   }
 
-  @Transactional
   public static boolean existsByAuthUserIdentity(AuthUser authUser) {
     // TODO Auto-generated method stub
     return false;
@@ -84,31 +79,26 @@ public class UserDAO extends BaseDAO<Long, User> {
     return create(authUser);
   }
 
-  @Transactional
   public static Object findByUserEmail(String email) {
     return instance.getSingleByPropertyValue("email", email);
   }
 
-  @Transactional
   public static void merge(AuthUser oldUser, AuthUser newUser) {
     // findByAuthUserIdentity(oldUser);
     instance.merge(findByAuthUserIdentity(newUser));
     // TODO how to merge?
   }
 
-  @Transactional
   public static void setLastLoginDate(AuthUser knownUser) {
     final User u = findByAuthUserIdentity(knownUser);
     u.setLastLogin(new Date());
     // Its attached i hope - no persist
   }
 
-  @Transactional
   public static User findByUsername(final String username) {
     return instance.getSingleByPropertyValue("username", username);
   }
 
-  @Transactional
   public static boolean existsByAuthUserIdentity(final AuthUserIdentity identity) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
     CriteriaQuery<Long> q = builder.createQuery(Long.class);
@@ -126,7 +116,6 @@ public class UserDAO extends BaseDAO<Long, User> {
     return JPA.em().createQuery(q).getSingleResult() > 0;
   }
 
-  @Transactional
   public static void merge(User user, User user2) {
     user = instance.merge(user);
     user.setUsername(user2.getUsername());
@@ -135,7 +124,6 @@ public class UserDAO extends BaseDAO<Long, User> {
     user.setNewsletter(user2.isNewsletter());
   }
 
-  @Transactional
   public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
     CriteriaQuery<User> q = instance.getCriteria();
     Root<User> root = instance.getRoot(q);
@@ -148,7 +136,6 @@ public class UserDAO extends BaseDAO<Long, User> {
     }
   }
 
-  @Transactional
   public static User findByAuthUserIdentity(final AuthUserIdentity identity) {
     if (identity == null) {
       return null;

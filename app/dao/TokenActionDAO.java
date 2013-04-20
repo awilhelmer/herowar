@@ -12,7 +12,6 @@ import models.entity.TokenAction;
 import models.entity.TokenAction.Type;
 import models.entity.User;
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 
 /**
  * The TokenActionDAO handle database access for the entity TokenAction.
@@ -27,7 +26,6 @@ public class TokenActionDAO extends BaseDAO<Long, TokenAction> {
 
   private static final TokenActionDAO instance = new TokenActionDAO();
 
-  @Transactional
   public static TokenAction create(final Type type, final String token, final User targetUser) {
     final Date created = new Date();
     final TokenAction ua = new TokenAction();
@@ -40,7 +38,6 @@ public class TokenActionDAO extends BaseDAO<Long, TokenAction> {
     return ua;
   }
 
-  @Transactional
   public static TokenAction findByToken(final String token, final Type type) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
     CriteriaQuery<TokenAction> q = instance.getCriteria();
@@ -53,7 +50,6 @@ public class TokenActionDAO extends BaseDAO<Long, TokenAction> {
     }
   }
 
-  @Transactional
   public static List<TokenAction> findByTokenAndUserId(final Long userId, final Type type) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
     CriteriaQuery<TokenAction> q = instance.getCriteria();
@@ -62,9 +58,7 @@ public class TokenActionDAO extends BaseDAO<Long, TokenAction> {
     return JPA.em().createQuery(q).getResultList();
   }
 
-  @Transactional
   public static void deleteByUser(final User u, final Type type) {
-
     List<TokenAction> actionList = findByTokenAndUserId(u.getId(), type);
     for (TokenAction action : actionList) {
       JPA.em().remove(action);

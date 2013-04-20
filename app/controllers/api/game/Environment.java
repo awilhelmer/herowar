@@ -1,5 +1,6 @@
 package controllers.api.game;
 
+import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
 
@@ -16,10 +17,12 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
 
   public static final Environment instance = new Environment();
 
+  @Transactional
   public static Result list() {
     return instance.listAll();
   }
 
+  @Transactional
   public static Result show(Long id) {
     return instance.showEntry(id);
   }

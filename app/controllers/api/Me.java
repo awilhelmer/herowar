@@ -6,6 +6,7 @@ import models.api.error.FormValidationError;
 import models.entity.User;
 import play.Logger;
 import play.data.Form;
+import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import providers.FormLogin;
@@ -25,6 +26,7 @@ import dao.UserDAO;
  */
 public class Me extends Controller {
 
+  @Transactional
   public static Result show() {
     User user = getLoggedInUser();
     if (user != null) {
@@ -33,6 +35,7 @@ public class Me extends Controller {
     return ok("{}");
   }
 
+  @Transactional
   public static Result login() {
     Logger.info("login called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -64,6 +67,7 @@ public class Me extends Controller {
     return ok();
   }
 
+  @Transactional
   public static Result signup() {
     Logger.info("signup called");
     com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -74,14 +78,17 @@ public class Me extends Controller {
     return UsernamePasswordAuthProvider.handleSignup(ctx());
   }
 
+  @Transactional
   public static Result checkUsername(String username) {
     return ok(toJson(UserDAO.findByUsername(username) != null));
   }
 
+  @Transactional
   public static Result checkEmail(String email) {
     return ok(toJson(UserDAO.findByUserEmail(email) != null));
   }
 
+  @Transactional
   private static User getLoggedInUser() {
     return Application.getLocalUser(session());
   }
