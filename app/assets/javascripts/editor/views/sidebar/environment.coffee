@@ -15,7 +15,24 @@ class Environment extends BasePropertiesView
 		EditorEventbus.showTerrainProperties.add @hidePanel
 		EditorEventbus.showObjectProperties.add @hidePanel
 		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @showPanel
+		EditorEventbus.showSidebarEnvironment.add @loadData
 		EditorEventbus.showSidebarPathing.add @hidePanel
+
+	initialize: (options) ->
+		@loadedEnvironment = false
+		super options
+	
+	loadData: =>
+		unless @loadedEnvironment
+			@loadedEnvironment = true
+			jqxhr = $.ajax
+				url					: '/api/game/environment/1'
+				type				: 'GET'
+				dataType		: 'json'
+				success			: @onSuccess
+		@showPanel()
+	
+	onSuccess: (data) =>
+		console.log data
 
 return Environment
