@@ -19,7 +19,7 @@ import play.db.jpa.JPA;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import dao.MainDao;
+import dao.game.MapDAO;
 import dao.game.MaterialDAO;
 
 public class Editor extends Controller {
@@ -31,7 +31,7 @@ public class Editor extends Controller {
   }
 
   public static Result mapShow(Long id) {
-    Map map = MainDao.getMapById(id);
+    Map map = MapDAO.getMapById(id);
     mapMaterials(map);
     return ok(toJson(map));
   }

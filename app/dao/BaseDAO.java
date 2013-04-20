@@ -31,7 +31,26 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
   protected CriteriaBuilder getCriteriaBuilder() {
     return JPA.em().getCriteriaBuilder();
   }
-  
+
+  protected T getSingleByPropertyValue(String property, Object value) {
+    CriteriaBuilder builder = getCriteriaBuilder();
+    CriteriaQuery<T> q = getCriteria();
+    Root<T> root = q.from(entityClass);
+    q.where(builder.equal(root.get(property), value));
+    try {
+      return JPA.em().createQuery(q).getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
+  }
+
+  protected long getBaseCount() {
+    CriteriaBuilder builder = getCriteriaBuilder();
+    CriteriaQuery<Long> q = builder.createQuery(Long.class);
+    Root<T> root = q.from(entityClass);
+    q.select(builder.count(root));
+    return JPA.em().createQuery(q).getSingleResult();
+  }
 
   @Transactional
   public boolean delete(K id) {

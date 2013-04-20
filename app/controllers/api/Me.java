@@ -15,7 +15,7 @@ import providers.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.controllers.Authenticate;
 
 import controllers.Application;
-import dao.MainDao;
+import dao.UserDAO;
 
 /**
  * The Me controller allows our application to get information about the current
@@ -45,7 +45,7 @@ public class Me extends Controller {
 
     // Check if user exists
 
-    if (MainDao.findByUserEmail(filledForm.get().getEmail()) == null) {
+    if (UserDAO.findByUserEmail(filledForm.get().getEmail()) == null) {
       return badRequest(toJson(new AuthenticationError()));
     }
 
@@ -75,11 +75,11 @@ public class Me extends Controller {
   }
 
   public static Result checkUsername(String username) {
-    return ok(toJson(MainDao.findByUsername(username) != null));
+    return ok(toJson(UserDAO.findByUsername(username) != null));
   }
 
   public static Result checkEmail(String email) {
-    return ok(toJson(MainDao.findByUserEmail(email) != null));
+    return ok(toJson(UserDAO.findByUserEmail(email) != null));
   }
 
   private static User getLoggedInUser() {

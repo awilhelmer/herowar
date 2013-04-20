@@ -16,7 +16,7 @@ import views.html.index;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUser;
 
-import dao.MainDao;
+import dao.UserDAO;
 
 /**
  * The Application controller handles all requests for our site and provides js
@@ -59,7 +59,7 @@ public class Application extends Controller {
 
   public static User getLocalUser(final Session session) {
     final AuthUser currentAuthUser = PlayAuthenticate.getUser(session);
-    final User localUser = MainDao.findByAuthUserIdentity(currentAuthUser);
+    final User localUser = UserDAO.findByAuthUserIdentity(currentAuthUser);
     return localUser;
   }
 

@@ -6,8 +6,7 @@ import play.Application;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 
-import dao.MainDao;
-
+import dao.UserDAO;
 
 public class UserServicePlugin extends com.feth.play.module.pa.service.UserServicePlugin {
 
@@ -17,9 +16,9 @@ public class UserServicePlugin extends com.feth.play.module.pa.service.UserServi
 
   @Override
   public Long save(final AuthUser authUser) {
-    final boolean isLinked = MainDao.existsByAuthUserIdentity(authUser);
+    final boolean isLinked = UserDAO.existsByAuthUserIdentity(authUser);
     if (!isLinked) {
-      return MainDao.create(authUser).getId();
+      return UserDAO.create(authUser).getId();
     } else {
       // we have this user already, so return null
       return null;
@@ -30,7 +29,7 @@ public class UserServicePlugin extends com.feth.play.module.pa.service.UserServi
   public Long getLocalIdentity(final AuthUserIdentity identity) {
     // For production: Caching might be a good idea here...
     // ...and dont forget to sync the cache when users get deactivated/deleted
-    final User u = MainDao.findByAuthUserIdentity(identity);
+    final User u = UserDAO.findByAuthUserIdentity(identity);
     if (u != null) {
       return u.getId();
     } else {
@@ -41,21 +40,21 @@ public class UserServicePlugin extends com.feth.play.module.pa.service.UserServi
   @Override
   public AuthUser merge(final AuthUser newUser, final AuthUser oldUser) {
     if (!oldUser.equals(newUser)) {
-      MainDao.merge(oldUser, newUser);
+      UserDAO.merge(oldUser, newUser);
     }
     return oldUser;
   }
 
   @Override
   public AuthUser link(final AuthUser oldUser, final AuthUser newUser) {
-    MainDao.addLinkedAccount(oldUser, newUser);
+    UserDAO.addLinkedAccount(oldUser, newUser);
     return newUser;
   }
 
   @Override
   public AuthUser update(final AuthUser knownUser) {
     // User logged in again, bump last login date
-    MainDao.setLastLoginDate(knownUser);
+    UserDAO.setLastLoginDate(knownUser);
     return knownUser;
   }
 

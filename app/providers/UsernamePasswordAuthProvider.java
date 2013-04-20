@@ -11,7 +11,7 @@ import play.mvc.Http.Context;
 
 import com.feth.play.module.mail.Mailer.Mail.Body;
 
-import dao.MainDao;
+import dao.UserDAO;
 
 /**
  * The UsernamePasswordAuthProvider implementation handles our username and
@@ -45,7 +45,7 @@ public class UsernamePasswordAuthProvider
   protected LoginUsernamePasswordAuthUser buildLoginAuthUser(FormLogin login, Context ctx) {
     // We need to fetch users email here since we login with username instead
     // email
-    User u = MainDao.findByUsername(login.getEmail());
+    User u = UserDAO.findByUsername(login.getEmail());
     return new LoginUsernamePasswordAuthUser(login.getPassword(), u.getEmail());
   }
 
@@ -56,7 +56,7 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected LoginResult loginUser(LoginUsernamePasswordAuthUser authUser) {
-    final User u = MainDao.findByUsernamePasswordIdentity(authUser);
+    final User u = UserDAO.findByUsernamePasswordIdentity(authUser);
     if (u == null) {
       Logger.info("User " + authUser.getEmail() + " not found");
       return LoginResult.NOT_FOUND;
@@ -76,11 +76,11 @@ public class UsernamePasswordAuthProvider
 
   @Override
   protected SignupResult signupUser(SignupUsernamePasswordAuthUser user) {
-    final User u = MainDao.findByUsernamePasswordIdentity(user);
+    final User u = UserDAO.findByUsernamePasswordIdentity(user);
     if (u != null) {
       return SignupResult.USER_EXISTS;
     }
-    MainDao.create(user);
+    UserDAO.create(user);
     return SignupResult.USER_CREATED;
   }
 

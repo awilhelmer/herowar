@@ -46,7 +46,7 @@ public class User implements Subject, Serializable {
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date lastLogin;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JsonIgnore
   private List<SecurityRole> roles;
 

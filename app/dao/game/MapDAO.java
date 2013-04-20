@@ -1,9 +1,5 @@
 package dao.game;
 
-import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-
 import models.entity.game.Map;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -34,15 +30,13 @@ public class MapDAO extends BaseDAO<Long, Map> {
   }
 
   @Transactional
-  public static Map getMapByName(String string) {
-    CriteriaBuilder builder = instance.getCriteriaBuilder();
-    CriteriaQuery<Map> q = instance.getCriteria();
-    q.where(builder.equal(q.from(Map.class).get("name"), string));
-    try {
-      return JPA.em().createQuery(q).getSingleResult();
-    } catch (NoResultException e) {
-      return null;
-    }
+  public static Map getMapByName(String name) {
+    return instance.getSingleByPropertyValue("name", name);
+  }
+
+  @Transactional
+  public static Map getMapById(Long id) {
+    return instance.findUnique(id);
   }
 
 }

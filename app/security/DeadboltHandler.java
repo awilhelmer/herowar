@@ -9,7 +9,7 @@ import be.objectify.deadbolt.java.DynamicResourceHandler;
 import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.user.AuthUserIdentity;
 
-import dao.MainDao;
+import dao.UserDAO;
 
 
 public class DeadboltHandler extends AbstractDeadboltHandler {
@@ -39,7 +39,7 @@ public class DeadboltHandler extends AbstractDeadboltHandler {
   public Subject getSubject(final Http.Context context) {
     final AuthUserIdentity u = PlayAuthenticate.getUser(context);
     // Caching might be a good idea here
-    return MainDao.findByAuthUserIdentity(u);
+    return UserDAO.findByAuthUserIdentity(u);
   }
 
   @Override

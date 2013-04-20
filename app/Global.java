@@ -17,6 +17,8 @@ import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
 import dao.MainDao;
+import dao.SecurityRoleDAO;
+import dao.UserDAO;
 import dao.game.MapDAO;
 import editor.EnvironmentHandler;
 import game.GamesHandler;
@@ -93,7 +95,7 @@ public class Global extends GlobalSettings {
   }
 
   private void initialSecurityRoles() {
-    if (MainDao.getSecurityRoleCount() != 0) {
+    if (SecurityRoleDAO.getSecurityRoleCount() != 0) {
       return;
     }
     Logger.info("Creating security roles");
@@ -106,11 +108,11 @@ public class Global extends GlobalSettings {
   }
 
   private void createAdminUser() {
-    if (MainDao.findByUsername("admin") == null) {
+    if (UserDAO.findByUsername("admin") == null) {
       return;
     }
     Logger.info("Creating admin user");
-    MainDao.create("admin", "admin", "admin@herowar.com");
+    UserDAO.create("admin", "admin", "admin@herowar.com");
   }
 
   private void createTutorialMap() {
@@ -136,7 +138,7 @@ public class Global extends GlobalSettings {
         .create(
             "Lorem ipsum dolor sit amet",
             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-            MainDao.findByUsername("admin"));
+            UserDAO.findByUsername("admin"));
   }
 
 }
