@@ -1,37 +1,11 @@
 package dao;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.ExpressionList;
-import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
-import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.AuthUserIdentity;
-import com.feth.play.module.pa.user.EmailIdentity;
-import com.feth.play.module.pa.user.NameIdentity;
-
-import controllers.Application;
-import play.Logger;
-import play.db.jpa.Transactional;
-import providers.FormSignup;
-import providers.SignupUsernamePasswordAuthUser;
-import models.entity.LinkedAccount;
 import models.entity.News;
-import models.entity.SecurityRole;
-import models.entity.TokenAction;
 import models.entity.User;
-import models.entity.UserPermission;
-import models.entity.TokenAction.Type;
-import models.entity.game.Map;
+import play.db.jpa.Transactional;
+import controllers.Application;
 
 public class MainDao {
-
-  @Transactional
-  public static LinkedAccount findByProviderKey(final User user, String key) {
-    return getFinder().where().eq("user", user).eq("providerKey", key).findUnique();
-  }
 
   @Transactional
   public static void merge(News news, News news2) {
@@ -57,6 +31,5 @@ public class MainDao {
     // TODO Auto-generated method stub
     return 0;
   }
-
 
 }
