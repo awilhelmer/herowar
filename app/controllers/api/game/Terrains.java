@@ -1,6 +1,7 @@
-package controllers.api;
+package controllers.api.game;
 
 import static play.libs.Json.toJson;
+import controllers.api.BaseAPI;
 import models.entity.game.Terrain;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;

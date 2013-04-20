@@ -23,18 +23,6 @@ PUT			/api/user/:id												controllers.api.Users.update(id: Long)
 DELETE	/api/user/:id												controllers.api.Users.delete(id: Long)
 POST		/api/user														controllers.api.Users.add()
 
-GET			/api/map/all												controllers.api.Maps.list()
-GET			/api/map/:id												controllers.api.Maps.show(id: Long)
-PUT			/api/map/:id												controllers.api.Maps.update(id: Long)
-DELETE	/api/map/:id												controllers.api.Maps.delete(id: Long)
-POST		/api/map														controllers.api.Maps.add()
-
-GET			/api/terrain/all										controllers.api.Terrains.list()
-GET			/api/terrain/:id										controllers.api.Terrains.show(id: Long)
-PUT			/api/terrain/:id										controllers.api.Terrains.update(id: Long)
-DELETE	/api/terrain/:id										controllers.api.Terrains.delete(id: Long)
-POST		/api/terrain												controllers.api.Terrains.add()
-
 GET			/api/object/all											controllers.api.Objects.list()
 GET			/api/object/:id											controllers.api.Objects.show(id: Long)
 PUT			/api/object/:id											controllers.api.Objects.update(id: Long)
@@ -49,6 +37,24 @@ POST		/api/news														controllers.api.News.add()
 
 GET			/api/game/environment/all						controllers.api.game.Environment.list()
 GET			/api/game/environment/:id						controllers.api.game.Environment.show(id: Long)
+
+GET			/api/game/geometry/all							controllers.api.game.Geometries.list()
+GET			/api/game/geometry/:id							controllers.api.game.Geometries.show(id: Long)
+PUT			/api/game/geometry/:id							controllers.api.game.Geometries.update(id: Long)
+DELETE	/api/game/geometry/:id							controllers.api.game.Geometries.delete(id: Long)
+POST		/api/game/geometry									controllers.api.game.Geometries.add()
+
+GET			/api/game/map/all										controllers.api.game.Maps.list()
+GET			/api/game/map/:id										controllers.api.game.Maps.show(id: Long)
+PUT			/api/game/map/:id										controllers.api.game.Maps.update(id: Long)
+DELETE	/api/game/map/:id										controllers.api.game.Maps.delete(id: Long)
+POST		/api/game/map												controllers.api.game.Maps.add()
+
+GET			/api/game/terrain/all								controllers.api.game.Terrains.list()
+GET			/api/game/terrain/:id								controllers.api.game.Terrains.show(id: Long)
+PUT			/api/game/terrain/:id								controllers.api.game.Terrains.update(id: Long)
+DELETE	/api/game/terrain/:id								controllers.api.game.Terrains.delete(id: Long)
+POST		/api/game/terrain										controllers.api.game.Terrains.add()
 
 GET			/api/editor/map/default							controllers.api.Editor.mapDefault()
 GET			/api/editor/map/:id									controllers.api.Editor.mapShow(id: Long)
