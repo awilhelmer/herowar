@@ -28,7 +28,7 @@ public class TokenAction implements Serializable {
    * Verification time frame (until the user clicks on the link in the email) in
    * seconds Defaults to one week
    */
-  private final static long VERIFICATION_TIME = 7 * 24 * 3600;
+  public final static long VERIFICATION_TIME = 7 * 24 * 3600;
 
   @Id
   private Long id;

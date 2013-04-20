@@ -53,34 +53,6 @@ public class MainDao {
     news.setAuthor(author);
   }
 
-  @Transactional
-  public static TokenAction findByToken(final String token, final Type type) {
-    return find.where().eq("token", token).eq("type", type).findUnique();
-  }
-
-
-
-  @Transactional
-  public static TokenAction create(final Type type, final String token, final User targetUser) {
-    final TokenAction ua = new TokenAction();
-    ua.targetUser = targetUser;
-    ua.token = token;
-    ua.type = type;
-    final Date created = new Date();
-    ua.created = created;
-    ua.expires = new Date(created.getTime() + VERIFICATION_TIME * 1000);
-    ua.save();
-    return ua;
-  }
-
-
-
-
-
-
-
-
-
   public static int getNewsCount() {
     // TODO Auto-generated method stub
     return 0;
