@@ -53,7 +53,7 @@ public class User implements Subject, Serializable {
   private List<SecurityRole> roles;
 
   @OneToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
+//  @JsonIgnore
   private List<LinkedAccount> linkedAccounts;
 
   @ManyToMany(cascade = CascadeType.ALL)

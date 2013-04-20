@@ -53,7 +53,7 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
   protected Result showEntry(K id) {
     try {
       return ok(toJson(getEntityManager().find(entityClass, id)));
-    } catch (NoResultException e) {
+    } catch (NoResultException | NullPointerException e) {
       return badRequest("No Result");
     }
   }

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.feth.play.module.pa.user.AuthUser;
 
 @Entity
@@ -20,6 +22,7 @@ public class LinkedAccount implements Serializable {
   private Long id;
 
   @ManyToOne(cascade = CascadeType.REFRESH)
+  @JsonIgnore
   private User user;
 
   private String providerUserId;
