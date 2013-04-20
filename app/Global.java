@@ -16,7 +16,7 @@ import com.feth.play.module.pa.PlayAuthenticate;
 import com.feth.play.module.pa.PlayAuthenticate.Resolver;
 
 import controllers.api.routes;
-import dao.MainDao;
+import dao.NewsDAO;
 import dao.SecurityRoleDAO;
 import dao.UserDAO;
 import dao.game.MapDAO;
@@ -130,11 +130,11 @@ public class Global extends GlobalSettings {
   }
 
   private void createDummyNews(Application app) {
-    if (!app.isDev() || MainDao.getNewsCount() != 0) {
+    if (!app.isDev() || NewsDAO.getNewsCount() != 0) {
       return;
     }
     Logger.info("Creating dummy news");
-    MainDao
+    NewsDAO
         .create(
             "Lorem ipsum dolor sit amet",
             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",

@@ -1,17 +1,22 @@
 package dao;
 
-import models.entity.News;
-import models.entity.User;
 import play.db.jpa.Transactional;
 import controllers.Application;
+import models.entity.News;
+import models.entity.User;
 
-public class MainDao {
+public class NewsDAO extends BaseDAO<Long, News> {
+
+  private NewsDAO() {
+    super(Long.class, News.class);
+  }
+
+  private static final NewsDAO instance = new NewsDAO();
 
   @Transactional
   public static void merge(News news, News news2) {
     news.setHeadline(news2.getHeadline());
     news.setText(news2.getText());
-
   }
 
   @Transactional
@@ -27,9 +32,9 @@ public class MainDao {
     news.setAuthor(author);
   }
 
-  public static int getNewsCount() {
-    // TODO Auto-generated method stub
-    return 0;
+  @Transactional
+  public static long getNewsCount() {
+    return instance.getBaseCount();
   }
 
 }
