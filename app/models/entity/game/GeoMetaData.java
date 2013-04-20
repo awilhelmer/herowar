@@ -35,10 +35,8 @@ public class GeoMetaData implements Serializable {
   @OneToOne(mappedBy = "metadata", cascade = CascadeType.REFRESH)
   private Geometry geometry;
 
-  public GeoMetaData() {
-  }
-
-  public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
+  public GeoMetaData(Long id, Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
+    this.id = id;
     this.formatVersion = formatVersion;
     this.sourceFile = sourceFile;
     this.generatedBy = generatedBy;
@@ -49,9 +47,16 @@ public class GeoMetaData implements Serializable {
     this.uvs = uvs;
     this.materials = materials;
   }
+  
+  public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
+    this(null, formatVersion, sourceFile, generatedBy, vertices, faces, normals, colors, uvs, materials);
+  }
 
   public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
-    this(3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
+    this(null, 3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
+  }
+  
+  public GeoMetaData() {
   }
 
   // GETTER & SETTER //
