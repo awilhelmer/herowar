@@ -20,6 +20,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   val appSettings = Seq[Setting[_]](
     EclipseKeys.skipParents in ThisBuild := false,
+    ebeanEnabled := false,
     resolvers += Resolver.url("Objectify Play Repository (release)", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("Objectify Play Repository (snapshot)", url("http://schaloner.github.com/snapshots/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
@@ -51,7 +52,6 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val appDependencies = Seq(
     javaCore,
     javaJdbc,
-    javaEbean,
     javaJpa,
     "mysql" % "mysql-connector-java" % "5.1.18",
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
@@ -63,6 +63,6 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   ////////// PROJECTS //////////
 
-  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings)
+  val main = play.Project(appName, appVersion, appDependencies, settings = Defaults.defaultSettings ++ appSettings ++ resourceSettings  )
 
 }
