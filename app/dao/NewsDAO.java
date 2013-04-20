@@ -1,5 +1,6 @@
 package dao;
 
+import play.db.jpa.JPA;
 import models.entity.News;
 import models.entity.User;
 import controllers.Application;
@@ -17,15 +18,17 @@ public class NewsDAO extends BaseDAO<Long, News> {
     news.setText(news2.getText());
   }
 
-  public static void create(String headline, String text) {
-    create(headline, text, Application.getLocalUser());
+  public static News create(String headline, String text) {
+    return create(headline, text, Application.getLocalUser());
   }
 
-  public static void create(String headline, String text, User author) {
+  public static News create(String headline, String text, User author) {
     final News news = new News();
     news.setHeadline(headline);
     news.setText(text);
     news.setAuthor(author);
+    JPA.em().persist(news);
+    return news;
   }
 
   public static long getNewsCount() {
