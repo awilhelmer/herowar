@@ -4,6 +4,7 @@ import static play.libs.Json.toJson;
 
 import java.io.Serializable;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,8 +33,9 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
   }
 
   protected Result listAll() {
-    CriteriaQuery<T> crit = getCriteria();
-    return ok(toJson(JPA.em().createQuery(crit).getResultList()));
+    CriteriaQuery<T> query = getCriteria();
+    query.select(getRoot());
+    return ok(toJson(getEntityManager().createQuery(query).getResultList()));
   }
 
   protected CriteriaQuery<T> getCriteria() {
@@ -45,12 +47,12 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
   }
 
   protected CriteriaBuilder getCriteriaBuilder() {
-    return JPA.em().getCriteriaBuilder();
+    return getEntityManager().getCriteriaBuilder();
   }
 
   protected Result showEntry(K id) {
     try {
-      return ok(toJson(JPA.em().find(entityClass, id)));
+      return ok(toJson(getEntityManager().find(entityClass, id)));
     } catch (NoResultException e) {
       return badRequest("No Result");
     }
@@ -58,8 +60,8 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
 
   public Result deleteEntry(K id) {
     try {
-      T obj = JPA.em().find(entityClass, id);
-      JPA.em().remove(obj);
+      T obj = getEntityManager().find(entityClass, id);
+      getEntityManager().remove(obj);
     } catch (NoResultException e) {
       return badRequest("No Result");
     }
@@ -68,20 +70,24 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
 
   public Result addEntry() {
     T obj = Form.form(entityClass).bindFromRequest().get();
-    JPA.em().persist(obj);
+    getEntityManager().persist(obj);
     return ok(toJson(obj));
   }
 
   public T findUnique(K id) {
     try {
-      return JPA.em().find(entityClass, id);
+      return getEntityManager().find(entityClass, id);
     } catch (NoResultException e) {
       return null;
     }
   }
 
   public T merge(T obj) {
-    return JPA.em().merge(obj);
+    return getEntityManager().merge(obj);
+  }
+  
+  protected EntityManager getEntityManager() {
+    return JPA.em();
   }
 
 }
