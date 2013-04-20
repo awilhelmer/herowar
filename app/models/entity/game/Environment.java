@@ -37,7 +37,7 @@ public class Environment  implements Serializable{
   @JoinColumn(name = "parent_id")
   private Environment parent;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
   private Geometry geometry;
 
   public Environment() {

@@ -9,6 +9,7 @@ import org.bushe.swing.event.ThreadSafeEventService;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.Play;
 import play.db.jpa.JPA;
 import play.mvc.Call;
 
@@ -72,14 +73,19 @@ public class Global extends GlobalSettings {
       }
     });
 
-    initialSecurityRoles();
-    initEventBus();
-    EnvironmentHandler.getInstance().sync();
-    WebSocketHandler.getInstance();
-    GamesHandler.getInstance();
-    createAdminUser();
-    createTutorialMap();
-    createDummyNews(app);
+    JPA.withTransaction(new play.libs.F.Callback0() {
+      @Override
+      public void invoke() throws Throwable {
+        initialSecurityRoles();
+        initEventBus();
+        EnvironmentHandler.getInstance().sync();
+        WebSocketHandler.getInstance();
+        GamesHandler.getInstance();
+        createAdminUser();
+        createTutorialMap();
+        createDummyNews();
+      }
+    });
   }
 
   private void initEventBus() {
@@ -129,8 +135,8 @@ public class Global extends GlobalSettings {
     JPA.em().persist(tutorialMap);
   }
 
-  private void createDummyNews(Application app) {
-    if (!app.isDev() || NewsDAO.getNewsCount() != 0) {
+  private void createDummyNews() {
+    if (!Play.application().isDev() || NewsDAO.getNewsCount() != 0) {
       return;
     }
     Logger.info("Creating dummy news");
