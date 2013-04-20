@@ -1,5 +1,6 @@
 import java.util.Arrays;
 
+import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.game.Map;
 
@@ -132,8 +133,6 @@ public class Global extends GlobalSettings {
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);
     tutorialMap.getTerrain().setzScale(100);
-
-    // JPA.em().persist(tutorialMap.getTerrain());
     JPA.em().persist(tutorialMap);
   }
 
