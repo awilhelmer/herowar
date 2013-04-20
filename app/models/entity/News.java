@@ -2,6 +2,7 @@ package models.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class News implements Serializable {
   @Column(length = 2000)
   private String text;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.REFRESH)
   private User author;
 
   // GETTER & SETTER //

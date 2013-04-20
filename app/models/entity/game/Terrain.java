@@ -32,12 +32,11 @@ public class Terrain implements Serializable {
   private Boolean wireframe;
 
   @JsonIgnore
-  @OneToOne(mappedBy = "terrain")
+  @OneToOne(mappedBy = "terrain", cascade = CascadeType.REFRESH)
   private Map map;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
   private Geometry geometry;
-
 
   public Terrain() {
     this.width = 500;
@@ -112,8 +111,6 @@ public class Terrain implements Serializable {
   public void setWireframe(Boolean wireframe) {
     this.wireframe = wireframe;
   }
-
-
 
   @Override
   public String toString() {

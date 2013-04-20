@@ -2,6 +2,7 @@ package models.entity.game;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class GeoMetaData implements Serializable {
   private Long materials;
 
   @JsonIgnore
-  @OneToOne(mappedBy = "metadata")
+  @OneToOne(mappedBy = "metadata", cascade = CascadeType.REFRESH)
   private Geometry geometry;
 
   public GeoMetaData() {

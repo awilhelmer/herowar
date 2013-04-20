@@ -12,6 +12,7 @@ import javax.persistence.Id;
  */
 @Entity
 @SuppressWarnings("serial")
+@Deprecated
 public class Object3D implements Serializable {
 
   @Id

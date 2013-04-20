@@ -5,19 +5,24 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name="map_materials")
 public class MapMaterials implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @EmbeddedId
   private PK id;
 
+  @NotNull
   private Long backBoneId;
 
-  @EmbeddedId
   public PK getId() {
     return id;
   }
@@ -26,7 +31,6 @@ public class MapMaterials implements Serializable {
     this.id = id;
   }
 
-  @NotNull
   public Long getBackBoneId() {
     return backBoneId;
   }
@@ -36,15 +40,15 @@ public class MapMaterials implements Serializable {
   }
 
   @Embeddable
-  public static class PK  implements Serializable {
+  public static class PK implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "map_id", referencedColumnName = "id", updatable = false)
+    @JoinColumn(name = "map_id", referencedColumnName = "id")
     private Map map;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "mat_id", referencedColumnName = "id", updatable = false)
+    @JoinColumn(name = "mat_id", referencedColumnName = "id")
     private Material material;
 
     public Map getMap() {

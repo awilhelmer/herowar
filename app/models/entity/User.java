@@ -56,7 +56,7 @@ public class User implements Subject, Serializable {
   @JsonIgnore
   private List<LinkedAccount> linkedAccounts;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
   @JsonIgnore
   private List<UserPermission> permissions;
 

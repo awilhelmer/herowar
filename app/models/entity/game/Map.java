@@ -36,19 +36,18 @@ public class Map implements Serializable {
   private Integer goldStart;
   private Integer goldPerTick;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   private Terrain terrain;
 
   @OneToMany(cascade = CascadeType.ALL)
-  private List<Wave> waves;
+  private Set<Wave> waves;
 
-//  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.mat")
-//  @JsonIgnore
-//  private Set<MapMaterials> mapMaterials;
-  
-  // For JSON mapping ...
-//  private List<Material> materials;
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.map")
+  @JsonIgnore
+  private Set<MapMaterials> mapMaterials;
 
+  @Transient
+  private List<Material> materials;
 
   public Map() {
     this.name = "";
@@ -61,9 +60,10 @@ public class Map implements Serializable {
     this.goldPerTick = 5;
     this.terrain = new Terrain();
     this.getTerrain().setGeometry(new Geometry());
+    this.getTerrain().getGeometry().setTerrain(this.getTerrain());
     this.getTerrain().getGeometry().setMetadata(new GeoMetaData());
+    this.getTerrain().getGeometry().getMetadata().setGeometry(this.getTerrain().getGeometry());
   }
-
 
   // GETTER & SETTER //
 
@@ -147,31 +147,29 @@ public class Map implements Serializable {
     this.terrain = terrain;
   }
 
-  public List<Wave> getWaves() {
+  public Set<Wave> getWaves() {
     return waves;
   }
 
-  public void setWaves(List<Wave> waves) {
+  public void setWaves(Set<Wave> waves) {
     this.waves = waves;
   }
 
-//  public Set<MapMaterials> getMapMaterials() {
-//    return mapMaterials;
-//  }
-//
-//  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
-//    this.mapMaterials = mapMaterials;
-//  }
+  public Set<MapMaterials> getMapMaterials() {
+    return mapMaterials;
+  }
 
-//  @Transient
-//  public List<Material> getMaterials() {
-//    return materials;
-//  }
-//
-//  public void setMaterials(List<Material> materials) {
-//    this.materials = materials;
-//  }
+  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
+    this.mapMaterials = mapMaterials;
+  }
 
+  public List<Material> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(List<Material> materials) {
+    this.materials = materials;
+  }
 
   @Override
   public String toString() {

@@ -13,6 +13,10 @@ import be.objectify.deadbolt.core.models.Permission;
 @SuppressWarnings("serial")
 public class UserPermission implements Permission, Serializable {
 
+  public UserPermission() {
+
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

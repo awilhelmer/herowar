@@ -3,6 +3,7 @@ package models.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import play.data.format.Formats;
 
@@ -35,15 +38,17 @@ public class TokenAction implements Serializable {
   @Column(unique = true)
   private String token;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   private User targetUser;
 
   @Enumerated(EnumType.STRING)
   private Type type;
 
+  @Temporal(TemporalType.TIMESTAMP)
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date created;
 
+  @Temporal(TemporalType.TIMESTAMP)
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date expires;
 

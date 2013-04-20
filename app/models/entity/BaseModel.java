@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import play.data.format.Formats;
@@ -17,9 +19,11 @@ import play.data.format.Formats;
 @SuppressWarnings("serial")
 public abstract class BaseModel implements Serializable {
 
+  @Temporal(TemporalType.TIMESTAMP)
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   protected Date cdate;
 
+  @Temporal(TemporalType.TIMESTAMP)
   @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
   protected Date udate;
 

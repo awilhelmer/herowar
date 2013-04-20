@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 public class Geometry implements Serializable {
   private static final long serialVersionUID = 5730315776315409881L;
@@ -51,6 +53,10 @@ public class Geometry implements Serializable {
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private GeoMetaData metadata;
+
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "geometry", optional = true)
+  @JsonIgnore
+  private Terrain terrain;
 
   public Geometry() {
   }
@@ -165,6 +171,14 @@ public class Geometry implements Serializable {
 
   public void setType(GeometryType type) {
     this.type = type;
+  }
+
+  public Terrain getTerrain() {
+    return terrain;
+  }
+
+  public void setTerrain(Terrain terrain) {
+    this.terrain = terrain;
   }
 
   @Override

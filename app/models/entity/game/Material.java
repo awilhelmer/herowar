@@ -1,6 +1,5 @@
 package models.entity.game;
 
-import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -29,16 +28,14 @@ public class Material implements Serializable {
   @Lob
   private String map;
 
-  // For mapping while saving
-  private Long backBoneId;
 
   private String color;
 
   private Boolean transparent;
 
-//  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//  @JsonIgnore
-//  private Set<MapMaterials> materialsMap;
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.material")
+  @JsonIgnore
+  private Set<MapMaterials> materialsMap;
 
   @Column(precision = 2)
   private Float opacity;
@@ -67,15 +64,6 @@ public class Material implements Serializable {
     this.map = map;
   }
 
-  @Transient
-  public Long getBackBoneId() {
-    return backBoneId;
-  }
-
-  public void setBackBoneId(Long backBoneId) {
-    this.backBoneId = backBoneId;
-  }
-
   public String getColor() {
     return color;
   }
@@ -100,12 +88,12 @@ public class Material implements Serializable {
     this.opacity = opacity;
   }
 
-//  public Set<MapMaterials> getMaterialsMap() {
-//    return materialsMap;
-//  }
-//
-//  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
-//    this.materialsMap = materialsMap;
-//  }
+  public Set<MapMaterials> getMaterialsMap() {
+    return materialsMap;
+  }
+
+  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
+    this.materialsMap = materialsMap;
+  }
 
 }

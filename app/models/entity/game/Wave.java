@@ -1,7 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,8 +25,8 @@ public class Wave implements Serializable {
   @ManyToOne
   private Map map;
   
-  @OneToMany(cascade = CascadeType.ALL)
-  private List<Army> armies;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="wave")
+  private Set<Army> armies;
 
   
   // GETTER & SETTER //  
@@ -47,11 +47,11 @@ public class Wave implements Serializable {
     this.map = map;
   }
 
-  public List<Army> getArmies() {
+  public Set<Army> getArmies() {
     return armies;
   }
 
-  public void setArmies(List<Army> armies) {
+  public void setArmies(Set<Army> armies) {
     this.armies = armies;
   }
 
