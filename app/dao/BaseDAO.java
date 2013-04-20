@@ -8,7 +8,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
 
 public abstract class BaseDAO<K extends Serializable, T extends Object> {
   @SuppressWarnings("unused")

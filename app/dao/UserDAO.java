@@ -107,9 +107,9 @@ public class UserDAO extends BaseDAO<Long, User> {
     Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
     Predicate precdicate = null;
     if (identity instanceof UsernamePasswordAuthUser) {
-      precdicate = getUsernamssePasswordAuthUserFind((UsernamePasswordAuthUser) identity, linkedAccounts);
+      precdicate = getUsernamssePasswordAuthUserFind((UsernamePasswordAuthUser) identity, root, linkedAccounts);
     } else {
-      precdicate = getAuthUserFind(identity, linkedAccounts);
+      precdicate = getAuthUserFind(identity, root, linkedAccounts);
 
     }
     q.where(precdicate);
@@ -125,10 +125,11 @@ public class UserDAO extends BaseDAO<Long, User> {
   }
 
   public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
+    Logger.info("findByUsernamePasswordIdentity(): " + identity.getEmail());
     CriteriaQuery<User> q = instance.getCriteria();
     Root<User> root = instance.getRoot(q);
     Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
-    q.where(getUsernamssePasswordAuthUserFind(identity, linkedAccounts));
+    q.where(getUsernamssePasswordAuthUserFind(identity, root, linkedAccounts));
     try {
       return JPA.em().createQuery(q).getSingleResult();
     } catch (NoResultException e) {
@@ -146,7 +147,7 @@ public class UserDAO extends BaseDAO<Long, User> {
       CriteriaQuery<User> q = instance.getCriteria();
       Root<User> root = instance.getRoot(q);
       Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
-      q.where(getAuthUserFind(identity, linkedAccounts));
+      q.where(getAuthUserFind(identity, root, linkedAccounts));
       try {
         return JPA.em().createQuery(q).getSingleResult();
       } catch (NoResultException e) {
@@ -155,16 +156,14 @@ public class UserDAO extends BaseDAO<Long, User> {
     }
   }
 
-  private static Predicate getUsernamssePasswordAuthUserFind(final UsernamePasswordAuthUser identity, Join<User, LinkedAccount> join) {
+  private static Predicate getUsernamssePasswordAuthUserFind(final UsernamePasswordAuthUser identity, Root<User> root, Join<User, LinkedAccount> join) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
-    return builder.equal(join.get("providerKey"), identity.getEmail());
+    return builder.and(builder.equal(root.get("email"), identity.getEmail()), builder.equal(join.get("providerKey"), identity.getProvider()));
   }
 
-  private static Predicate getAuthUserFind(final AuthUserIdentity identity, Join<User, LinkedAccount> join) {
+  private static Predicate getAuthUserFind(final AuthUserIdentity identity, Root<User> root, Join<User, LinkedAccount> join) {
     CriteriaBuilder builder = instance.getCriteriaBuilder();
-    Predicate precdicate = builder.equal(join.get("providerUserId"), identity.getId());
-    precdicate = builder.and(precdicate, builder.equal(join.get("providerKey"), identity.getProvider()));
-    return precdicate;
+    return builder.and(builder.equal(join.get("providerUserId"), identity.getId()), builder.equal(join.get("providerKey"), identity.getProvider()));
   }
 
 }
