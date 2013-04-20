@@ -3,6 +3,7 @@ package dao;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import models.entity.LinkedAccount;
 import models.entity.SecurityRole;
+import models.entity.TokenAction;
 import models.entity.UserPermission;
 import models.entity.TokenAction.Type;
 import models.entity.User;
@@ -37,12 +39,6 @@ public class UserDAO extends BaseDAO<Long, User> {
 
   private static final UserDAO instance = new UserDAO();
 
-  @Transactional
-  public static void deleteByUser(final User u, final Type type) {
-
-    // TargetActioN!
-    Ebean.delete(find.where().eq("targetUser.id", u.getId()).eq("type", type).findIterate());
-  }
 
   @Transactional
   public static void addLinkedAccount(AuthUser oldUser, AuthUser newUser) {
