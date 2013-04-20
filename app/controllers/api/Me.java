@@ -47,8 +47,7 @@ public class Me extends Controller {
     }
 
     // Check if user exists
-
-    if (UserDAO.findByUserEmail(filledForm.get().getEmail()) == null) {
+    if (UserDAO.findByUsername(filledForm.get().getEmail()) == null) {
       return badRequest(toJson(new AuthenticationError()));
     }
 
