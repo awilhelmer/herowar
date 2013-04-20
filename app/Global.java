@@ -115,7 +115,7 @@ public class Global extends GlobalSettings {
   }
 
   private void createAdminUser() {
-    if (UserDAO.findByUsername("admin") == null) {
+    if (UserDAO.findByUsername("admin") != null) {
       Logger.info("Admin already exists!");
       return;
     }
