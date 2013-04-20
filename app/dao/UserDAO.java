@@ -1,20 +1,16 @@
 package dao;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import models.entity.LinkedAccount;
-import models.entity.SecurityRole;
-import models.entity.TokenAction;
-import models.entity.UserPermission;
-import models.entity.TokenAction.Type;
 import models.entity.User;
 import play.Logger;
 import play.db.jpa.JPA;
@@ -22,8 +18,6 @@ import play.db.jpa.Transactional;
 import providers.FormSignup;
 import providers.SignupUsernamePasswordAuthUser;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.ExpressionList;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthUser;
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
@@ -38,7 +32,6 @@ public class UserDAO extends BaseDAO<Long, User> {
   }
 
   private static final UserDAO instance = new UserDAO();
-
 
   @Transactional
   public static void addLinkedAccount(AuthUser oldUser, AuthUser newUser) {
@@ -117,13 +110,20 @@ public class UserDAO extends BaseDAO<Long, User> {
 
   @Transactional
   public static boolean existsByAuthUserIdentity(final AuthUserIdentity identity) {
-    final ExpressionList<User> exp;
+    CriteriaBuilder builder = instance.getCriteriaBuilder();
+    CriteriaQuery<Long> q = builder.createQuery(Long.class);
+    Root<User> root = q.from(User.class);
+    q.select(builder.count(root));
+    Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
+    Predicate precdicate = null;
     if (identity instanceof UsernamePasswordAuthUser) {
-      exp = getUsernamePasswordAuthUserFind((UsernamePasswordAuthUser) identity);
+      precdicate = getUsernamssePasswordAuthUserFind((UsernamePasswordAuthUser) identity, linkedAccounts);
     } else {
-      exp = getAuthUserFind(identity);
+      precdicate = getAuthUserFind(identity, linkedAccounts);
+
     }
-    return exp.findRowCount() > 0;
+    q.where(precdicate);
+    return JPA.em().createQuery(q).getSingleResult() > 0;
   }
 
   @Transactional
@@ -137,17 +137,15 @@ public class UserDAO extends BaseDAO<Long, User> {
 
   @Transactional
   public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
-    return getUsernamePasswordAuthUserFind(identity).findUnique();
-  }
-
-  private static ExpressionList<User> getUsernamePasswordAuthUserFind(final UsernamePasswordAuthUser identity) {
-    return getEmailFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
-  }
-
-  @Transactional
-  private static ExpressionList<User> getAuthUserFind(final AuthUserIdentity identity) {
-    return getFinder().where().eq("active", true).eq("linkedAccounts.providerUserId", identity.getId())
-        .eq("linkedAccounts.providerKey", identity.getProvider());
+    CriteriaQuery<User> q = instance.getCriteria();
+    Root<User> root = instance.getRoot(q);
+    Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
+    q.where(getUsernamssePasswordAuthUserFind(identity, linkedAccounts));
+    try {
+      return JPA.em().createQuery(q).getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Transactional
@@ -158,7 +156,28 @@ public class UserDAO extends BaseDAO<Long, User> {
     if (identity instanceof UsernamePasswordAuthUser) {
       return findByUsernamePasswordIdentity((UsernamePasswordAuthUser) identity);
     } else {
-      return getAuthUserFind(identity).findUnique();
+      CriteriaQuery<User> q = instance.getCriteria();
+      Root<User> root = instance.getRoot(q);
+      Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
+      q.where(getAuthUserFind(identity, linkedAccounts));
+      try {
+        return JPA.em().createQuery(q).getSingleResult();
+      } catch (NoResultException e) {
+        return null;
+      }
     }
   }
+
+  private static Predicate getUsernamssePasswordAuthUserFind(final UsernamePasswordAuthUser identity, Join<User, LinkedAccount> join) {
+    CriteriaBuilder builder = instance.getCriteriaBuilder();
+    return builder.equal(join.get("providerKey"), identity.getEmail());
+  }
+
+  private static Predicate getAuthUserFind(final AuthUserIdentity identity, Join<User, LinkedAccount> join) {
+    CriteriaBuilder builder = instance.getCriteriaBuilder();
+    Predicate precdicate = builder.equal(join.get("providerUserId"), identity.getId());
+    precdicate = builder.and(precdicate, builder.equal(join.get("providerKey"), identity.getProvider()));
+    return precdicate;
+  }
+
 }
