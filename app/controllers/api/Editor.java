@@ -100,27 +100,27 @@ public class Editor extends Controller {
   }
 
   private static void saveMaterials(Map map) {
-    if (map.getMapMaterials() == null) {
-      map.setMapMaterials(new HashSet<MapMaterials>());
-    }
-    for (Material mat : map.getMaterials()) {
-      Material dbMat = MaterialDAO.getMaterialbyId(mat.getId());
-      if (dbMat == null) {
-        dbMat = mat;
-
-      } else {
-        // TODO
-      }
-
-    }
+//    if (map.getMapMaterials() == null) {
+//      map.setMapMaterials(new HashSet<MapMaterials>());
+//    }
+//    for (Material mat : map.getMaterials()) {
+//      Material dbMat = MaterialDAO.getMaterialbyId(mat.getId());
+//      if (dbMat == null) {
+//        dbMat = mat;
+//
+//      } else {
+//        // TODO
+//      }
+//
+//    }
   }
 
   private static void mapMaterials(Map map) {
-    map.setMaterials(new ArrayList<Material>());
-    for (MapMaterials mapMat : map.getMapMaterials()) {
-      Material mat = mapMat.getId().getMaterial();
-      mat.setBackBoneId(mapMat.getBackBoneId());
-      map.getMaterials().add(mat);
-    }
+//    map.setMaterials(new ArrayList<Material>());
+//    for (MapMaterials mapMat : map.getMapMaterials()) {
+//      Material mat = mapMat.getId().getMaterial();
+//      mat.setBackBoneId(mapMat.getBackBoneId());
+//      map.getMaterials().add(mat);
+//    }
   }
 }

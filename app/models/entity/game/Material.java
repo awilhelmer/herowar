@@ -33,9 +33,9 @@ public class Material implements Serializable {
 
   private Boolean transparent;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JsonIgnore
-  private Set<MapMaterials> materialsMap;
+//  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//  @JsonIgnore
+//  private Set<MapMaterials> materialsMap;
 
   @Column(precision = 2)
   private Float opacity;
@@ -97,12 +97,12 @@ public class Material implements Serializable {
     this.opacity = opacity;
   }
 
-  public Set<MapMaterials> getMaterialsMap() {
-    return materialsMap;
-  }
-
-  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
-    this.materialsMap = materialsMap;
-  }
+//  public Set<MapMaterials> getMaterialsMap() {
+//    return materialsMap;
+//  }
+//
+//  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
+//    this.materialsMap = materialsMap;
+//  }
 
 }

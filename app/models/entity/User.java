@@ -57,6 +57,8 @@ public class User implements Subject, Serializable {
   @JsonIgnore
   private List<UserPermission> permissions;
 
+  @OneToMany(cascade = CascadeType.ALL)
+  @JsonIgnore
   private Set<GameResult> gameResults;
 
   @Override

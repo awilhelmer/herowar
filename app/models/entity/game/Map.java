@@ -39,11 +39,12 @@ public class Map implements Serializable {
   @OneToMany(cascade = CascadeType.ALL)
   private List<Wave> waves;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.mat")
-  @JsonIgnore
-  private Set<MapMaterials> mapMaterials;
+//  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.mat")
+//  @JsonIgnore
+//  private Set<MapMaterials> mapMaterials;
+  
   // For JSON mapping ...
-  private List<Material> materials;
+//  private List<Material> materials;
 
 
   public Map() {
@@ -151,22 +152,22 @@ public class Map implements Serializable {
     this.waves = waves;
   }
 
-  public Set<MapMaterials> getMapMaterials() {
-    return mapMaterials;
-  }
+//  public Set<MapMaterials> getMapMaterials() {
+//    return mapMaterials;
+//  }
+//
+//  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
+//    this.mapMaterials = mapMaterials;
+//  }
 
-  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
-    this.mapMaterials = mapMaterials;
-  }
-
-  @Transient
-  public List<Material> getMaterials() {
-    return materials;
-  }
-
-  public void setMaterials(List<Material> materials) {
-    this.materials = materials;
-  }
+//  @Transient
+//  public List<Material> getMaterials() {
+//    return materials;
+//  }
+//
+//  public void setMaterials(List<Material> materials) {
+//    this.materials = materials;
+//  }
 
 
   @Override
