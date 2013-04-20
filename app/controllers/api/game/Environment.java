@@ -1,5 +1,9 @@
 package controllers.api.game;
 
+import static play.libs.Json.toJson;
+
+import java.util.List;
+
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
@@ -19,7 +23,8 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
 
   @Transactional
   public static Result list() {
-    return instance.listAll();
+    List<models.entity.game.Environment> list = instance.listAll(); 
+    return ok(toJson(list));
   }
 
   @Transactional

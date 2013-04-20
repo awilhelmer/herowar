@@ -1,6 +1,9 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
+
+import java.util.List;
+
 import controllers.api.BaseAPI;
 import models.entity.game.Terrain;
 import play.db.jpa.JPA;
@@ -22,7 +25,8 @@ public class Terrains extends BaseAPI<Long, Terrain> {
 
   @Transactional
   public static Result list() {
-    return instance.listAll();
+    List<Terrain> list = instance.listAll(); 
+    return ok(toJson(list));
   }
 
   @Transactional
