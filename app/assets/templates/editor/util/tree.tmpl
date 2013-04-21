@@ -2,10 +2,15 @@
 	<div class="loading"></div>
 {{else}}
 	{{#each children}}
-		{{name}}
+		<div class="item level-one"><span>{{name}}</span></div>
 		{{#if children}}
 			{{#each children}}
-				<div class="tree" data-view="views/util/tree" data-model="{{this}}"></div>
+				<div class="item level-two"><span>{{name}}</span></div>
+				{{#if children}}
+					{{#each children}}
+						<div class="item level-three"><span>{{name}}</span></div>
+					{{/each}}
+				{{/if}}
 			{{/each}}
 		{{/if}}
 	{{/each}}
