@@ -1,6 +1,7 @@
 package game.json;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
@@ -35,6 +36,7 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     writeStringAsDoubleArray(jgen, "morphColors", geometry.getMorphColors());
     writeStringAsDoubleArray(jgen, "normals", geometry.getNormals());
     writeStringAsDoubleArray(jgen, "colors", geometry.getColors());
+    writeStringAsDoubleArray(jgen, "materials", "[]");
     writeStringAsDoubleMultiArray(jgen, "uvs", geometry.getUvs());
     writeNumberField(jgen, "scale", geometry.getScale());
   }
@@ -49,6 +51,6 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     writeNumberField(jgen, "normals", metadata.getNormals());
     writeNumberField(jgen, "colors", metadata.getColors());
     writeNumberField(jgen, "uvs", metadata.getUvs());
-    writeNumberField(jgen, "materials", metadata.getMaterials());
+    writeNumberField(jgen, "materials", 0L); // metadata.getMaterials()
   }
 }

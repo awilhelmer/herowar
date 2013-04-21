@@ -14,9 +14,9 @@ class SelectorGeometry
 		console.log "SelectorGeometry #{name}, #{value}"
 		if name is 'sidebar-environment-geometries' and @id isnt value
 			@id = value
-			@loader.load "/api/game/geometry/#{@id}", @onLoad
+			@loader.load "/api/game/geometry/#{@id}", @onLoadGeometry
 			
-	onLoad: =>
+	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@id}"
 
 return SelectorGeometry

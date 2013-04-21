@@ -27,14 +27,13 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
     if (value != null && !"".equals(value)) {
       value = value.substring(2);
       value = value.substring(0, value.length() - 2);
-      if (value == null || "".equals(value)) {
-        return;
-      }
       jgen.writeArrayFieldStart(name);
       jgen.writeStartArray();
-      double[] values = (double[]) arrayDoubleConverter.convert(double[].class, value);
-      for (int i = 0; i < values.length; i++) {
-        jgen.writeNumber(values[i]);
+      if (value != null && !"".equals(value)) {
+        double[] values = (double[]) arrayDoubleConverter.convert(double[].class, value);
+        for (int i = 0; i < values.length; i++) {
+          jgen.writeNumber(values[i]);
+        }
       }
       jgen.writeEndArray();
       jgen.writeEndArray();
@@ -45,18 +44,14 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
     if (value != null && !"".equals(value)) {
       value = value.substring(1);
       value = value.substring(0, value.length() - 1);
-      if (value == null || "".equals(value)) {
-        return;
-      }
       String[] parts = value.split(",");
-      if (parts == null || parts.length == 0) {
-        return;
-      }
       jgen.writeArrayFieldStart(name);
-      double[] values = (double[]) arrayDoubleConverter.convert(double[].class, parts);
-      for (int i = 0; i < values.length; i++) {
-        jgen.writeNumber(values[i]);        
-      }      
+      if (value != null && !"".equals(value) && parts != null && parts.length > 0) {
+        double[] values = (double[]) arrayDoubleConverter.convert(double[].class, parts);
+        for (int i = 0; i < values.length; i++) {
+          jgen.writeNumber(values[i]);        
+        }
+      }
       jgen.writeEndArray();
     }    
   }
