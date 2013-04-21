@@ -26,6 +26,7 @@ import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import dao.game.EnvironmentDAO;
+import dao.game.GeometryDAO;
 import dao.game.MapDAO;
 import dao.game.MaterialDAO;
 
@@ -106,37 +107,18 @@ public class Editor extends Controller {
       if (geometry.getGeoMaterials() == null) {
         geometry.setGeoMaterials(new HashSet<GeoMaterial>());
       }
-      for (Integer index : geometry.getMaterialsIndex()) {
-        if (mapping.containsKey(index)) {
-          Material mat = mapping.get(geometry.getMaterialsIndex());
-          GeoMaterial geoMat = new GeoMaterial();
-          geoMat.setId(new GeoMaterial.PK());
-          geoMat.getId().setMaterial(mat);
-          geoMat.getId().setGeometry(geometry);
-          geoMat.setArrayIndex(Integer.valueOf(index).longValue());
-          geometry.getGeoMaterials().add(geoMat);
-        } else {
-          log.error(String.format("Material Index <%s> not found in Map->allMaterials!", index));
-        }
-      }
+      GeometryDAO.createGeoMaterials(geometry, mapping);
     }
   }
 
   private static java.util.Map<Integer, Material> saveMaterials(Map map) {
-    java.util.Map<Integer, Material> result = new HashMap<Integer, Material>();
+
     if (map.getAllMaterials() == null) {
       map.setAllMaterials(new HashSet<Material>());
     }
-    for (int i = 0; i < map.getMaterials().size(); i++) {
-      Material mat = map.getMaterials().get(i);
-      result.put(i, mat);
-      Material dbMat = MaterialDAO.getMaterialbyId(mat.getId());
-      if (dbMat == null) {
-        dbMat = mat;
-        JPA.em().persist(dbMat);
-      } else {
-        dbMat = MaterialDAO.mergeMaterial(mat);
-      }
+    java.util.Map<Integer, Material> result = MaterialDAO.mapAndSave(map.getMaterials());
+    for (Material mat : result.values()) {
+      map.getAllMaterials().add(mat);
     }
     return result;
   }
@@ -144,18 +126,8 @@ public class Editor extends Controller {
   private static void mapMaterials(Map map) {
     map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
     Geometry geo = map.getTerrain().getGeometry();
-    geo.setMaterialsIndex(new ArrayList<Integer>());
-    for (GeoMaterial geoMat : geo.getGeoMaterials()) {
-      Material mat = geoMat.getId().getMaterial();
-      int index = map.getMaterials().indexOf(mat);
-      if (index > -1 && index == geoMat.getArrayIndex().intValue()) {
-        geo.getMaterialsIndex().add(index);
-      } else {
-        log.error(String.format("Material Index <%s> and Geometry Index <%s> arent the same!", index, geoMat.getArrayIndex()));
-      }
+    GeometryDAO.mapMaterials(geo, map.getMaterials());
 
-    }
-    Collections.sort(geo.getMaterialsIndex()); // sorted indices
   }
 
 }
