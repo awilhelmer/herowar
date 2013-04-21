@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -32,16 +31,16 @@ public class Material implements Serializable {
 
   private Boolean transparent;
 
-  @Transient
-  @JsonIgnore
-  private Long arrayIndex;
-
   @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
   private Texture texture;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "allMaterials")
   @JsonIgnore
   private Set<Map> maps;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.material")
+  @JsonIgnore
+  private Set<GeoMaterial> geoMaterials;
 
   @Column(precision = 2)
   private Float opacity;
@@ -94,12 +93,20 @@ public class Material implements Serializable {
     this.maps = maps;
   }
 
-  public Long getArrayIndex() {
-    return arrayIndex;
+  public Texture getTexture() {
+    return texture;
   }
 
-  public void setArrayIndex(Long arrayIndex) {
-    this.arrayIndex = arrayIndex;
+  public void setTexture(Texture texture) {
+    this.texture = texture;
+  }
+
+  public Set<GeoMaterial> getGeoMaterials() {
+    return geoMaterials;
+  }
+
+  public void setGeoMaterials(Set<GeoMaterial> geoMaterials) {
+    this.geoMaterials = geoMaterials;
   }
 
   @Override

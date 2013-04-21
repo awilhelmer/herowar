@@ -3,6 +3,8 @@ package models.entity.game;
 import game.json.GeometryDeserializer;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -63,6 +67,13 @@ public class Geometry implements Serializable {
   @OneToOne(fetch = FetchType.LAZY, mappedBy = "geometry", optional = true)
   @JsonIgnore
   private Terrain terrain;
+
+  @Transient
+  private List<Integer> materialsIndex;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
+  @JsonIgnore
+  private Set<GeoMaterial> geoMaterials;
 
   public Geometry(Long id, String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
       GeometryType type, GeoMetaData metadata) {
@@ -161,7 +172,6 @@ public class Geometry implements Serializable {
     this.uvs = uvs;
   }
 
-
   public Double getScale() {
     return scale;
   }
@@ -192,6 +202,22 @@ public class Geometry implements Serializable {
 
   public void setTerrain(Terrain terrain) {
     this.terrain = terrain;
+  }
+
+  public List<Integer> getMaterialsIndex() {
+    return materialsIndex;
+  }
+
+  public void setMaterialsIndex(List<Integer> materialsIndex) {
+    this.materialsIndex = materialsIndex;
+  }
+
+  public Set<GeoMaterial> getGeoMaterials() {
+    return geoMaterials;
+  }
+
+  public void setGeoMaterials(Set<GeoMaterial> geoMaterials) {
+    this.geoMaterials = geoMaterials;
   }
 
   @Override
