@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
-@Table(name = "map_materials")
-public class MapMaterials implements Serializable {
+@Table(name = "geo_material")
+public class GeoMaterial implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @EmbeddedId
@@ -24,7 +24,6 @@ public class MapMaterials implements Serializable {
 
   @NotNull
   private Long arrayIndex;
-  
 
   public PK getId() {
     return id;
@@ -58,7 +57,7 @@ public class MapMaterials implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    MapMaterials other = (MapMaterials) obj;
+    GeoMaterial other = (GeoMaterial) obj;
     if (id == null) {
       if (other.id != null)
         return false;
@@ -72,21 +71,21 @@ public class MapMaterials implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "map_id", referencedColumnName = "id")
+    @JoinColumn(name = "geo_id", referencedColumnName = "id")
     @JsonIgnore
-    private Map map;
+    private Geometry geometry;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "mat_id", referencedColumnName = "id")
     @JsonIgnore
     private Material material;
 
-    public Map getMap() {
-      return map;
+    public Geometry getGeometry() {
+      return geometry;
     }
 
-    public void setMap(Map map) {
-      this.map = map;
+    public void setGeometry(Geometry geometry) {
+      this.geometry = geometry;
     }
 
     public Material getMaterial() {
@@ -101,7 +100,7 @@ public class MapMaterials implements Serializable {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((map == null) ? 0 : map.hashCode());
+      result = prime * result + ((geometry == null) ? 0 : geometry.hashCode());
       result = prime * result + ((material == null) ? 0 : material.hashCode());
       return result;
     }
@@ -115,10 +114,10 @@ public class MapMaterials implements Serializable {
       if (getClass() != obj.getClass())
         return false;
       PK other = (PK) obj;
-      if (map == null) {
-        if (other.map != null)
+      if (geometry == null) {
+        if (other.geometry != null)
           return false;
-      } else if (!map.equals(other.map))
+      } else if (!geometry.equals(other.geometry))
         return false;
       if (material == null) {
         if (other.material != null)

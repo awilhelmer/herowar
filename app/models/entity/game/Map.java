@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
@@ -44,9 +46,10 @@ public class Map implements Serializable {
   @OneToMany(cascade = CascadeType.ALL)
   private Set<Wave> waves;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.map")
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(name="map_materials")
   @JsonIgnore
-  private Set<MapMaterials> mapMaterials;
+  private Set<Material> allMaterials;
 
   @Transient
   private List<Material> materials;
@@ -157,12 +160,12 @@ public class Map implements Serializable {
     this.waves = waves;
   }
 
-  public Set<MapMaterials> getMapMaterials() {
-    return mapMaterials;
+  public Set<Material> getAllMaterials() {
+    return allMaterials;
   }
 
-  public void setMapMaterials(Set<MapMaterials> mapMaterials) {
-    this.mapMaterials = mapMaterials;
+  public void setAllMaterials(Set<Material> allMaterials) {
+    this.allMaterials = allMaterials;
   }
 
   public List<Material> getMaterials() {

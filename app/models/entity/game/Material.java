@@ -10,13 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Material implements Serializable {
   private static final long serialVersionUID = 1651915135235L;
 
@@ -26,9 +28,6 @@ public class Material implements Serializable {
 
   private String name;
 
-  @Lob
-  private String map;
-
   private String color;
 
   private Boolean transparent;
@@ -37,9 +36,12 @@ public class Material implements Serializable {
   @JsonIgnore
   private Long arrayIndex;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.material")
+  @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+  private Texture texture;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "allMaterials")
   @JsonIgnore
-  private Set<MapMaterials> materialsMap;
+  private Set<Map> maps;
 
   @Column(precision = 2)
   private Float opacity;
@@ -58,14 +60,6 @@ public class Material implements Serializable {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getMap() {
-    return map;
-  }
-
-  public void setMap(String map) {
-    this.map = map;
   }
 
   public String getColor() {
@@ -92,12 +86,12 @@ public class Material implements Serializable {
     this.opacity = opacity;
   }
 
-  public Set<MapMaterials> getMaterialsMap() {
-    return materialsMap;
+  public Set<Map> getMaps() {
+    return maps;
   }
 
-  public void setMaterialsMap(Set<MapMaterials> materialsMap) {
-    this.materialsMap = materialsMap;
+  public void setMaps(Set<Map> maps) {
+    this.maps = maps;
   }
 
   public Long getArrayIndex() {

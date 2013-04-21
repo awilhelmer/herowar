@@ -49,9 +49,6 @@ public class Geometry implements Serializable {
   private String colors;
 
   @Lob
-  private String materials;
-
-  @Lob
   private String uvs;
 
   @Column(precision = 6)
@@ -164,13 +161,6 @@ public class Geometry implements Serializable {
     this.uvs = uvs;
   }
 
-  public String getMaterials() {
-    return materials;
-  }
-
-  public void setMaterials(String materials) {
-    this.materials = materials;
-  }
 
   public Double getScale() {
     return scale;
