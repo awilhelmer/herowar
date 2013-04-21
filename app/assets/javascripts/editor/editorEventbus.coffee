@@ -43,5 +43,6 @@ editorEventbus =
 		resetWireframe					: new signals.Signal()
 
 		treeLoadData						: new signals.Signal()
+		treeSelectItem					: new signals.Signal()
 
 return editorEventbus

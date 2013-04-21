@@ -1,11 +1,18 @@
+EditorEventbus = require 'editorEventbus'
 db = require 'database'
 
 class Geometries extends Backbone.Collection
-
-	url: '/api/game/map/all'
-
+	
 	initialize: (models, options) ->
-		@model = require 'models/map'
+		@id = -1
+		@model = require 'models/geometry'
+		EditorEventbus.treeSelectItem.add @selectItem
 		super models, options
+		
+	selectItem: (name, value) =>
+		if name is 'sidebar-environment-categories' and @id isnt value
+			@id = value
+			@url = "/api/editor/environment/#{@id}"
+			@fetch()
 
 return Geometries
