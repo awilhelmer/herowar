@@ -1,6 +1,8 @@
 BaseModalView = require 'views/baseModalView'
 MapProperties = require 'mapProperties'
 templates = require 'templates'
+db = require 'database'
+EditorEventbus = require 'editorEventbus'
 
 class ModalFileMapSave extends BaseModalView
 
@@ -40,51 +42,22 @@ class ModalFileMapSave extends BaseModalView
 
 	saveMap: ->
 		@status.isSaving = true
+		world = db.get 'world'
+		handleMaterials 
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
 			dataType		: 'json'
 			contentType	: 'application/json; charset=utf-8'
-			data				: JSON.stringify @getMapAsJSON()
+			data				: world.attributes
 			success			: @onSuccess
 			error				: @onError
 		jqxhr.done @onDone
 
-	getMapAsJSON: ->
-		id									: MapProperties.MAP_ID
-		name 								: MapProperties.MAP_TITLE
-		description 				: MapProperties.MAP_DESCRIPTION
-		teamSize 						: MapProperties.MAP_TEAM_SIZE
-		prepareTime					: MapProperties.MAP_PREPARE_TIME
-		lives 							: MapProperties.MAP_LIVES
-		goldStart 					: MapProperties.MAP_GOLD_START
-		goldPerTick 				: MapProperties.MAP_GOLD_PER_TICK
-		terrain							:
-			id								: MapProperties.TERRAIN_ID
-			width							: MapProperties.TERRAIN_WIDTH
-			height						: MapProperties.TERRAIN_HEIGHT
-			smoothness				: MapProperties.TERRAIN_SMOOTHNESS
-			zScale						: MapProperties.TERRAIN_ZSCALE
-			geometry					:
-				id							: MapProperties.GEOMETRY_ID
-				faces						: "#{JSON.stringify(MapProperties.TERRAIN_FACES)}"
-				vertices				: "#{JSON.stringify(MapProperties.TERRAIN_VERTICES)}"
-				#materials				: "#{JSON.stringify(MapProperties.TERRAIN_MATERIALS)}" TODO
-				metadata				:
-					id						: MapProperties.GEOMETRY_METADATA_ID
-					formatVersion	: 3.1
-					sourceFile		: ''
-					generatedBy		: 'MapEditor'
-					vertices			: MapProperties.TERRAIN_VERTICES.length
-					faces					: MapProperties.TERRAIN_FACES.length
-					normals				: 0
-					colors				: 0
-					usvs					: 0
-					materials			: MapProperties.TERRAIN_MATERIALS.length
 
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'
-		@parseSuccessResponse data if _.isObject data
+		#@parseSuccessResponse data if _.isObject data
 		@status.isSuccessful = true
 
 	onError: (jqXHR, textStatus, errorThrown) =>
@@ -95,6 +68,11 @@ class ModalFileMapSave extends BaseModalView
 		console.log 'Save map DONE'
 		@status.isSaving = false
 
+	
+	handleMaterials: ->
+		 EditorEventbus.handleWorldMaterials.dispatch()
+	
+	
 	parseSuccessResponse: (data) ->
 		MapProperties.MAP_ID = data.id
 		MapProperties.TERRAIN_ID = data.terrain.id

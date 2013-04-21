@@ -46,4 +46,6 @@ editorEventbus =
 		treeSelectItem					: new signals.Signal()
 		listSelectItem					: new signals.Signal()
 
+		handleWorldMaterials		: new signals.Signal()
+
 return editorEventbus

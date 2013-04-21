@@ -3,9 +3,10 @@ Constants = require 'constants'
 db = require 'database'
 
 class World extends Backbone.Model
-
+	
 	initialize: (options) ->
 		@materialHelper = new MaterialHelper()
+		@initListener
 		super options
 
 	addTerrainMaterial: (materialId) ->
@@ -45,5 +46,11 @@ class World extends Backbone.Model
 					vector = mesh.geometry.vertices[i * segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
-
+	
+	handleMaterials: (map) ->
+		#Iterate geometries and its materials
+		#search the array index in world.materials with condition THREE.Material.name (withoud MATID) = material.id
+		#push the index it in worldData.terrein.geometry.materialIndexes array
+		
+	
 return World
