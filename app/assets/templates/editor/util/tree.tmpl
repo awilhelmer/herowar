@@ -2,13 +2,13 @@
 	<div class="loading"></div>
 {{else}}
 	{{#each children}}
-		<div class="item level-one"><span>{{name}}</span></div>
+		<div class="item level-one" data-value="{{id}}"><span>{{name}}</span></div>
 		{{#if children}}
 			{{#each children}}
-				<div class="item level-two"><span>{{name}}</span></div>
+				<div class="item level-two" data-value="{{id}}"><span>{{name}}</span></div>
 				{{#if children}}
 					{{#each children}}
-						<div class="item level-three"><span>{{name}}</span></div>
+						<div class="item level-three" data-value="{{id}}"><span>{{name}}</span></div>
 					{{/each}}
 				{{/if}}
 			{{/each}}
