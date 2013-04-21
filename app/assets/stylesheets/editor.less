@@ -44,11 +44,12 @@
 
 // Editor Files
 @import "editor/_variables.less";
-@import "editor/_menubar.less";
-@import "editor/_iconbar.less";
-@import "editor/_sidebar.less";
-@import "editor/_materialManager.less";
 @import "editor/_fd-slider.less";
+@import "editor/_iconbar.less";
+@import "editor/_materialManager.less";
+@import "editor/_menubar.less";
+@import "editor/_sidebar.less";
+@import "editor/_tree.less";
 
 // Utility classes
 @import "_utilities.less"; // Has to be last to override when necessary
@@ -102,6 +103,21 @@ canvas {
 
 .error {
 	color: #FF0000;
+}
+
+.loading {
+	height: 50px;
+	background-image:url(../images/loading.gif);
+  background-repeat:no-repeat;
+	background-position: center top;
+	
+	&:after { 
+		content: "Loading Data";
+		display: inline-block;
+		text-align: center;
+		width: 100%;
+		margin-top: 15px;
+	}
 }
 
 #modalFileMapOpen .modal-body div {

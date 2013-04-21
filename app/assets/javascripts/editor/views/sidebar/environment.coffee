@@ -7,6 +7,8 @@ class Environment extends BasePropertiesView
 	id: 'sidebar-environment'
 
 	className: 'sidebar-panel'
+		
+	entity: 'environment'
 
 	template: templates.get 'sidebar/environment.tmpl'
 
@@ -25,14 +27,17 @@ class Environment extends BasePropertiesView
 	loadData: =>
 		unless @loadedEnvironment
 			@loadedEnvironment = true
-			jqxhr = $.ajax
-				url					: '/api/game/environment/1'
-				type				: 'GET'
-				dataType		: 'json'
-				success			: @onSuccess
+			@model.fetch
+				success	: @onSuccess
 		@showPanel()
 	
 	onSuccess: (data) =>
 		console.log data
+		@render()
+	
+	render: ->
+		console.log 'Render Environment...'
+		console.log @getTemplateData()
+		super()
 
 return Environment
