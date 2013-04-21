@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
-@Table(name="map_materials")
+@Table(name = "map_materials")
 public class MapMaterials implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,8 @@ public class MapMaterials implements Serializable {
   private PK id;
 
   @NotNull
-  private Long backBoneId;
+  private Long arrayIndex;
+  
 
   public PK getId() {
     return id;
@@ -33,12 +34,37 @@ public class MapMaterials implements Serializable {
     this.id = id;
   }
 
-  public Long getBackBoneId() {
-    return backBoneId;
+  public Long getArrayIndex() {
+    return arrayIndex;
   }
 
-  public void setBackBoneId(Long backBoneId) {
-    this.backBoneId = backBoneId;
+  public void setArrayIndex(Long arrayIndex) {
+    this.arrayIndex = arrayIndex;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    MapMaterials other = (MapMaterials) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
   }
 
   @Embeddable
@@ -69,6 +95,37 @@ public class MapMaterials implements Serializable {
 
     public void setMaterial(Material material) {
       this.material = material;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((map == null) ? 0 : map.hashCode());
+      result = prime * result + ((material == null) ? 0 : material.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      PK other = (PK) obj;
+      if (map == null) {
+        if (other.map != null)
+          return false;
+      } else if (!map.equals(other.map))
+        return false;
+      if (material == null) {
+        if (other.material != null)
+          return false;
+      } else if (!material.equals(other.material))
+        return false;
+      return true;
     }
 
   }

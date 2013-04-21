@@ -14,5 +14,9 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
   public static Material getMaterialbyId(Long id) {
     return instance.findUnique(id);
   }
+  
+  public static Material mergeMaterial(Material material) {
+    return instance.merge(material);
+  }
 
 }

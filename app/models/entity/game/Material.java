@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -28,12 +29,15 @@ public class Material implements Serializable {
   @Lob
   private String map;
 
-
   private String color;
 
   private Boolean transparent;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="id.material")
+  @Transient
+  @JsonIgnore
+  private Long arrayIndex;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.material")
   @JsonIgnore
   private Set<MapMaterials> materialsMap;
 
@@ -94,6 +98,45 @@ public class Material implements Serializable {
 
   public void setMaterialsMap(Set<MapMaterials> materialsMap) {
     this.materialsMap = materialsMap;
+  }
+
+  public Long getArrayIndex() {
+    return arrayIndex;
+  }
+
+  public void setArrayIndex(Long arrayIndex) {
+    this.arrayIndex = arrayIndex;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Material other = (Material) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
   }
 
 }
