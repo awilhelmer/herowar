@@ -11,6 +11,10 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
 
   private static final EnvironmentDAO instance = new EnvironmentDAO();
 
+  public static EnvironmentDAO getInstance() {
+    return instance;
+  }
+
   public static long getEnvironmentCount() {
     return instance.getBaseCount();
   }

@@ -36,6 +36,7 @@ DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
 POST		/api/news														controllers.api.News.add()
 
 GET			/api/game/environment/all						controllers.api.game.Environment.list()
+GET			/api/game/environment/root					controllers.api.game.Environment.root()
 GET			/api/game/environment/:id						controllers.api.game.Environment.show(id: Long)
 
 GET			/api/game/geometry/all							controllers.api.game.Geometries.list()

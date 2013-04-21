@@ -1,8 +1,23 @@
 package controllers.api.game;
 
+import static play.libs.Json.toJson;
+
+import java.io.IOException;
+
+import game.GamesHandler;
+import game.json.EnvironmentExcludeGeoMixin;
+
+import javax.persistence.criteria.CriteriaQuery;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
+import dao.game.EnvironmentDAO;
 
 /**
  * The Environment controller handle api requests for the Environment model.
@@ -11,6 +26,8 @@ import controllers.api.BaseAPI;
  */
 public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
 
+  private static final Logger.ALogger log = Logger.of(Environment.class);
+  
   private Environment() {
     super(Long.class, models.entity.game.Environment.class);
   }
@@ -20,7 +37,19 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
   @Transactional
   public static Result list() {
     return instance.listAll(); 
- 
+  }
+  
+  @Transactional
+  public static Result root() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(models.entity.game.Environment.class, EnvironmentExcludeGeoMixin.class);
+    models.entity.game.Environment root = EnvironmentDAO.getInstance().getByName("Root");
+    try {
+      return ok(mapper.writeValueAsString(root));
+    } catch (IOException e) {
+      log.error("Failed to serialize root environment:", e);
+    }
+    return badRequest("Unexpected error occurred");
   }
 
   @Transactional

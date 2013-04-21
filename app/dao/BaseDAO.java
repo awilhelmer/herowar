@@ -18,7 +18,15 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     this.idClass = idClass;
     this.entityClass = entityClass;
   }
+  
+  public T getById(Object id) {
+    return getSingleByPropertyValue("id", id);
+  }
 
+  public T getByName(String name) {
+    return getSingleByPropertyValue("name", name);
+  }  
+  
   protected CriteriaQuery<T> getCriteria() {
     return getCriteriaBuilder().createQuery(entityClass);
   }
