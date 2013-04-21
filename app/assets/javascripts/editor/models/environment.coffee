@@ -1,5 +1,5 @@
 class Environment extends Backbone.Model
 
-		url: '/api/game/environment/1'
+		url: '/api/game/environment/root'
 
 return Environment

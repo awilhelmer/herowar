@@ -1,16 +1,9 @@
 package controllers.api.game;
 
-import static play.libs.Json.toJson;
+import game.json.EnvironmentExcludeGeoMixin;
 
 import java.io.IOException;
 
-import game.GamesHandler;
-import game.json.EnvironmentExcludeGeoMixin;
-
-import javax.persistence.criteria.CriteriaQuery;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
