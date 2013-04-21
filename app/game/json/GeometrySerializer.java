@@ -10,13 +10,12 @@ import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
 
 /**
  * @author Sebastian Sachtleben
  */
-public class GeometrySerializer extends JsonSerializer<Geometry> {
+public class GeometrySerializer extends BaseSerializer<Geometry> {
 
   @Override
   public void serialize(Geometry geometry, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
@@ -31,7 +30,7 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
   private void writeGeometry(Geometry geometry, JsonGenerator jgen) throws JsonGenerationException, IOException {
     DoubleConverter doubleConverter = new DoubleConverter();
     ArrayConverter arrayConverter = new ArrayConverter(double[].class, doubleConverter);
-    jgen.writeNumberField("id", geometry.getId());
+    writeNumberField(jgen, "id", geometry.getId());
     writeStringAsDoubleArray(jgen, arrayConverter, "vertices", geometry.getVertices());
     writeStringAsDoubleArray(jgen, arrayConverter, "faces", geometry.getVertices());
     writeStringAsDoubleArray(jgen, arrayConverter, "morphTargets", geometry.getVertices());
@@ -39,36 +38,18 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     writeStringAsDoubleArray(jgen, arrayConverter, "normals", geometry.getVertices());
     writeStringAsDoubleArray(jgen, arrayConverter, "colors", geometry.getVertices());
     writeStringAsDoubleArray(jgen, arrayConverter, "uvs", geometry.getVertices());
-    jgen.writeNumberField("scale", geometry.getScale());
+    writeNumberField(jgen, "scale", geometry.getScale());
   }
   
   private void writeMetadata(GeoMetaData metadata, JsonGenerator jgen) throws JsonGenerationException, IOException {
-    jgen.writeNumberField("id", metadata.getId());
-    jgen.writeNumberField("formatVersion", metadata.getFormatVersion());
+    writeNumberField(jgen, "id", metadata.getId());
+    writeNumberField(jgen, "formatVersion", metadata.getFormatVersion());
     jgen.writeStringField("sourceFile", metadata.getSourceFile());
-    jgen.writeNumberField("vertices", metadata.getVertices());
-    jgen.writeNumberField("faces", metadata.getFaces());
-    jgen.writeNumberField("normals", metadata.getNormals());
-    jgen.writeNumberField("colors", metadata.getColors());
-    jgen.writeNumberField("uvs", metadata.getUvs());
-    jgen.writeNumberField("materials", metadata.getMaterials());
+    writeNumberField(jgen, "vertices", metadata.getVertices());
+    writeNumberField(jgen, "faces", metadata.getFaces());
+    writeNumberField(jgen, "normals", metadata.getNormals());
+    writeNumberField(jgen, "colors", metadata.getColors());
+    writeNumberField(jgen, "uvs", metadata.getUvs());
+    writeNumberField(jgen, "materials", metadata.getMaterials());
   }
-  
-  private void writeStringAsDoubleArray(JsonGenerator jgen, ArrayConverter arrayConverter, String name, String value) throws JsonGenerationException, IOException {
-    if (value != null && !"".equals(value)) {
-      value = value.substring(1);
-      value = value.substring(0, value.length() - 1);
-      String[] parts = value.split(",");
-      if (parts == null || parts.length == 0) {
-        return;
-      }
-      jgen.writeArrayFieldStart(name);
-      double[] values = (double[]) arrayConverter.convert(double[].class, parts);
-      for (int i = 0; i < values.length; i++) {
-        jgen.writeNumber(values[i]);        
-      }      
-      jgen.writeEndArray();
-    }    
-  }
-
 }
