@@ -3,9 +3,12 @@ package game.json;
 import java.io.IOException;
 
 import org.apache.commons.beanutils.converters.ArrayConverter;
+import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonSerializer;
+
+import play.Logger;
 
 /**
  * The BaseSerializer provides several methods which helps to serialize a pojo properly.
@@ -17,16 +20,40 @@ import org.codehaus.jackson.map.JsonSerializer;
  */
 public abstract class BaseSerializer<T> extends JsonSerializer<T> {
 
-  protected void writeStringAsDoubleArray(JsonGenerator jgen, ArrayConverter arrayConverter, String name, String value) throws JsonGenerationException, IOException {
+  private DoubleConverter doubleConverter = new DoubleConverter();
+  private ArrayConverter arrayDoubleConverter = new ArrayConverter(double[].class, doubleConverter);
+  
+  protected void writeStringAsDoubleMultiArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
+    if (value != null && !"".equals(value)) {
+      value = value.substring(2);
+      value = value.substring(0, value.length() - 2);
+      if (value == null || "".equals(value)) {
+        return;
+      }
+      jgen.writeArrayFieldStart(name);
+      jgen.writeStartArray();
+      double[] values = (double[]) arrayDoubleConverter.convert(double[].class, value);
+      for (int i = 0; i < values.length; i++) {
+        jgen.writeNumber(values[i]);
+      }
+      jgen.writeEndArray();
+      jgen.writeEndArray();
+    }    
+  }
+  
+  protected void writeStringAsDoubleArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
     if (value != null && !"".equals(value)) {
       value = value.substring(1);
       value = value.substring(0, value.length() - 1);
+      if (value == null || "".equals(value)) {
+        return;
+      }
       String[] parts = value.split(",");
       if (parts == null || parts.length == 0) {
         return;
       }
       jgen.writeArrayFieldStart(name);
-      double[] values = (double[]) arrayConverter.convert(double[].class, parts);
+      double[] values = (double[]) arrayDoubleConverter.convert(double[].class, parts);
       for (int i = 0; i < values.length; i++) {
         jgen.writeNumber(values[i]);        
       }      

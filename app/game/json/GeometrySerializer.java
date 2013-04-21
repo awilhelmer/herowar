@@ -28,16 +28,14 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
   }
 
   private void writeGeometry(Geometry geometry, JsonGenerator jgen) throws JsonGenerationException, IOException {
-    DoubleConverter doubleConverter = new DoubleConverter();
-    ArrayConverter arrayConverter = new ArrayConverter(double[].class, doubleConverter);
     writeNumberField(jgen, "id", geometry.getId());
-    writeStringAsDoubleArray(jgen, arrayConverter, "vertices", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "faces", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "morphTargets", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "morphColors", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "normals", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "colors", geometry.getVertices());
-    writeStringAsDoubleArray(jgen, arrayConverter, "uvs", geometry.getVertices());
+    writeStringAsDoubleArray(jgen, "vertices", geometry.getVertices());
+    writeStringAsDoubleArray(jgen, "faces", geometry.getFaces());
+    writeStringAsDoubleArray(jgen, "morphTargets", geometry.getMorphTargets());
+    writeStringAsDoubleArray(jgen, "morphColors", geometry.getMorphColors());
+    writeStringAsDoubleArray(jgen, "normals", geometry.getNormals());
+    writeStringAsDoubleArray(jgen, "colors", geometry.getColors());
+    writeStringAsDoubleMultiArray(jgen, "uvs", geometry.getUvs());
     writeNumberField(jgen, "scale", geometry.getScale());
   }
   
@@ -45,6 +43,7 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     writeNumberField(jgen, "id", metadata.getId());
     writeNumberField(jgen, "formatVersion", metadata.getFormatVersion());
     jgen.writeStringField("sourceFile", metadata.getSourceFile());
+    jgen.writeStringField("generatedBy", metadata.getGeneratedBy());
     writeNumberField(jgen, "vertices", metadata.getVertices());
     writeNumberField(jgen, "faces", metadata.getFaces());
     writeNumberField(jgen, "normals", metadata.getNormals());
