@@ -43,7 +43,7 @@ class ModalFileMapSave extends BaseModalView
 	saveMap: ->
 		@status.isSaving = true
 		world = db.get 'world'
-		handleMaterials 
+		@handleMaterials()
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
