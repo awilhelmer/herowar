@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 import models.api.MaterialsComparator;
+import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
 import models.entity.game.MapMaterials;
@@ -22,6 +24,7 @@ import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import dao.game.EnvironmentDAO;
 import dao.game.MapDAO;
 import dao.game.MaterialDAO;
 
@@ -39,6 +42,12 @@ public class Editor extends Controller {
     mapMaterials(map);
     return ok(toJson(map));
   }
+  
+  @Transactional
+  public static Result envShow(Long id) {
+    Set<Geometry> geometries = EnvironmentDAO.getGeometries(id);
+    return ok(toJson(geometries));
+  }  
 
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
   @Transactional

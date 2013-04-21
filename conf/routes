@@ -61,6 +61,8 @@ GET			/api/editor/map/default							controllers.api.Editor.mapDefault()
 GET			/api/editor/map/:id									controllers.api.Editor.mapShow(id: Long)
 POST		/api/editor/map											controllers.api.Editor.addMap()
 
+GET			/api/editor/environment/:id					controllers.api.Editor.envShow(id: Long)
+
 ########## GAME ###########
 
 GET			/game																controllers.Game.index()
