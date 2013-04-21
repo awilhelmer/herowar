@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import game.json.GeometryDeserializer;
+import game.json.GeometrySerializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,12 +24,14 @@ import javax.persistence.Transient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @JsonDeserialize(using = GeometryDeserializer.class)
+@JsonSerialize(using = GeometrySerializer.class)
+@SuppressWarnings("serial")
 public class Geometry implements Serializable {
-  private static final long serialVersionUID = 5730315776315409881L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
