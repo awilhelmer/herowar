@@ -18,5 +18,9 @@ class SelectorGeometry
 			
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@id}"
+		mesh = new THREE.Mesh geometry
+		@editor.engine.scenegraph.scene.add mesh
+		@editor.engine.render()
+		console.log @editor
 
 return SelectorGeometry
