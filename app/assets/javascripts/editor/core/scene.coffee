@@ -28,6 +28,7 @@ class Scene
 		EditorEventbus.changeTerrain.add @changeTerrain
 		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
+		EditorEventbus.handleWorldMaterials.add @handleMaterials
 
 	createTextures: ->
 		@textures = db.get 'textures'
@@ -94,5 +95,9 @@ class Scene
 		col = db.get 'materials'
 		col.add new Material 1, 1, 'Terrain', '#006600'
 		@world.addTerrainMaterial 1
-
+	
+	handleMaterials:  =>
+		@world.handleMaterials @editor.engine.scenegraph.getMap()
+		
+		
 return Scene
