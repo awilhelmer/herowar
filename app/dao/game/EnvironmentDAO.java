@@ -1,12 +1,11 @@
 package dao.game;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import play.Logger;
-
 import models.entity.game.Environment;
-import models.entity.game.Geometry;
+import play.db.jpa.JPA;
 import dao.BaseDAO;
 
 /**
@@ -21,6 +20,8 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
 
   private static final EnvironmentDAO instance = new EnvironmentDAO();
 
+  private String treeSQL;
+
   public static EnvironmentDAO getInstance() {
     return instance;
   }
@@ -28,23 +29,56 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
   public static long getEnvironmentCount() {
     return instance.getBaseCount();
   }
-  
-  public static Set<Geometry> getGeometries(Long id) {
-    Set<Geometry> geometries = new HashSet<Geometry>();
-    getChildGeometries(geometries, instance.getById(id));
-    return geometries;
+
+  public static Set<Environment> getEnvWithGeometries(Long id) {
+    Set<Environment> result = new HashSet<Environment>();
+    getChildGeometries(result, id);
+    return result;
+
   }
-  
-  private static void getChildGeometries(Set<Geometry> set, Environment env) {
-    getChildGeometries(set, env.getChildren());
-  }
-  
-  private static void getChildGeometries(Set<Geometry> set, Set<Environment> env) {
-    for (Environment currentEnv : env) {
-      if (currentEnv.getGeometry() != null) {
-        set.add(currentEnv.getGeometry());
+
+  @SuppressWarnings("unchecked")
+  private static void getChildGeometries(Set<Environment> set, Long startId) {
+    List<Object[]> resultSet = JPA.em().createQuery(getTreeSelect()).setParameter(0, startId).getResultList();
+    for (Object[] row : resultSet) {
+      // Adding all results ...
+      for (int i = 2; i < 9; i += 3) {
+        Environment env = getEnvFromRow(row, i);
+        if (env != null) {
+          set.add(env);
+        }
       }
-      getChildGeometries(set, currentEnv.getChildren());
+      // Recursive get next depth
+      if (row[6] != null) {
+        getChildGeometries(set, (Long) row[6]);
+      }
     }
+  }
+
+  private static Environment getEnvFromRow(Object[] row, int geoIndex) {
+    if (geoIndex > 1 && row[geoIndex] != null) {
+      Environment env = new Environment();
+      env.setId((Long) row[geoIndex - 2]);
+      env.setName((String) row[geoIndex - 1]);
+      return env;
+    }
+    return null;
+  }
+
+  private static String getTreeSelect() {
+    if (instance.treeSQL == null) {
+      StringBuffer SQL = new StringBuffer();
+      SQL.append("SELECT e.id, e.name, g.id, c.id, c.name, g1.id, c2.id, c2.name, g2.id ");
+      SQL.append("FROM Environment e ");
+      SQL.append("LEFT JOIN e.geometry g ");
+      SQL.append("LEFT JOIN e.children c ");
+      SQL.append("LEFT JOIN c.geometry g1 ");
+      SQL.append("LEFT JOIN c.children c2 ");
+      SQL.append("LEFT JOIN c2.geometry g2 ");
+      SQL.append("WHERE ");
+      SQL.append("e.id = ?0 ");
+      instance.treeSQL = SQL.toString();
+    }
+    return instance.treeSQL;
   }
 }

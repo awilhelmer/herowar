@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import models.api.MaterialsComparator;
+import models.entity.game.Environment;
 import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
@@ -45,8 +46,8 @@ public class Editor extends Controller {
   
   @Transactional
   public static Result envShow(Long id) {
-    Set<Geometry> geometries = EnvironmentDAO.getGeometries(id);
-    return ok(toJson(geometries));
+    Set<Environment> envs = EnvironmentDAO.getEnvWithGeometries(id);
+    return ok(toJson(envs));
   }  
 
   @BodyParser.Of(value = BodyParser.Json.class, maxLength = 52428800)
