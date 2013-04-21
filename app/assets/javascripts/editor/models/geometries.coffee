@@ -1,6 +1,6 @@
 db = require 'database'
 
-class Maps extends Backbone.Collection
+class Geometries extends Backbone.Collection
 
 	url: '/api/game/map/all'
 
@@ -8,4 +8,4 @@ class Maps extends Backbone.Collection
 		@model = require 'models/map'
 		super models, options
 
-return Maps
+return Geometries
