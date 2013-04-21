@@ -27,17 +27,7 @@ class Environment extends BasePropertiesView
 	loadData: =>
 		unless @loadedEnvironment
 			@loadedEnvironment = true
-			@model.fetch
-				success	: @onSuccess
+			EditorEventbus.treeLoadData.dispatch 'sidebar-environment-categories' 
 		@showPanel()
-	
-	onSuccess: (data) =>
-		console.log data
-		@render()
-	
-	render: ->
-		console.log 'Render Environment...'
-		console.log @getTemplateData()
-		super()
 
 return Environment

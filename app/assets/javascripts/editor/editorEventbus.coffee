@@ -42,4 +42,6 @@ editorEventbus =
 		resetTerrainPool				: new signals.Signal()
 		resetWireframe					: new signals.Signal()
 
+		treeLoadData						: new signals.Signal()
+
 return editorEventbus
