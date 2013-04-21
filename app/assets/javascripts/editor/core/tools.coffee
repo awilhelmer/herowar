@@ -1,5 +1,6 @@
 EditorEventbus = require 'editorEventbus'
 SelectorArea = require 'helper/selectorArea'
+SelectorGeometry = require 'helper/selectorGeometry'
 SelectorObject = require 'helper/selectorObject'
 Constants = require 'constants'
 Variables = require 'variables'
@@ -17,8 +18,9 @@ class Tools
 	initialize: ->
 		console.log 'Initialize tools'
 		@materialHelper = new MaterialHelper @editor
-		@selectorObject = new SelectorObject @editor, @materialHelper
 		@selectorArea = new SelectorArea @editor, @materialHelper,@selectorObject
+		@selectorGeometry = new SelectorGeometry @editor
+		@selectorObject = new SelectorObject @editor, @materialHelper
 		@addEventListeners()
 	
 	addEventListeners: ->
