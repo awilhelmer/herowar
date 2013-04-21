@@ -1,15 +1,7 @@
 <div class="sidebar-panel-headline">Environment</div>
 <div class="sidebar-panel-content">
 	<p>Category:</p>
-	<div class="tree">
-		{{#unless id}}
-			<div class="loading"></div>
-		{{else}}
-			{{#each children}}
-				{{name}}
-			{{/each}}
-		{{/unless}}
-	</div>
+	<div class="tree" data-view="views/util/tree"></div>
 	<p>Models:</p>
 	<div class="tree"></div>
 </div>

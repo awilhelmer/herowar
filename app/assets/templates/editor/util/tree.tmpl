@@ -1,0 +1,12 @@
+{{#unless id}}
+	<div class="loading"></div>
+{{else}}
+	{{#each children}}
+		{{name}}
+		{{#if children}}
+			{{#each children}}
+				<div class="tree" data-view="views/util/tree" data-model="{{this}}"></div>
+			{{/each}}
+		{{/if}}
+	{{/each}}
+{{/unless}}
