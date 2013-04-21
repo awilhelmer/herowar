@@ -44,5 +44,6 @@ editorEventbus =
 
 		treeLoadData						: new signals.Signal()
 		treeSelectItem					: new signals.Signal()
+		listSelectItem					: new signals.Signal()
 
 return editorEventbus
