@@ -12,4 +12,12 @@ class List extends BaseView
 		@$el.removeAttr 'data-entity'
 		super options
 
+	bindEvents: ->
+		@listenTo @model, 'add remove change reset', @render if @model
+
+	render: ->
+		console.log 'Render List...'
+		console.log @getTemplateData()
+		super()
+
 return List
