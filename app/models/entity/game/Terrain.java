@@ -28,7 +28,7 @@ public class Terrain implements Serializable {
 
   private Integer width;
   private Integer height;
-  @Column(precision = 1)
+  @Column(scale = 1)
   private Float smoothness;
   private Integer zScale;
   private Boolean wireframe;

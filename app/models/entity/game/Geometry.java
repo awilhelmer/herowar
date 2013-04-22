@@ -60,7 +60,7 @@ public class Geometry implements Serializable {
   @Lob
   private String uvs;
 
-  @Column(precision = 6)
+  @Column(scale = 6)
   private Double scale;
 
   @Enumerated(EnumType.STRING)

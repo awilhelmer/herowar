@@ -20,7 +20,7 @@ public class GeoMetaData implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(precision = 1)
+  @Column(scale = 1)
   private Float formatVersion;
   private String sourceFile;
   private String generatedBy;

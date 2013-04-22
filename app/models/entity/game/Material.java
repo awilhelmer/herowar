@@ -42,7 +42,7 @@ public class Material implements Serializable {
   private String mapDiffuseWrap;
   private String shading;
   private Integer specularCoef;
-  @Column(precision = 3)
+  @Column(scale = 3)
   private Float transparency;
   private Boolean vertexColors;
   private Boolean transparent;
