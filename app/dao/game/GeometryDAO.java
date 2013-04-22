@@ -1,19 +1,17 @@
 package dao.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
-import play.Logger;
 import dao.BaseDAO;
 
 /**
  * @author Sebastian Sachtleben
  */
 public class GeometryDAO extends BaseDAO<Long, Geometry> {
-  private static final Logger.ALogger log = Logger.of(GeometryDAO.class);
-
   private GeometryDAO() {
     super(Long.class, Geometry.class);
   }
@@ -41,19 +39,16 @@ public class GeometryDAO extends BaseDAO<Long, Geometry> {
   }
 
   public static void createGeoMaterials(Geometry geometry, java.util.Map<Integer, Material> mapping) {
-    for (GeoMatId geoMatId : geometry.getMatIdMapper()) {
-      if (mapping.containsKey(geoMatId.getMaterialId())) {
-        Material mat = mapping.get(geoMatId.getMaterialId());
-        GeoMaterial geoMat = new GeoMaterial();
-        geoMat.setId(new GeoMaterial.PK());
-        geoMat.getId().setMaterial(mat);
-        geoMat.getId().setGeometry(geometry);
-        geoMat.setArrayIndex(geoMatId.getMaterialIndex());
-        geometry.getGeoMaterials().add(geoMat);
-      } else {
-        log.error(String.format("Material Index <%s> not found in Map!", geoMatId.getMaterialId()));
-      }
+    if (geometry.getGeoMaterials() == null)
+      geometry.setGeoMaterials(new HashSet<GeoMaterial>());
+    for (Integer index : mapping.keySet()) {
+      Material mat = mapping.get(index);
+      GeoMaterial geoMat = new GeoMaterial();
+      geoMat.setId(new GeoMaterial.PK());
+      geoMat.getId().setMaterial(mat);
+      geoMat.getId().setGeometry(geometry);
+      geoMat.setArrayIndex(index.longValue());
+      geometry.getGeoMaterials().add(geoMat);
     }
   }
-
 }

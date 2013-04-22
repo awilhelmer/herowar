@@ -35,7 +35,7 @@ public class EnvironmentHandler implements Serializable {
   private static EnvironmentHandler instance;
 
   private static ObjectMapper mapper = new ObjectMapper();
-  
+
   public static EnvironmentHandler getInstance() {
     if (instance == null) {
       instance = new EnvironmentHandler();
@@ -81,12 +81,13 @@ public class EnvironmentHandler implements Serializable {
     }
     return environment;
   }
-  
+
   private Geometry parseGeometryFile(File file) {
     try {
       Geometry geo = mapper.readValue(file, Geometry.class);
-      Map<Integer, Material> matMap =  MaterialDAO.mapAndSave(geo.getMaterials());
+      Map<Integer, Material> matMap = MaterialDAO.mapAndSave(geo.getMaterials());
       GeometryDAO.createGeoMaterials(geo, matMap);
+      return geo;
     } catch (IOException e) {
       log.error("Failed to parse geometry file:", e);
     }

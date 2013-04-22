@@ -76,6 +76,7 @@ public class Geometry implements Serializable {
   @Transient
   private List<GeoMatId> matIdMapper;
 
+  @Transient
   private List<Material> materials;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
