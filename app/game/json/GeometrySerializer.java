@@ -36,22 +36,29 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     }
     for (Material mat : materials) {
       jgen.writeStartObject();
-      if (mat.getDbgName() != null) {
-        jgen.writeStringField("DbgName", mat.getDbgName());
-      }
+      writeStringField(jgen, "DbgName", mat.getDbgName());
       writeNumberField(jgen, "DbgColor", mat.getDbgColor());
       writeNumberField(jgen, "DbgIndex", mat.getDbgIndex());
       writeStringAsDoubleArray(jgen, "colorAmbient", mat.getColorAmbient());
       writeStringAsDoubleArray(jgen, "colorDiffuse", mat.getColorDiffuse());
       writeStringAsDoubleArray(jgen, "colorSpecular", mat.getColorSpecular());
       writeNumberField(jgen, "id", mat.getId());
-      jgen.writeStringField("mapDiffuse", mat.getMapDiffuse());
-      if (mat.getName() != null) {
-        jgen.writeStringField("name", mat.getName());
-      }
+      writeStringField(jgen, "mapDiffuse", mat.getMapDiffuse());
+      writeStringField(jgen, "name", mat.getName());
+      writeStringField(jgen, "blending", mat.getBlending());
+      writeStringField(jgen, "shading", mat.getShading());
+      writeBooleanField(jgen, "depthTest", mat.getDepthTest());
+      writeBooleanField(jgen, "depthWrite", mat.getDepthWrite());
+      writeBooleanField(jgen, "transparent", mat.getTransparent());
+      writeBooleanField(jgen, "vertexColors", mat.getVertexColors());
+      writeNumberField(jgen, "transparency", mat.getTransparency());
+      writeNumberField(jgen, "specularCoef", mat.getSpecularCoef());
+      writeStringAsStringArray(jgen, "mapDiffuseWrap", mat.getMapDiffuseWrap());
       jgen.writeEndObject();
     }
   }
+
+
 
   private void writeGeometry(Geometry geometry, JsonGenerator jgen) throws JsonGenerationException, IOException {
     writeNumberField(jgen, "id", geometry.getId());

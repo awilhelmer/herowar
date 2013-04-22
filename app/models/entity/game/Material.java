@@ -32,12 +32,22 @@ public class Material implements Serializable {
   private Integer DbgColor;
   private Integer DbgIndex;
   private String DbgName;
+
+  private String blending;
+  private Boolean depthTest;
+  private Boolean depthWrite;
+  private String mapDiffuseWrap;
+  private String shading;
+  private Integer specularCoef;
+  @Column(precision = 3)
+  private Float transparency;
+  private Boolean vertexColors;
+  private Boolean transparent;
+
   private String colorAmbient;
   private String colorDiffuse;
   private String colorSpecular;
   private String mapDiffuse;
-
-  private Boolean transparent;
 
   @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
   private Texture texture;
@@ -171,6 +181,70 @@ public class Material implements Serializable {
 
   public void setMapDiffuse(String mapDiffuse) {
     this.mapDiffuse = mapDiffuse;
+  }
+
+  public String getBlending() {
+    return blending;
+  }
+
+  public void setBlending(String blending) {
+    this.blending = blending;
+  }
+
+  public Boolean getDepthTest() {
+    return depthTest;
+  }
+
+  public void setDepthTest(Boolean depthTest) {
+    this.depthTest = depthTest;
+  }
+
+  public Boolean getDepthWrite() {
+    return depthWrite;
+  }
+
+  public void setDepthWrite(Boolean depthWrite) {
+    this.depthWrite = depthWrite;
+  }
+
+  public String getMapDiffuseWrap() {
+    return mapDiffuseWrap;
+  }
+
+  public void setMapDiffuseWrap(String mapDiffuseWrap) {
+    this.mapDiffuseWrap = mapDiffuseWrap;
+  }
+
+  public String getShading() {
+    return shading;
+  }
+
+  public void setShading(String shading) {
+    this.shading = shading;
+  }
+
+  public Integer getSpecularCoef() {
+    return specularCoef;
+  }
+
+  public void setSpecularCoef(Integer specularCoef) {
+    this.specularCoef = specularCoef;
+  }
+
+  public Float getTransparency() {
+    return transparency;
+  }
+
+  public void setTransparency(Float transparency) {
+    this.transparency = transparency;
+  }
+
+  public Boolean getVertexColors() {
+    return vertexColors;
+  }
+
+  public void setVertexColors(Boolean vertexColors) {
+    this.vertexColors = vertexColors;
   }
 
   @Override

@@ -55,13 +55,37 @@ public class GeometryDeserializer extends JsonDeserializer<Geometry> {
       while (nodes.hasNext()) {
         JsonNode elem = (JsonNode) nodes.next();
         Material mat = new Material();
-        mat.setDbgColor(elem.get("DbgColor").getIntValue());
-        mat.setDbgIndex(elem.get("DbgIndex").getIntValue());
         mat.setDbgName(elem.get("DbgName").getTextValue());
-        mat.setColorAmbient(elem.get("colorAmbient").toString());
-        mat.setColorDiffuse(elem.get("colorDiffuse").toString());
-        mat.setColorSpecular(elem.get("colorSpecular").toString());
-        mat.setMapDiffuse(elem.get("mapDiffuse").getTextValue());
+        mat.setDbgIndex(elem.get("DbgIndex").getIntValue());
+        if (elem.get("DbgColor") != null)
+          mat.setDbgColor(elem.get("DbgColor").getIntValue());
+        if (elem.get("colorAmbient") != null)
+          mat.setColorAmbient(elem.get("colorAmbient").toString());
+        if (elem.get("colorDiffuse") != null)
+          mat.setColorDiffuse(elem.get("colorDiffuse").toString());
+        if (elem.get("colorSpecular") != null)
+          mat.setColorSpecular(elem.get("colorSpecular").toString());
+        if (elem.get("mapDiffuse") != null)
+          mat.setMapDiffuse(elem.get("mapDiffuse").getTextValue());
+        if (elem.get("blending") != null)
+          mat.setBlending(elem.get("blending").getTextValue());
+        if (elem.get("depthTest") != null)
+          mat.setDepthTest(elem.get("depthTest").getBooleanValue());
+        if (elem.get("depthWrite") != null)
+          mat.setDepthWrite(elem.get("depthWrite").getBooleanValue());
+        if (elem.get("mapDiffuseWrap") != null)
+          mat.setMapDiffuseWrap(elem.get("mapDiffuseWrap").toString());
+        if (elem.get("transparency") != null)
+          mat.setTransparency(elem.get("transparency").getDecimalValue().floatValue());
+        if (elem.get("transparent") != null)
+          mat.setTransparent(elem.get("transparent").getBooleanValue());
+        if (elem.get("vertexColors") != null)
+          mat.setVertexColors(elem.get("vertexColors").getBooleanValue());
+        if (elem.get("shading") != null)
+          mat.setShading(elem.get("shading").getTextValue());
+        if (elem.get("specularCoef") != null)
+          mat.setSpecularCoef(elem.get("specularCoef").getIntValue());
+
         materials.add(mat);
       }
     }
