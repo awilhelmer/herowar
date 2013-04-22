@@ -47,21 +47,10 @@ class World extends Backbone.Model
 					vector.z = terrain[i][j] if vector
 		obj
 	
+	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
-		#Iterate geometries and its materials
-		#search the array index in world.materials with condition THREE.Material.name (withoud MATID) = material.id
-		#push the index it in worldData.terrein.geometry.materialIndexes array
-		for child in map.children
-			if child.name != 'wireframe'
-				if child.material.materials	
-					for mat in child.material.materials
-						index = getMatIndexOfName(mat.name)
-						@attributes.terrain.geometry.materialsIndex.push index
+		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
+
 	
-	getMatIndexOfName: (name) ->
-		materials = @get 'materials'
-		for mat,index in materials
-			if 'matID' + mat.id is name
-				return index
 			
 return World

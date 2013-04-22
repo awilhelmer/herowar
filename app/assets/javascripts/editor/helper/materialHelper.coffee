@@ -19,7 +19,7 @@ class MaterialHelper
 
 
 	updateMaterial: (object, idMapper) ->
-		index = @getMaterialIndex object, idMapper
+		index = @getMaterialIndex object, idMapper.materialId
 		if index > -1
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial material, idMapper.materialId
@@ -28,14 +28,34 @@ class MaterialHelper
 						threeMaterial.map.needsUpdate = true
 		index
 					
-	getMaterialIndex:(obj, idMapper) ->
+	getMaterialIndex:(obj, materialId) ->
 		foundId = -1
 		for value,key in obj.material.materials
-			if value and value.name and value.name is 'matID' + idMapper.materialId
+			if value and value.name and value.name is 'matID' + materialId
 				foundId = key
 				break
 		foundId
 	
+	handleGeometryForSave:(backBoneGeometry, obj) ->
+		backBoneGeometry.matIdMapper = []
+		for child in 	obj.children
+			if child.name != 'wireframe'
+				if child.material.materials	
+					for mat, geoMatIndex in child.material.materials
+						index = @getGlobalMatIndexById(mat.name) #index of global materials list
+						if index
+							backBoneGeometry.materialsIndex.push materialId: index, materialIndex: geoMatIndex
+		null
+	
+	getGlobalMatIndexById: (name) ->
+		id = name.replace 'matID', ''
+		id = parseInt id
+		materials = db.get 'materials'
+		for material, key in materials
+			if material.id == id
+				return key
+		console.log "No Backbone material found!" 
+		null
 	
 	#Transform own materials (backbone model) to THREE.materials model 
 	# @see MaterialManagerMenu for all properties 
