@@ -21,6 +21,5 @@ class SelectorGeometry
 		mesh = new THREE.Mesh geometry
 		@editor.engine.scenegraph.scene.add mesh
 		@editor.engine.render()
-		console.log @editor
-
+		
 return SelectorGeometry
