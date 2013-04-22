@@ -1,15 +1,12 @@
 package game.json;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
 
-import org.apache.commons.beanutils.converters.ArrayConverter;
-import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
@@ -23,10 +20,10 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
   @Override
   public void serialize(Geometry geometry, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
     jgen.writeStartObject();
-    writeGeometry(geometry, jgen);
     jgen.writeObjectFieldStart("metadata");
     writeMetadata(geometry.getMetadata(), jgen);
     jgen.writeEndObject();
+    writeGeometry(geometry, jgen);
     jgen.writeArrayFieldStart("materials");
     writeMaterials(geometry.getMaterials(), jgen);
     jgen.writeEndArray();
