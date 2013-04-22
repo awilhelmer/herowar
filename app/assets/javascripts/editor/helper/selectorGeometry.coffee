@@ -1,10 +1,12 @@
 EditorEventbus = require 'editorEventbus'
+MaterialHelper = require 'helper/materialHelper'
 
 class SelectorGeometry
 	
 	constructor: (@editor) ->
 		@id = -1
 		@loader = new THREE.JSONLoader()
+		@materialHelper = new MaterialHelper()
 		@bindEvents()
 
 	bindEvents: ->
@@ -19,6 +21,7 @@ class SelectorGeometry
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@id}"
 		mesh = new THREE.Mesh geometry
+		
 		@editor.engine.scenegraph.scene.add mesh
 		@editor.engine.render()
 		

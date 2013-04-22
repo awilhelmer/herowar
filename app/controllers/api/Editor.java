@@ -4,8 +4,6 @@ import static play.libs.Json.toJson;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -96,6 +94,7 @@ public class Editor extends Controller {
     if (map.getTerrain().getMap() == null) {
       map.getTerrain().setMap(map);
     }
+    // For saving MatGeoId.materialId is the index of map.getMaterials()!
     java.util.Map<Integer, Material> matMap = saveMaterials(map);
     saveGeometryMaterials(map.getTerrain().getGeometry(), matMap);
     JPA.em().persist(map);
@@ -103,7 +102,7 @@ public class Editor extends Controller {
 
   // Mapping Indexes
   private static void saveGeometryMaterials(Geometry geometry, java.util.Map<Integer, Material> mapping) {
-    if (geometry.getMaterialsIndex() != null) {
+    if (geometry.getMatIdMapper() != null) {
       if (geometry.getGeoMaterials() == null) {
         geometry.setGeoMaterials(new HashSet<GeoMaterial>());
       }
@@ -123,11 +122,15 @@ public class Editor extends Controller {
     return result;
   }
 
+  /**
+   * For loading the MatGeoId.materialId is the real DB id
+   * 
+   * @param map
+   */
   private static void mapMaterials(Map map) {
     map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
     Geometry geo = map.getTerrain().getGeometry();
-    GeometryDAO.mapMaterials(geo, map.getMaterials());
-
+    GeometryDAO.mapMaterials(geo);
   }
 
 }

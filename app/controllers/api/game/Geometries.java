@@ -6,6 +6,7 @@ import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
+import dao.game.GeometryDAO;
 
 /**
  * The Geometries controller handle api requests for the Geometry model.
@@ -27,7 +28,9 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   @Transactional
   public static Result show(Long id) {
-    return instance.showEntry(id);
+    Geometry geo = GeometryDAO.getInstance().findUnique(id);
+    GeometryDAO.mapMaterials(geo);
+    return ok(toJson(geo));
   }
 
   @Transactional

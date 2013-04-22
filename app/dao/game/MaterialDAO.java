@@ -27,7 +27,10 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
     java.util.Map<Integer, Material> result = new HashMap<Integer, Material>();
     for (int i = 0; i < materials.size(); i++) {
       Material mat = materials.get(i);
-      Material dbMat = MaterialDAO.getMaterialbyId(mat.getId());
+      Material dbMat = null;
+      if (mat.getId() != null) {
+        dbMat = MaterialDAO.getMaterialbyId(mat.getId());
+      }
       if (dbMat == null) {
         dbMat = mat;
         JPA.em().persist(dbMat);

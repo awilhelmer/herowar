@@ -1,8 +1,6 @@
 package dao.game;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
@@ -26,33 +24,34 @@ public class GeometryDAO extends BaseDAO<Long, Geometry> {
     return instance;
   }
 
-  public static void mapMaterials(Geometry geo, List<Material> materials) {
-    geo.setMaterialsIndex(new ArrayList<Integer>());
+  /**
+   * For mapping geometry in Client
+   * 
+   * @param Geometry
+   */
+  public static void mapMaterials(Geometry geo) {
+    geo.setMatIdMapper(new ArrayList<GeoMatId>());
     for (GeoMaterial geoMat : geo.getGeoMaterials()) {
       Material mat = geoMat.getId().getMaterial();
-      int index = materials.indexOf(mat);
-      if (index > -1 && index == geoMat.getArrayIndex().intValue()) {
-        geo.getMaterialsIndex().add(index);
-      } else {
-        log.error(String.format("Material Index <%s> and Geometry Index <%s> arent the same!", index, geoMat.getArrayIndex()));
-      }
-
+      GeoMatId id = new GeoMatId();
+      id.setMaterialIndex(geoMat.getArrayIndex());
+      id.setMaterialId(mat.getId());
+      geo.getMatIdMapper().add(id);
     }
-    Collections.sort(geo.getMaterialsIndex()); // sorted indices
   }
 
   public static void createGeoMaterials(Geometry geometry, java.util.Map<Integer, Material> mapping) {
-    for (Integer index : geometry.getMaterialsIndex()) {
-      if (mapping.containsKey(index)) {
-        Material mat = mapping.get(geometry.getMaterialsIndex());
+    for (GeoMatId geoMatId : geometry.getMatIdMapper()) {
+      if (mapping.containsKey(geoMatId.getMaterialId())) {
+        Material mat = mapping.get(geoMatId.getMaterialId());
         GeoMaterial geoMat = new GeoMaterial();
         geoMat.setId(new GeoMaterial.PK());
         geoMat.getId().setMaterial(mat);
         geoMat.getId().setGeometry(geometry);
-        geoMat.setArrayIndex(Integer.valueOf(index).longValue());
+        geoMat.setArrayIndex(geoMatId.getMaterialIndex());
         geometry.getGeoMaterials().add(geoMat);
       } else {
-        log.error(String.format("Material Index <%s> not found in Map!", index));
+        log.error(String.format("Material Index <%s> not found in Map!", geoMatId.getMaterialId()));
       }
     }
   }

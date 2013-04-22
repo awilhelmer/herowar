@@ -26,6 +26,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import dao.game.GeoMatId;
+
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @JsonDeserialize(using = GeometryDeserializer.class)
@@ -72,7 +74,7 @@ public class Geometry implements Serializable {
   private Terrain terrain;
 
   @Transient
-  private List<Integer> materialsIndex;
+  private List<GeoMatId> matIdMapper;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
   @JsonIgnore
@@ -207,12 +209,12 @@ public class Geometry implements Serializable {
     this.terrain = terrain;
   }
 
-  public List<Integer> getMaterialsIndex() {
-    return materialsIndex;
+  public List<GeoMatId> getMatIdMapper() {
+    return matIdMapper;
   }
 
-  public void setMaterialsIndex(List<Integer> materialsIndex) {
-    this.materialsIndex = materialsIndex;
+  public void setMatIdMapper(List<GeoMatId> matIdMapper) {
+    this.matIdMapper = matIdMapper;
   }
 
   public Set<GeoMaterial> getGeoMaterials() {
