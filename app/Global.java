@@ -1,6 +1,5 @@
 import java.util.Arrays;
 
-import models.entity.News;
 import models.entity.SecurityRole;
 import models.entity.game.Map;
 
