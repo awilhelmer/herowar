@@ -16,13 +16,12 @@ class SelectorGeometry
 		console.log "SelectorGeometry #{name}, #{value}"
 		if name is 'sidebar-environment-geometries' and @id isnt value
 			@id = value
-			@loader.load "/api/game/geometry/env/#{@id}", @onLoadGeometry, 'assets/images/game/textures'
+			@loader.load 'assets/geometries/environment/terrain/trees/tree001.js', @onLoadGeometry, 'assets/images/game/textures'
+			# "/api/game/geometry/env/#{@id}"
 			
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@id}"
-		mesh = new THREE.Mesh geometry
-		if materials
-			mesh.material = new THREE.MeshFaceMaterial materials
+		mesh = new THREE.SkinnedMesh geometry,  new THREE.MeshFaceMaterial(materials), false
 		@editor.engine.scenegraph.scene.add mesh
 		@editor.engine.render()
 		
