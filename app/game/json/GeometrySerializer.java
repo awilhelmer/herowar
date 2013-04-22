@@ -28,14 +28,15 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     writeMetadata(geometry.getMetadata(), jgen);
     jgen.writeEndObject();
     jgen.writeArrayFieldStart("materials");
-    if (geometry.getMaterials() != null) {
-      writeMaterials(geometry.getMaterials(), jgen);
-    }
+    writeMaterials(geometry.getMaterials(), jgen);
     jgen.writeEndArray();
     jgen.writeEndObject();
   }
 
   private void writeMaterials(List<Material> materials, JsonGenerator jgen) throws JsonGenerationException, IOException {
+    if (materials == null || materials.size() == 0) {
+      return;
+    }
     for (Material mat : materials) {
       jgen.writeStartObject();
       if (mat.getDbgName() != null) {
