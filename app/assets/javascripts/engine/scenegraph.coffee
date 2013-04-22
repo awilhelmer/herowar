@@ -13,6 +13,10 @@ class SceneGraph
 		#@setMap(@createDefaultMap(2000, 2000))
 		#@addSkybox 'default'
 		@currentId = 1
+		@addLights()
+	
+	addLights: ->
+		@scene.add new THREE.AmbientLight 0x666666
 
 	update: ->
 		for id, obj of @dynamicObjects

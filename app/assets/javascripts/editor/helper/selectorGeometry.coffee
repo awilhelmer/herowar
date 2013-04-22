@@ -21,7 +21,9 @@ class SelectorGeometry
 			
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@id}"
-		mesh = new THREE.SkinnedMesh geometry,  new THREE.MeshFaceMaterial(materials), false
+		mesh = new THREE.Mesh geometry
+		# mat.skinning = true for mat in materials
+		mesh.material = new THREE.MeshFaceMaterial materials
 		@editor.engine.scenegraph.scene.add mesh
 		@editor.engine.render()
 		
