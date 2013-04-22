@@ -1,11 +1,13 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
+import models.entity.game.Environment;
 import models.entity.game.Geometry;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
+import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 
 /**
@@ -31,6 +33,17 @@ public class Geometries extends BaseAPI<Long, Geometry> {
     Geometry geo = GeometryDAO.getInstance().findUnique(id);
     GeometryDAO.mapMaterials(geo);
     return ok(toJson(geo));
+  }
+  
+  @Transactional
+  public static Result showByEnv(Long id) {
+    Environment env = EnvironmentDAO.getInstance().getById(id);
+    if (env == null || env.getGeometry() == null) {
+      return badRequest("No result found");
+    }
+    Geometry geo = env.getGeometry();
+    GeometryDAO.mapMaterials(geo);
+    return ok(toJson(geo));    
   }
 
   @Transactional
