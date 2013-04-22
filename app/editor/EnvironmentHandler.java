@@ -3,9 +3,11 @@ package editor;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import models.entity.game.Environment;
 import models.entity.game.Geometry;
+import models.entity.game.Material;
 
 import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -14,6 +16,8 @@ import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
 import dao.game.EnvironmentDAO;
+import dao.game.GeometryDAO;
+import dao.game.MaterialDAO;
 
 /**
  * The EnvironmentHandler synchronize between our geometries environment folder
@@ -80,7 +84,9 @@ public class EnvironmentHandler implements Serializable {
   
   private Geometry parseGeometryFile(File file) {
     try {
-      return mapper.readValue(file, Geometry.class);
+      Geometry geo = mapper.readValue(file, Geometry.class);
+      Map<Integer, Material> matMap =  MaterialDAO.mapAndSave(geo.getMaterials());
+      GeometryDAO.createGeoMaterials(geo, matMap);
     } catch (IOException e) {
       log.error("Failed to parse geometry file:", e);
     }

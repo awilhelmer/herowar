@@ -2,9 +2,11 @@ package game.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
+import models.entity.game.Material;
 
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.DoubleConverter;
@@ -25,7 +27,27 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     jgen.writeObjectFieldStart("metadata");
     writeMetadata(geometry.getMetadata(), jgen);
     jgen.writeEndObject();
+    jgen.writeObjectFieldStart("materials");
+    if (geometry.getMaterials() != null)
+      writeMaterials(geometry.getMaterials(), jgen);
     jgen.writeEndObject();
+    jgen.writeEndObject();
+  }
+
+  private void writeMaterials(List<Material> materials, JsonGenerator jgen) throws JsonGenerationException, IOException {
+    jgen.writeStartArray();
+    for (Material mat : materials) {
+      if (mat.getDbgName() != null)
+        jgen.writeStringField("name", mat.getDbgName());
+      writeNumberField(jgen, "DbgIndex", mat.getDbgIndex());
+      writeStringAsDoubleArray(jgen, "colorAmbient", mat.getColorAmbient());
+      writeStringAsDoubleArray(jgen, "colorDiffuse", mat.getColorDiffuse());
+      writeStringAsDoubleArray(jgen, "colorSpecular", mat.getColorSpecular());
+      writeNumberField(jgen, "id", mat.getId());
+      if (mat.getName() != null)
+        jgen.writeStringField("name", mat.getName());
+    }
+    jgen.writeEndArray();
   }
 
   private void writeGeometry(Geometry geometry, JsonGenerator jgen) throws JsonGenerationException, IOException {
@@ -40,7 +62,7 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     writeStringAsDoubleMultiArray(jgen, "uvs", geometry.getUvs());
     writeNumberField(jgen, "scale", geometry.getScale());
   }
-  
+
   private void writeMetadata(GeoMetaData metadata, JsonGenerator jgen) throws JsonGenerationException, IOException {
     writeNumberField(jgen, "id", metadata.getId());
     writeNumberField(jgen, "formatVersion", metadata.getFormatVersion());

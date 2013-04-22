@@ -28,6 +28,14 @@ public class Material implements Serializable {
   private String name;
 
   private String color;
+  // They are for model imports
+  private Integer DbgColor;
+  private Integer DbgIndex;
+  private String DbgName;
+  private String colorAmbient;
+  private String colorDiffuse;
+  private String colorSpecular;
+  private String mapDiffuse;
 
   private Boolean transparent;
 
@@ -107,6 +115,62 @@ public class Material implements Serializable {
 
   public void setGeoMaterials(Set<GeoMaterial> geoMaterials) {
     this.geoMaterials = geoMaterials;
+  }
+
+  public Integer getDbgColor() {
+    return DbgColor;
+  }
+
+  public void setDbgColor(Integer dbgColor) {
+    DbgColor = dbgColor;
+  }
+
+  public Integer getDbgIndex() {
+    return DbgIndex;
+  }
+
+  public void setDbgIndex(Integer dbgIndex) {
+    DbgIndex = dbgIndex;
+  }
+
+  public String getDbgName() {
+    return DbgName;
+  }
+
+  public void setDbgName(String dbgName) {
+    DbgName = dbgName;
+  }
+
+  public String getColorAmbient() {
+    return colorAmbient;
+  }
+
+  public void setColorAmbient(String colorAmbient) {
+    this.colorAmbient = colorAmbient;
+  }
+
+  public String getColorDiffuse() {
+    return colorDiffuse;
+  }
+
+  public void setColorDiffuse(String colorDiffuse) {
+    this.colorDiffuse = colorDiffuse;
+  }
+
+  public String getColorSpecular() {
+    return colorSpecular;
+  }
+
+  public void setColorSpecular(String colorSpecular) {
+    this.colorSpecular = colorSpecular;
+  }
+
+  public String getMapDiffuse() {
+    return mapDiffuse;
+  }
+
+  public void setMapDiffuse(String mapDiffuse) {
+    this.mapDiffuse = mapDiffuse;
   }
 
   @Override
