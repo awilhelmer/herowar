@@ -28,7 +28,10 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
     for (int i = 0; i < materials.size(); i++) {
       Material mat = materials.get(i);
       Material dbMat = null;
-      if (mat.getId() != null) {
+      if (mat.getName() != null) {
+        dbMat = instance.getByName(mat.getName());
+      }
+      if (dbMat == null && mat.getId() != null) {
         dbMat = MaterialDAO.getMaterialbyId(mat.getId());
       }
       if (dbMat == null) {

@@ -12,11 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @Entity
+@Table(name = "material", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Material implements Serializable {
   private static final long serialVersionUID = 1651915135235L;
