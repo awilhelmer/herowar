@@ -37,13 +37,15 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     for (Material mat : materials) {
       jgen.writeStartObject();
       if (mat.getDbgName() != null) {
-        jgen.writeStringField("name", mat.getDbgName());
+        jgen.writeStringField("DbgName", mat.getDbgName());
       }
+      writeNumberField(jgen, "DbgColor", mat.getDbgColor());
       writeNumberField(jgen, "DbgIndex", mat.getDbgIndex());
       writeStringAsDoubleArray(jgen, "colorAmbient", mat.getColorAmbient());
       writeStringAsDoubleArray(jgen, "colorDiffuse", mat.getColorDiffuse());
       writeStringAsDoubleArray(jgen, "colorSpecular", mat.getColorSpecular());
       writeNumberField(jgen, "id", mat.getId());
+      jgen.writeStringField("mapDiffuse", mat.getMapDiffuse());
       if (mat.getName() != null) {
         jgen.writeStringField("name", mat.getName());
       }

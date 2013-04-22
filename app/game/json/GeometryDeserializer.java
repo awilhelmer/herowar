@@ -61,6 +61,7 @@ public class GeometryDeserializer extends JsonDeserializer<Geometry> {
         mat.setColorAmbient(elem.get("colorAmbient").toString());
         mat.setColorDiffuse(elem.get("colorDiffuse").toString());
         mat.setColorSpecular(elem.get("colorSpecular").toString());
+        mat.setMapDiffuse(elem.get("mapDiffuse").getTextValue());
         materials.add(mat);
       }
     }
