@@ -76,12 +76,14 @@ public class Geometry implements Serializable {
   @Transient
   private List<GeoMatId> matIdMapper;
 
+  private List<Material> materials;
+
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
   @JsonIgnore
   private Set<GeoMaterial> geoMaterials;
 
   public Geometry(Long id, String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
-      GeometryType type, GeoMetaData metadata) {
+      GeometryType type, GeoMetaData metadata, List<Material> materials) {
     this.id = id;
     this.vertices = vertices;
     this.faces = faces;
@@ -93,19 +95,20 @@ public class Geometry implements Serializable {
     this.scale = scale;
     this.type = type;
     this.metadata = metadata;
+    this.materials = materials;
   }
 
   public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
       GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, morphTargets, morphColors, normals, colors, uvs, scale, type, metadata);
+    this(null, vertices, faces, morphTargets, morphColors, normals, colors, uvs, scale, type, metadata, null);
   }
 
   public Geometry(String vertices, String faces, String normals, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, "", "", normals, "", uvs, scale, type, metadata);
+    this(null, vertices, faces, "", "", normals, "", uvs, scale, type, metadata, null);
   }
 
   public Geometry(String vertices, String faces, String normals, String uvs, GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata);
+    this(null, vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata, null);
   }
 
   public Geometry() {
@@ -223,6 +226,14 @@ public class Geometry implements Serializable {
 
   public void setGeoMaterials(Set<GeoMaterial> geoMaterials) {
     this.geoMaterials = geoMaterials;
+  }
+
+  public List<Material> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(List<Material> materials) {
+    this.materials = materials;
   }
 
   @Override

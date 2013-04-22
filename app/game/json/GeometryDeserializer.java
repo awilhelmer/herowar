@@ -1,10 +1,14 @@
 package game.json;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
+import models.entity.game.Material;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
@@ -45,8 +49,23 @@ public class GeometryDeserializer extends JsonDeserializer<Geometry> {
     if (geometryNode.get("id") != null) {
       geometryId = geometryNode.get("id").getLongValue();
     }
+    List<Material> materials = new ArrayList<Material>();
+    if (geometryNode.get("materials") != null) {
+      Iterator<JsonNode> nodes = geometryNode.get("materials").getElements();
+      while (nodes.hasNext()) {
+        JsonNode elem = (JsonNode) nodes.next();
+        Material mat = new Material();
+        mat.setDbgColor(elem.get("DbgColor").getIntValue());
+        mat.setDbgIndex(elem.get("DbgIndex").getIntValue());
+        mat.setDbgName(elem.get("DbgName").getTextValue());
+        mat.setColorAmbient(elem.get("colorAmbient").toString());
+        mat.setColorDiffuse(elem.get("colorDiffuse").toString());
+        mat.setColorSpecular(elem.get("colorSpecular").toString());
+        materials.add(mat);
+      }
+    }
     return new Geometry(geometryId, geometryNode.get("vertices").toString(), geometryNode.get("faces").toString(), geometryNode.get("morphTargets").toString(),
         geometryNode.get("morphColors").toString(), geometryNode.get("normals").toString(), geometryNode.get("colors").toString(), geometryNode.get("uvs")
-            .toString(), geometryNode.get("scale").getDoubleValue(), GeometryType.ENVIRONMENT, metadata);
+            .toString(), geometryNode.get("scale").getDoubleValue(), GeometryType.ENVIRONMENT, metadata, materials);
   }
 }
