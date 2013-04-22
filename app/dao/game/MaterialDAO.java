@@ -29,7 +29,7 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
       Material mat = materials.get(i);
       Material dbMat = null;
       if (mat.getName() != null) {
-        dbMat = instance.getByName(mat.getName());
+        dbMat = instance.getByName(mat.getName().trim());
       }
       if (dbMat == null && mat.getId() != null) {
         dbMat = MaterialDAO.getMaterialbyId(mat.getId());
@@ -38,6 +38,7 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
         dbMat = mat;
         JPA.em().persist(dbMat);
       } else {
+        mat.setId(dbMat.getId());
         dbMat = MaterialDAO.mergeMaterial(mat);
       }
       result.put(i, dbMat);

@@ -74,6 +74,7 @@ public class Material implements Serializable {
     this.id = id;
   }
 
+  @Column(name="name", length = 100)
   public String getName() {
     return name;
   }

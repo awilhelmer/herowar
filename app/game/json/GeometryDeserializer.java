@@ -56,6 +56,7 @@ public class GeometryDeserializer extends JsonDeserializer<Geometry> {
         JsonNode elem = (JsonNode) nodes.next();
         Material mat = new Material();
         mat.setDbgName(elem.get("DbgName").getTextValue());
+        mat.setName(mat.getDbgName());
         mat.setDbgIndex(elem.get("DbgIndex").getIntValue());
         if (elem.get("DbgColor") != null)
           mat.setDbgColor(elem.get("DbgColor").getIntValue());
