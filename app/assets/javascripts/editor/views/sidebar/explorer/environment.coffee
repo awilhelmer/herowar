@@ -7,4 +7,7 @@ class EnvironmentExplorer extends BaseView
 
 	template: templates.get 'sidebar/explorer/environment.tmpl'
 
+	bindEvents: ->
+		@listenTo @model, 'add remove change reset', @render if @model
+
 return EnvironmentExplorer
