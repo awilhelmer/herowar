@@ -73,15 +73,19 @@ public class Geometry implements Serializable {
   @JsonIgnore
   private Terrain terrain;
 
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "geometry")
+  @JsonIgnore
+  private Set<Mesh> meshes;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
+  @JsonIgnore
+  private Set<GeoMaterial> geoMaterials;
+
   @Transient
   private List<GeoMatId> matIdMapper;
 
   @Transient
   private List<Material> materials;
-
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
-  @JsonIgnore
-  private Set<GeoMaterial> geoMaterials;
 
   public Geometry(Long id, String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
       GeometryType type, GeoMetaData metadata, List<Material> materials) {

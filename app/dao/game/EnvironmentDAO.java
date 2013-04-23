@@ -1,6 +1,6 @@
 package dao.game;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,15 +30,15 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
     return instance.getBaseCount();
   }
 
-  public static Set<Environment> getEnvWithGeometries(Long id) {
-    Set<Environment> result = new HashSet<Environment>();
+  public static List<Environment> getEnvWithGeometries(Long id) {
+    List<Environment> result = new ArrayList<Environment>();
     getChildGeometries(result, id);
     return result;
 
   }
 
   @SuppressWarnings("unchecked")
-  private static void getChildGeometries(Set<Environment> set, Long startId) {
+  private static void getChildGeometries(List<Environment> set, Long startId) {
     List<Object[]> resultSet = JPA.em().createQuery(getTreeSelect()).setParameter(0, startId).getResultList();
     for (Object[] row : resultSet) {
       // Adding all results ...

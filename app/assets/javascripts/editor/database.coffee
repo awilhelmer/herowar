@@ -13,6 +13,12 @@ database =
 			return _db[type].get obj
 		_db[type]
 	
+	
+	find: (type, attr) ->
+		@create type unless _db[type]?
+		_db[type].findWhere attr
+		
+		
 	add: (type, obj, options) ->
     options = _.extend {merge:true}, options
     @create type unless _db[type]

@@ -4,8 +4,9 @@ import static play.libs.Json.toJson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
@@ -16,6 +17,8 @@ import models.entity.game.Material;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import controllers.utils.EnvironmentComparator;
 
 import play.Logger;
 import play.db.jpa.JPA;
@@ -45,7 +48,8 @@ public class Editor extends Controller {
 
   @Transactional
   public static Result envShow(Long id) {
-    Set<Environment> envs = EnvironmentDAO.getEnvWithGeometries(id);
+    List<Environment> envs = EnvironmentDAO.getEnvWithGeometries(id);
+    Collections.sort(envs, new EnvironmentComparator());
     return ok(toJson(envs));
   }
 

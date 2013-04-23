@@ -46,6 +46,12 @@ public class Map implements Serializable {
   @OneToMany(cascade = CascadeType.ALL)
   private Set<Wave> waves;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="map")
+  private Set<Mesh> objects; 
+  
+  
+  
+  
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name="map_materials")
   @JsonIgnore
