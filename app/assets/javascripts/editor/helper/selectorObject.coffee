@@ -11,12 +11,17 @@ class SelectorObject
 		@bindEventListeners()
 
 	bindEventListeners: ->
+		EditorEventbus.mouseup.add @onMouseUp
 		EditorEventbus.mousemove.add @onMouseMove
 		EditorEventbus.selectWorldUI.add @selectWorld
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
 		EditorEventbus.updateModelMaterial.add @materialUpdate
 		EditorEventbus.listSelectItem.add @onSelectItem
+	
+	onMouseUp: (event) =>
+		if event.which is 1 # left click
+			@placeMesh() if @currentMesh?.visible
 	
 	onMouseMove: =>
 		if @currentMesh
@@ -33,8 +38,10 @@ class SelectorObject
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
 		@currentMesh.position = position
 		@editor.engine.render()
-		console.log 'Update Mesh Position'
-		console.log @currentMesh
+	
+	placeMesh: ->
+		@currentMesh = @currentMesh.clone()
+		@addMesh()
 	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
@@ -111,6 +118,9 @@ class SelectorObject
 		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
+		@addMesh()
+	
+	addMesh: ->
 		@currentMesh.visible = false
 		@editor.engine.scenegraph.scene.add @currentMesh
 		@editor.engine.render()
