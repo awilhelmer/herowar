@@ -2,7 +2,6 @@ package dao.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import models.entity.game.Environment;
 import play.db.jpa.JPA;
