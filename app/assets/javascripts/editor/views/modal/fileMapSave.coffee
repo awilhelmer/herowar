@@ -1,5 +1,4 @@
 BaseModalView = require 'views/baseModalView'
-MapProperties = require 'mapProperties'
 templates = require 'templates'
 db = require 'database'
 EditorEventbus = require 'editorEventbus'
@@ -37,7 +36,7 @@ class ModalFileMapSave extends BaseModalView
 
 	getErrors: ->
 		errors = []
-		errors.push 'Map title is required' unless MapProperties.MAP_TITLE
+		# errors.push 'Map title is required' unless MapProperties.MAP_TITLE
 		errors
 
 	saveMap: ->
@@ -74,9 +73,9 @@ class ModalFileMapSave extends BaseModalView
 	
 	
 	parseSuccessResponse: (data) ->
-		MapProperties.MAP_ID = data.id
-		MapProperties.TERRAIN_ID = data.terrain.id
-		MapProperties.GEOMETRY_ID = data.terrain.geometry.id
-		MapProperties.GEOMETRY_METADATA_ID = data.terrain.geometry.metadata.id
+		# MapProperties.MAP_ID = data.id
+		# MapProperties.TERRAIN_ID = data.terrain.id
+		# MapProperties.GEOMETRY_ID = data.terrain.geometry.id
+		# MapProperties.GEOMETRY_METADATA_ID = data.terrain.geometry.metadata.id
 
 return ModalFileMapSave

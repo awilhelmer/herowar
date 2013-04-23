@@ -1,7 +1,6 @@
 IntersectHelper = require 'helper/intersectHelper'
 MaterialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
-MapProperties = require 'mapProperties'
 Variables = require 'variables'
 Constants = require 'constants'
 db = require 'database'
@@ -62,8 +61,8 @@ class SelectorArea
 				@selector.material.opacity = 0.3
 				update = @handleBrush intersect
 				if update
-					MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
-					MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
+					# MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+					# MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 					@saveMaterials()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
@@ -71,8 +70,8 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z += 1
 				intersect.object.geometry.vertices[intersect.face.d].z += 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
-				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
+				# MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+				# MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@selector.material.opacity = 0.3
 			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
@@ -80,8 +79,8 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.c].z -= 1
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
-				MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
+				# MapProperties.TERRAIN_FACES = intersect.object.geometry.faces
+				# MapProperties.TERRAIN_VERTICES = intersect.object.geometry.vertices
 				@selector.material.opacity = 0.3
 		else
 			@selector.material.opacity = 1
@@ -96,9 +95,9 @@ class SelectorArea
 		null
 
 	saveMaterials: ->
-		MapProperties.TERRAIN_MATERIALS = []
-		for material in db.get('materials').models
-			MapProperties.TERRAIN_MATERIALS.push material
+		# MapProperties.TERRAIN_MATERIALS = []
+		# for material in db.get('materials').models
+			# MapProperties.TERRAIN_MATERIALS.push material
 
 	handleBrush: (intersect) ->
 		object = intersect.object

@@ -9,7 +9,6 @@ class SelectorObject
 		@objectHelper = new ObjectHelper @editor
 		@intersectHelper = new IntersectHelper @editor
 		@world = db.get 'world'
-		@terrain = db.get 'terrain'
 		@bindEventListeners()
 
 	bindEventListeners: ->
@@ -62,7 +61,7 @@ class SelectorObject
 			@objectHelper.addWireframe obj, 0xFFFF00
 
 	removeSelectionWireframe: (obj, type) ->
-		if @objectHelper.hasWireframe(obj) and type is 'terrain' and @terrain.get 'wireframe'
+		if @objectHelper.hasWireframe(obj) and type is 'terrain' and @world.get('terrain').wireframe
 			@objectHelper.changeWireframeColor obj, 0xFFFFFF
 		else
 			@objectHelper.removeWireframe obj

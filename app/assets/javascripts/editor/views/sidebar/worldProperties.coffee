@@ -1,7 +1,6 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
-MapProperties = require 'mapProperties'
 
 class WorldProperties extends BasePropertiesView
 
@@ -31,10 +30,8 @@ class WorldProperties extends BasePropertiesView
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
 		
-		
-		
 	nameChanged: (event) ->
 		@onChangedString(event)
-		MapProperties.MAP_TITLE = @model.get 'name' 
+		# MapProperties.MAP_TITLE = @model.get 'name' 
 
 return WorldProperties
