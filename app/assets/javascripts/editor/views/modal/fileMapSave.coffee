@@ -35,8 +35,9 @@ class ModalFileMapSave extends BaseModalView
 		status: @status
 
 	getErrors: ->
+		world = db.get 'world'
 		errors = []
-		# errors.push 'Map title is required' unless MapProperties.MAP_TITLE
+		errors.push 'Map title is required' unless world.get 'name'
 		errors
 
 	saveMap: ->
