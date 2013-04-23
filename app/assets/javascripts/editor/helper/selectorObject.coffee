@@ -25,7 +25,7 @@ class SelectorObject
 			@placeMesh() if @currentMesh?.visible
 		else if event.which is 3
 			@editor.engine.scenegraph.scene.remove @currentMesh
-			@currentMesh.dispose() # TODO: is this enough clean up?!?
+			@currentMesh.geometry.dispose() # TODO: is this enough clean up ?!?
 			@currentMesh = null
 	
 	onMouseMove: =>
@@ -120,17 +120,18 @@ class SelectorObject
 			@editor.engine.render()
 		null
 
-	onSelectItem: (name, value) =>
+	onSelectItem: (id, value, name) =>
 		console.log "SelectorGeometry #{name}, #{value}"
-		if name is 'sidebar-environment-geometries' and @currentMeshId isnt value
+		if id is 'sidebar-environment-geometries' and @currentMeshId isnt value
 			@currentMeshId = value
+			@currentMeshName = name
 			@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 			
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
-		@currentMesh.name = "mesh-#{@currentMeshId}"
+		@currentMesh.name = @currentMeshName
 		@addMesh()
 	
 	addMesh: ->
