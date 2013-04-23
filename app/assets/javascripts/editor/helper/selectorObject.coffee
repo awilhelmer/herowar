@@ -121,14 +121,13 @@ class SelectorObject
 		console.log "SelectorGeometry #{name}, #{value}"
 		if name is 'sidebar-environment-geometries' and @currentMeshId isnt value
 			@currentMeshId = value
-			@loader.load 'assets/geometries/environment/terrain/trees/tree001.js', @onLoadGeometry, 'assets/images/game/textures'
-			# "/api/game/geometry/env/#{@currentMeshId}"
+			@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 			
 	onLoadGeometry: (geometry, materials) =>
 		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
-		@currentMesh.name = 'tree001'
+		@currentMesh.name = "mesh-#{@currentMeshId}"
 		@addMesh()
 	
 	addMesh: ->
