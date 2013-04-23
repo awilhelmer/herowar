@@ -71,7 +71,7 @@ public class EnvironmentHandler implements Serializable {
   }
 
   private Environment createEnvironment(File file, Environment parent) {
-    return createEnvironment(WordUtils.capitalize(file.getName()), parent);
+    return createEnvironment(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
   }
 
   private Environment createEnvironment(String name, Environment parent) {
