@@ -28,10 +28,10 @@ class MaterialHelper
 						threeMaterial.map.needsUpdate = true
 		index
 					
-	getMaterialIndex:(obj, materialId) ->
+	getMaterialIndex:(obj, idMapper) ->
 		foundId = -1
 		for value,key in obj.material.materials
-			if value and value.name and value.name is 'matID' + materialId
+			if value and value.name and value.name is 'matID' + idMapper.materialId
 				foundId = key
 				break
 		foundId

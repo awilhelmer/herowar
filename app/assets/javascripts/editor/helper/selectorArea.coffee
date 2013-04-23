@@ -106,7 +106,7 @@ class SelectorArea
 						object.__webglInit = false #hack
 						object.__webglActive = false #hack 				
 						baseObject.add object
-						update = true
+						update = true	
 		update
 		
 	onMaterialSelected: (idMapper) =>
