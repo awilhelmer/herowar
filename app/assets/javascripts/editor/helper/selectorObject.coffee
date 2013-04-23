@@ -41,13 +41,12 @@ class SelectorObject
 		@editor.engine.render()
 	
 	placeMesh: ->
-		console.log 'Place Mesh'
-		console.log @currentMesh
+		id = @editor.engine.scenegraph.getNextId()
 		environmentsStatic = db.get 'environmentsStatic'
 		env = new Environment()
 		env.set
-			id : @editor.engine.scenegraph.getNextId()
-			name : @currentMesh.name
+			id : id
+			name : "#{@currentMesh.name}-#{id}"
 		console.log env
 		environmentsStatic.add env
 		@currentMesh = @currentMesh.clone()
