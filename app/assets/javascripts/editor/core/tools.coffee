@@ -1,10 +1,11 @@
 EditorEventbus = require 'editorEventbus'
+MaterialHelper = require 'helper/materialHelper'
+IntersectHelper = require 'helper/intersectHelper'
+ObjectHelper = require 'helper/objectHelper'
 SelectorArea = require 'helper/selectorArea'
-SelectorGeometry = require 'helper/selectorGeometry'
 SelectorObject = require 'helper/selectorObject'
 Constants = require 'constants'
 Variables = require 'variables'
-MaterialHelper = require 'helper/materialHelper'
 
 class Tools
 
@@ -17,11 +18,18 @@ class Tools
 		
 	initialize: ->
 		console.log 'Initialize tools'
-		@materialHelper = new MaterialHelper @editor
-		@selectorObject = new SelectorObject @editor, @materialHelper
-		@selectorArea = new SelectorArea @editor, @materialHelper, @selectorObject
-		@selectorGeometry = new SelectorGeometry @editor
+		@createHelpers()
+		@createSelectors()
 		@addEventListeners()
+	
+	createHelpers: ->
+		@objectHelper = new ObjectHelper @editor
+		@intersectHelper = new IntersectHelper @editor
+		@materialHelper = new MaterialHelper @editor
+	
+	createSelectors: ->
+		@selectorObject = new SelectorObject @editor, @materialHelper, @objectHelper, @intersectHelper
+		@selectorArea = new SelectorArea @editor, @materialHelper, @intersectHelper, @selectorObject	
 	
 	addEventListeners: ->
 		EditorEventbus.mouseup.add @onMouseUp

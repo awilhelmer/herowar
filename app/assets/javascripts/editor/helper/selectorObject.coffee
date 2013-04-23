@@ -1,13 +1,12 @@
-ObjectHelper = require 'helper/objectHelper'
-IntersectHelper = require 'helper/intersectHelper'
 EditorEventbus = require 'editorEventbus'
 db = require 'database'
 
 class SelectorObject
 
-	constructor: (@editor, @materialHelper) ->
-		@objectHelper = new ObjectHelper @editor
-		@intersectHelper = new IntersectHelper @editor
+	constructor: (@editor, @materialHelper, @objectHelper, @intersectHelper) ->
+		@currentMeshId = -1
+		@currentMesh = null
+		@loader = new THREE.JSONLoader()
 		@world = db.get 'world'
 		@bindEventListeners()
 
@@ -16,6 +15,7 @@ class SelectorObject
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
 		EditorEventbus.updateModelMaterial.add @materialUpdate
+		EditorEventbus.listSelectItem.add @onSelectItem
 		
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
@@ -79,5 +79,21 @@ class SelectorObject
 				mesh.__webglActive = false			
 				@editor.engine.scenegraph.getMap().add mesh
 			@editor.engine.render()
-		 null
+		null
+
+	onSelectItem: (name, value) =>
+		console.log "SelectorGeometry #{name}, #{value}"
+		if name is 'sidebar-environment-geometries' and @id isnt value
+			@id = value
+			@loader.load 'assets/geometries/environment/terrain/trees/tree001.js', @onLoadGeometry, 'assets/images/game/textures'
+			# "/api/game/geometry/env/#{@id}"
+			
+	onLoadGeometry: (geometry, materials) =>
+		console.log "Successfully loaded geometry with id #{@id}"
+		mesh = new THREE.Mesh geometry
+		# mat.skinning = true for mat in materials
+		mesh.material = new THREE.MeshFaceMaterial materials
+		@editor.engine.scenegraph.scene.add mesh
+		@editor.engine.render()
+		 
 return SelectorObject

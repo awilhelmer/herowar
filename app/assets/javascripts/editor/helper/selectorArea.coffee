@@ -1,5 +1,3 @@
-IntersectHelper = require 'helper/intersectHelper'
-MaterialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
 Constants = require 'constants'
@@ -7,8 +5,7 @@ db = require 'database'
 
 class SelectorArea
 	
-	constructor: (@editor, @materialHelper, @selectorObject) ->
-		@intersectHelper = new IntersectHelper @editor
+	constructor: (@editor, @materialHelper, @intersectHelper, @selectorObject) ->
 		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
 		@selector.rotation.x = - Math.PI/2
 		@isVisible = false
