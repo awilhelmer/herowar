@@ -27,6 +27,7 @@ class SelectorObject
 			@editor.engine.scenegraph.scene.remove @currentMesh
 			@currentMesh.geometry.dispose() # TODO: is this enough clean up ?!?
 			@currentMesh = null
+			@editor.engine.render()
 	
 	onMouseMove: =>
 		if @currentMesh
