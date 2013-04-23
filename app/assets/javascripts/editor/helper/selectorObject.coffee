@@ -55,7 +55,6 @@ class SelectorObject
 		env.set
 			id : id
 			name : "#{@currentMesh.name}-#{id}"
-		console.log env
 		environmentsStatic.add env
 		@currentMesh = @currentMesh.clone()
 		@addMesh()
@@ -125,14 +124,12 @@ class SelectorObject
 		null
 
 	onSelectItem: (id, value, name) =>
-		console.log "SelectorGeometry #{name}, #{value}"
 		if id is 'sidebar-environment-geometries' and @currentMeshId isnt value
 			@currentMeshId = value
 			@currentMeshName = name
 			@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 			
 	onLoadGeometry: (geometry, materials) =>
-		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
 		@currentMesh.name = @currentMeshName
