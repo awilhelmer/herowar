@@ -35,9 +35,4 @@ class Tree extends BaseView
 		$currentTarget.addClass 'active'
 		EditorEventbus.treeSelectItem.dispatch @$el.attr('id'), $currentTarget.data('value')
 
-	render: ->
-		console.log 'Render Tree...'
-		console.log @getTemplateData()
-		super()
-
 return Tree

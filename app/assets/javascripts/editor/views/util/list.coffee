@@ -27,9 +27,4 @@ class List extends BaseView
 		$currentTarget.addClass 'active'
 		EditorEventbus.listSelectItem.dispatch @$el.attr('id'), $currentTarget.data('value'), $currentTarget.data('name')
 
-	render: ->
-		console.log 'Render List...'
-		console.log @getTemplateData()
-		super()
-
 return List
