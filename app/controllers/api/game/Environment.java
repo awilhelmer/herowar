@@ -36,7 +36,7 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
   public static Result root() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.getSerializationConfig().addMixInAnnotations(models.entity.game.Environment.class, EnvironmentExcludeGeoMixin.class);
-    models.entity.game.Environment root = EnvironmentDAO.getInstance().getByName("Root");
+    models.entity.game.Environment root = EnvironmentDAO.getInstance().getRoot();
     try {
       return ok(mapper.writeValueAsString(root));
     } catch (IOException e) {
