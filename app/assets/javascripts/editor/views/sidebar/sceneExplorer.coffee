@@ -19,15 +19,6 @@ class SceneExplorer extends BaseView
 		EditorEventbus.selectTerrainViewport.add @selectTerrain
 		EditorEventbus.selectObjectViewport.add @selectObject
 
-	render: ->
-		super()
-		# TODO: handle this with a model
-		$scenegraphTree = @$el.find '.scenegraph-tree'
-		$scenegraphTree.append '<div class="scenegraph-tree-world active" data-type="world"><img src="assets/images/editor/world.png" /><span>World</span></div>'
-		$scenegraphTree.append '<div class="scenegraph-tree-terrain" data-type="terrain"><img src="assets/images/editor/terrain.jpg" /><span>Terrain</span></div>'
-		$scenegraphTree.append '<div class="scenegraph-tree-folder scenegraph-tree-environment" data-type="environment"><img src="assets/images/editor/folder.png" /><span>Environment</span></div>'
-		$scenegraphTree.append '<div class="scenegraph-tree-folder scenegraph-tree-pathing" data-type="pathing"><img src="assets/images/editor/folder.png" /><span>Pathing</span></div>'
-
 	selectElement: (event) ->
 		$currentTarget = $ event.currentTarget
 		type = $currentTarget.data 'type'
