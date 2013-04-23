@@ -21,8 +21,12 @@ class SelectorObject
 		EditorEventbus.listSelectItem.add @onSelectItem
 	
 	onMouseUp: (event) =>
-		if event.which is 1 # left click
+		if event.which is 1
 			@placeMesh() if @currentMesh?.visible
+		else if event.which is 3
+			@editor.engine.scenegraph.scene.remove @currentMesh
+			@currentMesh.dispose() # TODO: is this enough clean up?!?
+			@currentMesh = null
 	
 	onMouseMove: =>
 		if @currentMesh
