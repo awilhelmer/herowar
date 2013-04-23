@@ -1,4 +1,5 @@
 EditorEventbus = require 'editorEventbus'
+Environment = require 'models/environment'
 db = require 'database'
 
 class SelectorObject
@@ -40,6 +41,15 @@ class SelectorObject
 		@editor.engine.render()
 	
 	placeMesh: ->
+		console.log 'Place Mesh'
+		console.log @currentMesh
+		environmentsStatic = db.get 'environmentsStatic'
+		env = new Environment()
+		env.set
+			id : @editor.engine.scenegraph.getNextId()
+			name : @currentMesh.name
+		console.log env
+		environmentsStatic.add env
 		@currentMesh = @currentMesh.clone()
 		@addMesh()
 	
@@ -118,6 +128,7 @@ class SelectorObject
 		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
+		@currentMesh.name = 'tree001'
 		@addMesh()
 	
 	addMesh: ->
