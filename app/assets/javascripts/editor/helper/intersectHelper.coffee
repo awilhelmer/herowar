@@ -21,9 +21,17 @@ class IntersectHelper extends THREE.Raycaster
 		@projector.unprojectVector vector, camera
 		@set camera.position, vector.sub(camera.position).normalize()
 		intersectList = @intersectObjects objects, true		
-		intersectList = @handleFaceRadius(intersectList, faceRadius)
+		intersectList = @handleFaceRadius intersectList, faceRadius
 		intersectList
 
+	getIntersectObject: (intersectList) ->
+		for value, key in intersectList
+			if value.object and value.object.name isnt 'wireframe'
+				result = value
+				break
+		unless result
+			result = intersectList[0]
+		result
 
 	handleFaceRadius: (intersectList, faceRadius) ->
 		for intersect, idx in intersectList
@@ -61,19 +69,17 @@ class IntersectHelper extends THREE.Raycaster
 							d = obj.geometry.vertices[face.d].clone()
 							tri1 =  @getTriangle(a,b,d, faceRadius)
 							tri2 =  @getTriangle(b,c,d, faceRadius)
-							if not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c) and not THREE.Triangle.containsPoint(@intersectPoint,tri1.a, tri1.b, tri1.c)
+							if not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c) and not THREE.Triangle.containsPoint(@intersectPoint, tri1.a, tri1.b, tri1.c)
 								continue
 						intersect.faces.push face
-					
-						
 		intersectList
 				
-	getTriangle: (a,b,c,faceRadius) ->
-		tri1 = new THREE.Triangle a,b,c
+	getTriangle: (a, b, c, faceRadius) ->
+		tri1 = new THREE.Triangle a, b, c
 		mid1 = tri1.midpoint()
-		tri1.a = tri1.a.sub(mid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.b = tri1.b.sub(mid1).multiplyScalar(faceRadius).add(mid1)
-		tri1.c = tri1.c.sub(mid1).multiplyScalar(faceRadius).add(mid1)
+		tri1.a = tri1.a.sub(mid1).multiplyScalar(faceRadius).add mid1
+		tri1.b = tri1.b.sub(mid1).multiplyScalar(faceRadius).add mid1
+		tri1.c = tri1.c.sub(mid1).multiplyScalar(faceRadius).add mid1
 		tri1
 			
 return IntersectHelper

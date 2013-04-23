@@ -11,12 +11,21 @@ class SelectorObject
 		@bindEventListeners()
 
 	bindEventListeners: ->
+		EditorEventbus.mousemove.add @onMouseMove
 		EditorEventbus.selectWorldUI.add @selectWorld
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
 		EditorEventbus.updateModelMaterial.add @materialUpdate
 		EditorEventbus.listSelectItem.add @onSelectItem
-		
+	
+	onMouseMove: =>
+		if @currentMesh
+			intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], 1
+			@updateMeshPosition @intersectHelper.getIntersectObject intersectList if intersectList.length > 0
+	
+	updateMeshPosition: (intersect) ->
+		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
+	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
@@ -83,17 +92,16 @@ class SelectorObject
 
 	onSelectItem: (name, value) =>
 		console.log "SelectorGeometry #{name}, #{value}"
-		if name is 'sidebar-environment-geometries' and @id isnt value
-			@id = value
+		if name is 'sidebar-environment-geometries' and @currentMeshId isnt value
+			@currentMeshId = value
 			@loader.load 'assets/geometries/environment/terrain/trees/tree001.js', @onLoadGeometry, 'assets/images/game/textures'
-			# "/api/game/geometry/env/#{@id}"
+			# "/api/game/geometry/env/#{@currentMeshId}"
 			
 	onLoadGeometry: (geometry, materials) =>
-		console.log "Successfully loaded geometry with id #{@id}"
-		mesh = new THREE.Mesh geometry
-		# mat.skinning = true for mat in materials
-		mesh.material = new THREE.MeshFaceMaterial materials
-		@editor.engine.scenegraph.scene.add mesh
+		console.log "Successfully loaded geometry with id #{@currentMeshId}"
+		@currentMesh = new THREE.Mesh geometry
+		@currentMesh.material = new THREE.MeshFaceMaterial materials
+		@editor.engine.scenegraph.scene.add @currentMesh
 		@editor.engine.render()
 		 
 return SelectorObject

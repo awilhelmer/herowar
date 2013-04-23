@@ -26,7 +26,7 @@ class SelectorArea
 		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], radius
 		if intersectList.length > 0
 			@addSel() unless @isVisible
-			@updatePosition @getIntersectObject(intersectList)
+			@updatePosition @intersectHelper.getIntersectObject intersectList
 		else
 			@removeSel() if @isVisible
 
@@ -38,18 +38,9 @@ class SelectorArea
 		@isVisible = false
 		@editor.engine.scenegraph.scene.remove @selector
 		@editor.engine.render()
-
-	getIntersectObject: (intersectList) ->
-		for value, key in intersectList
-			if value.object and value.object.name isnt 'wireframe'
-				result = value
-				break
-		unless result
-			result = intersectList[0]
-		result
 		
 	updatePosition: (intersect) ->
-		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4(intersect.object.matrixRotationWorld)
+		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
 		unless @selectorObject.selectedObject
 			console.log "Selecting terrain!"
 			@selectorObject.selectTerrain()
