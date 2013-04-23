@@ -21,10 +21,20 @@ class SelectorObject
 	onMouseMove: =>
 		if @currentMesh
 			intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], 1
-			@updateMeshPosition @intersectHelper.getIntersectObject intersectList if intersectList.length > 0
+			if intersectList.length > 0
+				@currentMesh.visible = true unless @currentMesh.visible
+				@updateMeshPosition @intersectHelper.getIntersectObject intersectList
+			else
+				if @currentMesh.visible
+					@currentMesh.visible = false
+					@editor.engine.render()
 	
 	updateMeshPosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
+		@currentMesh.position = position
+		@editor.engine.render()
+		console.log 'Update Mesh Position'
+		console.log @currentMesh
 	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
@@ -101,6 +111,7 @@ class SelectorObject
 		console.log "Successfully loaded geometry with id #{@currentMeshId}"
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
+		@currentMesh.visible = false
 		@editor.engine.scenegraph.scene.add @currentMesh
 		@editor.engine.render()
 		 
