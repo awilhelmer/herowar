@@ -1,5 +1,6 @@
 EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
+Variables = require 'variables'
 db = require 'database'
 
 class SelectorObject
@@ -12,8 +13,6 @@ class SelectorObject
 		@bindEventListeners()
 
 	bindEventListeners: ->
-		EditorEventbus.mouseup.add @onMouseUp
-		EditorEventbus.mousemove.add @onMouseMove
 		EditorEventbus.selectWorldUI.add @selectWorld
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
@@ -22,12 +21,16 @@ class SelectorObject
 	
 	onMouseUp: (event) =>
 		if event.which is 1
-			@placeMesh() if @currentMesh?.visible
+			if @currentMesh
+				@placeMesh() if @currentMesh.visible
+			else if !Variables.MOUSE_MOVED
+						@update()
 		else if event.which is 3
-			@editor.engine.scenegraph.scene.remove @currentMesh
-			@currentMesh.geometry.dispose() # TODO: is this enough clean up ?!?
-			@currentMesh = null
-			@editor.engine.render()
+			if @currentMesh
+				@editor.engine.scenegraph.scene.remove @currentMesh
+				@currentMesh.geometry.dispose() # TODO: is this enough clean up ?!?
+				@currentMesh = null
+				@editor.engine.render()
 	
 	onMouseMove: =>
 		if @currentMesh
