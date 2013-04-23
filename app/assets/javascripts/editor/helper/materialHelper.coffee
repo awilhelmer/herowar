@@ -44,14 +44,14 @@ class MaterialHelper
 					for mat, geoMatIndex in child.material.materials
 						index = @getGlobalMatIndexById(mat.name) #index of global materials list
 						if index
-							backBoneGeometry.materialsIndex.push materialId: index, materialIndex: geoMatIndex
+							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
 	
 	getGlobalMatIndexById: (name) ->
 		id = name.replace 'matID', ''
 		id = parseInt id
 		materials = db.get 'materials'
-		for material, key in materials
+		for material, key in materials.models
 			if material.id == id
 				return key
 		console.log "No Backbone material found!" 
