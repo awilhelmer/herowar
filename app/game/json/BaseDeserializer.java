@@ -99,7 +99,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               parseAll(element, fieldNode, classes);
               value = element;
             } else {
-              log.error("Ignored parsing Class: " + propClass.getSimpleName());
+              log.warn("Ignored parsing Class: " + propClass.getSimpleName());
             }
             if (value != null) {
               PropertyUtils.setProperty(result, field, value);
