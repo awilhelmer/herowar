@@ -53,8 +53,21 @@ class SelectorObject
 		environmentsStatic = db.get 'environmentsStatic'
 		env = new Environment()
 		env.set
-			id : id
-			name : "#{@currentMesh.name}-#{id}"
+			id 				: id
+			name 			: "#{@currentMesh.name}-#{id}"
+			position	:
+				x				: @currentMesh.position.x
+				y				: @currentMesh.position.y
+				z				: @currentMesh.position.z
+			rotation	:
+				x				: @currentMesh.rotation.x
+				y				: @currentMesh.rotation.y
+				z				: @currentMesh.rotation.z
+			scale			:
+				x				: @currentMesh.scale.x
+				y				: @currentMesh.scale.y
+				z				: @currentMesh.scale.z
+		console.log env
 		environmentsStatic.add env
 		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
 	
