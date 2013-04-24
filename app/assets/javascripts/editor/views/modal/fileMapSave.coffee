@@ -49,7 +49,7 @@ class ModalFileMapSave extends BaseModalView
 			type				: 'POST'
 			dataType		: 'json'
 			contentType	: 'application/json; charset=utf-8'
-			data				: world.attributes
+			data				: JSON.stringify world.attributes
 			success			: @onSuccess
 			error				: @onError
 		jqxhr.done @onDone
