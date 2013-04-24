@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import models.entity.game.Vector3;
@@ -51,7 +52,21 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               value = fieldNode.getDoubleValue();
             } else if (propClass.isAssignableFrom(String.class)) {
               if (fieldNode.isArray()) {
-                value = fieldNode.toString();
+                StringBuffer string = new StringBuffer("[");
+                Iterator<JsonNode> elemIt = fieldNode.getElements();
+                while (elemIt.hasNext()) {
+                  JsonNode elemNode = (JsonNode) elemIt.next();
+                  Iterator<Entry<String, JsonNode>> arrFieldIT = elemNode.getFields();
+                  while (arrFieldIT.hasNext()) {
+                    JsonNode fieldArrElem = arrFieldIT.next().getValue();
+                    string.append(fieldArrElem.getTextValue() + ",");
+                  }
+                }
+                if (string.length() > 1) {
+                  string.deleteCharAt(string.length() - 1);
+                }
+                string.append("]");
+                value = string.toString();
               } else {
                 value = fieldNode.getTextValue();
               }
