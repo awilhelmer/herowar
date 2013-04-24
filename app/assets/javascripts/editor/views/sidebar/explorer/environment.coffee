@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
@@ -20,6 +21,7 @@ class EnvironmentExplorer extends BaseView
 		value = $currentTarget.data 'value'
 		$('.scenegraph-tree div').removeClass 'active'
 		$currentTarget.addClass 'active'
-		console.log "ID: #{value}"
+		EditorEventbus.selectObjectUI.dispatch value
+		EditorEventbus.showObjectProperties.dispatch()
 		
 return EnvironmentExplorer

@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+db = require 'database'
 
 class ObjectProperties extends BasePropertiesView
 	
@@ -17,5 +18,11 @@ class ObjectProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.selectObjectUI.add @selectItem
+
+	selectItem: (value) =>
+		console.log "Show object properties for id #{value}"
+		@model = db.get 'environmentsStatic', value
+		@render()
 
 return ObjectProperties
