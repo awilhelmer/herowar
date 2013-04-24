@@ -46,7 +46,7 @@ class SceneGraph
 	
 	hasStaticObject: (dbId) ->
 		if _.has(@staticObjects, dbId) and @staticObjects[dbId]?.length > 0
-			true
+			return true
 		false
 	
 	removeStaticObject: (obj) ->
