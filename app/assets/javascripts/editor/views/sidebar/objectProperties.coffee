@@ -12,7 +12,7 @@ class ObjectProperties extends BasePropertiesView
 	template: templates.get 'sidebar/objectProperties.tmpl'
 	
 	events:
-		'change input[name*="mp-color-"]'	: 'changeColor'
+		'change input'	: 'changeInput'
 	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
