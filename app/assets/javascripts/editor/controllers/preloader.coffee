@@ -120,6 +120,14 @@ class Preloader extends BaseController
 			success			: @onSuccess
 
 	onSuccess: (data) =>
+		console.log data
+		console.log JSON.stringify data.terrain.geometry
+		if data.terrain.geometry.id
+			console.log 'Parse geometry with json loader'
+			loader = new THREE.JSONLoader()
+			result = loader.parse JSON.stringify data.terrain.geometry
+			console.log result
+			data.terrain.geometry = result.geometry
 		world = db.get 'world'
 		world.set data
 		@state = 3
