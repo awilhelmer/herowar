@@ -27,4 +27,7 @@ class ObjectProperties extends BasePropertiesView
 		@model = db.get 'environmentsStatic', value
 		@render()
 
+	changeInput: (event) =>
+		
+
 return ObjectProperties
