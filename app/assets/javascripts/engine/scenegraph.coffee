@@ -44,6 +44,9 @@ class SceneGraph
 		@staticObjects[id].push obj
 		@scene.add obj
 	
+	getStaticObject: (id) ->
+		@staticObjects[id]
+	
 	hasStaticObject: (dbId) ->
 		if _.has(@staticObjects, dbId) and @staticObjects[dbId]?.length > 0
 			return true

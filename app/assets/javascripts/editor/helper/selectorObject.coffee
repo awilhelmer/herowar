@@ -18,6 +18,7 @@ class SelectorObject
 		EditorEventbus.selectObjectUI.add @selectObject
 		EditorEventbus.updateModelMaterial.add @materialUpdate
 		EditorEventbus.listSelectItem.add @onSelectItem
+		EditorEventbus.changeStaticObject.add @changeStaticObject
 	
 	onMouseUp: (event) =>
 		if event.which is 1
@@ -161,5 +162,19 @@ class SelectorObject
 				y				: mesh.scale.y
 				z				: mesh.scale.z
 		env
-		
+
+	changeStaticObject: (backboneModel) =>
+		console.log 'Change static object'
+		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get 'id'
+		console.log mesh
+		mesh.position.x = backboneModel.get('position').x
+		mesh.position.y = backboneModel.get('position').y
+		mesh.position.z = backboneModel.get('position').z
+		mesh.scale.x = backboneModel.get('scale').x
+		mesh.scale.y = backboneModel.get('scale').y
+		mesh.scale.z = backboneModel.get('scale').z
+		mesh.rotation.x = backboneModel.get('rotation').x
+		mesh.rotation.y = backboneModel.get('rotation').y
+		mesh.rotation.z = backboneModel.get('rotation').z
+
 return SelectorObject
