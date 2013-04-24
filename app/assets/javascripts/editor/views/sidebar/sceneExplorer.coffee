@@ -12,7 +12,9 @@ class SceneExplorer extends BaseView
 	template: templates.get 'sidebar/sceneExplorer.tmpl'
 
 	events:
-		'click .scenegraph-tree .item' 	: 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-world' : 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-terrain' : 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-folder' : 'selectElement'
 
 	bindEvents: ->
 		EditorEventbus.selectWorldViewport.add @selectWorld
