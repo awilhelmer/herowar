@@ -166,18 +166,9 @@ class SelectorObject
 		env
 
 	changeStaticObject: (backboneModel) =>
-		console.log 'Change static object'
 		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
-		console.log mesh
-		mesh.position.x = backboneModel.get('position').x
-		mesh.position.y = backboneModel.get('position').y
-		mesh.position.z = backboneModel.get('position').z
-		mesh.scale.x = backboneModel.get('scale').x
-		mesh.scale.y = backboneModel.get('scale').y
-		mesh.scale.z = backboneModel.get('scale').z
-		mesh.rotation.x = backboneModel.get('rotation').x
-		mesh.rotation.y = backboneModel.get('rotation').y
-		mesh.rotation.z = backboneModel.get('rotation').z
+		attributes = _.pick _.clone(backboneModel.attributes), 'position', 'scale', 'rotation'
+		_.extend mesh, attributes
 		@editor.engine.render()
 
 return SelectorObject
