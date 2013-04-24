@@ -28,6 +28,6 @@ class ObjectProperties extends BasePropertiesView
 		@render()
 
 	changeInput: (event) =>
-		
+		console.log 'Changed Input on Object ...'
 
 return ObjectProperties
