@@ -39,7 +39,6 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
 
   protected void parseAll(Object result, JsonNode node, List<Class<?>> classes) {
     Iterator<String> fieldIt = node.getFieldNames();
-
     while (fieldIt.hasNext()) {
       String field = fieldIt.next();
       JsonNode fieldNode = node.get(field);
@@ -59,7 +58,10 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
                   Iterator<Entry<String, JsonNode>> arrFieldIT = elemNode.getFields();
                   while (arrFieldIT.hasNext()) {
                     JsonNode fieldArrElem = arrFieldIT.next().getValue();
-                    string.append(fieldArrElem.getTextValue() + ",");
+                    String currentValue = fieldArrElem.asText();
+                    if (currentValue != null && !"".equals(currentValue)) {
+                      string.append(fieldArrElem.asText() + ",");
+                    }
                   }
                 }
                 if (string.length() > 1) {
