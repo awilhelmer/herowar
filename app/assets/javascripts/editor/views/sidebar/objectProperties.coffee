@@ -33,41 +33,36 @@ class ObjectProperties extends BasePropertiesView
 		name = $currentTarget.attr 'name'
 		switch name
 			when 'positionX'
-				position = @model.get 'position'
-				position.x = parseFloat $currentTarget.val()
-				@model.set 'positon', position
+				@model.get('position').x = parseFloat $currentTarget.val()
+				@triggerChange 'position'
 			when 'positionY'
-				position = @model.get 'position'
-				position.y = parseFloat $currentTarget.val()
-				@model.set 'positon', position
+				@model.get('position').y = parseFloat $currentTarget.val()
+				@triggerChange 'position'
 			when 'positionZ'
-				position = @model.get 'position'
-				position.z = parseFloat $currentTarget.val()
-				@model.set 'positon', position
+				@model.get('position').z = parseFloat $currentTarget.val()
+				@triggerChange 'position'
 			when 'scaleX'
-				scale = @model.get 'scale'
-				scale.x = parseFloat $currentTarget.val()
-				@model.set 'scale', scale
+				@model.get('scale').x = parseFloat $currentTarget.val()
+				@triggerChange 'scale'
 			when 'scaleY'
-				scale = @model.get 'scale'
-				scale.y = parseFloat $currentTarget.val()
-				@model.set 'positon', scale
+				@model.get('scale').y = parseFloat $currentTarget.val()
+				@triggerChange 'scale'
 			when 'scaleZ'
-				scale = @model.get 'scale'
-				scale.z = parseFloat $currentTarget.val()
-				@model.set 'scale', scale
+				@model.get('scale').z = parseFloat $currentTarget.val()
+				@triggerChange 'scale'
 			when 'rotationX'
-				rotation = @model.get 'rotation'
-				rotation.x = parseFloat $currentTarget.val()
-				@model.set 'rotation', rotation
+				@model.get('rotation').x = parseFloat $currentTarget.val()
+				@triggerChange 'rotation'
 			when 'rotationY'
-				rotation = @model.get 'rotation'
-				rotation.y = parseFloat $currentTarget.val()
-				@model.set 'rotation', rotation
+				@model.get('rotation').y = parseFloat $currentTarget.val()
+				@triggerChange 'rotation'
 			when 'rotationZ'
-				rotation = @model.get 'rotation'
-				rotation.z = parseFloat $currentTarget.val()
-				@model.set 'rotation', rotation
+				@model.get('rotation').z = parseFloat $currentTarget.val()
+				@triggerChange 'rotation'
 		EditorEventbus.changeStaticObject.dispatch @model
+
+	triggerChange: (propertyName) ->
+		@model.trigger "change:#{propertyName}"
+		@model.trigger 'change'
 
 return ObjectProperties
