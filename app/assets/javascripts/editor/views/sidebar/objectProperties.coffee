@@ -21,7 +21,6 @@ class ObjectProperties extends BasePropertiesView
 		EditorEventbus.selectObjectUI.add @selectItem
 
 	selectItem: (value) =>
-		console.log "Show object properties for id #{value}"
 		@model = db.get 'environmentsStatic', value
 		@render()
 
