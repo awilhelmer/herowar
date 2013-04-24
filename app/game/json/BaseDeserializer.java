@@ -42,7 +42,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
     while (fieldIt.hasNext()) {
       String field = fieldIt.next();
       JsonNode fieldNode = node.get(field);
-      if (fieldNode != null) {
+      if (fieldNode != null && !fieldNode.isNull()) {
         try {
           Class<?> propClass = PropertyUtils.getPropertyType(result, field);
           Object value = null;
