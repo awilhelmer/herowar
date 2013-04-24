@@ -38,14 +38,19 @@ class SceneGraph
 			delete @dynamicObjects[id]
 
 	addStaticObject: (obj, id) ->
-		unless @staticObjects.hasOwnProperty id
+		unless _.has(@staticObjects, id)
 			@staticObjects[id] = [] 
 		obj.listIndex = @staticObjects[id].length
 		@staticObjects[id].push obj
 		@scene.add obj
-		
+	
+	hasStaticObject: (dbId) ->
+		if _.has(@staticObjects, dbId) and @staticObjects[dbId]?.length > 0
+			true
+		false
+	
 	removeStaticObject: (obj) ->
-		unless @staticObjects.hasOwnProperty obj.dbId
+		unless _.has(@staticObjects, obj.dbId)
 		  arrIndex = @staticObjects[obj.dbId].listIndex
 			@scene.remove obj
 			if @staticObjects[obj.dbId][arrIndex]

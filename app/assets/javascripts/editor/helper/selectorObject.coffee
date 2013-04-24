@@ -56,8 +56,7 @@ class SelectorObject
 			id : id
 			name : "#{@currentMesh.name}-#{id}"
 		environmentsStatic.add env
-		@currentMesh = @currentMesh.clone()
-		@addMesh()
+		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
 	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
@@ -127,8 +126,14 @@ class SelectorObject
 		if id is 'sidebar-environment-geometries' and @currentMeshId isnt value
 			@currentMeshId = value
 			@currentMeshName = name
-			#TODO add Cache here
-			@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
+			unless @editor.engine.scenegraph.hasStaticObject(@currentMeshId)
+				console.log "Loading Geometry from Server ... "
+				now = new Date()
+				@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
+				console.log "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
+			else
+				mesh = @editor.engine.scenegraph.staticObjects[@currentMeshId][0]
+				@onLoadGeometry mesh.geometry, mesh.material.materials
 			
 	onLoadGeometry: (geometry, materials) =>
 		@currentMesh = new THREE.Mesh geometry
