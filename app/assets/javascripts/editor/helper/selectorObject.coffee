@@ -127,17 +127,19 @@ class SelectorObject
 		if id is 'sidebar-environment-geometries' and @currentMeshId isnt value
 			@currentMeshId = value
 			@currentMeshName = name
+			#TODO add Cache here
 			@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 			
 	onLoadGeometry: (geometry, materials) =>
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
 		@currentMesh.name = @currentMeshName
+		@currentMesh.dbId = @currentMeshId
 		@addMesh()
 	
 	addMesh: ->
 		@currentMesh.visible = false
-		@editor.engine.scenegraph.scene.add @currentMesh
+		@editor.engine.scenegraph.addStaticObject @currentMesh, @currentMeshId
 		@editor.engine.render()
 		 
 return SelectorObject

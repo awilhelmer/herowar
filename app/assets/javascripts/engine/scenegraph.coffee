@@ -10,6 +10,7 @@ class SceneGraph
 		@scene = new THREE.Scene()
 		@skyboxScene = new THREE.Scene()
 		@dynamicObjects = {}
+		@staticObjects =  {}
 		#@setMap(@createDefaultMap(2000, 2000))
 		#@addSkybox 'default'
 		@currentId = 1
@@ -36,6 +37,21 @@ class SceneGraph
 			@scene.remove @dynamicObjects[id].object3d
 			delete @dynamicObjects[id]
 
+	addStaticObject: (obj, id) ->
+		unless @staticObjects.hasOwnProperty id
+			@staticObjects[id] = [] 
+		obj.listIndex = @staticObjects[id].length
+		@staticObjects[id].push obj
+		@scene.add obj
+		
+	removeStaticObject: (obj) ->
+		unless @staticObjects.hasOwnProperty obj.dbId
+		  arrIndex = @staticObjects[obj.dbId].listIndex
+			@scene.remove obj
+			if @staticObjects[obj.dbId][arrIndex]
+				@staticObjects[obj.dbId].slice arrIndex, 1
+		null
+		
 	getMap: ->
 		@map
 
