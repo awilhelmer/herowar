@@ -40,12 +40,12 @@ class SceneGraph
 	addStaticObject: (obj, id) ->
 		unless _.has(@staticObjects, id)
 			@staticObjects[id] = [] 
-		obj.listIndex = @staticObjects[id].length
+		obj.userData.listIndex = @staticObjects[id].length
 		@staticObjects[id].push obj
 		@scene.add obj
 	
-	getStaticObject: (id) ->
-		@staticObjects[id]
+	getStaticObject: (id, index) ->
+		@staticObjects[id][index]
 	
 	hasStaticObject: (dbId) ->
 		if _.has(@staticObjects, dbId) and @staticObjects[dbId]?.length > 0

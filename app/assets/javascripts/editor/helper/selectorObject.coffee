@@ -136,7 +136,7 @@ class SelectorObject
 		@currentMesh = new THREE.Mesh geometry
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
 		@currentMesh.name = @currentMeshName
-		@currentMesh.dbId = @currentMeshId
+		@currentMesh.userData.dbId = @currentMeshId
 		@addMesh()
 	
 	addMesh: ->
@@ -148,6 +148,8 @@ class SelectorObject
 		env = new Environment()
 		env.set
 			id 				: id
+			dbId			: mesh.userData.dbId
+			listIndex	: mesh.userData.listIndex
 			name 			: "#{mesh.name}-#{id}"
 			position	:
 				x				: mesh.position.x
@@ -165,7 +167,7 @@ class SelectorObject
 
 	changeStaticObject: (backboneModel) =>
 		console.log 'Change static object'
-		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get 'id'
+		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
 		console.log mesh
 		mesh.position.x = backboneModel.get('position').x
 		mesh.position.y = backboneModel.get('position').y
@@ -176,5 +178,6 @@ class SelectorObject
 		mesh.rotation.x = backboneModel.get('rotation').x
 		mesh.rotation.y = backboneModel.get('rotation').y
 		mesh.rotation.z = backboneModel.get('rotation').z
+		@editor.engine.render()
 
 return SelectorObject

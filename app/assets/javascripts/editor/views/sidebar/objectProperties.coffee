@@ -34,39 +34,39 @@ class ObjectProperties extends BasePropertiesView
 		switch name
 			when 'positionX'
 				position = @model.get 'position'
-				position.x = $currentTarget.val()
+				position.x = parseFloat $currentTarget.val()
 				@model.set 'positon', position
 			when 'positionY'
 				position = @model.get 'position'
-				position.y = $currentTarget.val()
+				position.y = parseFloat $currentTarget.val()
 				@model.set 'positon', position
 			when 'positionZ'
 				position = @model.get 'position'
-				position.z = $currentTarget.val()
+				position.z = parseFloat $currentTarget.val()
 				@model.set 'positon', position
 			when 'scaleX'
 				scale = @model.get 'scale'
-				scale.x = $currentTarget.val()
+				scale.x = parseFloat $currentTarget.val()
 				@model.set 'scale', scale
 			when 'scaleY'
 				scale = @model.get 'scale'
-				scale.y = $currentTarget.val()
+				scale.y = parseFloat $currentTarget.val()
 				@model.set 'positon', scale
 			when 'scaleZ'
 				scale = @model.get 'scale'
-				scale.z = $currentTarget.val()
+				scale.z = parseFloat $currentTarget.val()
 				@model.set 'scale', scale
 			when 'rotationX'
 				rotation = @model.get 'rotation'
-				rotation.x = $currentTarget.val()
+				rotation.x = parseFloat $currentTarget.val()
 				@model.set 'rotation', rotation
 			when 'rotationY'
 				rotation = @model.get 'rotation'
-				rotation.y = $currentTarget.val()
+				rotation.y = parseFloat $currentTarget.val()
 				@model.set 'rotation', rotation
 			when 'rotationZ'
 				rotation = @model.get 'rotation'
-				rotation.z = $currentTarget.val()
+				rotation.z = parseFloat $currentTarget.val()
 				@model.set 'rotation', rotation
 		EditorEventbus.changeStaticObject.dispatch @model
 
