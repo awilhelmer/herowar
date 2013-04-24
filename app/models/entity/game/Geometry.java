@@ -87,35 +87,6 @@ public class Geometry implements Serializable {
   @Transient
   private List<Material> materials;
 
-  public Geometry(Long id, String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
-      GeometryType type, GeoMetaData metadata, List<Material> materials) {
-    this.id = id;
-    this.vertices = vertices;
-    this.faces = faces;
-    this.morphTargets = morphTargets;
-    this.morphColors = morphColors;
-    this.normals = normals;
-    this.colors = colors;
-    this.uvs = uvs;
-    this.scale = scale;
-    this.type = type;
-    this.metadata = metadata;
-    this.materials = materials;
-  }
-
-  public Geometry(String vertices, String faces, String morphTargets, String morphColors, String normals, String colors, String uvs, Double scale,
-      GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, morphTargets, morphColors, normals, colors, uvs, scale, type, metadata, null);
-  }
-
-  public Geometry(String vertices, String faces, String normals, String uvs, Double scale, GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, "", "", normals, "", uvs, scale, type, metadata, null);
-  }
-
-  public Geometry(String vertices, String faces, String normals, String uvs, GeometryType type, GeoMetaData metadata) {
-    this(null, vertices, faces, "", "", normals, "", uvs, 1.0d, type, metadata, null);
-  }
-
   public Geometry() {
   }
 
@@ -264,6 +235,13 @@ public class Geometry implements Serializable {
     } else if (!id.equals(other.id))
       return false;
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Geometry [id=" + id + ", vertices=" + vertices + ", faces=" + faces + ", morphTargets=" + morphTargets + ", morphColors=" + morphColors
+        + ", normals=" + normals + ", colors=" + colors + ", uvs=" + uvs + ", scale=" + scale + ", type=" + type + ", metadata=" + metadata + ", terrain="
+        + terrain + ", meshes=" + meshes + ", geoMaterials=" + geoMaterials + ", matIdMapper=" + matIdMapper + ", materials=" + materials + "]";
   }
 
 }

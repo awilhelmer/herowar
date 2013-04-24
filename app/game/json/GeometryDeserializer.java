@@ -1,7 +1,6 @@
 package game.json;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,7 +14,8 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.ObjectCodec;
 import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+
+import play.Logger;
 
 /**
  * Custom Deserializer for Geometry entity. We have to parse the arrays to
@@ -23,33 +23,72 @@ import org.codehaus.jackson.map.JsonDeserializer;
  * 
  * @author Sebastian Sachtleben
  */
-public class GeometryDeserializer extends JsonDeserializer<Geometry> {
+public class GeometryDeserializer extends BaseDeserializer<Geometry> {
+  private static final Logger.ALogger log = Logger.of(BaseSerializer.class);
 
   @Override
   public Geometry deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
     ObjectCodec oc = jsonParser.getCodec();
     JsonNode geometryNode = oc.readTree(jsonParser);
+    log.info("");
+    Geometry geo = this.parseObject(geometryNode, GeoMetaData.class, Material.class);
+    geo.setType(GeometryType.ENVIRONMENT);
+    log.info("Geometry: " + geo.toString());
+    // // Parse metadata
+    // GeoMetaData metadata = null;
+    // JsonNode metadataNode = geometryNode.get("metadata");
+    // if (metadataNode != null) {
+    // Long metadataId = null;
+    // if (metadataNode.get("id") != null) {
+    // metadataId = metadataNode.get("id").getLongValue();
+    // }
+    // metadata = new GeoMetaData(metadataId, (float)
+    // metadataNode.get("formatVersion").getDoubleValue(),
+    // metadataNode.get("sourceFile").getTextValue(),
+    // metadataNode.get("generatedBy").getTextValue(),
+    // metadataNode.get("vertices").getLongValue(),
+    // metadataNode.get("faces").getLongValue(), metadataNode
+    // .get("normals").getLongValue(),
+    // metadataNode.get("colors").getLongValue(),
+    // metadataNode.get("uvs").getLongValue(), metadataNode.get("materials")
+    // .getLongValue());
+    // }
+    //
+    // // Parse geometry
+    // Long geometryId = null;
+    // if (geometryNode.get("id") != null) {
+    // geometryId = geometryNode.get("id").getLongValue();
+    // }
+    // List<Material> materials = new ArrayList<Material>();
+    // parseMaterials(geometryNode, materials);
+    //
+    // Geometry geo = new Geometry();
+    //
+    // geo.setId(geometryId);
+    // if (geometryNode.get("vertices") != null)
+    // geo.setVertices(geometryNode.get("vertices").toString());
+    // if (geometryNode.get("faces") != null)
+    // geo.setFaces(geometryNode.get("faces").toString());
+    // if (geometryNode.get("morphTargets") != null)
+    // geo.setMorphTargets(geometryNode.get("morphTargets").toString());
+    // if (geometryNode.get("morphColors") != null)
+    // geo.setMorphColors(geometryNode.get("morphColors").toString());
+    // if (geometryNode.get("normals") != null)
+    // geo.setNormals(geometryNode.get("normals").toString());
+    // if (geometryNode.get("colors") != null)
+    // geo.setColors(geometryNode.get("colors").toString());
+    // if (geometryNode.get("uvs") != null)
+    // geo.setUvs(geometryNode.get("uvs").toString());
+    // if (geometryNode.get("scale") != null)
+    // geo.setScale(geometryNode.get("scale").getDoubleValue());
+    // geo.setType(GeometryType.ENVIRONMENT);
+    // geo.setMetadata(metadata);
+    // geo.setMaterials(materials);
 
-    // Parse metadata
-    GeoMetaData metadata = null;
-    JsonNode metadataNode = geometryNode.get("metadata");
-    if (metadataNode != null) {
-      Long metadataId = null;
-      if (metadataNode.get("id") != null) {
-        metadataId = metadataNode.get("id").getLongValue();
-      }
-      metadata = new GeoMetaData(metadataId, (float) metadataNode.get("formatVersion").getDoubleValue(), metadataNode.get("sourceFile").getTextValue(),
-          metadataNode.get("generatedBy").getTextValue(), metadataNode.get("vertices").getLongValue(), metadataNode.get("faces").getLongValue(), metadataNode
-              .get("normals").getLongValue(), metadataNode.get("colors").getLongValue(), metadataNode.get("uvs").getLongValue(), metadataNode.get("materials")
-              .getLongValue());
-    }
+    return geo;
+  }
 
-    // Parse geometry
-    Long geometryId = null;
-    if (geometryNode.get("id") != null) {
-      geometryId = geometryNode.get("id").getLongValue();
-    }
-    List<Material> materials = new ArrayList<Material>();
+  private void parseMaterials(JsonNode geometryNode, List<Material> materials) {
     if (geometryNode.get("materials") != null) {
       Iterator<JsonNode> nodes = geometryNode.get("materials").getElements();
       while (nodes.hasNext()) {
@@ -86,12 +125,10 @@ public class GeometryDeserializer extends JsonDeserializer<Geometry> {
           mat.setShading(elem.get("shading").getTextValue());
         if (elem.get("specularCoef") != null)
           mat.setSpecularCoef(elem.get("specularCoef").getIntValue());
-
+        if (elem.get("id") != null)
+          mat.setId(elem.get("id").getLongValue());
         materials.add(mat);
       }
     }
-    return new Geometry(geometryId, geometryNode.get("vertices").toString(), geometryNode.get("faces").toString(), geometryNode.get("morphTargets").toString(),
-        geometryNode.get("morphColors").toString(), geometryNode.get("normals").toString(), geometryNode.get("colors").toString(), geometryNode.get("uvs")
-            .toString(), geometryNode.get("scale").getDoubleValue(), GeometryType.ENVIRONMENT, metadata, materials);
   }
 }
