@@ -11,6 +11,9 @@ class ObjectProperties extends BasePropertiesView
 	
 	template: templates.get 'sidebar/objectProperties.tmpl'
 	
+	events:
+		'change input[name*="mp-color-"]'	: 'changeColor'
+	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
