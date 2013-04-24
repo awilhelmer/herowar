@@ -51,11 +51,7 @@ class SelectorObject
 	placeMesh: ->
 		id = @editor.engine.scenegraph.getNextId()
 		environmentsStatic = db.get 'environmentsStatic'
-		env = new Environment()
-		env.set
-			id : id
-			name : "#{@currentMesh.name}-#{id}"
-		environmentsStatic.add env
+		environmentsStatic.add @createModelFromMesh id, @currentMesh
 		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
 	
 	update: ->
@@ -146,5 +142,24 @@ class SelectorObject
 		@currentMesh.visible = false
 		@editor.engine.scenegraph.addStaticObject @currentMesh, @currentMeshId
 		@editor.engine.render()
-		 
+
+	createModelFromMesh: (id, mesh) ->
+		env = new Environment()
+		env.set
+			id 				: id
+			name 			: "#{mesh.name}-#{id}"
+			position	:
+				x				: mesh.position.x
+				y				: mesh.position.y
+				z				: mesh.position.z
+			rotation	:
+				x				: mesh.rotation.x
+				y				: mesh.rotation.y
+				z				: mesh.rotation.z
+			scale			:
+				x				: mesh.scale.x
+				y				: mesh.scale.y
+				z				: mesh.scale.z
+		env
+		
 return SelectorObject

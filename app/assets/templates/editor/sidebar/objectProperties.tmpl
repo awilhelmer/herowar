@@ -10,9 +10,15 @@
 			<div>
 				<form class="form-horizontal">
 					<div class="control-group">
-						<label class="control-label" for="inputHeadline">Name</label>
+						<label class="control-label" for="inputId">ID</label>
 						<div class="controls">
-							<input type="text" id="inputHeadline" class="input-medium" name="headline" placeholder="Headline">
+							<input type="text" id="inputId" class="input-medium" name="id" value="{{id}}" disabled>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputName">Name</label>
+						<div class="controls">
+							<input type="text" id="inputName" class="input-medium" name="name" value="{{name}}" disabled>
 						</div>
 					</div>
 					<div class="control-group">
@@ -26,7 +32,52 @@
 		</div>
 		<div class="tab-pane" id="op-coords">
 			<div class="sidebar-headline">Coordinates</div>
-			<span>Nothing here...</span>
+			<div>
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="inputPositionX">P.X</label>
+						<div class="controls">
+							<input type="text" id="inputPositionX" name="positionX" value="{{position.x}}">
+						</div>
+						<label class="control-label" for="inputScaleX">S.X</label>
+						<div class="controls">
+							<input type="text" id="inputScaleX" name="scaleX" value="{{scale.x}}">
+						</div>
+						<label class="control-label" for="inputRotationX">R.X</label>
+						<div class="controls">
+							<input type="text" id="inputRotationX" name="rotationX" value="{{rotation.x}}">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputPositionY">P.Y</label>
+						<div class="controls">
+							<input type="text" id="inputPositionY" name="positionY" value="{{position.y}}">
+						</div>
+						<label class="control-label" for="inputScaleY">S.Y</label>
+						<div class="controls">
+							<input type="text" id="inputScaleY" name="scaleY" value="{{scale.y}}">
+						</div>
+						<label class="control-label" for="inputRotationY">R.Y</label>
+						<div class="controls">
+							<input type="text" id="inputRotationY" name="rotationY" value="{{rotation.y}}">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputPositionZ">P.Z</label>
+						<div class="controls">
+							<input type="text" id="inputPositionZ" name="positionX" value="{{position.z}}">
+						</div>
+						<label class="control-label" for="inputScaleZ">S.Z</label>
+						<div class="controls">
+							<input type="text" id="inputScaleZ" name="scaleZ" value="{{scale.z}}">
+						</div>
+						<label class="control-label" for="inputRotationZ">R.Z</label>
+						<div class="controls">
+							<input type="text" id="inputRotationZ" name="rotationZ" value="{{rotation.z}}">
+						</div>
+					</div>
+				</form>			
+			</div>
 		</div>
 	</div>
 </div>

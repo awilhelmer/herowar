@@ -12,12 +12,14 @@ class SceneExplorer extends BaseView
 	template: templates.get 'sidebar/sceneExplorer.tmpl'
 
 	events:
-		'click .scenegraph-tree .item' 	: 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-world' : 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-terrain' : 'selectElement'
+		'click .scenegraph-tree .scenegraph-tree-folder' : 'selectElement'
 
 	bindEvents: ->
 		EditorEventbus.selectWorldViewport.add @selectWorld
 		EditorEventbus.selectTerrainViewport.add @selectTerrain
-		EditorEventbus.selectObjectViewport.add @selectObject
+		# EditorEventbus.selectObjectViewport.add @selectObject
 
 	selectElement: (event) ->
 		$currentTarget = $ event.currentTarget
@@ -29,9 +31,6 @@ class SceneExplorer extends BaseView
 			when 'terrain'
 				EditorEventbus.selectTerrainUI.dispatch()
 				@selectTerrain()
-			when 'object'
-				EditorEventbus.selectObjectUI.dispatch()
-				@selectObject()
 			when 'environment'
 				EditorEventbus.showSidebarEnvironment.dispatch()
 				@selectItem type
@@ -52,9 +51,5 @@ class SceneExplorer extends BaseView
 	selectTerrain: =>
 		@selectItem 'terrain'
 		EditorEventbus.showTerrainProperties.dispatch()
-
-	selectObject: =>
-		@selectItem 'object'
-		EditorEventbus.showObjectProperties.dispatch()
 
 return SceneExplorer

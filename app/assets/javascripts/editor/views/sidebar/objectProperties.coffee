@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+db = require 'database'
 
 class ObjectProperties extends BasePropertiesView
 	
@@ -10,6 +11,9 @@ class ObjectProperties extends BasePropertiesView
 	
 	template: templates.get 'sidebar/objectProperties.tmpl'
 	
+	events:
+		'change input'	: 'changeInput'
+	
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
@@ -17,5 +21,13 @@ class ObjectProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.selectObjectUI.add @selectItem
+
+	selectItem: (value) =>
+		@model = db.get 'environmentsStatic', value
+		@render()
+
+	changeInput: (event) =>
+		console.log 'Changed Input on Object ...'
 
 return ObjectProperties
