@@ -51,6 +51,4 @@ class World extends Backbone.Model
 	handleMaterials: (map) ->
 		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
 
-	
-			
 return World
