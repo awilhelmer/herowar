@@ -101,7 +101,11 @@ public class Editor extends Controller {
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
     java.util.Map<Integer, Material> matMap = saveMaterials(map);
     saveGeometryMaterials(map.getTerrain().getGeometry(), matMap);
-    JPA.em().persist(map);
+    if (map.getId() == null) {
+      JPA.em().persist(map);
+    } else {
+      map = JPA.em().merge(map);
+    }
   }
 
   // Mapping Indexes

@@ -40,19 +40,30 @@ class ModalFileMapSave extends BaseModalView
 		errors.push 'Map title is required' unless world.get 'name'
 		errors
 
+	fillMaterialArray: (data) ->
+		materials = []
+		for index in data.materials
+			materials.push db.get 'materials', index 
+		data.materials = materials
+		
 	saveMap: ->
 		@status.isSaving = true
 		world = db.get 'world'
-		@handleMaterials()
+		materials = world.attributes.materials
+		@handleMaterials world.attributes
+		@fillMaterialArray world.attributes
+		json = JSON.stringify world.attributes
+		#console.log 'json: ' + json
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
 			dataType		: 'json'
 			contentType	: 'application/json; charset=utf-8'
-			data				: JSON.stringify world.attributes
+			data				: json
 			success			: @onSuccess
 			error				: @onError
 		jqxhr.done @onDone
+		world.attributes.materials = materials
 
 
 	onSuccess: (data, textStatus, jqXHR) =>

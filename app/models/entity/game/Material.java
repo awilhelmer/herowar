@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -51,6 +52,9 @@ public class Material implements Serializable {
   private String colorDiffuse;
   private String colorSpecular;
   private String mapDiffuse;
+  
+  @Transient
+  private Long materialId;
 
   @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
   private Texture texture;
@@ -74,7 +78,7 @@ public class Material implements Serializable {
     this.id = id;
   }
 
-  @Column(name="name", length = 100)
+  @Column(name = "name", length = 100)
   public String getName() {
     return name;
   }
@@ -249,6 +253,14 @@ public class Material implements Serializable {
 
   public void setVertexColors(Boolean vertexColors) {
     this.vertexColors = vertexColors;
+  }
+  
+  public Long getMaterialId() {
+    return materialId;
+  }
+
+  public void setMaterialId(Long materialId) {
+    this.materialId = materialId;
   }
 
   @Override
