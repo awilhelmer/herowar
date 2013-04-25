@@ -14,6 +14,7 @@ import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
 import models.entity.game.Material;
+import models.entity.game.Mesh;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -85,6 +86,10 @@ public class Editor extends Controller {
       map.getTerrain().getGeometry().setUvs("[[]]"); // Seems like uvs will be set during deserializing from [[]] to [] which causes issues
     }
     map.getTerrain().getGeometry().setType(GeometryType.TERRAIN); // The terrain type will not be set, dunno why :(
+    for (Mesh mesh : map.getObjects()) {
+      mesh.setGeometry(JPA.em().find(Geometry.class, mesh.getGeometry().getId()));  // Set geometry from db otherwise detached error message
+      mesh.setMap(map);
+    }
     // END HOTFIXES
     saveMap(map);
     return ok(toJson(map));
