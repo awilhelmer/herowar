@@ -46,8 +46,11 @@ public class Editor extends Controller {
   @Transactional
   public static Result mapShow(Long id) {
     Map map = MapDAO.getMapById(id);
-    mapMaterials(map);
-    return ok(toJson(map));
+    if (map != null) {
+      mapMaterials(map);
+      return ok(toJson(map));
+    }
+    return notFound();
   }
 
   @Transactional
@@ -82,12 +85,27 @@ public class Editor extends Controller {
       return badRequest(errorMessage);
     }
     // HOTFIXES (this needs to be fixed)
-    if (map.getTerrain().getGeometry().getUvs() == null || "".equals(map.getTerrain().getGeometry().getUvs()) || "[]".equals(map.getTerrain().getGeometry().getUvs())) {
-      map.getTerrain().getGeometry().setUvs("[[]]"); // Seems like uvs will be set during deserializing from [[]] to [] which causes issues
+    if (map.getTerrain().getGeometry().getUvs() == null || "".equals(map.getTerrain().getGeometry().getUvs())
+        || "[]".equals(map.getTerrain().getGeometry().getUvs())) {
+      map.getTerrain().getGeometry().setUvs("[[]]"); // Seems like uvs will be
+                                                     // set during deserializing
+                                                     // from [[]] to [] which
+                                                     // causes issues
     }
-    map.getTerrain().getGeometry().setType(GeometryType.TERRAIN); // The terrain type will not be set, dunno why :(
+    map.getTerrain().getGeometry().setType(GeometryType.TERRAIN); // The terrain
+                                                                  // type will
+                                                                  // not be set,
+                                                                  // dunno why
+                                                                  // :(
     for (Mesh mesh : map.getObjects()) {
-      mesh.setGeometry(JPA.em().find(Geometry.class, mesh.getGeometry().getId()));  // Set geometry from db otherwise detached error message
+      mesh.setGeometry(JPA.em().find(Geometry.class, mesh.getGeometry().getId())); // Set
+                                                                                   // geometry
+                                                                                   // from
+                                                                                   // db
+                                                                                   // otherwise
+                                                                                   // detached
+                                                                                   // error
+                                                                                   // message
       mesh.setMap(map);
     }
     // END HOTFIXES
@@ -150,9 +168,11 @@ public class Editor extends Controller {
    * @param map
    */
   private static void mapMaterials(Map map) {
-    map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
     Geometry geo = map.getTerrain().getGeometry();
-    GeometryDAO.mapMaterials(geo);
+    if (map.getAllMaterials() != null) {
+      map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
+      GeometryDAO.mapMaterials(geo);
+    }
   }
 
 }

@@ -39,7 +39,7 @@ worldToObjectConverter =
 				
 			hasMaterial = true 							# for the moment OBJs without materials get default material
 			hasFaceUvs = false 							# not supported in OBJ
-			hasFaceVertexUvs = obj.terrain.geometry.uvs.length >= nVertices
+			hasFaceVertexUvs = obj.terrain.geometry.uvs and obj.terrain.geometry.uvs.length >= nVertices
 			hasFaceNormals = false 					# don't export any face normals (as they are computed in engine)
 			hasFaceVertexNormals = false 		# not sure what this means...
 			hasFaceColors = false						# not sure what this means...

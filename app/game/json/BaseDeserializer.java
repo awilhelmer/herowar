@@ -51,6 +51,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               value = fieldNode.getDoubleValue();
             } else if (propClass.isAssignableFrom(String.class)) {
               if (fieldNode.isArray()) {
+                //TODO checking for 2d Array
                 value = fieldNode.toString();
               } else {
                 value = fieldNode.getTextValue();

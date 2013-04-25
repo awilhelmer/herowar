@@ -54,7 +54,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     javaJdbc,
     javaJpa,
     "commons-beanutils" % "commons-beanutils" % "1.8.3",
-    "mysql" % "mysql-connector-java" % "5.1.18",
+    "mysql" % "mysql-connector-java" % "5.1.24",
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
     "be.objectify" %% "deadbolt-java" % "2.1-SNAPSHOT",
     "com.feth" %% "play-authenticate" % "0.2.5-SNAPSHOT")
