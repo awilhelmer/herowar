@@ -36,7 +36,6 @@ class World extends Backbone.Model
 	buildRandomTerrainMesh: (terrain, segWidth, segHeight) ->		
 		obj = @createTerrainMesh(new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight))
 		for mesh in obj.children
-			mesh.rotation.x = - Math.PI/2
 			for i in [0..segHeight]
 				for j in [0..segWidth]
 					vector = mesh.geometry.vertices[i * segHeight + j]
@@ -51,6 +50,7 @@ class World extends Backbone.Model
 		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: Constants.MATERIAL_SELECTED #TODO MAPPING ... 
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
+		mesh.rotation.x = - Math.PI/2
 		obj.add mesh
 		obj
 

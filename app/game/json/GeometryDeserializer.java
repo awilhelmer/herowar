@@ -13,8 +13,6 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.ObjectCodec;
 import org.codehaus.jackson.map.DeserializationContext;
 
-import play.Logger;
-
 /**
  * Custom Deserializer for Geometry entity. We have to parse the arrays to
  * strings.
@@ -22,7 +20,6 @@ import play.Logger;
  * @author Sebastian Sachtleben
  */
 public class GeometryDeserializer extends BaseDeserializer<Geometry> {
-  private static final Logger.ALogger log = Logger.of(BaseSerializer.class);
 
   @Override
   public Geometry deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {

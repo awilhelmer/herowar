@@ -55,14 +55,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
                 Iterator<JsonNode> elemIt = fieldNode.getElements();
                 while (elemIt.hasNext()) {
                   JsonNode elemNode = (JsonNode) elemIt.next();
-                  Iterator<Entry<String, JsonNode>> arrFieldIT = elemNode.getFields();
-                  while (arrFieldIT.hasNext()) {
-                    JsonNode fieldArrElem = arrFieldIT.next().getValue();
-                    String currentValue = fieldArrElem.asText();
-                    if (currentValue != null && !"".equals(currentValue)) {
-                      string.append(fieldArrElem.asText() + ",");
-                    }
-                  }
+                  string.append(elemNode.asText() + ",");
                 }
                 if (string.length() > 1) {
                   string.deleteCharAt(string.length() - 1);

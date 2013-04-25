@@ -9,6 +9,7 @@ worldToObjectConverter =
 		@fillMaterialArray obj
 		@convertGeometryVertices obj
 		@convertGeometryFaces obj
+		# TODO: fill meta data...
 		return obj
 
 	handleMaterials: ->
@@ -30,6 +31,44 @@ worldToObjectConverter =
 		obj.terrain.geometry.vertices = vertices
 
 	convertGeometryFaces: (obj) ->
-		# TODO: convert faces (reverse JSON loader) ...
+		faces = []
+		for face in obj.terrain.geometry.faces
+			
+			isTriangle = face instanceof THREE.Face3
+			
+			if isTriangle
+				nVertices = 3
+			else
+				nVertices = 4
+				
+			hasMaterial = true 							# for the moment OBJs without materials get default material
+			hasFaceUvs = false 							# not supported in OBJ
+			hasFaceVertexUvs = obj.terrain.geometry.uvs.length >= nVertices
+			hasFaceNormals = false 					# don't export any face normals (as they are computed in engine)
+			hasFaceVertexNormals = false 		# not sure what this means...
+			hasFaceColors = false						# not sure what this means...
+			hasFaceVertexColors = false 		# not supported in OBJ
+			
+			faceType = 0
+			faceType = @setBit faceType, 0, not isTriangle
+			faceType = @setBit faceType, 1, hasMaterial
+			faceType = @setBit faceType, 2, hasFaceUvs
+			faceType = @setBit faceType, 3, hasFaceVertexUvs
+			faceType = @setBit faceType, 4, hasFaceNormals
+			faceType = @setBit faceType, 5, hasFaceVertexNormals
+			faceType = @setBit faceType, 6, hasFaceColors
+			faceType = @setBit faceType, 7, hasFaceVertexColors
+			
+			faces.push faceType
+			faces.push val for key, val of _.pick face, 'a', 'b', 'c', 'd'
+			faces.push face.materialIndex if hasMaterial
+			
+		obj.terrain.geometry.faces = faces
+	
+	setBit: (value, position, bool) ->
+		if bool
+			value | (1 << position)
+		else
+			value & ~(1 << position)
 
 return worldToObjectConverter
