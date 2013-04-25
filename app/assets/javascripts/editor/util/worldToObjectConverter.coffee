@@ -60,9 +60,6 @@ worldToObjectConverter =
 		obj.terrain.geometry.faces = faces
 	
 	setBit: (value, position, bool) ->
-		if bool
-			value | (1 << position)
-		else
-			value & ~(1 << position)
+		if bool then value | (1 << position) else value & ~(1 << position)
 
 return worldToObjectConverter
