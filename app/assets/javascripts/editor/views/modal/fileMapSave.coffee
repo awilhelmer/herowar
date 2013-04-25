@@ -1,7 +1,5 @@
 BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
-db = require 'database'
-EditorEventbus = require 'editorEventbus'
 
 class ModalFileMapSave extends BaseModalView
 
@@ -35,16 +33,11 @@ class ModalFileMapSave extends BaseModalView
 		status: @status
 
 	getErrors: ->
+		db = require 'database'
 		world = db.get 'world'
 		errors = []
 		errors.push 'Map title is required' unless world.get 'name'
 		errors
-
-	fillMaterialArray: (data) ->
-		materials = []
-		for index in data.materials
-			materials.push db.get 'materials', index 
-		data.materials = materials
 		
 	saveMap: ->
 		@status.isSaving = true
@@ -61,13 +54,11 @@ class ModalFileMapSave extends BaseModalView
 		jqxhr.done @onDone
 
 	getMapAsJson: ->
-		world = db.get 'world'
-		attributes = _.clone world.attributes
-		materials = attributes.materials
-		@handleMaterials attributes
-		@fillMaterialArray attributes
-		world.attributes.materials = materials
-		JSON.stringify attributes
+		worldToObjectConverter = require 'util/worldToObjectConverter'
+		obj = worldToObjectConverter.convert()
+		console.log 'Prepared map object for saving:'
+		console.log obj
+		JSON.stringify obj
 
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'
@@ -80,12 +71,7 @@ class ModalFileMapSave extends BaseModalView
 
 	onDone: =>
 		console.log 'Save map DONE'
-		@status.isSaving = false
-
-	
-	handleMaterials: ->
-		 EditorEventbus.handleWorldMaterials.dispatch()
-	
+		@status.isSaving = false	
 	
 	parseSuccessResponse: (data) ->
 		# MapProperties.MAP_ID = data.id
