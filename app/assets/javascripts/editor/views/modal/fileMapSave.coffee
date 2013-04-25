@@ -60,14 +60,15 @@ class ModalFileMapSave extends BaseModalView
 			success			: @onSuccess
 			error				: @onError
 		jqxhr.done @onDone
-		world.attributes.materials = materials
 
 	getMapAsJson: ->
 		world = db.get 'world'
-		materials = world.attributes.materials
-		@handleMaterials world.attributes
-		@fillMaterialArray world.attributes
-		JSON.stringify world.attributes
+		attributes = _.clone world.attributes
+		materials = attributes.materials
+		@handleMaterials attributes
+		@fillMaterialArray attributes
+		world.attributes.materials = materials
+		JSON.stringify attributes
 
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'

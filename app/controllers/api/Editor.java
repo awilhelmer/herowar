@@ -80,6 +80,12 @@ public class Editor extends Controller {
       String errorMessage = "Failed to parse request data to entity";
       return badRequest(errorMessage);
     }
+    // HOTFIXES (this needs to be fixed)
+    if (map.getTerrain().getGeometry().getUvs() == null || "".equals(map.getTerrain().getGeometry().getUvs()) || "[]".equals(map.getTerrain().getGeometry().getUvs())) {
+      map.getTerrain().getGeometry().setUvs("[[]]"); // Seems like uvs will be set during deserializing from [[]] to [] which causes issues
+    }
+    map.getTerrain().getGeometry().setType(GeometryType.TERRAIN); // The terrain type will not be set, dunno why :(
+    // END HOTFIXES
     saveMap(map);
     return ok(toJson(map));
   }
