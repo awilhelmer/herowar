@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -29,13 +30,14 @@ public class Material implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
   private String name;
 
   private String color;
   // They are for model imports
-  private Integer DbgColor;
-  private Integer DbgIndex;
-  private String DbgName;
+  private Integer dbgColor;
+  private Integer dbgIndex;
+  private String dbgName;
 
   private String blending;
   private Boolean depthTest;
@@ -52,7 +54,7 @@ public class Material implements Serializable {
   private String colorDiffuse;
   private String colorSpecular;
   private String mapDiffuse;
-  
+
   @Transient
   private Long materialId;
 
@@ -136,27 +138,27 @@ public class Material implements Serializable {
   }
 
   public Integer getDbgColor() {
-    return DbgColor;
+    return dbgColor;
   }
 
   public void setDbgColor(Integer dbgColor) {
-    DbgColor = dbgColor;
+    this.dbgColor = dbgColor;
   }
 
   public Integer getDbgIndex() {
-    return DbgIndex;
+    return dbgIndex;
   }
 
   public void setDbgIndex(Integer dbgIndex) {
-    DbgIndex = dbgIndex;
+    this.dbgIndex = dbgIndex;
   }
 
   public String getDbgName() {
-    return DbgName;
+    return dbgName;
   }
 
   public void setDbgName(String dbgName) {
-    DbgName = dbgName;
+    this.dbgName = dbgName;
   }
 
   public String getColorAmbient() {
@@ -254,7 +256,7 @@ public class Material implements Serializable {
   public void setVertexColors(Boolean vertexColors) {
     this.vertexColors = vertexColors;
   }
-  
+
   public Long getMaterialId() {
     return materialId;
   }

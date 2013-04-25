@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import models.entity.game.Vector3;
@@ -44,6 +43,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
       JsonNode fieldNode = node.get(field);
       if (fieldNode != null && !fieldNode.isNull()) {
         try {
+          field = field.substring(0, 1).toLowerCase() + field.substring(1);
           Class<?> propClass = PropertyUtils.getPropertyType(result, field);
           Object value = null;
           if (propClass != null) {
@@ -51,7 +51,6 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               value = fieldNode.getDoubleValue();
             } else if (propClass.isAssignableFrom(String.class)) {
               if (fieldNode.isArray()) {
-                //TODO checking for 2d Array
                 value = fieldNode.toString();
               } else {
                 value = fieldNode.getTextValue();
@@ -105,6 +104,8 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
             if (value != null) {
               PropertyUtils.setProperty(result, field, value);
             }
+          } else {
+            log.warn(String.format("Field <%s> not found in Bean <%s>", field, result.getClass().getSimpleName()));
           }
         } catch (Exception e) {
           log.error("", e);
