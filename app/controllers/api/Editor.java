@@ -36,7 +36,10 @@ public class Editor extends Controller {
   private static final Logger.ALogger log = Logger.of(Editor.class);
 
   public static Result mapDefault() {
-    return ok(toJson(new Map()));
+    Map map = new Map();
+    map.getTerrain().getGeometry().setType(GeometryType.TERRAIN);
+    map.getTerrain().getGeometry().getMetadata().setGeneratedBy("WorldEditor");
+    return ok(toJson(map));
   }
 
   @Transactional

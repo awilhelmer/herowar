@@ -88,6 +88,14 @@ public class Geometry implements Serializable {
   private List<Material> materials;
 
   public Geometry() {
+    vertices = "[]";
+    faces = "[]";
+    morphTargets = "[]";
+    morphColors = "[]";
+    normals = "[]";
+    colors = "[]";
+    uvs = "[[]]";
+    scale = 1D;
   }
 
   // GETTER & SETTER //

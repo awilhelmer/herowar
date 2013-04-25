@@ -37,6 +37,7 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
 
   }
 
+  @SuppressWarnings("unchecked")
   public static Environment getRoot() {
     List<Object[]> resultSet = JPA.em().createQuery(getRootSelect("Root")).setParameter(0, "Root").getResultList();
     Environment root = new Environment();
@@ -65,6 +66,7 @@ public class EnvironmentDAO extends BaseDAO<Long, Environment> {
     return root;
   }
 
+  @SuppressWarnings("unchecked")
   private static void addChilds(Environment child) {
     List<Object[]> resultSet = JPA.em().createQuery(getRootSelect(null)).setParameter(0, child.getId()).getResultList();
     for (Object[] row : resultSet) {

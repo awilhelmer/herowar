@@ -49,9 +49,6 @@ public class Map implements Serializable {
   @OneToMany(cascade = CascadeType.ALL, mappedBy="map")
   private Set<Mesh> objects; 
   
-  
-  
-  
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name="map_materials")
   @JsonIgnore
@@ -172,6 +169,14 @@ public class Map implements Serializable {
 
   public void setAllMaterials(Set<Material> allMaterials) {
     this.allMaterials = allMaterials;
+  }
+
+  public Set<Mesh> getObjects() {
+    return objects;
+  }
+
+  public void setObjects(Set<Mesh> objects) {
+    this.objects = objects;
   }
 
   public List<Material> getMaterials() {

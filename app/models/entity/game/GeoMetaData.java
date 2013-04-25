@@ -53,10 +53,19 @@ public class GeoMetaData implements Serializable {
   }
 
   public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
-    this(null, 3.1f, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
+    this(null, 3.1F, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
   }
   
   public GeoMetaData() {
+    formatVersion = 3.1F;
+    sourceFile = "";
+    generatedBy = "";
+    vertices = 0L;
+    faces = 0L;
+    normals = 0L;
+    colors = 0L;
+    uvs = 0L;
+    materials = 0L;
   }
 
   // GETTER & SETTER //

@@ -48,12 +48,9 @@ class ModalFileMapSave extends BaseModalView
 		
 	saveMap: ->
 		@status.isSaving = true
-		world = db.get 'world'
-		materials = world.attributes.materials
-		@handleMaterials world.attributes
-		@fillMaterialArray world.attributes
-		json = JSON.stringify world.attributes
-		#console.log 'json: ' + json
+		json = @getMapAsJson()
+		console.log 'Save map'
+		console.log json
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
@@ -65,6 +62,12 @@ class ModalFileMapSave extends BaseModalView
 		jqxhr.done @onDone
 		world.attributes.materials = materials
 
+	getMapAsJson: ->
+		world = db.get 'world'
+		materials = world.attributes.materials
+		@handleMaterials world.attributes
+		@fillMaterialArray world.attributes
+		JSON.stringify world.attributes
 
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'
