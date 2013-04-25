@@ -50,7 +50,6 @@ class ModalFileMapSave extends BaseModalView
 		@status.isSaving = true
 		json = @getMapAsJson()
 		console.log 'Save map'
-		console.log json
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
