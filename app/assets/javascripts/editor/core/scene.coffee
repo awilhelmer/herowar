@@ -73,7 +73,10 @@ class Scene
 	buildTerrain: =>
 		console.log "Change terrain: size=#{@world.get('terrain').width}x#{@world.get('terrain').height} smoothness=#{@world.get('terrain').smoothness} zscale=#{@world.get('terrain').zScale}"
 		@randomPool.seek 0
-		map = @world.terrainUpdate()
+		if @world.get('terrain').geometry instanceof THREE.Geometry
+			map = @world.getTerrainMeshFromGeometry()
+		else
+			map = @world.terrainUpdate()
 		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
 		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe

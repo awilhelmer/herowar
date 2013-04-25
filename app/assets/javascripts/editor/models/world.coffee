@@ -18,8 +18,8 @@ class World extends Backbone.Model
 		@trigger 'change:materials'
 
 	terrainUpdate: ->
-		segWidth = Math.round(@get('terrain').width / 10)
-		segHeight = Math.round(@get('terrain').height / 10)
+		segWidth = Math.round @get('terrain').width / 10
+		segHeight = Math.round @get('terrain').height / 10
 		model = generateTerrain segWidth, segHeight, @get('terrain').smoothness
 		zScale = @get('terrain').zScale
 		terrain = []
@@ -28,17 +28,13 @@ class World extends Backbone.Model
 			for j in [0..segWidth]
 				row.push model[i][j] * zScale
 			terrain.push row
-		@getTerrainMesh terrain, segWidth, segHeight
+		@buildRandomTerrainMesh terrain, segWidth, segHeight
 
-	getTerrainMesh: (terrain, segWidth, segHeight) ->		
-		obj = new THREE.Object3D()
-		obj.name = (@get 'name') + '_group'
-		mesh = new THREE.Mesh new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight), new THREE.MeshFaceMaterial()
-		material = db.get 'materials', Constants.MATERIAL_SELECTED
-		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: Constants.MATERIAL_SELECTED #TODO MAPPING ... 
-		mesh.name = (@get 'name') + '_mesh'
-		mesh.geometry.dynamic = true
-		obj.add mesh
+	getTerrainMeshFromGeometry: ->
+		@createTerrainMesh @get('terrain').geometry
+
+	buildRandomTerrainMesh: (terrain, segWidth, segHeight) ->		
+		obj = @createTerrainMesh(new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight))
 		for mesh in obj.children
 			mesh.rotation.x = - Math.PI/2
 			for i in [0..segHeight]
@@ -46,7 +42,18 @@ class World extends Backbone.Model
 					vector = mesh.geometry.vertices[i * segHeight + j]
 					vector.z = terrain[i][j] if vector
 		obj
-	
+
+	createTerrainMesh: (geometry) ->
+		obj = new THREE.Object3D()
+		obj.name = (@get 'name') + '_group'
+		mesh = new THREE.Mesh geometry, new THREE.MeshFaceMaterial()
+		material = db.get 'materials', Constants.MATERIAL_SELECTED
+		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: Constants.MATERIAL_SELECTED #TODO MAPPING ... 
+		mesh.name = (@get 'name') + '_mesh'
+		mesh.geometry.dynamic = true
+		obj.add mesh
+		obj
+
 	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
 		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
