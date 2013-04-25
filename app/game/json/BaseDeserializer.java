@@ -51,17 +51,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               value = fieldNode.getDoubleValue();
             } else if (propClass.isAssignableFrom(String.class)) {
               if (fieldNode.isArray()) {
-                StringBuffer string = new StringBuffer("[");
-                Iterator<JsonNode> elemIt = fieldNode.getElements();
-                while (elemIt.hasNext()) {
-                  JsonNode elemNode = (JsonNode) elemIt.next();
-                  string.append(elemNode.asText() + ",");
-                }
-                if (string.length() > 1) {
-                  string.deleteCharAt(string.length() - 1);
-                }
-                string.append("]");
-                value = string.toString();
+                value = fieldNode.toString();
               } else {
                 value = fieldNode.getTextValue();
               }

@@ -28,8 +28,13 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
   
   protected void writeStringAsDoubleMultiArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
     if (value != null && !"".equals(value)) {
-      value = value.substring(2);
-      value = value.substring(0, value.length() - 2);
+      if (value.startsWith("[[")) {
+        value = value.substring(2);
+        value = value.substring(0, value.length() - 2);
+      } else {
+        value = value.substring(1);
+        value = value.substring(0, value.length() - 1);        
+      }
       jgen.writeArrayFieldStart(name);
       jgen.writeStartArray();
       if (value != null && !"".equals(value)) {

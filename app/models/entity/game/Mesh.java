@@ -38,6 +38,11 @@ public class Mesh implements Serializable {
   @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "rotation_x")),
       @AttributeOverride(name = "y", column = @Column(name = "rotation_y")), @AttributeOverride(name = "z", column = @Column(name = "rotation_z")) })
   private Vector3 rotation;
+  
+  @Embedded
+  @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "scale_x")),
+      @AttributeOverride(name = "y", column = @Column(name = "scale_y")), @AttributeOverride(name = "z", column = @Column(name = "scale_z")) })
+  private Vector3 scale;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "geo_id", referencedColumnName = "id")
@@ -46,12 +51,7 @@ public class Mesh implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "map_id", referencedColumnName = "id")
   @JsonIgnore
-  private Map map;
-
-  
-  @Column(scale = 6)
-  private Double scale;
-  
+  private Map map;  
   
   public Integer getId() {
     return id;
@@ -77,6 +77,14 @@ public class Mesh implements Serializable {
     this.rotation = rotation;
   }
 
+  public Vector3 getScale() {
+    return scale;
+  }
+
+  public void setScale(Vector3 scale) {
+    this.scale = scale;
+  }
+
   public Geometry getGeometry() {
     return geometry;
   }
@@ -92,15 +100,4 @@ public class Mesh implements Serializable {
   public void setMap(Map map) {
     this.map = map;
   }
-
-  public Double getScale() {
-    return scale;
-  }
-
-  public void setScale(Double scale) {
-    this.scale = scale;
-  }
-
- 
-
 }

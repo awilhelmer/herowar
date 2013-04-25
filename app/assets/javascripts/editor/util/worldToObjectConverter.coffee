@@ -9,7 +9,8 @@ worldToObjectConverter =
 		@fillMaterialArray obj
 		@convertGeometryVertices obj
 		@convertGeometryFaces obj
-		# TODO: fill meta data...
+		# TODO: fill geometry meta data...
+		@addObjects obj
 		return obj
 
 	handleMaterials: ->
@@ -61,5 +62,9 @@ worldToObjectConverter =
 	
 	setBit: (value, position, bool) ->
 		if bool then value | (1 << position) else value & ~(1 << position)
+
+	addObjects: (obj) ->
+		@environmentsStatic = db.get 'environmentsStatic'
+		console.log @environmentsStatic
 
 return worldToObjectConverter
