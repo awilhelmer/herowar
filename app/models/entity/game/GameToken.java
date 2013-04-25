@@ -28,8 +28,6 @@ public class GameToken implements Serializable {
   private static final long serialVersionUID = -5699234192975949575L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name="token_name")
   private String token;
   private Boolean invalid;
   
