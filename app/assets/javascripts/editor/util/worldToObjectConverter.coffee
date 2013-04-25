@@ -33,13 +33,8 @@ worldToObjectConverter =
 	convertGeometryFaces: (obj) ->
 		faces = []
 		for face in obj.terrain.geometry.faces
-			
 			isTriangle = face instanceof THREE.Face3
-			
-			if isTriangle
-				nVertices = 3
-			else
-				nVertices = 4
+			if isTriangle then nVertices = 3 else nVertices = 4
 				
 			hasMaterial = true 							# for the moment OBJs without materials get default material
 			hasFaceUvs = false 							# not supported in OBJ
@@ -62,7 +57,6 @@ worldToObjectConverter =
 			faces.push faceType
 			faces.push val for key, val of _.pick face, 'a', 'b', 'c', 'd'
 			faces.push face.materialIndex if hasMaterial
-			
 		obj.terrain.geometry.faces = faces
 	
 	setBit: (value, position, bool) ->
