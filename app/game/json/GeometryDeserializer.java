@@ -29,8 +29,11 @@ public class GeometryDeserializer extends BaseDeserializer<Geometry> {
     JsonNode geometryNode = oc.readTree(jsonParser);
     Geometry geo = this.parseObject(geometryNode, GeoMetaData.class, Material.class, GeoMatId.class);
     geo.setType(GeometryType.ENVIRONMENT);
-    for (Material mat : geo.getMaterials()) {
-      mat.setName(mat.getDbgName());
+    if (geo.getMaterials() != null) {
+      for (Material mat : geo.getMaterials()) {
+        mat.setName(mat.getDbgName());
+
+      }
     }
     return geo;
   }
