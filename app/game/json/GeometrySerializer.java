@@ -12,6 +12,8 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.SerializerProvider;
 
+import dao.game.GeoMatId;
+
 /**
  * @author Sebastian Sachtleben
  */
@@ -27,7 +29,23 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
     jgen.writeArrayFieldStart("materials");
     writeMaterials(geometry.getMaterials(), jgen);
     jgen.writeEndArray();
+    jgen.writeArrayFieldStart("matIdMapper");
+    writeMaterialIds(geometry.getMatIdMapper(), jgen);
+    jgen.writeEndArray();
     jgen.writeEndObject();
+  }
+
+  private void writeMaterialIds(List<GeoMatId> geoMaterials, JsonGenerator jgen) throws JsonGenerationException, IOException {
+    if (geoMaterials == null || geoMaterials.size() == 0) {
+      return;
+    }
+    for (GeoMatId geoM : geoMaterials) {
+      jgen.writeStartObject();
+      writeNumberField(jgen, "materialIndex", geoM.getMaterialIndex());
+      writeNumberField(jgen, "materialId", geoM.getMaterialId());
+      writeStringField(jgen, "materialName", geoM.getMaterialName());
+      jgen.writeEndObject();
+    }
   }
 
   private void writeMaterials(List<Material> materials, JsonGenerator jgen) throws JsonGenerationException, IOException {
@@ -57,8 +75,6 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
       jgen.writeEndObject();
     }
   }
-
-
 
   private void writeGeometry(Geometry geometry, JsonGenerator jgen) throws JsonGenerationException, IOException {
     writeNumberField(jgen, "id", geometry.getId());

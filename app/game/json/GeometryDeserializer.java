@@ -13,6 +13,8 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.ObjectCodec;
 import org.codehaus.jackson.map.DeserializationContext;
 
+import dao.game.GeoMatId;
+
 /**
  * Custom Deserializer for Geometry entity. We have to parse the arrays to
  * strings.
@@ -25,7 +27,7 @@ public class GeometryDeserializer extends BaseDeserializer<Geometry> {
   public Geometry deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
     ObjectCodec oc = jsonParser.getCodec();
     JsonNode geometryNode = oc.readTree(jsonParser);
-    Geometry geo = this.parseObject(geometryNode, GeoMetaData.class, Material.class);
+    Geometry geo = this.parseObject(geometryNode, GeoMetaData.class, Material.class, GeoMatId.class);
     geo.setType(GeometryType.ENVIRONMENT);
     for (Material mat : geo.getMaterials()) {
       mat.setName(mat.getDbgName());

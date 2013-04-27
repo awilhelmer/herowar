@@ -4,13 +4,23 @@ import java.io.Serializable;
 
 /**
  * For mapping Material in Geometry
+ * 
  * @author TimeX
- *
+ * 
  */
 public class GeoMatId implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long materialIndex;
   private Long materialId;
+  private String materialName;
+
+  public String getMaterialName() {
+    return materialName;
+  }
+
+  public void setMaterialName(String materialName) {
+    this.materialName = materialName;
+  }
 
   public Long getMaterialIndex() {
     return materialIndex;

@@ -36,7 +36,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
   @Transactional
   public static Result show(Long id) {
     Geometry geo = GeometryDAO.getInstance().findUnique(id);
-    GeometryDAO.mapMaterials(geo);
+    handleGeo(geo);
     return ok(toJson(geo));
   }
 
@@ -46,14 +46,21 @@ public class Geometries extends BaseAPI<Long, Geometry> {
     if (env == null || env.getGeometry() == null) {
       return badRequest("No result found");
     }
+
     Geometry geo = env.getGeometry();
+    handleGeo(geo);
+
+    return ok(toJson(geo));
+  }
+
+  private static void handleGeo(Geometry geo) {
     GeometryDAO.mapMaterials(geo); // For global binding ... TODO
+
     geo.setMaterials(new ArrayList<Material>());
     for (GeoMaterial geoMap : geo.getGeoMaterials()) {
       geo.getMaterials().add(geoMap.getId().getMaterial());
     }
 
-    return ok(toJson(geo));
   }
 
   @Transactional

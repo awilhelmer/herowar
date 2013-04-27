@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
 Variables = require 'variables'
+JSONLoader = require 'util/threeloader'
 db = require 'database'
 
 class SelectorObject
@@ -8,7 +9,7 @@ class SelectorObject
 	constructor: (@editor, @materialHelper, @objectHelper, @intersectHelper) ->
 		@currentMeshId = -1
 		@currentMesh = null
-		@loader = new THREE.JSONLoader()
+		@loader = new JSONLoader()
 		@world = db.get 'world'
 		@bindEventListeners()
 
@@ -126,17 +127,27 @@ class SelectorObject
 			unless @editor.engine.scenegraph.hasStaticObject(@currentMeshId)
 				console.log "Loading Geometry from Server ... "
 				now = new Date()
+				#TODO we must have the JSON object ... 
 				@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 				console.log "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
 			else
 				mesh = @editor.engine.scenegraph.staticObjects[@currentMeshId][0]
 				@onLoadGeometry mesh.geometry, mesh.material.materials
 			
-	onLoadGeometry: (geometry, materials) =>
+	onLoadGeometry: (geometry, materials, json) =>
 		@currentMesh = new THREE.Mesh geometry
-		@currentMesh.material = new THREE.MeshFaceMaterial materials
 		@currentMesh.name = @currentMeshName
 		@currentMesh.userData.dbId = @currentMeshId
+		@currentMesh.material = new THREE.MeshFaceMaterial materials
+		if json
+			for matId in json.matIdMapper
+				for threeMat in materials
+					if matId.materialName is threeMat.name
+						threeMat.name = "matID#{matId.materialId}" 
+						break 
+			
+			@currentMesh.userData.matIdMapper = json.matIdMapper
+			@materialHelper.loadGeometryMaterial @currentMesh
 		@addMesh()
 	
 	addMesh: ->

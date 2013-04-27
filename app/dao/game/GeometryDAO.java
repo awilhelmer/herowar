@@ -34,6 +34,7 @@ public class GeometryDAO extends BaseDAO<Long, Geometry> {
       GeoMatId id = new GeoMatId();
       id.setMaterialIndex(geoMat.getArrayIndex());
       id.setMaterialId(mat.getId());
+      id.setMaterialName(mat.getName());
       geo.getMatIdMapper().add(id);
     }
   }

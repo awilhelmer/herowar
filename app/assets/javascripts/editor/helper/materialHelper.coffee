@@ -46,7 +46,21 @@ class MaterialHelper
 						if index
 							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
-	
+		
+	#For Geometries without global materials binding 
+	loadGeometryMaterial: (geo) ->
+		if geo.userData.matIdMapper
+			materials = []
+			_.sortBy(geo.userData.matIdMapper,((idMat) => return idMat.materialIndex))
+			for idMapper in geo.userData.matIdMapper
+				index = @getMaterialIndex geo, idMapper
+				if index > -1
+					materials.push geo.material.materials[index]
+				else
+					console.log 'No material in index found ...'
+			geo.material.materials = materials
+		null
+		
 	getGlobalMatIndexById: (name) ->
 		id = name.replace 'matID', ''
 		id = parseInt id
