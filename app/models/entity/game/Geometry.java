@@ -2,6 +2,8 @@ package models.entity.game;
 
 import game.json.GeometryDeserializer;
 import game.json.GeometrySerializer;
+import game.json.StringArray;
+import game.json.StringArray.ArrayType;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,24 +42,31 @@ public class Geometry implements Serializable {
   private Long id;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String vertices;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String faces;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String morphTargets;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String morphColors;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String normals;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE)
   private String colors;
 
   @Lob
+  @StringArray(type=ArrayType.DOUBLE, dimensions=2)
   private String uvs;
 
   @Column(scale = 6)

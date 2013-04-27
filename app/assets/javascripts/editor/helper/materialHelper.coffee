@@ -57,7 +57,8 @@ class MaterialHelper
 				if index > -1
 					materials.push geo.material.materials[index]
 				else
-					console.log 'No material in index found ...'
+					console.error 'No material in index found ...'
+					return null
 			geo.material.materials = materials
 		null
 		

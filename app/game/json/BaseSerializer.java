@@ -1,13 +1,26 @@
 package game.json;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
+import models.entity.game.Vector3;
+
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.beanutils.converters.StringConverter;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonSerializer;
+
+import play.Logger;
 
 /**
  * The BaseSerializer provides several methods which helps to serialize a pojo
@@ -19,13 +32,108 @@ import org.codehaus.jackson.map.JsonSerializer;
  *          The class to serialize
  */
 public abstract class BaseSerializer<T> extends JsonSerializer<T> {
+  private static final Logger.ALogger log = Logger.of(BaseSerializer.class);
 
   private DoubleConverter doubleConverter = new DoubleConverter();
   private StringConverter stringConverter = new StringConverter();
   private ArrayConverter arrayDoubleConverter = new ArrayConverter(double[].class, doubleConverter);
   private ArrayConverter arrayStringConverter = new ArrayConverter(String[].class, stringConverter);
-  
-  
+
+  protected void writeAll(JsonGenerator jgen, T obj, Class<?>... clazz) throws JsonGenerationException, IOException {
+    List<Class<?>> classes = Arrays.asList(clazz);
+    writeObject(jgen, obj, classes);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void writeObject(JsonGenerator jgen, Object obj, List<Class<?>> classes) throws JsonGenerationException, IOException {
+    // PropertyDescriptor[] properties =
+    // PropertyUtils.getPropertyDescriptors(obj);
+
+    Field[] fields = obj.getClass().getFields();
+    jgen.writeStartObject();
+    for (Field field : fields) {
+      Class<?> type = field.getType();
+      try {
+        if (type != null && !type.isAnnotation() && !Modifier.isStatic(field.getModifiers())) {
+          Object value = PropertyUtils.getProperty(obj, field.getName());
+
+          if (value != null && !field.isAnnotationPresent(JsonIgnore.class)) {
+            if (type.isAssignableFrom(String.class)) {
+              if (field != null && field.isAnnotationPresent(StringArray.class)) {
+                StringArray anno = field.getAnnotation(StringArray.class);
+                int dimension = anno.dimensions();
+                switch (anno.type()) {
+                case INTEGER:
+                case DOUBLE:
+                  if (dimension == 1) {
+                    writeStringAsDoubleArray(jgen, field.getName(), value.toString());
+                  } else {
+                    writeStringAsDoubleMultiArray(jgen, field.getName(), value.toString());
+                  }
+                  break;
+                case STRING:
+                  writeStringAsStringArray(jgen, field.getName(), value.toString());
+                  if (dimension > 1) {
+                    log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", field.getName(), obj.getClass()
+                        .getSimpleName()));
+                  }
+                  break;
+                default:
+                  log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", field.getName(), obj.getClass().getSimpleName(),
+                      anno.type()));
+                  break;
+                }
+
+              } else {
+                jgen.writeStringField(field.getName(), value.toString());
+              }
+
+            } else if (type.isAssignableFrom(Double.class)) {
+              jgen.writeNumberField(field.getName(), (Double) value);
+            } else if (type.isAssignableFrom(Float.class)) {
+              jgen.writeNumberField(field.getName(), (Float) value);
+            } else if (type.isAssignableFrom(Integer.class)) {
+              jgen.writeNumberField(field.getName(), (Integer) value);
+            } else if (type.isAssignableFrom(Long.class)) {
+              jgen.writeNumberField(field.getName(), (Long) value);
+            } else if (type.isAssignableFrom(Short.class)) {
+              jgen.writeNumberField(field.getName(), (Short) value);
+            } else if (type.isAssignableFrom(Boolean.class)) {
+              jgen.writeBooleanField(field.getName(), (Boolean) value);
+            } else if (type.isAssignableFrom(Vector3.class)) {
+              Vector3 vec = (Vector3) value;
+              jgen.writeObjectField(field.getName(), vec);
+            } else if (type.isAssignableFrom(List.class) || type.isAssignableFrom(Set.class)) {
+              ParameterizedType pt = (ParameterizedType) field.getGenericType();
+              Class<?> genericType = (Class<?>) pt.getActualTypeArguments()[0];
+              if (classes.contains(genericType)) {
+                jgen.writeArrayFieldStart(field.getName());
+                Collection<Object> col = (Collection<Object>) value;
+                for (Object elem : col) {
+                  writeObject(jgen, elem, classes);
+                }
+                jgen.writeEndArray();
+              }
+
+            } else if (classes.contains(type)) {
+              jgen.writeObjectFieldStart(field.getName());
+              writeObject(jgen, value, classes);
+              jgen.writeEndObject();
+            } else {
+              log.warn(String.format("Field <%s> ignored in Bean <%s>", field.getName(), obj.getClass().getSimpleName()));
+            }
+          } else {
+            jgen.writeNullField(field.getName());
+          }
+
+        }
+      } catch (Exception e) {
+        log.error("", e);
+      }
+    }
+    jgen.writeEndObject();
+  }
+
   protected void writeStringAsDoubleMultiArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
     if (value != null && !"".equals(value)) {
       if (value.startsWith("[[")) {
@@ -33,7 +141,7 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
         value = value.substring(0, value.length() - 2);
       } else {
         value = value.substring(1);
-        value = value.substring(0, value.length() - 1);        
+        value = value.substring(0, value.length() - 1);
       }
       jgen.writeArrayFieldStart(name);
       jgen.writeStartArray();

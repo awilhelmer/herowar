@@ -127,7 +127,6 @@ class SelectorObject
 			unless @editor.engine.scenegraph.hasStaticObject(@currentMeshId)
 				console.log "Loading Geometry from Server ... "
 				now = new Date()
-				#TODO we must have the JSON object ... 
 				@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
 				console.log "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
 			else
@@ -141,7 +140,7 @@ class SelectorObject
 		@currentMesh.material = new THREE.MeshFaceMaterial materials
 		if json
 			for matId in json.matIdMapper
-				for threeMat in materials
+				for threeMat in @currentMesh.material.materials
 					if matId.materialName is threeMat.name
 						threeMat.name = "matID#{matId.materialId}" 
 						break 
