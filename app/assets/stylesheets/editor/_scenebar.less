@@ -1,0 +1,56 @@
+//
+// SceneBar
+// --------------------------------------------------
+
+#scenebar {
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	right: 300px;
+	height: 50px;
+	padding-left: 15px;
+	.box-shadow(0 1px 4px rgba(0,0,0,.065));
+}
+
+// COMPONENT: TABS
+
+#scenebar .nav {
+	margin-bottom: 5px;
+}
+
+#scenebar .nav-tabs {
+	border-bottom: none;
+}
+
+#scenebar .nav-tabs > li > a {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-right: 0px;
+	.border-radius(0 0 0 0);
+}
+
+#scenebar .nav-tabs > li > a {
+  color: #a0a7ad;
+  background-color: #6b6b6b;
+  border: 1px solid #333333;
+  border-left-width: 0px;
+}
+
+#scenebar .nav-tabs > li:first-child > a {
+	border-left-width: 1px;
+}
+
+#scenebar .nav-tabs > .active > a, 
+#scenebar .nav-tabs > .active > a:hover, 
+#scenebar .nav-tabs > .active > a:focus {
+	color: #333333;
+	background-color: #8da7cc;
+	border: 1px solid #333333;
+	border-left-width: 0px;
+}
+
+#scenebar .nav-tabs > .active:first-child > a, 
+#scenebar .nav-tabs > .active:first-child > a:hover, 
+#scenebar .nav-tabs > .active:first-child > a:focus {
+	border-left-width: 1px;
+}

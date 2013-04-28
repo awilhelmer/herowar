@@ -119,7 +119,7 @@ trait JavascriptTransformer {
       if (!(FileCacheHandler.writtenFiles.contains(file)))
         FileCacheHandler.writtenFiles :+= file
       FileCacheHandler.unchangedModules :+= tuple
-      println(FileCacheHandler.unchangedModules.size)
+      //println(FileCacheHandler.unchangedModules.size)
     }
     FileCacheHandler.writtenFiles
   }

@@ -1,0 +1,16 @@
+<div class="btn-toolbar">
+	<div class="btn-group" id="editor-menubar-tools">
+		<a class="btn {{#if selectIsSelected}}active{{/if}}" id="editor-menubar-tool-selection" href="#"><i class="icon-select"></i></a>
+		<a class="btn {{#if brushIsSelected}}active{{/if}} dropdown-toggle" id="editor-menubar-tool-brush" data-toggle="dropdown" href="#"><i class="icon-brush"></i></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+			<li><a tabindex="-1" id="editor-menubar-brush-tiny" href="#">Tiny {{#if brushIsTiny}}&radic;{{/if}}</a></li>
+			<li><a tabindex="-1" id="editor-menubar-brush-medium" href="#">Medium {{#if brushIsMedium}}&radic;{{/if}}</a></li>
+			<li><a tabindex="-1" id="editor-menubar-brush-large" href="#">Large {{#if brushIsLarge}}&radic;{{/if}}</a></li>
+		</ul>
+	</div>
+	<div class="btn-group" id="editor-menubar-brush">
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsMaterial}}active{{/if}}" id="editor-menubar-brush-materials" href="#"><i class="icon-materials"></i></a>
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainRaise}}active{{/if}}" id="editor-menubar-brush-raise" href="#"><i class="icon-raise"></i></a>
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainDegrade}}active{{/if}}" id="editor-menubar-brush-degrade" href="#"><i class="icon-degrade"></i></a>
+	</div>
+</div>
