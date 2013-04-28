@@ -72,7 +72,16 @@ class MaterialManagerMenu extends BaseView
 		matId = ++@nextMatId #TODO get next id from database! (Create new empty Material ... )
 		console.log "New material id #{id} matId #{matId}"
 		col = db.get 'materials'
-		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
+		mat = new Material()
+		mat.set 
+			'id'					: id
+			'materialId' 	: matId
+			'name' 				: "Mat.#{id}"
+			'color' 			: '#CCCCCC'
+			'transparent' : false
+			'opacity'			: 1
+			'map'					: undefined		
+		col.add mat
 		@updateMatId id, matId
 		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
 		

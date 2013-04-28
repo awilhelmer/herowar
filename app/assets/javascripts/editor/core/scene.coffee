@@ -94,7 +94,16 @@ class Scene
 
 	createTerrainMaterial: ->
 		col = db.get 'materials'
-		col.add new Material 1, 1, 'Terrain', '#006600'
+		mat = new Material()
+		mat.set 
+			'id'					: 1
+			'materialId' 	: 1
+			'name' 				: 'Terrain'
+			'color' 			: '#006600'
+			'transparent' : false
+			'opacity'			: 1
+			'map'					: undefined
+		col.add mat
 		@world.addTerrainMaterial 1
 	
 	handleMaterials:  =>
