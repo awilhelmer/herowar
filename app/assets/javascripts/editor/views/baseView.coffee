@@ -11,6 +11,7 @@ class BaseView extends Backbone.View
 		if @entity and not @model
 			@model = db.get @entity, @options.modelId
 		@bindEvents()
+		@bindCollectionEvents()
 		#clean subview dom element
 		@$el.removeAttr 'data-view data-model'
 		#add body class if is set:
@@ -20,9 +21,13 @@ class BaseView extends Backbone.View
 	bindEvents: ->
 		@listenTo @model, 'change', @render if @model
 
+	bindCollectionEvents: ->
+		if @model instanceof Backbone.Collection
+			@listenTo @model, 'fetching', => @$el.addClass 'loading'
+			@listenTo @model, 'fetched', => @$el.removeClass 'loading'
+
 	# if any custom event handlers have been added (the @listenTo will be removed by Backbone.View
 	unbindEvents: ->
-
  
 	render: ->
 			@$el.empty()
@@ -40,7 +45,6 @@ class BaseView extends Backbone.View
 
 	# OVERRIDE to do stuff after view is rendered
 	afterRender: (time) ->
-
 
 	# OVERRIDE allow view dependand modifications of the model
 	getTemplateData: ->
