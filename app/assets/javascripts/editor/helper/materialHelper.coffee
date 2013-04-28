@@ -51,7 +51,7 @@ class MaterialHelper
 	
 	loadGlobalMaterials:(geo) ->
 		materials = []
-		globalMaterials = materials = db.get 'materials'
+		globalMaterials = db.get 'materials'
 		if geo.matIdMapper
 			_.sortBy(geo.matIdMapper,((idMat) => return idMat.materialIndex))
 			for idMapper in geo.matIdMapper
