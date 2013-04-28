@@ -1,0 +1,42 @@
+//
+// SceneBar - TerrainMaterials
+// --------------------------------------------------
+
+#scenebar-terrain-materials {
+    overflow-y: auto;
+    height: 45px;
+}
+
+#scenebar-terrain-materials .content {
+    margin-left: 15px;
+}
+
+#scenebar-terrain-materials .mm-material {
+    cursor: pointer;
+    width: 75px;
+    background-color: #a0a7ad;
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    color: #333333;
+    float: left;
+    overflow: hidden;
+    
+    &:first-child {
+        border-right-width: 0;
+    }
+}
+
+#scenebar-terrain-materials .mm-material.active {
+    background-color: #ff9933;
+}
+
+#scenebar-terrain-materials .mm-material-prev {
+    width: 75px;
+    height: 25px;
+    background-color: #FFFFFF;  
+}
+
+#scenebar-terrain-materials .mm-material span {
+    margin-left: 5px;
+    margin-top: 5px;
+}
