@@ -42,9 +42,9 @@ class MaterialHelper
 			if child.name != 'wireframe'
 				if child.material.materials	
 					for mat, geoMatIndex in child.material.materials
-						id = mat.name.replace 'matID', ''
-						id = parseInt id
-						index = @getGlobalMatIndexById(id) #index of global materials list
+						materialId = mat.name.replace 'matID', ''
+						materialId = parseInt materialId
+						index = @getGlobalMatIndexById(materialId) #index of global materials list
 						if index > -1
 							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
@@ -80,7 +80,7 @@ class MaterialHelper
 	getGlobalMatIndexById: (id) ->
 		materials = db.get 'materials'
 		for material, key in materials.models
-			if material.id == id
+			if material.attributes.materialId == id
 				return key
 		console.log "No Backbone material found!" 
 		null

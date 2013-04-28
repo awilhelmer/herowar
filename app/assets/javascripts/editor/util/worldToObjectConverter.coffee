@@ -5,7 +5,7 @@ worldToObjectConverter =
 	convert: ->
 		world = db.get 'world'
 		obj = _.clone world.attributes
-		@handleMaterials()
+		@handleMaterials()	
 		@fillMaterialArray obj
 		@convertGeometryVertices obj
 		@convertGeometryFaces obj
@@ -19,8 +19,11 @@ worldToObjectConverter =
 
 	fillMaterialArray: (obj) ->
 		materials = []
-		for index in obj.materials
-			materials.push db.get 'materials', index 
+		col = db.get 'materials'
+		for mat in col.models
+			saveMat = _.clone mat.attributes
+			saveMat.id = saveMat.materialId
+			materials.push saveMat
 		obj.materials = materials
 
 	convertGeometryVertices: (obj) ->
