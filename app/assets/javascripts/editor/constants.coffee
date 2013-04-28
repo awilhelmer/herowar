@@ -3,15 +3,15 @@ constants =
 		TOOL_BRUSH											: 'brush'
 		TOOL_BRUSH_SELECTED							: false
 		TOOL_BRUSH_TYPE									: 'apply_material'
-		TOOL_BRUSH_SIZE									: 'tiny'
-		
-		BRUSH_SIZE_TINY									:  1
-		BRUSH_SIZE_MEDIUM								:  3
-		BRUSH_SIZE_LARGE								:  5
-		
+
+		BRUSH_MODE											: 'brush_mode'
 		BRUSH_APPLY_MATERIAL						: 'apply_material'
 		BRUSH_TERRAIN_RAISE						 	: 'terrain_raise'
 		BRUSH_TERRAIN_DEGRADE					 	: 'terrain_degrade'
+		BRUSH_SIZE											: 'brush_size'
+		BRUSH_SIZE_TINY									:  1
+		BRUSH_SIZE_MEDIUM								:  3
+		BRUSH_SIZE_LARGE								:  5
 		
 		MATERIAL_SELECTED								: 1
 

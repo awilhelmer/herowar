@@ -1,7 +1,11 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
+Constants = require 'constants'
 templates = require 'templates'
 
 class ScenebarTerrainTextureBrushView extends BaseView
+	
+	entity: 'ui/terrain'
 	
 	template: templates.get 'scenebar/terrainTextureBrush.tmpl'
 
@@ -16,22 +20,29 @@ class ScenebarTerrainTextureBrushView extends BaseView
 	brushSizeTiny: (event) =>
 		unless event then return
 		event.preventDefault()
-		Constants.TOOL_BRUSH_SIZE = Constants.BRUSH_SIZE_TINY
+		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_TINY
 		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_TINY
 		@render()
 
 	brushSizeMedium: (event) =>
 		unless event then return
 		event.preventDefault()
-		Constants.TOOL_BRUSH_SIZE = Constants.BRUSH_SIZE_MEDIUM
+		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_MEDIUM
 		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_MEDIUM
 		@render()
 
 	brushSizeLarge: (event) =>
 		unless event then return
 		event.preventDefault()
-		Constants.TOOL_BRUSH_SIZE = Constants.BRUSH_SIZE_LARGE
+		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_LARGE
 		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_LARGE
 		@render()
+		
+	getTemplateData: ->
+		json = super()
+		json.isSelectedTiny = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_TINY
+		json.isSelectedMedium = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_MEDIUM
+		json.isSelectedLarge = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_LARGE
+		json
 
 return ScenebarTerrainTextureBrushView
