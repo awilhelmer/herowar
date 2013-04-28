@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 import models.entity.SecurityRole;
+import models.entity.game.GeometryType;
 import models.entity.game.Map;
 
 import org.bushe.swing.event.EventServiceLocator;
@@ -132,6 +133,8 @@ public class Global extends GlobalSettings {
     tutorialMap.getTerrain().setHeight(600);
     tutorialMap.getTerrain().setSmoothness(0.5f);
     tutorialMap.getTerrain().setzScale(100);
+    tutorialMap.getTerrain().getGeometry().setType(GeometryType.TERRAIN);
+    tutorialMap.getTerrain().getGeometry().getMetadata().setGeneratedBy("WorldEditor");
     JPA.em().persist(tutorialMap);
   }
 
