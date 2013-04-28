@@ -46,8 +46,12 @@ public class MapDAO extends BaseDAO<Long, Map> {
    */
   public static void mapMaterials(Map map) {
     Geometry geo = map.getTerrain().getGeometry();
+    map.setMaterials(new ArrayList<Material>());
     if (map.getAllMaterials() != null) {
-      map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
+      for (Material mat : map.getAllMaterials()) {
+        mat.setMaterialId(mat.getId());
+        map.getMaterials().add(mat);
+      }
       GeometryDAO.mapMaterials(geo);
     }
   }
