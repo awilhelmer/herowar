@@ -1,6 +1,10 @@
 package dao.game;
 
+import java.util.ArrayList;
+
+import models.entity.game.Geometry;
 import models.entity.game.Map;
+import models.entity.game.Material;
 import play.db.jpa.JPA;
 import dao.BaseDAO;
 
@@ -33,6 +37,19 @@ public class MapDAO extends BaseDAO<Long, Map> {
 
   public static Map getMapById(Long id) {
     return instance.findUnique(id);
+  }
+
+  /**
+   * For loading the MatGeoId.materialId is the real DB id
+   * 
+   * @param map
+   */
+  public static void mapMaterials(Map map) {
+    Geometry geo = map.getTerrain().getGeometry();
+    if (map.getAllMaterials() != null) {
+      map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
+      GeometryDAO.mapMaterials(geo);
+    }
   }
 
 }
