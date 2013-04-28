@@ -1,4 +1,6 @@
 editorEventbus = 
+		
+		toggleTab								: new signals.Signal()
 
 		newMapEmpty							: new signals.Signal()
 
