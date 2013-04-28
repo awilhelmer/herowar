@@ -1,5 +1,8 @@
 package models.entity.game;
 
+import game.json.StringArray;
+import game.json.StringArray.ArrayType;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -42,6 +45,8 @@ public class Material implements Serializable {
   private String blending;
   private Boolean depthTest;
   private Boolean depthWrite;
+
+  @StringArray(type = ArrayType.STRING)
   private String mapDiffuseWrap;
   private String shading;
   private Integer specularCoef;
@@ -50,8 +55,11 @@ public class Material implements Serializable {
   private Boolean vertexColors;
   private Boolean transparent;
 
+  @StringArray(type = ArrayType.DOUBLE)
   private String colorAmbient;
+  @StringArray(type = ArrayType.DOUBLE)
   private String colorDiffuse;
+  @StringArray(type = ArrayType.DOUBLE)
   private String colorSpecular;
   private String mapDiffuse;
 

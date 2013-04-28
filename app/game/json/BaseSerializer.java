@@ -1,5 +1,6 @@
 package game.json;
 
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -19,6 +20,7 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonSerializer;
+import org.hibernate.Hibernate;
 
 import play.Logger;
 
@@ -41,16 +43,22 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
 
   protected void writeAll(JsonGenerator jgen, T obj, Class<?>... clazz) throws JsonGenerationException, IOException {
     List<Class<?>> classes = Arrays.asList(clazz);
+
+    jgen.writeStartObject();
     writeObject(jgen, obj, classes);
+    jgen.writeEndObject();
   }
 
   @SuppressWarnings("unchecked")
   private void writeObject(JsonGenerator jgen, Object obj, List<Class<?>> classes) throws JsonGenerationException, IOException {
     // PropertyDescriptor[] properties =
     // PropertyUtils.getPropertyDescriptors(obj);
+    Class<?> clazz = obj.getClass();
 
-    Field[] fields = obj.getClass().getFields();
-    jgen.writeStartObject();
+    if (Hibernate.getClass(obj) != null) {
+      clazz = Hibernate.getClass(obj);
+    }
+    Field[] fields = clazz.getDeclaredFields();
     for (Field field : fields) {
       Class<?> type = field.getType();
       try {
@@ -74,13 +82,11 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                 case STRING:
                   writeStringAsStringArray(jgen, field.getName(), value.toString());
                   if (dimension > 1) {
-                    log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", field.getName(), obj.getClass()
-                        .getSimpleName()));
+                    log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", field.getName(), clazz.getSimpleName()));
                   }
                   break;
                 default:
-                  log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", field.getName(), obj.getClass().getSimpleName(),
-                      anno.type()));
+                  log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", field.getName(), clazz.getSimpleName(), anno.type()));
                   break;
                 }
 
@@ -110,17 +116,23 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                 jgen.writeArrayFieldStart(field.getName());
                 Collection<Object> col = (Collection<Object>) value;
                 for (Object elem : col) {
+                  jgen.writeStartObject();
                   writeObject(jgen, elem, classes);
+                  jgen.writeEndObject();
                 }
                 jgen.writeEndArray();
               }
 
-            } else if (classes.contains(type)) {
+            } else if (field.isEnumConstant()) {
+              // not supported yet
+            }
+
+            else if (classes.contains(type)) {
               jgen.writeObjectFieldStart(field.getName());
               writeObject(jgen, value, classes);
               jgen.writeEndObject();
             } else {
-              log.warn(String.format("Field <%s> ignored in Bean <%s>", field.getName(), obj.getClass().getSimpleName()));
+              log.warn(String.format("Field <%s> ignored in Bean <%s>", field.getName(), clazz.getSimpleName()));
             }
           } else {
             jgen.writeNullField(field.getName());
@@ -131,7 +143,7 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
         log.error("", e);
       }
     }
-    jgen.writeEndObject();
+
   }
 
   protected void writeStringAsDoubleMultiArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {

@@ -2,12 +2,18 @@ package controllers.api.game;
 
 import static play.libs.Json.toJson;
 
+import game.json.BaseSerializer;
+
 import java.util.ArrayList;
+
+import org.codehaus.jackson.JsonNode;
+import org.hibernate.Hibernate;
 
 import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
+import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -21,6 +27,7 @@ import dao.game.GeometryDAO;
  * @author Sebastian Sachtleben
  */
 public class Geometries extends BaseAPI<Long, Geometry> {
+  private static final Logger.ALogger log = Logger.of(Geometries.class);
 
   private Geometries() {
     super(Long.class, Geometry.class);
@@ -46,11 +53,11 @@ public class Geometries extends BaseAPI<Long, Geometry> {
     if (env == null || env.getGeometry() == null) {
       return badRequest("No result found");
     }
-
     Geometry geo = env.getGeometry();
+    log.info("Loaded geometry ID " + geo.getId() + " Class " + geo.getClass().getName());
     handleGeo(geo);
-
-    return ok(toJson(geo));
+    JsonNode node = toJson(geo);
+    return ok(node);
   }
 
   private static void handleGeo(Geometry geo) {

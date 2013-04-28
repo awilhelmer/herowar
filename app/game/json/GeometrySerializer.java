@@ -21,6 +21,6 @@ public class GeometrySerializer extends BaseSerializer<Geometry> {
   public void serialize(Geometry geometry, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
 
     writeAll(jgen, geometry, GeoMetaData.class, Material.class, GeoMatId.class);
- 
+    
   }
 }
