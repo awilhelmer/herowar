@@ -9,20 +9,6 @@
 	</ul>
 </div>
 -->
-<div id="scenebar-terrain-edit" class="scenebar-panel">
-	<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsMaterial}}active{{/if}}" id="editor-menubar-brush-materials" href="#" title="Brush material"><i class="icon-materials"></i></a>
-	<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainRaise}}active{{/if}}" id="editor-menubar-brush-raise" href="#" title="Raise terrain"><i class="icon-raise"></i></a>
-	<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainDegrade}}active{{/if}}" id="editor-menubar-brush-degrade" href="#" title="Degrade terrain"><i class="icon-degrade"></i></a>
-	<div class="headline">Edit Terrain</div>
-</div>
-<div id="scenebar-terrain-material" class="scenebar-panel">
-	<a class="btn" id="scenebar-terrain-material-add" href="#" title="Add Material"><i class="icon-material-add"></i></a>
-	<div id="scenebar-terrain-materials" data-view="views/scenebar/terrainMaterials"></div>
-	<div class="headline">Terrain Texturing</div>
-</div>
-<div id="scenebar-terrain-brush" class="scenebar-panel">
-	<a class="btn" id="scenebar-terrain-brush-small" href="#" title="Brush Small Size"><i class="icon-brush-small"></i></a>
-	<a class="btn" id="scenebar-terrain-brush-medium" href="#" title="Brush Medium Size"><i class="icon-brush-medium"></i></a>
-	<a class="btn" id="scenebar-terrain-brush-large" href="#" title="Brush Large Size"><i class="icon-brush-large"></i></a>
-	<div class="headline">Texture Brush</div>
-</div>
+<div id="scenebar-terrain-edit" class="scenebar-panel" data-view="views/scenebar/terrainEdit"></div>
+<div id="scenebar-terrain-material" class="scenebar-panel" data-view="views/scenebar/terrainTexturing"></div>
+<div id="scenebar-terrain-brush" class="scenebar-panel" data-view="views/scenebar/terrainTextureBrush"></div>
