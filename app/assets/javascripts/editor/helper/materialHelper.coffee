@@ -45,20 +45,19 @@ class MaterialHelper
 						id = mat.name.replace 'matID', ''
 						id = parseInt id
 						index = @getGlobalMatIndexById(id) #index of global materials list
-						if index
+						if index > -1
 							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
 	
 	loadGlobalMaterials:(geo) ->
 		materials = []
-		globalMaterials = db.get 'materials'
+		globalMat = db.get 'materials'
 		if geo.matIdMapper
 			_.sortBy(geo.matIdMapper,((idMat) => return idMat.materialIndex))
 			for idMapper in geo.matIdMapper
 				index = @getGlobalMatIndexById(idMapper.materialId)
-				if index
-					mat = globalMaterials[index]
-					mat.name = "matID#{idMat.materialId}"
+				if index > -1
+					mat = _.clone globalMat.models[index].attributes
 					materials.push mat
 		geo.materials = materials
 

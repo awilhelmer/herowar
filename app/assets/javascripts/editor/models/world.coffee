@@ -34,6 +34,7 @@ class World extends Backbone.Model
 		@createTerrainMesh @get('terrain').geometry
 
 	buildRandomTerrainMesh: (terrain, segWidth, segHeight) ->		
+		materials = [] #TODO build from selected material...
 		obj = @createTerrainMesh(new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight))
 		for mesh in obj.children
 			for i in [0..segHeight]
@@ -45,12 +46,14 @@ class World extends Backbone.Model
 	createTerrainMesh: (geometry) ->
 		obj = new THREE.Object3D()
 		obj.name = (@get 'name') + '_group'
-		mesh = new THREE.Mesh geometry, new THREE.MeshFaceMaterial()
-		material = db.get 'materials', Constants.MATERIAL_SELECTED
-		@materialHelper.getThreeMaterialId mesh, id: material.get('id'), materialId: Constants.MATERIAL_SELECTED #TODO MAPPING ... 
+		mesh = new THREE.Mesh geometry, new THREE.MeshFaceMaterial([])
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		mesh.rotation.x = - Math.PI/2
+		if geometry.userData and geometry.userData.materials
+			for mat in geometry.userData.materials
+				#TODO id of global index
+				@materialHelper.getThreeMaterialId mesh, (id: mat.id, materialId: mat.materialId)
 		obj.add mesh
 		obj
 
@@ -59,7 +62,7 @@ class World extends Backbone.Model
 		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
 		
 		
-	#onloading parse materials in geomtry
+	#onloading parse materials in geometry
 	loadMaterials: (data) ->
 		materials = db.get 'materials'
 		data.materials = [] unless data.materials

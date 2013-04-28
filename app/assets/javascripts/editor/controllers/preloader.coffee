@@ -131,7 +131,12 @@ class Preloader extends BaseController
 			console.log "Parse geometry id #{data.terrain.geometry.id} with json loader"
 			loader = new THREE.JSONLoader()
 			result = loader.parse data.terrain.geometry
+			materials = data.terrain.geometry.materials
 			data.terrain.geometry = result.geometry
+			#set in userData our DB-materials ... 
+			data.terrain.geometry.userData = {}
+			data.terrain.geometry.userData.materials = materials
+			data.terrain.geometry
 		data
 
 	finish: ->
