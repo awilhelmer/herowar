@@ -14,8 +14,9 @@ class ScenebarTerrainTextureBrushView extends BaseView
 		'click #scenebar-terrain-brush-medium'	: 'brushSizeMedium'
 		'click #scenebar-terrain-brush-large' 	: 'brushSizeLarge'
 
-	dummy: (event) =>
-		event?.preventDefault()
+	initialize: (options) ->
+		super options
+		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_TINY
 
 	brushSizeTiny: (event) =>
 		unless event then return
@@ -40,6 +41,7 @@ class ScenebarTerrainTextureBrushView extends BaseView
 		
 	getTemplateData: ->
 		json = super()
+		json.isActive = @model.get(Constants.BRUSH_MODE) is Constants.BRUSH_APPLY_MATERIAL
 		json.isSelectedTiny = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_TINY
 		json.isSelectedMedium = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_MEDIUM
 		json.isSelectedLarge = @model.get(Constants.BRUSH_SIZE) is Constants.BRUSH_SIZE_LARGE

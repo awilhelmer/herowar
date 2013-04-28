@@ -1,4 +1,4 @@
-<a class="btn {{#if isSelectedTiny}}active{{/if}}" id="scenebar-terrain-brush-small" href="#" title="Brush Small Size"><i class="icon-brush-size-small"></i></a>
-<a class="btn {{#if isSelectedMedium}}active{{/if}}" id="scenebar-terrain-brush-medium" href="#" title="Brush Medium Size"><i class="icon-brush-size-medium"></i></a>
-<a class="btn {{#if isSelectedLarge}}active{{/if}}" id="scenebar-terrain-brush-large" href="#" title="Brush Large Size"><i class="icon-brush-size-large"></i></a>
+<a class="btn {{#unless isActive}}disabled{{/unless}} {{#if isSelectedTiny}}active{{/if}}" id="scenebar-terrain-brush-small" href="#" title="Brush Small Size"><i class="icon-brush-size-small"></i></a>
+<a class="btn {{#unless isActive}}disabled{{/unless}} {{#if isSelectedMedium}}active{{/if}}" id="scenebar-terrain-brush-medium" href="#" title="Brush Medium Size"><i class="icon-brush-size-medium"></i></a>
+<a class="btn {{#unless isActive}}disabled{{/unless}} {{#if isSelectedLarge}}active{{/if}}" id="scenebar-terrain-brush-large" href="#" title="Brush Large Size"><i class="icon-brush-size-large"></i></a>
 <div class="headline">Texture Brush</div>
