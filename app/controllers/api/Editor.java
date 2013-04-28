@@ -3,7 +3,6 @@ package controllers.api;
 import static play.libs.Json.toJson;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -19,14 +18,13 @@ import models.entity.game.Mesh;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import controllers.utils.EnvironmentComparator;
-
 import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import controllers.utils.EnvironmentComparator;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 import dao.game.MapDAO;
@@ -47,7 +45,7 @@ public class Editor extends Controller {
   public static Result mapShow(Long id) {
     Map map = MapDAO.getMapById(id);
     if (map != null) {
-      mapMaterials(map);
+      MapDAO.mapMaterials(map);
       return ok(toJson(map));
     }
     return notFound();
@@ -160,19 +158,6 @@ public class Editor extends Controller {
       map.getAllMaterials().add(mat);
     }
     return result;
-  }
-
-  /**
-   * For loading the MatGeoId.materialId is the real DB id
-   * 
-   * @param map
-   */
-  private static void mapMaterials(Map map) {
-    Geometry geo = map.getTerrain().getGeometry();
-    if (map.getAllMaterials() != null) {
-      map.setMaterials(new ArrayList<Material>(map.getAllMaterials()));
-      GeometryDAO.mapMaterials(geo);
-    }
   }
 
 }

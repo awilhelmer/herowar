@@ -42,11 +42,26 @@ class MaterialHelper
 			if child.name != 'wireframe'
 				if child.material.materials	
 					for mat, geoMatIndex in child.material.materials
-						index = @getGlobalMatIndexById(mat.name) #index of global materials list
+						id = mat.name 'matID', ''
+						id = parseInt id
+						index = @getGlobalMatIndexById(id) #index of global materials list
 						if index
 							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
-		
+	
+	loadGlobalMaterials:(geo) ->
+		materials = []
+		globalMaterials = materials = db.get 'materials'
+		if geo.matIdMapper
+			_.sortBy(geo.matIdMapper,((idMat) => return idMat.materialIndex))
+			for idMapper in geo.matIdMapper
+				index = @getGlobalMatIndexById(idMapper.materialId)
+				if index
+					mat = globalMaterials[index]
+					mat.name = "matID#{idMat.materialId}"
+					materials.push mat
+		geo.materials = materials
+
 	#For Geometries without global materials binding 
 	loadGeometryMaterial: (geo) ->
 		if geo.userData.matIdMapper
@@ -62,9 +77,7 @@ class MaterialHelper
 			geo.material.materials = materials
 		null
 		
-	getGlobalMatIndexById: (name) ->
-		id = name.replace 'matID', ''
-		id = parseInt id
+	getGlobalMatIndexById: (id) ->
 		materials = db.get 'materials'
 		for material, key in materials.models
 			if material.id == id

@@ -57,5 +57,14 @@ class World extends Backbone.Model
 	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
 		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
+		
+		
+	#onloading parse materials in geomtry
+	loadMaterials: (data) ->
+		materials = db.get 'materials'
+		for mat in data.materials
+			materials.add mat
+		@materialHelper.loadGlobalMaterials data.terrain.geometry
+	
 
 return World
