@@ -121,6 +121,7 @@ class Preloader extends BaseController
 
 	onSuccess: (data) =>
 		world = db.get 'world'
+		world.loadMaterials data
 		world.set @parseWorldData data
 		console.log world
 		@state = 3

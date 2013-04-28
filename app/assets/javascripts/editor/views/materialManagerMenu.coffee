@@ -18,10 +18,11 @@ class MaterialManagerMenu extends BaseView
 		EditorEventbus.changeMaterial.add @changeMaterial
 		EditorEventbus.menuSelectMaterial.add @selectMaterial
 		
-		
+	
+	#TODO on preloading fill all materials from - initialize from preloader
 	initialize: (options) ->
 		@nextId = 1
-		@nextMatId = 1
+		@nextMatId = 1 #TODO get next id from database! (Create new empty Material ... )
 		@idmapper = [id:@nextId, materialId:@nextMatId]
 		super options
 		
@@ -68,7 +69,7 @@ class MaterialManagerMenu extends BaseView
 	newMaterial: (event) =>
 		event?.preventDefault()
 		id = ++@nextId
-		matId = ++@nextMatId
+		matId = ++@nextMatId #TODO get next id from database! (Create new empty Material ... )
 		console.log "New material id #{id} matId #{matId}"
 		col = db.get 'materials'
 		col.add new Material id, matId, "Mat.#{id}", '#CCCCCC'
