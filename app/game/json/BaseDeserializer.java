@@ -133,13 +133,15 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
     } catch (NoSuchFieldException e) {
     } catch (SecurityException e) {
     }
-    if (target != null) {
+    if (target == null) {
       Field[] fields = result.getClass().getDeclaredFields();
       for (Field field : fields) {
         if (field.isAnnotationPresent(JsonFieldName.class)) {
           JsonFieldName mapping = field.getAnnotation(JsonFieldName.class);
           String newName = mapping.name();
           if (newName.equals(name)) {
+            //Sdasd
+            log.info("Return new name " + newName);
             return newName;
           }
         }
