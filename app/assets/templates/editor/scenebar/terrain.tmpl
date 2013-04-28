@@ -1,4 +1,5 @@
 <div class="btn-toolbar">
+	<!--
 	<div class="btn-group" id="editor-menubar-tools">
 		<a class="btn {{#if selectIsSelected}}active{{/if}}" id="editor-menubar-tool-selection" href="#"><i class="icon-select"></i></a>
 		<a class="btn {{#if brushIsSelected}}active{{/if}} dropdown-toggle" id="editor-menubar-tool-brush" data-toggle="dropdown" href="#"><i class="icon-brush"></i></a>
@@ -8,9 +9,11 @@
 			<li><a tabindex="-1" id="editor-menubar-brush-large" href="#">Large {{#if brushIsLarge}}&radic;{{/if}}</a></li>
 		</ul>
 	</div>
+	-->
 	<div class="btn-group" id="editor-menubar-brush">
-		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsMaterial}}active{{/if}}" id="editor-menubar-brush-materials" href="#"><i class="icon-materials"></i></a>
-		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainRaise}}active{{/if}}" id="editor-menubar-brush-raise" href="#"><i class="icon-raise"></i></a>
-		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainDegrade}}active{{/if}}" id="editor-menubar-brush-degrade" href="#"><i class="icon-degrade"></i></a>
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsMaterial}}active{{/if}}" id="editor-menubar-brush-materials" href="#" title="Brush material"><i class="icon-materials"></i></a>
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainRaise}}active{{/if}}" id="editor-menubar-brush-raise" href="#" title="Raise terrain"><i class="icon-raise"></i></a>
+		<a class="btn {{#if selectIsSelected}}disabled{{/if}} {{#if brushTypeIsTerrainDegrade}}active{{/if}}" id="editor-menubar-brush-degrade" href="#" title="Degrade terrain"><i class="icon-degrade"></i></a>
+		<div class="headline">Edit Terrain</div>
 	</div>
 </div>
