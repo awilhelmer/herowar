@@ -141,12 +141,13 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
           String newName = mapping.name();
           if (newName.equals(name)) {
             //Sdasd
-            log.info("Return new name " + newName);
-            return newName;
+            log.info("Return new name " + field.getName());
+            return field.getName();
           }
         }
       }
     }
+    log.error("No Class Field found for JSON Field name " + name);
     return name;
   }
 }
