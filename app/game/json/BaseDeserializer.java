@@ -147,7 +147,6 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
         }
       }
     }
-    log.error("No Class Field found for JSON Field name " + name);
     return name;
   }
 }
