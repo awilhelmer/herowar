@@ -9,7 +9,7 @@ Variables = require 'variables'
 class Editor extends BaseController
 
 	views:
-		'views/menubar'	  			: ''
+		'views/iconbar2'  			: ''
 		'views/iconbar'	  			: ''
 		'views/sceneExplorer'		: ''
 		'views/sidebar'	  			: ''
