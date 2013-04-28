@@ -42,7 +42,7 @@ class MaterialHelper
 			if child.name != 'wireframe'
 				if child.material.materials	
 					for mat, geoMatIndex in child.material.materials
-						id = mat.name 'matID', ''
+						id = mat.name.replace 'matID', ''
 						id = parseInt id
 						index = @getGlobalMatIndexById(id) #index of global materials list
 						if index
