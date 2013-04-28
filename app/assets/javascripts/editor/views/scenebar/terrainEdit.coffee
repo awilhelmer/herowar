@@ -10,13 +10,21 @@ class ScenebarTerrainEditView extends BaseView
 	template: templates.get 'scenebar/terrainEdit.tmpl'
 
 	events:
+		'click a'																: 'onClick'
 		'click #editor-menubar-brush-materials' : 'materials'
 		'click #editor-menubar-brush-raise' 		: 'raise'
 		'click #editor-menubar-brush-degrade' 	: 'degrade'
 
-	materials: (event) =>
+	onClick: (event) =>
 		unless event then return
 		event.preventDefault()
+		Constants.TOOL_BRUSH_SELECTED = true
+		console.log 'Set Brush Selection'
+		EditorEventbus.selectTool.dispatch Constants.TOOL_BRUSH
+		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
+
+	materials: (event) =>
+		unless event then return
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_APPLY_MATERIAL
@@ -24,7 +32,6 @@ class ScenebarTerrainEditView extends BaseView
 
 	raise: (event) =>
 		unless event then return
-		event.preventDefault()
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_TERRAIN_RAISE
@@ -32,7 +39,6 @@ class ScenebarTerrainEditView extends BaseView
 
 	degrade: (event) =>
 		unless event then return
-		event.preventDefault()
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_TERRAIN_DEGRADE
