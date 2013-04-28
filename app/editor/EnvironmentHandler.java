@@ -85,6 +85,10 @@ public class EnvironmentHandler implements Serializable {
   private Geometry parseGeometryFile(File file) {
     try {
       Geometry geo = mapper.readValue(file, Geometry.class);
+      for (Material mat : geo.getMaterials()) {
+        mat.setName(mat.getDbgName());
+      }
+      
       Map<Integer, Material> matMap = MaterialDAO.mapAndSave(geo.getMaterials());
       GeometryDAO.createGeoMaterials(geo, matMap);
       return geo;
