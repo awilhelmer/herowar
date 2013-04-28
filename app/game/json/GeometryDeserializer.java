@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import models.entity.game.GeoMetaData;
 import models.entity.game.Geometry;
-import models.entity.game.GeometryType;
 import models.entity.game.Material;
 
 import org.codehaus.jackson.JsonNode;
@@ -28,10 +27,12 @@ public class GeometryDeserializer extends BaseDeserializer<Geometry> {
     ObjectCodec oc = jsonParser.getCodec();
     JsonNode geometryNode = oc.readTree(jsonParser);
     Geometry geo = this.parseObject(geometryNode, GeoMetaData.class, Material.class, GeoMatId.class);
-    geo.setType(GeometryType.ENVIRONMENT);
+    // geo.setType(GeometryType.ENVIRONMENT);
     if (geo.getMaterials() != null) {
       for (Material mat : geo.getMaterials()) {
-        mat.setName(mat.getDbgName());
+        //Here we have got uploaded Materials, so any name is missing
+        if (mat.getName() == null)
+          mat.setName(mat.getDbgName());
 
       }
     }

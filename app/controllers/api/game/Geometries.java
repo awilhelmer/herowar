@@ -2,17 +2,15 @@ package controllers.api.game;
 
 import static play.libs.Json.toJson;
 
-import game.json.BaseSerializer;
-
 import java.util.ArrayList;
-
-import org.codehaus.jackson.JsonNode;
-import org.hibernate.Hibernate;
 
 import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
+
+import org.codehaus.jackson.JsonNode;
+
 import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -54,7 +52,6 @@ public class Geometries extends BaseAPI<Long, Geometry> {
       return badRequest("No result found");
     }
     Geometry geo = env.getGeometry();
-    log.info("Loaded geometry ID " + geo.getId() + " Class " + geo.getClass().getName());
     handleGeo(geo);
     JsonNode node = toJson(geo);
     return ok(node);

@@ -126,8 +126,8 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                 jgen.writeEndArray();
               }
 
-            } else if (field.isEnumConstant()) {
-              // not supported yet
+            } else if (type.isEnum()) {
+              jgen.writeStringField(fieldName, value.toString());
             }
 
             else if (classes.contains(type)) {

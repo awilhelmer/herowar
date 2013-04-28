@@ -36,6 +36,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
 
   }
 
+  @SuppressWarnings("unchecked")
   protected void parseAll(Object result, JsonNode node, List<Class<?>> classes) {
     Iterator<String> fieldIt = node.getFieldNames();
     while (fieldIt.hasNext()) {
@@ -93,6 +94,17 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
                 }
                 value = col;
               }
+            } else if (propClass.isEnum()) {
+              value = fieldNode.getTextValue();
+              Class<? extends Enum<?>> enumClass = ( Class<? extends Enum<?>>) propClass;
+              Enum<?>[] enums = enumClass.getEnumConstants();
+              for (Enum<?> elem : enums) {
+                if (elem.toString().equals(value)) {
+                  value = elem;
+                  break;
+                }
+              }
+
             } else if (classes.contains(propClass)) {
               // Self defined Object
               Object element = propClass.newInstance();

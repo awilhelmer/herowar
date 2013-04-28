@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import game.json.JsonFieldName;
+import game.json.MaterialDeserializer;
 import game.json.StringArray;
 import game.json.StringArray.ArrayType;
 
@@ -23,9 +24,11 @@ import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 @Entity
 @Table(name = "material", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@JsonDeserialize(using = MaterialDeserializer.class)
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Material implements Serializable {
   private static final long serialVersionUID = 1651915135235L;

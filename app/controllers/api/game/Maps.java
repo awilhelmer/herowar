@@ -28,6 +28,8 @@ public class Maps extends BaseAPI<Long, Map> {
 
   @Transactional
   public static Result show(Long id) {
+    
+    
     return instance.showEntry(id);
   }
 
