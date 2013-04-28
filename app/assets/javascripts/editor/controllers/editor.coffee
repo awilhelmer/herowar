@@ -11,6 +11,7 @@ class Editor extends BaseController
 	views:
 		'views/menubar'	  			: ''
 		'views/iconbar'	  			: ''
+		'views/sceneExplorer'		: ''
 		'views/sidebar'	  			: ''
 		'views/viewport'				: ''
 		'views/materialManager'	: ''

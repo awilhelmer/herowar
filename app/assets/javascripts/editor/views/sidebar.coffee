@@ -5,8 +5,6 @@ class Sidebar extends BaseView
 
 	id: 'sidebar'
 	
-	className: 'sidebar-right'
-	
 	template: templates.get 'sidebar.tmpl'
 	
 return Sidebar

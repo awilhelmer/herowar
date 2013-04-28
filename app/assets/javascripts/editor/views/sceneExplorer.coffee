@@ -5,11 +5,11 @@ db = require 'database'
 
 class SceneExplorer extends BaseView
 
-	id: 'sidebar-sceneexlorer'
+	id: 'scene-exlorer'
 
 	className: 'sidebar-panel'
 
-	template: templates.get 'sidebar/sceneExplorer.tmpl'
+	template: templates.get 'sceneExplorer.tmpl'
 
 	events:
 		'click .scenegraph-tree .scenegraph-tree-world' : 'selectElement'
