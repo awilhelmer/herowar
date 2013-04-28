@@ -23,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import models.entity.BaseModel;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -35,7 +37,7 @@ import dao.game.GeoMatId;
 @JsonDeserialize(using = GeometryDeserializer.class)
 @JsonSerialize(using = GeometrySerializer.class)
 @SuppressWarnings("serial")
-public class Geometry implements Serializable {
+public class Geometry extends BaseModel implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

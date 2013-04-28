@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @SuppressWarnings("serial")
-public class News implements Serializable {
+public class News extends BaseModel implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

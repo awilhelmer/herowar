@@ -1,5 +1,6 @@
 package models.entity.game;
 
+import game.json.JsonFieldName;
 import game.json.StringArray;
 import game.json.StringArray.ArrayType;
 
@@ -38,8 +39,11 @@ public class Material implements Serializable {
 
   private String color;
   // They are for model imports
+  @JsonFieldName(name = "DbgColor")
   private Integer dbgColor;
+  @JsonFieldName(name = "DbgIndex")
   private Integer dbgIndex;
+  @JsonFieldName(name = "DbgName")
   private String dbgName;
 
   private String blending;
