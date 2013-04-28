@@ -43,7 +43,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
       JsonNode fieldNode = node.get(field);
       if (fieldNode != null && !fieldNode.isNull()) {
         try {
-          field = field.substring(0, 1).toLowerCase() + field.substring(1);
+          field = getRealField(field, result);
           Class<?> propClass = PropertyUtils.getPropertyType(result, field);
           Object value = null;
           if (propClass != null) {
@@ -112,5 +112,27 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
         }
       }
     }
+  }
+
+  private String getRealField(String name, Object result) {
+    Field target = null;
+    try {
+      target = result.getClass().getField(name);
+    } catch (NoSuchFieldException e) {
+    } catch (SecurityException e) {
+    }
+    if (target != null) {
+      Field[] fields = result.getClass().getDeclaredFields();
+      for (Field field : fields) {
+        if (field.isAnnotationPresent(JsonFieldName.class)) {
+          JsonFieldName mapping = field.getAnnotation(JsonFieldName.class);
+          String newName = mapping.name();
+          if (newName.equals(name)) {
+            return newName;
+          }
+        }
+      }
+    }
+    return name;
   }
 }

@@ -31,7 +31,7 @@ import be.objectify.deadbolt.core.models.Subject;
 @Entity
 @Table(name = "users")
 @SuppressWarnings("serial")
-public class User implements Subject, Serializable {
+public class User extends BaseModel implements Subject, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

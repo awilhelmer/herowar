@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import models.entity.BaseModel;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -25,7 +27,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Entity
 @SuppressWarnings("serial")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Map implements Serializable {
+public class Map extends BaseModel implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

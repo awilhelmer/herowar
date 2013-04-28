@@ -1,6 +1,5 @@
 package game.json;
 
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -64,7 +63,11 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
       try {
         if (type != null && !type.isAnnotation() && !Modifier.isStatic(field.getModifiers())) {
           Object value = PropertyUtils.getProperty(obj, field.getName());
-
+          String fieldName = field.getName();
+          if (field != null && field.isAnnotationPresent(JsonFieldName.class)) {
+            JsonFieldName annoName = field.getAnnotation(JsonFieldName.class);
+            fieldName = annoName.name();
+          }
           if (value != null && !field.isAnnotationPresent(JsonIgnore.class)) {
             if (type.isAssignableFrom(String.class)) {
               if (field != null && field.isAnnotationPresent(StringArray.class)) {
@@ -74,46 +77,46 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                 case INTEGER:
                 case DOUBLE:
                   if (dimension == 1) {
-                    writeStringAsDoubleArray(jgen, field.getName(), value.toString());
+                    writeStringAsDoubleArray(jgen, fieldName, value.toString());
                   } else {
-                    writeStringAsDoubleMultiArray(jgen, field.getName(), value.toString());
+                    writeStringAsDoubleMultiArray(jgen, fieldName, value.toString());
                   }
                   break;
                 case STRING:
-                  writeStringAsStringArray(jgen, field.getName(), value.toString());
+                  writeStringAsStringArray(jgen, fieldName, value.toString());
                   if (dimension > 1) {
-                    log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", field.getName(), clazz.getSimpleName()));
+                    log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", fieldName, clazz.getSimpleName()));
                   }
                   break;
                 default:
-                  log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", field.getName(), clazz.getSimpleName(), anno.type()));
+                  log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", fieldName, clazz.getSimpleName(), anno.type()));
                   break;
                 }
 
               } else {
-                jgen.writeStringField(field.getName(), value.toString());
+                jgen.writeStringField(fieldName, value.toString());
               }
 
             } else if (type.isAssignableFrom(Double.class)) {
-              jgen.writeNumberField(field.getName(), (Double) value);
+              jgen.writeNumberField(fieldName, (Double) value);
             } else if (type.isAssignableFrom(Float.class)) {
-              jgen.writeNumberField(field.getName(), (Float) value);
+              jgen.writeNumberField(fieldName, (Float) value);
             } else if (type.isAssignableFrom(Integer.class)) {
-              jgen.writeNumberField(field.getName(), (Integer) value);
+              jgen.writeNumberField(fieldName, (Integer) value);
             } else if (type.isAssignableFrom(Long.class)) {
-              jgen.writeNumberField(field.getName(), (Long) value);
+              jgen.writeNumberField(fieldName, (Long) value);
             } else if (type.isAssignableFrom(Short.class)) {
-              jgen.writeNumberField(field.getName(), (Short) value);
+              jgen.writeNumberField(fieldName, (Short) value);
             } else if (type.isAssignableFrom(Boolean.class)) {
-              jgen.writeBooleanField(field.getName(), (Boolean) value);
+              jgen.writeBooleanField(fieldName, (Boolean) value);
             } else if (type.isAssignableFrom(Vector3.class)) {
               Vector3 vec = (Vector3) value;
-              jgen.writeObjectField(field.getName(), vec);
+              jgen.writeObjectField(fieldName, vec);
             } else if (type.isAssignableFrom(List.class) || type.isAssignableFrom(Set.class)) {
               ParameterizedType pt = (ParameterizedType) field.getGenericType();
               Class<?> genericType = (Class<?>) pt.getActualTypeArguments()[0];
               if (classes.contains(genericType)) {
-                jgen.writeArrayFieldStart(field.getName());
+                jgen.writeArrayFieldStart(fieldName);
                 Collection<Object> col = (Collection<Object>) value;
                 for (Object elem : col) {
                   jgen.writeStartObject();
@@ -128,14 +131,14 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
             }
 
             else if (classes.contains(type)) {
-              jgen.writeObjectFieldStart(field.getName());
+              jgen.writeObjectFieldStart(fieldName);
               writeObject(jgen, value, classes);
               jgen.writeEndObject();
             } else {
               log.warn(String.format("Field <%s> ignored in Bean <%s>", field.getName(), clazz.getSimpleName()));
             }
           } else {
-            jgen.writeNullField(field.getName());
+            jgen.writeNullField(fieldName);
           }
 
         }
