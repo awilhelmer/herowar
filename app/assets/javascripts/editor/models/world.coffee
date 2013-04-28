@@ -9,11 +9,8 @@ class World extends Backbone.Model
 		@initListener
 		super options
 
-	addTerrainMaterial: (materialId) ->
-		materials = @get 'materials'
-		materials = [] unless materials
-		materials.push materialId
-		@set 'materials', materials
+	addTerrainMaterial: (idMapper) ->
+		#@loadMaterials
 		@trigger 'change'
 		@trigger 'change:materials'
 
@@ -34,8 +31,13 @@ class World extends Backbone.Model
 		@createTerrainMesh @get('terrain').geometry
 
 	buildRandomTerrainMesh: (terrain, segWidth, segHeight) ->		
-		materials = [] #TODO build from selected material...
-		obj = @createTerrainMesh(new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight))
+		materials = [] 
+		col = db.get 'materials'
+		for mat in col.models
+			materials.push id:mat.attributes.id, materialId:mat.attributes.materialId
+		geo = new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight)
+		geo.userData = materials: materials
+		obj = @createTerrainMesh(geo)
 		for mesh in obj.children
 			for i in [0..segHeight]
 				for j in [0..segWidth]
@@ -52,7 +54,6 @@ class World extends Backbone.Model
 		mesh.rotation.x = - Math.PI/2
 		if geometry.userData and geometry.userData.materials
 			for mat in geometry.userData.materials
-				#TODO id of global index
 				@materialHelper.getThreeMaterialId mesh, (id: mat.id, materialId: mat.materialId)
 		obj.add mesh
 		obj

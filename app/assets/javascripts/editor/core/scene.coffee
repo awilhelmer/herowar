@@ -104,7 +104,7 @@ class Scene
 			'opacity'			: 1
 			'map'					: undefined
 		col.add mat
-		@world.addTerrainMaterial 1
+		@world.addTerrainMaterial id : mat.id, materialId: mat.merialId
 	
 	handleMaterials:  =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
