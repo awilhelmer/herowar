@@ -1,4 +1,6 @@
-class Environment extends Backbone.Model
+BaseModel = require 'models/baseModel'
+
+class Environment extends BaseModel
 
 		url: '/api/game/environment/root'
 

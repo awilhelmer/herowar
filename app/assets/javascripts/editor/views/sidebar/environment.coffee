@@ -7,8 +7,6 @@ class Environment extends BasePropertiesView
 	id: 'sidebar-environment'
 
 	className: 'sidebar-panel'
-		
-	entity: 'environmentTree'
 
 	template: templates.get 'sidebar/environment.tmpl'
 

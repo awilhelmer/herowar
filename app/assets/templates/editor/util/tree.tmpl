@@ -1,6 +1,4 @@
-{{#unless id}}
-	<div class="loading"></div>
-{{else}}
+{{#if id}}
 	{{#each children}}
 		<div class="item level-one" data-value="{{id}}"><span>{{name}}</span></div>
 		{{#if children}}
@@ -14,4 +12,4 @@
 			{{/each}}
 		{{/if}}
 	{{/each}}
-{{/unless}}
+{{/if}}

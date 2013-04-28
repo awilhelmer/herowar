@@ -11,7 +11,7 @@ class BaseView extends Backbone.View
 		if @entity and not @model
 			@model = db.get @entity, @options.modelId
 		@bindEvents()
-		@bindCollectionEvents()
+		@bindFetchEvents()
 		#clean subview dom element
 		@$el.removeAttr 'data-view data-model'
 		#add body class if is set:
@@ -21,8 +21,8 @@ class BaseView extends Backbone.View
 	bindEvents: ->
 		@listenTo @model, 'change', @render if @model
 
-	bindCollectionEvents: ->
-		if @model instanceof Backbone.Collection
+	bindFetchEvents: ->
+		if @model
 			@listenTo @model, 'fetching', => @$el.addClass 'loading'
 			@listenTo @model, 'fetched', => @$el.removeClass 'loading'
 
