@@ -12,6 +12,25 @@
 	.box-shadow(0 1px 4px rgba(0,0,0,.065));
 }
 
+#scenebar .scenebar-panel {
+	float: left;
+	margin-left: 5px;
+	
+	&:first-child {
+		margin-left: 0px;
+	}
+}
+
+#scenebar .scenebar-panel .headline {
+	font-size: @baseFontSize;
+	text-align: center;
+	color: #a0a7ad;
+	background-color: #6b6b6b;
+	border: 1px solid #333333;
+	border-top-width: 0px;
+	.border-bottom-radius(@borderRadiusLarge);
+}
+
 // COMPONENT: TABS
 
 #scenebar .nav {
