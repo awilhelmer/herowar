@@ -62,6 +62,7 @@ class World extends Backbone.Model
 	#onloading parse materials in geomtry
 	loadMaterials: (data) ->
 		materials = db.get 'materials'
+		data.materials = [] unless data.materials
 		for mat in data.materials
 			materials.add mat
 		@materialHelper.loadGlobalMaterials data.terrain.geometry
