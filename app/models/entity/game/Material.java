@@ -27,7 +27,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 @Entity
-@Table(name = "material", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "material", uniqueConstraints = @UniqueConstraint(columnNames = "dbgname"))
 @JsonDeserialize(using = MaterialDeserializer.class)
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Material implements Serializable {
@@ -47,6 +47,7 @@ public class Material implements Serializable {
   @JsonFieldName(name = "DbgIndex")
   private Integer dbgIndex;
   @JsonFieldName(name = "DbgName")
+  @Column(name = "dbgname")
   private String dbgName;
 
   private String blending;

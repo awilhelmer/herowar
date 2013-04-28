@@ -13,7 +13,6 @@ import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
 import models.entity.game.Material;
-import models.entity.game.Mesh;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -82,31 +81,6 @@ public class Editor extends Controller {
       String errorMessage = "Failed to parse request data to entity";
       return badRequest(errorMessage);
     }
-    // HOTFIXES (this needs to be fixed)
-    if (map.getTerrain().getGeometry().getUvs() == null || "".equals(map.getTerrain().getGeometry().getUvs())
-        || "[]".equals(map.getTerrain().getGeometry().getUvs())) {
-      map.getTerrain().getGeometry().setUvs("[[]]"); // Seems like uvs will be
-                                                     // set during deserializing
-                                                     // from [[]] to [] which
-                                                     // causes issues
-    }
-    map.getTerrain().getGeometry().setType(GeometryType.TERRAIN); // The terrain
-                                                                  // type will
-                                                                  // not be set,
-                                                                  // dunno why
-                                                                  // :(
-    for (Mesh mesh : map.getObjects()) {
-      mesh.setGeometry(JPA.em().find(Geometry.class, mesh.getGeometry().getId())); // Set
-                                                                                   // geometry
-                                                                                   // from
-                                                                                   // db
-                                                                                   // otherwise
-                                                                                   // detached
-                                                                                   // error
-                                                                                   // message
-      mesh.setMap(map);
-    }
-    // END HOTFIXES
     saveMap(map);
     return ok(toJson(map));
   }
@@ -155,6 +129,7 @@ public class Editor extends Controller {
     }
     java.util.Map<Integer, Material> result = MaterialDAO.mapAndSave(map.getMaterials());
     for (Material mat : result.values()) {
+    
       map.getAllMaterials().add(mat);
     }
     return result;

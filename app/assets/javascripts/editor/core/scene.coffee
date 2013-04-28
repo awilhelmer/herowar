@@ -97,7 +97,7 @@ class Scene
 		mat = new Material()
 		mat.set 
 			'id'					: 1
-			'materialId' 	: 1
+			'materialId' 	: -1
 			'name' 				: 'Terrain'
 			'color' 			: '#006600'
 			'transparent' : false

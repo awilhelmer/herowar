@@ -28,13 +28,16 @@ public class MaterialDAO extends BaseDAO<Long, Material> {
     for (int i = 0; i < materials.size(); i++) {
       Material mat = materials.get(i);
       Material dbMat = null;
-      if (mat.getName() != null) {
-        dbMat = instance.getByName(mat.getName().trim());
+      if (mat.getDbgName() != null) {
+        //For Geometry materials ...
+        dbMat = instance.getSingleByPropertyValue("dbgName", mat.getDbgName().trim());
       }
-      if (dbMat == null && mat.getId() != null) {
+      if (dbMat == null && mat.getId() != null && mat.getId() > -1) {
         dbMat = MaterialDAO.getMaterialbyId(mat.getId());
       }
       if (dbMat == null) {
+        if (mat.getId() != null && mat.getId() < 0)
+          mat.setId(null);
         dbMat = mat;
         JPA.em().persist(dbMat);
       } else {

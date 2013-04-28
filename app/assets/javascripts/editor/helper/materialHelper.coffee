@@ -62,6 +62,7 @@ class MaterialHelper
 		geo.materials = materials
 
 	#For Geometries without global materials binding 
+	#
 	loadGeometryMaterial: (geo) ->
 		if geo.userData.matIdMapper
 			materials = []
