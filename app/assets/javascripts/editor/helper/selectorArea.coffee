@@ -20,8 +20,19 @@ class SelectorArea
 		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
 		EditorEventbus.selectBrushSize.add @selectBrushSize
-		
-	update: ->
+
+	onMouseUp: (event) ->
+		if event.which is 1
+			EditorEventbus.resetWireframe.dispatch @selectorObject.selectedObject
+		else if event.which is 3
+			Constants.TOOL_BRUSH_SELECTED = false
+			console.log 'Set Tool Selection'
+			EditorEventbus.selectTool.dispatch Constants.TOOL_SELECTION
+			terrain = db.get 'ui/terrain'
+			terrain.unset Constants.BRUSH_MODE if terrain
+			
+
+	onMouseMove: ->
 		radius = @brushSize/2
 		if radius > 1
 			radius += 0.33 #Precision

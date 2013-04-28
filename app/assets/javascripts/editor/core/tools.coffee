@@ -41,15 +41,14 @@ class Tools
 			when Constants.TOOL_SELECTION
 				@selectorObject.onMouseUp event
 			when Constants.TOOL_BRUSH
-				if event.which is 1
-					EditorEventbus.resetWireframe.dispatch @selectorObject.selectedObject 
+				@selectorArea.onMouseUp event
 
 	onMouseMove: =>
 		switch @active
 			when Constants.TOOL_SELECTION
 				@selectorObject.onMouseMove()
 			when Constants.TOOL_BRUSH
-				@selectorArea.update()
+				@selectorArea.onMouseMove()
 		
 	selectTool: (type) =>
 		@active = type

@@ -21,7 +21,7 @@ class SelectorObject
 		EditorEventbus.listSelectItem.add @onSelectItem
 		EditorEventbus.changeStaticObject.add @changeStaticObject
 	
-	onMouseUp: (event) =>
+	onMouseUp: (event) ->
 		if event.which is 1
 			if @currentMesh
 				@placeMesh() if @currentMesh.visible
@@ -34,7 +34,7 @@ class SelectorObject
 				@currentMesh = null
 				@editor.engine.render()
 	
-	onMouseMove: =>
+	onMouseMove: ->
 		if @currentMesh
 			intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], 1
 			if intersectList.length > 0
