@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
@@ -13,6 +14,7 @@ import models.entity.game.Geometry;
 import models.entity.game.GeometryType;
 import models.entity.game.Map;
 import models.entity.game.Material;
+import models.entity.game.Mesh;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -101,6 +103,16 @@ public class Editor extends Controller {
     }
     if (map.getTerrain().getMap() == null) {
       map.getTerrain().setMap(map);
+    }
+    if (map.getObjects() != null) {
+      Set<Mesh> meshes = new HashSet<Mesh>();
+      for (Mesh mesh : map.getObjects()) {
+        if (mesh.getGeometry().getId() != null) {
+          mesh.setGeometry(GeometryDAO.getInstance().findUnique(mesh.getGeometry().getId()));
+          meshes.add(mesh);
+        }
+      }
+      map.setObjects(meshes);
     }
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
     java.util.Map<Integer, Material> matMap = saveMaterials(map);
