@@ -11,7 +11,6 @@ class World extends Backbone.Model
 		super options
 
 	addTerrainMaterial: (idMapper) ->
-		#@loadMaterials
 		@trigger 'change'
 		@trigger 'change:materials'
 
@@ -37,7 +36,9 @@ class World extends Backbone.Model
 		for mat in col.models
 			matIdMapper.push id:mat.attributes.id, materialId:mat.attributes.materialId
 		geo = new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight)
-		geo.userData = matIdMapper: matIdMapper
+		geo.userData = @get('terrain').geometry.userData
+		unless geo.userData
+			geo.userData = matIdMapper: matIdMapper
 		obj = @createTerrainMesh(geo)
 		for mesh in obj.children
 			for i in [0..segHeight]
@@ -53,8 +54,7 @@ class World extends Backbone.Model
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		mesh.rotation.x = - Math.PI/2
-		if geometry.userData and geometry.userData.matIdMapper
-			@materialHelper.loadGlobalMaterials mesh
+		@materialHelper.loadGlobalMaterials mesh
 		obj.add mesh
 		obj
 
@@ -65,7 +65,6 @@ class World extends Backbone.Model
 		
 	#onloading parse materials in geometry
 	loadMaterials: (materials) ->
-		#TODO load it in terrain
 		col = db.get 'materials'
 		materials = [] unless materials
 		i = 1

@@ -37,7 +37,7 @@ class MaterialHelper
 		foundId
 	
 	handleGeometryForSave:(backBoneGeometry, obj) ->
-		backBoneGeometry.matIdMapper = []
+		backBoneGeometry.userData.matIdMapper = []
 		for child in 	obj.children
 			if child.name != 'wireframe'
 				if child.material.materials	
@@ -46,7 +46,7 @@ class MaterialHelper
 						materialId = parseInt materialId
 						index = @getGlobalMatIndexById(materialId) #index of global materials list
 						if index > -1
-							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
+							backBoneGeometry.userData.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
 	
 	loadGlobalMaterials:(mesh) ->

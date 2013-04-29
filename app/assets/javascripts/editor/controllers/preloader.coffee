@@ -121,11 +121,18 @@ class Preloader extends BaseController
 
 	onSuccess: (data) =>
 		world = db.get 'world'
-		matIdMapper = data.terrain.geometry.matIdMapper;
+		oldGeo = data.terrain.geometry
 		data.terrain.geometry.materials = []
 		world.set @parseWorldData data
-		world.attributes.terrain.geometry.userData = {}
-		world.attributes.terrain.geometry.userData.matIdMapper = matIdMapper
+		newGeo = world.attributes.terrain.geometry
+		newGeo.userData = {}
+		newGeo.userData.matIdMapper = oldGeo.matIdMapper
+		newGeo.userData.id = oldGeo.id
+		newGeo.userData.type = oldGeo.type
+		newGeo.userData.metadata = oldGeo.metadata
+		newGeo.userData.version = oldGeo.version
+		newGeo.userData.cdate = oldGeo.cdate
+		
 		world.loadMaterials data.materials
 		console.log world
 		@state = 3

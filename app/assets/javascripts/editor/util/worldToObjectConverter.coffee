@@ -9,7 +9,7 @@ worldToObjectConverter =
 		@fillMaterialArray obj
 		@convertGeometryVertices obj
 		@convertGeometryFaces obj
-		# TODO: fill geometry meta data...
+		@convertThreeGeometry obj
 		@addObjects obj
 		return obj
 
@@ -66,6 +66,28 @@ worldToObjectConverter =
 	setBit: (value, position, bool) ->
 		if bool then value | (1 << position) else value & ~(1 << position)
 
+	convertThreeGeometry: (obj) ->
+		geometry = obj.terrain.geometry
+		unless geometry instanceof THREE.Geometry
+			return
+		geometry =
+			id: geometry.userData.id
+			vertices: geometry.vertices
+			faces: geometry.faces
+			morphTargets: geometry.morphTargets
+			morphColors: geometry.morphColors
+			normals:	geometry.normals
+			colors: geometry.colors
+			uvs:	geometry.uvs
+			scale: geometry.scale
+			type:	geometry.userData.type
+			metadata: geometry.userData.metadata
+			matIdMapper: geometry.userData.matIdMapper
+			version = geometry.userData.version
+			cdate = geometry.userData.cdate
+		obj.terrain.geometry = geometry
+	
+	
 	addObjects: (obj) ->
 		geometries = db.get 'geometries'
 		environmentsStatic = db.get 'environmentsStatic'
