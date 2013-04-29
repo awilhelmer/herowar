@@ -108,6 +108,7 @@ public class Editor extends Controller {
       Set<Mesh> meshes = new HashSet<Mesh>();
       for (Mesh mesh : map.getObjects()) {
         if (mesh.getGeometry().getId() != null) {
+          mesh.setMap(map);
           mesh.setGeometry(GeometryDAO.getInstance().findUnique(mesh.getGeometry().getId()));
           meshes.add(mesh);
         }
