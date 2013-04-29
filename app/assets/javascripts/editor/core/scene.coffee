@@ -112,10 +112,21 @@ class Scene
 	
 	createStaticObjects: ->
 		if @world.attributes.staticObjects
-			for mesh in @world.attributes.staticObjects
-				@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.id
-			
-	
+			mesh = null
+			for instance in @world.attributes.objects
+				if @editor.engine.scenegraph.hasStaticObject instance.geometry.id 
+					for staticMesh in @world.attributes.staticObjects
+						if staticMesh.userData.id is instance.geometry.id
+							mesh = staticMesh
+							break
+				else
+					mesh = @editor.engine.scenegraph.staticObjects[instance.geometry.id][0]
+					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, mesh.geometry.name, id:mesh.userData.dbId
+				#add position to mesh ... 
+				if mesh
+					mesh.position = new THREE.Vector3 instance.position.x,instance.position.y,instance.position.z
+					@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
+
 	handleMaterials:  =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
 		

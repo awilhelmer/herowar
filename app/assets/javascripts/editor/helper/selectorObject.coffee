@@ -135,7 +135,8 @@ class SelectorObject
 				@onLoadGeometry mesh.geometry, mesh.material.materials
 			
 	onLoadGeometry: (geometry, materials, json) =>
-		@currentMesh = materialHelper.createMesh geometry, materials, json, @currentMeshName
+		json = id:@currentMeshId unless json
+		@currentMesh = materialHelper.createMesh geometry, materials, @currentMeshName, json
 		@addMesh()
 	
 	addMesh: ->

@@ -84,12 +84,12 @@ materialHelper =
 		null
 	
 	
-	createMesh: (geometry, materials, json, name) ->
+	createMesh: (geometry, materials, name, json) ->
 		mesh = new THREE.Mesh geometry
 		mesh.name = name
 		mesh.userData.dbId = json.id
 		mesh.material = new THREE.MeshFaceMaterial materials
-		if json
+		if json.matIdMapper
 			for matId in json.matIdMapper
 				for threeMat in mesh.material.materials
 					if matId.materialName is threeMat.name

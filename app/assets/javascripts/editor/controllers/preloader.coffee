@@ -149,6 +149,7 @@ class Preloader extends BaseController
 					result = loader.parse object
 					mesh = materialHelper.createMesh result.geometry, result.materials, object, object.name
 					mesh.userData.id = object.id
+					mesh.userData.matIdMapper = object.matIdMapper
 					staticMeshes.push mesh
 				data.staticObjetcs = staticMeshes
 		data
