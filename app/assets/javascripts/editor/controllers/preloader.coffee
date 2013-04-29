@@ -121,8 +121,12 @@ class Preloader extends BaseController
 
 	onSuccess: (data) =>
 		world = db.get 'world'
-		world.loadMaterials data
+		matIdMapper = data.terrain.geometry.matIdMapper;
+		data.terrain.geometry.materials = []
 		world.set @parseWorldData data
+		world.attributes.terrain.geometry.userData = {}
+		world.attributes.terrain.geometry.userData.matIdMapper = matIdMapper
+		world.loadMaterials data.materials
 		console.log world
 		@state = 3
 	
@@ -131,12 +135,7 @@ class Preloader extends BaseController
 			console.log "Parse geometry id #{data.terrain.geometry.id} with json loader"
 			loader = new THREE.JSONLoader()
 			result = loader.parse data.terrain.geometry
-			materials = data.terrain.geometry.materials
 			data.terrain.geometry = result.geometry
-			#set in userData our DB-materials ... 
-			data.terrain.geometry.userData = {}
-			data.terrain.geometry.userData.materials = materials
-			data.terrain.geometry
 		data
 
 	finish: ->

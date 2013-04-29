@@ -31,12 +31,12 @@ class World extends Backbone.Model
 		@createTerrainMesh @get('terrain').geometry
 
 	buildRandomTerrainMesh: (terrain, segWidth, segHeight) ->		
-		materials = [] 
+		matIdMapper = [] 
 		col = db.get 'materials'
 		for mat in col.models
-			materials.push id:mat.attributes.id, materialId:mat.attributes.materialId
+			matIdMapper.push id:mat.attributes.id, materialId:mat.attributes.materialId
 		geo = new THREE.PlaneGeometry(@get('terrain').width, @get('terrain').height, segWidth, segHeight)
-		geo.userData = materials: materials
+		geo.userData = matIdMapper: matIdMapper
 		obj = @createTerrainMesh(geo)
 		for mesh in obj.children
 			for i in [0..segHeight]
@@ -52,8 +52,8 @@ class World extends Backbone.Model
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		mesh.rotation.x = - Math.PI/2
-		if geometry.userData and geometry.userData.materials
-			for mat in geometry.userData.materials
+		if geometry.userData and geometry.userData.matIdMapper
+			for mat in geometry.userData.matIdMapper
 				@materialHelper.getThreeMaterialId mesh, (id: mat.id, materialId: mat.materialId)
 		obj.add mesh
 		obj
@@ -64,12 +64,15 @@ class World extends Backbone.Model
 		
 		
 	#onloading parse materials in geometry
-	loadMaterials: (data) ->
-		materials = db.get 'materials'
-		data.materials = [] unless data.materials
-		for mat in data.materials
-			materials.add mat
-		@materialHelper.loadGlobalMaterials data.terrain.geometry
+	loadMaterials: (materials) ->
+		col = db.get 'materials'
+		materials = [] unless materials
+		i = 1
+		for mat in materials
+			mat.id = i
+			col.add mat
+			i++
+		#@materialHelper.loadGlobalMaterials data.terrain.geometry
 	
 
 return World

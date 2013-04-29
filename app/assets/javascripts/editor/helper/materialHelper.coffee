@@ -52,14 +52,14 @@ class MaterialHelper
 	loadGlobalMaterials:(geo) ->
 		materials = []
 		globalMat = db.get 'materials'
-		if geo.matIdMapper
-			_.sortBy(geo.matIdMapper,((idMat) => return idMat.materialIndex))
-			for idMapper in geo.matIdMapper
+		if geo.userData and geo.userData.matIdMapper
+			_.sortBy(geo.userData.matIdMapper,((idMat) => return idMat.materialIndex))
+			for idMapper in geo.userData.matIdMapper
 				index = @getGlobalMatIndexById(idMapper.materialId)
 				if index > -1
 					mat = _.clone globalMat.models[index].attributes
 					materials.push mat
-		geo.materials = materials
+		geo.userData.materials = materials
 
 	#For Geometries without global materials binding 
 	#
@@ -77,10 +77,10 @@ class MaterialHelper
 			geo.material.materials = materials
 		null
 		
-	getGlobalMatIndexById: (id) ->
+	getGlobalMatIndexById: (materialId) ->
 		materials = db.get 'materials'
 		for material, key in materials.models
-			if material.attributes.materialId == id
+			if material.attributes.materialId == materialId
 				return key
 		console.log "No Backbone material found!" 
 		null
