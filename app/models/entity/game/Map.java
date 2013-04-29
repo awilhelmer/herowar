@@ -48,16 +48,19 @@ public class Map extends BaseModel implements Serializable {
   @OneToMany(cascade = CascadeType.ALL)
   private Set<Wave> waves;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="map")
-  private Set<Mesh> objects; 
-  
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map")
+  private Set<Mesh> objects;
+
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinTable(name="map_materials")
+  @JoinTable(name = "map_materials")
   @JsonIgnore
   private Set<Material> allMaterials;
 
   @Transient
   private List<Material> materials;
+
+  @Transient
+  private List<Geometry> staticGeometries;
 
   public Map() {
     this.name = "";
@@ -187,6 +190,14 @@ public class Map extends BaseModel implements Serializable {
 
   public void setMaterials(List<Material> materials) {
     this.materials = materials;
+  }
+
+  public List<Geometry> getStaticGeometries() {
+    return staticGeometries;
+  }
+
+  public void setStaticGeometries(List<Geometry> staticGeometries) {
+    this.staticGeometries = staticGeometries;
   }
 
   @Override

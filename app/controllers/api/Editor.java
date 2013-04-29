@@ -1,6 +1,7 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
+import game.json.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -46,8 +47,17 @@ public class Editor extends Controller {
   public static Result mapShow(Long id) {
     Map map = MapDAO.getMapById(id);
     if (map != null) {
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.getSerializationConfig().addMixInAnnotations(Mesh.class, MeshExcludeGeometryMixin.class);
       MapDAO.mapMaterials(map);
-      return ok(toJson(map));
+      MapDAO.mapStaticGeometries(map);
+      try {
+        return ok(mapper.writeValueAsString(map));
+      } catch (IOException e) {
+        log.error("Failed to serialize root environment:", e);
+      }
+
+      return badRequest("Unexpected error occurred");
     }
     return notFound();
   }

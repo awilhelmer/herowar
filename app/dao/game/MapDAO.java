@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import models.entity.game.Geometry;
 import models.entity.game.Map;
 import models.entity.game.Material;
+import models.entity.game.Mesh;
 import play.db.jpa.JPA;
 import dao.BaseDAO;
 
@@ -56,4 +57,11 @@ public class MapDAO extends BaseDAO<Long, Map> {
     }
   }
 
+  public static void mapStaticGeometries(Map map) {
+    map.setStaticGeometries(new ArrayList<Geometry>());
+    for (Mesh mesh : map.getObjects()) {
+      if (!map.getStaticGeometries().contains(mesh.getGeometry()))
+        map.getStaticGeometries().add(mesh.getGeometry());
+    }
+  }
 }
