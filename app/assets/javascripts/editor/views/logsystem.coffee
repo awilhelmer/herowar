@@ -11,7 +11,6 @@ class LogSystem extends BaseView
 	
 	afterRender: ->
 		container = @$ '.content'
-		console.log container
 		container.animate scrollTop: container[0].scrollHeight
 	
 return LogSystem
