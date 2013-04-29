@@ -10,12 +10,31 @@
     bottom: 0px;
 }
 
-#logsystem .headline {
-    display: block;
+#logsystem .header {
     padding-left: 5px;
     background-color: #333333;
     line-height: 28px;
     font-weight: bold;
+}
+
+#logsystem .header button {
+    float: right;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+#logsystem .header .minimize {
+    background-image: url("../images/editor/minimize.gif");
+}
+
+#logsystem .header .maximize {
+    background-image: url("../images/editor/maximize.gif");
 }
 
 #logsystem .content {
