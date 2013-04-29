@@ -1,11 +1,11 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
-class IconbarView2 extends BaseView
+class IconbarView extends BaseView
 
-	id: 'iconbar2'
+	id: 'iconbar'
 	
-	template: templates.get 'iconbar2.tmpl'
+	template: templates.get 'iconbar.tmpl'
 
 	events:
 		'click [data-modal="true"]' : 'showModal'
@@ -17,4 +17,4 @@ class IconbarView2 extends BaseView
 		id = $currentTarget.attr 'id'
 		$("#modal#{id.charAt(0).toUpperCase()}#{id.slice(1)}").modal 'show'
 
-return IconbarView2
+return IconbarView
