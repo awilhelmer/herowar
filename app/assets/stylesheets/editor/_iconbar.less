@@ -1,59 +1,40 @@
 //
-// MENUBAR
+// Iconbar
 // --------------------------------------------------
 
-// COMPONENT: NAVBAR
-
 #iconbar {
-	position: absolute;
-	top: 30px;
-	left: 0px;
-	right: 300px;
-	background: #474747;
-	border-bottom: 1px solid #a0a7ad;
-	.box-shadow(0 1px 4px rgba(0,0,0,.065));
+	height: 30px;
+	margin-left: 13px;
+	margin-top: 8px;
 }
 
-#iconbar .btn-toolbar {
-	margin-top: 0px;
-	margin-left: 15px;
+#iconbar a {
+	margin-left: 5px;
+	
+	&:first-child {
+		margin-left: 0px;
+	}
 }
 
 #iconbar [class^="icon-"],
 #iconbar [class*=" icon-"] {
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  margin-top: 1px;
-  *margin-right: .3em;
-  line-height: 32px;
-  vertical-align: text-top;
+  width: 16px;
+  height: 16px;
 }
 
-.icon-back {
-	  background-image: url("../images/editor/menubar/back.png");
+#iconbar .icon-new {
+	  background-image: url("../images/editor/iconbar/new.png");
 }
 
-.icon-into {
-	  background-image: url("../images/editor/menubar/into.png");
+#iconbar .icon-open {
+	  background-image: url("../images/editor/iconbar/open.png");
 }
 
-.icon-select {
-	  background-image: url("../images/editor/menubar/select.png");
+#iconbar .icon-save {
+	  background-image: url("../images/editor/iconbar/save.png");
 }
 
-.icon-materials {
-	  background-image: url("../images/editor/menubar/materials.png");
-}
-
-.icon-raise {
-	  background-image: url("../images/editor/menubar/raise.png");
-}
-
-.icon-degrade {
-	  background-image: url("../images/editor/menubar/degrade.png");
-}
-
-.icon-brush {
-	  background-image: url("../images/editor/menubar/brush.png");
+#iconbar .icon-exit {
+	  background-image: url("../images/editor/iconbar/exit.png");
 }
