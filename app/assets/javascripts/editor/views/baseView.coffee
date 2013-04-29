@@ -39,12 +39,13 @@ class BaseView extends Backbone.View
 			@_renderSubviews $html
 			@postRender $html
 			@$el.append $html
+			setTimeout @afterRender, 1			
 
 	# OVERRIDE to add some post render behavior
 	postRender: ($html) ->
 
 	# OVERRIDE to do stuff after view is rendered
-	afterRender: (time) ->
+	afterRender: ->
 
 	# OVERRIDE allow view dependand modifications of the model
 	getTemplateData: ->
