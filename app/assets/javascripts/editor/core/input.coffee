@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 Eventbus = require 'eventbus'
 Variables = require 'variables'
 Constants = require 'constants'
+log = require 'util/logger'
 
 class Input
 
@@ -12,7 +13,7 @@ class Input
 		@addEventListener()
 	
 	addEventListener: ->
-		console.log 'Register input listeners'
+		log.debug 'Register input listeners'
 		window.addEventListener 'resize',  => Eventbus.windowResize.dispatch true
 		window.addEventListener 'keyup', (event) => @onKeyUp event
 		window.addEventListener 'keydown', (event) => @onKeyDown event
