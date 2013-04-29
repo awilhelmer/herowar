@@ -1,6 +1,7 @@
 BaseController = require 'controllers/baseController'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
+log = require 'util/logger'
 db = require 'database'
 
 class Preloader extends BaseController
@@ -9,7 +10,7 @@ class Preloader extends BaseController
 		'views/preloader'	: ''
 
 	initialize: (options) ->
-		console.log 'Initialize preloader...'
+		log.info 'Initialize preloader...'
 		super options
 		@$container = $ '#preloader'
 		@initLoader()			
