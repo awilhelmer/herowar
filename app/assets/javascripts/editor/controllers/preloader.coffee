@@ -133,7 +133,6 @@ class Preloader extends BaseController
 		newGeo.userData.metadata = oldGeo.metadata
 		newGeo.userData.version = oldGeo.version
 		newGeo.userData.cdate = oldGeo.cdate
-		#world.initStaticObjects()
 		world.loadMaterials data.materials
 		console.log world
 		@state = 3
@@ -144,6 +143,14 @@ class Preloader extends BaseController
 			loader = new THREE.JSONLoader()
 			result = loader.parse data.terrain.geometry
 			data.terrain.geometry = result.geometry
+			if data.staticObjetcs
+				staticMeshes = []
+				for object in data.staticObjetcs
+					result = loader.parse object
+					mesh = materialHelper.createMesh result.geometry, result.materials, object, object.name
+					mesh.userData.id = object.id
+					staticMeshes.push mesh
+				data.staticObjetcs = staticMeshes
 		data
 
 	finish: ->

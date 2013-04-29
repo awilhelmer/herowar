@@ -21,6 +21,7 @@ class Scene
 		@addEventListeners()
 		@reset()		
 		@createTextures()
+		@createStaticObjects()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
@@ -106,6 +107,13 @@ class Scene
 				'map'					: undefined
 			col.add mat
 			@world.addTerrainMaterial id : mat.id, materialId: mat.merialId
+	
+	
+	createStaticObjects: ->
+		if @world.attributes.staticObjects
+			for mesh in @world.attributes.staticObjects
+				@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.id
+			
 	
 	handleMaterials:  =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()

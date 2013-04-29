@@ -60,15 +60,6 @@ class World extends Backbone.Model
 		obj.add mesh
 		obj
 
-	initStaticObjects: ->
-		objects = @get('staticObjects')
-		if objetcs
-			loader = new THREE.JSONLoader()
-			for object in objects
-				result = loader.parse object
-				mesh = materialHelper.createMesh result.geometry, result.materials, object 
-			
-
 	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
 		materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
