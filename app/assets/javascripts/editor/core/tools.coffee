@@ -1,5 +1,4 @@
 EditorEventbus = require 'editorEventbus'
-MaterialHelper = require 'helper/materialHelper'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
 SelectorArea = require 'helper/selectorArea'
@@ -25,11 +24,10 @@ class Tools
 	createHelpers: ->
 		@objectHelper = new ObjectHelper @editor
 		@intersectHelper = new IntersectHelper @editor
-		@materialHelper = new MaterialHelper @editor
 	
 	createSelectors: ->
-		@selectorObject = new SelectorObject @editor, @materialHelper, @objectHelper, @intersectHelper
-		@selectorArea = new SelectorArea @editor, @materialHelper, @intersectHelper, @selectorObject	
+		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
+		@selectorArea = new SelectorArea @editor, @intersectHelper, @selectorObject	
 	
 	addEventListeners: ->
 		EditorEventbus.mouseup.add @onMouseUp

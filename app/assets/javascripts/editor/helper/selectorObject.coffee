@@ -3,10 +3,11 @@ Environment = require 'models/environment'
 Variables = require 'variables'
 JSONLoader = require 'util/threeloader'
 db = require 'database'
+materialHelper = require 'helper/materialHelper'
 
 class SelectorObject
 
-	constructor: (@editor, @materialHelper, @objectHelper, @intersectHelper) ->
+	constructor: (@editor, @objectHelper, @intersectHelper) ->
 		@currentMeshId = -1
 		@currentMesh = null
 		@loader = new JSONLoader()
@@ -108,7 +109,7 @@ class SelectorObject
 	materialUpdate: (idMapper) =>
 		if idMapper
 			mesh = @objectHelper.getModel @editor.engine.scenegraph.getMap()
-			matIndex = @materialHelper.updateMaterial mesh, idMapper
+			matIndex = materialHelper.updateMaterial mesh, idMapper
 			if matIndex > -1 and mesh.material.materials[matIndex].map and mesh.material.materials[matIndex].map.needsUpdate
 				@editor.engine.scenegraph.getMap().remove mesh
 				@editor.engine.render()
@@ -134,19 +135,7 @@ class SelectorObject
 				@onLoadGeometry mesh.geometry, mesh.material.materials
 			
 	onLoadGeometry: (geometry, materials, json) =>
-		@currentMesh = new THREE.Mesh geometry
-		@currentMesh.name = @currentMeshName
-		@currentMesh.userData.dbId = @currentMeshId
-		@currentMesh.material = new THREE.MeshFaceMaterial materials
-		if json
-			for matId in json.matIdMapper
-				for threeMat in @currentMesh.material.materials
-					if matId.materialName is threeMat.name
-						threeMat.name = "matID#{matId.materialId}" 
-						break 
-			
-			@currentMesh.userData.matIdMapper = json.matIdMapper
-			@materialHelper.loadGeometryMaterial @currentMesh
+		@currentMesh = materialHelper.createMesh geometry, materials, json
 		@addMesh()
 	
 	addMesh: ->

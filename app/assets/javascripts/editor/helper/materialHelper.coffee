@@ -1,8 +1,7 @@
 Variables = require 'variables'
 db = require 'database'
 
-class MaterialHelper
-
+materialHelper =
 	getThreeMaterialId: (object, idMapper) ->
 		unless object.material and object.material.materials
 			materials = []
@@ -84,6 +83,23 @@ class MaterialHelper
 		console.log "No Backbone material found!" 
 		null
 	
+	
+	createMesh: (geometry, materials, json) ->
+		mesh = new THREE.Mesh geometry
+		mesh.name = json.name
+		mesh.userData.dbId = json.id
+		mesh.material = new THREE.MeshFaceMaterial materials
+		if json
+			for matId in json.matIdMapper
+				for threeMat in mesh.material.materials
+					if matId.materialName is threeMat.name
+						threeMat.name = "matID#{matId.materialId}" 
+						break 
+			
+			mesh.userData.matIdMapper = json.matIdMapper
+			@loadGeometryMaterial mesh
+		mesh
+	
 	#Transform own materials (backbone model) to THREE.materials model 
 	# @see MaterialManagerMenu for all properties 
 	transformMaterial:(material, materialId) ->
@@ -117,4 +133,4 @@ class MaterialHelper
 					console.log "Material Key #{key} is unknown" 
 		result
 
-return MaterialHelper
+return materialHelper

@@ -2,11 +2,11 @@ MaterialHelper = require 'helper/materialHelper'
 Constants = require 'constants'
 EditorEventbus = require 'editorEventbus'
 db = require 'database'
+materialHelper = require 'helper/materialHelper'
 
 class World extends Backbone.Model
 	
 	initialize: (options) ->
-		@materialHelper = new MaterialHelper()
 		@initListener
 		super options
 
@@ -56,15 +56,24 @@ class World extends Backbone.Model
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
 		mesh.rotation.x = - Math.PI/2
-		@materialHelper.loadGlobalMaterials mesh
+		materialHelper.loadGlobalMaterials mesh
 		obj.add mesh
 		obj
 
+	initStaticObjects: ->
+		objects = @get('staticObjects')
+		if objetcs
+			loader = new THREE.JSONLoader()
+			for object in objects
+				result = loader.parse object
+				mesh = materialHelper.createMesh result.geometry, result.materials, object 
+			
+
 	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
-		@materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
+		materialHelper.handleGeometryForSave @attributes.terrain.geometry, map
 		
-		
+
 	#onloading parse materials in geometry
 	loadMaterials: (materials) ->
 		col = db.get 'materials'

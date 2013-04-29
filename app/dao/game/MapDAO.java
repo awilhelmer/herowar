@@ -61,6 +61,7 @@ public class MapDAO extends BaseDAO<Long, Map> {
     map.setStaticGeometries(new ArrayList<Geometry>());
     for (Mesh mesh : map.getObjects()) {
       if (!map.getStaticGeometries().contains(mesh.getGeometry()))
+        GeometryDAO.mapMaterials(mesh.getGeometry());
         map.getStaticGeometries().add(mesh.getGeometry());
     }
   }

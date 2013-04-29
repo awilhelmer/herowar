@@ -132,7 +132,7 @@ class Preloader extends BaseController
 		newGeo.userData.metadata = oldGeo.metadata
 		newGeo.userData.version = oldGeo.version
 		newGeo.userData.cdate = oldGeo.cdate
-		
+		#world.initStaticObjects()
 		world.loadMaterials data.materials
 		console.log world
 		@state = 3

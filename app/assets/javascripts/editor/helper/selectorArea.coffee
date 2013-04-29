@@ -2,10 +2,11 @@ EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
 Constants = require 'constants'
 db = require 'database'
+materialHelper = require 'helper/materialHelper'
 
 class SelectorArea
 	
-	constructor: (@editor, @materialHelper, @intersectHelper, @selectorObject) ->
+	constructor: (@editor, @intersectHelper, @selectorObject) ->
 		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
 		@selector.rotation.x = - Math.PI/2
 		@selector.material.opacity = 0.3
@@ -104,7 +105,7 @@ class SelectorArea
 		faceIndex = intersect.faceIndex
 		baseObject = @selectorObject.objectHelper.getBaseObject object
 		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
-			newIndex = @materialHelper.getThreeMaterialId object, @selectedMatId
+			newIndex = materialHelper.getThreeMaterialId object, @selectedMatId
 			for face in intersect.faces
 				oldIndex = face.materialIndex
 				if oldIndex isnt newIndex 
