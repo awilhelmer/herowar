@@ -69,6 +69,7 @@ worldToObjectConverter =
 	convertThreeGeometry: (obj) ->
 		geometry = obj.terrain.geometry
 		unless geometry instanceof THREE.Geometry
+			geometry.matIdMapper = geometry.userData.matIdMapper
 			return
 		geometry =
 			id: geometry.userData.id
