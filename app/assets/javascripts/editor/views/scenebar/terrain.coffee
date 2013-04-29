@@ -18,10 +18,15 @@ class ScenebarTerrainView extends BaseView
 		
 
 	initialize: (options) ->
-		@nextId = 1
+		col = db.get 'materials'
+		if col.models.length > 0
+			@nextId = col.models.length
+		else
+			@nextId = 1
 		@nextMatId = -1
+		console.log "setted StartId to #{@nextId}"
 		super options
-
+	
 	newMaterial: (event) =>
 		event?.preventDefault()
 		id = ++@nextId

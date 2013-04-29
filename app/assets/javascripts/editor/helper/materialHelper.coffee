@@ -49,20 +49,19 @@ class MaterialHelper
 							backBoneGeometry.matIdMapper.push materialId: index, materialIndex: geoMatIndex
 		null
 	
-	loadGlobalMaterials:(geo) ->
+	loadGlobalMaterials:(mesh) ->
 		materials = []
 		globalMat = db.get 'materials'
-		if geo.userData and geo.userData.matIdMapper
-			_.sortBy(geo.userData.matIdMapper,((idMat) => return idMat.materialIndex))
-			for idMapper in geo.userData.matIdMapper
+		if mesh.geometry.userData and mesh.geometry.userData.matIdMapper
+			_.sortBy(mesh.geometry.userData.matIdMapper,((idMat) => return idMat.materialIndex))
+			for idMapper in mesh.geometry.userData.matIdMapper
 				index = @getGlobalMatIndexById(idMapper.materialId)
 				if index > -1
-					mat = _.clone globalMat.models[index].attributes
-					materials.push mat
-		geo.userData.materials = materials
+					mat = @transformMaterial globalMat.models[index], idMapper.materialId
+					materials.push mat 
+		mesh.material = new THREE.MeshFaceMaterial materials
 
 	#For Geometries without global materials binding 
-	#
 	loadGeometryMaterial: (geo) ->
 		if geo.userData.matIdMapper
 			materials = []

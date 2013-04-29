@@ -1,5 +1,6 @@
 MaterialHelper = require 'helper/materialHelper'
 Constants = require 'constants'
+EditorEventbus = require 'editorEventbus'
 db = require 'database'
 
 class World extends Backbone.Model
@@ -53,8 +54,7 @@ class World extends Backbone.Model
 		mesh.geometry.dynamic = true
 		mesh.rotation.x = - Math.PI/2
 		if geometry.userData and geometry.userData.matIdMapper
-			for mat in geometry.userData.matIdMapper
-				@materialHelper.getThreeMaterialId mesh, (id: mat.id, materialId: mat.materialId)
+			@materialHelper.loadGlobalMaterials mesh
 		obj.add mesh
 		obj
 
@@ -65,6 +65,7 @@ class World extends Backbone.Model
 		
 	#onloading parse materials in geometry
 	loadMaterials: (materials) ->
+		#TODO load it in terrain
 		col = db.get 'materials'
 		materials = [] unless materials
 		i = 1
@@ -72,7 +73,6 @@ class World extends Backbone.Model
 			mat.id = i
 			col.add mat
 			i++
-		#@materialHelper.loadGlobalMaterials data.terrain.geometry
 	
 
 return World
