@@ -14,6 +14,7 @@ class Editor extends BaseController
 		'views/sidebarLeft'			: ''
 		'views/sidebar'	  			: ''
 		'views/viewport'				: ''
+		'views/logsystem'				: ''
 		'views/modal'						: ''
 
 	initialize: (options) ->
