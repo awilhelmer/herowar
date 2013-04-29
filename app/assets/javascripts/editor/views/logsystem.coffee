@@ -9,4 +9,9 @@ class LogSystem extends BaseView
 	
 	template: templates.get 'logsystem.tmpl'
 	
+	afterRender: ->
+		container = @$ '.content'
+		console.log container
+		container.animate scrollTop: container[0].scrollHeight
+	
 return LogSystem
