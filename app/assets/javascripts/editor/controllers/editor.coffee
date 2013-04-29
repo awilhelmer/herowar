@@ -14,7 +14,6 @@ class Editor extends BaseController
 		'views/sceneExplorer'		: ''
 		'views/sidebar'	  			: ''
 		'views/viewport'				: ''
-		'views/materialManager'	: ''
 		'views/modal'						: ''
 
 	initialize: (options) ->
