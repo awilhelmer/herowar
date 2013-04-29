@@ -53,7 +53,7 @@ class MaterialHelper
 		materials = []
 		globalMat = db.get 'materials'
 		if mesh.geometry.userData and mesh.geometry.userData.matIdMapper
-			_.sortBy(mesh.geometry.userData.matIdMapper,((idMat) => return idMat.materialIndex))
+			mesh.geometry.userData.matIdMapper = _.sortBy mesh.geometry.userData.matIdMapper, (idMat) => return idMat.materialIndex
 			for idMapper in mesh.geometry.userData.matIdMapper
 				index = @getGlobalMatIndexById(idMapper.materialId)
 				if index > -1
@@ -65,7 +65,7 @@ class MaterialHelper
 	loadGeometryMaterial: (geo) ->
 		if geo.userData.matIdMapper
 			materials = []
-			_.sortBy(geo.userData.matIdMapper,((idMat) => return idMat.materialIndex))
+			geo.userData.matIdMapper = _.sortBy geo.userData.matIdMapper, (idMat) => return idMat.materialIndex
 			for idMapper in geo.userData.matIdMapper
 				index = @getMaterialIndex geo, idMapper
 				if index > -1
