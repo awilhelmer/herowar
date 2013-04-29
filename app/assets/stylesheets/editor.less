@@ -44,16 +44,19 @@
 
 // Editor Files
 @import "editor/_variables.less";
+@import "editor/_global.less";
 @import "editor/_fd-slider.less";
 @import "editor/_iconbar.less";
 @import "editor/_list.less";
-@import "editor/_materialManager.less";
+@import "editor/_materialManager.less";     // Deprecated ?!?
+@import "editor/_preloader.less";
 @import "editor/_scenebar.less";
 @import "editor/_sceneExplorer.less";
 @import "editor/_sidebar.less";
 @import "editor/_sidebarLeft.less";
 @import "editor/_sidebarRight.less";
 @import "editor/_tree.less";
+@import "editor/_viewport.less";
 @import "editor/scenebar/_environments.less";
 @import "editor/scenebar/_terrain.less";
 @import "editor/scenebar/_terrainMaterials.less";
@@ -61,81 +64,3 @@
 
 // Utility classes
 @import "_utilities.less"; // Has to be last to override when necessary
-
-// Editor Style
-
-body {
-	background: #474747;
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	font-family: georgia;
-	font-size: 14px;
-	color: #a0a7ad;
-}
-
-canvas {
-	pointer-events: none;
-}
-
-#preloader {
-	position: absolute;
-	right: 0px;
-	top: 0px;
-	left: 0px;
-	bottom: 0px;
-}
-
-#viewport {
-	position: absolute;
-	left: 250px;
-	right: 300px;
-	top: 125px;
-	bottom: 0px;	
-}
-
-#camera {
-	position: absolute;
-	right: 305px;
-	top: 90px;
-	z-index: 2;
-	color: #000000;
-}
-
-.fd-slider {
-	width: 55%;
-	display: inline-block;
-	float: right;
-	top: -1px;
-}
-
-.error {
-	color: #FF0000;
-}
-
-.loading {
-	background-image:url(../images/loading.gif);
-  background-repeat:no-repeat;
-	background-position: center 15px;
-	
-	&:after { 
-		content: "Loading Data";
-		display: inline-block;
-		text-align: center;
-		width: 100%;
-		margin-top: 25px;
-	}
-}
-
-#sidebar-environment input {
-	width: 276px;
-	margin-bottom: 5px;
-}
-
-#modalFileMapOpen .modal-body div {
-	cursor: pointer;
-}
-
-#modalFileMapOpen .modal-body .active {
-	background-color: #ff9933;
-}
