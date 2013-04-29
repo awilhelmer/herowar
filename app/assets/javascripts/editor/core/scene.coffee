@@ -4,6 +4,7 @@ EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
 Texture = require 'models/texture'
 Constants = require 'constants'
+log = require 'util/logger'
 db = require 'database'
 
 class Scene
@@ -50,7 +51,7 @@ class Scene
 		smoothness = parseFloat smoothness
 		zScale = parseInt zScale
 		if @hasValidSize(width, height) and @hasChangedSize(width, height, smoothness, zScale)
-			console.log 'Terrain has valid changes'
+			log.debug 'Terrain has valid changes'
 			@world.get('terrain').width = width
 			@world.get('terrain').height = height
 			@world.get('terrain').smoothness = smoothness
@@ -61,18 +62,18 @@ class Scene
 		@world.get('terrain').wireframe = value
 
 	resetTerrainPool: =>
-		console.log 'Reseting terrain pool'
+		log.info 'Reseting terrain pool'
 		@randomPool.reset()
 		@buildTerrain()
 
 	reset: =>
-		console.log 'Reseting scene'
+		log.info 'Reseting scene'
 		@createTerrainMaterial()
 		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
 	buildTerrain: =>
-		console.log "Change terrain: size=#{@world.get('terrain').width}x#{@world.get('terrain').height} smoothness=#{@world.get('terrain').smoothness} zscale=#{@world.get('terrain').zScale}"
+		log.info "Change terrain: size=#{@world.get('terrain').width}x#{@world.get('terrain').height} smoothness=#{@world.get('terrain').smoothness} zscale=#{@world.get('terrain').zScale}"
 		@randomPool.seek 0
 		if @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()

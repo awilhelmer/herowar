@@ -2,6 +2,7 @@ BaseController = require 'controllers/baseController'
 Input = require 'core/input'
 Scene = require 'core/scene'
 Tools = require 'core/tools'
+log = require 'util/logger'
 db = require 'database'
 Engine = require 'engine'
 Variables = require 'variables'
@@ -18,7 +19,7 @@ class Editor extends BaseController
 		'views/modal'						: ''
 
 	initialize: (options) ->
-		console.log 'Initialize editor...'
+		log.info 'Initialize editor...'
 		super options
 		@data = db.data()
 		@initEngine()

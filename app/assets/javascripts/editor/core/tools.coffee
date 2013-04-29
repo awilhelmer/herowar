@@ -5,6 +5,7 @@ SelectorArea = require 'helper/selectorArea'
 SelectorObject = require 'helper/selectorObject'
 Constants = require 'constants'
 Variables = require 'variables'
+log = require 'util/logger'
 
 class Tools
 
@@ -16,7 +17,7 @@ class Tools
 		@initialize()
 		
 	initialize: ->
-		console.log 'Initialize tools'
+		log.info 'Initialize tools'
 		@createHelpers()
 		@createSelectors()
 		@addEventListeners()
