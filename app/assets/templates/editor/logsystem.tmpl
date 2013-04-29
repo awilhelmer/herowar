@@ -1,4 +1,8 @@
-<span class="headline">Log System</span>
+<div class="header">
+	{{#unless isMinimized}}<button type="button" class="minimize"></button>{{/unless}}
+	{{#if isMinimized}}<button type="button" class="maximize"></button>{{/if}}
+	<span>Log System</span>
+</div>
 <div class="content">
 	{{#each []}}
 		<p>{{message}}</p>
