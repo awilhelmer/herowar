@@ -15,6 +15,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.beanutils.converters.StringConverter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -57,7 +58,8 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
     if (Hibernate.getClass(obj) != null) {
       clazz = Hibernate.getClass(obj);
     }
-    Field[] fields = clazz.getDeclaredFields();
+    Field[] fields = getAllFields(clazz);
+
     for (Field field : fields) {
       Class<?> type = field.getType();
       try {
@@ -147,6 +149,15 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
       }
     }
 
+  }
+
+  private Field[] getAllFields(Class<?> clazz) {
+    Field[] result = clazz.getDeclaredFields();
+    if (clazz.getSuperclass() != null && clazz.getSuperclass() != Object.class) {
+      result = ArrayUtils.addAll(result, getAllFields(clazz.getSuperclass()));
+    }
+
+    return result;
   }
 
   protected void writeStringAsDoubleMultiArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {

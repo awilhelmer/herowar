@@ -102,9 +102,6 @@ public class Editor extends Controller {
     if (map.getTerrain().getMap() == null) {
       map.getTerrain().setMap(map);
     }
-    if (map.getTerrain().getGeometry().getId() != null) {
-      map.getTerrain().setGeometry(JPA.em().merge(map.getTerrain().getGeometry()));
-    }
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
     java.util.Map<Integer, Material> matMap = saveMaterials(map);
     saveGeometryMaterials(map.getTerrain().getGeometry(), matMap);
