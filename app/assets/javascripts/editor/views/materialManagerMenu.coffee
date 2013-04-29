@@ -15,8 +15,8 @@ class MaterialManagerMenu extends BaseView
 		'click .mm-new-material' : 'newMaterial'
 	
 	bindEvents: ->
-		EditorEventbus.changeMaterial.add @changeMaterial
-		EditorEventbus.menuSelectMaterial.add @selectMaterial
+		#EditorEventbus.changeMaterial.add @changeMaterial
+		#EditorEventbus.menuSelectMaterial.add @selectMaterial --> Refactoring to terrain.coffe
 		
 	
 	#TODO on preloading fill all materials from - initialize from preloader
@@ -53,9 +53,8 @@ class MaterialManagerMenu extends BaseView
 
 	selectMaterial: (id) =>
 		matId =  @getMaterialId id
-		modelId = id
-		console.log "Select material id #{modelId} matId #{matId}"
-		idMapper = id: modelId, materialId:matId
+		console.log "Select material id #{id} matId #{matId}"
+		idMapper = id: id, materialId:matId
 		Constants.MATERIAL_SELECTED = id
 		EditorEventbus.selectMaterial.dispatch idMapper
 

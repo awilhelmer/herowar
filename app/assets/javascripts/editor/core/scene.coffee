@@ -94,17 +94,18 @@ class Scene
 
 	createTerrainMaterial: ->
 		col = db.get 'materials'
-		mat = new Material()
-		mat.set 
-			'id'					: 1
-			'materialId' 	: -1
-			'name' 				: 'Terrain'
-			'color' 			: '#006600'
-			'transparent' : false
-			'opacity'			: 1
-			'map'					: undefined
-		col.add mat
-		@world.addTerrainMaterial id : mat.id, materialId: mat.merialId
+		if col.models.length == 0
+			mat = new Material()
+			mat.set 
+				'id'					: 1
+				'materialId' 	: -1
+				'name' 				: 'Terrain'
+				'color' 			: '#006600'
+				'transparent' : false
+				'opacity'			: 1
+				'map'					: undefined
+			col.add mat
+			@world.addTerrainMaterial id : mat.id, materialId: mat.merialId
 	
 	handleMaterials:  =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
