@@ -18,6 +18,8 @@ class ObjectHelper
 			@wireFrameMaterials.materials[0].color.set color
 			@wireFrameMaterials.materials[0].needsUpdate = true
 			mesh = new THREE.Mesh obj.children[0].geometry.clone(), @wireFrameMaterials
+			for face in mesh.geometry.faces
+				face.materialIndex = 0
 			mesh.rotation.copy obj.children[0].rotation.clone()
 			mesh.name = 'wireframe'
 			obj.add mesh
