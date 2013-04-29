@@ -83,8 +83,8 @@ worldToObjectConverter =
 			type:	geometry.userData.type
 			metadata: geometry.userData.metadata
 			matIdMapper: geometry.userData.matIdMapper
-			version = geometry.userData.version
-			cdate = geometry.userData.cdate
+			version: geometry.userData.version
+			cdate: geometry.userData.cdate
 		obj.terrain.geometry = geometry
 	
 	
