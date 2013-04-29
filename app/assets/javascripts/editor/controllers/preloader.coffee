@@ -63,7 +63,7 @@ class Preloader extends BaseController
 
 	updateState: (type, name, state) ->
 		unless type of @states
-			console.log "Unkown loader type #{type}."
+			log.error "Unkown loader type #{type}."
 			return
 		if state is true
 			@progress.remaining--
@@ -73,7 +73,7 @@ class Preloader extends BaseController
 		@progress.finish = true if @progress.loaded is @progress.total
 
 	loadItem: (type, name, url) ->
-		console.log "Load [type=#{type}, name=#{name}, url=#{url}]"
+		log.info "Load [type=#{type}, name=#{name}, url=#{url}]"
 		@updateState type, name, false
 		switch type
 			# TODO: implement geometries and image loading cases
@@ -140,14 +140,14 @@ class Preloader extends BaseController
 	
 	parseWorldData: (data) ->
 		if data.terrain.geometry.id
-			console.log "Parse geometry id #{data.terrain.geometry.id} with json loader"
+			log.info "Parse geometry id #{data.terrain.geometry.id} with json loader"
 			loader = new THREE.JSONLoader()
 			result = loader.parse data.terrain.geometry
 			data.terrain.geometry = result.geometry
 		data
 
 	finish: ->
-		console.log 'Preloading complete'
+		log.info 'Preloading complete'
 		@preloadComplete = true
 		@$container.find('canvas').remove()
 		db.data @data

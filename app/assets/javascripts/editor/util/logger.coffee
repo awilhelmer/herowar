@@ -17,11 +17,11 @@ logger =
 
 log = (level, message) ->
 	logs = db.get 'ui/logs'
-	log = new Log()
-	log.set
+	item = new Log()
+	item.set
 		'level' : level
 		'message'	: message
 		'cdate' : new Date().getTime()
-	logs.add log
+	logs.add item
 	
 return logger

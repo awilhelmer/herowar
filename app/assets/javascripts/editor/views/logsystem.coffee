@@ -5,6 +5,8 @@ class LogSystem extends BaseView
 
 	id: 'logsystem'
 	
+	entity: 'ui/logs'
+	
 	template: templates.get 'logsystem.tmpl'
 	
 return LogSystem
