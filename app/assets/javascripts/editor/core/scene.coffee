@@ -1,5 +1,7 @@
 ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
+Environment = require 'models/environment'
+materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
 Texture = require 'models/texture'
@@ -111,21 +113,50 @@ class Scene
 	
 	
 	createStaticObjects: ->
-		if @world.attributes.staticObjects
+		if @world.attributes.staticGeometries
 			mesh = null
 			for instance in @world.attributes.objects
-				if @editor.engine.scenegraph.hasStaticObject instance.geometry.id 
-					for staticMesh in @world.attributes.staticObjects
-						if staticMesh.userData.id is instance.geometry.id
+				unless @editor.engine.scenegraph.hasStaticObject instance.geoId 
+					for staticMesh in @world.attributes.staticGeometries
+						if staticMesh.userData.id is instance.geoId
 							mesh = staticMesh
+							mesh.name = instance.name
 							break
 				else
-					mesh = @editor.engine.scenegraph.staticObjects[instance.geometry.id][0]
-					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, mesh.geometry.name, id:mesh.userData.dbId
+					mesh = @editor.engine.scenegraph.staticGeometries[instance.geoId][0]
+					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
 				#add position to mesh ... 
 				if mesh
 					mesh.position = new THREE.Vector3 instance.position.x,instance.position.y,instance.position.z
+					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
+					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
 					@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
+					id = @editor.engine.scenegraph.getNextId()
+					environmentsStatic = db.get 'environmentsStatic'
+					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
+		null
+
+	#TODO central static code please!
+	createModelFromMesh: (id, mesh, name) ->
+		env = new Environment()
+		env.set
+			id 				: id
+			dbId			: mesh.userData.dbId
+			listIndex	: mesh.userData.listIndex
+			name 			: name
+			position	:
+				x				: mesh.position.x
+				y				: mesh.position.y
+				z				: mesh.position.z
+			rotation	:
+				x				: mesh.rotation.x
+				y				: mesh.rotation.y
+				z				: mesh.rotation.z
+			scale			:
+				x				: mesh.scale.x
+				y				: mesh.scale.y
+				z				: mesh.scale.z
+		env
 
 	handleMaterials:  =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()

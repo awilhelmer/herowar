@@ -96,7 +96,7 @@ worldToObjectConverter =
 		for model in environmentsStatic.models
 			staticObj = model.attributes
 			staticObj.geometry = id: staticObj.dbId
-			objects.push _.pick staticObj, 'geometry', 'position', 'rotation', 'scale'
+			objects.push _.pick staticObj, 'geometry', 'position', 'rotation', 'scale' , 'name'
 		obj.objects = objects
 
 return worldToObjectConverter

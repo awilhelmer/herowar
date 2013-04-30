@@ -2,6 +2,7 @@ package dao.game;
 
 import java.util.ArrayList;
 
+import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Map;
 import models.entity.game.Material;
@@ -60,9 +61,14 @@ public class MapDAO extends BaseDAO<Long, Map> {
   public static void mapStaticGeometries(Map map) {
     map.setStaticGeometries(new ArrayList<Geometry>());
     for (Mesh mesh : map.getObjects()) {
+      mesh.setGeoId(mesh.getGeometry().getId());
       if (!map.getStaticGeometries().contains(mesh.getGeometry()))
-        GeometryDAO.mapMaterials(mesh.getGeometry());
-        map.getStaticGeometries().add(mesh.getGeometry());
+        mesh.getGeometry().setMaterials(new ArrayList<Material>());
+      for (GeoMaterial geoMap : mesh.getGeometry().getGeoMaterials()) {
+        mesh.getGeometry().getMaterials().add(geoMap.getId().getMaterial());
+      }
+      GeometryDAO.mapMaterials(mesh.getGeometry());
+      map.getStaticGeometries().add(mesh.getGeometry());
     }
   }
 }

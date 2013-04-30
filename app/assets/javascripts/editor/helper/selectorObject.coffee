@@ -1,9 +1,9 @@
 EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
+materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
 JSONLoader = require 'util/threeloader'
 db = require 'database'
-materialHelper = require 'helper/materialHelper'
 
 class SelectorObject
 

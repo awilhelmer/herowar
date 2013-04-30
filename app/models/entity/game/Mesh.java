@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -29,6 +30,10 @@ public class Mesh implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  private String name;
+
+  private Boolean visible;
+
   @Embedded
   @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "position_x")),
       @AttributeOverride(name = "y", column = @Column(name = "position_y")), @AttributeOverride(name = "z", column = @Column(name = "position_z")) })
@@ -38,10 +43,10 @@ public class Mesh implements Serializable {
   @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "rotation_x")),
       @AttributeOverride(name = "y", column = @Column(name = "rotation_y")), @AttributeOverride(name = "z", column = @Column(name = "rotation_z")) })
   private Vector3 rotation;
-  
+
   @Embedded
-  @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "scale_x")),
-      @AttributeOverride(name = "y", column = @Column(name = "scale_y")), @AttributeOverride(name = "z", column = @Column(name = "scale_z")) })
+  @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "scale_x")), @AttributeOverride(name = "y", column = @Column(name = "scale_y")),
+      @AttributeOverride(name = "z", column = @Column(name = "scale_z")) })
   private Vector3 scale;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
@@ -51,8 +56,11 @@ public class Mesh implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "map_id", referencedColumnName = "id")
   @JsonIgnore
-  private Map map;  
-  
+  private Map map;
+
+  @Transient
+  private Long geoId;
+
   public Integer getId() {
     return id;
   }
@@ -100,6 +108,29 @@ public class Mesh implements Serializable {
   public void setMap(Map map) {
     this.map = map;
   }
-  
-  
+
+  public Long getGeoId() {
+    return geoId;
+  }
+
+  public void setGeoId(Long geoId) {
+    this.geoId = geoId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Boolean getVisible() {
+    return visible;
+  }
+
+  public void setVisible(Boolean visible) {
+    this.visible = visible;
+  }
+
 }

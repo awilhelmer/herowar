@@ -1,6 +1,7 @@
 BaseController = require 'controllers/baseController'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
+materialHelper = require 'helper/materialHelper'
 log = require 'util/logger'
 db = require 'database'
 
@@ -143,15 +144,15 @@ class Preloader extends BaseController
 			loader = new THREE.JSONLoader()
 			result = loader.parse data.terrain.geometry
 			data.terrain.geometry = result.geometry
-			if data.staticObjetcs
+			if data.staticGeometries
 				staticMeshes = []
-				for object in data.staticObjetcs
+				for object in data.staticGeometries
 					result = loader.parse object
-					mesh = materialHelper.createMesh result.geometry, result.materials, object, object.name
+					mesh = materialHelper.createMesh result.geometry, result.materials, object.name, object
 					mesh.userData.id = object.id
 					mesh.userData.matIdMapper = object.matIdMapper
 					staticMeshes.push mesh
-				data.staticObjetcs = staticMeshes
+				data.staticGeometries = staticMeshes
 		data
 
 	finish: ->
