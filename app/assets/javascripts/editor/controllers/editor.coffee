@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseController = require 'controllers/baseController'
 Input = require 'core/input'
 Scene = require 'core/scene'
@@ -23,6 +24,7 @@ class Editor extends BaseController
 		super options
 		@data = db.data()
 		@initEngine()
+		@bindEvents()
 		@initCore()
 		
 	initEngine: ->
@@ -47,5 +49,11 @@ class Editor extends BaseController
 		@input = new Input @
 		@scene = new Scene @
 		@tools = new Tools @
+
+	bindEvents: ->
+		EditorEventbus.render.add @render
+	
+	render: (resize) =>
+		if resize then @engine.onWindowResize true else	@engine.render()
 
 return Editor

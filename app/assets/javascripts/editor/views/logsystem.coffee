@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
 
@@ -14,30 +15,52 @@ class LogSystem extends BaseView
 		'click .maximize' : 'maximize'
 	
 	initalize: (options) ->
+		@isMoving = false
 		@isMinimized = false
 	
 	afterRender: ->
 		container = @$ '.content'
-		container.animate scrollTop: container[0].scrollHeight
+		container.animate scrollTop: container[0].scrollHeight, 0
 	
 	minimize: ->
-		console.log 'Minimize'
+		lastRerenderTween = 100
+		@isMoving = true
 		$viewport = $ '#viewport'
 		$viewport.animate bottom: "-=72px", 500
-		@$el.animate height: "-=72px", 500
-		@isMinimized = true
+		@$el.animate height: "-=72px", 
+			duration: 500
+			step: (now, tween) =>
+				if tween.now < (lastRerenderTween - 5)
+					lastRerenderTween = tween.now
+					EditorEventbus.render.dispatch true
+			complete: =>
+				@isMoving = false
+				@isMinimized = true
+				EditorEventbus.render.dispatch true
+				@render()
 		@render()
 	
 	maximize: ->
-		console.log 'Maximize'
+		lastRerenderTween = 28
+		@isMoving = true
 		$viewport = $ '#viewport'
 		$viewport.animate bottom: "+=72px", 500
-		@$el.animate height: "+=72px", 500
-		@isMinimized = false
+		@$el.animate height: "+=72px", 
+			duration: 500
+			step: (now, tween) =>
+				if tween.now > (lastRerenderTween + 5)
+					lastRerenderTween = tween.now
+					EditorEventbus.render.dispatch true
+			complete: =>
+				@isMoving = false
+				@isMinimized = false
+				EditorEventbus.render.dispatch true
+				@render()
 		@render()
 	
 	getTemplateData: ->
 		json = super()
+		json.isMoving = @isMoving
 		json.isMinimized = @isMinimized
 		json
 	
