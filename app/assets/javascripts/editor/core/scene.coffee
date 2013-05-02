@@ -123,7 +123,7 @@ class Scene
 							mesh.name = instance.name
 							break
 				else
-					mesh = @editor.engine.scenegraph.staticGeometries[instance.geoId][0]
+					mesh = @editor.engine.scenegraph.staticObjects[instance.geoId][0]
 					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
 				#add position to mesh ... 
 				if mesh
