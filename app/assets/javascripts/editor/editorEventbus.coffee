@@ -26,6 +26,7 @@ editorEventbus =
 		selectWorldUI					 	: new signals.Signal()
 		selectTerrainUI				 	: new signals.Signal()
 		selectObjectUI					: new signals.Signal()
+		removeStaticObject			: new signals.Signal()
 
 		showWorldProperties		 	: new signals.Signal()
 		showTerrainProperties	 	: new signals.Signal()

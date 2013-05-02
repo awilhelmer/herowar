@@ -31,6 +31,7 @@ class Scene
 		EditorEventbus.changeTerrainWireframe.add @changeTerrainWireframe
 		EditorEventbus.resetTerrainPool.add @resetTerrainPool
 		EditorEventbus.handleWorldMaterials.add @handleMaterials
+		EditorEventbus.removeStaticObject.add @removeStaticObject
 
 	createTextures: ->
 		@textures = db.get 'textures'
@@ -158,8 +159,10 @@ class Scene
 				z				: mesh.scale.z
 		env
 
-	handleMaterials:  =>
+	handleMaterials: =>
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
-		
+	
+	removeStaticObject: (obj) =>
+		@editor.engine.scenegraph.removeStaticObject obj
 		
 return Scene

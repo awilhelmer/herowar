@@ -12,7 +12,7 @@ class EnvironmentExplorer extends BaseView
 		'click .scenegraph-tree-object' : 'selectElement'
 
 	initialize: (options) ->
-		_addContextMenu()				
+		@addContextMenu()				
 		super options
 
 	bindEvents: ->
@@ -27,17 +27,20 @@ class EnvironmentExplorer extends BaseView
 		$currentTarget.addClass 'active'
 		EditorEventbus.selectObjectUI.dispatch value
 		EditorEventbus.showObjectProperties.dispatch()
+		
+	removeElement: (key, opt) =>
+		id = opt.$trigger.data 'value'
+		obj = @model.get id
+		@model.remove obj
+		console.log 'REMOVE ENVIRONMENT...', obj
+		EditorEventbus.removeStaticObject.dispatch obj
 
-_addContextMenu = ->
-	jQuery.contextMenu
-		selector			: '.scenegraph-tree-object'
-		items					:
-			remove			:
-				name			: 'Delete'
-				callback	: _removeElement
-
-_removeElement = (key, opt) =>
-	id = opt.$trigger.data 'value'
-	console.log 'REMOVE ENVIRONMENT...', id
+	addContextMenu: ->
+		jQuery.contextMenu
+			selector			: '.scenegraph-tree-object'
+			items					:
+				remove			:
+					name			: 'Delete'
+					callback	: @removeElement
 
 return EnvironmentExplorer
