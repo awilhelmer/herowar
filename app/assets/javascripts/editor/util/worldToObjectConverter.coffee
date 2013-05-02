@@ -90,6 +90,8 @@ worldToObjectConverter =
 	
 	
 	addObjects: (obj) ->
+		obj.staticGeometries = null
+		#delete obj.staticGeometries
 		geometries = db.get 'geometries'
 		environmentsStatic = db.get 'environmentsStatic'
 		objects = []
