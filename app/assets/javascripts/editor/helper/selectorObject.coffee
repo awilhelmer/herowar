@@ -3,6 +3,7 @@ Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
 JSONLoader = require 'util/threeloader'
+log = require 'util/logger'
 db = require 'database'
 
 class SelectorObject
@@ -54,7 +55,9 @@ class SelectorObject
 	placeMesh: ->
 		id = @editor.engine.scenegraph.getNextId()
 		environmentsStatic = db.get 'environmentsStatic'
-		environmentsStatic.add @createModelFromMesh id, @currentMesh
+		envModel = @createModelFromMesh id, @currentMesh
+		environmentsStatic.add envModel
+		log.info "Add environment #{envModel.get('name')}"
 		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
 	
 	update: ->

@@ -15,7 +15,7 @@ class ScenebarEnvironmentsView extends BaseView
 	
 	toggleTab: (id) =>
 		if id is 'scenebar-environments' and !@loadedEnvironments
-			console.log 'LOAD EVIRONMENTS ...'
+			console.log 'Load Environments in Scenebar ...'
 			@loadedEnvironments = true
 			EditorEventbus.treeLoadData.dispatch 'sidebar-environment-categories' 	
 
