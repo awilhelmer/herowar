@@ -164,6 +164,8 @@ class Scene
 	
 	removeStaticObject: (obj) =>
 		log.info "Remove environment #{obj.get('name')}"
+		col = db.get 'environmentsStatic'
+		col.remove obj
 		@editor.engine.scenegraph.removeStaticObject obj.attributes
 		EditorEventbus.render.dispatch()
 		
