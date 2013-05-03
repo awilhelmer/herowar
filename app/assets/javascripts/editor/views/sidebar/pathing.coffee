@@ -36,7 +36,6 @@ class Pathing extends BasePropertiesView
 			@selectedItem = db.get 'paths', value
 			$removeButton = @$ '#sidebar-pathing-remove'
 			$removeButton.addClass 'show' unless $removeButton.hasClass 'show'
-			console.log 'listSelectItem...', id, value, name
 
 	createItem: ->
 		id = @nextId++
@@ -52,6 +51,6 @@ class Pathing extends BasePropertiesView
 		col.remove @selectedItem
 		# TODO: select next item after removing current one
 		@selectedItem = null
-		@$('#sidebar-pathing-remove').removeClass 'show'
+		@$('#sidebar-pathing-remove').removeClass 'show'		
 
 return Pathing

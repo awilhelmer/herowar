@@ -14,6 +14,7 @@ class List extends BaseView
 	initialize: (options) ->
 		@entity = @$el.data 'entity'
 		@$el.removeAttr 'data-entity'
+		@selectedVal = null
 		super options
 
 	bindEvents: ->
@@ -25,6 +26,11 @@ class List extends BaseView
 		$currentTarget = $ event.currentTarget
 		@$('.item').removeClass 'active'
 		$currentTarget.addClass 'active'
-		EditorEventbus.listSelectItem.dispatch @$el.attr('id'), $currentTarget.data('value'), $currentTarget.data('name')
+		@selectedVal = $currentTarget.data('value')
+		EditorEventbus.listSelectItem.dispatch @$el.attr('id'), @selectedVal, $currentTarget.data('name')
+
+	render: ->
+		super()
+		@$("div[data-value='#{@selectedVal}']").addClass 'active' if @selectedVal
 
 return List
