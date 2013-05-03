@@ -10,7 +10,10 @@ class PathingProperties extends BasePropertiesView
 	className: 'sidebar-panel hidden'
 	
 	template: templates.get 'sidebar/pathingProperties.tmpl'
-		
+
+	events:
+		'change input[name="name"]'	: 'onChangedString'
+
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
