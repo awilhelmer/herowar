@@ -129,19 +129,19 @@ class SelectorObject
 			@currentMeshId = value
 			@currentMeshName = name
 			unless @editor.engine.scenegraph.hasStaticObject(@currentMeshId)
-				console.log "Loading Geometry from Server ... "
+				log.debug "Loading Geometry from Server ... "
 				now = new Date()
 				@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
-				console.log "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
+				log.debug "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
 			else
 				mesh = @editor.engine.scenegraph.staticObjects[@currentMeshId][0]
 				@onLoadGeometry mesh.geometry, mesh.material.materials
-			
+
 	onLoadGeometry: (geometry, materials, json) =>
 		json = id:@currentMeshId unless json
 		@currentMesh = materialHelper.createMesh geometry, materials, @currentMeshName, json
 		@addMesh()
-	
+
 	addMesh: ->
 		@currentMesh.visible = false
 		@editor.engine.scenegraph.addStaticObject @currentMesh, @currentMeshId
