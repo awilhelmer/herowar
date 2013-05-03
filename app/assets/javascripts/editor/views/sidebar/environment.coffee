@@ -39,7 +39,6 @@ class Environment extends BasePropertiesView
 		EditorEventbus.removeStaticObject.dispatch @selectedItem
 		# TODO: select next item after removing current one
 		@selectedItem = null
-		$removeButton = @$ '#sidebar-environment-remove'
-		$removeButton.removeClass 'show'
+		@$('#sidebar-environment-remove').removeClass 'show'
 
 return Environment
