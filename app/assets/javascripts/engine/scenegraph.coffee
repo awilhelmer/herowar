@@ -41,6 +41,7 @@ class SceneGraph
 		unless _.has(@staticObjects, id)
 			@staticObjects[id] = [] 
 		obj.userData.listIndex = @staticObjects[id].length
+		obj.userData.dbId = id
 		@staticObjects[id].push obj
 		@scene.add obj
 	
@@ -53,9 +54,10 @@ class SceneGraph
 		false
 	
 	removeStaticObject: (obj) ->
-		unless _.has(@staticObjects, obj.dbId)
-		  arrIndex = @staticObjects[obj.dbId].listIndex
-			@scene.remove obj
+		if _.has(@staticObjects, obj.dbId)
+			threeModel = @staticObjects[obj.dbId][obj.listIndex]
+			arrIndex = threeModel.userData.listIndex
+			@scene.remove threeModel
 			if @staticObjects[obj.dbId][arrIndex]
 				@staticObjects[obj.dbId].slice arrIndex, 1
 		null
