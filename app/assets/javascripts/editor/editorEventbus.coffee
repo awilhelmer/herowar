@@ -26,12 +26,14 @@ editorEventbus =
 		selectWorldUI					 	: new signals.Signal()
 		selectTerrainUI				 	: new signals.Signal()
 		selectObjectUI					: new signals.Signal()
+		selectPathUI						: new signals.Signal()
 		removeStaticObject			: new signals.Signal()
 
 		showWorldProperties		 	: new signals.Signal()
 		showTerrainProperties	 	: new signals.Signal()
 		showObjectProperties		: new signals.Signal()
 		showMaterialProperties	: new signals.Signal()
+		showPathingProperties		: new signals.Signal()
 		showSidebarEnvironment	: new signals.Signal()
 		showSidebarPathing			: new signals.Signal()
 

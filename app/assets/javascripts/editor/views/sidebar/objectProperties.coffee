@@ -21,6 +21,7 @@ class ObjectProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.selectObjectUI.add @selectItem
 
 	selectItem: (value) =>

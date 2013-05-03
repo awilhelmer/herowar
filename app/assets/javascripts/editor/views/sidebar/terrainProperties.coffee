@@ -31,6 +31,7 @@ class TerrainProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		@listenTo @model, 'change:materials', @render if @model
 
 	createSliders: ->

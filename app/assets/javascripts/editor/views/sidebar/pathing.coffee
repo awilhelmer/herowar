@@ -23,6 +23,7 @@ class Pathing extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @showPanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.listSelectItem.add @listSelectItem
 
 	initialize: (options) ->

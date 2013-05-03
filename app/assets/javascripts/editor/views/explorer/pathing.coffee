@@ -17,5 +17,11 @@ class PathingExplorer extends BaseView
 	selectElement: (event) ->
 		unless event then return
 		event.preventDefault()
+		$currentTarget = $ event.currentTarget
+		value = $currentTarget.data 'value'
+		$('.scenegraph-tree div').removeClass 'active'
+		$currentTarget.addClass 'active'
+		EditorEventbus.selectPathUI.dispatch value
+		EditorEventbus.showPathingProperties.dispatch()
 
 return PathingExplorer

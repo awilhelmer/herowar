@@ -21,6 +21,7 @@ class Environment extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @showPanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.listSelectItem.add @listSelectItem
 
 	initialize: (options) ->

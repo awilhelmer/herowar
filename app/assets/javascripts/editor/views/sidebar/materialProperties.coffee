@@ -24,6 +24,7 @@ class MaterialProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @showPanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.selectMaterial.add @loadMaterial
 		EditorEventbus.deselectMaterial.add @hidePanel
 

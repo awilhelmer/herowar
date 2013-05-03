@@ -29,6 +29,7 @@ class WorldProperties extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @hidePanel
+		EditorEventbus.showPathingProperties.add @hidePanel
 		
 	nameChanged: (event) ->
 		@onChangedString(event)
