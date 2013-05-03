@@ -12,7 +12,8 @@ class PathingProperties extends BasePropertiesView
 	template: templates.get 'sidebar/pathingProperties.tmpl'
 
 	events:
-		'change input[name="name"]'	: 'onChangedString'
+		'change input[name="name"]'				: 'onChangedString'
+		'click #sidebar-waypoint-create'	: 'createWaypoint'
 
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -27,5 +28,8 @@ class PathingProperties extends BasePropertiesView
 	selectItem: (value) =>
 		@model = db.get 'paths', value
 		@render()
+
+	createWaypoint: ->
+		# TODO: load flag model ...
 
 return PathingProperties
