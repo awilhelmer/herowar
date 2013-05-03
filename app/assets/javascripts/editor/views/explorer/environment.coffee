@@ -6,7 +6,7 @@ class EnvironmentExplorer extends BaseView
 
 	entity: 'environmentsStatic'
 
-	template: templates.get 'explorer/environment.tmpl'
+	template: templates.get 'explorer/item.tmpl'
 
 	events:
 		'click .scenegraph-tree-object' : 'selectElement'
