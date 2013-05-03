@@ -35,7 +35,6 @@ class Environment extends BasePropertiesView
 			console.log 'listSelectItem...', id, value, name
 
 	removeItem: ->
-		event.preventDefault()
 		id = @selectedItem.get 'id'
 		EditorEventbus.removeStaticObject.dispatch @selectedItem
 		# TODO: select next item after removing current one

@@ -10,6 +10,10 @@ class Pathing extends BasePropertiesView
 
 	template: templates.get 'sidebar/pathing.tmpl'
 
+	events:
+		'click #sidebar-pathing-create'	: 'createItem'
+		'click #sidebar-pathing-remove'	: 'removeItem'
+
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
 		EditorEventbus.showTerrainProperties.add @hidePanel
@@ -17,5 +21,9 @@ class Pathing extends BasePropertiesView
 		EditorEventbus.showMaterialProperties.add @hidePanel
 		EditorEventbus.showSidebarEnvironment.add @hidePanel
 		EditorEventbus.showSidebarPathing.add @showPanel
+
+	createItem: ->
+	
+	removeItem: ->
 
 return Pathing
