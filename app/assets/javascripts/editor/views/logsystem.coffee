@@ -17,6 +17,10 @@ class LogSystem extends BaseView
 	initalize: (options) ->
 		@isMoving = false
 		@isMinimized = false
+		super options
+
+	bindEvents: ->
+		@listenTo @model, 'add remove change reset', @render
 	
 	afterRender: ->
 		container = @$ '.content'

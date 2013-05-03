@@ -32,7 +32,6 @@ class EnvironmentExplorer extends BaseView
 		id = opt.$trigger.data 'value'
 		obj = @model.get id
 		@model.remove obj
-		console.log 'REMOVE ENVIRONMENT...', obj
 		EditorEventbus.removeStaticObject.dispatch obj
 
 	addContextMenu: ->
