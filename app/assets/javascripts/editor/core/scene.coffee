@@ -163,6 +163,8 @@ class Scene
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
 	
 	removeStaticObject: (obj) =>
+		log.info "Remove environment #{obj.get('name')}"
 		@editor.engine.scenegraph.removeStaticObject obj.attributes
+		EditorEventbus.render.dispatch()
 		
 return Scene
