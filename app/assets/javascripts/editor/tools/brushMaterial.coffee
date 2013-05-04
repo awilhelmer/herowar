@@ -11,9 +11,9 @@ class BrushMaterial extends SelectorPlane
 	constructor: (@editor, @intersectHelper, @selectorObject) ->
 		super @editor, @intersectHelper
 		
-		initialize: ->
-			@world = db.get 'world'
-			super()
+	initialize: ->
+		@world = db.get 'world'
+		super()
 		
 	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
