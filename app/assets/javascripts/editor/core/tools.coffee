@@ -28,7 +28,7 @@ class Tools
 		@intersectHelper = new IntersectHelper @editor
 	
 	createSelectors: ->
-		@placeObject = new PlaceObject @editor
+		@placeObject = new PlaceObject @editor, @intersectHelper
 		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
 		@selectorArea = new SelectorArea @editor, @intersectHelper, @selectorObject	
 	
@@ -41,13 +41,14 @@ class Tools
 		switch @active
 			when Constants.TOOL_SELECTION
 				@selectorObject.onMouseUp event
+				@placeObject.onMouseUp event
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseUp event
 
 	onMouseMove: =>
 		switch @active
 			when Constants.TOOL_SELECTION
-				@selectorObject.onMouseMove()
+				@placeObject.onMouseMove()
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseMove()
 		

@@ -1,17 +1,12 @@
 EditorEventbus = require 'editorEventbus'
-Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
-JSONLoader = require 'util/threeloader'
-log = require 'util/logger'
 db = require 'database'
 
 class SelectorObject
 
 	constructor: (@editor, @objectHelper, @intersectHelper) ->
-		@currentMeshId = -1
-		@currentMesh = null
-		@loader = new JSONLoader()
+		@tool = db.get 'ui/tool'
 		@world = db.get 'world'
 		@bindEventListeners()
 
@@ -20,45 +15,10 @@ class SelectorObject
 		EditorEventbus.selectTerrainUI.add @selectTerrain
 		EditorEventbus.selectObjectUI.add @selectObject
 		EditorEventbus.updateModelMaterial.add @materialUpdate
-		EditorEventbus.listSelectItem.add @onSelectItem
-		EditorEventbus.changeStaticObject.add @changeStaticObject
 	
 	onMouseUp: (event) ->
 		if event.which is 1
-			if @currentMesh
-				@placeMesh() if @currentMesh.visible
-			else if !Variables.MOUSE_MOVED
-						@update()
-		else if event.which is 3
-			if @currentMesh
-				@editor.engine.scenegraph.scene.remove @currentMesh
-				@currentMesh.geometry.dispose() # TODO: is this enough clean up ?!?
-				@currentMesh = null
-				@editor.engine.render()
-	
-	onMouseMove: ->
-		if @currentMesh
-			intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], 1
-			if intersectList.length > 0
-				@currentMesh.visible = true unless @currentMesh.visible
-				@updateMeshPosition @intersectHelper.getIntersectObject intersectList
-			else
-				if @currentMesh.visible
-					@currentMesh.visible = false
-					@editor.engine.render()
-	
-	updateMeshPosition: (intersect) ->
-		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
-		@currentMesh.position = position
-		@editor.engine.render()
-	
-	placeMesh: ->
-		id = @editor.engine.scenegraph.getNextId()
-		environmentsStatic = db.get 'environmentsStatic'
-		envModel = @createModelFromMesh id, @currentMesh
-		environmentsStatic.add envModel
-		log.info "Environment \"#{envModel.get('name')}\" added"
-		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
+			@update() unless @tool.get('currentMesh') and Variables.MOUSE_MOVED
 	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
@@ -123,55 +83,5 @@ class SelectorObject
 				@editor.engine.scenegraph.getMap().add mesh
 			@editor.engine.render()
 		null
-
-	onSelectItem: (id, value, name) =>
-		if id is 'sidebar-environment-geometries' and @currentMeshId isnt value
-			@currentMeshId = value
-			@currentMeshName = name
-			unless @editor.engine.scenegraph.hasStaticObject(@currentMeshId)
-				log.debug "Loading Geometry from Server ... "
-				now = new Date()
-				@loader.load "/api/game/geometry/env/#{@currentMeshId}", @onLoadGeometry, 'assets/images/game/textures'
-				log.debug "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
-			else
-				mesh = @editor.engine.scenegraph.staticObjects[@currentMeshId][0]
-				@onLoadGeometry mesh.geometry, mesh.material.materials
-
-	onLoadGeometry: (geometry, materials, json) =>
-		json = id:@currentMeshId unless json
-		@currentMesh = materialHelper.createMesh geometry, materials, @currentMeshName, json
-		@addMesh()
-
-	addMesh: ->
-		@currentMesh.visible = false
-		@editor.engine.scenegraph.addStaticObject @currentMesh, @currentMeshId
-		@editor.engine.render()
-
-	createModelFromMesh: (id, mesh) ->
-		env = new Environment()
-		env.set
-			id 				: id
-			dbId			: mesh.userData.dbId
-			listIndex	: mesh.userData.listIndex
-			name 			: "#{mesh.name}-#{id}"
-			position	:
-				x				: mesh.position.x
-				y				: mesh.position.y
-				z				: mesh.position.z
-			rotation	:
-				x				: mesh.rotation.x
-				y				: mesh.rotation.y
-				z				: mesh.rotation.z
-			scale			:
-				x				: mesh.scale.x
-				y				: mesh.scale.y
-				z				: mesh.scale.z
-		env
-
-	changeStaticObject: (backboneModel) =>
-		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
-		attributes = _.pick _.clone(backboneModel.attributes), 'position', 'scale', 'rotation'
-		_.extend mesh, attributes
-		@editor.engine.render()
 
 return SelectorObject
