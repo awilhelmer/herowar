@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 Constants = require 'constants'
 templates = require 'templates'
+log = require 'util/logger'
 db = require 'database'
 
 class ScenebarTerrainEditView extends BaseView
@@ -24,7 +25,7 @@ class ScenebarTerrainEditView extends BaseView
 		unless event then return
 		event.preventDefault()
 		Constants.TOOL_BRUSH_SELECTED = true
-		console.log 'Set Brush Selection'
+		log.debug 'Set Tool Brush'
 		@tool.set 'active', Constants.TOOL_BRUSH
 		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
 

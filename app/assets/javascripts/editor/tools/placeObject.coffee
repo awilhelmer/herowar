@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
 JSONLoader = require 'util/threeloader'
+Constants = require 'constants'
 log = require 'util/logger'
 db = require 'database'
 
@@ -28,6 +29,8 @@ class PlaceObject
 				@tool.get('currentMesh').geometry.dispose() # TODO: is this enough clean up ?!?
 				@tool.unset 'currentMesh'
 				@editor.engine.render()
+				log.debug 'Set Tool Selection'
+				@tool.set 'active', Constants.TOOL_SELECTION
 
 	onMouseMove: (event) ->
 		if @tool.get('currentMesh')
@@ -42,7 +45,9 @@ class PlaceObject
 
 	onSelectItem: (id, value, name) =>
 		if id is 'sidebar-environment-geometries' and @tool.get('currentMeshId') isnt value
+			log.debug 'Set Tool Build'
 			@tool.set
+				'active'					: Constants.TOOL_BUILD
 				'currentMeshId' 	: value
 				'currentMeshName'	: name
 			unless @editor.engine.scenegraph.hasStaticObject @tool.get 'currentMeshId'

@@ -16,6 +16,7 @@ class Tools
 	initialize: ->
 		log.debug 'Initialize tools'
 		@tool = db.get 'ui/tool'
+		log.debug 'Set Tool Selection'
 		@tool.set 'active', Constants.TOOL_SELECTION
 		@createHelpers()
 		@createSelectors()
@@ -36,15 +37,16 @@ class Tools
 	
 	onMouseUp: (event) =>
 		switch @tool.get 'active'
-			when Constants.TOOL_SELECTION
-				@selectorObject.onMouseUp event
+			when Constants.TOOL_BUILD
 				@placeObject.onMouseUp event
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseUp event
+			when Constants.TOOL_SELECTION
+				@selectorObject.onMouseUp event
 	
 	onMouseMove: =>
 		switch @tool.get 'active'
-			when Constants.TOOL_SELECTION
+			when Constants.TOOL_BUILD
 				@placeObject.onMouseMove()
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseMove()

@@ -1,8 +1,9 @@
+materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
 Constants = require 'constants'
+log = require 'util/logger'
 db = require 'database'
-materialHelper = require 'helper/materialHelper'
 
 class SelectorArea
 	
@@ -28,11 +29,10 @@ class SelectorArea
 			EditorEventbus.resetWireframe.dispatch @selectorObject.selectedObject
 		else if event.which is 3
 			Constants.TOOL_BRUSH_SELECTED = false
-			console.log 'Set Tool Selection'
+			log.debug 'Set Tool Selection'
 			@tool.set 'active', Constants.TOOL_SELECTION
 			terrain = db.get 'ui/terrain'
 			terrain.unset Constants.BRUSH_MODE if terrain
-			
 
 	onMouseMove: ->
 		radius = @brushSize/2

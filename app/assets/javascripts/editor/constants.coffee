@@ -1,4 +1,5 @@
 constants =
+		TOOL_BUILD											: 'build'
 		TOOL_SELECTION									: 'select'
 		TOOL_BRUSH											: 'brush'
 		TOOL_BRUSH_SELECTED							: false
