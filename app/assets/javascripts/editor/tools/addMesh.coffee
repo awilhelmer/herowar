@@ -34,8 +34,9 @@ class AddObject extends SelectorTerrain
 			@editor.engine.render()
 
 	update: (position, intersect) ->
-		@tool.get('currentMesh').position = position
-		@editor.engine.render()
+		if @tool.get('currentMesh')
+			@tool.get('currentMesh').position = position
+			@editor.engine.render()
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED if event.which is 1

@@ -18,7 +18,7 @@ materialHelper =
 
 
 	updateMaterial: (object, idMapper) ->
-		index = @getMaterialIndex object, idMapper.materialId
+		index = @getMaterialIndex object, idMapper
 		if index > -1
 			material = db.get 'materials', idMapper.id 
 			threeMaterial = @transformMaterial material, idMapper.materialId
