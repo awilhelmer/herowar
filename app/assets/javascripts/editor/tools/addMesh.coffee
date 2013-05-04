@@ -18,10 +18,6 @@ class AddObject extends SelectorTerrain
 		@loader = new JSONLoader()
 		super @editor, @intersectHelper
 
-	bindEvents: ->
-		EditorEventbus.listSelectItem.add @onSelectItem
-		EditorEventbus.changeStaticObject.add @changeStaticObject
-
 	onLeaveTool: ->
 		if @tool.get('currentMesh')
 			@editor.engine.scenegraph.scene.remove @tool.get('currentMesh')
@@ -44,22 +40,6 @@ class AddObject extends SelectorTerrain
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED if event.which is 1
 		super event
-
-	onSelectItem: (id, value, name) =>
-		if id is 'sidebar-environment-geometries' and @tool.get('currentMeshId') isnt value
-			log.debug 'Set Tool Build'
-			@tool.set
-				'active'					: Constants.TOOL_BUILD
-				'currentMeshId' 	: value
-				'currentMeshName'	: name
-			unless @editor.engine.scenegraph.hasStaticObject @tool.get 'currentMeshId'
-				log.debug "Loading Geometry from Server ... "
-				now = new Date()
-				@loader.load "/api/game/geometry/env/#{@tool.get('currentMeshId')}", @onLoadGeometry, 'assets/images/game/textures'
-				log.debug "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
-			else
-				mesh = @editor.engine.scenegraph.staticObjects[@tool.get('currentMeshId')][0]
-				@onLoadGeometry mesh.geometry, mesh.material.materials
 
 	onLoadGeometry: (geometry, materials, json) =>
 		json = id:@tool.get('currentMeshId') unless json
@@ -99,11 +79,5 @@ class AddObject extends SelectorTerrain
 		environmentsStatic.add envModel
 		log.info "Environment \"#{envModel.get('name')}\" added"
 		@onLoadGeometry @tool.get('currentMesh').geometry, @tool.get('currentMesh').material.materials
-
-	changeStaticObject: (backboneModel) =>
-		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
-		attributes = _.pick _.clone(backboneModel.attributes), 'position', 'scale', 'rotation'
-		_.extend mesh, attributes
-		@editor.engine.render()
 
 return AddObject

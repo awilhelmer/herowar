@@ -1,7 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
-AddObject = require 'tools/addObject'
+AddEnvironment = require 'tools/addEnvironment'
 BrushMaterial = require 'tools/brushMaterial'
 SelectorObject = require 'tools/selectorObject'
 Constants = require 'constants'
@@ -27,7 +27,7 @@ class Tools
 		@intersectHelper = new IntersectHelper @editor
 	
 	createSelectors: ->
-		@addObject = new AddObject @editor, @intersectHelper
+		@addEnvironment = new AddEnvironment @editor, @intersectHelper
 		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
 		@brushMaterial = new BrushMaterial @editor, @intersectHelper, @selectorObject	
 	

@@ -1,5 +1,5 @@
 constants =
-		TOOL_BUILD											: 'addObject'
+		TOOL_BUILD											: 'addEnvironment'
 		TOOL_SELECTION									: 'selectorObject'
 		TOOL_BRUSH											: 'brushMaterial'
 
