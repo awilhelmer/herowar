@@ -6,15 +6,6 @@ class BasePropertiesView extends BaseView
 		@sliderCreated = false
 		super options
 
-	hidePanel: =>
-		@$el.addClass 'hidden'
-
-	showPanel: =>
-		@$el.removeClass 'hidden'
-		unless @sliderCreated
-			@createSliders()
-			@sliderCreated = true
-
 	createSliders: ->
 		# Should be overridden
 
@@ -27,6 +18,12 @@ class BasePropertiesView extends BaseView
 			callbacks:
 				update:
 					[callbackFunc]
+
+	render: ->
+		super()
+		unless @sliderCreated
+			@createSliders()
+			@sliderCreated = true
 
 	onChangedString: (event) ->
 		unless event then return

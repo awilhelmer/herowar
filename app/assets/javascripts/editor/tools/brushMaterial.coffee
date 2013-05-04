@@ -17,7 +17,6 @@ class BrushMaterial extends SelectorPlane
 		
 	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
-		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
 		EditorEventbus.selectBrushSize.add @selectBrushSize
 
@@ -80,10 +79,6 @@ class BrushMaterial extends SelectorPlane
 	onMaterialSelected: (idMapper) =>
 		log.debug "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"
 		@selectedMatId = idMapper
-		
-	onMaterialDeselect: () =>
-		log.debug 'SelectorArea: Deselected ID!'
-		@selectedMatId = null
 
 	selectBrush: (tool) =>
 		@brushTool = tool

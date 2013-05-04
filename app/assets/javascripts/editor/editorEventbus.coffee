@@ -40,17 +40,8 @@ editorEventbus =
 	selectPathUI						: new signals.Signal()
 	removeStaticObject			: new signals.Signal()
 
-	showWorldProperties		 	: new signals.Signal()
-	showTerrainProperties	 	: new signals.Signal()
-	showObjectProperties		: new signals.Signal()
-	showMaterialProperties	: new signals.Signal()
-	showPathingProperties		: new signals.Signal()
-	showSidebarEnvironment	: new signals.Signal()
-	showSidebarPathing			: new signals.Signal()
-
 	selectMaterial					: new signals.Signal()
 	updateModelMaterial			: new signals.Signal()
-	deselectMaterial				: new signals.Signal()
 	changeMaterial					: new signals.Signal()
 
 	changeTerrain					 	: new signals.Signal()

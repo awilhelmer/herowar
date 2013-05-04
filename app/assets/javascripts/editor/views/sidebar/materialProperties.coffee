@@ -19,15 +19,7 @@ class MaterialProperties extends BasePropertiesView
 		'change input[name*="mp-basis-"]'	: 'changeBasis'
 	
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @showPanel
-		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
-		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.selectMaterial.add @loadMaterial
-		EditorEventbus.deselectMaterial.add @hidePanel
 
 	loadMaterial: (id) =>
 		log.debug 'Load Material Properties'

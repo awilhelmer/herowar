@@ -27,17 +27,11 @@ class TerrainProperties extends BasePropertiesView
 		'click .mm-material' 							: 'loadMaterial'
 
 	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
 		@terrain = db.get 'ui/terrain'
 		super options
 
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @showPanel
-		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
-		EditorEventbus.showPathingProperties.add @hidePanel
 		@listenTo @model, 'change:materials', @render if @model
 
 	createSliders: ->
@@ -80,6 +74,6 @@ class TerrainProperties extends BasePropertiesView
 		$currentTarget = $ event.currentTarget
 		if modelId
 			@terrain.set 'brushMaterialId', modelId
-			EditorEventbus.dispatch 'showMaterialProperties'
+			@sidebar.set 'active', 'sidebar-properties-material'
 
 return TerrainProperties

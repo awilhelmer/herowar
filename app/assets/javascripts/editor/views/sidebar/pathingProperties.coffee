@@ -18,13 +18,6 @@ class PathingProperties extends BasePropertiesView
 		'click #sidebar-waypoint-create'	: 'createWaypoint'
 
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
-		EditorEventbus.showPathingProperties.add @showPanel
 		EditorEventbus.selectPathUI.add @selectItem
 
 	selectItem: (value) =>

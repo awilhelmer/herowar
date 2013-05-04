@@ -15,13 +15,6 @@ class Environment extends BasePropertiesView
 		'click #sidebar-environment-remove'	: 'removeItem'
 
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @showPanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
-		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.listSelectItem.add @listSelectItem
 
 	initialize: (options) ->

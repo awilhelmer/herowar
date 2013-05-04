@@ -14,6 +14,7 @@ class ScenebarTerrainMaterials extends BaseView
 		'click .mm-material' : 'loadMaterial'
 	
 	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
 		@terrain = db.get 'ui/terrain'
 		super options
 	
@@ -30,7 +31,7 @@ class ScenebarTerrainMaterials extends BaseView
 		modelId = $currentTarget.data 'matid'
 		if modelId
 			@terrain.set 'brushMaterialId', modelId
-			EditorEventbus.dispatch 'showMaterialProperties'
+			@sidebar.set 'active', 'sidebar-properties-material'
 
 	render: ->
 		super()

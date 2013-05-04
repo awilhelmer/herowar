@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
+db = require 'database'
 
 class EnvironmentExplorer extends BaseView
 
@@ -12,6 +13,7 @@ class EnvironmentExplorer extends BaseView
 		'click .scenegraph-tree-object' : 'selectElement'
 
 	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
 		@addContextMenu()				
 		super options
 
@@ -26,7 +28,7 @@ class EnvironmentExplorer extends BaseView
 		$('.scenegraph-tree div').removeClass 'active'
 		$currentTarget.addClass 'active'
 		EditorEventbus.dispatch 'selectObjectUI', value
-		EditorEventbus.dispatch 'showObjectProperties'
+		@sidebar.set 'active', 'sidebar-properties-object'
 		
 	removeElement: (key, opt) =>
 		id = opt.$trigger.data 'value'

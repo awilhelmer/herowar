@@ -15,6 +15,7 @@ class TerrainMaterial extends BaseView
 		'click' : 'loadMaterial'
 
 	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
 		@terrain = db.get 'ui/terrain'
 		super options
 
@@ -22,6 +23,6 @@ class TerrainMaterial extends BaseView
 		unless event then return
 		event.preventDefault()
 		@terrain.set 'brushMaterialId', @options.modelId
-		EditorEventbus.dispatch 'showMaterialProperties'
+		@sidebar.set 'active', 'sidebar-properties-material'
 		
 return TerrainMaterial

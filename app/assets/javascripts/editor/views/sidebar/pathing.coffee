@@ -18,13 +18,6 @@ class Pathing extends BasePropertiesView
 		'click #sidebar-pathing-remove'	: 'removeItem'
 
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @hidePanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @showPanel
-		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.listSelectItem.add @listSelectItem
 
 	initialize: (options) ->

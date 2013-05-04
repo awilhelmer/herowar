@@ -17,6 +17,10 @@ class SceneExplorer extends BaseView
 		'click .scenegraph-tree .scenegraph-tree-terrain' : 'selectElement'
 		'click .scenegraph-tree .scenegraph-tree-folder' : 'selectElement'
 
+	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
+		super options
+
 	bindEvents: ->
 		EditorEventbus.selectWorldViewport.add @selectWorld
 		EditorEventbus.selectTerrainViewport.add @selectTerrain
@@ -33,10 +37,10 @@ class SceneExplorer extends BaseView
 				EditorEventbus.dispatch 'selectTerrainUI'
 				@selectTerrain()
 			when 'environment'
-				EditorEventbus.dispatch 'showSidebarEnvironment'
+				@sidebar.set 'active', 'sidebar-environment'
 				@selectItem type
 			when 'pathing'
-				EditorEventbus.dispatch 'showSidebarPathing'
+				@sidebar.set 'active', 'sidebar-pathing'
 				@selectItem type
 			else
 				log.error "ERROR type \"#{type}\" is unknowned"
@@ -47,10 +51,10 @@ class SceneExplorer extends BaseView
 
 	selectWorld: =>
 		@selectItem 'world'
-		EditorEventbus.dispatch 'showWorldProperties'
+		@sidebar.set 'active', 'sidebar-properties-world'
 
 	selectTerrain: =>
 		@selectItem 'terrain'
-		EditorEventbus.dispatch 'showTerrainProperties'
+		@sidebar.set 'active', 'sidebar-properties-terrain'
 
 return SceneExplorer

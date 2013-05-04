@@ -15,13 +15,6 @@ class ObjectProperties extends BasePropertiesView
 		'change input'	: 'changeInput'
 	
 	bindEvents: ->
-		EditorEventbus.showWorldProperties.add @hidePanel
-		EditorEventbus.showTerrainProperties.add @hidePanel
-		EditorEventbus.showObjectProperties.add @showPanel
-		EditorEventbus.showMaterialProperties.add @hidePanel
-		EditorEventbus.showSidebarEnvironment.add @hidePanel
-		EditorEventbus.showSidebarPathing.add @hidePanel
-		EditorEventbus.showPathingProperties.add @hidePanel
 		EditorEventbus.selectObjectUI.add @selectItem
 
 	selectItem: (value) =>
