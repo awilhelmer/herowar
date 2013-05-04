@@ -1,3 +1,4 @@
+log = require 'util/logger'
 db = require 'database'
 
 class BaseView extends Backbone.View
@@ -89,7 +90,7 @@ class BaseView extends Backbone.View
 			val = $currentTarget.is(':checked')
 		else 
 			val = $currentTarget.val()		
-		console.log "#{modul}property #{property}: #{val}"
+		log.debug "#{modul}property #{property}: #{val}"
 		property: property, value:val
 
 return BaseView
