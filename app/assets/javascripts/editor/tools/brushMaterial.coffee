@@ -1,3 +1,4 @@
+SelectorTerrain = require 'tools/selectorTerrain'
 materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
@@ -5,45 +6,29 @@ Constants = require 'constants'
 log = require 'util/logger'
 db = require 'database'
 
-class SelectorArea
+class BrushMaterial extends SelectorTerrain
 	
 	constructor: (@editor, @intersectHelper, @selectorObject) ->
-		@tool = db.get 'ui/tool'
-		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
-		@selector.rotation.x = - Math.PI/2
-		@selector.material.opacity = 0.3
 		@world = db.get 'world'
 		@isVisible = false
-		@model = null
-		@brushSize = 1
-		@bindEvents()
+		@createSel()
+		@addEventListeners()
+		super @editor, @intersectHelper
 		
-	bindEvents: ->
+	addEventListeners: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
 		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
 		EditorEventbus.selectBrushSize.add @selectBrushSize
 
 	onMouseUp: (event) ->
-		if event.which is 1
-			EditorEventbus.dispatch 'resetWireframe', @selectorObject.selectedObject
-		else if event.which is 3
-			@removeSel()
-			log.debug 'Set Tool Selection'
-			@tool.set 'active', Constants.TOOL_SELECTION
-			terrain = db.get 'ui/terrain'
-			terrain.unset Constants.BRUSH_MODE if terrain
+		EditorEventbus.dispatch 'resetWireframe', @selectorObject.selectedObject if event.which is 1
+		super event
 
-	onMouseMove: ->
-		radius = @brushSize/2
-		if radius > 1
-			radius += 0.33 #Precision
-		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], radius
-		if intersectList.length > 0
-			@addSel() unless @isVisible
-			@updatePosition @intersectHelper.getIntersectObject intersectList
-		else
-			@removeSel() if @isVisible
+	createSel: ->
+		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
+		@selector.rotation.x = - Math.PI/2
+		@selector.material.opacity = 0.3
 
 	addSel: ->
 		@isVisible = true
@@ -54,8 +39,7 @@ class SelectorArea
 		@editor.engine.scenegraph.scene.remove @selector
 		@editor.engine.render()
 		
-	updatePosition: (intersect) ->
-		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
+	update: (position, intersect) ->
 		unless @selectorObject.selectedObject
 			log.debug "Selecting terrain!"
 			@selectorObject.selectTerrain()
@@ -87,6 +71,17 @@ class SelectorArea
 			@selector.position.z = z
 		@editor.engine.render()
 		null
+
+	onLeaveTool: ->
+		@removeSel()
+		terrain = db.get 'ui/terrain'
+		terrain.unset Constants.BRUSH_MODE if terrain
+
+	onIntersect: ->
+		@addSel() unless @isVisible
+
+	onNonIntersect: ->
+		@removeSel() if @isVisible
 
 	handleBrush: (intersect) ->
 		object = intersect.object
@@ -122,8 +117,8 @@ class SelectorArea
 		@brushTool = tool
 		
 	selectBrushSize: (brushSize) =>
-		@brushSize = brushSize
+		@radius = brushSize / 2
 		@selector.scale.x = brushSize
 		@selector.scale.y = brushSize
 		
-return SelectorArea
+return BrushMaterial

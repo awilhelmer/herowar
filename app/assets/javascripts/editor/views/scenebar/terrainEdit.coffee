@@ -12,7 +12,7 @@ class ScenebarTerrainEditView extends BaseView
 	template: templates.get 'scenebar/terrainEdit.tmpl'
 
 	events:
-		'click a'																: 'onClick'
+		'click button'													: 'onClick'
 		'click #editor-menubar-brush-materials' : 'materials'
 		'click #editor-menubar-brush-raise' 		: 'raise'
 		'click #editor-menubar-brush-degrade' 	: 'degrade'

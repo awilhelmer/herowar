@@ -2,7 +2,7 @@ EditorEventbus = require 'editorEventbus'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
 PlaceObject = require 'tools/placeObject'
-SelectorArea = require 'tools/selectorArea'
+BrushMaterial = require 'tools/brushMaterial'
 SelectorObject = require 'tools/selectorObject'
 Constants = require 'constants'
 log = require 'util/logger'
@@ -29,7 +29,7 @@ class Tools
 	createSelectors: ->
 		@placeObject = new PlaceObject @editor, @intersectHelper
 		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
-		@selectorArea = new SelectorArea @editor, @intersectHelper, @selectorObject	
+		@brushMaterial = new BrushMaterial @editor, @intersectHelper, @selectorObject	
 	
 	addEventListeners: ->
 		EditorEventbus.mouseup.add @onMouseUp
@@ -40,7 +40,7 @@ class Tools
 			when Constants.TOOL_BUILD
 				@placeObject.onMouseUp event
 			when Constants.TOOL_BRUSH
-				@selectorArea.onMouseUp event
+				@brushMaterial.onMouseUp event
 			when Constants.TOOL_SELECTION
 				@selectorObject.onMouseUp event
 	
@@ -49,6 +49,6 @@ class Tools
 			when Constants.TOOL_BUILD
 				@placeObject.onMouseMove()
 			when Constants.TOOL_BRUSH
-				@selectorArea.onMouseMove()
+				@brushMaterial.onMouseMove()
 	
 return Tools
