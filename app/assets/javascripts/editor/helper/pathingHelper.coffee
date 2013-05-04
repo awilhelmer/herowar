@@ -56,7 +56,6 @@ class PathingHelper
 				line = new THREE.Line geometry, @lineMaterial
 				@editor.engine.scenegraph.scene.add line
 				@meshes.push line
-			console.log index
 		@editor.engine.render()
 
 	removePath: ->
