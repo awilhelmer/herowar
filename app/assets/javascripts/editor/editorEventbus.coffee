@@ -16,7 +16,6 @@ editorEventbus =
 		touchend								: new signals.Signal()
 		touchmove								: new signals.Signal()
 
-		selectTool							: new signals.Signal()
 		selectBrush							: new signals.Signal()
 		selectBrushSize					: new signals.Signal()
 

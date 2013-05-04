@@ -5,20 +5,18 @@ PlaceObject = require 'tools/placeObject'
 SelectorArea = require 'tools/selectorArea'
 SelectorObject = require 'tools/selectorObject'
 Constants = require 'constants'
-Variables = require 'variables'
 log = require 'util/logger'
+db = require 'database'
 
 class Tools
 
-	list : [ Constants.TOOL_SELECTION, Constants.TOOL_BRUSH	]
-
-	active : Constants.TOOL_SELECTION	
-	
 	constructor: (@editor) ->
 		@initialize()
 		
 	initialize: ->
-		log.info 'Initialize tools'
+		log.debug 'Initialize tools'
+		@tool = db.get 'ui/tool'
+		@tool.set 'active', Constants.TOOL_SELECTION
 		@createHelpers()
 		@createSelectors()
 		@addEventListeners()
@@ -35,24 +33,20 @@ class Tools
 	addEventListeners: ->
 		EditorEventbus.mouseup.add @onMouseUp
 		EditorEventbus.mousemove.add @onMouseMove
-		EditorEventbus.selectTool.add @selectTool
 	
 	onMouseUp: (event) =>
-		switch @active
+		switch @tool.get 'active'
 			when Constants.TOOL_SELECTION
 				@selectorObject.onMouseUp event
 				@placeObject.onMouseUp event
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseUp event
-
+	
 	onMouseMove: =>
-		switch @active
+		switch @tool.get 'active'
 			when Constants.TOOL_SELECTION
 				@placeObject.onMouseMove()
 			when Constants.TOOL_BRUSH
 				@selectorArea.onMouseMove()
-		
-	selectTool: (type) =>
-		@active = type
-
+	
 return Tools

@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 Constants = require 'constants'
 templates = require 'templates'
+db = require 'database'
 
 class ScenebarTerrainEditView extends BaseView
 
@@ -15,12 +16,16 @@ class ScenebarTerrainEditView extends BaseView
 		'click #editor-menubar-brush-raise' 		: 'raise'
 		'click #editor-menubar-brush-degrade' 	: 'degrade'
 
+	initialize: (options) ->
+		@tool = db.get 'ui/tool'
+		super options
+
 	onClick: (event) =>
 		unless event then return
 		event.preventDefault()
 		Constants.TOOL_BRUSH_SELECTED = true
 		console.log 'Set Brush Selection'
-		EditorEventbus.selectTool.dispatch Constants.TOOL_BRUSH
+		@tool.set 'active', Constants.TOOL_BRUSH
 		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
 
 	materials: (event) =>

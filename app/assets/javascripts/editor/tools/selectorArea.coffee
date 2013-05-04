@@ -7,6 +7,7 @@ materialHelper = require 'helper/materialHelper'
 class SelectorArea
 	
 	constructor: (@editor, @intersectHelper, @selectorObject) ->
+		@tool = db.get 'ui/tool'
 		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
 		@selector.rotation.x = - Math.PI/2
 		@selector.material.opacity = 0.3
@@ -28,7 +29,7 @@ class SelectorArea
 		else if event.which is 3
 			Constants.TOOL_BRUSH_SELECTED = false
 			console.log 'Set Tool Selection'
-			EditorEventbus.selectTool.dispatch Constants.TOOL_SELECTION
+			@tool.set 'active', Constants.TOOL_SELECTION
 			terrain = db.get 'ui/terrain'
 			terrain.unset Constants.BRUSH_MODE if terrain
 			
