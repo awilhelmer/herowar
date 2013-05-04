@@ -28,7 +28,7 @@ class SelectorArea
 		if event.which is 1
 			EditorEventbus.resetWireframe.dispatch @selectorObject.selectedObject
 		else if event.which is 3
-			Constants.TOOL_BRUSH_SELECTED = false
+			@removeSel()
 			log.debug 'Set Tool Selection'
 			@tool.set 'active', Constants.TOOL_SELECTION
 			terrain = db.get 'ui/terrain'
@@ -64,7 +64,6 @@ class SelectorArea
 				update = @handleBrush intersect
 				if update
 					@saveGeometry intersect.object.geometry
-					@saveMaterials()
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
 				intersect.object.geometry.vertices[intersect.face.b].z += 1
@@ -79,7 +78,6 @@ class SelectorArea
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
 				@saveGeometry intersect.object.geometry
-		else
 		x = Math.floor(position.x / 10) * 10 + 5
 		y = Math.floor(position.y / 10) * 10 + 1
 		z = Math.floor(position.z / 10) * 10 + 5
@@ -95,11 +93,6 @@ class SelectorArea
 		@world.get('terrain').geometry.vertices = geometry.vertices
 		@world.trigger 'change:terrain'
 		@world.trigger 'change'
-
-	saveMaterials: ->
-		# MapProperties.TERRAIN_MATERIALS = []
-		# for material in db.get('materials').models
-			# MapProperties.TERRAIN_MATERIALS.push material
 
 	handleBrush: (intersect) ->
 		object = intersect.object
@@ -118,7 +111,7 @@ class SelectorArea
 						object.geometry.geometryGroups = undefined
 						object.geometry.geometryGroupsList = undefined
 						object.__webglInit = false #hack
-						object.__webglActive = false #hack 				
+						object.__webglActive = false #hack
 						baseObject.add object
 						update = true	
 		update
