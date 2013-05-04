@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
+PathingHelper = require 'helper/pathingHelper'
 AddEnvironment = require 'tools/addEnvironment'
 AddWaypoint = require 'tools/addWaypoint'
 BrushMaterial = require 'tools/brushMaterial'
@@ -26,6 +27,7 @@ class Tools
 	createHelpers: ->
 		@objectHelper = new ObjectHelper @editor
 		@intersectHelper = new IntersectHelper @editor
+		@pathingHelper = new PathingHelper @editor
 	
 	createSelectors: ->
 		@addEnvironment = new AddEnvironment @editor, @intersectHelper
