@@ -31,4 +31,9 @@ class ScenebarTerrainMaterials extends BaseView
 			@terrain.set 'brushMaterialId', modelId
 			EditorEventbus.showMaterialProperties.dispatch()
 
+	render: ->
+		super()
+		$selectedMaterial = @$ "div[data-matid='#{@terrain.get('brushMaterialId')}']"
+		$selectedMaterial.addClass 'active' if $selectedMaterial.length isnt 0
+
 return ScenebarTerrainMaterials
