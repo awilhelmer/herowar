@@ -20,6 +20,8 @@ class SelectorObject
 		if event.which is 1
 			@update() unless @tool.get('currentMesh') and Variables.MOUSE_MOVED
 	
+	onMouseMove: ->
+	
 	update: ->
 		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children

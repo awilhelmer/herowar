@@ -1,7 +1,7 @@
 constants =
-		TOOL_BUILD											: 'build'
-		TOOL_SELECTION									: 'select'
-		TOOL_BRUSH											: 'brush'
+		TOOL_BUILD											: 'addObject'
+		TOOL_SELECTION									: 'selectorObject'
+		TOOL_BRUSH											: 'brushMaterial'
 
 		BRUSH_MODE											: 'brush_mode'
 		BRUSH_APPLY_MATERIAL						: 'apply_material'

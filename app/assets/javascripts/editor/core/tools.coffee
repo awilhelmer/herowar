@@ -1,7 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
-PlaceObject = require 'tools/placeObject'
+AddObject = require 'tools/addObject'
 BrushMaterial = require 'tools/brushMaterial'
 SelectorObject = require 'tools/selectorObject'
 Constants = require 'constants'
@@ -27,7 +27,7 @@ class Tools
 		@intersectHelper = new IntersectHelper @editor
 	
 	createSelectors: ->
-		@placeObject = new PlaceObject @editor, @intersectHelper
+		@addObject = new AddObject @editor, @intersectHelper
 		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
 		@brushMaterial = new BrushMaterial @editor, @intersectHelper, @selectorObject	
 	
@@ -36,19 +36,9 @@ class Tools
 		EditorEventbus.mousemove.add @onMouseMove
 	
 	onMouseUp: (event) =>
-		switch @tool.get 'active'
-			when Constants.TOOL_BUILD
-				@placeObject.onMouseUp event
-			when Constants.TOOL_BRUSH
-				@brushMaterial.onMouseUp event
-			when Constants.TOOL_SELECTION
-				@selectorObject.onMouseUp event
+		@[@tool.get('active')].onMouseUp event
 	
 	onMouseMove: =>
-		switch @tool.get 'active'
-			when Constants.TOOL_BUILD
-				@placeObject.onMouseMove()
-			when Constants.TOOL_BRUSH
-				@brushMaterial.onMouseMove()
+		@[@tool.get('active')].onMouseMove()
 	
 return Tools
