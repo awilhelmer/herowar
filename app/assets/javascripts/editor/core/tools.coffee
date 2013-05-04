@@ -1,8 +1,9 @@
 EditorEventbus = require 'editorEventbus'
 IntersectHelper = require 'helper/intersectHelper'
 ObjectHelper = require 'helper/objectHelper'
-SelectorArea = require 'helper/selectorArea'
-SelectorObject = require 'helper/selectorObject'
+PlaceObject = require 'tools/placeObject'
+SelectorArea = require 'tools/selectorArea'
+SelectorObject = require 'tools/selectorObject'
 Constants = require 'constants'
 Variables = require 'variables'
 log = require 'util/logger'
@@ -27,6 +28,7 @@ class Tools
 		@intersectHelper = new IntersectHelper @editor
 	
 	createSelectors: ->
+		@placeObject = new PlaceObject @editor
 		@selectorObject = new SelectorObject @editor, @objectHelper, @intersectHelper
 		@selectorArea = new SelectorArea @editor, @intersectHelper, @selectorObject	
 	
