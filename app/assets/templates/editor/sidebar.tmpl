@@ -1,9 +1,9 @@
 <div class="sidebar-inner">
-	<div id="sidebar-properties-world" class="sidebar-panel" data-view="views/sidebar/worldProperties"></div>
-	<div id="sidebar-properties-terrain" class="sidebar-panel hidden" data-view="views/sidebar/terrainProperties"></div>
-	<div id="sidebar-properties-object" class="sidebar-panel hidden" data-view="views/sidebar/objectProperties"></div>
-	<div id="sidebar-properties-material" class="sidebar-panel hidden" data-view="views/sidebar/materialProperties"></div>
-	<div id="sidebar-properties-pathing" class="sidebar-panel hidden" data-view="views/sidebar/pathingProperties"></div>
-	<div id="sidebar-environment" class="sidebar-panel hidden" data-view="views/sidebar/environment"></div>
-	<div id="sidebar-pathing" class="sidebar-panel hidden" data-view="views/sidebar/pathing"></div>
+	<div id="sidebar-properties-world" class="sidebar-panel {{#unless isActivePropertiesWorld}}hidden{{/unless}}" data-view="views/sidebar/worldProperties"></div>
+	<div id="sidebar-properties-terrain" class="sidebar-panel {{#unless isActivePropertiesTerrain}}hidden{{/unless}}" data-view="views/sidebar/terrainProperties"></div>
+	<div id="sidebar-properties-object" class="sidebar-panel {{#unless isActivePropertiesObject}}hidden{{/unless}}" data-view="views/sidebar/objectProperties"></div>
+	<div id="sidebar-properties-material" class="sidebar-panel {{#unless isActivePropertiesMaterial}}hidden{{/unless}}" data-view="views/sidebar/materialProperties"></div>
+	<div id="sidebar-properties-pathing" class="sidebar-panel {{#unless isActivePropertiesPathing}}hidden{{/unless}}" data-view="views/sidebar/pathingProperties"></div>
+	<div id="sidebar-environment" class="sidebar-panel {{#unless isActiveEnvironment}}hidden{{/unless}}" data-view="views/sidebar/environment"></div>
+	<div id="sidebar-pathing" class="sidebar-panel {{#unless isActivePathing}}hidden{{/unless}}" data-view="views/sidebar/pathing"></div>
 </div>

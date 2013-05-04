@@ -19,7 +19,6 @@ class PathingWaypoints extends BaseView
 	getTemplateData: ->
 		json = []
 		json.push value.toJSON() for value in @model.where path: @currentPathId
-		console.log json
 		json
 
 	selectPathId: (value) =>
