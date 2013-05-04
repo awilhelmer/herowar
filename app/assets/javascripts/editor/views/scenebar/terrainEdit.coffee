@@ -19,6 +19,7 @@ class ScenebarTerrainEditView extends BaseView
 
 	initialize: (options) ->
 		@tool = db.get 'ui/tool'
+		@terrain = db.get 'ui/terrain'
 		super options
 
 	onClick: (event) =>
@@ -27,6 +28,10 @@ class ScenebarTerrainEditView extends BaseView
 		Constants.TOOL_BRUSH_SELECTED = true
 		log.debug 'Set Tool Brush'
 		@tool.set 'active', Constants.TOOL_BRUSH
+		unless @terrain.get 'brushMaterialId'
+			col = db.get 'materials'
+			mat = col.at 0
+			@terrain.set 'brushMaterialId', mat.get 'id'
 		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
 
 	materials: (event) =>

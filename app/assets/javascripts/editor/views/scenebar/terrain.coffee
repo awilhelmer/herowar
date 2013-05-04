@@ -44,6 +44,7 @@ class ScenebarTerrainView extends BaseView
 			'opacity'			: 1
 			'map'					: undefined
 		col.add mat
+		@terrain.set 'brushMaterialId', id
 		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
 		
 

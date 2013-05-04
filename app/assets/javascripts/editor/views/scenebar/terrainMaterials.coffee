@@ -19,6 +19,7 @@ class ScenebarTerrainMaterials extends BaseView
 	
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render
+		@listenTo @terrain, 'change:brushMaterialId', @render
 	
 	loadMaterial: (event) =>
 		unless event then return
