@@ -38,6 +38,7 @@ editorEventbus =
 	selectTerrainUI				 	: new signals.Signal()
 	selectObjectUI					: new signals.Signal()
 	selectPathUI						: new signals.Signal()
+	selectWaveUI						: new signals.Signal()
 	removeStaticObject			: new signals.Signal()
 
 	selectMaterial					: new signals.Signal()
