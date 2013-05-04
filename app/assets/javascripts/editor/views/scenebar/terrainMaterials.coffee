@@ -19,11 +19,11 @@ class ScenebarTerrainMaterials extends BaseView
 		unless event then return
 		event.preventDefault()
 		$currentTarget = $ event.currentTarget
-		$('#materialManager .mm-material').removeClass 'active'
+		$('#scenebar-terrain-materials .mm-material').removeClass 'active'
 		$currentTarget.addClass 'active'
 		modelId = $currentTarget.data 'matid'
 		@dispatchSelectMaterialEvent modelId if modelId
-						
+		
 	dispatchSelectMaterialEvent: (modelId) ->
 		EditorEventbus.menuSelectMaterial.dispatch modelId
 		EditorEventbus.showMaterialProperties.dispatch()
