@@ -10,14 +10,17 @@ class SelectorPlane extends SelectorTerrain
 		super()
 
 	update: (position, intersect) ->
-		x = Math.floor(position.x / 10) * 10 + 5
-		y = Math.floor(position.y / 10) * 10 + 1
-		z = Math.floor(position.z / 10) * 10 + 5
-		if x isnt @selector.position.x or y isnt @selector.position.y or z isnt @selector.position.z
-			@selector.position.x = x
-			@selector.position.y = y
-			@selector.position.z = z
+		pos = @calculatePossiblePosition position
+		if pos.x isnt @selector.position.x or pos.y isnt @selector.position.y or pos.z isnt @selector.position.z
+			@selector.position.x = pos.x
+			@selector.position.y = pos.y
+			@selector.position.z = pos.z
 		@editor.engine.render()
+	
+	calculatePossiblePosition: (position) ->
+		x: Math.floor(position.x / 10) * 10 + 5
+		y: Math.floor(position.y / 10) * 10 + 1
+		z: Math.floor(position.z / 10) * 10 + 5
 
 	onLeaveTool: ->
 		@removeSel() if @isVisible

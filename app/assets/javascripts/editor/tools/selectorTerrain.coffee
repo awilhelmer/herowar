@@ -34,10 +34,10 @@ class SelectorTerrain
 			@radius += 0.33 #Precision
 		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], @radius
 		if intersectList.length > 0
+			@lastIntersect = @intersectHelper.getIntersectObject intersectList
+			@lastPosition = new THREE.Vector3().addVectors @lastIntersect.point, @lastIntersect.face.normal.clone().applyMatrix4 @lastIntersect.object.matrixRotationWorld
 			@onIntersect()
-			intersect = @intersectHelper.getIntersectObject intersectList
-			position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
-			@update position, intersect
+			@update @lastPosition, @lastIntersect
 		else
 			@onNonIntersect()
 
