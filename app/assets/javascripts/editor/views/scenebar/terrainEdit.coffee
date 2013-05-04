@@ -25,7 +25,6 @@ class ScenebarTerrainEditView extends BaseView
 	onClick: (event) =>
 		unless event then return
 		event.preventDefault()
-		Constants.TOOL_BRUSH_SELECTED = true
 		log.debug 'Set Tool Brush'
 		@tool.set 'active', Constants.TOOL_BRUSH
 		unless @terrain.get 'brushMaterialId'
