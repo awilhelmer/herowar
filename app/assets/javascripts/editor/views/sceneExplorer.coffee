@@ -42,6 +42,9 @@ class SceneExplorer extends BaseView
 			when 'pathing'
 				@sidebar.set 'active', 'sidebar-pathing'
 				@selectItem type
+			when 'waves'
+				@sidebar.set 'active', 'sidebar-waves'
+				@selectItem type
 			else
 				log.error "ERROR type \"#{type}\" is unknowned"
 
