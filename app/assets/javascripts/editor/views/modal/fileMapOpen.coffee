@@ -1,6 +1,7 @@
 BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
 app = require 'application'
+log = require 'util/logger'
 db = require 'database'
 
 class ModalFileMapOpen extends BaseModalView
@@ -52,7 +53,7 @@ class ModalFileMapOpen extends BaseModalView
 		if @mapId is -1
 			$currentTarget.popover 'show'
 		else
-			console.log "Choose map #{@mapId}"
+			log.debug "Choose map #{@mapId}"
 			window.location = "/editor?map=#{@mapId}"
 
 return ModalFileMapOpen

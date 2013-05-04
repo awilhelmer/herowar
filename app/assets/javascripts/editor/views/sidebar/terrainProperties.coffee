@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 Constants = require 'constants'
+log = require 'util/logger'
 db = require 'database'
 
 class TerrainProperties extends BasePropertiesView
@@ -46,7 +47,7 @@ class TerrainProperties extends BasePropertiesView
 		@createSlider @$el.find('#inputZScale').get(0), Constants.TERRAIN_MIN_ZSCALE, Constants.TERRAIN_MAX_ZSCALE, Constants.TERRAIN_STEPS_ZSCALE, @changeTerrain
 
 	changeTerrain: (event) =>
-		console.log 'CHANGE TERRAIN !!!!'
+		log.debug 'CHANGE TERRAIN !!!!'
 		EditorEventbus.changeTerrain.dispatch @$el.find('input[name="width"]').val(), @$el.find('input[name="height"]').val(), @$el.find('input[name="smoothness"]').val(), @$el.find('input[name="zScale"]').val()
 
 	validateTerrainWidth: (event) =>

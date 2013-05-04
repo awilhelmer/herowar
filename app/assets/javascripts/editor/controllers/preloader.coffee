@@ -135,7 +135,6 @@ class Preloader extends BaseController
 		newGeo.userData.version = oldGeo.version
 		newGeo.userData.cdate = oldGeo.cdate
 		world.loadMaterials data.materials
-		#console.log world
 		@state = 3
 	
 	parseWorldData: (data) ->

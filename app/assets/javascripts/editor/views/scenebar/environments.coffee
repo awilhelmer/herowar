@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
+log = require 'util/logger'
 
 class ScenebarEnvironmentsView extends BaseView
 	
@@ -15,7 +16,7 @@ class ScenebarEnvironmentsView extends BaseView
 	
 	toggleTab: (id) =>
 		if id is 'scenebar-environments' and !@loadedEnvironments
-			console.log 'Load Environments in Scenebar ...'
+			log.debug 'Load Environments in Scenebar ...'
 			@loadedEnvironments = true
 			EditorEventbus.treeLoadData.dispatch 'sidebar-environment-categories' 	
 

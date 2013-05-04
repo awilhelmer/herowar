@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
+log = require 'util/logger'
 
 class Tree extends BaseView
 
@@ -23,7 +24,7 @@ class Tree extends BaseView
 	
 	loadData: (id) =>
 		if not @loadedData and @$el.attr('id') is id
-			console.log "Load tree data for #{id}"
+			log.debug "Load tree data for #{id}"
 			@loadedData = true
 			@model.fetch()
 

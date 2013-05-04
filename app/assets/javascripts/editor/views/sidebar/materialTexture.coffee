@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 Constants = require 'constants'
 templates = require 'templates'
+log = require 'util/logger'
 db = require 'database'
 
 class MaterialTexture extends BaseView
@@ -19,7 +20,7 @@ class MaterialTexture extends BaseView
 		unless event then return
 		event.preventDefault()
 		if Constants.MATERIAL_SELECTED
-			console.log 'Load texture'
+			log.debug 'Load texture'
 			material = db.get 'materials', Constants.MATERIAL_SELECTED
 			material.set 'map', @model.get 'threeTexture'
 			EditorEventbus.changeMaterial.dispatch Constants.MATERIAL_SELECTED

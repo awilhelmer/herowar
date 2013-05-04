@@ -33,7 +33,6 @@ class Environment extends BasePropertiesView
 			@selectedItem = db.get 'environmentsStatic', value
 			$removeButton = @$ '#sidebar-environment-remove'
 			$removeButton.addClass 'show' unless $removeButton.hasClass 'show'
-			console.log 'listSelectItem...', id, value, name
 
 	removeItem: ->
 		col = db.get 'environmentsStatic'

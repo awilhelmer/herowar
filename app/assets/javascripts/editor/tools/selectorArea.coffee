@@ -57,7 +57,7 @@ class SelectorArea
 	updatePosition: (intersect) ->
 		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
 		unless @selectorObject.selectedObject
-			console.log "Selecting terrain!"
+			log.debug "Selecting terrain!"
 			@selectorObject.selectTerrain()
 		if Variables.MOUSE_PRESSED_LEFT	
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
@@ -111,11 +111,11 @@ class SelectorArea
 		update
 		
 	onMaterialSelected: (idMapper) =>
-		console.log "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"
+		log.debug "SelectorArea: Selected ID #{idMapper.id} MaterialId #{idMapper.materialId}!"
 		@selectedMatId = idMapper
 		
 	onMaterialDeselect: () =>
-		console.log 'SelectorArea: Deselected ID!'
+		log.debug 'SelectorArea: Deselected ID!'
 		@selectedMatId = null
 
 	selectBrush: (tool) =>

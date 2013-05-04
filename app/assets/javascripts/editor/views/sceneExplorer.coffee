@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
+log = require 'util/logger'
 db = require 'database'
 
 class SceneExplorer extends BaseView
@@ -38,7 +39,7 @@ class SceneExplorer extends BaseView
 				EditorEventbus.showSidebarPathing.dispatch()
 				@selectItem type
 			else
-				console.log "ERROR type \"#{type}\" is unknowned"
+				log.error "ERROR type \"#{type}\" is unknowned"
 
 	selectItem: (type) ->
 		@$el.find('.scenegraph-tree div').removeClass 'active'

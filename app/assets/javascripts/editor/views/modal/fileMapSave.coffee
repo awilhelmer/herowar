@@ -1,5 +1,6 @@
 BaseModalView = require 'views/baseModalView'
 templates = require 'templates'
+log = require 'util/logger'
 
 class ModalFileMapSave extends BaseModalView
 
@@ -42,7 +43,7 @@ class ModalFileMapSave extends BaseModalView
 	saveMap: ->
 		@status.isSaving = true
 		json = @getMapAsJson()
-		console.log 'Save map'
+		log.info 'Save map'
 		jqxhr = $.ajax
 			url					: '/api/editor/map'
 			type				: 'POST'
@@ -56,27 +57,20 @@ class ModalFileMapSave extends BaseModalView
 	getMapAsJson: ->
 		worldToObjectConverter = require 'util/worldToObjectConverter'
 		obj = worldToObjectConverter.convert()
-		console.log 'Prepared map object for saving:'
-		console.log obj
+		#console.log 'Prepared map object for saving:'
+		#console.log obj
 		JSON.stringify obj
 
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'
-		#@parseSuccessResponse data if _.isObject data
 		@status.isSuccessful = true
 
 	onError: (jqXHR, textStatus, errorThrown) =>
-		console.log 'Save map ERROR'
+		log.error 'Save map ERROR'
 		@status.isError = true
 
 	onDone: =>
-		console.log 'Save map DONE'
+		log.info 'Saved map successfully'
 		@status.isSaving = false	
-	
-	parseSuccessResponse: (data) ->
-		# MapProperties.MAP_ID = data.id
-		# MapProperties.TERRAIN_ID = data.terrain.id
-		# MapProperties.GEOMETRY_ID = data.terrain.geometry.id
-		# MapProperties.GEOMETRY_METADATA_ID = data.terrain.geometry.metadata.id
 
 return ModalFileMapSave

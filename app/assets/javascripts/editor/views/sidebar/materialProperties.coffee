@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+log = require 'util/logger'
 db = require 'database'
 
 class MaterialProperties extends BasePropertiesView
@@ -29,9 +30,8 @@ class MaterialProperties extends BasePropertiesView
 		EditorEventbus.deselectMaterial.add @hidePanel
 
 	loadMaterial: (id) =>
-		console.log 'Load Material Properties'
+		log.debug 'Load Material Properties'
 		@model = db.get 'materials', id.id
-		console.log @model
 		@render()
 
 	changeBasis: (event) =>
