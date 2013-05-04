@@ -10,7 +10,7 @@ class Geometries extends Backbone.Collection
 		super models, options
 		
 	selectItem: (name, value) =>
-		if name is 'sidebar-environment-categories' and @id isnt value
+		if name is 'sidebar-environment-categories-list' and @id isnt value
 			@id = value
 			@url = "/api/editor/environment/#{@id}"
 			@fetch()

@@ -11,7 +11,7 @@ class AddEnvironment extends AddMesh
 		EditorEventbus.changeStaticObject.add @changeStaticObject
 	
 	onSelectItem: (id, value, name) =>
-		if id is 'sidebar-environment-geometries' and @tool.get('currentMeshId') isnt value
+		if id is 'sidebar-environment-geometries-list' and @tool.get('currentMeshId') isnt value
 			log.debug 'Set Tool Build'
 			@tool.set
 				'active'					: Constants.TOOL_BUILD
