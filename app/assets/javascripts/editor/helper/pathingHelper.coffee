@@ -5,12 +5,15 @@ db = require 'database'
 
 class PathingHelper
 	
+	color: 0x0000FF
+	
 	constructor: (@editor) ->
 		@sidebar = db.get 'ui/sidebar'
 		@waypoints = db.get 'waypoints'
 		@path = null
 		@pathWaypoints = []
 		@meshes = []
+		@lineMaterial = new THREE.LineBasicMaterial color: @color
 		@bindEvents()
 	
 	bindEvents: ->
@@ -39,11 +42,21 @@ class PathingHelper
 
 	buildPath: ->
 		for waypoint in @pathWaypoints
-			mesh = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0x0000FF, transparent: true, opacity:1)
+			mesh = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: @color, transparent: true, opacity:1)
 			mesh.position = waypoint.get('position')
 			mesh.rotation.x = - Math.PI/2
 			@editor.engine.scenegraph.scene.add mesh
 			@meshes.push mesh
+			index = _.indexOf @pathWaypoints, waypoint
+			if index isnt 0
+				prevWaypoint = @pathWaypoints[index - 1]
+				geometry = new THREE.Geometry()
+				geometry.vertices.push new THREE.Vector3 prevWaypoint.get('position').x, prevWaypoint.get('position').y, prevWaypoint.get('position').z
+				geometry.vertices.push new THREE.Vector3 waypoint.get('position').x, waypoint.get('position').y, waypoint.get('position').z
+				line = new THREE.Line geometry, @lineMaterial
+				@editor.engine.scenegraph.scene.add line
+				@meshes.push line
+			console.log index
 		@editor.engine.render()
 
 	removePath: ->
