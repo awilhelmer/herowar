@@ -1,3 +1,4 @@
+SelectorTerrain = require 'tools/selectorTerrain'
 EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
@@ -7,7 +8,7 @@ Variables = require 'variables'
 log = require 'util/logger'
 db = require 'database'
 
-class PlaceObject
+class AddObject extends SelectorTerrain
 
 	constructor: (@editor, @intersectHelper) ->
 		@tool = db.get 'ui/tool'
@@ -15,34 +16,34 @@ class PlaceObject
 			'currentMeshId' 	: -1
 			'currentMeshName'	: null
 		@loader = new JSONLoader()
-		@bindEventListeners()
+		super @editor, @intersectHelper
 
-	bindEventListeners: ->
+	bindEvents: ->
 		EditorEventbus.listSelectItem.add @onSelectItem
 		EditorEventbus.changeStaticObject.add @changeStaticObject
 
-	onMouseUp: (event) ->
-		if event.which is 1
-			@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED
-		else if event.which is 3
-			if @tool.get('currentMesh')
-				@editor.engine.scenegraph.scene.remove @tool.get('currentMesh')
-				@tool.get('currentMesh').geometry.dispose() # TODO: is this enough clean up ?!?
-				@tool.unset 'currentMesh'
-				@editor.engine.render()
-				log.debug 'Set Tool Selection'
-				@tool.set 'active', Constants.TOOL_SELECTION
-
-	onMouseMove: (event) ->
+	onLeaveTool: ->
 		if @tool.get('currentMesh')
-			intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], 1
-			if intersectList.length > 0
-				@tool.get('currentMesh').visible = true unless @tool.get('currentMesh').visible
-				@updateMeshPosition @intersectHelper.getIntersectObject intersectList
-			else
-				if @tool.get('currentMesh').visible
-					@tool.get('currentMesh').visible = false
-					@editor.engine.render()
+			@editor.engine.scenegraph.scene.remove @tool.get('currentMesh')
+			@tool.get('currentMesh').geometry.dispose() # TODO: is this enough clean up ?!?
+			@tool.unset 'currentMesh'
+			@editor.engine.render()
+
+	onIntersect: ->
+		@tool.get('currentMesh').visible = true if @tool.get('currentMesh') and !@tool.get('currentMesh').visible
+
+	onNonIntersect: ->
+		if @tool.get('currentMesh')?.visible
+			@tool.get('currentMesh').visible = false
+			@editor.engine.render()
+
+	update: (position, intersect) ->
+		@tool.get('currentMesh').position = position
+		@editor.engine.render()
+
+	onMouseUp: (event) ->
+		@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED if event.which is 1
+		super event
 
 	onSelectItem: (id, value, name) =>
 		if id is 'sidebar-environment-geometries' and @tool.get('currentMeshId') isnt value
@@ -90,11 +91,6 @@ class PlaceObject
 				y				: mesh.scale.y
 				z				: mesh.scale.z
 		env
-
-	updateMeshPosition: (intersect) ->
-		position = new THREE.Vector3().addVectors intersect.point, intersect.face.normal.clone().applyMatrix4 intersect.object.matrixRotationWorld
-		@tool.get('currentMesh').position = position
-		@editor.engine.render()
 	
 	placeMesh: ->
 		id = @editor.engine.scenegraph.getNextId()
@@ -110,4 +106,4 @@ class PlaceObject
 		_.extend mesh, attributes
 		@editor.engine.render()
 
-return PlaceObject
+return AddObject

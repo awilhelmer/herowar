@@ -8,7 +8,18 @@ class SelectorTerrain
 	constructor: (@editor, @intersectHelper) ->
 		@tool = db.get 'ui/tool'
 		@radius = 0.5
-	
+		@bindEvents()
+		
+	bindEvents: ->
+
+	onLeaveTool: ->
+
+	onIntersect: ->
+
+	onNonIntersect: ->
+
+	update: (position, intersect) ->
+
 	onMouseUp: (event) =>
 		if event.which is 3
 			@onLeaveTool()
@@ -26,13 +37,5 @@ class SelectorTerrain
 			@update position, intersect
 		else
 			@onNonIntersect()
-
-	update: (position, intersect) ->
-
-	onLeaveTool: ->
-
-	onIntersect: ->
-
-	onNonIntersect: ->
 
 return SelectorTerrain

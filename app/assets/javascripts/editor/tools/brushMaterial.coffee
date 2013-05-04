@@ -12,10 +12,9 @@ class BrushMaterial extends SelectorTerrain
 		@world = db.get 'world'
 		@isVisible = false
 		@createSel()
-		@addEventListeners()
 		super @editor, @intersectHelper
 		
-	addEventListeners: ->
+	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
 		EditorEventbus.deselectMaterial.add @onMaterialDeselect
 		EditorEventbus.selectBrush.add @selectBrush
