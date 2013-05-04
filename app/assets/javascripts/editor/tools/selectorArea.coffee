@@ -63,21 +63,21 @@ class SelectorArea
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				update = @handleBrush intersect
 				if update
-					@saveGeometry intersect.object.geometry
+					@world.saveGeometry intersect.object.geometry
 			else if @brushTool is Constants.BRUSH_TERRAIN_RAISE
 				intersect.object.geometry.vertices[intersect.face.a].z += 1
 				intersect.object.geometry.vertices[intersect.face.b].z += 1
 				intersect.object.geometry.vertices[intersect.face.c].z += 1
 				intersect.object.geometry.vertices[intersect.face.d].z += 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				@saveGeometry intersect.object.geometry
+				@world.saveGeometry intersect.object.geometry
 			else if @brushTool is Constants.BRUSH_TERRAIN_DEGRADE 
 				intersect.object.geometry.vertices[intersect.face.a].z -= 1
 				intersect.object.geometry.vertices[intersect.face.b].z -= 1
 				intersect.object.geometry.vertices[intersect.face.c].z -= 1
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
-				@saveGeometry intersect.object.geometry
+				@world.saveGeometry intersect.object.geometry
 		x = Math.floor(position.x / 10) * 10 + 5
 		y = Math.floor(position.y / 10) * 10 + 1
 		z = Math.floor(position.z / 10) * 10 + 5
@@ -87,12 +87,6 @@ class SelectorArea
 			@selector.position.z = z
 		@editor.engine.render()
 		null
-
-	saveGeometry: (geometry) ->
-		@world.get('terrain').geometry.faces = geometry.faces
-		@world.get('terrain').geometry.vertices = geometry.vertices
-		@world.trigger 'change:terrain'
-		@world.trigger 'change'
 
 	handleBrush: (intersect) ->
 		object = intersect.object

@@ -59,6 +59,12 @@ class World extends Backbone.Model
 		materialHelper.loadGlobalMaterials mesh
 		obj.add mesh
 		obj
+		
+	saveGeometry: (geometry) ->
+		@get('terrain').geometry.faces = geometry.faces
+		@get('terrain').geometry.vertices = geometry.vertices
+		@trigger 'change:terrain'
+		@trigger 'change'
 
 	#on saving parse MatGeoId Array in Geometry
 	handleMaterials: (map) ->
@@ -74,6 +80,5 @@ class World extends Backbone.Model
 			mat.id = i
 			col.add mat
 			i++
-	
 
 return World
