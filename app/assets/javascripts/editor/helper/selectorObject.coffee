@@ -57,7 +57,7 @@ class SelectorObject
 		environmentsStatic = db.get 'environmentsStatic'
 		envModel = @createModelFromMesh id, @currentMesh
 		environmentsStatic.add envModel
-		log.info "Environment #{envModel.get('name')} added"
+		log.info "Environment \"#{envModel.get('name')}\" added"
 		@onLoadGeometry @currentMesh.geometry, @currentMesh.material.materials
 	
 	update: ->

@@ -2,6 +2,7 @@ BasePropertiesView = require 'views/basePropertiesView'
 EditorEventbus = require 'editorEventbus'
 Path = require 'models/path'
 templates = require 'templates'
+log = require 'util/logger'
 db = require 'database'
 
 class Pathing extends BasePropertiesView
@@ -45,10 +46,12 @@ class Pathing extends BasePropertiesView
 			'name' 	: "Path-#{id}"
 		col = db.get 'paths'
 		col.add path
+		log.info "Path \"#{path.get('name')}\" created"
 
 	removeItem: ->
 		col = db.get 'paths'
 		col.remove @selectedItem
+		log.info "Path \"#{@selectedItem.get('name')}\" removed"
 		# TODO: select next item after removing current one
 		@selectedItem = null
 		@$('#sidebar-pathing-remove').removeClass 'show'		

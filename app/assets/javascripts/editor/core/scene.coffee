@@ -163,7 +163,7 @@ class Scene
 		@world.handleMaterials @editor.engine.scenegraph.getMap()
 	
 	removeStaticObject: (obj) =>
-		log.info "Environment #{obj.get('name')} removed"
+		log.info "Environment \"#{obj.get('name')}\" removed"
 		col = db.get 'environmentsStatic'
 		col.remove obj
 		@editor.engine.scenegraph.removeStaticObject obj.attributes
