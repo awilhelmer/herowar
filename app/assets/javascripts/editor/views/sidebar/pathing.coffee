@@ -50,10 +50,16 @@ class Pathing extends BasePropertiesView
 
 	removeItem: ->
 		col = db.get 'paths'
+		index = col.indexOf @selectedItem
 		col.remove @selectedItem
 		log.info "Path \"#{@selectedItem.get('name')}\" removed"
-		# TODO: select next item after removing current one
-		@selectedItem = null
-		@$('#sidebar-pathing-remove').removeClass 'show'		
+		if col.length > index
+			@selectedItem = col.at index
+		else if index > 0
+			@selectedItem = col.at index - 1
+		else
+			@selectedItem = null
+		@$("div[data-value='#{@selectedItem.get('id')}']").addClass 'active' if @selectedItem
+		@$('#sidebar-pathing-remove').removeClass 'show' unless @selectedItem
 
 return Pathing

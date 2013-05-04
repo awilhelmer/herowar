@@ -36,10 +36,17 @@ class Environment extends BasePropertiesView
 			console.log 'listSelectItem...', id, value, name
 
 	removeItem: ->
-		id = @selectedItem.get 'id'
+		col = db.get 'environmentsStatic'
+		index = col.indexOf @selectedItem
 		EditorEventbus.removeStaticObject.dispatch @selectedItem
 		# TODO: select next item after removing current one
-		@selectedItem = null
-		@$('#sidebar-environment-remove').removeClass 'show'
+		if col.length > index
+			@selectedItem = col.at index
+		else if index > 0
+			@selectedItem = col.at index - 1
+		else
+			@selectedItem = null
+		@$("div[data-value='#{@selectedItem.get('id')}']").addClass 'active' if @selectedItem
+		@$('#sidebar-pathing-remove').removeClass 'show' unless @selectedItem
 
 return Environment
