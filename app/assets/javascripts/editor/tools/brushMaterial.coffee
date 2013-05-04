@@ -1,4 +1,4 @@
-SelectorTerrain = require 'tools/selectorTerrain'
+SelectorPlane = require 'tools/selectorPlane'
 materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
@@ -6,13 +6,14 @@ Constants = require 'constants'
 log = require 'util/logger'
 db = require 'database'
 
-class BrushMaterial extends SelectorTerrain
+class BrushMaterial extends SelectorPlane
 	
 	constructor: (@editor, @intersectHelper, @selectorObject) ->
-		@world = db.get 'world'
-		@isVisible = false
-		@createSel()
 		super @editor, @intersectHelper
+		
+		initialize: ->
+			@world = db.get 'world'
+			super()
 		
 	bindEvents: ->
 		EditorEventbus.selectMaterial.add @onMaterialSelected
@@ -23,20 +24,6 @@ class BrushMaterial extends SelectorTerrain
 	onMouseUp: (event) ->
 		EditorEventbus.dispatch 'resetWireframe', @selectorObject.selectedObject if event.which is 1
 		super event
-
-	createSel: ->
-		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: 0xFF0000, transparent: true, opacity:1)
-		@selector.rotation.x = - Math.PI/2
-		@selector.material.opacity = 0.3
-
-	addSel: ->
-		@isVisible = true
-		@editor.engine.scenegraph.scene.add @selector
-
-	removeSel: ->
-		@isVisible = false
-		@editor.engine.scenegraph.scene.remove @selector
-		@editor.engine.render()
 		
 	update: (position, intersect) ->
 		unless @selectorObject.selectedObject
@@ -61,26 +48,12 @@ class BrushMaterial extends SelectorTerrain
 				intersect.object.geometry.vertices[intersect.face.d].z -= 1
 				intersect.object.geometry.verticesNeedUpdate = true
 				@world.saveGeometry intersect.object.geometry
-		x = Math.floor(position.x / 10) * 10 + 5
-		y = Math.floor(position.y / 10) * 10 + 1
-		z = Math.floor(position.z / 10) * 10 + 5
-		if x isnt @selector.position.x or y isnt @selector.position.y or z isnt @selector.position.z
-			@selector.position.x = x
-			@selector.position.y = y
-			@selector.position.z = z
-		@editor.engine.render()
-		null
+		super position, intersect
 
 	onLeaveTool: ->
-		@removeSel()
 		terrain = db.get 'ui/terrain'
 		terrain.unset Constants.BRUSH_MODE if terrain
-
-	onIntersect: ->
-		@addSel() unless @isVisible
-
-	onNonIntersect: ->
-		@removeSel() if @isVisible
+		super()
 
 	handleBrush: (intersect) ->
 		object = intersect.object

@@ -6,10 +6,13 @@ db = require 'database'
 class SelectorTerrain
 	
 	constructor: (@editor, @intersectHelper) ->
+		@initialize()
+	
+	initialize: ->
 		@tool = db.get 'ui/tool'
 		@radius = 0.5
 		@bindEvents()
-		
+	
 	bindEvents: ->
 
 	onLeaveTool: ->
