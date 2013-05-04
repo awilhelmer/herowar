@@ -30,9 +30,11 @@ class SelectorTerrain
 			@tool.set 'active', Constants.TOOL_SELECTION
 		
 	onMouseMove: (event) =>
-		if @radius > 1
-			@radius += 0.33 #Precision
-		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], @radius
+		radius = @radius
+		if radius > 1
+			radius /=2
+			radius += 0.33
+		intersectList = @intersectHelper.mouseIntersects [ @editor.engine.scenegraph.getMap() ], radius
 		if intersectList.length > 0
 			@lastIntersect = @intersectHelper.getIntersectObject intersectList
 			@lastPosition = new THREE.Vector3().addVectors @lastIntersect.point, @lastIntersect.face.normal.clone().applyMatrix4 @lastIntersect.object.matrixRotationWorld

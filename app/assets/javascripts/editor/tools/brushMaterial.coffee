@@ -84,7 +84,7 @@ class BrushMaterial extends SelectorPlane
 		@brushTool = tool
 		
 	selectBrushSize: (brushSize) =>
-		@radius = brushSize / 2
+		@radius = brushSize
 		@selector.scale.x = brushSize
 		@selector.scale.y = brushSize
 		
