@@ -3,6 +3,7 @@ Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
 JSONLoader = require 'util/threeloader'
 Constants = require 'constants'
+Variables = require 'variables'
 log = require 'util/logger'
 db = require 'database'
 
@@ -22,7 +23,7 @@ class PlaceObject
 
 	onMouseUp: (event) ->
 		if event.which is 1
-			@placeMesh() if @tool.get('currentMesh')?.visible
+			@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED
 		else if event.which is 3
 			if @tool.get('currentMesh')
 				@editor.engine.scenegraph.scene.remove @tool.get('currentMesh')
