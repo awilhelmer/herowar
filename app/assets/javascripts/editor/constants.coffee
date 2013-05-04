@@ -1,5 +1,6 @@
 constants =
 		TOOL_BUILD											: 'addEnvironment'
+		TOOL_WAYPOINT										: 'addWaypoint'
 		TOOL_SELECTION									: 'selectorObject'
 		TOOL_BRUSH											: 'brushMaterial'
 

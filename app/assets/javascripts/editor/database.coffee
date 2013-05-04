@@ -1,7 +1,7 @@
 _db = {}
 _data = {}
 
-database =         
+database =
 
 	get: (type, obj) ->
 		@create type unless _db[type]?

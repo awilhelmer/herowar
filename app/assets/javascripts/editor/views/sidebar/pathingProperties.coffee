@@ -1,6 +1,8 @@
 EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
+Constants = require 'constants'
+log = require 'util/logger'
 db = require 'database'
 
 class PathingProperties extends BasePropertiesView
@@ -30,6 +32,8 @@ class PathingProperties extends BasePropertiesView
 		@render()
 
 	createWaypoint: ->
-		# TODO: load flag model ...
+		log.debug 'Set Tool Waypoint'
+		tool = db.get 'ui/tool'
+		tool.set 'active', Constants.TOOL_WAYPOINT
 
 return PathingProperties
