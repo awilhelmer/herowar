@@ -2,8 +2,9 @@ EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
 BaseView = require 'views/baseView'
 templates = require 'templates'
-db = require 'database'
 Constants = require 'constants'
+log = require 'util/logger'
+db = require 'database'
 
 class ScenebarTerrainView extends BaseView
 	
@@ -24,14 +25,14 @@ class ScenebarTerrainView extends BaseView
 		else
 			@nextId = 1
 		@nextMatId = -1
-		console.log "setted StartId to #{@nextId}"
+		log.debug "Set next material id to #{@nextId}"
 		super options
 	
 	newMaterial: (event) =>
 		event?.preventDefault()
 		id = ++@nextId
 		matId = --@nextMatId 
-		console.log "New material id #{id} matId #{matId}"
+		log.debug "New material id #{id} matId #{matId}"
 		col = db.get 'materials'
 		mat = new Material()
 		mat.set 
@@ -41,21 +42,21 @@ class ScenebarTerrainView extends BaseView
 			'color' 			: '#CCCCCC'
 			'transparent' : false
 			'opacity'			: 1
-			'map'					: undefined		
+			'map'					: undefined
 		col.add mat
 		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
 		
 
 	selectMaterial: (id) =>
 		matId =  @getMaterialId id
-		console.log "Select material id #{id} matId #{matId}"
+		log.debug "Select material id #{id} matId #{matId}"
 		idMapper = id: id, materialId:matId
 		Constants.MATERIAL_SELECTED = id
 		EditorEventbus.selectMaterial.dispatch idMapper
 
 	changeMaterial: (id) =>
 		matId =  @getMaterialId id
-		console.log "Changed material id #{id} matId #{matId}"
+		log.debug "Changed material id #{id} matId #{matId}"
 		idMapper = id: id, materialId: matId
 		EditorEventbus.selectMaterial.dispatch idMapper
 		EditorEventbus.updateModelMaterial.dispatch idMapper
