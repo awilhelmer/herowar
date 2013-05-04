@@ -37,7 +37,7 @@ class Environment extends BasePropertiesView
 	removeItem: ->
 		col = db.get 'environmentsStatic'
 		index = col.indexOf @selectedItem
-		EditorEventbus.removeStaticObject.dispatch @selectedItem
+		EditorEventbus.dispatch 'removeStaticObject', @selectedItem
 		# TODO: select next item after removing current one
 		if col.length > index
 			@selectedItem = col.at index

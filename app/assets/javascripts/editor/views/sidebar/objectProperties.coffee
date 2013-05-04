@@ -60,7 +60,7 @@ class ObjectProperties extends BasePropertiesView
 			when 'rotationZ'
 				@model.get('rotation').z = parseFloat $currentTarget.val()
 				@triggerChange 'rotation'
-		EditorEventbus.changeStaticObject.dispatch @model
+		EditorEventbus.dispatch 'changeStaticObject', @model
 
 	triggerChange: (propertyName) ->
 		@model.trigger "change:#{propertyName}"

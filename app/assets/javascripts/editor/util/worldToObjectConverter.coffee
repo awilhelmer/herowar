@@ -15,7 +15,7 @@ worldToObjectConverter =
 
 	handleMaterials: ->
 		EditorEventbus = require 'editorEventbus'
-		EditorEventbus.handleWorldMaterials.dispatch()
+		EditorEventbus.dispatch 'handleWorldMaterials'
 
 	fillMaterialArray: (obj) ->
 		materials = []

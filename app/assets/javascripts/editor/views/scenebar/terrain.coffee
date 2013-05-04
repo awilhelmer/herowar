@@ -45,7 +45,7 @@ class ScenebarTerrainView extends BaseView
 			'map'					: undefined
 		col.add mat
 		@terrain.set 'brushMaterialId', id
-		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
+		EditorEventbus.dispatch 'selectMaterial', id: id, materialId: matId
 		
 
 	selectMaterial: (model) =>
@@ -54,14 +54,14 @@ class ScenebarTerrainView extends BaseView
 		log.debug "Select material id #{id} matId #{matId}"
 		idMapper = id: id, materialId:matId
 		Constants.MATERIAL_SELECTED = id
-		EditorEventbus.selectMaterial.dispatch idMapper
+		EditorEventbus.dispatch 'selectMaterial', idMapper
 
 	changeMaterial: (id) =>
 		matId =  @getMaterialId id
 		log.debug "Changed material id #{id} matId #{matId}"
 		idMapper = id: id, materialId: matId
-		EditorEventbus.selectMaterial.dispatch idMapper
-		EditorEventbus.updateModelMaterial.dispatch idMapper
+		EditorEventbus.dispatch 'selectMaterial', idMapper
+		EditorEventbus.dispatch 'updateModelMaterial', idMapper
 
 	getMaterialId: (id) ->
 		material = db.get 'materials', id

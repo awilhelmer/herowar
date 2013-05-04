@@ -30,7 +30,7 @@ class ScenebarTerrainMaterials extends BaseView
 		modelId = $currentTarget.data 'matid'
 		if modelId
 			@terrain.set 'brushMaterialId', modelId
-			EditorEventbus.showMaterialProperties.dispatch()
+			EditorEventbus.dispatch 'showMaterialProperties'
 
 	render: ->
 		super()

@@ -39,14 +39,14 @@ class MaterialProperties extends BasePropertiesView
 		event.preventDefault()
 		entry = @getEntry event, "mp-basis-"
 		@model.set entry.property, entry.value
-		EditorEventbus.changeMaterial.dispatch @model.id
+		EditorEventbus.dispatch 'changeMaterial', @model.id
 		
 	changeColor: (event) =>
 		unless event then return
 		event.preventDefault()
 		entry = @getEntry event, "mp-color-"
 		@model.set entry.property, entry.value
-		EditorEventbus.changeMaterial.dispatch @model.id
+		EditorEventbus.dispatch 'changeMaterial', @model.id
 		
 	getTemplateData: ->
 		json = super()

@@ -26,7 +26,7 @@ class SelectorArea
 
 	onMouseUp: (event) ->
 		if event.which is 1
-			EditorEventbus.resetWireframe.dispatch @selectorObject.selectedObject
+			EditorEventbus.dispatch 'resetWireframe', @selectorObject.selectedObject
 		else if event.which is 3
 			@removeSel()
 			log.debug 'Set Tool Selection'

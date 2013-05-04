@@ -23,6 +23,6 @@ class MaterialTexture extends BaseView
 			log.debug 'Load texture'
 			material = db.get 'materials', Constants.MATERIAL_SELECTED
 			material.set 'map', @model.get 'threeTexture'
-			EditorEventbus.changeMaterial.dispatch Constants.MATERIAL_SELECTED
+			EditorEventbus.dispatch 'changeMaterial', Constants.MATERIAL_SELECTED
 
 return MaterialTexture

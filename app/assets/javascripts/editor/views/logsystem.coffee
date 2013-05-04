@@ -36,11 +36,11 @@ class LogSystem extends BaseView
 			step: (now, tween) =>
 				if tween.now < (lastRerenderTween - 5)
 					lastRerenderTween = tween.now
-					EditorEventbus.render.dispatch true
+					EditorEventbus.dispatch 'render', true
 			complete: =>
 				@isMoving = false
 				@isMinimized = true
-				EditorEventbus.render.dispatch true
+				EditorEventbus.dispatch 'render', true
 				@render()
 		@render()
 	
@@ -54,11 +54,11 @@ class LogSystem extends BaseView
 			step: (now, tween) =>
 				if tween.now > (lastRerenderTween + 5)
 					lastRerenderTween = tween.now
-					EditorEventbus.render.dispatch true
+					EditorEventbus.dispatch 'render', true
 			complete: =>
 				@isMoving = false
 				@isMinimized = false
-				EditorEventbus.render.dispatch true
+				EditorEventbus.dispatch 'render', true
 				@render()
 		@render()
 	

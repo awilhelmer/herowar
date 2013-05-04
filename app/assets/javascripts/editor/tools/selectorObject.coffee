@@ -28,15 +28,15 @@ class SelectorObject
 			if @objectHelper.isTerrain 
 				@selectedType = 'terrain'
 				@addSelectionWireframe obj, @selectedType
-				EditorEventbus.selectTerrainViewport.dispatch()
+				EditorEventbus.dispatch 'selectTerrainViewport'
 			else 
 				@selectedType = 'object'
-				EditorEventbus.selectObjectViewport.dispatch()
+				EditorEventbus.dispatch 'selectObjectViewport'
 			@selectedObject = obj
 		else
 			@selectedType = 'world'
 			@selectedObject = null
-			EditorEventbus.selectWorldViewport.dispatch()
+			EditorEventbus.dispatch 'selectWorldViewport'
 		@editor.engine.render()
 
 	selectWorld: =>

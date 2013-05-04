@@ -167,6 +167,6 @@ class Scene
 		col = db.get 'environmentsStatic'
 		col.remove obj
 		@editor.engine.scenegraph.removeStaticObject obj.attributes
-		EditorEventbus.render.dispatch()
+		EditorEventbus.dispatch 'render'
 		
 return Scene

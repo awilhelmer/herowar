@@ -21,7 +21,7 @@ class PathingExplorer extends BaseView
 		value = $currentTarget.data 'value'
 		$('.scenegraph-tree div').removeClass 'active'
 		$currentTarget.addClass 'active'
-		EditorEventbus.selectPathUI.dispatch value
-		EditorEventbus.showPathingProperties.dispatch()
+		EditorEventbus.dispatch 'selectPathUI', value
+		EditorEventbus.dispatch 'showPathingProperties'
 
 return PathingExplorer

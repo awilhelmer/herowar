@@ -18,6 +18,6 @@ class ScenebarEnvironmentsView extends BaseView
 		if id is 'scenebar-environments' and !@loadedEnvironments
 			log.debug 'Load Environments in Scenebar ...'
 			@loadedEnvironments = true
-			EditorEventbus.treeLoadData.dispatch 'sidebar-environment-categories' 	
+			EditorEventbus.dispatch 'treeLoadData', 'sidebar-environment-categories' 	
 
 return ScenebarEnvironmentsView

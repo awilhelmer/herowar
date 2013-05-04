@@ -34,6 +34,6 @@ class Tree extends BaseView
 		$currentTarget = $ event.currentTarget
 		@$('.item').removeClass 'active'
 		$currentTarget.addClass 'active'
-		EditorEventbus.treeSelectItem.dispatch @$el.attr('id'), $currentTarget.data('value')
+		EditorEventbus.dispatch 'treeSelectItem', @$el.attr('id'), $currentTarget.data('value')
 
 return Tree

@@ -13,6 +13,6 @@ class ScenebarView extends BaseView
 
 	toggleTab: (event) =>
 		id = $(event.target).attr('href').split('#')[1]
-		EditorEventbus.toggleTab.dispatch id	
+		EditorEventbus.dispatch 'toggleTab',id	
 
 return ScenebarView

@@ -31,28 +31,28 @@ class ScenebarTerrainEditView extends BaseView
 			col = db.get 'materials'
 			mat = col.at 0
 			@terrain.set 'brushMaterialId', mat.get 'id'
-		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
+		EditorEventbus.dispatch 'selectBrush', Constants.BRUSH_APPLY_MATERIAL
 
 	materials: (event) =>
 		unless event then return
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_APPLY_MATERIAL
-		EditorEventbus.selectBrush.dispatch Constants.BRUSH_APPLY_MATERIAL
+		EditorEventbus.dispatch 'selectBrush', Constants.BRUSH_APPLY_MATERIAL
 
 	raise: (event) =>
 		unless event then return
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_TERRAIN_RAISE
-		EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_RAISE
+		EditorEventbus.dispatch 'selectBrush', Constants.BRUSH_TERRAIN_RAISE
 
 	degrade: (event) =>
 		unless event then return
 		$('#scenebar-terrain-edit a').removeClass 'active'
 		$(event.currentTarget).addClass 'active'
 		@model.set Constants.BRUSH_MODE, Constants.BRUSH_TERRAIN_DEGRADE
-		EditorEventbus.selectBrush.dispatch Constants.BRUSH_TERRAIN_DEGRADE
+		EditorEventbus.dispatch 'selectBrush', Constants.BRUSH_TERRAIN_DEGRADE
 
 	getTemplateData: ->
 		json = super()

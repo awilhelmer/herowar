@@ -27,16 +27,16 @@ class SceneExplorer extends BaseView
 		type = $currentTarget.data 'type'
 		switch type
 			when 'world'
-				EditorEventbus.selectWorldUI.dispatch()
+				EditorEventbus.dispatch 'selectWorldUI'
 				@selectWorld()
 			when 'terrain'
-				EditorEventbus.selectTerrainUI.dispatch()
+				EditorEventbus.dispatch 'selectTerrainUI'
 				@selectTerrain()
 			when 'environment'
-				EditorEventbus.showSidebarEnvironment.dispatch()
+				EditorEventbus.dispatch 'showSidebarEnvironment'
 				@selectItem type
 			when 'pathing'
-				EditorEventbus.showSidebarPathing.dispatch()
+				EditorEventbus.dispatch 'showSidebarPathing'
 				@selectItem type
 			else
 				log.error "ERROR type \"#{type}\" is unknowned"
@@ -47,10 +47,10 @@ class SceneExplorer extends BaseView
 
 	selectWorld: =>
 		@selectItem 'world'
-		EditorEventbus.showWorldProperties.dispatch()
+		EditorEventbus.dispatch 'showWorldProperties'
 
 	selectTerrain: =>
 		@selectItem 'terrain'
-		EditorEventbus.showTerrainProperties.dispatch()
+		EditorEventbus.dispatch 'showTerrainProperties'
 
 return SceneExplorer

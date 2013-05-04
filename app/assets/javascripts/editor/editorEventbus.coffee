@@ -1,4 +1,16 @@
+log = require 'util/logger'
+
 editorEventbus = 
+
+		dispatch: (name, params) ->
+			if arguments?.length > 0
+				args = [].slice.call arguments
+				name = args.shift()
+				unless args.length isnt 0
+					log.debug "[EVENT] Dispatch \"#{name}\""
+				else
+					log.debug "[EVENT] Dispatch \"#{name}\" with parameters \"#{args.join(',')}\""
+				@[name].dispatch.apply null, args
 		
 		render									: new signals.Signal()
 		toggleTab								: new signals.Signal()

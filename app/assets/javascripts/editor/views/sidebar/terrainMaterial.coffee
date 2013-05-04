@@ -22,7 +22,6 @@ class TerrainMaterial extends BaseView
 		unless event then return
 		event.preventDefault()
 		@terrain.set 'brushMaterialId', @options.modelId
-		EditorEventbus.showMaterialProperties.dispatch()
-		@dispatchSelectMaterialEvent @options.modelId
-
+		EditorEventbus.dispatch 'showMaterialProperties'
+		
 return TerrainMaterial

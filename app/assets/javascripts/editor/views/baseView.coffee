@@ -90,7 +90,7 @@ class BaseView extends Backbone.View
 			val = $currentTarget.is(':checked')
 		else 
 			val = $currentTarget.val()		
-		log.debug "#{modul}property #{property}: #{val}"
+		log.debug "Found \"#{val}\" for input field \"#{modul}property #{property}\""
 		property: property, value:val
 
 return BaseView

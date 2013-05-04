@@ -22,21 +22,21 @@ class ScenebarTerrainTextureBrushView extends BaseView
 		unless event then return
 		event.preventDefault()
 		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_TINY
-		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_TINY
+		EditorEventbus.dispatch 'selectBrushSize', Constants.BRUSH_SIZE_TINY
 		@render()
 
 	brushSizeMedium: (event) =>
 		unless event then return
 		event.preventDefault()
 		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_MEDIUM
-		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_MEDIUM
+		EditorEventbus.dispatch 'selectBrushSize', Constants.BRUSH_SIZE_MEDIUM
 		@render()
 
 	brushSizeLarge: (event) =>
 		unless event then return
 		event.preventDefault()
 		@model.set Constants.BRUSH_SIZE, Constants.BRUSH_SIZE_LARGE
-		EditorEventbus.selectBrushSize.dispatch Constants.BRUSH_SIZE_LARGE
+		EditorEventbus.dispatch 'selectBrushSize', Constants.BRUSH_SIZE_LARGE
 		@render()
 		
 	getTemplateData: ->

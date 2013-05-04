@@ -48,7 +48,7 @@ class TerrainProperties extends BasePropertiesView
 
 	changeTerrain: (event) =>
 		log.debug 'CHANGE TERRAIN !!!!'
-		EditorEventbus.changeTerrain.dispatch @$el.find('input[name="width"]').val(), @$el.find('input[name="height"]').val(), @$el.find('input[name="smoothness"]').val(), @$el.find('input[name="zScale"]').val()
+		EditorEventbus.dispatch 'changeTerrain', @$el.find('input[name="width"]').val(), @$el.find('input[name="height"]').val(), @$el.find('input[name="smoothness"]').val(), @$el.find('input[name="zScale"]').val()
 
 	validateTerrainWidth: (event) =>
 		unless event then return
@@ -69,10 +69,10 @@ class TerrainProperties extends BasePropertiesView
 	changeWireframe: (event) =>
 		unless event then return
 		$currentTarget = $ event.currentTarget
-		EditorEventbus.changeTerrainWireframe.dispatch $currentTarget.is ':checked'
+		EditorEventbus.dispatch 'changeTerrainWireframe', $currentTarget.is ':checked'
 
 	resetTerrainPool: =>
-		EditorEventbus.resetTerrainPool.dispatch()
+		EditorEventbus.dispatch 'resetTerrainPool'
 
 	loadMaterial: (event) =>
 		unless event then return
@@ -80,6 +80,6 @@ class TerrainProperties extends BasePropertiesView
 		$currentTarget = $ event.currentTarget
 		if modelId
 			@terrain.set 'brushMaterialId', modelId
-			EditorEventbus.showMaterialProperties.dispatch()
+			EditorEventbus.dispatch 'showMaterialProperties'
 
 return TerrainProperties

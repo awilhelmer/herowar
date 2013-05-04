@@ -25,13 +25,13 @@ class EnvironmentExplorer extends BaseView
 		value = $currentTarget.data 'value'
 		$('.scenegraph-tree div').removeClass 'active'
 		$currentTarget.addClass 'active'
-		EditorEventbus.selectObjectUI.dispatch value
-		EditorEventbus.showObjectProperties.dispatch()
+		EditorEventbus.dispatch 'selectObjectUI', value
+		EditorEventbus.dispatch 'showObjectProperties'
 		
 	removeElement: (key, opt) =>
 		id = opt.$trigger.data 'value'
 		obj = @model.get id
-		EditorEventbus.removeStaticObject.dispatch obj
+		EditorEventbus.dispatch 'removeStaticObject', obj
 
 	addContextMenu: ->
 		jQuery.contextMenu
