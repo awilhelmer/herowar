@@ -1,5 +1,6 @@
 Log = require 'models/ui/log'
 db = require 'database'
+DateFormat = require 'util/dateFormat'
 
 logger =
 	
@@ -16,12 +17,14 @@ logger =
 		log "ERROR", message
 
 log = (level, message) ->
+	curDate = new Date()
 	logs = db.get 'ui/logs'
 	item = new Log()
 	item.set
 		'level' : level
 		'message'	: message
-		'cdate' : new Date().getTime()
+		'cdate' : curDate.getTime()
+		'formattedDate' : DateFormat.format curDate, 'ddd mmm dd hh:nn:ss'
 	logs.add item
 	
 return logger
