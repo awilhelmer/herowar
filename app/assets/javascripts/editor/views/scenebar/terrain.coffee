@@ -13,12 +13,8 @@ class ScenebarTerrainView extends BaseView
 	events:
 		'click #scenebar-terrain-material-add' : 'newMaterial'
 
-	bindEvents: ->
-		EditorEventbus.changeMaterial.add @changeMaterial
-		EditorEventbus.menuSelectMaterial.add @selectMaterial
-		
-
 	initialize: (options) ->
+		@terrain = db.get 'ui/terrain'
 		col = db.get 'materials'
 		if col.models.length > 0
 			@nextId = col.models.length
@@ -27,6 +23,10 @@ class ScenebarTerrainView extends BaseView
 		@nextMatId = -1
 		log.debug "Set next material id to #{@nextId}"
 		super options
+	
+	bindEvents: ->
+		EditorEventbus.changeMaterial.add @changeMaterial
+		@listenTo @terrain, 'change:brushMaterialId', @selectMaterial
 	
 	newMaterial: (event) =>
 		event?.preventDefault()
@@ -47,7 +47,8 @@ class ScenebarTerrainView extends BaseView
 		EditorEventbus.selectMaterial.dispatch id: id, materialId: matId
 		
 
-	selectMaterial: (id) =>
+	selectMaterial: (model) =>
+		id = model.get 'brushMaterialId'
 		matId =  @getMaterialId id
 		log.debug "Select material id #{id} matId #{matId}"
 		idMapper = id: id, materialId:matId

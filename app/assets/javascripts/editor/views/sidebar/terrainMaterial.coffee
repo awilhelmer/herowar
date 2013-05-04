@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 templates = require 'templates'
+db = require 'database'
 
 class TerrainMaterial extends BaseView
 		
@@ -12,14 +13,16 @@ class TerrainMaterial extends BaseView
 	
 	events:
 		'click' : 'loadMaterial'
-	
+
+	initialize: (options) ->
+		@terrain = db.get 'ui/terrain'
+		super options
+
 	loadMaterial: (event) =>
 		unless event then return
 		event.preventDefault()
-		@dispatchSelectMaterialEvent @options.modelId
-
-	dispatchSelectMaterialEvent: (modelId) ->
-		EditorEventbus.menuSelectMaterial.dispatch modelId
+		@terrain.set 'brushMaterialId', @options.modelId
 		EditorEventbus.showMaterialProperties.dispatch()
+		@dispatchSelectMaterialEvent @options.modelId
 
 return TerrainMaterial

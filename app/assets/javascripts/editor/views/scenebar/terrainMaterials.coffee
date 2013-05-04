@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BaseView = require 'views/baseView'
 Constants = require 'constants'
 templates = require 'templates'
+db = require 'database'
 
 class ScenebarTerrainMaterials extends BaseView
 
@@ -12,8 +13,12 @@ class ScenebarTerrainMaterials extends BaseView
 	events:
 		'click .mm-material' : 'loadMaterial'
 	
+	initialize: (options) ->
+		@terrain = db.get 'ui/terrain'
+		super options
+	
 	bindEvents: ->
-		@listenTo @model, 'add remove change reset', @render if @model
+		@listenTo @model, 'add remove change reset', @render
 	
 	loadMaterial: (event) =>
 		unless event then return
@@ -22,10 +27,8 @@ class ScenebarTerrainMaterials extends BaseView
 		$('#scenebar-terrain-materials .mm-material').removeClass 'active'
 		$currentTarget.addClass 'active'
 		modelId = $currentTarget.data 'matid'
-		@dispatchSelectMaterialEvent modelId if modelId
-		
-	dispatchSelectMaterialEvent: (modelId) ->
-		EditorEventbus.menuSelectMaterial.dispatch modelId
-		EditorEventbus.showMaterialProperties.dispatch()
+		if modelId
+			@terrain.set 'brushMaterialId', modelId
+			EditorEventbus.showMaterialProperties.dispatch()
 
 return ScenebarTerrainMaterials

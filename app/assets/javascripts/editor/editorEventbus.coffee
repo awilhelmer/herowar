@@ -36,7 +36,6 @@ editorEventbus =
 		showSidebarEnvironment	: new signals.Signal()
 		showSidebarPathing			: new signals.Signal()
 
-		menuSelectMaterial			: new signals.Signal()
 		selectMaterial					: new signals.Signal()
 		updateModelMaterial			: new signals.Signal()
 		deselectMaterial				: new signals.Signal()

@@ -2,6 +2,7 @@ EditorEventbus = require 'editorEventbus'
 BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 Constants = require 'constants'
+db = require 'database'
 
 class TerrainProperties extends BasePropertiesView
 	
@@ -23,6 +24,10 @@ class TerrainProperties extends BasePropertiesView
 		'change input[name="wireframe"]' 	: 'changeWireframe'
 		'click #randomizeTerrain' 				: 'resetTerrainPool'
 		'click .mm-material' 							: 'loadMaterial'
+
+	initialize: (options) ->
+		@terrain = db.get 'ui/terrain'
+		super options
 
 	bindEvents: ->
 		EditorEventbus.showWorldProperties.add @hidePanel
@@ -72,11 +77,8 @@ class TerrainProperties extends BasePropertiesView
 		unless event then return
 		event.preventDefault()
 		$currentTarget = $ event.currentTarget
-		modelId = $currentTarget.data 'matid'
-		@dispatchSelectMaterialEvent modelId if modelId
-
-	dispatchSelectMaterialEvent: (modelId) ->
-		EditorEventbus.menuSelectMaterial.dispatch modelId
-		EditorEventbus.showMaterialProperties.dispatch()
+		if modelId
+			@terrain.set 'brushMaterialId', modelId
+			EditorEventbus.showMaterialProperties.dispatch()
 
 return TerrainProperties
