@@ -4,8 +4,10 @@ import static play.libs.Json.toJson;
 import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -119,6 +121,7 @@ public class Editor extends Controller {
       map.getTerrain().setMap(map);
     }
     if (map.getObjects() != null) {
+      List<Integer> oldIds = new ArrayList<Integer>();
       Set<Mesh> meshes = new HashSet<Mesh>();
       for (Mesh mesh : map.getObjects()) {
         if (mesh.getGeometry().getId() != null) {
@@ -129,8 +132,18 @@ public class Editor extends Controller {
           mesh.setId(null);
         } else {
           mesh = MeshDAO.getInstance().merge(mesh);
+          oldIds.add(mesh.getId());
         }
         meshes.add(mesh);
+      }
+      // Delete old meshes
+
+      for (Iterator<Mesh> iterator = map.getObjects().iterator(); iterator.hasNext();) {
+        Mesh mesh = iterator.next();
+        if (!oldIds.contains(mesh.getId())) {
+          iterator.remove();
+          JPA.em().remove(mesh);
+        }
 
       }
       map.setObjects(meshes);
