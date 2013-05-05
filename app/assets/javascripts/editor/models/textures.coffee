@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Textures extends Backbone.Collection
 
 	initialize: (models, options) ->

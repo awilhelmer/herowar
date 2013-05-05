@@ -1,5 +1,4 @@
 EditorEventbus = require 'editorEventbus'
-db = require 'database'
 
 class Geometries extends Backbone.Collection
 	

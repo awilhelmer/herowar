@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Waves extends Backbone.Collection
 
 	initialize: (models, options) ->

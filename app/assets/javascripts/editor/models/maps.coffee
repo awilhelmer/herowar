@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Maps extends Backbone.Collection
 
 	url: '/api/game/map/all'

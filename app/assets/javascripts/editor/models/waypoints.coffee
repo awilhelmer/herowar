@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Waypoints extends Backbone.Collection
 
 	initialize: (models, options) ->

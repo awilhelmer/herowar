@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Materials extends Backbone.Collection
 
 	initialize: (models, options) ->

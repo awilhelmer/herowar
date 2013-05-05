@@ -1,5 +1,3 @@
-db = require 'database'
-
 class Paths extends Backbone.Collection
 
 	initialize: (models, options) ->
