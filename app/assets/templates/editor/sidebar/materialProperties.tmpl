@@ -1,12 +1,12 @@
 <div class="sidebar-panel-headline">Material Properties</div>
 <div class="sidebar-panel-content">
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="#mp-basis" data-toggle="tab">Basis</a>
-		<li><a href="#mp-color" data-toggle="tab">Color</a>
-		<li><a href="#mp-texture" data-toggle="tab">Texture</a>
+		<li {{#if isActiveTabBasis}}class="active"{{/if}}><a data-toggle="tab" data-target="#mp-basis">Basis</a>
+		<li {{#if isActiveTabColor}}class="active"{{/if}}><a data-toggle="tab" data-target="#mp-color">Color</a>
+		<li {{#if isActiveTabTexture}}class="active"{{/if}}><a data-toggle="tab" data-target="#mp-texture">Texture</a>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane active" id="mp-basis">
+		<div class="tab-pane {{#if isActiveTabBasis}}active{{/if}}" id="mp-basis">
 			<div class="sidebar-headline">Basis Settings</div>
 			<div>
 				<form class="form-horizontal">
@@ -29,7 +29,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="tab-pane" id="mp-color">
+		<div class="tab-pane {{#if isActiveTabColor}}active{{/if}}" id="mp-color">
 			<div class="sidebar-headline">Color Settings</div>
 			<div>
 				<form class="form-horizontal">
@@ -48,7 +48,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="tab-pane" id="mp-texture">
+		<div class="tab-pane {{#if isActiveTabTexture}}active{{/if}}" id="mp-texture">
 			<div class="sidebar-headline">Texture Settings</div>
 			<div>
 				{{#each textures}}
