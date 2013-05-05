@@ -95,7 +95,10 @@ public class Editor extends Controller {
       return badRequest(errorMessage);
     }
     saveMap(map);
-    return ok(toJson(map));
+    // Flushing for new Id
+    JPA.em().flush();
+    log.info(String.format("Map Id <%s> successfully saved!", map.getId()));
+    return ok(toJson(map.getId()));
   }
 
   private static boolean isValid(Map map) {

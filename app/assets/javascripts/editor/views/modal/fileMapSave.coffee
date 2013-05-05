@@ -61,8 +61,10 @@ class ModalFileMapSave extends BaseModalView
 		#console.log obj
 		JSON.stringify obj
 
+#Data is saved Map Id
 	onSuccess: (data, textStatus, jqXHR) =>
 		console.log 'Save map SUCCESS'
+		window.location.href = "/editor?map=" + data
 		@status.isSuccessful = true
 
 	onError: (jqXHR, textStatus, errorThrown) =>
@@ -72,5 +74,6 @@ class ModalFileMapSave extends BaseModalView
 	onDone: =>
 		log.info 'Saved map successfully'
 		@status.isSaving = false	
+		
 
 return ModalFileMapSave
