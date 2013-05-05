@@ -12,6 +12,7 @@ worldToObjectConverter =
 		@convertThreeGeometry obj
 		@addObjects obj
 		@addPaths obj
+		@addWaves obj
 		console.log obj
 		return obj
 
@@ -116,5 +117,12 @@ worldToObjectConverter =
 			for currentWaypoint in currentWaypoints
 				path.waypoints.push _.pick currentWaypoint.attributes, 'id', 'name', 'position'
 			obj.paths.push path
+
+	addWaves: (obj) ->
+		waves = db.get 'waves'
+		obj.waves = []
+		for currentWave in waves.models
+			wave = _.pick currentWave.attributes, 'id', 'name', 'prepareTime', 'waveTime', 'quantity', 'path', 'unit'
+			obj.waves.push wave
 
 return worldToObjectConverter
