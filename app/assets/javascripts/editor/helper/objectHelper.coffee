@@ -38,10 +38,8 @@ class ObjectHelper
 					mesh.material.materials[0].needsUpdate = true
 
 	getBaseObject: (obj) ->	
-		if obj
-			while !_.isUndefined obj.parent
-					obj = obj.parent
-					break if obj.parent instanceof THREE.Scene
+		unless obj then return
+		obj = obj.parent while not _.isUndefined(obj.parent) and not (obj.parent instanceof THREE.Scene)
 		obj
 	
 	getWireframe: (obj) ->
