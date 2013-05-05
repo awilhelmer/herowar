@@ -6,9 +6,11 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import models.entity.game.GeoMetaData;
 import models.entity.game.Vector3;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -71,6 +73,8 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
             fieldName = annoName.name();
           }
           if (value != null && !field.isAnnotationPresent(JsonIgnore.class)) {
+            if (obj.getClass() == GeoMetaData.class && fieldName.toLowerCase().startsWith("geometry"))
+              log.info("ILLEGAL CIRCLE IN GEOMETADATA");
             if (type.isAssignableFrom(String.class)) {
               if (field != null && field.isAnnotationPresent(StringArray.class)) {
                 StringArray anno = field.getAnnotation(StringArray.class);
@@ -111,6 +115,8 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
               jgen.writeNumberField(fieldName, (Short) value);
             } else if (type.isAssignableFrom(Boolean.class)) {
               jgen.writeBooleanField(fieldName, (Boolean) value);
+            } else if (type.isAssignableFrom(Date.class)) {
+              jgen.writeNumberField(fieldName, ((Date) value).getTime());
             } else if (type.isAssignableFrom(Vector3.class)) {
               Vector3 vec = (Vector3) value;
               jgen.writeObjectField(fieldName, vec);

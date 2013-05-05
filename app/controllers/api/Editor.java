@@ -1,7 +1,7 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-import game.json.MeshExcludeGeometryMixin;
+import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -1,6 +1,6 @@
 package controllers.api.game;
 
-import game.json.EnvironmentExcludeGeoMixin;
+import game.json.excludes.EnvironmentExcludeGeoMixin;
 
 import java.io.IOException;
 

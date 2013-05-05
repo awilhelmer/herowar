@@ -1,4 +1,4 @@
-package game.json;
+package game.json.excludes;
 
 import models.entity.game.Geometry;
 
