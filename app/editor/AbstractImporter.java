@@ -8,6 +8,11 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import models.entity.game.Geometry;
 import models.entity.game.Material;
 
@@ -41,8 +46,10 @@ public abstract class AbstractImporter<E extends Serializable> {
     getLogger().info("Starting synchronize between folder and database");
     File baseFolder = new File(Play.application().path(), getBaseFolder());
     E root = createEntry("Root", null);
-    readDirectory(baseFolder, root);
-    JPA.em().persist(root);
+    if (root != null) {
+      readDirectory(baseFolder, root);
+      JPA.em().persist(root);
+    }
     getLogger().info("Finish synchronize between folder and database");
   }
 
@@ -59,10 +66,15 @@ public abstract class AbstractImporter<E extends Serializable> {
           getLogger().info("Found geometry: " + file.getAbsolutePath());
           child = createEntry(file, parent);
           if (PropertyUtils.isReadable(child, "geometry")) {
-            PropertyUtils.setProperty(child, "geometry", parseGeometryFile(file));
+            Geometry geo = (Geometry) PropertyUtils.getProperty(child, "geometry");
+            Geometry newGeo = parseGeometryFile(file);
+            syncGeometry(geo, newGeo);
+            PropertyUtils.setProperty(child, "geometry", newGeo);
+
           } else {
             getLogger().warn(String.format("Property geometry not found on Class <%s>", child.getClass()));
           }
+
         }
         if (PropertyUtils.isReadable(child, "children")) {
           Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
@@ -78,6 +90,22 @@ public abstract class AbstractImporter<E extends Serializable> {
     }
   }
 
+  private void syncGeometry(Geometry geo, Geometry newGeo) {
+    if (geo != null && geo.getId() != null) {
+      getLogger().info("Sync geo Id: " + geo.getId());
+      newGeo.setId(geo.getId());
+      newGeo.setVersion(geo.getVersion());
+      if (newGeo.getMaterials().equals(geo.getMaterials())) {
+        newGeo.setMaterials(geo.getMaterials());
+        newGeo.setGeoMaterials(geo.getGeoMaterials());
+      }
+      newGeo.getMetadata().setId(geo.getMetadata().getId());
+      newGeo.setMetadata(JPA.em().merge(newGeo.getMetadata()));
+      newGeo.setMeshes(geo.getMeshes());
+      newGeo = JPA.em().merge(newGeo);
+    }
+  }
+
   private E createEntry(File file, E parent) {
     try {
       return createEntry(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
@@ -89,23 +117,43 @@ public abstract class AbstractImporter<E extends Serializable> {
 
   private E createEntry(String name, E parent) {
     E entry = null;
-    try {
-      entry = clazz.newInstance();
-      if (PropertyUtils.isReadable(entry, "name")) {
-        PropertyUtils.setProperty(entry, "name", name);
-      } else {
-        getLogger().warn(String.format("Property name not found on Class <%s>", entry.getClass()));
+
+    entry = getByName(clazz, name);
+    if (entry == null) {
+      try {
+        entry = clazz.newInstance();
+        if (PropertyUtils.isReadable(entry, "name")) {
+          PropertyUtils.setProperty(entry, "name", name);
+        } else {
+          getLogger().warn(String.format("Property name not found on Class <%s>", entry.getClass()));
+        }
+        if (parent != null && PropertyUtils.isReadable(entry, "parent")) {
+          PropertyUtils.setProperty(entry, "parent", parent);
+        } else {
+          getLogger().warn(String.format("Property parent not found on Class <%s>", entry.getClass()));
+        }
+      } catch (Exception e) {
+        getLogger().error("", e);
       }
-      if (parent != null && PropertyUtils.isReadable(entry, "parent")) {
-        PropertyUtils.setProperty(entry, "parent", parent);
-      } else {
-        getLogger().warn(String.format("Property parent not found on Class <%s>", entry.getClass()));
-      }
-    } catch (Exception e) {
-      getLogger().error("", e);
+
     }
 
     return entry;
+  }
+
+  private E getByName(Class<E> clazz, String name) {
+    E result = null;
+    CriteriaBuilder builder = JPA.em().getCriteriaBuilder();
+    CriteriaQuery<E> q = builder.createQuery(clazz);
+    Root<E> root = q.from(clazz);
+    q.where(builder.equal(root.get("name"), name));
+    try {
+      result = JPA.em().createQuery(q).getSingleResult();
+    } catch (NoResultException e) {
+      // nothing
+    }
+
+    return result;
   }
 
   private Geometry parseGeometryFile(File file) {
