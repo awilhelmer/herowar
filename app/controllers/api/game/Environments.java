@@ -1,8 +1,10 @@
 package controllers.api.game;
 
-import game.json.excludes.EnvironmentExcludeGeoMixin;
+import game.json.excludes.ExcludeGeometryMixin;
 
 import java.io.IOException;
+
+import models.entity.game.Environment;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -17,15 +19,15 @@ import dao.game.EnvironmentDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
+public class Environments extends BaseAPI<Long, Environment> {
 
-  private static final Logger.ALogger log = Logger.of(Environment.class);
+  private static final Logger.ALogger log = Logger.of(Environments.class);
   
-  private Environment() {
-    super(Long.class, models.entity.game.Environment.class);
+  private Environments() {
+    super(Long.class, Environment.class);
   }
 
-  public static final Environment instance = new Environment();
+  public static final Environments instance = new Environments();
 
   @Transactional
   public static Result list() {
@@ -36,7 +38,7 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
   @Transactional
   public static Result root() {
     ObjectMapper mapper = new ObjectMapper();
-    mapper.getSerializationConfig().addMixInAnnotations(models.entity.game.Environment.class, EnvironmentExcludeGeoMixin.class);
+    mapper.getSerializationConfig().addMixInAnnotations(Environment.class, ExcludeGeometryMixin.class);
     try {
       return ok(mapper.writeValueAsString(EnvironmentDAO.getRoot()));
     } catch (IOException e) {

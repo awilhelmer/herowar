@@ -35,9 +35,9 @@ PUT			/api/news/:id												controllers.api.News.update(id: Long)
 DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
 POST		/api/news														controllers.api.News.add()
 
-GET			/api/game/environment/all						controllers.api.game.Environment.list()
-GET			/api/game/environment/root					controllers.api.game.Environment.root()
-GET			/api/game/environment/:id						controllers.api.game.Environment.show(id: Long)
+GET			/api/game/environment/all						controllers.api.game.Environments.list()
+GET			/api/game/environment/root					controllers.api.game.Environments.root()
+GET			/api/game/environment/:id						controllers.api.game.Environments.show(id: Long)
 
 GET			/api/game/geometry/all							controllers.api.game.Geometries.list()
 GET			/api/game/geometry/env/:id					controllers.api.game.Geometries.showByEnv(id: Long)
@@ -57,6 +57,10 @@ GET			/api/game/terrain/:id								controllers.api.game.Terrains.show(id: Long)
 PUT			/api/game/terrain/:id								controllers.api.game.Terrains.update(id: Long)
 DELETE	/api/game/terrain/:id								controllers.api.game.Terrains.delete(id: Long)
 POST		/api/game/terrain										controllers.api.game.Terrains.add()
+
+GET			/api/game/unit/all									controllers.api.game.Units.list()
+GET			/api/game/unit/root									controllers.api.game.Units.root()
+GET			/api/game/unit/:id									controllers.api.game.Units.show(id: Long)
 
 GET			/api/editor/map/default							controllers.api.Editor.mapDefault()
 GET			/api/editor/map/:id									controllers.api.Editor.mapShow(id: Long)
