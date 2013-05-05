@@ -14,7 +14,7 @@ class ObjectHelper
 
 	addWireframe: (obj, color) ->
 		#TODO hard coded children access ...
-		if (obj)
+		if obj
 			@wireFrameMaterials.materials[0].color.set color
 			@wireFrameMaterials.materials[0].needsUpdate = true
 			mesh = new THREE.Mesh obj.children[0].geometry.clone(), @wireFrameMaterials

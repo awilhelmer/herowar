@@ -16,6 +16,7 @@ class ObjectProperties extends BasePropertiesView
 	
 	bindEvents: ->
 		EditorEventbus.selectObjectUI.add @selectItem
+		EditorEventbus.selectObjectViewport.add @selectItem
 
 	selectItem: (value) =>
 		@model = db.get 'environmentsStatic', value

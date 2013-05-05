@@ -23,17 +23,19 @@ class SelectorObject
 	onMouseMove: ->
 	
 	update: ->
-		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
+		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
 		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
-			if @objectHelper.isTerrain 
+			if @objectHelper.isTerrain obj
 				@selectedType = 'terrain'
-				@addSelectionWireframe obj, @selectedType
 				EditorEventbus.dispatch 'selectTerrainViewport'
 			else 
-				@selectedType = 'object'
-				EditorEventbus.dispatch 'selectObjectViewport'
+				list = db.get('environmentsStatic').where dbId: obj.userData.dbId, listIndex: obj.userData.listIndex
+				if list.length > 0
+					@selectedType = 'object'
+					EditorEventbus.dispatch 'selectObjectViewport', list[0].get 'id'
+			@addSelectionWireframe obj, @selectedType
 			@selectedObject = obj
 		else
 			@selectedType = 'world'
@@ -42,7 +44,7 @@ class SelectorObject
 		@editor.engine.render()
 
 	selectWorld: =>
-		@removeSelectionWireframe @editor.engine.scenegraph.getMap(), @selectedType if @selectedObject and @selectedType is 'terrain'
+		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
 		@selectedType = 'world'
 		@selectedObject = null
 		@editor.engine.render()
@@ -50,7 +52,7 @@ class SelectorObject
 	selectTerrain: =>
 		if @selectedObject and @selectedType isnt 'terrain'
 			@removeSelectionWireframe @selectedObject, @selectedType
-		else if @selectedType isnt 'terrain'
+		if @selectedType isnt 'terrain'
 			@selectedObject = @editor.engine.scenegraph.getMap()
 			@selectedType = 'terrain'
 			@addSelectionWireframe @selectedObject, @selectedType
