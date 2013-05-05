@@ -83,11 +83,15 @@ public abstract class AbstractImporter<E extends Serializable> {
         }
         if (PropertyUtils.isReadable(child, "children")) {
           Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
+          if (JPA.em().contains(child)) {
+            child = JPA.em().merge(child);
+          }
           childs.add(child);
 
         } else {
           getLogger().warn(String.format("Property children not found on Class <%s>", child.getClass()));
         }
+
       }
 
     } catch (Exception e) {
