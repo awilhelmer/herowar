@@ -238,16 +238,7 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
         while (!item.startsWith("\"")) {
           item = item.substring(1);
         }
-        Map<String, String> properties = new HashMap<String, String>();
-        int nextIndex2 = item.indexOf(",\"");
-        while (nextIndex2 != -1) {
-          String property = item.substring(0, nextIndex2);
-          String[] parts = property.split(":");
-          properties.put(parts[0], parts[1]);
-          item = item.substring(nextIndex2 + 2);
-          nextIndex2 = item.indexOf(",\"");
-        }
-        objects.add(properties);
+        objects.add(parseObjectProperties(item));
         value = value.substring(nextIndex + 1);
         nextIndex = value.indexOf("}");
       }
@@ -256,13 +247,38 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
         for (Map<String, String> obj : objects) {
           jgen.writeStartObject();
           for (Map.Entry<String, String> entry : obj.entrySet()) {
-            jgen.writeStringField(entry.getKey(), entry.getValue());
+            if (entry.getValue().startsWith("[")) {
+              writeStringAsDoubleArray(jgen, entry.getKey(), entry.getValue());
+            } else {
+              jgen.writeStringField(entry.getKey(), entry.getValue());
+            }
           }
           jgen.writeEndObject();
         }
       }
       jgen.writeEndArray();
     }
+  }
+  
+  private Map<String, String> parseObjectProperties(String object) {
+    Map<String, String> properties = new HashMap<String, String>();
+    int index = object.indexOf(",\"");
+    boolean isLast = true;
+    while (index != -1 || isLast) {
+      String property = index != -1 ? object.substring(0, index) : object;
+      String[] parts = property.split(":");
+      if (parts.length == 2) {
+        String key = parts[0].replaceAll("\"", "");
+        String value = parts[1].replaceAll("\"", "");
+        properties.put(key, value);
+        object = object.substring(index + 2);
+        if (index == -1) {
+          isLast = false;
+        }
+        index = object.indexOf(",\"");
+      }
+    }
+    return properties;
   }
 
   protected void writeStringField(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
