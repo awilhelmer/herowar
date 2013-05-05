@@ -110,6 +110,8 @@ public abstract class AbstractImporter<E extends Serializable> {
       newGeo.getMetadata().setId(geo.getMetadata().getId());
       newGeo.setMetadata(JPA.em().merge(newGeo.getMetadata()));
       newGeo.setMeshes(geo.getMeshes());
+      newGeo.setCdate(geo.getCdate());
+      
       newGeo = JPA.em().merge(newGeo);
     }
   }
