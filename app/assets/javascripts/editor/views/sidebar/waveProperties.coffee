@@ -43,6 +43,7 @@ class WaveProperties extends BasePropertiesView
 
 	selectWave: (value) =>
 		@model = db.get 'waves', value
+		EditorEventbus.dispatch 'listSetItem', 'sidebar-properties-wave-unit-list', @model.get 'unit'
 		@render()
 
 	listSelectItem: (id, value, name) =>

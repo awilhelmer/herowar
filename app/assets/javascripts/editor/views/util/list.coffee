@@ -19,6 +19,10 @@ class List extends BaseView
 
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
+		EditorEventbus.listSetItem.add @setItem
+
+	setItem: (id, value) =>
+		@selectedVal = value if id is @$el.attr 'id'
 
 	selectElement: (event) =>
 		unless event then return
