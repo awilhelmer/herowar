@@ -35,6 +35,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   @Transactional
   public static Result list() {
+    log.warn("called listAll without Excludes!");
     return instance.listAll();
   }
 

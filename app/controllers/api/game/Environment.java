@@ -1,6 +1,6 @@
 package controllers.api.game;
 
-import game.json.EnvironmentExcludeGeoMixin;
+import game.json.excludes.EnvironmentExcludeGeoMixin;
 
 import java.io.IOException;
 
@@ -29,6 +29,7 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
 
   @Transactional
   public static Result list() {
+    log.warn("called listAll without Excludes!");
     return instance.listAll(); 
   }
   

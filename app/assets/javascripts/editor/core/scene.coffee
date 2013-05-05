@@ -131,10 +131,12 @@ class Scene
 					mesh.position = new THREE.Vector3 instance.position.x,instance.position.y,instance.position.z
 					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
 					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
+					mesh.userData.meshId = instance.id
 					@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
 					id = @editor.engine.scenegraph.getNextId()
 					environmentsStatic = db.get 'environmentsStatic'
 					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
+		@editor.engine.render()
 		null
 
 	#TODO central static code please!
@@ -143,6 +145,7 @@ class Scene
 		env.set
 			id 				: id
 			dbId			: mesh.userData.dbId
+			meshId		:	mesh.userData.meshId
 			listIndex	: mesh.userData.listIndex
 			name 			: name
 			position	:

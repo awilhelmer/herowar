@@ -2,6 +2,7 @@ package controllers.api.game;
 
 import static play.libs.Json.toJson;
 import models.entity.game.Terrain;
+import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -13,6 +14,7 @@ import controllers.api.BaseAPI;
  * @author Sebastian Sachtleben
  */
 public class Terrains extends BaseAPI<Long, Terrain> {
+  private static final Logger.ALogger log = Logger.of(Terrains.class);
 
   private Terrains() {
     super(Long.class, Terrain.class);
@@ -22,7 +24,8 @@ public class Terrains extends BaseAPI<Long, Terrain> {
 
   @Transactional
   public static Result list() {
-    return  instance.listAll(); 
+    log.warn("called listAll without Excludes!");
+    return instance.listAll();
   }
 
   @Transactional

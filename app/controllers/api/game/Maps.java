@@ -1,7 +1,16 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
+import game.json.excludes.MapDataExcludeMixin;
+
+import java.io.IOException;
+import java.util.List;
+
 import models.entity.game.Map;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -13,6 +22,7 @@ import controllers.api.BaseAPI;
  * @author Sebastian Sachtleben
  */
 public class Maps extends BaseAPI<Long, Map> {
+  private static final Logger.ALogger log = Logger.of(Maps.class);
 
   private Maps() {
     super(Long.class, Map.class);
@@ -22,8 +32,20 @@ public class Maps extends BaseAPI<Long, Map> {
 
   @Transactional
   public static Result list() {
+    List<Map> result = instance.getAll();
+    for (Map map : result) {
+      JPA.em().detach(map);
+    }
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(Map.class, MapDataExcludeMixin.class);
+    try {
+      return ok(mapper.writeValueAsString(result));
+    } catch (IOException e) {
+      log.error("Failed to serialize root environment:", e);
+    }
 
-    return instance.listAll();
+    return badRequest("Unexpected error occurred");
+
   }
 
   @Transactional

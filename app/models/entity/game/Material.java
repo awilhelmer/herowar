@@ -54,6 +54,8 @@ public class Material implements Serializable {
   private Boolean depthTest;
   private Boolean depthWrite;
 
+  private Integer sortIndex;
+
   @StringArray(type = ArrayType.STRING)
   private String mapDiffuseWrap;
   private String shading;
@@ -279,6 +281,14 @@ public class Material implements Serializable {
 
   public void setMaterialId(Long materialId) {
     this.materialId = materialId;
+  }
+
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
   }
 
   @Override

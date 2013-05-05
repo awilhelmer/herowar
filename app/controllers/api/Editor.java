@@ -1,7 +1,7 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-import game.json.MeshExcludeGeometryMixin;
+import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -31,6 +31,7 @@ import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 import dao.game.MapDAO;
 import dao.game.MaterialDAO;
+import dao.game.MeshDAO;
 
 public class Editor extends Controller {
 
@@ -120,8 +121,14 @@ public class Editor extends Controller {
         if (mesh.getGeometry().getId() != null) {
           mesh.setMap(map);
           mesh.setGeometry(GeometryDAO.getInstance().findUnique(mesh.getGeometry().getId()));
-          meshes.add(mesh);
         }
+        if (mesh.getId() == null || mesh.getId().intValue() < 0) {
+          mesh.setId(null);
+        } else {
+          mesh = MeshDAO.getInstance().merge(mesh);
+        }
+        meshes.add(mesh);
+
       }
       map.setObjects(meshes);
     }
