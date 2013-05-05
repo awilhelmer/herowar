@@ -3,17 +3,15 @@ package controllers.api.game;
 import game.json.excludes.ExcludeGeometryMixin;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+
+import models.entity.game.Unit;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
-import models.entity.game.Environment;
-import models.entity.game.Unit;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
 import controllers.api.BaseAPI;
-import dao.game.EnvironmentDAO;
 import dao.game.UnitDAO;
 
 /**
@@ -42,8 +40,9 @@ public class Units extends BaseAPI<Long, Unit> {
     ObjectMapper mapper = new ObjectMapper();
     mapper.getSerializationConfig().addMixInAnnotations(Unit.class, ExcludeGeometryMixin.class);
     try {
-      return ok(mapper.writeValueAsString(UnitDAO.getInstance().getRootEntity()));
-    } catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+      Unit root = UnitDAO.getInstance().getByName("Root");
+      return ok(mapper.writeValueAsString(root.getChildren()));
+    } catch (IOException e) {
       log.error("Failed to serialize root unit:", e);
     }
     return badRequest("Unexpected error occurred");
