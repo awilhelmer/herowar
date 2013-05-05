@@ -35,8 +35,8 @@ public class Units extends BaseAPI<Long, Unit> {
     return instance.listAll(); 
   }
   
-//  @Transactional
-//  public static Result root() {
+  @Transactional
+  public static Result root() {
 //    ObjectMapper mapper = new ObjectMapper();
 //    mapper.getSerializationConfig().addMixInAnnotations(Unit.class, ExcludeGeometryMixin.class);
 //    try {
@@ -44,8 +44,8 @@ public class Units extends BaseAPI<Long, Unit> {
 //    } catch (IOException e) {
 //      log.error("Failed to serialize root unit:", e);
 //    }
-//    return badRequest("Unexpected error occurred");
-//  }
+    return badRequest("Unexpected error occurred");
+  }
 
   @Transactional
   public static Result show(Long id) {
