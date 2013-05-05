@@ -100,8 +100,7 @@ public abstract class AbstractImporter<E extends Serializable> {
       getLogger().info("Sync geo Id: " + geo.getId());
       newGeo.setId(geo.getId());
       newGeo.setVersion(geo.getVersion());
-      if (newGeo.getMaterials().equals(geo.getMaterials())) {
-        newGeo.setMaterials(geo.getMaterials());
+      if (newGeo.getGeoMaterials().equals(geo.getGeoMaterials())) {
         newGeo.setGeoMaterials(geo.getGeoMaterials());
       }
       newGeo.getMetadata().setId(geo.getMetadata().getId());
