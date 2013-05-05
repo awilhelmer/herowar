@@ -23,6 +23,7 @@ import dao.SecurityRoleDAO;
 import dao.UserDAO;
 import dao.game.MapDAO;
 import editor.EnvironmentImporter;
+import editor.UnitImporter;
 import game.GamesHandler;
 import game.network.handler.WebSocketHandler;
 
@@ -80,6 +81,7 @@ public class Global extends GlobalSettings {
         initialSecurityRoles();
         initEventBus();
         EnvironmentImporter.getInstance().sync();
+        UnitImporter.getInstance().sync();
         WebSocketHandler.getInstance();
         GamesHandler.getInstance();
         createAdminUser();
