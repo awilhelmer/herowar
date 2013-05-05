@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 /**
  * @author Sebastian Sachtleben
  */
-@Entity
+//@Entity
 @SuppressWarnings("serial")
 public class Army implements Serializable {
 

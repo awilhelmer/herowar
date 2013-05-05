@@ -5,11 +5,13 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  * @author Sebastian Sachtleben
@@ -21,16 +23,19 @@ public class Wave implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
+
   @ManyToOne
   private Map map;
-  
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="wave")
-  private Set<Army> armies;
 
-  
-  // GETTER & SETTER //  
-  
+  // @OneToMany(cascade = CascadeType.ALL, mappedBy="wave")
+  // private Set<Army> armies;
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(name = "wave_units")
+  private Set<Unit> units;
+
+  // GETTER & SETTER //
+
   public Long getId() {
     return id;
   }
@@ -47,13 +52,20 @@ public class Wave implements Serializable {
     this.map = map;
   }
 
-  public Set<Army> getArmies() {
-    return armies;
+  public Set<Unit> getUnits() {
+    return units;
   }
 
-  public void setArmies(Set<Army> armies) {
-    this.armies = armies;
+  public void setUnits(Set<Unit> units) {
+    this.units = units;
   }
 
- 
+  // public Set<Army> getArmies() {
+  // return armies;
+  // }
+  //
+  // public void setArmies(Set<Army> armies) {
+  // this.armies = armies;
+  // }
+
 }
