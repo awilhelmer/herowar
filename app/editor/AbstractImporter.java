@@ -48,8 +48,12 @@ public abstract class AbstractImporter<E extends Serializable> {
     E root = createEntry("Root", null);
     if (root != null) {
       readDirectory(baseFolder, root);
-      if (!JPA.em().contains(root))
+      if (!JPA.em().contains(root)) {
         JPA.em().persist(root);
+      } else {
+        root = JPA.em().merge(root);
+      }
+
     }
     getLogger().info("Finish synchronize between folder and database");
   }
