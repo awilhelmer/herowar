@@ -22,7 +22,7 @@ import dao.NewsDAO;
 import dao.SecurityRoleDAO;
 import dao.UserDAO;
 import dao.game.MapDAO;
-import editor.EnvironmentHandler;
+import editor.EnvironmentImporter;
 import game.GamesHandler;
 import game.network.handler.WebSocketHandler;
 
@@ -79,7 +79,7 @@ public class Global extends GlobalSettings {
       public void invoke() throws Throwable {
         initialSecurityRoles();
         initEventBus();
-        EnvironmentHandler.getInstance().sync();
+        EnvironmentImporter.getInstance().sync();
         WebSocketHandler.getInstance();
         GamesHandler.getInstance();
         createAdminUser();

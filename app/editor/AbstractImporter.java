@@ -3,11 +3,9 @@ package editor;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
-
-import models.entity.game.Environment;
-import models.entity.game.Geometry;
-import models.entity.game.Material;
 
 import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,71 +13,68 @@ import org.codehaus.jackson.map.ObjectMapper;
 import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
+
+import models.entity.game.Environment;
+import models.entity.game.Geometry;
+import models.entity.game.Material;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
 
 /**
- * The EnvironmentHandler synchronize between our geometries environment folder
- * and our database.
+ * The AbstractImporter provides basic functionality to import json js files to
+ * our database.
  * 
  * @author Sebastian Sachtleben
  */
-@SuppressWarnings("serial")
-public class EnvironmentHandler implements Serializable {
+public abstract class AbstractImporter<E extends Serializable> {
 
-  public static final String ENVIRONMENT_FOLDER_PATH = "public" + File.separator + "geometries" + File.separator + "environment";
-
-  private static final Logger.ALogger log = Logger.of(EnvironmentHandler.class);
-
-  private static EnvironmentHandler instance;
+  private static final Logger.ALogger log = Logger.of(AbstractImporter.class);
 
   private static ObjectMapper mapper = new ObjectMapper();
 
-  public static EnvironmentHandler getInstance() {
-    if (instance == null) {
-      instance = new EnvironmentHandler();
-    }
-    return instance;
+  private Class<E> clazz;
+  
+  public AbstractImporter() {
+    this.clazz = getTypeParameterClass();
   }
 
   public void sync() {
-    if (EnvironmentDAO.getEnvironmentCount() != 0)
-      return;
     log.info("Starting synchronize between folder and database");
-    File baseFolder = new File(Play.application().path(), ENVIRONMENT_FOLDER_PATH);
-    Environment root = createEnvironment("Root", null);
+    File baseFolder = new File(Play.application().path(), getBaseFolder());
+    E root = createEntry("Root", null);
     readDirectory(baseFolder, root);
     JPA.em().persist(root);
     log.info("Finish synchronize between folder and database");
   }
 
-  private void readDirectory(File folder, Environment parent) {
+  private void readDirectory(File folder, E parent) {
     for (File file : folder.listFiles()) {
-      Environment child = null;
+      E child = null;
       if (file.isDirectory()) {
         log.info("Found directory: " + file.getAbsolutePath());
-        child = createEnvironment(file, parent);
+        child = createEntry(file, parent);
         readDirectory(file, child);
       } else {
         log.info("Found geometry: " + file.getAbsolutePath());
-        child = createEnvironment(file, parent);
+        child = createEntry(file, parent);
         child.setGeometry(parseGeometryFile(file));
       }
       parent.getChildren().add(child);
     }
   }
 
-  private Environment createEnvironment(File file, Environment parent) {
-    return createEnvironment(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
+  private E createEntry(File file, E parent) {
+    return createEntry(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
   }
 
-  private Environment createEnvironment(String name, Environment parent) {
-    Environment environment = new Environment(name);
+  private E createEntry(String name, E parent) {
+    E entry = clazz.newInstance();
+    entry.setName(name);
     if (parent != null) {
-      environment.setParent(parent);
+      entry.setParent(parent);
     }
-    return environment;
+    return entry;
   }
 
   private Geometry parseGeometryFile(File file) {
@@ -88,7 +83,7 @@ public class EnvironmentHandler implements Serializable {
       for (Material mat : geo.getMaterials()) {
         mat.setName(mat.getDbgName());
       }
-      
+
       Map<Integer, Material> matMap = MaterialDAO.mapAndSave(geo.getMaterials());
       GeometryDAO.createGeoMaterials(geo, matMap);
       return geo;
@@ -97,5 +92,15 @@ public class EnvironmentHandler implements Serializable {
     }
     return null;
   }
+  
+  @SuppressWarnings("unchecked")
+  private Class<E> getTypeParameterClass()
+  {
+      Type type = getClass().getGenericSuperclass();
+      ParameterizedType paramType = (ParameterizedType) type;
+      return (Class<E>) paramType.getActualTypeArguments()[0];
+  }
+  
+  public abstract String getBaseFolder();
 
 }
