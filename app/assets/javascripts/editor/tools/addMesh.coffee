@@ -48,8 +48,9 @@ class AddObject extends SelectorTerrain
 		@addMesh()
 
 	addMesh: ->
-		@tool.get('currentMesh').visible = false
-		@editor.engine.scenegraph.addStaticObject @tool.get('currentMesh'), @tool.get('currentMeshId')
+		mesh = @tool.get('currentMesh')
+		mesh.visible = false
+		@editor.engine.scenegraph.addStaticObject mesh, @tool.get('currentMeshId')
 		@editor.engine.render()
 
 	createModelFromMesh: (id, mesh) ->
@@ -57,6 +58,7 @@ class AddObject extends SelectorTerrain
 		env.set
 			id 				: id
 			dbId			: mesh.userData.dbId
+			meshId		:	id * -1
 			listIndex	: mesh.userData.listIndex
 			name 			: "#{mesh.name}-#{id}"
 			position	:

@@ -49,11 +49,11 @@ public class Mesh implements Serializable {
       @AttributeOverride(name = "z", column = @Column(name = "scale_z")) })
   private Vector3 scale;
 
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, optional = false)
   @JoinColumn(name = "geo_id", referencedColumnName = "id")
   private Geometry geometry;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
   @JoinColumn(name = "map_id", referencedColumnName = "id")
   @JsonIgnore
   private Map map;
