@@ -1,11 +1,11 @@
 <div class="sidebar-panel-headline">Wave Properties</div>
 <div class="sidebar-panel-content">
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" data-target="#wp-basis">Basis</a>
-		<li><a data-toggle="tab" data-target="#wp-unit">Unit</a>
+		<li {{#if isActiveTabBasis}}class="active"{{/if}}><a data-toggle="tab" data-target="#wp-basis">Basis</a>
+		<li {{#if isActiveTabUnit}}class="active"{{/if}}><a data-toggle="tab" data-target="#wp-unit">Unit</a>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane active" id="wp-basis">
+		<div class="tab-pane {{#if isActiveTabBasis}}active{{/if}}" id="wp-basis">
 			<div class="sidebar-headline">Basis Settings</div>
 			<form class="form-horizontal">
 				<div class="control-group">
@@ -44,9 +44,9 @@
 				</div>
 			</form>
 		</div>
-		<div class="tab-pane" id="wp-unit">
+		<div class="tab-pane {{#if isActiveTabUnit}}active{{/if}}" id="wp-unit">
 			<div class="sidebar-headline">Unit</div>
-			<div id="sidebar-properties-wave-unit-list" class="list" data-view="views/util/list" data-entity="units"></div>
+			<div id="sidebar-properties-wave-unit-list" class="list" data-view="views/util/list" data-entity="units" data-selected="{{unit}}"></div>
 		</div>
 	</div>
 </div>

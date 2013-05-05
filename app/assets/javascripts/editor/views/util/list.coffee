@@ -13,8 +13,8 @@ class List extends BaseView
 
 	initialize: (options) ->
 		@entity = @$el.data 'entity'
-		@$el.removeAttr 'data-entity'
-		@selectedVal = null
+		@selectedVal = @$el.data 'selected'
+		@$el.removeAttr 'data-entity data-selected'
 		super options
 
 	bindEvents: ->

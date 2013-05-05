@@ -28,7 +28,8 @@ class WaveProperties extends BasePropertiesView
 		super options
 
 	bindEvents: ->
-		EditorEventbus.selectWaveUI.add @selectItem
+		EditorEventbus.selectWaveUI.add @selectWave
+		EditorEventbus.listSelectItem.add @listSelectItem
 
 	changeTab: (event) ->
 		unless event then return
@@ -40,13 +41,18 @@ class WaveProperties extends BasePropertiesView
 			units = db.get 'units'
 			units.fetch()
 
-	selectItem: (value) =>
+	selectWave: (value) =>
 		@model = db.get 'waves', value
 		@render()
+
+	listSelectItem: (id, value, name) =>
+		@model.set 'unit', value if id is 'sidebar-properties-wave-unit-list'
 
 	getTemplateData: ->
 		json = super()
 		json.paths = @getPathsFromDB() if @model
+		json.isActiveTabBasis = @tabs.get('waveProperties') is '#wp-basis'
+		json.isActiveTabUnit = @tabs.get('waveProperties') is '#wp-unit'
 		json
 
 	getPathsFromDB: ->
