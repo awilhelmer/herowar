@@ -35,7 +35,8 @@ public class GeoMetaData implements Serializable {
   @OneToOne(mappedBy = "metadata", cascade = CascadeType.REFRESH)
   private Geometry geometry;
 
-  public GeoMetaData(Long id, Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
+  public GeoMetaData(Long id, Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs,
+      Long materials) {
     this.id = id;
     this.formatVersion = formatVersion;
     this.sourceFile = sourceFile;
@@ -47,7 +48,7 @@ public class GeoMetaData implements Serializable {
     this.uvs = uvs;
     this.materials = materials;
   }
-  
+
   public GeoMetaData(Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
     this(null, formatVersion, sourceFile, generatedBy, vertices, faces, normals, colors, uvs, materials);
   }
@@ -55,7 +56,7 @@ public class GeoMetaData implements Serializable {
   public GeoMetaData(String sourceFile, Long vertices, Long faces, Long normals, Long colors, Long uvs, Long materials) {
     this(null, 3.1F, sourceFile, "WorldEditor", vertices, faces, normals, colors, uvs, materials);
   }
-  
+
   public GeoMetaData() {
     formatVersion = 3.1F;
     sourceFile = "";
@@ -156,6 +157,85 @@ public class GeoMetaData implements Serializable {
 
   public void setGeometry(Geometry geometry) {
     this.geometry = geometry;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((colors == null) ? 0 : colors.hashCode());
+    result = prime * result + ((faces == null) ? 0 : faces.hashCode());
+    result = prime * result + ((formatVersion == null) ? 0 : formatVersion.hashCode());
+    result = prime * result + ((generatedBy == null) ? 0 : generatedBy.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((materials == null) ? 0 : materials.hashCode());
+    result = prime * result + ((normals == null) ? 0 : normals.hashCode());
+    result = prime * result + ((sourceFile == null) ? 0 : sourceFile.hashCode());
+    result = prime * result + ((uvs == null) ? 0 : uvs.hashCode());
+    result = prime * result + ((vertices == null) ? 0 : vertices.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    GeoMetaData other = (GeoMetaData) obj;
+    if (colors == null) {
+      if (other.colors != null)
+        return false;
+    } else if (!colors.equals(other.colors))
+      return false;
+    if (faces == null) {
+      if (other.faces != null)
+        return false;
+    } else if (!faces.equals(other.faces))
+      return false;
+    if (formatVersion == null) {
+      if (other.formatVersion != null)
+        return false;
+    } else if (!formatVersion.equals(other.formatVersion))
+      return false;
+    if (generatedBy == null) {
+      if (other.generatedBy != null)
+        return false;
+    } else if (!generatedBy.equals(other.generatedBy))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (materials == null) {
+      if (other.materials != null)
+        return false;
+    } else if (!materials.equals(other.materials))
+      return false;
+    if (normals == null) {
+      if (other.normals != null)
+        return false;
+    } else if (!normals.equals(other.normals))
+      return false;
+    if (sourceFile == null) {
+      if (other.sourceFile != null)
+        return false;
+    } else if (!sourceFile.equals(other.sourceFile))
+      return false;
+    if (uvs == null) {
+      if (other.uvs != null)
+        return false;
+    } else if (!uvs.equals(other.uvs))
+      return false;
+    if (vertices == null) {
+      if (other.vertices != null)
+        return false;
+    } else if (!vertices.equals(other.vertices))
+      return false;
+    return true;
   }
 
   @Override
