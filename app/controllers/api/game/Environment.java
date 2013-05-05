@@ -29,6 +29,7 @@ public class Environment extends BaseAPI<Long, models.entity.game.Environment> {
 
   @Transactional
   public static Result list() {
+    log.warn("called listAll without Excludes!");
     return instance.listAll(); 
   }
   

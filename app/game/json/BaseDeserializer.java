@@ -66,10 +66,10 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               value = Integer.valueOf(fieldNode.getIntValue()).shortValue();
             } else if (propClass.isAssignableFrom(Boolean.class)) {
               value = fieldNode.getBooleanValue();
-            } 
-//            else if (propClass.isAssignableFrom(Date.class)) {
-//              value = new Date(fieldNode.getLongValue());
-//            }
+            }
+            // else if (propClass.isAssignableFrom(Date.class)) {
+            // value = new Date(fieldNode.getLongValue());
+            // }
             else if (propClass.isAssignableFrom(Vector3.class)) {
               Vector3 vector = new Vector3();
               if (fieldNode.get("x") != null)
@@ -115,8 +115,7 @@ public abstract class BaseDeserializer<T> extends JsonDeserializer<T> {
               parseAll(element, fieldNode, classes);
               value = element;
             } else {
-              log.warn(String.format("Ignored parsing Class: <%s> in Bean <%s> Field <%s>" + propClass.getSimpleName(), result.getClass().getSimpleName(),
-                  field));
+              log.warn(String.format("Ignored parsing Class: <%s> in Bean <%s> Field <%s>", propClass.getSimpleName(), result.getClass().getSimpleName(), field));
             }
             if (value != null) {
               PropertyUtils.setProperty(result, field, value);

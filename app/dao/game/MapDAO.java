@@ -1,6 +1,9 @@
 package dao.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
@@ -54,6 +57,14 @@ public class MapDAO extends BaseDAO<Long, Map> {
         mat.setMaterialId(mat.getId());
         map.getMaterials().add(mat);
       }
+
+      Collections.sort(map.getMaterials(), new Comparator<Material>() {
+        @Override
+        public int compare(Material o1, Material o2) {
+          return o1.getSortIndex().compareTo(o2.getSortIndex());
+        }
+
+      });
       GeometryDAO.mapMaterials(geo);
     }
   }

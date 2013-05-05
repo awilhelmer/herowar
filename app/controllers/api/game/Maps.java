@@ -33,6 +33,9 @@ public class Maps extends BaseAPI<Long, Map> {
   @Transactional
   public static Result list() {
     List<Map> result = instance.getAll();
+    for (Map map : result) {
+      JPA.em().detach(map);
+    }
     ObjectMapper mapper = new ObjectMapper();
     mapper.getSerializationConfig().addMixInAnnotations(Map.class, MapDataExcludeMixin.class);
     try {
