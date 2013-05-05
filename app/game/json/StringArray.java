@@ -10,11 +10,10 @@ import java.lang.annotation.Target;
 public @interface StringArray {
 
   enum ArrayType {
-    INTEGER, DOUBLE, STRING
+    INTEGER, DOUBLE, STRING, OBJECT
   }
 
   ArrayType type();
 
   int dimensions() default 1;
-
 }

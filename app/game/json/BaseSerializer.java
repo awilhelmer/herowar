@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import models.entity.game.GeoMetaData;
@@ -93,6 +97,9 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                   if (dimension > 1) {
                     log.warn(String.format("Field <%s> in Bean <%s>: MultiStringArray in StringArray not supported!", fieldName, clazz.getSimpleName()));
                   }
+                  break;
+                case OBJECT:
+                  writeStringAsObjectArray(jgen, fieldName, value.toString());
                   break;
                 default:
                   log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", fieldName, clazz.getSimpleName(), anno.type()));
@@ -214,6 +221,44 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
         String[] values = (String[]) arrayStringConverter.convert(String[].class, parts);
         for (int i = 0; i < values.length; i++) {
           jgen.writeString(values[i]);
+        }
+      }
+      jgen.writeEndArray();
+    }
+  }
+
+  protected void writeStringAsObjectArray(JsonGenerator jgen, String name, String value) throws JsonGenerationException, IOException {
+    if (value != null && !"".equals(value)) {
+      value = value.substring(1);
+      value = value.substring(0, value.length() - 1);
+      List<Map<String, String>> objects = new ArrayList<Map<String, String>>();
+      int nextIndex = value.indexOf("}");
+      while (nextIndex != -1) {
+        String item = value.substring(0, nextIndex);
+        while (!item.startsWith("\"")) {
+          item = item.substring(1);
+        }
+        Map<String, String> properties = new HashMap<String, String>();
+        int nextIndex2 = item.indexOf(",\"");
+        while (nextIndex2 != -1) {
+          String property = item.substring(0, nextIndex2);
+          String[] parts = property.split(":");
+          properties.put(parts[0], parts[1]);
+          item = item.substring(nextIndex2 + 2);
+          nextIndex2 = item.indexOf(",\"");
+        }
+        objects.add(properties);
+        value = value.substring(nextIndex + 1);
+        nextIndex = value.indexOf("}");
+      }
+      jgen.writeArrayFieldStart(name);
+      if (objects != null && objects.size() > 0) {
+        for (Map<String, String> obj : objects) {
+          jgen.writeStartObject();
+          for (Map.Entry<String, String> entry : obj.entrySet()) {
+            jgen.writeStringField(entry.getKey(), entry.getValue());
+          }
+          jgen.writeEndObject();
         }
       }
       jgen.writeEndArray();

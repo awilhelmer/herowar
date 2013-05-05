@@ -52,7 +52,7 @@ public class Geometry extends BaseModel implements Serializable {
   private String faces;
 
   @Lob
-  @StringArray(type = ArrayType.DOUBLE)
+  @StringArray(type = ArrayType.OBJECT)
   private String morphTargets;
 
   @Lob
