@@ -14,7 +14,10 @@ class WaveProperties extends BasePropertiesView
 	template: templates.get 'sidebar/waveProperties.tmpl'
 
 	events:
-		'change input[name="name"]'				: 'onChangedString'
+		'change input[name="name"]'					: 'onChangedString'
+		'change input[name="prepareTime"]'	: 'onChangedInteger'
+		'change input[name="waveTime"]'			: 'onChangedInteger'
+		'change input[name="quantity"]'			: 'onChangedInteger'
 
 	bindEvents: ->
 		EditorEventbus.selectWaveUI.add @selectItem

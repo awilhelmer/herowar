@@ -11,6 +11,8 @@ worldToObjectConverter =
 		@convertGeometryFaces obj
 		@convertThreeGeometry obj
 		@addObjects obj
+		@addPaths obj
+		console.log obj
 		return obj
 
 	handleMaterials: ->
@@ -102,5 +104,17 @@ worldToObjectConverter =
 			convertedMesh.id = staticObj.meshId
 			objects.push convertedMesh
 		obj.objects = objects
+
+	addPaths: (obj) ->
+		paths = db.get 'paths'
+		waypoints = db.get 'waypoints'
+		obj.paths = []
+		for currentPath in paths.models
+			currentWaypoints = waypoints.where path : currentPath.get 'id'
+			path = _.pick currentPath.attributes, 'id', 'name'
+			path.waypoints = []
+			for currentWaypoint in currentWaypoints
+				path.waypoints.push _.pick currentWaypoint.attributes, 'id', 'name', 'position'
+			obj.paths.push path
 
 return worldToObjectConverter
