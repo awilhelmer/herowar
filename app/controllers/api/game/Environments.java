@@ -3,6 +3,7 @@ package controllers.api.game;
 import game.json.excludes.ExcludeGeometryMixin;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import models.entity.game.Environment;
 
@@ -40,8 +41,8 @@ public class Environments extends BaseAPI<Long, Environment> {
     ObjectMapper mapper = new ObjectMapper();
     mapper.getSerializationConfig().addMixInAnnotations(Environment.class, ExcludeGeometryMixin.class);
     try {
-      return ok(mapper.writeValueAsString(EnvironmentDAO.getRoot()));
-    } catch (IOException e) {
+      return ok(mapper.writeValueAsString(EnvironmentDAO.getInstance().getRootEntity()));
+    } catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
       log.error("Failed to serialize root environment:", e);
     }
     return badRequest("Unexpected error occurred");

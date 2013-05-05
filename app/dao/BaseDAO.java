@@ -9,10 +9,9 @@ import javax.persistence.criteria.Root;
 
 import play.db.jpa.JPA;
 
-public abstract class BaseDAO<K extends Serializable, T extends Object> {
-  @SuppressWarnings("unused")
-  private Class<K> idClass;
-  private Class<T> entityClass;
+public abstract class BaseDAO<K extends Serializable, T extends Object> {  
+  protected Class<K> idClass;
+  protected Class<T> entityClass;
 
   public BaseDAO(Class<K> idClass, Class<T> entityClass) {
     this.idClass = idClass;
@@ -79,5 +78,4 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
   public T merge(T obj) {
     return JPA.em().merge(obj);
   }
-
 }
