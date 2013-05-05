@@ -63,32 +63,37 @@ public abstract class AbstractImporter<E extends Serializable> {
     try {
       for (File file : folder.listFiles()) {
         E child = null;
+        boolean updateGeo = false;
         if (file.isDirectory()) {
           getLogger().info("Found directory: " + file.getAbsolutePath());
           child = createEntry(file, parent);
           readDirectory(file, child);
+          updateGeo = true;
         } else {
           getLogger().info("Found geometry: " + file.getAbsolutePath());
           child = createEntry(file, parent);
           if (PropertyUtils.isReadable(child, "geometry")) {
             Geometry geo = (Geometry) PropertyUtils.getProperty(child, "geometry");
-            Geometry newGeo = parseGeometryFile(file);
-            syncGeometry(geo, newGeo);
-            PropertyUtils.setProperty(child, "geometry", newGeo);
+            if (geo.getUdate().getTime() < file.lastModified()) {
+              Geometry newGeo = parseGeometryFile(file);
+              syncGeometry(geo, newGeo);
+              PropertyUtils.setProperty(child, "geometry", newGeo);
+              updateGeo = true;
+            }
 
           } else {
             getLogger().warn(String.format("Property geometry not found on Class <%s>", child.getClass()));
           }
 
         }
-        if (PropertyUtils.isReadable(child, "children")) {
+        if (PropertyUtils.isReadable(child, "children") && updateGeo) {
           Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
           if (JPA.em().contains(child)) {
             child = JPA.em().merge(child);
           }
           childs.add(child);
 
-        } else {
+        } else if (!updateGeo) {
           getLogger().warn(String.format("Property children not found on Class <%s>", child.getClass()));
         }
 
@@ -111,7 +116,7 @@ public abstract class AbstractImporter<E extends Serializable> {
       newGeo.setMetadata(JPA.em().merge(newGeo.getMetadata()));
       newGeo.setMeshes(geo.getMeshes());
       newGeo.setCdate(geo.getCdate());
-      
+
       newGeo = JPA.em().merge(newGeo);
     }
   }
