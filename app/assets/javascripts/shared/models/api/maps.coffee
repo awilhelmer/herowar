@@ -10,6 +10,10 @@ class APIMaps extends Backbone.Collection
 	url: ->
 		"#{app.resourcePath()}game/map/all"
 
+	fetch: (options) ->
+		console.log 'Fetch maps ...'
+		super options
+
 	parse: (resp) ->
 		db.add "db/maps", entry for entry in resp
 		return resp

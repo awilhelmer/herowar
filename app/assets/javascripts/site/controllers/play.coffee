@@ -1,14 +1,11 @@
-BaseController = require 'controllers/baseController'
+FetchCollectionController = require 'controllers/fetchCollectionController'
 
-###
-    The play controller shows play menu.
+class PlayController extends FetchCollectionController
 
-    @author Sebastian Sachtleben
-###
-class PlayController extends BaseController
+	views:
+		'views/header'	: ''
+		'views/play'		: ''
 
-    views:
-        'views/header'	: ''
-        'views/play'  	: ''
+	collection: 'api/maps'
 
 return PlayController
