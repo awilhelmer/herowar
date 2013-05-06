@@ -3,6 +3,7 @@ RandomPool = require 'helper/randomPool'
 Environment = require 'models/environment'
 Path = require 'models/path'
 Waypoint = require 'models/waypoint'
+Wave = require 'models/wave'
 materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
@@ -167,6 +168,22 @@ class Scene
 			@editor.tools.addWaypoint.nextId = wayId
 			EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
 	 	null
+
+	createWaves: ->
+		waves = db.get 'waves'
+		if @world.attributes.waves
+			waveId = 1
+			for wave in @world.attributes.waves
+				waveDbId = wave.id
+				wave.id = waveId++
+				waveModel = new Wave()
+				waveModel.set wave
+				waveModel.attributes.dbId = waveDbId
+				waveModel.attributes.path = wave.pathId
+				if wave.unitIds and wave.unitIds.length > 0
+					waveModel.attributes.unit =	wave.unitIds[0]
+			EditorEventbus.dispatch 'initIdChanged', 'waves', waveId
+		null
 
 	#TODO central static code please!
 	createModelFromMesh: (id, mesh, name) ->
