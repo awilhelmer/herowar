@@ -23,6 +23,7 @@ import models.entity.game.Waypoint;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.h2.command.dml.Merge;
 
 import play.Logger;
 import play.db.jpa.JPA;
@@ -113,10 +114,7 @@ public class Editor extends Controller {
   }
 
   private static void saveMap(Map map) {
-    Map oldMap = null;
-    if (map.getId() != null) {
-      oldMap = MapDAO.getMapById(map.getId());
-    }
+
     if (map.getTerrain().getGeometry().getMetadata().getGeometry() == null) {
       map.getTerrain().getGeometry().getMetadata().setGeometry(map.getTerrain().getGeometry());
     }
@@ -154,13 +152,13 @@ public class Editor extends Controller {
       }
       map.setObjects(meshes);
     }
+    Set<Long> oldWaypointIds = new HashSet<Long>();
+    Set<Long> oldPathIds = new HashSet<Long>();
 
     if (map.getPaths() != null) {
       Set<Path> paths = new HashSet<Path>();
       for (Path path : map.getPaths()) {
         Set<Waypoint> waypoints = new HashSet<Waypoint>();
-        Set<Long> oldWaypointIds = new HashSet<Long>();
-        Set<Long> oldPathIds = new HashSet<Long>();
         path.setMap(map);
         for (Waypoint waypoint : path.getWaypoints()) {
           waypoint.setPath(path);
@@ -181,25 +179,6 @@ public class Editor extends Controller {
           path.setId(null);
         }
         paths.add(path);
-        // Remove old stuff ...
-        if (oldMap != null) {
-          for (Iterator<Path> pathIt = oldMap.getPaths().iterator(); pathIt.hasNext();) {
-            Path oldPath = pathIt.next();
-            if (!oldPathIds.contains(oldPath.getId())) {
-              pathIt.remove();
-              JPA.em().remove(oldPath);
-            } else {
-              for (Iterator<Waypoint> wayIt = oldPath.getWaypoints().iterator(); wayIt.hasNext();) {
-                Waypoint oldWaypoint = wayIt.next();
-                if (!oldWaypointIds.contains(oldWaypoint.getId())) {
-                  wayIt.remove();
-                  JPA.em().remove(oldWaypoint);
-                }
-              }
-            }
-          }
-
-        }
       }
       map.setPaths(paths);
 
@@ -208,10 +187,26 @@ public class Editor extends Controller {
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
     java.util.Map<Integer, Material> matMap = saveMaterials(map);
     saveGeometryMaterials(map.getTerrain().getGeometry(), matMap);
-    if (oldMap == null) {
+    if (map.getId() == null) {
       JPA.em().persist(map);
     } else {
       map = JPA.em().merge(map);
+    }
+
+    for (Iterator<Path> pathIt = map.getPaths().iterator(); pathIt.hasNext();) {
+      Path oldPath = pathIt.next();
+      if (!oldPathIds.contains(oldPath.getId())) {
+        pathIt.remove();
+        JPA.em().remove(oldPath);
+      } else {
+        for (Iterator<Waypoint> wayIt = oldPath.getWaypoints().iterator(); wayIt.hasNext();) {
+          Waypoint oldWaypoint = wayIt.next();
+          if (!oldWaypointIds.contains(oldWaypoint.getId())) {
+            wayIt.remove();
+            JPA.em().remove(oldWaypoint);
+          }
+        }
+      }
     }
   }
 
