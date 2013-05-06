@@ -26,9 +26,9 @@ class Editor extends ApplicationController
 		@engine.pause = true
 	
 	initCore: ->
-		@scene = new EditorScene @
 		@input = new Input @
 		@tools = new Tools @
+		@scene = new EditorScene @
 
 	bindEvents: ->
 		EditorEventbus.render.add @render

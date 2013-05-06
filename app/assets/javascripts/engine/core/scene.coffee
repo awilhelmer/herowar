@@ -111,9 +111,10 @@ class Scene
 					waypointModel.attributes.dbId = waypointDbId
 					waypointModel.attributes.path = pathModel.attributes.id
 					waypoints.add waypointModel
-			@app.tools.addWaypoint.nextId = wayId
-			EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
+			@afterCreatingPaths wayId, pathId
 	 	null
+
+	afterCreatingPaths: (wayId, pathId) ->
 
 	createWaves: ->
 		waves = db.get 'waves'
@@ -128,8 +129,10 @@ class Scene
 				waveModel.attributes.path = wave.pathId
 				if wave.unitIds and wave.unitIds.length > 0
 					waveModel.attributes.unit =	wave.unitIds[0]
-			EditorEventbus.dispatch 'initIdChanged', 'waves', waveId
+			@afterCreatingWaves waveId
 		null
+	
+	afterCreatingWaves: (waveId) ->
 
 	#TODO central static code please!
 	createModelFromMesh: (id, mesh, name) ->

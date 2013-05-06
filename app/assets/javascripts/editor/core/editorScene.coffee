@@ -76,5 +76,12 @@ class EditorScene extends Scene
 		col.remove obj
 		@app.engine.scenegraph.removeStaticObject obj.attributes
 		EditorEventbus.dispatch 'render'
-		
+
+	afterCreatingPaths: (wayId, pathId) ->
+		@app.tools.addWaypoint.nextId = wayId
+		EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
+
+	afterCreatingWaves: (waveId) ->
+		EditorEventbus.dispatch 'initIdChanged', 'waves', waveId
+
 return EditorScene
