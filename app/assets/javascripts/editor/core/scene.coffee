@@ -150,18 +150,18 @@ class Scene
 			wayId = 1
 			pathId = 1
 			for path in @world.attributes.paths
-				pathId = path.id
+				pathDbId = path.id
 				path.id = pathId++
 				pathModel = new Path()
 				pathModel.set path
-				pathModel.attributes.dbId = pathId
+				pathModel.attributes.dbId = pathDbId
 				paths.add pathModel
 				for waypoint in path.waypoints
-					waypointId = waypoint.id
+					waypointDbId = waypoint.id
 					waypoint.id = wayId++
 					waypointModel = new Waypoint()
 					waypointModel.set waypoint
-					waypointModel.attributes.dbId = waypointId
+					waypointModel.attributes.dbId = waypointDbId
 					waypointModel.attributes.path = pathModel.attributes.id
 					waypoints.add waypointModel
 			@editor.tools.addWaypoint.nextId = wayId
