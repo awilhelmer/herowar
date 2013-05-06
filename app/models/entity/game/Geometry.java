@@ -6,6 +6,7 @@ import game.json.StringArray;
 import game.json.StringArray.ArrayType;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -107,6 +108,7 @@ public class Geometry extends BaseModel implements Serializable {
     colors = "[]";
     uvs = "[[]]";
     scale = 1D;
+    geoMaterials = new HashSet<GeoMaterial>();
   }
 
   // GETTER & SETTER //

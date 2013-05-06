@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -74,6 +75,7 @@ public class Map extends BaseModel implements Serializable {
     this.lives = 20;
     this.goldStart = 2000;
     this.goldPerTick = 5;
+    this.allMaterials = new HashSet<Material>();
     this.terrain = new Terrain();
     this.getTerrain().setGeometry(new Geometry());
     this.getTerrain().getGeometry().setTerrain(this.getTerrain());
