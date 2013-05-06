@@ -3,44 +3,45 @@
 // --------------------------------------------------
 
 // Core variables and mixins
-@import "_variables.less";
-@import "_mixins.less";
+@import "lib/bootstrap/_variables.less";
+@import "lib/bootstrap/_mixins.less";
 
 // CSS Reset
-@import "_reset.less";
+@import "lib/bootstrap/_reset.less";
 
 // Grid system and page structure
-@import "_scaffolding.less";
-@import "_grid.less";
-@import "_layouts.less";
+@import "lib/bootstrap/_scaffolding.less";
+@import "lib/bootstrap/_grid.less";
+@import "lib/bootstrap/_layouts.less";
 
 // Base CSS
-@import "_type.less";
-@import "_code.less";
-@import "_forms.less";
-@import "_tables.less";
+@import "lib/bootstrap/_type.less";
+@import "lib/bootstrap/_code.less";
+@import "lib/bootstrap/_forms.less";
+@import "lib/bootstrap/_tables.less";
 
 // Components: common
-@import "_dropdowns.less";
-@import "_animations.less";
-@import "_close.less";
+@import "lib/bootstrap/_dropdowns.less";
+@import "lib/bootstrap/_animations.less";
+@import "lib/bootstrap/_close.less";
 
 // Components: Buttons & Alerts
-@import "_buttons.less";
-@import "_button-groups.less";
-@import "_alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+@import "lib/bootstrap/_buttons.less";
+@import "lib/bootstrap/_button-groups.less";
+@import "lib/bootstrap/_alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
 // Components: Nav
-@import "_navs.less";
-@import "_navbar.less";
+@import "lib/bootstrap/_navs.less";
+@import "lib/bootstrap/_navbar.less";
 
 // Components: Popovers
-@import "_modals.less";
-@import "_tooltip.less";
-@import "_popovers.less";
+@import "lib/bootstrap/_modals.less";
+@import "lib/bootstrap/_tooltip.less";
+@import "lib/bootstrap/_popovers.less";
 
-// JQuery Gritter
-@import "_gritter.less";
+// External Libs
+@import "lib/_gritter.less";
+@import "lib/_contextMenu.less";
 
 // Editor Files
 @import "editor/_variables.less";
@@ -57,7 +58,6 @@
 @import "editor/_sidebarRight.less";
 @import "editor/_tree.less";
 @import "editor/_viewport.less";
-@import "editor/lib/_contextMenu.less";
 @import "editor/scenebar/_environments.less";
 @import "editor/scenebar/_terrain.less";
 @import "editor/scenebar/_terrainMaterials.less";
@@ -67,4 +67,4 @@
 @import "editor/sidebar/_waves.less";
 
 // Utility classes
-@import "_utilities.less"; // Has to be last to override when necessary
+@import "lib/bootstrap/_utilities.less"; // Has to be last to override when necessary
