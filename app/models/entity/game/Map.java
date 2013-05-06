@@ -45,7 +45,7 @@ public class Map extends BaseModel implements Serializable {
   @OneToOne(cascade = CascadeType.ALL)
   private Terrain terrain;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map")
   private Set<Wave> waves;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "map")

@@ -34,8 +34,7 @@ public class Unit implements Serializable {
   @NotNull
   private String name;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "parent_id")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="parent")
   private Set<Unit> children = new HashSet<Unit>();
 
   @JsonIgnore

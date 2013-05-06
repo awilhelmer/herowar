@@ -34,8 +34,7 @@ public class Environment implements Serializable {
   @NotNull
   private String name;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "parent_id")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
   private Set<Environment> children = new HashSet<Environment>();
 
   @JsonIgnore

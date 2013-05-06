@@ -90,7 +90,7 @@ public abstract class AbstractImporter<E extends Serializable> {
           Object id = PropertyUtils.getProperty(child, "id");
           if (id != null && JPA.em().contains(child)) {
             child = JPA.em().merge(child);
-          }else  {
+          } else if (JPA.em().contains(parent)) {
             JPA.em().persist(child);
           }
           childs.add(child);
