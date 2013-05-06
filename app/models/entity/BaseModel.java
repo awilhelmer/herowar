@@ -63,4 +63,42 @@ public abstract class BaseModel implements Serializable {
   public void setVersion(Long version) {
     this.version = version;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((cdate == null) ? 0 : cdate.hashCode());
+    result = prime * result + ((udate == null) ? 0 : udate.hashCode());
+    result = prime * result + ((version == null) ? 0 : version.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    BaseModel other = (BaseModel) obj;
+    if (cdate == null) {
+      if (other.cdate != null)
+        return false;
+    } else if (!cdate.equals(other.cdate))
+      return false;
+    if (udate == null) {
+      if (other.udate != null)
+        return false;
+    } else if (!udate.equals(other.udate))
+      return false;
+    if (version == null) {
+      if (other.version != null)
+        return false;
+    } else if (!version.equals(other.version))
+      return false;
+    return true;
+  }
+
 }
