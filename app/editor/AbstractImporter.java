@@ -64,6 +64,7 @@ public abstract class AbstractImporter<E extends Serializable> {
       for (File file : folder.listFiles()) {
         E child = null;
         boolean updateGeo = false;
+
         if (file.isDirectory()) {
           getLogger().info("Found directory: " + file.getAbsolutePath());
           child = createEntry(file, parent);
@@ -80,15 +81,14 @@ public abstract class AbstractImporter<E extends Serializable> {
               PropertyUtils.setProperty(child, "geometry", newGeo);
               updateGeo = true;
             }
-
           } else {
             getLogger().warn(String.format("Property geometry not found on Class <%s>", child.getClass()));
           }
-
         }
         if (PropertyUtils.isReadable(child, "children") && updateGeo) {
           Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
-          if (JPA.em().contains(child)) {
+          Object id = PropertyUtils.getProperty(child, "id");
+          if (id != null && JPA.em().contains(child)) {
             child = JPA.em().merge(child);
           }
           childs.add(child);
