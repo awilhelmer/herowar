@@ -1,5 +1,6 @@
 EditorEventbus = require 'editorEventbus'
 ApplicationController = require 'controllers/application'
+EditorScene = require 'core/editorScene'
 Input = require 'core/input'
 Tools = require 'core/tools'
 log = require 'util/logger'
@@ -25,7 +26,7 @@ class Editor extends ApplicationController
 		@engine.pause = true
 	
 	initCore: ->
-		super()
+		@scene = new EditorScene @
 		@input = new Input @
 		@tools = new Tools @
 

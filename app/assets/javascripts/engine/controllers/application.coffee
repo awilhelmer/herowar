@@ -35,7 +35,6 @@ class ApplicationController extends BaseController
 	
 	initCore: ->
 		@scene = new Scene @
-
 	
 	render: (resize) =>
 		if resize then @engine.onWindowResize true else	@engine.render()
