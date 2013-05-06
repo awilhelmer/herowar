@@ -56,6 +56,9 @@ public class Map extends BaseModel implements Serializable {
   @JsonIgnore
   private Set<Material> allMaterials;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map")
+  private Set<Path> paths;
+
   @Transient
   private List<Material> materials;
 
@@ -198,6 +201,14 @@ public class Map extends BaseModel implements Serializable {
 
   public void setStaticGeometries(List<Geometry> staticGeometries) {
     this.staticGeometries = staticGeometries;
+  }
+
+  public Set<Path> getPaths() {
+    return paths;
+  }
+
+  public void setPaths(Set<Path> paths) {
+    this.paths = paths;
   }
 
   @Override

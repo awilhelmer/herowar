@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import models.entity.game.Material;
 import models.entity.game.Mesh;
+import models.entity.game.Path;
 import models.entity.game.Terrain;
 import models.entity.game.Wave;
 
@@ -18,4 +19,6 @@ public class MapDataExcludeMixin {
   private Set<Mesh> objects;
   @JsonIgnore
   private Set<Material> allMaterials;
+  @JsonIgnore
+  private Set<Path> paths;
 }

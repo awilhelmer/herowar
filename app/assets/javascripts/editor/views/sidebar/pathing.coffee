@@ -22,6 +22,7 @@ class Pathing extends BasePropertiesView
 
 	initialize: (options) ->
 		@nextId = 1
+		@nextDbId = -1
 		@selectedItem = null
 		super options
 
@@ -33,9 +34,11 @@ class Pathing extends BasePropertiesView
 
 	createItem: ->
 		id = @nextId++
+		dbId = @nextDbId--
 		path = new Path()
 		path.set 
 			'id'		: id
+			'dbId'	: dbId
 			'name' 	: "Path-#{id}"
 		col = db.get 'paths'
 		col.add path

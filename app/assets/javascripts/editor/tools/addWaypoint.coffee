@@ -11,6 +11,7 @@ class AddWaypoint extends SelectorPlane
 	initialize: ->
 		@currentPathId = -1
 		@nextId = 1
+		@nextDbId = -1
 		super()
 	
 	bindEvents: ->
@@ -23,9 +24,11 @@ class AddWaypoint extends SelectorPlane
 	createWaypoint: ->
 		pos = @calculatePossiblePosition @lastPosition
 		id = @nextId++
+		dbId = @nextDbId--
 		waypoint = new Waypoint()
 		waypoint.set
 			'id' 				: id
+			'dbId'			: dbId
 			'name'			: "Waypoint #{id} - #{pos.x} x #{pos.y} x #{pos.z}"
 			'position'	: pos
 			'path'			: @currentPathId
