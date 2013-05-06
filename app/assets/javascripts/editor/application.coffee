@@ -1,4 +1,4 @@
-Router = require 'router'
+EditorRouter = require 'editorRouter'
 
 app =
 	resourcePath: -> "http://localhost:9000/api/"	
@@ -6,7 +6,7 @@ app =
 	views: {}
 	
 	start: ->
-		app.router = new Router()
+		app.router = new EditorRouter()
 		Backbone.history.start pushState: true
 
 return app
