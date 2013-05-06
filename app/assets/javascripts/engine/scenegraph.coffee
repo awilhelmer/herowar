@@ -1,4 +1,4 @@
-BaseModel = require 'model/basemodel'
+BaseModel = require 'models/basemodel'
 Variables = require 'variables'
 
 class SceneGraph
