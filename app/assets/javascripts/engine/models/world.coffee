@@ -1,8 +1,5 @@
-MaterialHelper = require 'helper/materialHelper'
-Constants = require 'constants'
-EditorEventbus = require 'editorEventbus'
-db = require 'database'
 materialHelper = require 'helper/materialHelper'
+db = require 'database'
 
 class World extends Backbone.Model
 	
