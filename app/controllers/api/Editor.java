@@ -1,6 +1,7 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
+import game.json.excludes.MapDataExcludeMixin;
 import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import models.entity.game.Map;
 import models.entity.game.Material;
 import models.entity.game.Mesh;
 import models.entity.game.Path;
+import models.entity.game.Wave;
 import models.entity.game.Waypoint;
 
 import org.codehaus.jackson.JsonNode;
@@ -56,6 +58,7 @@ public class Editor extends Controller {
       mapper.getSerializationConfig().addMixInAnnotations(Mesh.class, MeshExcludeGeometryMixin.class);
       MapDAO.mapMaterials(map);
       MapDAO.mapStaticGeometries(map);
+      MapDAO.mapWaves(map);
       try {
         return ok(mapper.writeValueAsString(map));
       } catch (IOException e) {
@@ -123,64 +126,20 @@ public class Editor extends Controller {
     if (map.getTerrain().getMap() == null) {
       map.getTerrain().setMap(map);
     }
-    if (map.getObjects() != null) {
-      List<Long> oldIds = new ArrayList<Long>();
-      Set<Mesh> meshes = new HashSet<Mesh>();
-      for (Mesh mesh : map.getObjects()) {
-        if (mesh.getGeometry().getId() != null) {
-          mesh.setMap(map);
-          mesh.setGeometry(GeometryDAO.getInstance().findUnique(mesh.getGeometry().getId()));
-        }
-        if (mesh.getId() == null || mesh.getId().intValue() < 0) {
-          mesh.setId(null);
-        } else {
-          mesh = MeshDAO.getInstance().merge(mesh);
-          oldIds.add(mesh.getId());
-        }
-        meshes.add(mesh);
-      }
-      // Delete old meshes
-
-      for (Iterator<Mesh> iterator = map.getObjects().iterator(); iterator.hasNext();) {
-        Mesh mesh = iterator.next();
-        if (!oldIds.contains(mesh.getId())) {
-          iterator.remove();
-          JPA.em().remove(mesh);
-        }
-
-      }
-      map.setObjects(meshes);
-    }
+    Set<Long> oldMeshIds = new HashSet<Long>();
     Set<Long> oldWaypointIds = new HashSet<Long>();
     Set<Long> oldPathIds = new HashSet<Long>();
+    Set<Long> oldWaveIds = new HashSet<Long>();
+
+    if (map.getObjects() != null) {
+      MapDAO.createMeshes(map, oldMeshIds);
+    }
 
     if (map.getPaths() != null) {
-      Set<Path> paths = new HashSet<Path>();
-      for (Path path : map.getPaths()) {
-        Set<Waypoint> waypoints = new HashSet<Waypoint>();
-        path.setMap(map);
-        for (Waypoint waypoint : path.getWaypoints()) {
-          waypoint.setPath(path);
-          if (waypoint.getId() != null && waypoint.getId().longValue() > -1) {
-            waypoint = JPA.em().merge(waypoint);
-            oldWaypointIds.add(waypoint.getId());
-          } else {
-            waypoint.setId(null);
-          }
-          waypoints.add(waypoint);
-        }
-
-        path.setWaypoints(waypoints);
-        if (path.getId() != null && path.getId().longValue() > -1) {
-          path = JPA.em().merge(path);
-          oldPathIds.add(path.getId());
-        } else {
-          path.setId(null);
-        }
-        paths.add(path);
-      }
-      map.setPaths(paths);
-
+      MapDAO.createPaths(map, oldPathIds, oldWaypointIds);
+    }
+    if (map.getWaves() != null) {
+      MapDAO.createWaves(map, oldWaveIds);
     }
 
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
@@ -192,21 +151,10 @@ public class Editor extends Controller {
       map = JPA.em().merge(map);
     }
 
-    for (Iterator<Path> pathIt = map.getPaths().iterator(); pathIt.hasNext();) {
-      Path oldPath = pathIt.next();
-      if (!oldPathIds.contains(oldPath.getId())) {
-        pathIt.remove();
-        JPA.em().remove(oldPath);
-      } else {
-        for (Iterator<Waypoint> wayIt = oldPath.getWaypoints().iterator(); wayIt.hasNext();) {
-          Waypoint oldWaypoint = wayIt.next();
-          if (!oldWaypointIds.contains(oldWaypoint.getId())) {
-            wayIt.remove();
-            JPA.em().remove(oldWaypoint);
-          }
-        }
-      }
-    }
+    MapDAO.deletePaths(map, oldPathIds, oldWaypointIds);
+    MapDAO.deleteWaves(map, oldWaveIds);
+    MapDAO.deleteMeshes(map, oldMeshIds);
+
   }
 
   // Mapping Indexes
