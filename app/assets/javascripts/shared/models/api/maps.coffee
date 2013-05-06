@@ -8,7 +8,7 @@ class APIMaps extends Backbone.Collection
 		super models, options
 
 	url: ->
-		"#{app.resourcePath()}map/all"
+		"#{app.resourcePath()}game/map/all"
 
 	parse: (resp) ->
 		db.add "db/maps", entry for entry in resp
