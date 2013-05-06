@@ -66,7 +66,7 @@ public class Map extends BaseModel implements Serializable {
   private List<Geometry> staticGeometries;
 
   public Map() {
-    this.name = "";
+    this.name = "Default Map";
     this.description = "";
     this.skybox = "default";
     this.teamSize = 1;

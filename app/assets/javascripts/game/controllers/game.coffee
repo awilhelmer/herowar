@@ -7,4 +7,4 @@ class Game extends ApplicationController
 		log.info 'Initialize game...'
 		super options
 
-return Editor
+return Game

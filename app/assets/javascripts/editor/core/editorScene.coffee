@@ -9,18 +9,14 @@ EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
 Texture = require 'models/texture'
 Constants = require 'constants'
+Scene = require 'core/scene'
 log = require 'util/logger'
 db = require 'database'
 
-class Scene
-
-	constructor: (@editor) ->
-		@isInitialized = false
-		@initialize()
-		@isInitialized = true
+class EditorScene extends Scene
 	
 	initialize: ->
-		@objectHelper = new ObjectHelper @editor
+		@objectHelper = new ObjectHelper @app
 		@randomPool = new RandomPool()
 		@randomPool.hook()
 		@world = db.get 'world'
@@ -41,7 +37,7 @@ class Scene
 		@textures = db.get 'textures'
 		nextTextureId = 1
 		@textures.add @createTexture nextTextureId++, 'Blank', '', undefined
-		@textures.add @createTexture nextTextureId++, key, val.sourceFile, val for key, val of @editor.data.textures
+		@textures.add @createTexture nextTextureId++, key, val.sourceFile, val for key, val of @app.data.textures
 
 	createTexture: (id, name, sourceFile, threeTexture) ->
 		texture = new Texture()
@@ -76,7 +72,7 @@ class Scene
 	reset: =>
 		log.info 'Reseting scene'
 		@createTerrainMaterial()
-		@editor.engine.scenegraph.addSkybox @world.get 'skybox'
+		@app.engine.scenegraph.addSkybox @world.get 'skybox'
 		@resetTerrainPool()
 
 	buildTerrain: =>
@@ -89,8 +85,8 @@ class Scene
 		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
 		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe
-		@editor.engine.scenegraph.setMap map
-		@editor.engine.render()
+		@app.engine.scenegraph.setMap map
+		@app.engine.render()
 
 	getWireframeColor: =>
 		if @isInitialized then 0xFFFF00 else 0xFFFFFF
@@ -121,14 +117,14 @@ class Scene
 		if @world.attributes.staticGeometries
 			mesh = null
 			for instance in @world.attributes.objects
-				unless @editor.engine.scenegraph.hasStaticObject instance.geoId 
+				unless @app.engine.scenegraph.hasStaticObject instance.geoId 
 					for staticMesh in @world.attributes.staticGeometries
 						if staticMesh.userData.id is instance.geoId
 							mesh = staticMesh
 							mesh.name = instance.name
 							break
 				else
-					mesh = @editor.engine.scenegraph.staticObjects[instance.geoId][0]
+					mesh = @app.engine.scenegraph.staticObjects[instance.geoId][0]
 					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
 				#add position to mesh ... 
 				if mesh
@@ -136,11 +132,11 @@ class Scene
 					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
 					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
 					mesh.userData.meshId = instance.id
-					@editor.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
-					id = @editor.engine.scenegraph.getNextId()
+					@app.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
+					id = @app.engine.scenegraph.getNextId()
 					environmentsStatic = db.get 'environmentsStatic'
 					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
-		@editor.engine.render()
+		@app.engine.render()
 		null
 
 
@@ -165,7 +161,7 @@ class Scene
 					waypointModel.attributes.dbId = waypointDbId
 					waypointModel.attributes.path = pathModel.attributes.id
 					waypoints.add waypointModel
-			@editor.tools.addWaypoint.nextId = wayId
+			@app.tools.addWaypoint.nextId = wayId
 			EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
 	 	null
 
@@ -209,13 +205,13 @@ class Scene
 		env
 
 	handleMaterials: =>
-		@world.handleMaterials @editor.engine.scenegraph.getMap()
+		@world.handleMaterials @app.engine.scenegraph.getMap()
 	
 	removeStaticObject: (obj) =>
 		log.info "Environment \"#{obj.get('name')}\" removed"
 		col = db.get 'environmentsStatic'
 		col.remove obj
-		@editor.engine.scenegraph.removeStaticObject obj.attributes
+		@app.engine.scenegraph.removeStaticObject obj.attributes
 		EditorEventbus.dispatch 'render'
 		
-return Scene
+return EditorScene
