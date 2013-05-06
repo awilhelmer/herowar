@@ -32,7 +32,7 @@ public class GeoMetaData implements Serializable {
   private Long materials;
 
   @JsonIgnore
-  @OneToOne(mappedBy = "metadata")
+  @OneToOne(mappedBy = "metadata", cascade = CascadeType.REFRESH)
   private Geometry geometry;
 
   public GeoMetaData(Long id, Float formatVersion, String sourceFile, String generatedBy, Long vertices, Long faces, Long normals, Long colors, Long uvs,
