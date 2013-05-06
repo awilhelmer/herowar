@@ -10,5 +10,6 @@ class GameController extends ApplicationController
 	initialize: (options) ->
 		log.info 'Initialize game...'
 		super options
+		@engine.start()
 
 return GameController
