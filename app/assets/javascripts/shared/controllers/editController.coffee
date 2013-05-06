@@ -1,18 +1,7 @@
-BaseController = require 'controllers/baseController'
+FetchModelController = require 'controllers/fetchModelController'
 db = require 'database'
 
-class EditController extends BaseController
-
-	initialize: (options) ->
-		throw "collection should be set" unless @collection
-		@options = _.extend {}, options
-		@fetchDetails()
-		super @options
-
-	fetchDetails: ->
-		unless db.get @collection, @options[0]
-			col = db.get @collection
-			col.fetch id: @options[0] if col
+class EditController extends FetchModelController
 
 	getEditOptions: ->
 		options = {}

@@ -20,7 +20,9 @@ class BaseView extends Backbone.View
  
 	# OVERRIDE to listen just to a specific field or something else
 	bindEvents: ->
-		@listenTo @model, 'change', @render if @model
+		if @model
+			@listenTo @model, 'change', @render if @model instanceof Backbone.Model
+			@listenTo @model, 'add remove change reset', @render if @model instanceof Backbone.Collection
 
 	bindFetchEvents: ->
 		if @model
