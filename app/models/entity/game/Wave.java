@@ -48,7 +48,8 @@ public class Wave implements Serializable {
   @JsonIgnore
   private Set<Unit> units;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH })
+  @JoinColumn(name = "path_id")
   @JsonIgnore
   private Path path;
 
