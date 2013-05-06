@@ -3,6 +3,6 @@ app = require 'application'
 class Map extends Backbone.Model 
 
 	url: ->
-		"#{app.resourcePath()}map/#{@id}"
+		"#{app.resourcePath()}game/map/#{@id}"
 	
 return Map

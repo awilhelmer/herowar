@@ -2,15 +2,17 @@ AuthView = require 'views/authView'
 templates = require 'templates'
 app = require 'application'
 
-###
-    The Play shows our play view.
-
-    @author Sebastian Sachtleben
-###
 class Play extends AuthView
 
 	id: 'play'
 	
+	entity: 'db/maps'
+	
 	template: templates.get 'play.tmpl'
+	
+	getTemplateData: ->
+		json = super()
+		console.log json
+		json
 	
 return Play

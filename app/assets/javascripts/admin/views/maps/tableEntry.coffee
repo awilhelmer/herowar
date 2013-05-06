@@ -1,7 +1,6 @@
 TableEntryView = require 'views/tableEntryView'
 templates = require 'templates'
 app = require 'application'
-log = require 'util/logger'
 db = require 'database'
 
 class MapTableEntry extends TableEntryView
@@ -17,6 +16,6 @@ class MapTableEntry extends TableEntryView
 
 	editorEntry: (event) ->
 		event?.preventDefault()
-		log.info "Jump in editor with map \"#{@model.get('name')}\""
+		console.log "Jump in editor with map \"#{@model.get('name')}\""
 
 return MapTableEntry
