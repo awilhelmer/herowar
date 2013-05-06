@@ -19,9 +19,11 @@ class Waves extends BasePropertiesView
 
 	bindEvents: ->
 		EditorEventbus.listSelectItem.add @listSelectItem
+		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
 		@nextId = 1
+		@nextDbId = -1
 		@selectedItem = null
 		super options
 
@@ -33,9 +35,11 @@ class Waves extends BasePropertiesView
 
 	createItem: ->
 		id = @nextId++
+		dbId = @nextDbId--
 		wave = new Wave()
 		wave.set 
 			'id'		: id
+			'dbId'	: dbId
 			'name' 	: "Wave-#{id}"
 		col = db.get 'waves'
 		col.add wave
@@ -54,5 +58,10 @@ class Waves extends BasePropertiesView
 			@selectedItem = null
 		@$("div[data-value='#{@selectedItem.get('id')}']").addClass 'active' if @selectedItem
 		@$('#sidebar-waves-remove').removeClass 'show' unless @selectedItem
+
+	setStartId: (module, startId) =>
+		if module is 'waves'
+			log.info "Setting Start Id of waves to #{startId}"
+			@nextId = startId
 
 return Waves
