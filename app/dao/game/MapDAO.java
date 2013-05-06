@@ -3,6 +3,7 @@ package dao.game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -100,13 +101,15 @@ public class MapDAO extends BaseDAO<Long, Map> {
 
   }
 
-  public static void createWaves(Map map, Set<Long> oldWaveIds) {
+  public static void createWaves(Map map, Set<Long> oldWaveIds, java.util.Map<Long, Path> newPaths) {
     Set<Wave> waves = new HashSet<Wave>();
     for (Wave wave : map.getWaves()) {
       wave.setMap(map);
       Path path = null;
-      if (wave.getPathId() != null) {
+      if (wave.getPathId() != null && wave.getPathId().longValue() > -1) {
         path = PathDAO.getInstance().findUnique(wave.getPathId());
+      } else if (wave.getPathId() != null && newPaths != null) {
+        path = newPaths.get(wave.getPathId());
       }
       wave.setPath(path);
       wave.setUnits(new HashSet<Unit>());
@@ -129,11 +132,11 @@ public class MapDAO extends BaseDAO<Long, Map> {
     map.setWaves(waves);
   }
 
-  public static void createPaths(Map map, Set<Long> oldPathIds, Set<Long> oldWaypointIds) {
+  public static java.util.Map<Long, Path> createPaths(Map map, Set<Long> oldPathIds, Set<Long> oldWaypointIds) {
+    java.util.Map<Long, Path> result = new HashMap<Long, Path>();
     Set<Path> paths = new HashSet<Path>();
     for (Path path : map.getPaths()) {
       Set<Waypoint> waypoints = new HashSet<Waypoint>();
-      path.setMap(map);
       for (Waypoint waypoint : path.getWaypoints()) {
         waypoint.setPath(path);
         if (waypoint.getId() != null && waypoint.getId().longValue() > -1) {
@@ -146,15 +149,23 @@ public class MapDAO extends BaseDAO<Long, Map> {
       }
 
       path.setWaypoints(waypoints);
+      path.setMap(map);
       if (path.getId() != null && path.getId().longValue() > -1) {
         path = JPA.em().merge(path);
         oldPathIds.add(path.getId());
       } else {
+        result.put(path.getId(), path);
         path.setId(null);
+       // JPA.em().persist(path);
       }
       paths.add(path);
     }
+    //JPA.em().flush();
     map.setPaths(paths);
+    for (Path path : map.getPaths()) {
+      path.setMap(map);
+    }
+    return result;
   }
 
   public static void createMeshes(Map map, Set<Long> oldMeshIds) {

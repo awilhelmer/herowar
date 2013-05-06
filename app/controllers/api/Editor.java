@@ -1,14 +1,11 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-import game.json.excludes.MapDataExcludeMixin;
 import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +17,6 @@ import models.entity.game.Map;
 import models.entity.game.Material;
 import models.entity.game.Mesh;
 import models.entity.game.Path;
-import models.entity.game.Wave;
-import models.entity.game.Waypoint;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,7 +32,6 @@ import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 import dao.game.MapDAO;
 import dao.game.MaterialDAO;
-import dao.game.MeshDAO;
 
 public class Editor extends Controller {
 
@@ -135,11 +129,12 @@ public class Editor extends Controller {
       MapDAO.createMeshes(map, oldMeshIds);
     }
 
+    java.util.Map<Long, Path> newPaths = null;
     if (map.getPaths() != null) {
-      MapDAO.createPaths(map, oldPathIds, oldWaypointIds);
+      newPaths = MapDAO.createPaths(map, oldPathIds, oldWaypointIds);
     }
     if (map.getWaves() != null) {
-      MapDAO.createWaves(map, oldWaveIds);
+      MapDAO.createWaves(map, oldWaveIds, newPaths);
     }
 
     // For saving MatGeoId.materialId is the index of map.getMaterials()!

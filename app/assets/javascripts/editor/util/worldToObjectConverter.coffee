@@ -126,10 +126,12 @@ worldToObjectConverter =
 		obj.waves = []
 		for currentWave in waves.models
 			wave = _.pick currentWave.attributes, 'id', 'name', 'prepareTime', 'waveTime', 'quantity'
-			wave.pathId = currentWave.attributes.path
-			wave.unitIds = [] 
-			wave.unitIds.push currentWave.attributes.unit
 			wave.id = currentWave.attributes.dbId
+			if currentWave.attributes.path
+				wave.pathId = currentWave.attributes.path
+			wave.unitIds = [] 
+			if currentWave.attributes.unit		
+				wave.unitIds.push currentWave.attributes.unit
 			obj.waves.push wave
 
 return worldToObjectConverter
