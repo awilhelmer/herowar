@@ -19,6 +19,7 @@ class Pathing extends BasePropertiesView
 
 	bindEvents: ->
 		EditorEventbus.listSelectItem.add @listSelectItem
+		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
 		@nextId = 1
@@ -58,4 +59,8 @@ class Pathing extends BasePropertiesView
 		@$("div[data-value='#{@selectedItem.get('id')}']").addClass 'active' if @selectedItem
 		@$('#sidebar-pathing-remove').removeClass 'show' unless @selectedItem
 
+	setStartId: (module, startId) =>
+		if module is 'pathing'
+			log.info "Setting Start Id of pathing to #{startId}"
+			@nextId = startId
 return Pathing

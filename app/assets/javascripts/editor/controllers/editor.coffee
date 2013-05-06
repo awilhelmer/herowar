@@ -47,8 +47,8 @@ class Editor extends BaseController
 	
 	initCore: ->
 		@input = new Input @
-		@scene = new Scene @
 		@tools = new Tools @
+		@scene = new Scene @
 
 	bindEvents: ->
 		EditorEventbus.render.add @render

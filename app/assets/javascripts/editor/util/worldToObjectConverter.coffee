@@ -113,11 +113,11 @@ worldToObjectConverter =
 		for currentPath in paths.models
 			currentWaypoints = waypoints.where path : currentPath.get 'id'
 			path = _.pick currentPath.attributes, 'id', 'name'
-			path.id = currentPath.dbId
+			path.id = currentPath.attributes.dbId
 			path.waypoints = []
 			for currentWaypoint in currentWaypoints
 				waypoint = _.pick currentWaypoint.attributes, 'id', 'name', 'position'
-				waypoint.dbId = currentWaypoint.attributes.dbId
+				waypoint.id = currentWaypoint.attributes.dbId
 				path.waypoints.push waypoint
 			obj.paths.push path
 

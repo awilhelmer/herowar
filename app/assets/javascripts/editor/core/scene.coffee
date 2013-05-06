@@ -1,6 +1,8 @@
 ObjectHelper = require 'helper/objectHelper'
 RandomPool = require 'helper/randomPool'
 Environment = require 'models/environment'
+Path = require 'models/path'
+Waypoint = require 'models/waypoint'
 materialHelper = require 'helper/materialHelper'
 EditorEventbus = require 'editorEventbus'
 Material = require 'models/material'
@@ -25,6 +27,7 @@ class Scene
 		@reset()		
 		@createTextures()
 		@createStaticObjects()
+		@createPaths()
 
 	addEventListeners: ->
 		EditorEventbus.changeTerrain.add @changeTerrain
@@ -138,6 +141,32 @@ class Scene
 					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
 		@editor.engine.render()
 		null
+
+
+	createPaths: ->
+		paths = db.get 'paths'
+		waypoints = db.get 'waypoints'
+		if @world.attributes.paths
+			wayId = 1
+			pathId = 1
+			for path in @world.attributes.paths
+				pathId = path.id
+				path.id = pathId++
+				pathModel = new Path()
+				pathModel.set path
+				pathModel.attributes.dbId = pathId
+				paths.add pathModel
+				for waypoint in path.waypoints
+					waypointId = waypoint.id
+					waypoint.id = wayId++
+					waypointModel = new Waypoint()
+					waypointModel.set waypoint
+					waypointModel.attributes.dbId = waypointId
+					waypointModel.attributes.path = pathModel.attributes.id
+					waypoints.add waypointModel
+			@editor.tools.addWaypoint.nextId = wayId
+			EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
+	 	null
 
 	#TODO central static code please!
 	createModelFromMesh: (id, mesh, name) ->
