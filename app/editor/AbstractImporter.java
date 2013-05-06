@@ -74,7 +74,7 @@ public abstract class AbstractImporter<E extends Serializable> {
           child = createEntry(file, parent);
           if (PropertyUtils.isReadable(child, "geometry")) {
             Geometry geo = (Geometry) PropertyUtils.getProperty(child, "geometry");
-            if (geo.getUdate().getTime() < file.lastModified()) {
+            if (geo == null || geo.getUdate() == null || geo.getUdate().getTime() < file.lastModified()) {
               Geometry newGeo = parseGeometryFile(file);
               syncGeometry(geo, newGeo);
               PropertyUtils.setProperty(child, "geometry", newGeo);
