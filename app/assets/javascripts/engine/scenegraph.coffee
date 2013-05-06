@@ -10,9 +10,7 @@ class SceneGraph
 		@scene = new THREE.Scene()
 		@skyboxScene = new THREE.Scene()
 		@dynamicObjects = {}
-		@staticObjects =  {}
-		#@setMap(@createDefaultMap(2000, 2000))
-		#@addSkybox 'default'
+		@staticObjects = {}
 		@currentId = 1
 		@addLights()
 	
