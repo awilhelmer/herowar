@@ -10,6 +10,8 @@ class Preloader extends BaseController
 	views:
 		'views/preloader'	: ''
 
+	redirectTo: ''
+
 	initialize: (options) ->
 		log.info 'Initialize preloader...'
 		super options
@@ -160,6 +162,6 @@ class Preloader extends BaseController
 		@preloadComplete = true
 		@$container.find('canvas').remove()
 		db.data @data
-		Backbone.history.loadUrl 'editor2'
+		Backbone.history.loadUrl @redirectTo
 
 return Preloader
