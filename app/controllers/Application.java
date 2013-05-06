@@ -48,6 +48,7 @@ public class Application extends Controller {
     jsFiles.get("site").add("javascripts/st" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("game").add("javascripts/gv" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("game").add("javascripts/gs" + BuildInfo.cacheNumber() + ".js");
+    jsFiles.get("game").add("javascripts/gt" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("editor").add("javascripts/ev" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("editor").add("javascripts/es" + BuildInfo.cacheNumber() + ".js");
     jsFiles.get("editor").add("javascripts/et" + BuildInfo.cacheNumber() + ".js");

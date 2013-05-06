@@ -11,7 +11,7 @@ class Engine
 		throw 'No View declared' unless @opts.views
 		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @opts.rendererType
 		@main = @opts.container
-		@main = $ '#main' unless @main	# TODO: create container if not exists
+		@main = $ '#main' unless @main
 		@data = @opts.data || {}
 
 	init: ->
