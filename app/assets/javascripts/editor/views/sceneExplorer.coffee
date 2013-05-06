@@ -24,7 +24,6 @@ class SceneExplorer extends BaseView
 	bindEvents: ->
 		EditorEventbus.selectWorldViewport.add @selectWorld
 		EditorEventbus.selectTerrainViewport.add @selectTerrain
-		# EditorEventbus.selectObjectViewport.add @selectObject
 
 	selectElement: (event) ->
 		$currentTarget = $ event.currentTarget

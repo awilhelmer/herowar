@@ -14,7 +14,7 @@ class ObjectHelper
 
 	addWireframe: (obj, color) ->
 		#TODO hard coded children access ...
-		if (obj)
+		if obj
 			@wireFrameMaterials.materials[0].color.set color
 			@wireFrameMaterials.materials[0].needsUpdate = true
 			mesh = new THREE.Mesh obj.children[0].geometry.clone(), @wireFrameMaterials
@@ -38,10 +38,8 @@ class ObjectHelper
 					mesh.material.materials[0].needsUpdate = true
 
 	getBaseObject: (obj) ->	
-		if obj
-			while !_.isUndefined obj.parent
-					obj = obj.parent
-					break if obj.parent instanceof THREE.Scene
+		unless obj then return
+		obj = obj.parent while not _.isUndefined(obj.parent) and not (obj.parent instanceof THREE.Scene)
 		obj
 	
 	getWireframe: (obj) ->

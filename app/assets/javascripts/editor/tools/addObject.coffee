@@ -21,7 +21,8 @@ class AddObject extends SelectorTerrain
 	onLeaveTool: ->
 		if @tool.get('currentMesh')
 			@editor.engine.scenegraph.scene.remove @tool.get('currentMesh')
-			@tool.get('currentMesh').geometry.dispose() # TODO: is this enough clean up ?!?
+			for child in @tool.get('currentMesh').children
+				child.geometry.dispose() # TODO: is this enough clean up ?!?
 			@tool.unset 'currentMesh'
 			@editor.engine.render()
 
@@ -43,8 +44,12 @@ class AddObject extends SelectorTerrain
 		super event
 
 	onLoadGeometry: (geometry, materials, json) =>
-		json = id:@tool.get('currentMeshId') unless json
-		@tool.set 'currentMesh', materialHelper.createMesh geometry, materials, @tool.get('currentMeshName'), json
+		json = id: @tool.get('currentMeshId') unless json
+		mesh = materialHelper.createMesh geometry, materials, @tool.get('currentMeshName'), json
+		obj = new THREE.Object3D()
+		obj.name = mesh.name
+		obj.add mesh
+		@tool.set 'currentMesh', obj
 		@addMesh()
 
 	addMesh: ->
@@ -81,6 +86,6 @@ class AddObject extends SelectorTerrain
 		envModel = @createModelFromMesh id, @tool.get('currentMesh')
 		environmentsStatic.add envModel
 		log.info "Environment \"#{envModel.get('name')}\" added"
-		@onLoadGeometry @tool.get('currentMesh').geometry, @tool.get('currentMesh').material.materials
+		@onLoadGeometry @tool.get('currentMesh').children[0].geometry, @tool.get('currentMesh').children[0].material.materials
 
 return AddObject

@@ -19,6 +19,7 @@ class EnvironmentExplorer extends BaseView
 
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
+		EditorEventbus.selectObjectViewport.add @selectObject
 
 	selectElement: (event) ->
 		unless event then return
@@ -34,6 +35,11 @@ class EnvironmentExplorer extends BaseView
 		id = opt.$trigger.data 'value'
 		obj = @model.get id
 		EditorEventbus.dispatch 'removeStaticObject', obj
+
+	selectObject: (id) =>
+		$('.scenegraph-tree div').removeClass 'active'
+		@$("div[data-value='#{id}']").addClass 'active'
+		@sidebar.set 'active', 'sidebar-properties-object'
 
 	addContextMenu: ->
 		jQuery.contextMenu

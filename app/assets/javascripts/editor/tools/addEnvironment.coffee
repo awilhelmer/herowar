@@ -1,10 +1,9 @@
 EditorEventbus = require 'editorEventbus'
 Constants = require 'constants'
 log = require 'util/logger'
+AddObject = require 'tools/addObject'
 
-AddMesh = require 'tools/addMesh'
-
-class AddEnvironment extends AddMesh
+class AddEnvironment extends AddObject
 	
 	bindEvents: ->
 		EditorEventbus.listSelectItem.add @onSelectItem

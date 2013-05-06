@@ -13,12 +13,16 @@ class List extends BaseView
 
 	initialize: (options) ->
 		@entity = @$el.data 'entity'
-		@$el.removeAttr 'data-entity'
-		@selectedVal = null
+		@selectedVal = @$el.data 'selected'
+		@$el.removeAttr 'data-entity data-selected'
 		super options
 
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
+		EditorEventbus.listSetItem.add @setItem
+
+	setItem: (id, value) =>
+		@selectedVal = value if id is @$el.attr 'id'
 
 	selectElement: (event) =>
 		unless event then return
