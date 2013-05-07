@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import models.entity.game.GeoMaterial;
@@ -142,18 +141,19 @@ public class MapDAO extends BaseDAO<Long, Map> {
     for (Path path : map.getPaths()) {
       path.setMap(map);
       Set<Waypoint> waypoints = new HashSet<Waypoint>();
-      for (Waypoint waypoint : path.getWaypoints()) {
+      for (int i = 0; i < path.getWaypoints().size(); i++) {
+        Waypoint waypoint = path.getWaypoints().get(i);
+        waypoint.setSortOder(i);
         waypoint.setPath(path);
         if (waypoint.getId() != null && waypoint.getId().longValue() > -1) {
           waypoint = JPA.em().merge(waypoint);
-
         } else {
           waypoint.setId(null);
         }
         waypoints.add(waypoint);
       }
 
-      path.setWaypoints(waypoints);
+      path.setDbWaypoints(waypoints);
       if (path.getId() != null && path.getId().longValue() > -1) {
         path = JPA.em().merge(path);
       } else {
@@ -186,6 +186,21 @@ public class MapDAO extends BaseDAO<Long, Map> {
     }
 
     map.setObjects(meshes);
+
+  }
+
+  public static void mapPaths(Map map) {
+    for (Path path : map.getPaths()) {
+      PathDAO.mapWaypoints(path);
+    }
+
+  }
+
+  public static void mapAll(Map map) {
+    mapMaterials(map);
+    mapStaticGeometries(map);
+    mapWaves(map);
+    mapPaths(map);
 
   }
 

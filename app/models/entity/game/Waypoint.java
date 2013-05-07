@@ -30,6 +30,8 @@ public class Waypoint implements Serializable {
 
   private String name;
   
+  private Integer sortOder;
+  
   @Embedded
   @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "position_x")),
       @AttributeOverride(name = "y", column = @Column(name = "position_y")), @AttributeOverride(name = "z", column = @Column(name = "position_z")) })
@@ -69,6 +71,14 @@ public class Waypoint implements Serializable {
 
   public void setPath(Path path) {
     this.path = path;
+  }
+
+  public Integer getSortOder() {
+    return sortOder;
+  }
+
+  public void setSortOder(Integer sortOder) {
+    this.sortOder = sortOder;
   }
 
   @Override

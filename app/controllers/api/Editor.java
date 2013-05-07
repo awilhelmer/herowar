@@ -1,6 +1,7 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
+import game.json.excludes.MapDataExcludeMixin;
 import game.json.excludes.MeshExcludeGeometryMixin;
 
 import java.io.IOException;
@@ -50,9 +51,7 @@ public class Editor extends Controller {
     if (map != null) {
       ObjectMapper mapper = new ObjectMapper();
       mapper.getSerializationConfig().addMixInAnnotations(Mesh.class, MeshExcludeGeometryMixin.class);
-      MapDAO.mapMaterials(map);
-      MapDAO.mapStaticGeometries(map);
-      MapDAO.mapWaves(map);
+      MapDAO.mapAll(map);
       try {
         return ok(mapper.writeValueAsString(map));
       } catch (IOException e) {
