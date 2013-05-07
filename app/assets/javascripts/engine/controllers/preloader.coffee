@@ -1,26 +1,23 @@
-BaseController = require 'controllers/baseController'
+RendererCanvasController = require 'controllers/rendererCanvas'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 materialHelper = require 'helper/materialHelper'
 log = require 'util/logger'
 db = require 'database'
 
-class Preloader extends BaseController
+class Preloader extends RendererCanvasController
+
+	id: 'preloader'
+	
+	redirectTo: ''
 
 	views:
 		'views/preloader'	: ''
 
-	redirectTo: ''
-
 	initialize: (options) ->
 		log.info 'Initialize preloader...'
+		@initVariables()			
 		super options
-		@$container = $ '#preloader'
-		@initLoader()			
-		@createRenderer()
-		@initRendererContext()
-		@animate()
-		@state = 1
 		@load
 			textures:
 				'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
@@ -28,9 +25,10 @@ class Preloader extends BaseController
 			texturesCube:
 				'default' 					: 'assets/images/game/skybox/default/%1.jpg'
 
-	initLoader: ->
+	initVariables: ->
 		@preloadComplete = false
 		@alpha = 1.0
+		@state = 1
 		@percentage = 0
 		@data = {}
 		@states = {}
@@ -43,16 +41,6 @@ class Preloader extends BaseController
 			remaining: 0
 			loaded: 0
 			finish: false
-
-	createRenderer: ->
-		@renderer = new THREE.CanvasRenderer
-			clearColor: 0x555555
-		@$container.append @renderer.domElement
-		@renderer.setSize @$container.width(), @$container.height()
-
-	initRendererContext: ->
-		@ctx = @renderer.domElement.getContext '2d'
-		@ctx.textAlign = 'center'
 
 	load: (data) ->
 		for type in @types
