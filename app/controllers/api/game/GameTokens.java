@@ -12,6 +12,7 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import controllers.Application;
+import dao.game.MapDAO;
 
 /**
  * The GameTokens controller handle api requests for the GameToken model.
@@ -21,7 +22,7 @@ import controllers.Application;
 public class GameTokens extends Controller {
   
   @Transactional
-  public static Result create() {
+  public static Result create(Long mapId) {
     User user = Application.getLocalUser();
     if (user == null) {
       return badRequest(toJson(new NotLoggedInError()));
@@ -29,6 +30,7 @@ public class GameTokens extends Controller {
     GameToken gameToken = new GameToken();
     gameToken.setToken(RandomStringUtils.randomAlphanumeric(50));
     gameToken.setCreatedByUser(user);
+    gameToken.setMap(MapDAO.getMapById(mapId));
     JPA.em().persist(gameToken);
     return ok(toJson(gameToken));
   }

@@ -27,7 +27,6 @@ public class PlayerProcessor extends ConnectionProcessor implements IProcessor {
 
   public PlayerProcessor(String topic, WebSocketConnection connection) {
     super(topic, connection);
-
     // this.addTokenListener(new InputListener());
   }
 
@@ -41,9 +40,7 @@ public class PlayerProcessor extends ConnectionProcessor implements IProcessor {
     if (session != null) {
       Long now = System.currentTimeMillis();
       double delta = session.getClock().getDelta();
-
     }
-
   }
 
   @Override
@@ -54,12 +51,10 @@ public class PlayerProcessor extends ConnectionProcessor implements IProcessor {
   private void updatePlayer(double delta) {
     double realDelta = (delta / (gameTickDuration * 0.001));
     int ticks = (int) realDelta;
-
     final GameSession session = getSession();
     for (; ticks > 0; ticks--) {
       proccessPlayerSpeed(session, realDelta);
     }
-
   }
 
   private void proccessPlayerSpeed(GameSession session, double delta) {
@@ -78,5 +73,4 @@ public class PlayerProcessor extends ConnectionProcessor implements IProcessor {
   public void stop() {
     super.stop();
   }
-
 }
