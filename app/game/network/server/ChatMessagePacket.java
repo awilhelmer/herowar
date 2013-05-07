@@ -1,6 +1,6 @@
 package game.network.server;
 
-import game.network.BasePacket;
+import game.network.ObjectPacket;
 import game.network.PacketType;
 
 /**
@@ -8,7 +8,7 @@ import game.network.PacketType;
  * 
  * @authorAlexander Wilhelmer
  */
-public class ChatMessagePacket extends BasePacket {
+public class ChatMessagePacket extends ObjectPacket {
   private static final long serialVersionUID = 758911699262440495L;
   
   private String message;

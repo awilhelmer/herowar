@@ -1,9 +1,9 @@
 package game.network;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * Used to detect packet type.
@@ -13,35 +13,34 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("serial")
-public class BasePacket implements Serializable {
+public class ObjectPacket extends BasePacket {
   
-  @JsonProperty
-  protected Integer type;
-  
-  @JsonProperty
-  protected Long createdTime;
+  protected Long objectId;
 
-  public Integer getType() {
-    return type;
+  public ObjectPacket() {
+    this.createdTime = new Date().getTime();
   }
 
-  public void setType(Integer type) {
-    this.type = type;
+  public ObjectPacket(Long objectId) {
+    super();
+    this.objectId = objectId;
+    this.createdTime = new Date().getTime();
   }
 
-  public Long getCreatedTime() {
-    return createdTime;
+  public Long getObjectId() {
+    return objectId;
   }
 
-  public void setCreatedTime(Long createdTime) {
-    this.createdTime = createdTime;
+  public void setObjectId(Long objectId) {
+    this.objectId = objectId;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((type == null) ? 0 : type.hashCode());
+    result = prime * result + ((objectId == null) ? 0 : objectId.hashCode());
     return result;
   }
 
@@ -53,11 +52,16 @@ public class BasePacket implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    BasePacket other = (BasePacket) obj;
+    ObjectPacket other = (ObjectPacket) obj;
     if (type == null) {
       if (other.type != null)
         return false;
     } else if (!type.equals(other.type))
+      return false;
+    if (objectId == null) {
+      if (other.objectId != null)
+        return false;
+    } else if (!objectId.equals(other.objectId))
       return false;
     return true;
   }

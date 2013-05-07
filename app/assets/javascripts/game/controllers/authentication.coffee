@@ -34,7 +34,7 @@ class AuthenticationController extends RenderCanvasController
 				if app.socketClient.isOpen
 					AuthPacket = require 'network/packets/authPacket'
 					# TODO: get real auth token here
-					packet = new AuthPacket 12345
+					packet = new AuthPacket '12345'
 					app.socketClient.send packet
 					@state = 2
 					log.info 'Switched to state 2 !!!!'

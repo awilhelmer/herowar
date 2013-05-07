@@ -1,7 +1,7 @@
 package game.network.server;
 
 import game.GameSession;
-import game.network.BasePacket;
+import game.network.ObjectPacket;
 import game.network.PacketType;
 
 /**
@@ -9,7 +9,7 @@ import game.network.PacketType;
  * 
  * @author Sebastian Sachtleben
  */
-public class PlayerInitPacket extends BasePacket {
+public class PlayerInitPacket extends ObjectPacket {
   private static final long serialVersionUID = -4769104244918925086L;
 
   private GameSession object;
