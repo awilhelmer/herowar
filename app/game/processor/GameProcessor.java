@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import models.entity.game.Map;
+
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -28,13 +30,15 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private final Node rootNode;
   private Long gameId;
+  private Map map;
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
   private Long objectIdGenerator = null;
 
-  public GameProcessor(Long gameId, GameSession session) {
-    super("episode-" + gameId);
+  public GameProcessor(Long gameId, Map map, GameSession session) {
+    super("game-" + gameId + "-map-" + map.getId());
     this.gameId = gameId;
+    this.map = map;
     this.objectIdGenerator = 0l;
     this.addPlayer(session);
     this.rootNode = new Node();
@@ -43,7 +47,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   @Override
   public void process() {
-    log.debug("Updating game: " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
+    log.debug("Updating " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
     proccessObjects();
     processIntelligent();
   }
@@ -114,15 +118,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   // }
 
   public void addPlayer(GameSession player) {
-    player.getModel().setId(getObjectIdGenerator());
-    rootNode.attachChild(player.getModel());
     synchronized (sessions) {
       this.sessions.add(player);
     }
   }
 
   public void removePlayer(WebSocketConnection connection) {
-
     synchronized (sessions) {
       Iterator<GameSession> iter = sessions.iterator();
       while (iter.hasNext()) {
@@ -170,4 +171,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.gameId = gameId;
   }
 
+  public Map getMap() {
+    return map;
+  }
+
+  public void setMap(Map map) {
+    this.map = map;
+  }
 }

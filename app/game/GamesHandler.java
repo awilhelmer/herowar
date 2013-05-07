@@ -1,20 +1,22 @@
 package game;
 
+import game.event.GameJoinEvent;
 import game.event.GameLeaveEvent;
 import game.processor.GameProcessor;
 import game.processor.ProcessorHandler;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import models.entity.game.Map;
 
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
-
 
 
 /**
@@ -27,7 +29,7 @@ public class GamesHandler implements Serializable {
 
   private static final Logger.ALogger log = Logger.of(GamesHandler.class);
 
-  private ConcurrentHashMap<Integer, List<GameProcessor>> games = new ConcurrentHashMap<Integer, List<GameProcessor>>();
+  private ConcurrentHashMap<Long, List<GameProcessor>> games = new ConcurrentHashMap<Long, List<GameProcessor>>();
   private ConcurrentHashMap<WebSocketConnection, GameSession> connections = new ConcurrentHashMap<WebSocketConnection, GameSession>();
   private ConcurrentHashMap<GameSession, ProcessorHandler> processors = new ConcurrentHashMap<GameSession, ProcessorHandler>();
 
@@ -90,11 +92,18 @@ public class GamesHandler implements Serializable {
 //        modelNames.toArray(new String[modelNames.size()]))));
 //  }
 //
-  /**
-   * Observes player leave event and remove player from game.
-   * 
-   * @param event
-   */
+
+  @EventSubscriber
+  public void observePlayerJoinEvent(GameJoinEvent event) {
+    GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(),
+        event.getConnection());
+    GameProcessor game = createGame(event.getGameToken().getMap(), session);
+    session.setGame(game);
+    connections.put(event.getConnection(), session);
+    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken()
+        .getCreatedByUser().getUsername(), game.getTopic()));
+  }
+  
   @EventSubscriber
   public void observePlayerLeaveEvent(GameLeaveEvent event) {
     log.info("Remove player with connection " + event.getConnection().httpRequest().id());
@@ -106,6 +115,38 @@ public class GamesHandler implements Serializable {
     if (player != null) {
       removePlayer(player, event.getConnection());
     }
+  }
+  
+  private GameProcessor createGame(Map map, GameSession session) {
+    GameProcessor game = getOpenGame(map);
+    if (game != null) {
+      game.addPlayer(session);
+
+    } else {
+      game = new GameProcessor(gameId, map, session);
+      game.start();
+      gameId++;
+      if (games.containsKey(map.getId())) {
+        games.get(map.getId()).add(game);
+      } else {
+        List<GameProcessor> newGameList = new ArrayList<GameProcessor>();
+        newGameList.add(game);
+        games.put(map.getId(), newGameList);
+      }
+    }
+    return game;
+  }
+  
+  private GameProcessor getOpenGame(Map map) {
+    if (games.containsKey(map.getId())) {
+      List<GameProcessor> processors = games.get(map.getId());
+      for (GameProcessor game : processors) {
+        if (game.getSessions().size() < map.getTeamSize()) {
+          return game;
+        }
+      }
+    }
+    return null;
   }
 
   private void removePlayer(GameSession session, WebSocketConnection connection) {
@@ -128,11 +169,11 @@ public class GamesHandler implements Serializable {
     games.clear();
   }
 
-  public Map<Integer, List<GameProcessor>> getGames() {
+  public java.util.Map<Long, List<GameProcessor>> getGames() {
     return games;
   }
 
-  public Map<WebSocketConnection, GameSession> getConnections() {
+  public java.util.Map<WebSocketConnection, GameSession> getConnections() {
     return connections;
   }
 

@@ -19,7 +19,8 @@ class Play extends AuthView
 		$currentTarget = $ event.currentTarget
 		id = $currentTarget.data 'id'
 		unless id then return
-		gameToken = db.get 'api/gameToken'
+		gameToken = db.get "api/gameToken"
+		gameToken.id = id
 		gameToken.fetch success: @onSuccess
 	
 	onSuccess: (response) =>

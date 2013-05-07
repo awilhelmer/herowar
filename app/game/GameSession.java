@@ -30,12 +30,10 @@ public class GameSession implements Serializable {
   private PlayerProcessor playerProcessor;
 
   public GameSession(User user, GameToken token, WebSocketConnection connection) {
-    // super(user.getId(), user, model, modelName);
     this.user = user;
     this.token = token;
     this.connection = connection;
     this.clock = new GameClock();
-    // TODO init model ...
   }
 
   public long getLatency() {
