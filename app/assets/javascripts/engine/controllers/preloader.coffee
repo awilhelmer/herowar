@@ -1,7 +1,7 @@
 RendererCanvasController = require 'controllers/rendererCanvas'
+materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
-materialHelper = require 'helper/materialHelper'
 log = require 'util/logger'
 db = require 'database'
 

@@ -2,8 +2,9 @@ Router = require 'router'
 
 class GameRouter extends Router
 
-    routes:
-        'game'  : 'gamePreloader'
-        'game2' : 'game'
+	routes:
+		'game'	: 'authentication'
+		'game2'	: 'gamePreloader'
+		'game3'	: 'game'
 
 return GameRouter

@@ -1,5 +1,4 @@
 BaseController = require 'controllers/baseController'
-SocketClient = require 'network/socketclient'
 Variables = require 'variables'
 Scene = require 'core/scene'
 Engine = require 'engine'
@@ -37,7 +36,6 @@ class ApplicationController extends BaseController
 	
 	initCore: ->
 		@scene = new Scene @
-		@socketClient = new SocketClient @
 	
 	render: (resize) =>
 		if resize then @engine.onWindowResize true else	@engine.render()

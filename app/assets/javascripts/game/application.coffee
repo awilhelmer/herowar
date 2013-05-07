@@ -1,3 +1,4 @@
+SocketClient = require 'network/socketclient'
 GameRouter = require 'gameRouter'
 
 app =
@@ -6,6 +7,7 @@ app =
 	views: {}
 	
 	start: ->
+		app.socketClient = new SocketClient()
 		app.router = new GameRouter()
 		Backbone.history.start pushState: true
 
