@@ -21,7 +21,7 @@ public class ClientPreloadCompletePacket extends BasePacket implements InputPack
   
   @Override
   public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-    // TODO Auto-generated method stub
+    log.info("Process " + this.toString());
   }
 
   @Override

@@ -5,15 +5,12 @@ import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.PacketType;
 import game.network.client.ClientInitPacket;
+import game.network.client.ClientPreloadCompletePacket;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -63,8 +60,7 @@ public class PacketHandler implements Serializable {
 
   private void registerTypes() {
     packetTypeCache.put(PacketType.ClientInitPacket, ClientInitPacket.class);
-    // packetTypeCache.put(PacketType.ClientPreloadCompletePacket,
-    // ClientPreloadCompletePacket.class);
+    packetTypeCache.put(PacketType.ClientPreloadCompletePacket, ClientPreloadCompletePacket.class);
   }
 
   public Map<Integer, Class<? extends BasePacket>> getPacketTypeCache() {
