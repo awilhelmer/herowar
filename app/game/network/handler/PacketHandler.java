@@ -45,7 +45,7 @@ public class PacketHandler implements Serializable {
       return;
     }
     try {
-      InputPacket packet = (InputPacket) Json.fromJson(Json.parse(data), getPacketTypeCache().get(packetType.getType().getClass()));
+      InputPacket packet = (InputPacket) Json.fromJson(Json.parse(data), getPacketTypeCache().get(packetType.getType()));
       if (packet != null) {
         log.debug("Retrieved (connection " + connection.httpRequest().id() + "):" + packet.toString());
         packet.process(this, handler, connection);

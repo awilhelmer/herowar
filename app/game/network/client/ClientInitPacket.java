@@ -7,18 +7,20 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
+
 import models.entity.game.GameToken;
 
 import org.bushe.swing.event.EventBus;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonIgnoreType;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.webbitserver.WebSocketConnection;
 
-import play.Logger;
-import play.libs.Json;
 import dao.game.GameTokenDAO;
+
+import play.Logger;
+import play.db.jpa.Transactional;
+import play.libs.Json;
 
 /**
  * Initial client packet contains game token.
@@ -30,6 +32,7 @@ import dao.game.GameTokenDAO;
 @SuppressWarnings("serial")
 public class ClientInitPacket extends BasePacket implements InputPacket {
   
+  @JsonIgnore
   private static final Logger.ALogger log = Logger.of(ClientInitPacket.class);
 
   @JsonProperty
