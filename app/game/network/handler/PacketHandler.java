@@ -17,6 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import play.libs.Json;
 
 /**
@@ -38,17 +39,22 @@ public class PacketHandler implements Serializable {
     return instance;
   }
 
-  public void handle(WebSocketHandler handler, WebSocketConnection connection, String data) {
+  public void handle(final WebSocketHandler handler, final WebSocketConnection connection, String data) {
     BasePacket packetType = Json.fromJson(Json.parse(data), BasePacket.class);
     if (packetType == null || !getPacketTypeCache().containsKey(packetType.getType())) {
       log.error("Failed to get packet for type: " + (packetType != null ? packetType.getType() : null));
       return;
     }
     try {
-      InputPacket packet = (InputPacket) Json.fromJson(Json.parse(data), getPacketTypeCache().get(packetType.getType()));
+      final InputPacket packet = (InputPacket) Json.fromJson(Json.parse(data), getPacketTypeCache().get(packetType.getType()));
       if (packet != null) {
         log.debug("Retrieved (connection " + connection.httpRequest().id() + "):" + packet.toString());
-        packet.process(this, handler, connection);
+        JPA.withTransaction(new play.libs.F.Callback0() {
+          @Override
+          public void invoke() throws Throwable {
+            packet.process(instance, handler, connection);
+          }
+        });
       }
     } catch (Exception e) {
       log.error("Failed to parse input packet (connection=" + connection.httpRequest().id() + "): " + data, e);
