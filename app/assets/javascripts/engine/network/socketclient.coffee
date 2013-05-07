@@ -18,6 +18,7 @@ class SocketClient
 		@socket.onclose = @onClose
 		@socket.onmessage = @onMessage
 		@socket.onerror = @onError
+		events.on 'send:packet', @send, @
 
 	onOpen: (event) =>
 		log.debug "Socket Status: #{@socket.readyState} (Opened)"

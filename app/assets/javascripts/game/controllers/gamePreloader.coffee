@@ -1,4 +1,6 @@
 Preloader = require 'controllers/preloader'
+PreloadCompletePacket = require 'network/packets/preloadCompletePacket'
+events = require 'events'
 
 class GamePreloader extends Preloader
 	
@@ -8,5 +10,9 @@ class GamePreloader extends Preloader
 	initialize: (options) ->
 		@options = _.extend { map: 1 }, options
 		super @options
+	
+	finish: ->
+		events.trigger 'send:packet', new PreloadCompletePacket()
+		super()
 	
 return GamePreloader
