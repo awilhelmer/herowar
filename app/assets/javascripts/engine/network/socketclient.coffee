@@ -1,3 +1,4 @@
+BasePacket = require 'network/packets/basePacket'
 log = require 'util/logger'
 
 class SocketClient
@@ -19,14 +20,20 @@ class SocketClient
 
 	onOpen: (event) =>
 		log.info "Socket Status: #{@socket.readyState} (Opened)"
+		@isOpen = true
 	
 	onClose: (event) =>
 		log.info "Socket Status: #{@socket.readyState} (Closed)"
+		@isOpen = false
+		@isAuthenticated = false
 
 	onMessage: (event) =>
 		console.log '[SocketClient] Received: ', event
 
 	onError: (event) =>
 		throw 'Oh no, an error occured in socket client'
+
+	send: (packet) ->
+		@socket.send packet.get() if @isOpen and packet instanceof BasePacket
 
 return SocketClient
