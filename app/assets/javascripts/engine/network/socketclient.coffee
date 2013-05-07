@@ -1,5 +1,6 @@
 BasePacket = require 'network/packets/basePacket'
 log = require 'util/logger'
+events = require 'events'
 
 class SocketClient
 
@@ -9,7 +10,7 @@ class SocketClient
 		@socket = new WebSocket host
 		@isOpen = false
 		@isAuthenticated = false
-		log.info "Creating web socket connection to #{host}"
+		log.debug "Creating web socket connection to #{host}"
 		@bindEvents()
 		
 	bindEvents: ->
@@ -19,16 +20,20 @@ class SocketClient
 		@socket.onerror = @onError
 
 	onOpen: (event) =>
-		log.info "Socket Status: #{@socket.readyState} (Opened)"
+		log.debug "Socket Status: #{@socket.readyState} (Opened)"
 		@isOpen = true
 	
 	onClose: (event) =>
-		log.info "Socket Status: #{@socket.readyState} (Closed)"
+		log.debug "Socket Status: #{@socket.readyState} (Closed)"
 		@isOpen = false
 		@isAuthenticated = false
 
 	onMessage: (event) =>
-		console.log '[SocketClient] Received: ', event
+		if event and event.data
+			packet = JSON.parse event.data
+			if packet.type
+				log.debug "[SocketClient] Trigger 'retrieve:packet:#{packet.type}' event for packet '#{event.data}'"
+				events.trigger "retrieve:packet:#{packet.type}", packet
 
 	onError: (event) =>
 		throw 'Oh no, an error occured in socket client'
