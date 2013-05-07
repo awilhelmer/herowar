@@ -34,7 +34,8 @@ public class Wave implements Serializable {
   private Integer prepareTime;
   private Integer waveTime;
   private Integer quantity;
-
+  private Integer sortOder;
+  
   @ManyToOne(cascade = CascadeType.REFRESH)
   @JoinColumn(name = "map_id")
   @JsonIgnore
@@ -139,6 +140,14 @@ public class Wave implements Serializable {
 
   public void setUnitIds(List<Long> unitIds) {
     this.unitIds = unitIds;
+  }
+
+  public Integer getSortOder() {
+    return sortOder;
+  }
+
+  public void setSortOder(Integer sortOder) {
+    this.sortOder = sortOder;
   }
 
   // public Set<Army> getArmies() {

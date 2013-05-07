@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -28,7 +30,11 @@ public class Path implements Serializable {
   private String name;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "path", orphanRemoval = true)
-  private Set<Waypoint> waypoints;
+  @JsonIgnore
+  private Set<Waypoint> dbWaypoints;
+
+  @Transient
+  private List<Waypoint> waypoints;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = true)
   @JoinColumn(name = "map_id", referencedColumnName = "id")
@@ -51,11 +57,19 @@ public class Path implements Serializable {
     this.name = name;
   }
 
-  public Set<Waypoint> getWaypoints() {
+  public Set<Waypoint> getDbWaypoints() {
+    return dbWaypoints;
+  }
+
+  public void setDbWaypoints(Set<Waypoint> dbWaypoints) {
+    this.dbWaypoints = dbWaypoints;
+  }
+
+  public List<Waypoint> getWaypoints() {
     return waypoints;
   }
 
-  public void setWaypoints(Set<Waypoint> waypoints) {
+  public void setWaypoints(List<Waypoint> waypoints) {
     this.waypoints = waypoints;
   }
 
