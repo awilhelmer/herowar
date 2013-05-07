@@ -29,7 +29,7 @@ public class PacketType {
 //  public static final Integer PlayerInputPacket = 23;
 //  public static final Integer ObjectRotationPacket = 30;
 //  public static final Integer ObjectShotPacket = 31;
-//  public static final Integer PreloadListPacket = 50;
+  public static final Integer PreloadDataPacket = 50;
 //  public static final Integer ChatMessagePacket = 70;
 
 }

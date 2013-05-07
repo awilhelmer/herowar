@@ -2,12 +2,16 @@ package game;
 
 import game.event.GameJoinEvent;
 import game.event.GameLeaveEvent;
+import game.network.server.PreloadDataPacket;
 import game.processor.GameProcessor;
 import game.processor.ProcessorHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
@@ -17,6 +21,7 @@ import org.bushe.swing.event.annotation.EventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.libs.Json;
 
 
 /**
@@ -46,53 +51,6 @@ public class GamesHandler implements Serializable {
     log.info(this.getClass().getSimpleName() + " initialized");
   }
 
-
-//  private GameProcessor createGame(Episode episode, GameSession session) {
-//    GameProcessor game = getOpenGame(episode);
-//    if (game != null) {
-//      game.addPlayer(session);
-//
-//    } else {
-//      game = new GameProcessor(gameId, episode, session);
-//      game.start();
-//      gameId++;
-//      if (games.containsKey(episode.getId())) {
-//        games.get(episode.getId()).add(game);
-//      } else {
-//        List<GameProcessor> newGameList = new ArrayList<GameProcessor>();
-//        newGameList.add(game);
-//        games.put(episode.getId(), newGameList);
-//      }
-//    }
-//    return game;
-//  }
-//
-//  private GameProcessor getOpenGame(Episode episode) {
-//    if (games.containsKey(episode.getId())) {
-//      List<GameProcessor> processors = games.get(episode.getId());
-//      for (GameProcessor game : processors) {
-//        if (game.getSessions().size() < episode.getMaxPlayers()) {
-//          return game;
-//        }
-//      }
-//    }
-//    return null;
-//  }
-//
-//  private void sendPreloadListPacket(WebSocketConnection connection, GameProcessor game) {
-//    Set<String> modelNames = new HashSet<String>();
-//    for (GameSession obj : game.getSessions()) {
-//      modelNames.add(obj.getModelName());
-//    }
-//    for (SceneObject obj : game.getObjects()) {
-//      modelNames.add(obj.getModelName());
-//    }
-//    Gson gson = GsonProducer.get();
-//    connection.send(gson.toJson(new PreloadListPacket(game.getTopic(),
-//        modelNames.toArray(new String[modelNames.size()]))));
-//  }
-//
-
   @EventSubscriber
   public void observePlayerJoinEvent(GameJoinEvent event) {
     GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(),
@@ -102,6 +60,7 @@ public class GamesHandler implements Serializable {
     connections.put(event.getConnection(), session);
     log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken()
         .getCreatedByUser().getUsername(), game.getTopic()));
+    sendPreloadDataPacket(event.getConnection(), game);
   }
   
   @EventSubscriber
@@ -149,6 +108,17 @@ public class GamesHandler implements Serializable {
     return null;
   }
 
+  private void sendPreloadDataPacket(WebSocketConnection connection, GameProcessor game) {
+    // TODO: replace hardcoded preload data
+    java.util.Map<String, String> textures = new HashMap<String, String>();
+    textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
+    textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
+    java.util.Map<String, String> texturesCube = new HashMap<String, String>();
+    texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
+    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), textures, texturesCube);
+    connection.send(Json.toJson(packet).toString());
+  }
+  
   private void removePlayer(GameSession session, WebSocketConnection connection) {
     ProcessorHandler handler = processors.get(session);
     if (handler != null && handler.isStarted()) {
