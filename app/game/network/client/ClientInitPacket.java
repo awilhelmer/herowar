@@ -43,8 +43,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
       log.info("Found " + gameToken.toString());
       log.info("Auth connection " + connection.httpRequest().id() + " granted for " + gameToken.getCreatedByUser().toString());
       log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
-      // TODO handle selected Models from Database
-      EventBus.publish(new GameJoinEvent(gameToken, connection, "defaultmodel.dae"));
+      EventBus.publish(new GameJoinEvent(gameToken, connection));
       connection.send(Json.toJson(new AccessGrantedPacket()).toString());
     } else {
       connection.send(Json.toJson(new AccessDeniedPacket()).toString());

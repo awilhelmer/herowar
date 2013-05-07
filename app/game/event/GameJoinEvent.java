@@ -8,18 +8,17 @@ import org.webbitserver.WebSocketConnection;
  * This event will be fired if a player requests to join a game.
  * 
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
 
 public class GameJoinEvent {
 
   private GameToken gameToken;
   private WebSocketConnection connection;
-  private String modelName;
 
-  public GameJoinEvent(GameToken gameToken, WebSocketConnection connection, String modelName) {
+  public GameJoinEvent(GameToken gameToken, WebSocketConnection connection) {
     this.gameToken = gameToken;
     this.connection = connection;
-    this.modelName = modelName;
   }
 
   public GameJoinEvent() {
@@ -41,13 +40,4 @@ public class GameJoinEvent {
   public void setConnection(WebSocketConnection connection) {
     this.connection = connection;
   }
-
-  public String getModelName() {
-    return modelName;
-  }
-
-  public void setModelName(String modelName) {
-    this.modelName = modelName;
-  }
-
 }
