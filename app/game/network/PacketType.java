@@ -24,12 +24,12 @@ public class PacketType {
 //  public static final Integer PlayerJoinPacket = 20;
   public static final Integer PlayerLeavePacket = 21;
   public static final Integer PlayerInitPacket = 22;
+  public static final Integer PlayerStatusPacket = 35;
 //  public static final Integer ObjectPositionPacket = 26;
 //  public static final Integer PlayerInputPacket = 23;
 //  public static final Integer ObjectRotationPacket = 30;
 //  public static final Integer ObjectShotPacket = 31;
 //  public static final Integer PreloadListPacket = 50;
 //  public static final Integer ChatMessagePacket = 70;
-  
 
 }

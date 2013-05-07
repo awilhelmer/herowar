@@ -2,6 +2,7 @@ package game.processor;
 
 import game.GameSession;
 import game.network.BasePacket;
+import game.network.server.PlayerStatusPacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IProcessor;
 
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
 
@@ -23,17 +25,19 @@ import com.ardor3d.scenegraph.Spatial;
 
 /**
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
 public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private final static Logger.ALogger log = Logger.of(GameProcessor.class);
 
   private final Node rootNode;
+  private Long objectIdGenerator = null;
   private Long gameId;
   private Map map;
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
-  private Long objectIdGenerator = null;
+  private ConcurrentHashMap<Long, Long> playerGold = new ConcurrentHashMap<Long, Long>();
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId + "-map-" + map.getId());
@@ -50,6 +54,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     log.debug("Updating " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
     proccessObjects();
     processIntelligent();
+    updateGold();
+    sendPlayerStats();
   }
 
   @Override
@@ -121,6 +127,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     synchronized (sessions) {
       this.sessions.add(player);
     }
+    this.playerGold.put(player.getUser().getId(), map.getGoldStart().longValue());
   }
 
   public void removePlayer(WebSocketConnection connection) {
@@ -145,6 +152,21 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     for (Spatial obj : rootNode.getChildren()) {
       // TODO add game logic here ...
 
+    }
+  }
+  
+  private void updateGold() {
+    Iterator<java.util.Map.Entry<Long, Long>> iter = playerGold.entrySet().iterator();
+    while(iter.hasNext()) {
+      java.util.Map.Entry<Long, Long> entry = iter.next();
+      entry.setValue(entry.getValue() + map.getGoldPerTick());
+    }
+  }
+  
+  private void sendPlayerStats() {
+    for (GameSession session : sessions) {
+      PlayerStatusPacket packet = new PlayerStatusPacket(map.getLives(), playerGold.get(session.getUser().getId()));
+      session.getConnection().send(Json.toJson(packet).toString());
     }
   }
 

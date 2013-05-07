@@ -158,6 +158,11 @@ public class GamesHandler implements Serializable {
     game.removePlayer(connection);
     connections.remove(connection);
     processors.remove(session);
+    // TODO: Current we shutdown the games without users, later they should go on...
+    if (game.getSessions().size() == 0) {
+      game.stop();
+      games.remove(game);
+    }
   }
 
   public void stop() {
