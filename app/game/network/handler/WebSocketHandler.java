@@ -10,6 +10,8 @@ import java.util.Map;
 import models.entity.User;
 
 import org.bushe.swing.event.EventBus;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.ThreadSafeEventService;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
@@ -19,6 +21,7 @@ import play.Logger;
  * The websocket handler controls every connection between server and clients.
  * 
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
 public class WebSocketHandler extends BaseWebSocketHandler {
 
@@ -39,6 +42,16 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     return authConnections;
   }
 
+  public void init() {
+    System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
+    GamesHandler.getInstance();
+    log.info("WebSocketHandler started");
+  }
+  
+  public void destroy() {
+    GamesHandler.getInstance().stop();
+    log.info("WebSocketHandler stopped");
+  }
 
   @Override
   public void onOpen(WebSocketConnection connection) {

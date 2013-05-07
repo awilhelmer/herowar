@@ -27,6 +27,7 @@ import dao.game.MapDAO;
 import editor.EnvironmentImporter;
 import editor.UnitImporter;
 import game.GamesHandler;
+import game.network.GameServer;
 import game.network.handler.WebSocketHandler;
 
 /**
@@ -38,7 +39,6 @@ public class Global extends GlobalSettings {
 
   @Override
   public void onStart(Application app) {
-    Logger.info("Herowar has stated");
     PlayAuthenticate.setResolver(new Resolver() {
 
       @Override
@@ -81,7 +81,7 @@ public class Global extends GlobalSettings {
       @Override
       public void invoke() throws Throwable {
         initialSecurityRoles();
-        initEventBus();
+        initGameServer();
         EnvironmentImporter.getInstance().sync();
         UnitImporter.getInstance().sync();
         WebSocketHandler.getInstance();
@@ -89,20 +89,21 @@ public class Global extends GlobalSettings {
         createAdminUser();
         createTutorialMap();
         createDummyNews();
+        Logger.info("Herowar has stated");
       }
     });
   }
 
-  private void initEventBus() {
+  private void initGameServer() {
     System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
-    // Init GameHandler
-    Logger.info("Eventbus initialized");
+    GameServer.getInstance().start();
+    Logger.info("GameServer started");
   }
 
   @Override
   public void onStop(Application app) {
     Logger.info("Herowar shutdown...");
-    GamesHandler.getInstance().stop();
+    GameServer.getInstance().shutdown();
   }
 
   private void initialSecurityRoles() {
