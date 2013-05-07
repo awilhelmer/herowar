@@ -8,7 +8,7 @@ class GamePreloader extends Preloader
 	
 	# TODO: Removed hardcoded map and set via game token or what ever...
 	initialize: (options) ->
-		@options = _.extend { map: 1 }, options
+		@options = _.extend { map: 2 }, options
 		super @options
 	
 	finish: ->
