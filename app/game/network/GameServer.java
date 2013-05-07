@@ -15,7 +15,7 @@ import play.Logger;
 @SuppressWarnings("serial")
 public class GameServer implements Serializable {
 
-  public static final int PORT = 9000;
+  public static final int PORT = 8081;
   
   private static final Logger.ALogger log = Logger.of(GameServer.class);
   
