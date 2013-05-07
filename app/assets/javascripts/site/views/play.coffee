@@ -1,6 +1,7 @@
 AuthView = require 'views/authView'
 templates = require 'templates'
 app = require 'application'
+db = require 'database'
 
 class Play extends AuthView
 
@@ -9,10 +10,19 @@ class Play extends AuthView
 	entity: 'db/maps'
 	
 	template: templates.get 'play.tmpl'
+
+	events:
+		'click .map' : 'joinMap'
 	
-	getTemplateData: ->
-		json = super()
-		console.log json
-		json
+	joinMap: (event) ->
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		id = $currentTarget.data 'id'
+		unless id then return
+		gameToken = db.get 'api/gameToken'
+		gameToken.fetch success: @onSuccess
+	
+	onSuccess: (response) =>
+		window.location = "/game?token=#{response.get('token')}"
 	
 return Play

@@ -7,7 +7,6 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
-
 import models.entity.game.GameToken;
 
 import org.bushe.swing.event.EventBus;
@@ -16,11 +15,9 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.webbitserver.WebSocketConnection;
 
-import dao.game.GameTokenDAO;
-
 import play.Logger;
-import play.db.jpa.Transactional;
 import play.libs.Json;
+import dao.game.GameTokenDAO;
 
 /**
  * Initial client packet contains game token.

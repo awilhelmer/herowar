@@ -40,6 +40,7 @@ public class GameToken implements Serializable {
 
   public GameToken() {
     this.invalid = false;
+    this.createdDate = new Date();
   }
 
   public GameToken(String token) {
