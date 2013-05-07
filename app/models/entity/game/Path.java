@@ -27,10 +27,10 @@ public class Path implements Serializable {
   private Long id;
   private String name;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "path")
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "path", orphanRemoval = true)
   private Set<Waypoint> waypoints;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = true)
   @JoinColumn(name = "map_id", referencedColumnName = "id")
   @JsonIgnore
   private Map map;

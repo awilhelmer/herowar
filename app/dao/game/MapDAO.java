@@ -17,10 +17,12 @@ import models.entity.game.Path;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
+import play.Logger;
 import play.db.jpa.JPA;
 import dao.BaseDAO;
 
 public class MapDAO extends BaseDAO<Long, Map> {
+  private static final Logger.ALogger log = Logger.of(MapDAO.class);
 
   private MapDAO() {
     super(Long.class, Map.class);
@@ -92,7 +94,8 @@ public class MapDAO extends BaseDAO<Long, Map> {
 
   public static void mapWaves(Map map) {
     for (Wave wave : map.getWaves()) {
-      wave.setPathId(wave.getPath().getId());
+      if (wave.getPath() != null)
+        wave.setPathId(wave.getPath().getId());
       wave.setUnitIds(new ArrayList<Long>());
       for (Unit unit : wave.getUnits()) {
         wave.getUnitIds().add(unit.getId());
@@ -101,7 +104,7 @@ public class MapDAO extends BaseDAO<Long, Map> {
 
   }
 
-  public static void createWaves(Map map, Set<Long> oldWaveIds, java.util.Map<Long, Path> newPaths) {
+  public static void createWaves(Map map, java.util.Map<Long, Path> newPaths) {
     Set<Wave> waves = new HashSet<Wave>();
     for (Wave wave : map.getWaves()) {
       wave.setMap(map);
@@ -111,6 +114,7 @@ public class MapDAO extends BaseDAO<Long, Map> {
       } else if (wave.getPathId() != null && newPaths != null) {
         path = newPaths.get(wave.getPathId());
       }
+      log.info("saving wave with pathId " + wave.getPathId());
       wave.setPath(path);
       wave.setUnits(new HashSet<Unit>());
       if (wave.getUnitIds() != null) {
@@ -122,7 +126,6 @@ public class MapDAO extends BaseDAO<Long, Map> {
       }
       if (wave.getId() != null && wave.getId().longValue() > -1) {
         wave = JPA.em().merge(wave);
-        oldWaveIds.add(wave.getId());
       } else {
         wave.setId(null);
       }
@@ -130,18 +133,20 @@ public class MapDAO extends BaseDAO<Long, Map> {
     }
 
     map.setWaves(waves);
+
   }
 
-  public static java.util.Map<Long, Path> createPaths(Map map, Set<Long> oldPathIds, Set<Long> oldWaypointIds) {
+  public static java.util.Map<Long, Path> createPaths(Map map) {
     java.util.Map<Long, Path> result = new HashMap<Long, Path>();
     Set<Path> paths = new HashSet<Path>();
     for (Path path : map.getPaths()) {
+      path.setMap(map);
       Set<Waypoint> waypoints = new HashSet<Waypoint>();
       for (Waypoint waypoint : path.getWaypoints()) {
         waypoint.setPath(path);
         if (waypoint.getId() != null && waypoint.getId().longValue() > -1) {
           waypoint = JPA.em().merge(waypoint);
-          oldWaypointIds.add(waypoint.getId());
+
         } else {
           waypoint.setId(null);
         }
@@ -149,79 +154,39 @@ public class MapDAO extends BaseDAO<Long, Map> {
       }
 
       path.setWaypoints(waypoints);
-      path.setMap(map);
       if (path.getId() != null && path.getId().longValue() > -1) {
         path = JPA.em().merge(path);
-        oldPathIds.add(path.getId());
       } else {
         result.put(path.getId(), path);
         path.setId(null);
-       // JPA.em().persist(path);
+
       }
       paths.add(path);
     }
-    //JPA.em().flush();
+
     map.setPaths(paths);
-    for (Path path : map.getPaths()) {
-      path.setMap(map);
-    }
+
     return result;
   }
 
-  public static void createMeshes(Map map, Set<Long> oldMeshIds) {
+  public static void createMeshes(Map map) {
     Set<Mesh> meshes = new HashSet<Mesh>();
     for (Mesh mesh : map.getObjects()) {
+      mesh.setMap(map);
       if (mesh.getGeometry().getId() != null) {
-        mesh.setMap(map);
         mesh.setGeometry(GeometryDAO.getInstance().findUnique(mesh.getGeometry().getId()));
       }
       if (mesh.getId() == null || mesh.getId().intValue() < 0) {
         mesh.setId(null);
+        JPA.em().persist(mesh);
       } else {
         mesh = MeshDAO.getInstance().merge(mesh);
-        oldMeshIds.add(mesh.getId());
       }
       meshes.add(mesh);
     }
+
     map.setObjects(meshes);
+
   }
 
-  public static void deletePaths(Map map, Set<Long> oldPathIds, Set<Long> oldWaypointIds) {
-    for (Iterator<Path> pathIt = map.getPaths().iterator(); pathIt.hasNext();) {
-      Path oldPath = pathIt.next();
-      if (!oldPathIds.contains(oldPath.getId())) {
-        pathIt.remove();
-        JPA.em().remove(oldPath);
-      } else {
-        for (Iterator<Waypoint> wayIt = oldPath.getWaypoints().iterator(); wayIt.hasNext();) {
-          Waypoint oldWaypoint = wayIt.next();
-          if (!oldWaypointIds.contains(oldWaypoint.getId())) {
-            wayIt.remove();
-            JPA.em().remove(oldWaypoint);
-          }
-        }
-      }
-    }
-  }
-
-  public static void deleteWaves(Map map, Set<Long> oldWaveIds) {
-    for (Iterator<Wave> waveIt = map.getWaves().iterator(); waveIt.hasNext();) {
-      Wave oldWave = waveIt.next();
-      if (!oldWaveIds.contains(oldWave.getId())) {
-        waveIt.remove();
-        JPA.em().remove(oldWave);
-      }
-    }
-  }
-
-  public static void deleteMeshes(Map map, Set<Long> oldMeshIds) {
-    for (Iterator<Mesh> iterator = map.getObjects().iterator(); iterator.hasNext();) {
-      Mesh mesh = iterator.next();
-      if (!oldMeshIds.contains(mesh.getId())) {
-        iterator.remove();
-        JPA.em().remove(mesh);
-      }
-
-    }
-  }
 }

@@ -120,21 +120,16 @@ public class Editor extends Controller {
     if (map.getTerrain().getMap() == null) {
       map.getTerrain().setMap(map);
     }
-    Set<Long> oldMeshIds = new HashSet<Long>();
-    Set<Long> oldWaypointIds = new HashSet<Long>();
-    Set<Long> oldPathIds = new HashSet<Long>();
-    Set<Long> oldWaveIds = new HashSet<Long>();
-
     if (map.getObjects() != null) {
-      MapDAO.createMeshes(map, oldMeshIds);
+      MapDAO.createMeshes(map);
     }
 
     java.util.Map<Long, Path> newPaths = null;
     if (map.getPaths() != null) {
-      newPaths = MapDAO.createPaths(map, oldPathIds, oldWaypointIds);
+      newPaths = MapDAO.createPaths(map);
     }
     if (map.getWaves() != null) {
-      MapDAO.createWaves(map, oldWaveIds, newPaths);
+      MapDAO.createWaves(map, newPaths);
     }
 
     // For saving MatGeoId.materialId is the index of map.getMaterials()!
@@ -145,10 +140,6 @@ public class Editor extends Controller {
     } else {
       map = JPA.em().merge(map);
     }
-
-    MapDAO.deletePaths(map, oldPathIds, oldWaypointIds);
-    MapDAO.deleteWaves(map, oldWaveIds);
-    MapDAO.deleteMeshes(map, oldMeshIds);
 
   }
 

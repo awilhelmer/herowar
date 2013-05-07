@@ -46,10 +46,10 @@ public class Map extends BaseModel implements Serializable {
   @OneToOne(cascade = CascadeType.ALL)
   private Terrain terrain;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map", orphanRemoval = true)
   private Set<Wave> waves;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map", orphanRemoval = true)
   private Set<Mesh> objects;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -57,7 +57,7 @@ public class Map extends BaseModel implements Serializable {
   @JsonIgnore
   private Set<Material> allMaterials;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "map", orphanRemoval = true)
   private Set<Path> paths;
 
   @Transient

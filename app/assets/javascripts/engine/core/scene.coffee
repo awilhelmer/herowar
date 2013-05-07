@@ -16,6 +16,7 @@ class Scene
 		@createTextures()
 		@createStaticObjects()
 		@createPaths()
+		@createWaves()
 		@isInitialized = true
 	
 	# Override for custom initialize
@@ -129,6 +130,7 @@ class Scene
 				waveModel.attributes.path = wave.pathId
 				if wave.unitIds and wave.unitIds.length > 0
 					waveModel.attributes.unit =	wave.unitIds[0]
+				waves.add waveModel
 			@afterCreatingWaves waveId
 		null
 	
