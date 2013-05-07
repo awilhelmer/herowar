@@ -1,28 +1,22 @@
 package game;
 
 import java.io.Serializable;
+
 /**
  * Provides delta for game simulator.
  * 
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
+@SuppressWarnings("serial")
 public class GameClock implements Serializable {
 
-  private static final long serialVersionUID = -5256345395907707410L;
-
   private Long oldTime = null;
-
-  /**
-   * Create new game clock instance.
-   */
-  public GameClock() {
+  
+  public void reset() {
+    oldTime = null;
   }
 
-  /**
-   * Get delta since last check. Do not call this multiple times.
-   * 
-   * @return delta double value
-   */
   public Double getDelta() {
     Double diff = 0d;
     Long newTime = System.currentTimeMillis();
@@ -33,5 +27,4 @@ public class GameClock implements Serializable {
     this.oldTime = newTime;
     return diff;
   }
-
 }
