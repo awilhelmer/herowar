@@ -27,16 +27,20 @@ public class GameToken implements Serializable {
   @Id
   private String token;
   private Boolean invalid;
-  
+
   @ManyToOne(cascade = { CascadeType.REFRESH })
   @JoinColumn(name = "createdbyuser_id")
   private User createdByUser;
-  
+
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;
-  
+
   @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
   private GameResult result;
+
+  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = true)
+  @JoinColumn(name = "map_id")
+  private Map map;
 
   public GameToken() {
     this.invalid = false;
@@ -87,6 +91,14 @@ public class GameToken implements Serializable {
 
   public void setResult(GameResult result) {
     this.result = result;
+  }
+
+  public Map getMap() {
+    return map;
+  }
+
+  public void setMap(Map map) {
+    this.map = map;
   }
 
   @Override
