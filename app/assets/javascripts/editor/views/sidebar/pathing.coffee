@@ -22,6 +22,7 @@ class Pathing extends BasePropertiesView
 		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
+		@waves = db.get 'waves'
 		@nextId = 1
 		@nextDbId = -1
 		@selectedItem = null
@@ -44,6 +45,11 @@ class Pathing extends BasePropertiesView
 		col = db.get 'paths'
 		col.add path
 		log.info "Path \"#{path.get('name')}\" created"
+		@addPathToIncompleteWaves id
+
+	addPathToIncompleteWaves: (id) ->
+		for wave in @waves.models
+			wave.set 'path', id unless wave.has('path')
 
 	removeItem: ->
 		col = db.get 'paths'

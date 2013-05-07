@@ -22,6 +22,7 @@ class Waves extends BasePropertiesView
 		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
+		@paths = db.get 'paths'
 		@nextId = 1
 		@nextDbId = -1
 		@selectedItem = null
@@ -41,6 +42,7 @@ class Waves extends BasePropertiesView
 			'id'		: id
 			'dbId'	: dbId
 			'name' 	: "Wave-#{id}"
+		wave.set 'path', @paths.models[0].get('id') if @paths.length > 0
 		col = db.get 'waves'
 		col.add wave
 		log.info "Wave \"#{wave.get('name')}\" created"
