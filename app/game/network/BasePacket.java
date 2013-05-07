@@ -1,9 +1,9 @@
 package game.network;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * Used to detect packet type.
@@ -15,12 +15,14 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @SuppressWarnings("serial")
 public class BasePacket implements Serializable {
   
-  @JsonProperty
   protected Integer type;
   
-  @JsonProperty
   protected Long createdTime;
 
+  public BasePacket() {
+    this.createdTime = (new Date()).getTime();
+  }
+  
   public Integer getType() {
     return type;
   }

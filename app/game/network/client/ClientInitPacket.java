@@ -10,9 +10,6 @@ import game.network.server.AccessGrantedPacket;
 import models.entity.game.GameToken;
 
 import org.bushe.swing.event.EventBus;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -25,14 +22,11 @@ import dao.game.GameTokenDAO;
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("serial")
 public class ClientInitPacket extends BasePacket implements InputPacket {
   
-  @JsonIgnore
   private static final Logger.ALogger log = Logger.of(ClientInitPacket.class);
 
-  @JsonProperty
   private String token;
 
   @Override
@@ -85,7 +79,6 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
 
   @Override
   public String toString() {
-    return "PlayerInitPacket [token=" + token + "]";
+    return "ClientInitPacket [type=" + type + ", createdTime=" + createdTime + ", token=" + token + "]";
   }
-
 }
