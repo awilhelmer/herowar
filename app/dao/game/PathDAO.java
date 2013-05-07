@@ -24,7 +24,7 @@ public class PathDAO extends BaseDAO<Long, Path> {
   public static void mapWaypoints(Path path) {
     List<Waypoint> waypoints = new ArrayList<Waypoint>();
 
-    for (Waypoint point : path.getWaypoints()) {
+    for (Waypoint point : path.getDbWaypoints()) {
       waypoints.add(point);
     }
     Collections.sort(waypoints, new Comparator<Waypoint>() {
