@@ -52,7 +52,6 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   public void process() {
     log.debug("Process " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins) {
-      log.debug("Run plugin: " + plugin.toString());
       plugin.process();
     }
   }
@@ -84,14 +83,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     synchronized (sessions) {
       this.sessions.add(player);
     }
-//    this.playerGold.put(player.getUser().getId(), map.getGoldStart().longValue());
+    for (IPlugin plugin : plugins) {
+      plugin.addPlayer(player);
+    }
   }
 
   public void removePlayer(WebSocketConnection connection) {
+    GameSession player = null;
     synchronized (sessions) {
       Iterator<GameSession> iter = sessions.iterator();
       while (iter.hasNext()) {
-        GameSession player = iter.next();
+        player = iter.next();
         if (player.getConnection().equals(connection)) {
           rootNode.detachChild(player.getModel());
           iter.remove();
@@ -99,12 +101,15 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
         }
       }
     }
+    for (IPlugin plugin : plugins) {
+      plugin.removePlayer(player);
+    }
   }
-  
+
   private void registerPlugins() {
-    plugins.add(new GoldUpdatePlugin());
+    plugins.add(new GoldUpdatePlugin(this));
   }
-  
+
   // GETTER && SETTER //
 
   public synchronized Long getObjectIdGenerator() {
@@ -123,15 +128,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     return gameId;
   }
 
-  public void setGameId(Long gameId) {
-    this.gameId = gameId;
-  }
-
   public Map getMap() {
     return map;
-  }
-
-  public void setMap(Map map) {
-    this.map = map;
   }
 }
