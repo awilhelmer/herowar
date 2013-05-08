@@ -4,7 +4,6 @@ package game.processor.meta;
 /**
  * @author Alexander Wilhelmer
  */
-
 public interface IProcessor {
 
   public void process();

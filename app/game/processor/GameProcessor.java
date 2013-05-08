@@ -2,16 +2,16 @@ package game.processor;
 
 import game.GameSession;
 import game.network.BasePacket;
-import game.network.server.PlayerStatusPacket;
 import game.processor.meta.AbstractProcessor;
+import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
+import game.processor.plugin.GoldUpdatePlugin;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
 
@@ -21,7 +21,6 @@ import play.Logger;
 import play.libs.Json;
 
 import com.ardor3d.scenegraph.Node;
-import com.ardor3d.scenegraph.Spatial;
 
 /**
  * @author Alexander Wilhelmer
@@ -37,7 +36,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Map map;
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
-  private ConcurrentHashMap<Long, Long> playerGold = new ConcurrentHashMap<Long, Long>();
+  private Set<IPlugin> plugins = Collections.synchronizedSet(new HashSet<IPlugin>());
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId + "-map-" + map.getId());
@@ -46,16 +45,16 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.objectIdGenerator = 0l;
     this.addPlayer(session);
     this.rootNode = new Node();
-    this.loadMap();
+    this.registerPlugins();
   }
 
   @Override
   public void process() {
-    log.debug("Updating " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
-    proccessObjects();
-    processIntelligent();
-    updateGold();
-    sendPlayerStats();
+    log.debug("Process " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
+    for (IPlugin plugin : plugins) {
+      log.debug("Run plugin: " + plugin.toString());
+      plugin.process();
+    }
   }
 
   @Override
@@ -81,53 +80,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     broadcast(null, message, true);
   }
 
-  // public Set<SceneObject> getVisibleObjects(GameSession session) {
-  // Set<SceneObject> objects = new HashSet<SceneObject>();
-  //
-  // for (SceneObject obj : this.objects) {
-  // if (obj.getObject() != null) {
-  // double distance = GameMath.distanceTo(session.getObject().getPosition(),
-  // new Vector3(obj.getObject()
-  // .getPosition().getX(), obj.getObject().getPosition().getY(),
-  // obj.getObject().getPosition().getZ()));
-  // log.debug("Distance " + Math.round(distance) + " from " +
-  // session.getUser().getUsername() + " to "
-  // + obj.toString());
-  // if (!session.getVisibleObjects().contains(obj) && distance <
-  // GameConfiguration.DEFAULT_VIEW_RANGE) {
-  // log.debug("Object " + obj.toString() + " in range for " +
-  // session.getUser().getUsername());
-  // objects.add(obj);
-  // }
-  // }
-  // }
-  //
-  // for (GameSession player : sessions) {
-  // if (player.getObject() != null) {
-  // if (!GameUtil.isSameSession(session, player)) {
-  // double distance = GameMath.distanceTo(session.getObject().getPosition(),
-  // player.getObject().getPosition());
-  // log.debug("Distance " + Math.round(distance) + " from " +
-  // session.getUser().getUsername() + " to "
-  // + player.getUser().getUsername());
-  // if (!session.getVisibleObjects().contains(player) && distance <
-  // GameConfiguration.DEFAULT_VIEW_RANGE) {
-  // log.debug("Player " + player.getUser().getUsername() + " in range for " +
-  // session.getUser().getUsername());
-  // objects.add(player);
-  // }
-  // }
-  // }
-  // }
-  //
-  // return objects;
-  // }
-
   public void addPlayer(GameSession player) {
     synchronized (sessions) {
       this.sessions.add(player);
     }
-    this.playerGold.put(player.getUser().getId(), map.getGoldStart().longValue());
+//    this.playerGold.put(player.getUser().getId(), map.getGoldStart().longValue());
   }
 
   public void removePlayer(WebSocketConnection connection) {
@@ -143,39 +100,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       }
     }
   }
-
-  private void processIntelligent() {
-    // TODO handle intelligent here
-  }
-
-  private void proccessObjects() {
-    for (Spatial obj : rootNode.getChildren()) {
-      // TODO add game logic here ...
-
-    }
+  
+  private void registerPlugins() {
+    plugins.add(new GoldUpdatePlugin());
   }
   
-  private void updateGold() {
-    Iterator<java.util.Map.Entry<Long, Long>> iter = playerGold.entrySet().iterator();
-    while(iter.hasNext()) {
-      java.util.Map.Entry<Long, Long> entry = iter.next();
-      entry.setValue(entry.getValue() + map.getGoldPerTick());
-    }
-  }
-  
-  private void sendPlayerStats() {
-    for (GameSession session : sessions) {
-      PlayerStatusPacket packet = new PlayerStatusPacket(map.getLives(), playerGold.get(session.getUser().getId()));
-      session.getConnection().send(Json.toJson(packet).toString());
-    }
-  }
-
-  /**
-   * TODO init the map Polygon-information ...
-   */
-  private void loadMap() {
-
-  }
+  // GETTER && SETTER //
 
   public synchronized Long getObjectIdGenerator() {
     return new Long(objectIdGenerator++);
@@ -183,6 +113,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public Set<GameSession> getSessions() {
     return sessions;
+  }
+
+  public Set<IPlugin> getPlugins() {
+    return plugins;
   }
 
   public Long getGameId() {
