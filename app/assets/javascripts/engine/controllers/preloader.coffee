@@ -18,12 +18,16 @@ class Preloader extends RendererCanvasController
 		log.info 'Initialize preloader...'
 		@initVariables()			
 		super options
-		@load
-			textures:
-				'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
-				'stone-rough-001'		: 'assets/images/game/textures/stone/rough-001.jpg'
-			texturesCube:
-				'default' 					: 'assets/images/game/skybox/default/%1.jpg'
+		if @options.data
+			@load @options.data
+		else
+			# TODO: get a proper solution here for the editor...
+			@load
+				textures:
+					'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
+					'stone-rough-001'		: 'assets/images/game/textures/stone/rough-001.jpg'
+				texturesCube:
+					'default' 					: 'assets/images/game/skybox/default/%1.jpg'
 
 	initVariables: ->
 		@preloadComplete = false

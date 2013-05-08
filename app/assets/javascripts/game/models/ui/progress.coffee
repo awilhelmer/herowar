@@ -19,9 +19,8 @@ class Progress extends Backbone.Model
 		events.on 'retrieve:packet:35', @updateAttributes, @
 		
 	updateAttributes: (packet) ->
-		if packet and packet.lives and packet.gold
-			@set
-				'lives' : packet.lives
-				'gold'	: packet.gold
+		if packet
+			_.extend @attributes, _.omit packet, 'type', 'createdTime'
+			@trigger 'change'
 
 return Progress

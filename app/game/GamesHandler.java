@@ -2,6 +2,7 @@ package game;
 
 import game.event.GameJoinEvent;
 import game.event.GameLeaveEvent;
+import game.network.server.PreloadData;
 import game.network.server.PreloadDataPacket;
 import game.processor.GameProcessor;
 import game.processor.ProcessorHandler;
@@ -9,9 +10,7 @@ import game.processor.ProcessorHandler;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
@@ -23,11 +22,10 @@ import org.webbitserver.WebSocketConnection;
 import play.Logger;
 import play.libs.Json;
 
-
 /**
  * 
  * @author Alexander Wilhelmer
- *
+ * 
  */
 public class GamesHandler implements Serializable {
   private static final long serialVersionUID = -1236371535292715843L;
@@ -53,16 +51,14 @@ public class GamesHandler implements Serializable {
 
   @EventSubscriber
   public void observePlayerJoinEvent(GameJoinEvent event) {
-    GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(),
-        event.getConnection());
+    GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(), event.getConnection());
     GameProcessor game = createGame(event.getGameToken().getMap(), session);
     session.setGame(game);
     connections.put(event.getConnection(), session);
-    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken()
-        .getCreatedByUser().getUsername(), game.getTopic()));
+    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken().getCreatedByUser().getUsername(), game.getTopic()));
     sendPreloadDataPacket(event.getConnection(), game);
   }
-  
+
   @EventSubscriber
   public void observePlayerLeaveEvent(GameLeaveEvent event) {
     log.info("Remove player with connection " + event.getConnection().httpRequest().id());
@@ -75,7 +71,7 @@ public class GamesHandler implements Serializable {
       removePlayer(player, event.getConnection());
     }
   }
-  
+
   private GameProcessor createGame(Map map, GameSession session) {
     GameProcessor game = getOpenGame(map);
     if (game != null) {
@@ -95,7 +91,7 @@ public class GamesHandler implements Serializable {
     }
     return game;
   }
-  
+
   private GameProcessor getOpenGame(Map map) {
     if (games.containsKey(map.getId())) {
       List<GameProcessor> processors = games.get(map.getId());
@@ -115,10 +111,10 @@ public class GamesHandler implements Serializable {
     textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
     java.util.Map<String, String> texturesCube = new HashMap<String, String>();
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
-    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), textures, texturesCube);
+    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube));
     connection.send(Json.toJson(packet).toString());
   }
-  
+
   private void removePlayer(GameSession session, WebSocketConnection connection) {
     ProcessorHandler handler = processors.get(session);
     if (handler != null && handler.isStarted()) {
@@ -128,7 +124,8 @@ public class GamesHandler implements Serializable {
     game.removePlayer(connection);
     connections.remove(connection);
     processors.remove(session);
-    // TODO: Current we shutdown the games without users, later they should go on...
+    // TODO: Current we shutdown the games without users, later they should go
+    // on...
     if (game.getSessions().size() == 0) {
       game.stop();
       games.remove(game);

@@ -1,14 +1,15 @@
 Preloader = require 'controllers/preloader'
 PreloadCompletePacket = require 'network/packets/preloadCompletePacket'
 events = require 'events'
+db = require 'database'
 
 class GamePreloader extends Preloader
 	
 	redirectTo: 'game3'
 	
-	# TODO: Removed hardcoded map and set via game token or what ever...
 	initialize: (options) ->
-		@options = _.extend { map: 2 }, options
+		preload = db.get 'ui/preload'
+		@options = _.extend preload.attributes, options
 		super @options
 	
 	finish: ->

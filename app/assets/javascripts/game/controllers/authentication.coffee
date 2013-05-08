@@ -3,6 +3,7 @@ Variables = require 'variables'
 log = require 'util/logger'
 app = require 'application'
 events = require 'events'
+db = require 'database'
 
 class AuthenticationController extends RenderCanvasController
 
@@ -14,6 +15,7 @@ class AuthenticationController extends RenderCanvasController
 	initialize: (options) ->
 		log.debug 'Initialize authentication process'
 		options = _.extend {}, options
+		@preload = db.get 'ui/preload'
 		@token = options.token
 		@state =
 			complete	: false
@@ -39,7 +41,7 @@ class AuthenticationController extends RenderCanvasController
 			@sendAuthRequest()
 			@ctx.fillText "Authenticating", Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
 		@ctx.restore()
-		@redirect() if @state.request and @state.response and @state.granted and not @state.complete
+		@redirect() if @state.request and @state.response and @state.granted and not @state.complete and @preload.has 'map'
 
 	sendAuthRequest: ->
 		if not @state.request and app.socketClient.isOpen

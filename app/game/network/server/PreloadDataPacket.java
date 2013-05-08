@@ -1,8 +1,5 @@
 package game.network.server;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import game.network.BasePacket;
 import game.network.PacketType;
 
@@ -15,14 +12,12 @@ import game.network.PacketType;
 public class PreloadDataPacket extends BasePacket {
 
   private Long map;
-  private Map<String, String> textures = new HashMap<String, String>();
-  private Map<String, String> texturesCube = new HashMap<String, String>();
+  private PreloadData data;
   
-  public PreloadDataPacket(Long map, Map<String, String> textures, Map<String, String> texturesCube) {
+  public PreloadDataPacket(Long map, PreloadData data) {
     this();
     this.map = map;
-    this.textures = textures;
-    this.texturesCube = texturesCube;
+    this.data = data;
   }
   
   public PreloadDataPacket() {
@@ -37,25 +32,17 @@ public class PreloadDataPacket extends BasePacket {
   public void setMap(Long map) {
     this.map = map;
   }
-
-  public Map<String, String> getTextures() {
-    return textures;
+  
+  public PreloadData getData() {
+    return data;
   }
 
-  public void setTextures(Map<String, String> textures) {
-    this.textures = textures;
-  }
-
-  public Map<String, String> getTexturesCube() {
-    return texturesCube;
-  }
-
-  public void setTexturesCube(Map<String, String> texturesCube) {
-    this.texturesCube = texturesCube;
+  public void setData(PreloadData data) {
+    this.data = data;
   }
 
   @Override
   public String toString() {
-    return "PreloadDataPacket [type=" + type + ", createdTime=" + createdTime + ", map=" + map + ", textures=" + textures + ", texturesCube=" + texturesCube  + "]";
+    return "PreloadDataPacket [type=" + type + ", createdTime=" + createdTime + ", map=" + map + ", data=" + data + "]";
   }
 }
