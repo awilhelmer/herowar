@@ -128,7 +128,7 @@ public class GamesHandler implements Serializable {
     // on...
     if (game.getSessions().size() == 0) {
       game.stop();
-      games.remove(game);
+      games.get(game.getMap().getId()).remove(game);
     }
   }
 

@@ -125,7 +125,6 @@ public class UserDAO extends BaseDAO<Long, User> {
   }
 
   public static User findByUsernamePasswordIdentity(final UsernamePasswordAuthUser identity) {
-    Logger.info("findByUsernamePasswordIdentity(): " + identity.getEmail());
     CriteriaQuery<User> q = instance.getCriteria();
     Root<User> root = instance.getRoot(q);
     Join<User, LinkedAccount> linkedAccounts = root.join("linkedAccounts");
