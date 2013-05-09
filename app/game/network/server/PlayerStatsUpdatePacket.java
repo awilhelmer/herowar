@@ -4,25 +4,21 @@ import game.network.BasePacket;
 import game.network.PacketType;
 
 /**
- * Server sends info about the current player status.
+ * Server sends player stats to client to syncronize values.
  * 
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class PlayerStatusPacket extends BasePacket {
+public class PlayerStatsUpdatePacket extends BasePacket {
 
-  private Integer lives;
-  private Long gold;
+  protected Integer lives;
+  protected Long gold;
   
-  public PlayerStatusPacket(Integer lives, Long gold) {
-    this();
+  public PlayerStatsUpdatePacket(Integer lives, Long gold) {
+    super();
+    this.type = PacketType.PlayerStatsUpdatePacket;
     this.lives = lives;
     this.gold = gold;
-  }
-  
-  public PlayerStatusPacket() {
-    super();
-    this.type = PacketType.PlayerStatusPacket;
   }
 
   public Integer getLives() {
@@ -43,6 +39,6 @@ public class PlayerStatusPacket extends BasePacket {
 
   @Override
   public String toString() {
-    return "PlayerStatusPacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + ", gold=" + gold + "]";
+    return "PlayerStatsUpdatePacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + ", gold=" + gold + "]";
   }
 }

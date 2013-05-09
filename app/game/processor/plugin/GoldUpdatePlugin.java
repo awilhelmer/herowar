@@ -1,7 +1,9 @@
 package game.processor.plugin;
 
 import game.GameSession;
-import game.network.server.PlayerStatusPacket;
+import game.network.BasePacket;
+import game.network.server.PlayerStatsInitPacket;
+import game.network.server.PlayerStatsUpdatePacket;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
@@ -9,6 +11,7 @@ import game.processor.meta.IPlugin;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+import models.entity.game.Map;
 import play.libs.Json;
 
 /**
@@ -19,7 +22,8 @@ import play.libs.Json;
  */
 public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
 
-  private ConcurrentHashMap<Long, Long> goldCache = new ConcurrentHashMap<Long, Long>();
+  private ConcurrentHashMap<Long, Long> playerGold = new ConcurrentHashMap<Long, Long>();
+  private ConcurrentHashMap<Long, Boolean> playerInit = new ConcurrentHashMap<Long, Boolean>();
 
   public GoldUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -30,24 +34,25 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
     updateGold();
     sendStats();
   }
-  
+
   @Override
   public void addPlayer(GameSession player) {
     long playerId = player.getUser().getId();
-    if (!goldCache.containsKey(playerId)) {
+    if (!playerGold.containsKey(playerId)) {
       long startValue = getProcessor().getMap().getGoldStart().longValue();
-      goldCache.put(playerId, startValue);
+      playerGold.put(playerId, startValue);
+      playerInit.put(playerId, false);
     }
   }
 
   @Override
   public void removePlayer(GameSession player) {
-    // Do nothing, the gold should stay and still keep updated since the user
-    // could rejoin...
+    long playerId = player.getUser().getId();
+    playerInit.put(playerId, false);
   }
 
   private void updateGold() {
-    Iterator<java.util.Map.Entry<Long, Long>> iter = goldCache.entrySet().iterator();
+    Iterator<java.util.Map.Entry<Long, Long>> iter = playerGold.entrySet().iterator();
     while (iter.hasNext()) {
       java.util.Map.Entry<Long, Long> entry = iter.next();
       long newGold = entry.getValue() + getProcessor().getMap().getGoldPerTick();
@@ -57,7 +62,15 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   private void sendStats() {
     for (GameSession session : getProcessor().getSessions()) {
-      PlayerStatusPacket packet = new PlayerStatusPacket(getProcessor().getMap().getLives(), goldCache.get(session.getUser().getId()));
+      long playerId = session.getUser().getId();
+      Map map = getProcessor().getMap();
+      BasePacket packet = null;
+      if (playerInit.get(playerId)) {
+        packet = new PlayerStatsUpdatePacket(map.getLives(), playerGold.get(playerId));
+      } else {
+        packet = new PlayerStatsInitPacket(map.getLives(), playerGold.get(playerId), map.getGoldPerTick());
+        playerInit.replace(playerId, true);
+      }
       session.getConnection().send(Json.toJson(packet).toString());
     }
   }
