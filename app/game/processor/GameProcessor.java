@@ -6,6 +6,7 @@ import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
 import game.processor.plugin.GoldUpdatePlugin;
+import game.processor.plugin.WaveUpdatePlugin;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -111,6 +112,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private void registerPlugins() {
     plugins.add(new GoldUpdatePlugin(this));
+    plugins.add(new WaveUpdatePlugin(this));
   }
 
   // GETTER && SETTER //
