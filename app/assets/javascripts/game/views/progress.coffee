@@ -9,4 +9,8 @@ class ProgressView extends BaseView
 	
 	template: templates.get 'progress.tmpl'
 	
+	render: ->
+		console.log @model.toJSON()
+		super()
+	
 return ProgressView

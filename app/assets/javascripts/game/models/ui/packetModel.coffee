@@ -3,6 +3,8 @@ events = require 'events'
 class PacketModel extends Backbone.Model
 
 	type: null
+	
+	timeValues: {}
 
 	rate: 1000
 
@@ -11,8 +13,8 @@ class PacketModel extends Backbone.Model
 		@setDefaultValues()
 		@bindPacketEvents()
 	
-	# Should be overridden
-	update: ->
+	update: =>
+		@updateTimeValue key, val for key, val of @timeValues
 	
 	setDefaultValues: ->
 		@set
@@ -37,10 +39,24 @@ class PacketModel extends Backbone.Model
 
 	onPacket: (packet) ->
 		if packet
-			_.extend @attributes, _.omit packet, 'type', 'createdTime'
+			_.extend @attributes, _.extend _.omit(packet, 'type', 'createdTime'), { retrieveTime: packet.createdTime }
 			unless @get '_active'
 				_.extend @attributes, { _active : true }
 				@start() if @rate > 0
 			@trigger 'change'
+
+	updateTimeValue: (valueKey, incrementKey, timeKey) ->
+		console.log 'UpdateTimeValue', valueKey, @get(valueKey), timeKey, @get(timeKey), incrementKey, @get(incrementKey)
+		unless @get(valueKey) or @get(incrementKey) then return
+		unless timeKey
+			timeKey = if not @get('updateTime') or @get('updateTime') < @get('retrieveTime') then 'retrieveTime' else 'updateTime'
+			console.log 'Set timekey: ', timeKey
+		time = (new Date()).getTime()
+		dif = time - @get timeKey
+		newVal = Math.round(@get(valueKey) + ((dif / 1000) * @get incrementKey))
+		update = {}
+		update[valueKey] = newVal
+		update.updateTime = time	
+		@set update
 	
 return PacketModel

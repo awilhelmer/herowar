@@ -66,13 +66,17 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
       Map map = getProcessor().getMap();
       BasePacket packet = null;
       if (playerInit.get(playerId)) {
-        packet = new PlayerStatsUpdatePacket(map.getLives(), playerGold.get(playerId));
+//        packet = new PlayerStatsUpdatePacket(map.getLives(), playerGold.get(playerId));
       } else {
         packet = new PlayerStatsInitPacket(map.getLives(), playerGold.get(playerId), map.getGoldPerTick());
         playerInit.replace(playerId, true);
+        sendPacket(session, packet);
       }
-      session.getConnection().send(Json.toJson(packet).toString());
     }
+  }
+  
+  private void sendPacket(GameSession session, BasePacket packet) {
+    session.getConnection().send(Json.toJson(packet).toString());
   }
 
   @Override
