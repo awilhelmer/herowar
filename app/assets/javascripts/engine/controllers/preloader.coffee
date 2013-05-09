@@ -45,6 +45,7 @@ class Preloader extends RendererCanvasController
 			remaining: 0
 			loaded: 0
 			finish: false
+			started: true
 
 	load: (data) ->
 		for type in @types
@@ -99,7 +100,7 @@ class Preloader extends RendererCanvasController
 			@ctx.fillStyle = "rgba(200, 200, 200, #{@alpha})"
 			@ctx.fillText "Loading #{Math.round(@percentage)}%", Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2 + 30
 			@ctx.restore()
-			if @progress.finish
+			if @progress.finish and @progress.started
 				@state = 2
 				@loadMap()
 		else 
