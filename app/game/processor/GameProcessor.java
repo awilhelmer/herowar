@@ -40,7 +40,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Long objectIdGenerator = null;
   private Long gameId;
   private Map map;
-  private State state = State.PRELOAD;
+  private State state;
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
   private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
@@ -52,6 +52,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.objectIdGenerator = 0l;
     this.rootNode = new Node();
     this.registerPlugins();
+    this.updateState(State.PRELOAD);
     this.addPlayer(session);
   }
 
@@ -125,6 +126,20 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
   }
+  
+  private void updateState(State state) {
+    if (this.state != null) { 
+      for (IPlugin plugin : plugins.get(this.state)) {
+        plugin.unload();
+      }
+    }
+    if (state != null) {
+      for (IPlugin plugin : plugins.get(state)) {
+        plugin.load();
+      }
+    }
+    this.state = state;
+  }
 
   // GETTER && SETTER //
 
@@ -150,10 +165,6 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   
   public State getState() {
     return state;
-  }
-
-  public void setState(State state) {
-    this.state = state;
   }
 
   public enum State {

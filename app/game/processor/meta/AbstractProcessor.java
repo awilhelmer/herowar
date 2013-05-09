@@ -12,15 +12,17 @@ import play.Logger;
  * Abstract processor class to handle multithreaded game backend.
  * 
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
 public abstract class AbstractProcessor implements Runnable {
+  
   private final static Logger.ALogger log = Logger.of(AbstractProcessor.class);
 
   protected String topic;
-
-  private List<EventTopicSubscriber<? extends Object>> tokenListeners = new ArrayList<EventTopicSubscriber<? extends Object>>();
   private Thread thread = null;
   private boolean running = true;
+
+  private List<EventTopicSubscriber<? extends Object>> listeners = new ArrayList<EventTopicSubscriber<? extends Object>>();
 
   public AbstractProcessor(String topic) {
     if (getUpdateTimer() <= 0) {
@@ -52,34 +54,41 @@ public abstract class AbstractProcessor implements Runnable {
   public void stop() {
     thread = null;
     running = false;
-    for (EventTopicSubscriber<? extends Object> listener : tokenListeners) {
-      EventBus.unsubscribe(topic, listener);
-    }
+    removeListeners();
   }
 
-  public void addTokenListener(EventTopicSubscriber<? extends Object> listener) {
+  public void addListener(EventTopicSubscriber<? extends Object> listener) {
     EventBus.subscribe(topic, listener);
-    tokenListeners.add(listener);
+    listeners.add(listener);
+  }
+  
+  public void removeListener(EventTopicSubscriber<? extends Object> listener) {
+    EventBus.unsubscribe(topic, listener);
+    listeners.remove(listener);
+  }
+  
+  public void removeListeners() {
+    for (EventTopicSubscriber<? extends Object> listener : listeners) {
+      EventBus.unsubscribe(topic, listener);
+      listeners.remove(listener);
+    }
   }
 
   public abstract void process();
 
   public abstract int getUpdateTimer();
 
-  public boolean isRunning() {
-    return running;
-  }
-
-  public void setRunning(boolean running) {
-    this.running = running;
-  }
-
+  // GETTER && SETTER //
+  
   public String getTopic() {
     return topic;
   }
-
-  public void setTopic(String topic) {
-    this.topic = topic;
+  
+  public boolean isRunning() {
+    return running;
   }
-
+  
+  public void setRunning(boolean running) {
+    this.running = running;
+  }
 }

@@ -38,6 +38,16 @@ public class WaveUpdatePlugin extends AbstractPlugin implements IPlugin {
   public void process() {
     log.debug("Processing " + this.toString() + " with wave " + currentWaveCount + " / " + allWavesCount + " (" + currentWave.toString() + ")");
   }
+  
+  @Override
+  public void load() {
+    // TODO Auto-generated method stub
+  }
+
+  @Override
+  public void unload() {
+    // TODO Auto-generated method stub
+  }
 
   @Override
   public void addPlayer(GameSession player) {

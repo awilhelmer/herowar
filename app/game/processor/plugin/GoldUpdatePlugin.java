@@ -30,6 +30,16 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
     updateGold();
     sendStats();
   }
+  
+  @Override
+  public void load() {
+    // TODO Auto-generated method stub
+  }
+
+  @Override
+  public void unload() {
+    // TODO Auto-generated method stub
+  }
 
   @Override
   public void addPlayer(GameSession player) {

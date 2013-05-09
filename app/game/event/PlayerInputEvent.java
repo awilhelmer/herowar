@@ -18,7 +18,6 @@ public class PlayerInputEvent {
     this.createdTime = createdTime;
   }
 
-
   public PlayerInputEvent() {
     // empty
   }
