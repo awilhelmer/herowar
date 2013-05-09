@@ -23,6 +23,9 @@ import play.libs.Json;
 import com.ardor3d.scenegraph.Node;
 
 /**
+ * The GameProcessor handles every game specific actions like updating player
+ * gold, control waves, tower damage and much more.
+ * 
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
@@ -67,18 +70,6 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     super.stop();
   }
 
-  public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
-    for (GameSession session : sessions) {
-      if (sendSelf || !connection.equals(session.getConnection())) {
-        session.getConnection().send(Json.toJson(message).toString());
-      }
-    }
-  }
-
-  public void broadcast(BasePacket message) {
-    broadcast(null, message, true);
-  }
-
   public void addPlayer(GameSession player) {
     synchronized (sessions) {
       this.sessions.add(player);
@@ -104,6 +95,18 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     for (IPlugin plugin : plugins) {
       plugin.removePlayer(player);
     }
+  }
+  
+  public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
+    for (GameSession session : sessions) {
+      if (sendSelf || !connection.equals(session.getConnection())) {
+        session.getConnection().send(Json.toJson(message).toString());
+      }
+    }
+  }
+
+  public void broadcast(BasePacket message) {
+    broadcast(null, message, true);
   }
 
   private void registerPlugins() {
