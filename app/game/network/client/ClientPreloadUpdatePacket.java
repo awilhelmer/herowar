@@ -1,13 +1,5 @@
 package game.network.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bushe.swing.event.EventBus;
-import org.webbitserver.WebSocketConnection;
-
-import play.Logger;
-
 import game.GameSession;
 import game.GamesHandler;
 import game.event.PreloadUpdateEvent;
@@ -19,6 +11,13 @@ import game.processor.GameProcessor.Topic;
 import game.processor.PlayerProcessor;
 import game.processor.ProcessorHandler;
 import game.processor.meta.IProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.webbitserver.WebSocketConnection;
+
+import play.Logger;
 
 /**
  * Send from client when preloading is done.
@@ -54,7 +53,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
       GamesHandler.getInstance().getProcessors().put(session, handler);
       log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getUser().getUsername());
     }
-    EventBus.publish(session.getGame().getTopicName(Topic.PRELOAD), new PreloadUpdateEvent(session.getUser().getId(), progress));
+    session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getUser().getId(), progress));
   }
  
   public Integer getProgress() {

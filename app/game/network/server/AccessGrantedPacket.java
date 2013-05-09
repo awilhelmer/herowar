@@ -9,8 +9,8 @@ import game.network.PacketType;
  * @author Alexander Wilhelmer
  */
 
+@SuppressWarnings("serial")
 public class AccessGrantedPacket extends BasePacket {
-  private static final long serialVersionUID = 8377557173578070738L;
 
   public AccessGrantedPacket() {
 		this.type = PacketType.AccessGrantedPacket;

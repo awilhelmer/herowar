@@ -7,5 +7,6 @@ packetType =
 	# Server Packets
 	SERVER_ACCESS_DECLINED    : 11
 	SERVER_ACCESS_GRANTED     : 12
+	SERVER_GAME_START					: 13
 
 return packetType

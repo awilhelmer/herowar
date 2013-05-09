@@ -9,8 +9,8 @@ import game.network.PacketType;
  * 
  * @author Sebastian Sachtleben
  */
+@SuppressWarnings("serial")
 public class PlayerInitPacket extends ObjectPacket {
-  private static final long serialVersionUID = -4769104244918925086L;
 
   private GameSession object;
 

@@ -8,8 +8,8 @@ import game.network.PacketType;
  * 
  * @author Alexander Wilhelmer
  */
+@SuppressWarnings("serial")
 public class PlayerLeavePacket extends BasePacket {
-  private static final long serialVersionUID = -7908654617988848218L;
 
   public PlayerLeavePacket() {
 		this.type = PacketType.PlayerLeavePacket;

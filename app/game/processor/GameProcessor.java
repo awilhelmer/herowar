@@ -19,6 +19,7 @@ import java.util.Set;
 
 import models.entity.game.Map;
 
+import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 import org.webbitserver.WebSocketConnection;
@@ -153,6 +154,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       }
     }
     this.state = state;
+  }
+  
+  public void publish(Topic topic, Object obj) {
+    EventBus.publish(getTopicName(topic), obj);
   }
   
   public String getTopicName(Topic topic) {

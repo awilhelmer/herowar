@@ -8,8 +8,8 @@ import game.network.PacketType;
  * 
  * @author Alexander Wilhelmer
  */
+@SuppressWarnings("serial")
 public class AccessDeniedPacket extends BasePacket {
-  private static final long serialVersionUID = -6495912566763954467L;
 
   public AccessDeniedPacket() {
 		this.type = PacketType.AccessDeniedPacket;
@@ -19,5 +19,4 @@ public class AccessDeniedPacket extends BasePacket {
 	public String toString() {
 		return "AccessDeniedPacket [type=" + type + "]";
 	}
-	
 }

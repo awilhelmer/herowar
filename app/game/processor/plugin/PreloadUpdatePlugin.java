@@ -3,6 +3,7 @@ package game.processor.plugin;
 import game.GameSession;
 import game.event.GameStateEvent;
 import game.event.PreloadUpdateEvent;
+import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
 import game.processor.GameProcessor.Topic;
@@ -15,6 +16,7 @@ import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
+import play.libs.Json;
 
 /**
  * The PreloadUpdatePlugin sends informations about the preload state of every
@@ -45,7 +47,8 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
     // game starts even when the players are not connected.
     if (preloadProgress.size() > 0 && preloadPlayerMissing == 0) {
       log.info("All player finshed preloading - switching game state to " + State.GAME);
-      EventBus.publish(getProcessor().getTopicName(Topic.STATE), new GameStateEvent(State.GAME));
+      getProcessor().publish(Topic.STATE, new GameStateEvent(State.GAME));
+      getProcessor().broadcast(new GameStartPacket());
     }
   }
 
