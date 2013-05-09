@@ -19,7 +19,7 @@ import play.libs.Json;
  */
 public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
 
-  private ConcurrentHashMap<Long, Long> playerGold = new ConcurrentHashMap<Long, Long>();
+  private ConcurrentHashMap<Long, Long> goldCache = new ConcurrentHashMap<Long, Long>();
 
   public GoldUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -33,7 +33,11 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void addPlayer(GameSession player) {
-    this.playerGold.put(player.getUser().getId(), getProcessor().getMap().getGoldStart().longValue());
+    long playerId = player.getUser().getId();
+    if (!goldCache.containsKey(playerId)) {
+      long startValue = getProcessor().getMap().getGoldStart().longValue();
+      this.goldCache.put(playerId, startValue);
+    }
   }
 
   @Override
@@ -43,16 +47,17 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   private void updateGold() {
-    Iterator<java.util.Map.Entry<Long, Long>> iter = playerGold.entrySet().iterator();
+    Iterator<java.util.Map.Entry<Long, Long>> iter = goldCache.entrySet().iterator();
     while (iter.hasNext()) {
       java.util.Map.Entry<Long, Long> entry = iter.next();
-      entry.setValue(entry.getValue() + getProcessor().getMap().getGoldPerTick());
+      long newGold = entry.getValue() + getProcessor().getMap().getGoldPerTick();
+      entry.setValue(newGold);
     }
   }
 
   private void sendStats() {
     for (GameSession session : getProcessor().getSessions()) {
-      PlayerStatusPacket packet = new PlayerStatusPacket(getProcessor().getMap().getLives(), playerGold.get(session.getUser().getId()));
+      PlayerStatusPacket packet = new PlayerStatusPacket(getProcessor().getMap().getLives(), goldCache.get(session.getUser().getId()));
       session.getConnection().send(Json.toJson(packet).toString());
     }
   }

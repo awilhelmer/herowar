@@ -43,9 +43,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.gameId = gameId;
     this.map = map;
     this.objectIdGenerator = 0l;
-    this.addPlayer(session);
     this.rootNode = new Node();
     this.registerPlugins();
+    this.addPlayer(session);
   }
 
   @Override
