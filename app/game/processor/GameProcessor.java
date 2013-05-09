@@ -43,7 +43,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Set<IPlugin> plugins = Collections.synchronizedSet(new HashSet<IPlugin>());
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
-    super("game-" + gameId + "-map-" + map.getId());
+    super("game-" + gameId);
     this.gameId = gameId;
     this.map = map;
     this.objectIdGenerator = 0l;

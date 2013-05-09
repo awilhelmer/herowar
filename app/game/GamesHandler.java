@@ -23,12 +23,13 @@ import play.Logger;
 import play.libs.Json;
 
 /**
+ * The GamesHandler control all current running games.
  * 
  * @author Alexander Wilhelmer
- * 
+ * @author Sebastian Sachtleben
  */
+@SuppressWarnings("serial")
 public class GamesHandler implements Serializable {
-  private static final long serialVersionUID = -1236371535292715843L;
 
   private static final Logger.ALogger log = Logger.of(GamesHandler.class);
 
@@ -76,7 +77,6 @@ public class GamesHandler implements Serializable {
     GameProcessor game = getOpenGame(map);
     if (game != null) {
       game.addPlayer(session);
-
     } else {
       game = new GameProcessor(gameId, map, session);
       game.start();
@@ -140,6 +140,8 @@ public class GamesHandler implements Serializable {
     processors.clear();
     games.clear();
   }
+  
+  // GETTER && SETTER //
 
   public java.util.Map<Long, List<GameProcessor>> getGames() {
     return games;
