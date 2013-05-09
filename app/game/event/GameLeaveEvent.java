@@ -7,7 +7,6 @@ import org.webbitserver.WebSocketConnection;
  * 
  * @author Alexander Wilhelmer
  */
-
 public class GameLeaveEvent {
 
   private WebSocketConnection connection;

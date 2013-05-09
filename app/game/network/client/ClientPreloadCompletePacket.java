@@ -47,8 +47,8 @@ public class ClientPreloadCompletePacket extends BasePacket implements InputPack
     ProcessorHandler handler = new ProcessorHandler(list);
     handler.start();
     GamesHandler.getInstance().getProcessors().put(session, handler);
-    log.info("Send preload complete event to " + session.getGame().getTopic() + " for " + session.getUser().getUsername());
-    EventBus.publish(session.getGame().getTopic(), new PreloadUpdateEvent(session.getUser().getId(), 100));
+    log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getUser().getUsername());
+    EventBus.publish(session.getGame().getTopicName(), new PreloadUpdateEvent(session.getUser().getId(), 100));
   }
 
   @Override

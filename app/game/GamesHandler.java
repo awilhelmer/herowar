@@ -56,7 +56,7 @@ public class GamesHandler implements Serializable {
     GameProcessor game = createGame(event.getGameToken().getMap(), session);
     session.setGame(game);
     connections.put(event.getConnection(), session);
-    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken().getCreatedByUser().getUsername(), game.getTopic()));
+    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken().getCreatedByUser().getUsername(), game.getTopicName()));
     sendPreloadDataPacket(event.getConnection(), game);
   }
 

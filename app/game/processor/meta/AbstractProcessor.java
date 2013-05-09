@@ -18,18 +18,18 @@ public abstract class AbstractProcessor implements Runnable {
   
   private final static Logger.ALogger log = Logger.of(AbstractProcessor.class);
 
-  protected String topic;
+  protected String topicName;
   private Thread thread = null;
   private boolean running = true;
 
   private List<EventTopicSubscriber<? extends Object>> listeners = new ArrayList<EventTopicSubscriber<? extends Object>>();
 
-  public AbstractProcessor(String topic) {
+  public AbstractProcessor(String topicName) {
     if (getUpdateTimer() <= 0) {
       log.warn("Deactivated Processor");
       this.running = false;
     }
-    this.topic = topic;
+    this.topicName = topicName;
   }
 
   @Override
@@ -58,20 +58,24 @@ public abstract class AbstractProcessor implements Runnable {
   }
 
   public void addListener(EventTopicSubscriber<? extends Object> listener) {
-    EventBus.subscribe(topic, listener);
+    EventBus.subscribe(topicName, listener);
     listeners.add(listener);
   }
   
   public void removeListener(EventTopicSubscriber<? extends Object> listener) {
-    EventBus.unsubscribe(topic, listener);
+    EventBus.unsubscribe(topicName, listener);
     listeners.remove(listener);
   }
   
   public void removeListeners() {
     for (EventTopicSubscriber<? extends Object> listener : listeners) {
-      EventBus.unsubscribe(topic, listener);
+      EventBus.unsubscribe(topicName, listener);
       listeners.remove(listener);
     }
+  }
+  
+  public void publish(Object o) {
+    EventBus.publish(topicName, o);
   }
 
   public abstract void process();
@@ -80,8 +84,8 @@ public abstract class AbstractProcessor implements Runnable {
 
   // GETTER && SETTER //
   
-  public String getTopic() {
-    return topic;
+  public String getTopicName() {
+    return topicName;
   }
   
   public boolean isRunning() {

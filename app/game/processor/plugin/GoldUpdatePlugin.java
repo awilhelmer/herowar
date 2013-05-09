@@ -46,7 +46,7 @@ public class GoldUpdatePlugin extends AbstractPlugin implements IPlugin {
     long playerId = player.getUser().getId();
     if (!goldCache.containsKey(playerId)) {
       long startValue = getProcessor().getMap().getGoldStart().longValue();
-      this.goldCache.put(playerId, startValue);
+      goldCache.put(playerId, startValue);
     }
   }
 

@@ -1,6 +1,7 @@
 package game.processor;
 
 import game.GameSession;
+import game.event.GameStateEvent;
 import game.network.BasePacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
@@ -18,6 +19,8 @@ import java.util.Set;
 
 import models.entity.game.Map;
 
+import org.bushe.swing.event.annotation.AnnotationProcessor;
+import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -51,6 +54,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.map = map;
     this.objectIdGenerator = 0l;
     this.rootNode = new Node();
+    AnnotationProcessor.process(this);
     this.registerPlugins();
     this.updateState(State.PRELOAD);
     this.addPlayer(session);
@@ -58,7 +62,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   @Override
   public void process() {
-    log.debug("Process " + getTopic() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
+    log.debug("Process " + getTopicName() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins.get(state)) {
       plugin.process();
     }
@@ -125,6 +129,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.PRELOAD).add(new PreloadUpdatePlugin(this));
     plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
+  }
+  
+  @RuntimeTopicEventSubscriber
+  public void updateStateByEvent(String topic, GameStateEvent event) {
+    updateState(event.getState());
   }
   
   private void updateState(State state) {

@@ -10,7 +10,6 @@ import org.webbitserver.WebSocketConnection;
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
-
 public class GameJoinEvent {
 
   private GameToken gameToken;
