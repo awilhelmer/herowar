@@ -1,5 +1,5 @@
 Preloader = require 'controllers/preloader'
-PreloadCompletePacket = require 'network/packets/preloadCompletePacket'
+PreloadUpdatePacket = require 'network/packets/preloadUpdatePacket'
 events = require 'events'
 db = require 'database'
 
@@ -12,8 +12,7 @@ class GamePreloader extends Preloader
 		@options = _.extend preload.attributes, options
 		super @options
 	
-	finish: ->
-		events.trigger 'send:packet', new PreloadCompletePacket()
-		super()
+	afterUpdateState: ->
+		events.trigger 'send:packet', new PreloadUpdatePacket Math.round @percentage if @percentage > 0
 	
 return GamePreloader

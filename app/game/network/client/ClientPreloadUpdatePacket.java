@@ -26,9 +26,11 @@ import game.processor.meta.IProcessor;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class ClientPreloadCompletePacket extends BasePacket implements InputPacket {
+public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket {
 
-  private static final Logger.ALogger log = Logger.of(ClientPreloadCompletePacket.class);
+  private static final Logger.ALogger log = Logger.of(ClientPreloadUpdatePacket.class);
+  
+  private Integer progress;
   
   @Override
   public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
@@ -40,20 +42,31 @@ public class ClientPreloadCompletePacket extends BasePacket implements InputPack
       log.error("GameSession should not be null");
       return;
     }
-    session.getClock().reset();
-    List<IProcessor> list = new ArrayList<IProcessor>();
-    PlayerProcessor playerProcessor = new PlayerProcessor(session.getToken().getToken(), connection);
-    session.setPlayerProcessor(playerProcessor);
-    list.add(playerProcessor);
-    ProcessorHandler handler = new ProcessorHandler(list);
-    handler.start();
-    GamesHandler.getInstance().getProcessors().put(session, handler);
-    log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getUser().getUsername());
-    EventBus.publish(session.getGame().getTopicName(Topic.PRELOAD), new PreloadUpdateEvent(session.getUser().getId(), 100));
+    // TODO: this could be end badly if the user send multiple times 100 progress...
+    if (progress == 100) {
+      session.getClock().reset();
+      List<IProcessor> list = new ArrayList<IProcessor>();
+      PlayerProcessor playerProcessor = new PlayerProcessor(session.getToken().getToken(), connection);
+      session.setPlayerProcessor(playerProcessor);
+      list.add(playerProcessor);
+      ProcessorHandler handler = new ProcessorHandler(list);
+      handler.start();
+      GamesHandler.getInstance().getProcessors().put(session, handler);
+      log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getUser().getUsername());
+    }
+    EventBus.publish(session.getGame().getTopicName(Topic.PRELOAD), new PreloadUpdateEvent(session.getUser().getId(), progress));
+  }
+ 
+  public Integer getProgress() {
+    return progress;
+  }
+
+  public void setProgress(Integer progress) {
+    this.progress = progress;
   }
 
   @Override
   public String toString() {
-    return "ClientPreloadCompletePacket [type=" + type + "]";
+    return "ClientPreloadUpdatePacket [type=" + type + ", progress=" + progress + "]";
   }
 }

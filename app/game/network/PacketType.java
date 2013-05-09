@@ -10,7 +10,7 @@ public class PacketType {
 
   // Client
   public static final Integer ClientInitPacket = 1;
-  public static final Integer ClientPreloadCompletePacket = 10;
+  public static final Integer ClientPreloadUpdatePacket = 10;
 //  public static final Integer ClientRotationPacket = 2;
 //  public static final Integer ClientShot1Packet = 5;
 //  public static final Integer ClientInputKeyPacket = 6;

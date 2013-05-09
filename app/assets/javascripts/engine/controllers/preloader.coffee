@@ -65,7 +65,11 @@ class Preloader extends RendererCanvasController
 			@progress.loaded++
 			@percentage = @progress.loaded / @progress.total  * 100
 		@states[type][name] = state
+		@afterUpdateState()
 		@progress.finish = true if @progress.loaded is @progress.total
+
+	# Override to do someone after state update
+	afterUpdateState: ->
 
 	loadItem: (type, name, url) ->
 		log.info "Load [type=#{type}, name=#{name}, url=#{url}]"

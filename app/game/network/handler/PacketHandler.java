@@ -5,7 +5,7 @@ import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.PacketType;
 import game.network.client.ClientInitPacket;
-import game.network.client.ClientPreloadCompletePacket;
+import game.network.client.ClientPreloadUpdatePacket;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -60,7 +60,7 @@ public class PacketHandler implements Serializable {
 
   private void registerTypes() {
     packetTypeCache.put(PacketType.ClientInitPacket, ClientInitPacket.class);
-    packetTypeCache.put(PacketType.ClientPreloadCompletePacket, ClientPreloadCompletePacket.class);
+    packetTypeCache.put(PacketType.ClientPreloadUpdatePacket, ClientPreloadUpdatePacket.class);
   }
 
   public Map<Integer, Class<? extends BasePacket>> getPacketTypeCache() {
