@@ -42,6 +42,7 @@ class PacketModel extends Backbone.Model
 			_.extend @attributes, _.extend _.omit(packet, 'type', 'createdTime'), { retrieveTime: packet.createdTime }
 			unless @get '_active'
 				_.extend @attributes, { _active : true }
+				@calculateRate()
 				@start() if @rate > 0
 			@trigger 'change'
 
@@ -58,5 +59,16 @@ class PacketModel extends Backbone.Model
 		update[valueKey] = newVal
 		update.updateTime = time	
 		@set update
+
+	calculateRate: ->
+		newRate = @rate
+		for key, val of @timeValues
+			if @get(key) or @get(val)
+				currentRate = Math.round 1000 / @get val
+				console.log 'Calculate rate for', key, ':', currentRate
+				newRate = currentRate if currentRate < newRate
+		if newRate isnt @rate
+			console.log 'Update rate ', newRate, ' from ', @rate
+			@rate = newRate
 	
 return PacketModel
