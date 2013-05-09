@@ -6,10 +6,12 @@ import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
 import game.processor.plugin.GoldUpdatePlugin;
+import game.processor.plugin.PreloadUpdatePlugin;
 import game.processor.plugin.WaveUpdatePlugin;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -38,9 +40,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Long objectIdGenerator = null;
   private Long gameId;
   private Map map;
+  private State state = State.PRELOAD;
 
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
-  private Set<IPlugin> plugins = Collections.synchronizedSet(new HashSet<IPlugin>());
+  private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId);
@@ -55,7 +58,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   @Override
   public void process() {
     log.debug("Process " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
-    for (IPlugin plugin : plugins) {
+    for (IPlugin plugin : plugins.get(state)) {
       plugin.process();
     }
   }
@@ -75,8 +78,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     synchronized (sessions) {
       this.sessions.add(player);
     }
-    for (IPlugin plugin : plugins) {
-      plugin.addPlayer(player);
+    for (Set<IPlugin> statePlugins : plugins.values()) {
+      for (IPlugin plugin : statePlugins) {
+        plugin.addPlayer(player);
+      }
     }
   }
 
@@ -93,8 +98,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
         }
       }
     }
-    for (IPlugin plugin : plugins) {
-      plugin.removePlayer(player);
+    for (Set<IPlugin> statePlugins : plugins.values()) {
+      for (IPlugin plugin : statePlugins) {
+        plugin.removePlayer(player);
+      }
     }
   }
   
@@ -111,8 +118,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   }
 
   private void registerPlugins() {
-    plugins.add(new GoldUpdatePlugin(this));
-    plugins.add(new WaveUpdatePlugin(this));
+    for (State state : State.values()) {
+      plugins.put(state, new HashSet<IPlugin>());
+    }
+    plugins.get(State.PRELOAD).add(new PreloadUpdatePlugin(this));
+    plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
+    plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
   }
 
   // GETTER && SETTER //
@@ -125,7 +136,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     return sessions;
   }
 
-  public Set<IPlugin> getPlugins() {
+  public java.util.Map<State, Set<IPlugin>> getPlugins() {
     return plugins;
   }
 
@@ -135,5 +146,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public Map getMap() {
     return map;
+  }
+  
+  public State getState() {
+    return state;
+  }
+
+  public void setState(State state) {
+    this.state = state;
+  }
+
+  public enum State {
+    PRELOAD, GAME, FINISH 
   }
 }
