@@ -57,7 +57,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   @Override
   public void process() {
-    log.debug("Process " + getTopic() + " with players " + Arrays.toString(sessions.toArray()));
+    log.debug("Process " + getTopic() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins.get(state)) {
       plugin.process();
     }

@@ -11,7 +11,7 @@ import game.processor.meta.IPlugin;
  * @author Sebastian Sachtleben
  */
 public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
-
+  
   public PreloadUpdatePlugin(GameProcessor processor) {
     super(processor);
   }
