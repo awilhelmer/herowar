@@ -5,7 +5,7 @@ class ProgressView extends BaseView
 
 	id: 'progress'
 	
-	entity: 'ui/progress'
+	entity: 'ui/stats'
 	
 	template: templates.get 'progress.tmpl'
 	

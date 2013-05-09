@@ -1,18 +1,10 @@
 PacketType = require 'network/packets/packetType'
-events = require 'events'
+PacketModel = require 'models/ui/packetModel'
 
-class Preload extends Backbone.Model
+class Preload extends PacketModel
 
-	initialize: (options) ->
-		super options
-		@bindEvents()
-
-	bindEvents: ->
-		events.on "retrieve:packet:#{PacketType.SERVER_PRELOAD_DATA}", @updateAttributes, @
-		
-	updateAttributes: (packet) ->
-		if packet
-			_.extend @attributes, _.omit packet, 'type', 'createdTime'
-			@trigger 'change'
+	type: PacketType.SERVER_PRELOAD_DATA
+	
+	rate: 0
 
 return Preload

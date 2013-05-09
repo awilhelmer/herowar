@@ -23,7 +23,7 @@ class GamePreloader extends Preloader
 		events.trigger 'send:packet', new PreloadUpdatePacket Math.round @percentage if @percentage > 0
 
 	onGameStart: ->
-		log.debug 'Game has been started'
+		log.debug 'Server game has been started'
 		@progress.started = true
 
 return GamePreloader
