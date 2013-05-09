@@ -1,3 +1,4 @@
+PacketType = require 'network/packets/packetType'
 events = require 'events'
 
 class Progress extends Backbone.Model
@@ -16,7 +17,7 @@ class Progress extends Backbone.Model
 			'waveCount'		: 0
 
 	bindEvents: ->
-		events.on 'retrieve:packet:35', @updateAttributes, @
+		events.on "retrieve:packet:#{PacketType.SERVER_PLAYER_STATUS}", @updateAttributes, @
 		
 	updateAttributes: (packet) ->
 		if packet

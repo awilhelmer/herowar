@@ -1,4 +1,5 @@
 RenderCanvasController = require 'controllers/rendererCanvas'
+PacketType = require 'network/packets/packetType'
 Variables = require 'variables'
 log = require 'util/logger'
 app = require 'application'
@@ -26,8 +27,8 @@ class AuthenticationController extends RenderCanvasController
 		super options
 	
 	bindEvents: ->
-		events.on 'retrieve:packet:11', @onAccessDenied, @
-		events.on 'retrieve:packet:12', @onAccessGranted, @
+		events.on "retrieve:packet:#{PacketType.SERVER_ACCESS_DECLINED}", @onAccessDenied, @
+		events.on "retrieve:packet:#{PacketType.SERVER_ACCESS_GRANTED}", @onAccessGranted, @
 
 	animate: =>
 		requestAnimationFrame @animate unless @authenticationComplete
