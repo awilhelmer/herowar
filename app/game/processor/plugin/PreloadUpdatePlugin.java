@@ -5,12 +5,14 @@ import game.event.GameStateEvent;
 import game.event.PreloadUpdateEvent;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
+import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bushe.swing.event.EventTopicSubscriber;
+import org.bushe.swing.event.EventBus;
+import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
 
@@ -25,7 +27,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(PreloadUpdatePlugin.class);
 
   private ConcurrentHashMap<Long, Integer> preloadProgress = new ConcurrentHashMap<Long, Integer>();
-  private EventTopicSubscriber<PreloadUpdateEvent> preloadUpdateSubscriber = createPreloadUpdateSubscriber();
+//  private EventTopicSubscriber<PreloadUpdateEvent> preloadUpdateSubscriber = createPreloadUpdateSubscriber();
 
   private Integer preloadPlayerMissing = 0;
 
@@ -43,18 +45,8 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
     // game starts even when the players are not connected.
     if (preloadProgress.size() > 0 && preloadPlayerMissing == 0) {
       log.info("All player finshed preloading - switching game state to " + State.GAME);
-      getProcessor().publish(new GameStateEvent(State.GAME));
+      EventBus.publish(getProcessor().getTopicName(Topic.STATE), new GameStateEvent(State.GAME));
     }
-  }
-
-  @Override
-  public void load() {
-    getProcessor().addListener(preloadUpdateSubscriber);
-  }
-
-  @Override
-  public void unload() {
-    getProcessor().removeListener(preloadUpdateSubscriber);
   }
 
   @Override
@@ -71,25 +63,25 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
     // Do nothing, the preload state should not change when a user disconnects.
     // Once the timeout will be reached the game should start automatically...
   }
-
-  private EventTopicSubscriber<PreloadUpdateEvent> createPreloadUpdateSubscriber() {
-    return new EventTopicSubscriber<PreloadUpdateEvent>() {
-      @Override
-      public void onEvent(String topic, PreloadUpdateEvent data) {
-        if (preloadProgress.containsKey(data.getPlayerId())) {
-          log.info("Update preload progress for user " + data.getPlayerId() + " with " + data.getProgress());
-          if (preloadProgress.get(data.getPlayerId()) == 100 && data.getProgress() < 100) {
-            // Player finished preloaded before but seems reconnected and need
-            // to load again
-            preloadPlayerMissing++;
-          } else if (preloadProgress.get(data.getPlayerId()) < 100 && data.getProgress() == 100) {
-            // Player fully preloaded and waiting for starting game
-            preloadPlayerMissing--;
-          }
-          preloadProgress.replace(data.getPlayerId(), data.getProgress());
-        }
+  
+  @RuntimeTopicEventSubscriber(methodName = "getPreloadTopic")
+  public void onPreloadUpdateEvent(String topic, PreloadUpdateEvent data) {
+    if (preloadProgress.containsKey(data.getPlayerId())) {
+      log.info("Update preload progress for user " + data.getPlayerId() + " with " + data.getProgress());
+      if (preloadProgress.get(data.getPlayerId()) == 100 && data.getProgress() < 100) {
+        // Player finished preloaded before but seems reconnected and need
+        // to load again
+        preloadPlayerMissing++;
+      } else if (preloadProgress.get(data.getPlayerId()) < 100 && data.getProgress() == 100) {
+        // Player fully preloaded and waiting for starting game
+        preloadPlayerMissing--;
       }
-    };
+      preloadProgress.replace(data.getPlayerId(), data.getProgress());
+    }
+  }
+  
+  public String getPreloadTopic() {
+    return getProcessor().getTopicName(Topic.PRELOAD);
   }
 
   @Override

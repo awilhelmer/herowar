@@ -73,10 +73,6 @@ public abstract class AbstractProcessor implements Runnable {
       listeners.remove(listener);
     }
   }
-  
-  public void publish(Object o) {
-    EventBus.publish(topicName, o);
-  }
 
   public abstract void process();
 

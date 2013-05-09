@@ -76,6 +76,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   @Override
   public void stop() {
     log.debug(this.toString() + " stopped");
+    AnnotationProcessor.unprocess(this);
     super.stop();
   }
 
@@ -131,9 +132,13 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
   }
   
-  @RuntimeTopicEventSubscriber
+  @RuntimeTopicEventSubscriber(methodName = "getStateTopic")
   public void updateStateByEvent(String topic, GameStateEvent event) {
     updateState(event.getState());
+  }
+  
+  public String getStateTopic() {
+    return getTopicName(Topic.STATE);
   }
   
   private void updateState(State state) {
@@ -148,6 +153,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       }
     }
     this.state = state;
+  }
+  
+  public String getTopicName(Topic topic) {
+    return getTopicName() + "-" + topic.name().toLowerCase();
+  }
+  
+  public enum Topic {
+    STATE, PRELOAD
   }
 
   // GETTER && SETTER //

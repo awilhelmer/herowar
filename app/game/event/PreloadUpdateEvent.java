@@ -15,7 +15,7 @@ public class PreloadUpdateEvent {
     this.playerId = playerId;
     this.progress = progress;
   }
-
+  
   public Long getPlayerId() {
     return playerId;
   }

@@ -15,6 +15,7 @@ import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
+import game.processor.GameProcessor.Topic;
 import game.processor.PlayerProcessor;
 import game.processor.ProcessorHandler;
 import game.processor.meta.IProcessor;
@@ -48,7 +49,7 @@ public class ClientPreloadCompletePacket extends BasePacket implements InputPack
     handler.start();
     GamesHandler.getInstance().getProcessors().put(session, handler);
     log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getUser().getUsername());
-    EventBus.publish(session.getGame().getTopicName(), new PreloadUpdateEvent(session.getUser().getId(), 100));
+    EventBus.publish(session.getGame().getTopicName(Topic.PRELOAD), new PreloadUpdateEvent(session.getUser().getId(), 100));
   }
 
   @Override
