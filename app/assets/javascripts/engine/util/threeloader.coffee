@@ -1,7 +1,6 @@
 class JSONLoader extends THREE.JSONLoader
 	
-
-#here we can use the loader and can callback the original json object ... 
+	#here we can use the loader and can callback the original json object ... 
 	loadAjaxJSON: (context, url, callback, texturePath, callbackProgress) ->
 		xhr = new XMLHttpRequest()
 		length = 0

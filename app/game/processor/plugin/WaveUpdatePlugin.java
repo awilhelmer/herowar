@@ -129,7 +129,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
         Iterator<Waypoint> iter = current.getPath().getDbWaypoints().iterator();
         Waypoint waypoint = iter.next();
-        ObjectInPacket packet = new ObjectInPacket(0, waypoint.getPosition());
+        ObjectInPacket packet = new ObjectInPacket(getProcessor().getObjectIdGenerator(), waypoint.getPosition());
         log.debug("Spawn enemy for " + current.getName() + " " + packet.toString());
         broadcast(packet);
         lastSpawnDate = now;

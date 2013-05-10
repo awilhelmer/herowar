@@ -14,10 +14,12 @@ public class PreloadData implements Serializable {
   
   private Map<String, String> textures = new HashMap<String, String>();
   private Map<String, String> texturesCube = new HashMap<String, String>();
+  private Map<String, String> geometries = new HashMap<String, String>();
   
-  public PreloadData(Map<String, String> textures, Map<String, String> texturesCube) {
+  public PreloadData(Map<String, String> textures, Map<String, String> texturesCube, Map<String, String> geometries) {
     this.textures = textures;
     this.texturesCube = texturesCube;
+    this.geometries = geometries;
   }
   
   public PreloadData() {
@@ -39,8 +41,11 @@ public class PreloadData implements Serializable {
     this.texturesCube = texturesCube;
   }
 
-  @Override
-  public String toString() {
-    return "PreloadData [textures=" + textures + ", texturesCube=" + texturesCube + "]";
+  public Map<String, String> getGeometries() {
+    return geometries;
+  }
+
+  public void setGeometries(Map<String, String> geometries) {
+    this.geometries = geometries;
   }
 }

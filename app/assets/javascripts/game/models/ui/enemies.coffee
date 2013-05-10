@@ -9,6 +9,9 @@ class Enemies extends PacketModel
 		'_active' : true
 		'quantity' : 0
 
+	initialize: (options) ->
+		super options
+
 	onPacket: (packet) ->
 		if packet
 			# TODO: we need here the info how much enemies are on the field for late joiner

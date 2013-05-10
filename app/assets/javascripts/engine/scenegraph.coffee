@@ -71,15 +71,6 @@ class SceneGraph
 
 	getNextId: ->
 		@currentId++
-	
-	addDummyObject: ->
-		mesh = new THREE.Mesh new THREE.CubeGeometry(200, 200, 200), new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true
-		obj = new BaseModel(mesh)
-		@addDynObject obj, @getNextId()
-
-	createDefaultMap: (width, height) ->
-		THREE.SceneUtils.createMultiMaterialObject new THREE.PlaneGeometry(width, height, Math.round(width / 100), Math.round(height / 100)), 
-		[ new THREE.MeshBasicMaterial(color: 0x006600), new THREE.MeshBasicMaterial(color: 0xFFFFFF, wireframe: true) ]
 
 	addSkybox: (name) ->
 		cubeTexture = @engine.getData 'texturesCube', name

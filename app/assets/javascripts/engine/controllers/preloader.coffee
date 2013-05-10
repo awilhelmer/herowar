@@ -1,5 +1,6 @@
 RendererCanvasController = require 'controllers/rendererCanvas'
 materialHelper = require 'helper/materialHelper'
+JSONLoader = require 'util/threeloader'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 log = require 'util/logger'
@@ -36,6 +37,7 @@ class Preloader extends RendererCanvasController
 		@percentage = 0
 		@data = {}
 		@states = {}
+		@jsonLoader = new JSONLoader()
 		@types = [ 'textures', 'texturesCube', 'geometries', 'images' ]
 		for type in @types
 			@data[type] = {}
@@ -88,6 +90,13 @@ class Preloader extends RendererCanvasController
 				]
 				@data[type][name] = THREE.ImageUtils.loadTextureCube urls, new THREE.CubeRefractionMapping(), =>
 					@updateState type, name, true
+			when 'geometries'
+				@jsonLoader.load url, 
+					(geometry, materials, json) =>
+						geometry.name = name
+						@data[type][name] = [geometry, materials, json]
+						@updateState type, name, true
+					, 'assets/images/game/textures'
 			else 
 				throw "The loader type '#{type}' is not supported"
 

@@ -111,7 +111,9 @@ public class GamesHandler implements Serializable {
     textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
     java.util.Map<String, String> texturesCube = new HashMap<String, String>();
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
-    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube));
+    java.util.Map<String, String> geometries = new HashMap<String, String>();
+    geometries.put("ratamahatta", "api/game/geometry/unit/2");
+    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube, geometries));
     connection.send(Json.toJson(packet).toString());
   }
 

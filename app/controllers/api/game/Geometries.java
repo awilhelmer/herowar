@@ -8,6 +8,7 @@ import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
+import models.entity.game.Unit;
 
 import org.codehaus.jackson.JsonNode;
 
@@ -18,6 +19,7 @@ import play.mvc.Result;
 import controllers.api.BaseAPI;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
+import dao.game.UnitDAO;
 
 /**
  * The Geometries controller handle api requests for the Geometry model.
@@ -53,6 +55,18 @@ public class Geometries extends BaseAPI<Long, Geometry> {
       return badRequest("No result found");
     }
     Geometry geo = env.getGeometry();
+    handleGeo(geo);
+    JsonNode node = toJson(geo);
+    return ok(node);
+  }
+  
+  @Transactional
+  public static Result showByUnit(Long id) {
+    Unit unit = UnitDAO.getInstance().getById(id);
+    if (unit == null || unit.getGeometry() == null) {
+      return badRequest("No result found");
+    }
+    Geometry geo = unit.getGeometry();
     handleGeo(geo);
     JsonNode node = toJson(geo);
     return ok(node);
