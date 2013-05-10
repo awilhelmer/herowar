@@ -30,7 +30,6 @@ class Enemies extends PacketModel
 		mesh = materialHelper.createMesh loadedData[0], loadedData[1], name, id: id
 		obj = new THREE.Object3D()
 		obj.name = mesh.name
-		obj.useQuaternion = true
 		#obj.position = position
 		obj.add mesh
 		dynObj = new Enemy obj
