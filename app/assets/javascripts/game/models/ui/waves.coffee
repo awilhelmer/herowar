@@ -15,7 +15,6 @@ class Waves extends PacketModel
 		time = @get('eta') - date.getTime()
 		arrival = @calculateCountdown time
 		@set 'arrival', arrival
-		console.log 'Arrival in', @get('arrival'), time, "=", @get('eta'), "-", date.getTime()
 			
 	calculateCountdown: (t) ->
 		if t <= 0 then return ''
