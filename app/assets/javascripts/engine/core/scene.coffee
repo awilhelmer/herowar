@@ -1,3 +1,4 @@
+materialHelper = require 'helper/materialHelper'
 Environment = require 'models/environment'
 Material = require 'models/material'
 Waypoint = require 'models/waypoint'

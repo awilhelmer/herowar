@@ -9,7 +9,6 @@ import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
 import models.entity.game.GameToken;
 import models.entity.game.Wave;
-import net.sf.ehcache.hibernate.HibernateUtil;
 
 import org.bushe.swing.event.EventBus;
 import org.hibernate.Hibernate;
@@ -27,7 +26,7 @@ import dao.game.GameTokenDAO;
  */
 @SuppressWarnings("serial")
 public class ClientInitPacket extends BasePacket implements InputPacket {
-  
+
   private static final Logger.ALogger log = Logger.of(ClientInitPacket.class);
 
   private String token;
@@ -40,10 +39,13 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
       log.info("Found " + gameToken.toString());
       log.info("Auth connection " + connection.httpRequest().id() + " granted for " + gameToken.getCreatedByUser().toString());
       log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
-      // TODO: Load waves since the map is detached after but a optimized query should be faster then this?!?
+      // TODO: Load waves since the map is detached after but a optimized query
+      // should be faster then this?!?
       Hibernate.initialize(gameToken.getMap().getWaves());
       for (Wave wave : gameToken.getMap().getWaves()) {
         Hibernate.initialize(wave.getPath().getDbWaypoints());
+        Hibernate.initialize(wave.getUnits());
+        Hibernate.initialize(wave.getPath());
       }
       EventBus.publish(new GameJoinEvent(gameToken, connection));
       connection.send(Json.toJson(new AccessGrantedPacket()).toString());

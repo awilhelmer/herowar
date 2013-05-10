@@ -1,5 +1,6 @@
 BaseModel = require 'models/basemodel'
 Variables = require 'variables'
+events = require 'events'
 
 class SceneGraph
 
@@ -13,6 +14,10 @@ class SceneGraph
 		@staticObjects = {}
 		@currentId = 1
 		@addLights()
+		@bindEvents()
+	
+	bindEvents: ->
+		events.on 'add:dynamicObject', @onAddDynamicObject, @
 	
 	addLights: ->
 		@scene.add new THREE.AmbientLight 0x666666
@@ -89,5 +94,9 @@ class SceneGraph
 		if _.isUndefined @skybox
 			@skyboxScene.remove @skybox
 			@skybox = undefined
+
+	onAddDynamicObject: (id, model) ->
+		console.log 'onAddDynamicObject', id, model
+		@addDynObject model, id
 
 return SceneGraph

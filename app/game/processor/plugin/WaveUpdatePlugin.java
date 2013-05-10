@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+import models.entity.game.Unit;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
 import play.Logger;
@@ -129,7 +130,9 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
         Iterator<Waypoint> iter = current.getPath().getDbWaypoints().iterator();
         Waypoint waypoint = iter.next();
-        ObjectInPacket packet = new ObjectInPacket(getProcessor().getObjectIdGenerator(), waypoint.getPosition());
+        Iterator<Unit> iter2 = current.getUnits().iterator();
+        Unit unit = iter2.next();
+        ObjectInPacket packet = new ObjectInPacket(getProcessor().getObjectIdGenerator(), unit.getName(), current.getPath().getId(), waypoint.getPosition());
         log.debug("Spawn enemy for " + current.getName() + " " + packet.toString());
         broadcast(packet);
         lastSpawnDate = now;

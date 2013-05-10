@@ -13,13 +13,34 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class ObjectInPacket extends ObjectPacket {
 
-  public ObjectInPacket(long id, Vector3 position) {
+  protected String name;
+  protected long path;
+  
+  public ObjectInPacket(long id, String name, long path, Vector3 position) {
     super(id, position);
     this.type = PacketType.ObjectInPacket;
+    this.name = name;
+    this.path = path;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+  
+  public long getPath() {
+    return path;
+  }
+
+  public void setPath(long path) {
+    this.path = path;
   }
 
   @Override
   public String toString() {
-    return "ObjectInPacket [type=" + type + ", id=" + id + ", position=" + position.toString() + "]";
+    return "ObjectInPacket [type=" + type + ", id=" + id + ", name=" + name + ", path=" + path + ", position=" + position.toString() + "]";
   }
 }

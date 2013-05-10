@@ -78,7 +78,7 @@ class Preloader extends RendererCanvasController
 		log.info "Load [type=#{type}, name=#{name}, url=#{url}]"
 		@updateState type, name, false
 		switch type
-			# TODO: implement geometries and image loading cases
+			# TODO: implement image loading cases
 			when 'textures'
 				@data[type][name] = THREE.ImageUtils.loadTexture url, undefined, =>
 					@updateState type, name, true

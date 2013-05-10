@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class Wave implements Serializable {
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name = "wave_units")
   @JsonIgnore
-  private Set<Unit> units;
+  private Set<Unit> units = new HashSet<Unit>();
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.REFRESH })
   @JoinColumn(name = "path_id")
