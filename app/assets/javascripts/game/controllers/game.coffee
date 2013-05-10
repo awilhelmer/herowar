@@ -1,4 +1,5 @@
 ApplicationController = require 'controllers/application'
+PathingHelper = require 'helper/pathingHelper'
 log = require 'util/logger'
 
 class GameController extends ApplicationController
@@ -11,6 +12,9 @@ class GameController extends ApplicationController
 	initialize: (options) ->
 		log.info 'Initialize game...'
 		super options
+		# Show path during develop - Should be removed later
+		@pathingHelper = new PathingHelper @
+		@pathingHelper.showPath()
 		@engine.start()
 
 return GameController
