@@ -26,14 +26,15 @@ class Enemies extends PacketModel
 	
 	createEnemy: (id, name, pathId, position) ->
 		path = @getPathById pathId
+		waypoints = path.get 'waypoints'
 		loadedData = db.data().geometries[name]
 		mesh = materialHelper.createMesh loadedData[0], loadedData[1], name, id: id
 		obj = new THREE.Object3D()
 		obj.name = mesh.name
-		#obj.position = position
+		obj.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if _.isArray waypoints
 		obj.add mesh
 		dynObj = new Enemy obj
-		dynObj.waypoints = path.get 'waypoints'
+		dynObj.waypoints = waypoints if _.isArray waypoints
 		events.trigger 'add:dynamicObject', id, dynObj
 		
 	getPathById: (id) ->
