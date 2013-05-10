@@ -22,9 +22,10 @@ class Enemies extends PacketModel
 			quantity = if @get('quantity') then @get('quantity') else 0
 			quantity++
 			@set 'quantity', quantity
-			@createEnemy packet.id, packet.name, packet.position
+			@createEnemy packet.id, packet.name, packet.path, packet.position
 	
-	createEnemy: (id, name, position) ->
+	createEnemy: (id, name, pathId, position) ->
+		path = @getPathById pathId
 		loadedData = db.data().geometries[name]
 		mesh = materialHelper.createMesh loadedData[0], loadedData[1], name, id: id
 		obj = new THREE.Object3D()
@@ -32,7 +33,13 @@ class Enemies extends PacketModel
 		#obj.position = position
 		obj.add mesh
 		dynObj = new Enemy obj
-		console.log 'Create Enemy from: ', id, name, obj
+		dynObj.waypoints = path.get 'waypoints'
 		events.trigger 'add:dynamicObject', id, dynObj
+		
+	getPathById: (id) ->
+		allPaths = db.get 'paths'
+		foundPaths = allPaths.where dbId : id
+		unless foundPaths.length isnt 0 then throw "Couldnt find path for unit #{name}"
+		return foundPaths[0]
 		
 return Enemies
