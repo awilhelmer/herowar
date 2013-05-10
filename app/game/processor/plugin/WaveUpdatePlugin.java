@@ -2,6 +2,7 @@ package game.processor.plugin;
 
 import game.GameSession;
 import game.network.server.WaveInitPacket;
+import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
@@ -24,24 +25,44 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   private Set<Wave> waves;
   private Wave current;
-  private int currentIndex;
+  private Wave next;
+  private int index;
+  private int total;
+  
   private Date startDate;
+  private boolean waveUpdated = false;
 
   public WaveUpdatePlugin(GameProcessor processor) {
     super(processor);
     waves = getProcessor().getMap().getWaves();
-    currentIndex = 1;
-    current = getNextWave();
+  }
+  
+  @Override
+  public void process() {
+    Date now = new Date();
+    if (next != null && startDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
+      current = next;
+      next = getNextWave();
+      index++;
+      startDate = new Date();
+      waveUpdated = true;
+    }
+    super.process();
+    waveUpdated = false;
   }
 
   @Override
   public void processSession(GameSession session) {
-    log.debug("Processing " + this.toString() + " with wave " + currentIndex + " / " + waves.size() + " (" + current.toString() + ")");
+    log.debug("Processing " + this.toString() + " with wave " + index + " / " + total + ": " + (current != null ? current.toString() : ""));
     long playerId = session.getUser().getId();
     if (!hashInitPacket(playerId)) {
-      long eta = startDate.getTime() + (current.getPrepareTime() * 1000);
-      sendPacket(session, new WaveInitPacket(currentIndex, eta, waves.size()));
+      long eta = getEta();
+      sendPacket(session, new WaveInitPacket(index, eta, total));
       getInitPacket().replace(playerId, true);
+    }
+    if (waveUpdated) {
+      long eta = getEta();
+      sendPacket(session, new WaveUpdatePacket(index, eta));
     }
   }
 
@@ -49,6 +70,10 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   public void load() {
     super.load();
     startDate = new Date();
+    index = 0;
+    total = waves.size();
+    current = null;
+    next = getNextWave();
   }
 
   @Override
@@ -65,9 +90,15 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private Wave getNextWave() {
     Iterator<Wave> wavesIterator = waves.iterator();
     if (wavesIterator.hasNext()) {
-      return wavesIterator.next();
+      Wave next = wavesIterator.next();
+      wavesIterator.remove();
+      return next;
     }
     return null;
+  }
+  
+  private long getEta() {
+    return next != null ? startDate.getTime() + (next.getPrepareTime() * 1000) : 0;
   }
 
   @Override

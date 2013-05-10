@@ -4,14 +4,18 @@ insert into geometry (id, cdate, udate, version, colors, faces, morphColors, mor
 
 insert into material (id, blending, color, colorAmbient, colorDiffuse, colorSpecular, dbgColor, dbgIndex, dbgname, depthTest, depthWrite, mapDiffuse, mapDiffuseWrap, name, opacity, shading, sortIndex, specularCoef, transparency, transparent, vertexColors, texture_id) values (5, null, '#9ea69b', null, null, null, null, null, null, null, null, null, null, 'Terrain', 0.0, null, 0, null, null, false, null, null);
 insert into material (id, blending, color, colorAmbient, colorDiffuse, colorSpecular, dbgColor, dbgIndex, dbgname, depthTest, depthWrite, mapDiffuse, mapDiffuseWrap, name, opacity, shading, sortIndex, specularCoef, transparency, transparent, vertexColors, texture_id) values (6, null, '#ff9999', null, null, null, null, null, null, null, null, null, null, 'Mat.2', 1.0, null, 1, null, null, false, null, null);
+
 insert into terrain (id, height, smoothness, width, wireframe, zScale, geometry_id) values (2, 500, 0.1, 500, true, 0, 13);
+
 insert into map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) values (2,now(), now(), 3, '', 5, 2000, 20, 'Default Map', 500, 'default', 1, 2, null);
+
 insert into map_materials (Map_id, allMaterials_id) values (2, 5);
 insert into map_materials (Map_id, allMaterials_id) values (2, 6);
+
 insert into geo_material (arrayIndex, mat_id, geo_id) values (0, 5, 13);
 insert into geo_material (arrayIndex, mat_id, geo_id) values (1, 6, 13);
-insert into path (id, name, map_id) values (2, 'Path-1', 2);
 
+insert into path (id, name, map_id) values (2, 'Path-1', 2);
 
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 14 - -85 x 1 x 185', -85.0, 1.0, 185.0, 2, 13);
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 8 - -115 x 1 x -155', -115.0, 1.0, -155.0, 2, 7);
@@ -35,5 +39,7 @@ insert into waypoint (name, position_x, position_y, position_z, path_id, sortOde
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 1 - 235 x 1 x -245', 235.0, 1.0, -245.0, 2, 0);
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 3 - 145 x 1 x -45', 145.0, 1.0, -45.0, 2, 2);
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 4 - 105 x 1 x 5', 105.0, 1.0, 5.0, 2, 3);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (1, 'Wave-1', 60, 50, 120, 2, 2, 0);
+
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (1, 'Wave-1', 20, 50, 120, 2, 2, 0);
+
 insert into wave_units (Wave_id, units_id) values (1, 2);

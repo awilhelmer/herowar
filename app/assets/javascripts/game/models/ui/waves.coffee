@@ -8,12 +8,14 @@ class Waves extends PacketModel
 
 	update: =>
 		@calculateArrival() if @get 'eta'
+		@unset 'arrival' if @get('eta') is 0 and @get 'arrival'
 
 	calculateArrival: ->
 		date = new Date()
 		time = @get('eta') - date.getTime()
 		arrival = @calculateCountdown time
 		@set 'arrival', arrival
+		console.log 'Arrival in', @get('arrival'), time, "=", @get('eta'), "-", date.getTime()
 			
 	calculateCountdown: (t) ->
 		if t <= 0 then return ''
