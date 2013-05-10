@@ -2,7 +2,7 @@ class BaseModel
 
 	constructor: (@object3d) ->
 	
-	update: ->
+	update: (delta) ->
 		
 
 return BaseModel 

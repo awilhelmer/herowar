@@ -22,10 +22,10 @@ class Engine
 		Variables.SCREEN_WIDTH = @main.width()
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
-		@scenegraph = new SceneGraph(@)
-		@viewhandler = new ViewHandler(@, @opts.views)
+		@scenegraph = new SceneGraph @
+		@viewhandler = new ViewHandler @, @opts.views
+		@clock = new THREE.Clock()
 		@pause = false
-		#document.addEventListener 'mousemove', @onDocumentMouseMove, false
 		@initListener()
 		console.log "Engine started!"
 		
@@ -55,7 +55,8 @@ class Engine
 		$(@renderer.domElement).remove()
 
 	render: ->
-		@scenegraph.update()
+		delta = @clock.getDelta()
+		@scenegraph.update delta
 		Eventbus.beforeRender.dispatch()
 		@viewhandler.render @renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene
 		Eventbus.afterRender.dispatch()

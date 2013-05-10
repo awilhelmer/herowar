@@ -22,9 +22,9 @@ class SceneGraph
 	addLights: ->
 		@scene.add new THREE.AmbientLight 0x666666
 
-	update: ->
+	update: (delta) ->
 		for id, obj of @dynamicObjects
-			obj.update()
+			obj.update delta
 
 	clear: ->
 		for id, obj of @dynamicObjects
