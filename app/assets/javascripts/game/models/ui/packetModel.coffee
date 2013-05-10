@@ -47,14 +47,14 @@ class PacketModel extends Backbone.Model
 			@trigger 'change'
 
 	updateTimeValue: (valueKey, incrementKey, timeKey) ->
-		console.log 'UpdateTimeValue', valueKey, @get(valueKey), timeKey, @get(timeKey), incrementKey, @get(incrementKey)
+		#console.log 'UpdateTimeValue', valueKey, @get(valueKey), incrementKey, @get(incrementKey)
 		unless @get(valueKey) or @get(incrementKey) then return
 		unless timeKey
 			timeKey = if not @get('updateTime') or @get('updateTime') < @get('retrieveTime') then 'retrieveTime' else 'updateTime'
-			console.log 'Set timekey: ', timeKey
+			#console.log 'Set timekey: ', timeKey
 		time = (new Date()).getTime()
 		dif = time - @get timeKey
-		newVal = Math.round(@get(valueKey) + ((dif / 1000) * @get incrementKey))
+		newVal = Math.round(@get(valueKey) + (dif / 1000 * @get incrementKey))
 		update = {}
 		update[valueKey] = newVal
 		update.updateTime = time	
@@ -65,7 +65,7 @@ class PacketModel extends Backbone.Model
 		for key, val of @timeValues
 			if @get(key) or @get(val)
 				currentRate = Math.round 1000 / @get val
-				console.log 'Calculate rate for', key, ':', currentRate
+				#console.log 'Calculate rate for', key, ':', currentRate
 				newRate = currentRate if currentRate < newRate
 		if newRate isnt @rate
 			console.log 'Update rate ', newRate, ' from ', @rate

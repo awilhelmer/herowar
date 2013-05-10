@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
 
@@ -46,8 +47,20 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Map map;
   private State state;
 
+  /**
+   * The session set contains all sessions for this game.
+   */
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
+  
+  /**
+   * The plugins map contains all running plugins for each game state.
+   */
   private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
+  
+  /**
+   * The player cache contains player specific variables and properties like gold and is used by plugins.
+   */
+  private ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> playerCache = new ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>>();
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId);
@@ -83,7 +96,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public void addPlayer(GameSession player) {
     synchronized (sessions) {
-      this.sessions.add(player);
+      sessions.add(player);
+    }
+    long playerId = player.getUser().getId();
+    if (!playerCache.containsKey(playerId)) {
+      playerCache.put(playerId, new ConcurrentHashMap<String, Object>());
     }
     for (Set<IPlugin> statePlugins : plugins.values()) {
       for (IPlugin plugin : statePlugins) {
@@ -180,6 +197,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public java.util.Map<State, Set<IPlugin>> getPlugins() {
     return plugins;
+  }
+
+  public ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> getPlayerCache() {
+    return playerCache;
   }
 
   public Long getGameId() {

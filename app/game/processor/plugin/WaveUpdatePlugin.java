@@ -36,7 +36,7 @@ public class WaveUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void process() {
-    log.debug("Processing " + this.toString() + " with wave " + currentWaveCount + " / " + allWavesCount + " (" + currentWave.toString() + ")");
+    //log.debug("Processing " + this.toString() + " with wave " + currentWaveCount + " / " + allWavesCount + " (" + currentWave.toString() + ")");
   }
 
   @Override
