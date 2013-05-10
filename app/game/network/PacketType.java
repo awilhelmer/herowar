@@ -33,7 +33,8 @@ public class PacketType {
 //  public static final Integer ObjectShotPacket = 31;
   public static final Integer PreloadDataPacket = 50;
 //  public static final Integer ChatMessagePacket = 70;
-  public static final Integer WaveUpdatePacket = 60;
+  public static final Integer WaveInitPacket = 60;
+  public static final Integer WaveUpdatePacket = 61;
   
 
 }
