@@ -87,6 +87,6 @@ public class Vector3 implements Serializable {
 
   @Override
   public String toString() {
-    return "GameVector3 [x=" + x + ", y=" + y + ", z=" + z + "]";
+    return "Vector3 [x=" + x + ", y=" + y + ", z=" + z + "]";
   }
 }

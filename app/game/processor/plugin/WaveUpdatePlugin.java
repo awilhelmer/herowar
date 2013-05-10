@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import models.entity.game.Wave;
+import models.entity.game.Waypoint;
 import play.Logger;
 
 /**
@@ -126,8 +127,11 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
       Date now = new Date();
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
-        log.debug("Spawn enemy for " + current.getName());
-        broadcast(new ObjectInPacket());
+        Iterator<Waypoint> iter = current.getPath().getDbWaypoints().iterator();
+        Waypoint waypoint = iter.next();
+        ObjectInPacket packet = new ObjectInPacket(0, waypoint.getPosition());
+        log.debug("Spawn enemy for " + current.getName() + " " + packet.toString());
+        broadcast(packet);
         lastSpawnDate = now;
         spawnCurrent++;
         spawnTotal++;

@@ -1,5 +1,6 @@
 package game.network.server;
 
+import models.entity.game.Vector3;
 import game.network.ObjectPacket;
 import game.network.PacketType;
 
@@ -12,12 +13,13 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class ObjectInPacket extends ObjectPacket {
 
-  public ObjectInPacket() {
+  public ObjectInPacket(long id, Vector3 position) {
+    super(id, position);
     this.type = PacketType.ObjectInPacket;
   }
 
   @Override
   public String toString() {
-    return "ObjectInPacket [type=" + type + "]";
+    return "ObjectInPacket [type=" + type + ", id=" + id + ", position=" + position.toString() + "]";
   }
 }

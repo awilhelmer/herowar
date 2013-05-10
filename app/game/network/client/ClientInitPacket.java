@@ -8,6 +8,7 @@ import game.network.handler.WebSocketHandler;
 import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
 import models.entity.game.GameToken;
+import models.entity.game.Wave;
 import net.sf.ehcache.hibernate.HibernateUtil;
 
 import org.bushe.swing.event.EventBus;
@@ -41,6 +42,9 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
       log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
       // TODO: Load waves since the map is detached after but a optimized query should be faster then this?!?
       Hibernate.initialize(gameToken.getMap().getWaves());
+      for (Wave wave : gameToken.getMap().getWaves()) {
+        Hibernate.initialize(wave.getPath().getDbWaypoints());
+      }
       EventBus.publish(new GameJoinEvent(gameToken, connection));
       connection.send(Json.toJson(new AccessGrantedPacket()).toString());
     } else {

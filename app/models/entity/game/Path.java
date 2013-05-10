@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class Path implements Serializable {
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "path", orphanRemoval = true)
   @JsonIgnore
-  private Set<Waypoint> dbWaypoints;
+  private Set<Waypoint> dbWaypoints = new HashSet<Waypoint>();
 
   @Transient
   private List<Waypoint> waypoints;
