@@ -39,14 +39,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   
   @Override
   public void process() {
-    Date now = new Date();
-    if (next != null && startDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
-      current = next;
-      next = getNextWave();
-      index++;
-      startDate = new Date();
-      waveUpdated = true;
-    }
+    waveUpdated = checkWaveUpdate();
     super.process();
     waveUpdated = false;
   }
@@ -85,6 +78,18 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   @Override
   public void removePlayer(GameSession player) {
     // TODO Auto-generated method stub
+  }
+  
+  private boolean checkWaveUpdate() {
+    Date now = new Date();
+    if (next != null && startDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
+      current = next;
+      next = getNextWave();
+      index++;
+      startDate = new Date();
+      return true;
+    }
+    return false;
   }
 
   private Wave getNextWave() {

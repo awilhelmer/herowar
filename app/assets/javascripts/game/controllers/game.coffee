@@ -5,6 +5,7 @@ class GameController extends ApplicationController
 
 	views:
 		'views/progress'	: ''
+		'views/build'			: ''
 		'views/viewport'	: ''
 
 	initialize: (options) ->
