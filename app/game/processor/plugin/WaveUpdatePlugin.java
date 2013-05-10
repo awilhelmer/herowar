@@ -1,6 +1,7 @@
 package game.processor.plugin;
 
 import game.GameSession;
+import game.network.server.ObjectInPacket;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
@@ -29,8 +30,10 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private int index;
   private int total;
   
-  private Date startDate;
-  private boolean waveUpdated = false;
+  private double spawnRate;
+  private Date lastSpawnDate;
+  private Date waveStartDate;
+  private boolean waveUpdated;
 
   public WaveUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -40,21 +43,22 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   @Override
   public void process() {
     waveUpdated = checkWaveUpdate();
+    createUnit();
     super.process();
     waveUpdated = false;
   }
 
   @Override
   public void processSession(GameSession session) {
-    log.debug("Processing " + this.toString() + " with wave " + index + " / " + total + ": " + (current != null ? current.toString() : ""));
+    log.debug("Processing " + this.toString() + " with wave " + index + " / " + total + ": " + (current != null ? current.getName() : ""));
     long playerId = session.getUser().getId();
     if (!hashInitPacket(playerId)) {
-      long eta = getEta();
+      long eta = getWaveEta();
       sendPacket(session, new WaveInitPacket(index, eta, total));
       getInitPacket().replace(playerId, true);
     }
     if (waveUpdated) {
-      long eta = getEta();
+      long eta = getWaveEta();
       sendPacket(session, new WaveUpdatePacket(index, eta));
     }
   }
@@ -62,11 +66,10 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   @Override
   public void load() {
     super.load();
-    startDate = new Date();
-    index = 0;
-    total = waves.size();
     current = null;
-    next = getNextWave();
+    next = null;
+    total = waves.size();
+    loadNextWave(true);
   }
 
   @Override
@@ -82,14 +85,26 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   
   private boolean checkWaveUpdate() {
     Date now = new Date();
-    if (next != null && startDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
-      current = next;
-      next = getNextWave();
-      index++;
-      startDate = new Date();
+    if (next != null && waveStartDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
+      loadNextWave(false);
       return true;
     }
     return false;
+  }
+  
+  private void loadNextWave(boolean first) {
+    current = next;
+    next = getNextWave();
+    if (current != null) {
+      index++;
+    } else {
+      index = 0;
+    }
+    spawnRate = current != null ? current.getWaveTime().doubleValue() * 1000 / current.getQuantity().doubleValue() : 0;
+    if (current != null)
+      log.debug("Set spawnRate to " + spawnRate + " (" + current.getWaveTime().doubleValue() + " * 1000 / " + current.getQuantity().doubleValue());
+    lastSpawnDate = new Date();
+    waveStartDate = new Date();
   }
 
   private Wave getNextWave() {
@@ -102,8 +117,18 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     return null;
   }
   
-  private long getEta() {
-    return next != null ? startDate.getTime() + (next.getPrepareTime() * 1000) : 0;
+  private long getWaveEta() {
+    return next != null ? waveStartDate.getTime() + (next.getPrepareTime() * 1000) : 0;
+  }
+  
+  private void createUnit() {
+    if (current != null && spawnRate > 0) {
+      Date now = new Date();
+      if (now.getTime() <= lastSpawnDate.getTime() + spawnRate) {
+        log.debug("Spawn enemy for Wave " + current.getName());
+        broadcast(new ObjectInPacket());
+      }
+    }
   }
 
   @Override

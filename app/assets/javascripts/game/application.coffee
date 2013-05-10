@@ -15,6 +15,7 @@ app =
 
 	# We have to initialize models to deal with init packets before the view is created
 	initModels: ->
+		db.get 'ui/enemies'
 		db.get 'ui/preload'
 		db.get 'ui/stats'
 		db.get 'ui/waves'

@@ -117,6 +117,16 @@ public class AbstractPlugin {
   }
 
   /**
+   * Broadcast a packet to all players.
+   * 
+   * @param packet
+   *          The packet to broadcast.
+   */
+  public void broadcast(BasePacket packet) {
+    getProcessor().broadcast(packet);
+  }
+
+  /**
    * Get topic name for the GameProcessor.
    * 
    * @return The topic name

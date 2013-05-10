@@ -7,6 +7,9 @@ class PacketModel extends Backbone.Model
 	timeValues: {}
 
 	rate: 1000
+	
+	defaultValues:
+		'_active' : false
 
 	initialize: (options) ->
 		super options
@@ -17,8 +20,7 @@ class PacketModel extends Backbone.Model
 		@updateTimeValue key, val for key, val of @timeValues
 	
 	setDefaultValues: ->
-		@set
-			'_active' : false
+		@set @defaultValues
 	
 	bindPacketEvents: ->
 		if not _.isNull(@type) and _.isArray @type
