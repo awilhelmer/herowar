@@ -31,6 +31,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private int total;
   
   private double spawnRate;
+  private int spawnCurrent;
+  private int spawnTotal;
   private Date lastSpawnDate;
   private Date waveStartDate;
   private boolean waveUpdated;
@@ -101,8 +103,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       index = 0;
     }
     spawnRate = current != null ? current.getWaveTime().doubleValue() * 1000 / current.getQuantity().doubleValue() : 0;
-    if (current != null)
-      log.debug("Set spawnRate to " + spawnRate + " (" + current.getWaveTime().doubleValue() + " * 1000 / " + current.getQuantity().doubleValue());
+    spawnCurrent = 0;
     lastSpawnDate = new Date();
     waveStartDate = new Date();
   }
@@ -122,11 +123,14 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
   
   private void createUnit() {
-    if (current != null && spawnRate > 0) {
+    if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
       Date now = new Date();
-      if (now.getTime() <= lastSpawnDate.getTime() + spawnRate) {
+      if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
         log.debug("Spawn enemy for Wave " + current.getName());
         broadcast(new ObjectInPacket());
+        lastSpawnDate = now;
+        spawnCurrent++;
+        spawnTotal++;
       }
     }
   }
