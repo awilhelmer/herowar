@@ -23,7 +23,6 @@ class BrushMaterial extends SelectorPlane
 
 	onMouseUp: (event) ->
 		EditorEventbus.dispatch 'resetWireframe', @selectorObject.selectedObject if event.which is 1
-		super event
 		
 	update: (position, intersect) ->
 		unless @selectorObject.selectedObject

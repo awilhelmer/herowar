@@ -1,5 +1,3 @@
-Constants = require 'constants'
-log = require 'util/logger'
 db = require 'database'
 
 class SelectorTerrain
@@ -8,7 +6,6 @@ class SelectorTerrain
 		@initialize()
 	
 	initialize: ->
-		@tool = db.get 'ui/tool'
 		@radius = 0.5
 		@bindEvents()
 	
@@ -23,10 +20,6 @@ class SelectorTerrain
 	update: (position, intersect) ->
 
 	onMouseUp: (event) =>
-		if event.which is 3
-			@onLeaveTool()
-			log.debug 'Set Tool Selection'
-			@tool.set 'active', Constants.TOOL_SELECTION
 		
 	onMouseMove: (event) =>
 		radius = @radius

@@ -41,7 +41,6 @@ class AddObject extends SelectorTerrain
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentMesh')?.visible and !@input.get('mouse_moved') if event.which is 1
-		super event
 
 	onLoadGeometry: (geometry, materials, json) =>
 		json = id: @tool.get('currentMeshId') unless json

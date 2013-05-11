@@ -41,6 +41,10 @@ class Tools
 	
 	onMouseUp: (event) =>
 		@[@tool.get('active')].onMouseUp event
+		if event.which is 3 and @tool.get('active') isnt Constants.TOOL_SELECTION
+			@[@tool.get('active')].onLeaveTool()
+			log.debug 'Set Tool Selection'
+			@tool.set 'active', Constants.TOOL_SELECTION
 	
 	onMouseMove: =>
 		@[@tool.get('active')].onMouseMove()

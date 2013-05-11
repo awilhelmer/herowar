@@ -19,7 +19,6 @@ class AddWaypoint extends SelectorPlane
 	
 	onMouseUp: (event) ->
 		@createWaypoint() if event.which is 1 and @isVisible
-		super event
 	
 	createWaypoint: ->
 		pos = @calculatePossiblePosition @lastPosition
