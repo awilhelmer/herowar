@@ -94,6 +94,8 @@ class Preloader extends RendererCanvasController
 				@jsonLoader.load url, 
 					(geometry, materials, json) =>
 						geometry.name = name
+						geometry.computeBoundingBox()
+						geometry.computeMorphNormals()
 						@data[type][name] = [geometry, materials, json]
 						@updateState type, name, true
 					, 'assets/images/game/textures'

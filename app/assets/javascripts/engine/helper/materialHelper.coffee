@@ -84,8 +84,6 @@ materialHelper =
 		null
 	
 	createAnimMesh: (geometry, materials, name, json) ->
-		geometry.computeBoundingBox()
-		geometry.computeMorphNormals()
 		# TODO: this is bad ...
 		if _.isArray(materials) and materials.length > 0
 			materials[0].morphTargets = true
