@@ -3,6 +3,7 @@ Variables = require 'variables'
 Constants = require 'constants'
 Eventbus = require 'eventbus'
 Input = require 'core/input'
+events = require 'events'
 db = require 'database'
 
 class EditorInput extends Input
@@ -24,6 +25,7 @@ class EditorInput extends Input
 			@model.set 'mouse_pressed_left', false if event.which is 1
 			@model.set 'mouse_pressed_middle', false if event.which is 2
 			@model.set 'mouse_pressed_right', false if event.which is 3
+		events.trigger 'mouse:up', event
 		EditorEventbus.mouseup.dispatch event
 		unless @tool.get('active') is Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
@@ -34,6 +36,7 @@ class EditorInput extends Input
 			@model.set 'mouse_pressed_left', true if event.which is 1
 			@model.set 'mouse_pressed_middle', true if event.which is 2
 			@model.set 'mouse_pressed_right', true if event.which is 3
+		events.trigger 'mouse:down', event
 		EditorEventbus.mousedown.dispatch event
 		unless @tool.get('active') is Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
@@ -44,6 +47,7 @@ class EditorInput extends Input
 			@model.set 
 				'mouse_position_x': event.clientX
 				'mouse_position_y': event.clientY
+		events.trigger 'mouse:move', event
 		EditorEventbus.mousemove.dispatch event
 		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
 		if @tool.get('active') isnt Constants.TOOL_BRUSH and (@model.get('mouse_pressed_left') or @model.get('mouse_pressed_right'))

@@ -1,6 +1,7 @@
 Eventbus = require 'eventbus'
 Variables = require 'variables'
 log = require 'util/logger'
+events = require 'events'
 db = require 'database'
 
 class Input
@@ -37,6 +38,7 @@ class Input
 			@model.set 'mouse_pressed_left', false if event.which is 1
 			@model.set 'mouse_pressed_middle', false if event.which is 2
 			@model.set 'mouse_pressed_right', false if event.which is 3
+		events.trigger 'mouse:up', event
 		Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', false unless @model.get('mouse_pressed_left') or @model.get('mouse_pressed_middle') or @model.get('mouse_pressed_right')
 		
@@ -45,6 +47,7 @@ class Input
 			@model.set 'mouse_pressed_left', true if event.which is 1
 			@model.set 'mouse_pressed_middle', true if event.which is 2
 			@model.set 'mouse_pressed_right', true if event.which is 3
+		events.trigger 'mouse:down', event
 		Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', false
 		
@@ -53,6 +56,7 @@ class Input
 			@model.set 
 				'mouse_position_x': event.clientX
 				'mouse_position_y': event.clientY
+		events.trigger 'mouse:move', event
 		Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', true
 	

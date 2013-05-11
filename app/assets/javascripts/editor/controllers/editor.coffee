@@ -2,8 +2,8 @@ EditorEventbus = require 'editorEventbus'
 ApplicationController = require 'controllers/application'
 EditorInput = require 'core/editorInput'
 EditorScene = require 'core/editorScene'
+EditorTools = require 'core/editorTools'
 Variables = require 'variables'
-Tools = require 'core/tools'
 log = require 'util/logger'
 
 class Editor extends ApplicationController
@@ -40,9 +40,9 @@ class Editor extends ApplicationController
 	
 	initCore: ->
 		@input = new EditorInput @
-		@tools = new Tools @
 		@scene = new EditorScene @
-
+		@tools = new EditorTools @
+		
 	bindEvents: ->
 		EditorEventbus.render.add @render
 	
