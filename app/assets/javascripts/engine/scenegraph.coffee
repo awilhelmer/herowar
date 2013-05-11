@@ -18,6 +18,7 @@ class SceneGraph
 	
 	bindEvents: ->
 		events.on 'add:dynamicObject', @onAddDynamicObject, @
+		events.on 'remove:dynamicObject', @onRemoveDynamicObject, @
 	
 	addLights: ->
 		@scene.add new THREE.AmbientLight 0x666666
@@ -36,7 +37,7 @@ class SceneGraph
 			@scene.add object.object3d
 
 	removeDynObject: (id) ->
-		unless @dynamicObjects.hasOwnProperty id
+		if @dynamicObjects.hasOwnProperty id
 			@scene.remove @dynamicObjects[id].object3d
 			delete @dynamicObjects[id]
 
@@ -98,5 +99,9 @@ class SceneGraph
 	onAddDynamicObject: (id, model) ->
 		console.log 'onAddDynamicObject', id, model
 		@addDynObject model, id
+
+	onRemoveDynamicObject: (id) ->
+		console.log 'onRemoveDynamicObject', id
+		@removeDynObject id
 
 return SceneGraph

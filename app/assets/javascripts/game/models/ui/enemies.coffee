@@ -31,7 +31,7 @@ class Enemies extends PacketModel
 		events.trigger 'add:dynamicObject', id, dynObj
 	
 	createModel: (id, name, data, waypoints) ->
-		model = new Enemy @createObject3D id, name, data, waypoints
+		model = new Enemy id, @createObject3D id, name, data, waypoints
 		model.waypoints = waypoints if _.isArray waypoints
 		model
 	

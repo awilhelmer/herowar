@@ -1,29 +1,36 @@
 BaseModel = require 'models/basemodel'
+events = require 'events'
 
 class Enemy extends BaseModel
 	
+	id: null
+	
 	waypoints: []
 	
-	constructor: (@object3d) ->
+	constructor: (@id, @object3d) ->
 		@object3d.useQuaternion = true
-		@target = new THREE.Object3D()
 	
 	update: (delta) ->
 		@move delta
 	
 	move: (delta) ->
 		return if @waypoints.length is 0
+		@waypointArrivalCheck()
+		return if @waypoints.length is 0
 		waypoint = @waypoints[0]
-		if Math.abs(waypoint.position.x - @object3d.position.x) < 1 and Math.abs(waypoint.position.z - @object3d.position.z) < 1
-			console.log "Reached #{waypoint.name}"
-			@waypoints.splice 0, 1
-			return if @waypoints.length is 0
-			waypoint = @waypoints[0]
-		#console.log 'Moving', waypoint.position.x - @object3d.position.x, waypoint.position.z - @object3d.position.z 
 		@rotateTo waypoint.position
-		@object3d.translateZ delta * 10
+		@object3d.translateZ delta * 20
 
 	rotateTo: (position) ->
 		@object3d.lookAt new THREE.Vector3 position.x, 0, position.z
 	
+	waypointArrivalCheck: ->
+		waypoint = @waypoints[0]
+		@waypointReached waypoint if Math.abs(waypoint.position.x - @object3d.position.x) < 1 and Math.abs(waypoint.position.z - @object3d.position.z) < 1
+
+	waypointReached: (waypoint) ->
+		console.log "Enemy #{@id} reached #{waypoint.name}"
+		@waypoints.splice 0, 1
+		events.trigger 'remove:dynamicObject', @id if @waypoints.length is 0
+
 return Enemy
