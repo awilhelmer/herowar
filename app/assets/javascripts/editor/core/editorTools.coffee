@@ -23,11 +23,4 @@ class EditorTools extends Tools
 		@selectorObject = new SelectorObject @app, @objectHelper, @intersectHelper
 		@brushMaterial = new BrushMaterial @app, @intersectHelper, @selectorObject	
 
-	onMouseUp: (event) ->
-		super event
-		if event.which is 3 and @tool.get('active') isnt @defaultTool
-			@[@tool.get('active')].onLeaveTool()
-			log.debug 'Set Tool Selection'
-			@tool.set 'active', @defaultTool
-
 return EditorTools

@@ -30,9 +30,13 @@ class Tools
 		events.on 'mouse:move', @onMouseMove, @
 	
 	onMouseUp: (event) ->
-		@[@tool.get('active')].onMouseUp event
+		@[@tool.get('active')].onMouseUp event if @tool.get('active')
+		if event.which is 3 and @tool.get('active') isnt @defaultTool
+			@[@tool.get('active')].onLeaveTool() if @tool.get('active')
+			log.debug 'Set default tool'
+			@tool.set 'active', @defaultTool
 	
 	onMouseMove: ->
-		@[@tool.get('active')].onMouseMove()
+		@[@tool.get('active')].onMouseMove() if @tool.get('active')
 	
 return Tools
