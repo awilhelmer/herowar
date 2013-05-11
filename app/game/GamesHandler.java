@@ -113,6 +113,7 @@ public class GamesHandler implements Serializable {
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
     java.util.Map<String, String> geometries = new HashMap<String, String>();
     geometries.put("Ratamahatta", "api/game/geometry/unit/2");
+    geometries.put("Cannon001", "api/game/geometry/tower/1");
     PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube, geometries));
     connection.send(Json.toJson(packet).toString());
   }

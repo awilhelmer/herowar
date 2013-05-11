@@ -8,6 +8,7 @@ import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
+import models.entity.game.Tower;
 import models.entity.game.Unit;
 
 import org.codehaus.jackson.JsonNode;
@@ -19,6 +20,7 @@ import play.mvc.Result;
 import controllers.api.BaseAPI;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
+import dao.game.TowerDAO;
 import dao.game.UnitDAO;
 
 /**
@@ -67,6 +69,18 @@ public class Geometries extends BaseAPI<Long, Geometry> {
       return badRequest("No result found");
     }
     Geometry geo = unit.getGeometry();
+    handleGeo(geo);
+    JsonNode node = toJson(geo);
+    return ok(node);
+  }
+  
+  @Transactional
+  public static Result showByTower(Long id) {
+    Tower tower = TowerDAO.getInstance().getById(id);
+    if (tower == null || tower.getGeometry() == null) {
+      return badRequest("No result found");
+    }
+    Geometry geo = tower.getGeometry();
     handleGeo(geo);
     JsonNode node = toJson(geo);
     return ok(node);
