@@ -19,7 +19,7 @@
 	"materials" : [	{
 		"DbgColor" : 15597568,
 		"DbgIndex" : 0,
-		"DbgName" : "ree-wood-wood-011png",
+		"DbgName" : "tree-wood-wood-011png",
 		"blending" : "NormalBlending",
 		"colorAmbient" : [1.0, 1.0, 1.0],
 		"colorDiffuse" : [1.0, 1.0, 1.0],
