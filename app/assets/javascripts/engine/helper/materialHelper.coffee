@@ -84,7 +84,10 @@ materialHelper =
 		null
 	
 	createAnimMesh: (geometry, materials, name, json) ->
-		@updateMeshProperties new THREE.MorphAnimMesh(geometry), materials, name, json
+		geometry.computeMorphNormals()
+		mesh = @updateMeshProperties new THREE.MorphAnimMesh(geometry), materials, name, json
+		mesh.parseAnimations()
+		mesh
 	
 	createMesh: (geometry, materials, name, json) ->
 		@updateMeshProperties new THREE.Mesh(geometry), materials, name, json
