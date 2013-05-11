@@ -34,7 +34,7 @@ class Enemies extends PacketModel
 		obj.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if _.isArray waypoints
 		obj.add mesh
 		dynObj = new Enemy obj
-		dynObj.waypoints = waypoints if _.isArray waypoints
+		dynObj.waypoints = _.clone(waypoints) if _.isArray waypoints
 		events.trigger 'add:dynamicObject', id, dynObj
 		
 	getPathById: (id) ->
