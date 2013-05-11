@@ -1,5 +1,6 @@
 package game.processor;
 
+import game.GameClock;
 import game.GameSession;
 import game.event.GameStateEvent;
 import game.models.UnitModel;
@@ -47,6 +48,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private final Node rootNode;
   private Long objectIdGenerator = null;
   private Long gameId;
+  private GameClock clock;
   private Map map;
   private State state;
 
@@ -74,6 +76,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.map = map;
     this.objectIdGenerator = 0l;
     this.rootNode = new Node();
+
     AnnotationProcessor.process(this);
     this.registerPlugins();
     this.updateState(State.PRELOAD);
@@ -82,9 +85,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   @Override
   public void process() {
+    if (clock == null) {
+      clock = new GameClock();
+    }
     log.debug("Process " + getTopicName() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins.get(state)) {
-      plugin.process();
+      plugin.process(clock.getDelta());
     }
   }
 

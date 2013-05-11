@@ -2,6 +2,7 @@ package game.models;
 
 import java.io.Serializable;
 
+import com.ardor3d.math.type.ReadOnlyVector3;
 import com.ardor3d.scenegraph.Mesh;
 
 public class BaseModel extends Mesh implements Serializable {
@@ -34,6 +35,13 @@ public class BaseModel extends Mesh implements Serializable {
 
   public void setDbId(Long dbId) {
     this.dbId = dbId;
+  }
+
+  @Deprecated
+  // not implemented yet ...
+  public void lookAt(ReadOnlyVector3 vector) {
+
+    throw new UnsupportedOperationException();
   }
 
   @Override

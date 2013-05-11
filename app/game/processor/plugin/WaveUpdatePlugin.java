@@ -46,10 +46,10 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void process() {
+  public void process(Double delta) {
     waveUpdated = checkWaveUpdate();
     createUnit();
-    super.process();
+    super.process(delta);
     waveUpdated = false;
   }
 

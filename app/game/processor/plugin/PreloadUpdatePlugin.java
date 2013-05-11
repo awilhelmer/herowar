@@ -12,11 +12,9 @@ import game.processor.meta.IPlugin;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
-import play.libs.Json;
 
 /**
  * The PreloadUpdatePlugin sends informations about the preload state of every
@@ -29,7 +27,8 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(PreloadUpdatePlugin.class);
 
   private ConcurrentHashMap<Long, Integer> preloadProgress = new ConcurrentHashMap<Long, Integer>();
-//  private EventTopicSubscriber<PreloadUpdateEvent> preloadUpdateSubscriber = createPreloadUpdateSubscriber();
+  // private EventTopicSubscriber<PreloadUpdateEvent> preloadUpdateSubscriber =
+  // createPreloadUpdateSubscriber();
 
   private Integer preloadPlayerMissing = 0;
 
@@ -38,7 +37,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process() {
+  public void process(Double delta) {
     // TODO: This maybe cause the PreloadUpdatePlugin to start the game to
     // early. The first player connects and reach fast 100% before the other
     // players even connected and the map will start. We need to get somewhere
@@ -66,7 +65,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
     // Do nothing, the preload state should not change when a user disconnects.
     // Once the timeout will be reached the game should start automatically...
   }
-  
+
   @RuntimeTopicEventSubscriber(methodName = "getPreloadTopic")
   public void onPreloadUpdateEvent(String topic, PreloadUpdateEvent data) {
     if (preloadProgress.containsKey(data.getPlayerId())) {
@@ -82,7 +81,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
       preloadProgress.replace(data.getPlayerId(), data.getProgress());
     }
   }
-  
+
   public String getPreloadTopic() {
     return getProcessor().getTopicName(Topic.PRELOAD);
   }

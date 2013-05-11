@@ -17,7 +17,7 @@ public abstract class UpdateSessionPlugin extends AbstractPlugin {
     super(processor);
   }
 
-  public void process() {
+  public void process(Double delta) {
     Iterator<GameSession> iter = getSessions().iterator();
     while (iter.hasNext()) {
       GameSession session = iter.next();

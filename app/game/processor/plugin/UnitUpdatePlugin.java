@@ -11,13 +11,18 @@ import game.processor.meta.IPlugin;
 
 import java.util.Set;
 
+import models.entity.game.Vector3;
+import models.entity.game.Waypoint;
+
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
-import com.google.common.eventbus.Subscribe;
-
-import models.entity.game.Path;
-import models.entity.game.Unit;
 import play.Logger;
+
+import com.ardor3d.math.MathUtils;
+import com.ardor3d.math.Matrix3;
+import com.ardor3d.math.Matrix4;
+import com.ardor3d.math.Quaternion;
+import com.ardor3d.math.type.ReadOnlyVector3;
 
 /**
  * 
@@ -39,19 +44,50 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process() {
+  public void process(Double delta) {
     Set<UnitModel> units = getProcessor().getUnits();
-    // TODO Process units
+    for (UnitModel unit : units) {
+      processWaypoints(unit);
+      processMoving(unit, delta);
+    }
   }
 
-  @Override
-  public void addPlayer(GameSession player) {
+  private void processMoving(UnitModel unit, Double delta) {
+    if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
 
+      rotateTo(unit.getActiveWaypoint().getPosition(), unit.getTranslation());
+      unit.addTranslation(0, 0, delta * 20); // TODO Speed of unit
+    } else {
+      // TODO enemy reached his goal ...
+    }
   }
 
-  @Override
-  public void removePlayer(GameSession player) {
+  private void rotateTo(Vector3 position, ReadOnlyVector3 objPosition) {
+    com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
+    target.setY(0D);
+    Matrix3 m = new Matrix3();
+    MathUtils.matrixLookAt(objPosition, target, new com.ardor3d.math.Vector3(0, 1, 0), m);
+    Quaternion q = new Quaternion();
+    q.fromRotationMatrix(m);
+  }
 
+  private void processWaypoints(UnitModel unit) {
+    if (!unit.isEndPointReached()) {
+      Waypoint waypoint = unit.getActiveWaypoint();
+      ReadOnlyVector3 position = unit.getTranslation();
+      if (waypoint != null) {
+        if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
+          int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
+          if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
+            unit.setActiveWaypoint(unit.getActivePath().getWaypoints().get(index + 1));
+          } else {
+            unit.setEndPointReached(true);
+            unit.setActiveWaypoint(null);
+            log.info("Unit " + unit.getId() + " reached endwaypoint!");
+          }
+        }
+      }
+    }
   }
 
   @RuntimeTopicEventSubscriber(methodName = "getUnitTopic")
@@ -59,7 +95,13 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     Long id = getProcessor().getObjectIdGenerator();
     UnitModel model = new UnitModel(id, event.getUnit().getId());
     model.setActivePath(event.getPath());
-
+    if (!event.getPath().getWaypoints().isEmpty()) {
+      Waypoint waypoint = event.getPath().getWaypoints().get(0);
+      model.setActiveWaypoint(waypoint);
+      model.setTranslation(waypoint.getPosition().getArdorVector());
+    } else {
+      log.warn("No Waypoint found!");
+    }
     getProcessor().getUnits().add(model);
     log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", event.getUnit().getName(), event.getPath().getId()));
     ObjectInPacket packet = new ObjectInPacket(id, event.getUnit().getName(), event.getPath().getId());
@@ -71,4 +113,13 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     return getProcessor().getTopicName(Topic.UNIT);
   }
 
+  @Override
+  public void addPlayer(GameSession player) {
+    // Empty
+  }
+
+  @Override
+  public void removePlayer(GameSession player) {
+    // Empty
+  }
 }

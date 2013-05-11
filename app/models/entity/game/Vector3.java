@@ -3,6 +3,9 @@ package models.entity.game;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+
+import com.ardor3d.math.type.ReadOnlyVector3;
 
 @Embeddable
 public class Vector3 implements Serializable {
@@ -11,6 +14,9 @@ public class Vector3 implements Serializable {
   private Double x;
   private Double y;
   private Double z;
+
+  @Transient
+  private com.ardor3d.math.Vector3 ardorVector;
 
   public Vector3() {
     this.x = 0d;
@@ -46,6 +52,17 @@ public class Vector3 implements Serializable {
 
   public void setZ(Double z) {
     this.z = z;
+  }
+
+  public com.ardor3d.math.Vector3 getArdorVector() {
+    if (ardorVector == null) {
+      ardorVector = new com.ardor3d.math.Vector3(x, y, z);
+    }
+    return ardorVector;
+  }
+
+  public void setArdorVector(com.ardor3d.math.Vector3 ardorVector) {
+    this.ardorVector = ardorVector;
   }
 
   @Override
@@ -89,4 +106,5 @@ public class Vector3 implements Serializable {
   public String toString() {
     return "Vector3 [x=" + x + ", y=" + y + ", z=" + z + "]";
   }
+
 }

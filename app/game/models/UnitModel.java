@@ -10,6 +10,8 @@ public class UnitModel extends BaseModel {
 
   private Waypoint activeWaypoint;
 
+  private boolean endPointReached = false;
+
   public UnitModel(Long id, Long dbId) {
     super(id, dbId);
   }
@@ -28,6 +30,14 @@ public class UnitModel extends BaseModel {
 
   public void setActiveWaypoint(Waypoint activeWaypoint) {
     this.activeWaypoint = activeWaypoint;
+  }
+
+  public void setEndPointReached(boolean b) {
+    endPointReached = b;
+  }
+
+  public boolean isEndPointReached() {
+    return endPointReached;
   }
 
 }
