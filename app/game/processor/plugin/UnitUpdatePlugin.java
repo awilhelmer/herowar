@@ -72,7 +72,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(m);
     Quaternion qStart = new Quaternion();
-    qEnd.fromRotationMatrix(unit.getRotation());
+    qStart.fromRotationMatrix(unit.getRotation());
     unit.setRotation(qStart.slerp(qEnd, 0.07, null));
   }
 
