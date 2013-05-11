@@ -6,6 +6,7 @@ db = require 'database'
 class SelectorObject
 
 	constructor: (@editor, @objectHelper, @intersectHelper) ->
+		@input = db.get 'input'
 		@tool = db.get 'ui/tool'
 		@world = db.get 'world'
 		@bindEventListeners()
@@ -18,7 +19,7 @@ class SelectorObject
 	
 	onMouseUp: (event) ->
 		if event.which is 1
-			@update() unless @tool.get('currentMesh') and Variables.MOUSE_MOVED
+			@update() unless @tool.get('currentMesh') and @input.get('mouse_moved')
 	
 	onMouseMove: ->
 	

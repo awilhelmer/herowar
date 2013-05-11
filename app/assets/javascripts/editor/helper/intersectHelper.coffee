@@ -1,8 +1,10 @@
 Variables = require 'variables'
+db = require 'database'
 
 class IntersectHelper extends THREE.Raycaster
 
 	constructor: (@editor) ->
+		@input = db.get 'input'
 		super()
 		@projector = new THREE.Projector()
 		@sphere = new THREE.Sphere()
@@ -14,8 +16,8 @@ class IntersectHelper extends THREE.Raycaster
 
 	mouseIntersects: (objects, faceRadius) ->
 		vector = new THREE.Vector3(
-			((Variables.MOUSE_POSITION_X - Variables.SCREEN_LEFT) / Variables.SCREEN_WIDTH) * 2 - 1
-			-((Variables.MOUSE_POSITION_Y - Variables.SCREEN_TOP) / Variables.SCREEN_HEIGHT) * 2 + 1
+			((@input.get('mouse_position_x') - Variables.SCREEN_LEFT) / Variables.SCREEN_WIDTH) * 2 - 1
+			-((@input.get('mouse_position_y') - Variables.SCREEN_TOP) / Variables.SCREEN_HEIGHT) * 2 + 1
 			0.5)
 		camera = @editor.engine.viewhandler.views[0].camera	# TODO: find out from which viewport this click comes
 		@projector.unprojectVector vector, camera

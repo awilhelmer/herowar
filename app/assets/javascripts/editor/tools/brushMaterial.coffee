@@ -12,6 +12,7 @@ class BrushMaterial extends SelectorPlane
 		super @editor, @intersectHelper
 		
 	initialize: ->
+		@input = db.get 'input'
 		@world = db.get 'world'
 		super()
 		
@@ -28,7 +29,7 @@ class BrushMaterial extends SelectorPlane
 		unless @selectorObject.selectedObject
 			log.debug "Selecting terrain!"
 			@selectorObject.selectTerrain()
-		if Variables.MOUSE_PRESSED_LEFT	
+		if @input.get 'mouse_pressed_left'
 			if @brushTool is Constants.BRUSH_APPLY_MATERIAL
 				update = @handleBrush intersect
 				if update

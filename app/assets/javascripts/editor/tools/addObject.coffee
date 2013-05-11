@@ -1,5 +1,4 @@
 SelectorTerrain = require 'tools/selectorTerrain'
-EditorEventbus = require 'editorEventbus'
 Environment = require 'models/environment'
 materialHelper = require 'helper/materialHelper'
 JSONLoader = require 'util/threeloader'
@@ -11,6 +10,7 @@ db = require 'database'
 class AddObject extends SelectorTerrain
 
 	constructor: (@editor, @intersectHelper) ->
+		@input = db.get 'input'
 		@tool = db.get 'ui/tool'
 		@tool.set
 			'currentMeshId' 	: -1
@@ -40,7 +40,7 @@ class AddObject extends SelectorTerrain
 			@editor.engine.render()
 
 	onMouseUp: (event) ->
-		@placeMesh() if @tool.get('currentMesh')?.visible and !Variables.MOUSE_MOVED if event.which is 1
+		@placeMesh() if @tool.get('currentMesh')?.visible and !@input.get('mouse_moved') if event.which is 1
 		super event
 
 	onLoadGeometry: (geometry, materials, json) =>

@@ -1,10 +1,12 @@
 Eventbus = require 'eventbus'
 Variables = require 'variables'
 log = require 'util/logger'
+db = require 'database'
 
 class Input
 
 	constructor: (@editor) ->
+		@model = db.get 'input'
 		@initialize()
 		@addEventListener()
 	
@@ -32,26 +34,27 @@ class Input
 		
 	onMouseUp: (event) ->
 		if event
-			Variables.MOUSE_PRESSED_LEFT = false if event.which is 1
-			Variables.MOUSE_PRESSED_MIDDLE = false if event.which is 2
-			Variables.MOUSE_PRESSED_RIGHT = false if event.which is 3
+			@model.set 'mouse_pressed_left', false if event.which is 1
+			@model.set 'mouse_pressed_middle', false if event.which is 2
+			@model.set 'mouse_pressed_right', false if event.which is 3
 		Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = false unless Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_MIDDLE or Variables.MOUSE_PRESSED_RIGHT
+		@model.set 'mouse_moved', false unless @model.get('mouse_pressed_left') or @model.get('mouse_pressed_middle') or @model.get('mouse_pressed_right')
 		
 	onMouseDown: (event) ->
 		if event
-			Variables.MOUSE_PRESSED_LEFT = true if event.which is 1
-			Variables.MOUSE_PRESSED_MIDDLE = true if event.which is 2
-			Variables.MOUSE_PRESSED_RIGHT = true if event.which is 3
+			@model.set 'mouse_pressed_left', true if event.which is 1
+			@model.set 'mouse_pressed_middle', true if event.which is 2
+			@model.set 'mouse_pressed_right', true if event.which is 3
 		Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = false
+		@model.set 'mouse_moved', false
 		
 	onMouseMove: (event) ->
 		if event
-			Variables.MOUSE_POSITION_X = event.clientX
-			Variables.MOUSE_POSITION_Y = event.clientY
+			@model.set 
+				'mouse_position_x': event.clientX
+				'mouse_position_y': event.clientY
 		Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = true
+		@model.set 'mouse_moved', true
 	
 	onMouseWheel: (event) ->
 		Eventbus.controlsChanged.dispatch event

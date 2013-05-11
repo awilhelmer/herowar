@@ -8,6 +8,7 @@ db = require 'database'
 class EditorInput extends Input
 	
 	initialize: ->
+		@model = db.get 'input'
 		@tool = db.get 'ui/tool'
 
 	onKeyUp: (event) ->
@@ -20,33 +21,34 @@ class EditorInput extends Input
 
 	onMouseUp: (event) ->
 		if event
-			Variables.MOUSE_PRESSED_LEFT = false if event.which is 1
-			Variables.MOUSE_PRESSED_MIDDLE = false if event.which is 2
-			Variables.MOUSE_PRESSED_RIGHT = false if event.which is 3
+			@model.set 'mouse_pressed_left', false if event.which is 1
+			@model.set 'mouse_pressed_middle', false if event.which is 2
+			@model.set 'mouse_pressed_right', false if event.which is 3
 		EditorEventbus.mouseup.dispatch event
 		unless @tool.get('active') is Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = false unless Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_MIDDLE or Variables.MOUSE_PRESSED_RIGHT
+		@model.set 'mouse_moved', false unless @model.get('mouse_pressed_left') or @model.get('mouse_pressed_middle') or @model.get('mouse_pressed_right')
 		
 	onMouseDown: (event) ->
 		if event
-			Variables.MOUSE_PRESSED_LEFT = true if event.which is 1
-			Variables.MOUSE_PRESSED_MIDDLE = true if event.which is 2
-			Variables.MOUSE_PRESSED_RIGHT = true if event.which is 3
+			@model.set 'mouse_pressed_left', true if event.which is 1
+			@model.set 'mouse_pressed_middle', true if event.which is 2
+			@model.set 'mouse_pressed_right', true if event.which is 3
 		EditorEventbus.mousedown.dispatch event
 		unless @tool.get('active') is Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = false
+		@model.set 'mouse_moved', false
 		
 	onMouseMove: (event) ->
 		if event
-			Variables.MOUSE_POSITION_X = event.clientX
-			Variables.MOUSE_POSITION_Y = event.clientY
+			@model.set 
+				'mouse_position_x': event.clientX
+				'mouse_position_y': event.clientY
 		EditorEventbus.mousemove.dispatch event
 		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
-		if @tool.get('active') isnt Constants.TOOL_BRUSH and (Variables.MOUSE_PRESSED_LEFT or Variables.MOUSE_PRESSED_RIGHT)
+		if @tool.get('active') isnt Constants.TOOL_BRUSH and (@model.get('mouse_pressed_left') or @model.get('mouse_pressed_right'))
 			Eventbus.controlsChanged.dispatch event
-		Variables.MOUSE_MOVED = true
+		@model.set 'mouse_moved', true
 	
 	onMouseWheel: (event) ->
 		EditorEventbus.mousewheel.dispatch event

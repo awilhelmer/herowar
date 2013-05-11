@@ -1,4 +1,3 @@
-EditorEventbus = require 'editorEventbus'
 Constants = require 'constants'
 log = require 'util/logger'
 db = require 'database'
