@@ -83,9 +83,13 @@ materialHelper =
 		console.log "No Backbone material found!" 
 		null
 	
+	createAnimMesh: (geometry, materials, name, json) ->
+		@updateMeshProperties new THREE.MorphAnimMesh(geometry), materials, name, json
 	
 	createMesh: (geometry, materials, name, json) ->
-		mesh = new THREE.Mesh geometry
+		@updateMeshProperties new THREE.Mesh(geometry), materials, name, json
+	
+	updateMeshProperties: (mesh, materials, name, json) ->
 		mesh.name = name
 		mesh.userData.dbId = json.id
 		mesh.material = new THREE.MeshFaceMaterial materials
@@ -95,7 +99,6 @@ materialHelper =
 					if matId.materialName is threeMat.name
 						threeMat.name = "matID#{matId.materialId}" 
 						break 
-			
 			mesh.userData.matIdMapper = json.matIdMapper
 			@loadGeometryMaterial mesh
 		mesh
