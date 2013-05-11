@@ -31,17 +31,11 @@ class Enemies extends PacketModel
 		events.trigger 'add:dynamicObject', id, dynObj
 	
 	createModel: (id, name, data, waypoints) ->
-		model = new Enemy id, @createObject3D id, name, data, waypoints
-		model.waypoints = waypoints if _.isArray waypoints
+		model = new Enemy id, name, @createMesh id, name, data
+		if _.isArray waypoints
+			model.waypoints = waypoints
+			model.object3d.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z
 		model
-	
-	createObject3D: (id, name, data, waypoints) ->
-		mesh = @createMesh id, name, data
-		obj = new THREE.Object3D()
-		obj.name = mesh.name
-		obj.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if _.isArray waypoints
-		obj.add mesh
-		obj
 		
 	createMesh: (id, name, data) ->
 		mesh = materialHelper.createMesh data[0], data[1], name, id: id

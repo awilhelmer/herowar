@@ -5,10 +5,18 @@ class Enemy extends BaseModel
 	
 	id: null
 	
+	name: null
+	
+	meshBody: null
+	
 	waypoints: []
 	
-	constructor: (@id, @object3d) ->
-		@object3d.useQuaternion = true
+	constructor: (@id, @name, @meshBody) ->
+		obj = new THREE.Object3D()
+		obj.name = @name
+		obj.useQuaternion = true
+		obj.add @meshBody
+		super obj
 	
 	update: (delta) ->
 		@move delta
@@ -29,7 +37,7 @@ class Enemy extends BaseModel
 		@waypointReached waypoint if Math.abs(waypoint.position.x - @object3d.position.x) < 1 and Math.abs(waypoint.position.z - @object3d.position.z) < 1
 
 	waypointReached: (waypoint) ->
-		console.log "Enemy #{@id} reached #{waypoint.name}"
+		console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
 		events.trigger 'remove:dynamicObject', @id if @waypoints.length is 0
 
