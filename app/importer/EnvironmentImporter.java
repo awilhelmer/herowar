@@ -1,4 +1,4 @@
-package editor;
+package importer;
 
 import java.io.File;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import play.Logger.ALogger;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class EnvironmentImporter extends AbstractImporter<Environment> implements Serializable {
+public class EnvironmentImporter extends TreeImporter<Environment> implements Serializable {
 
   private static final Logger.ALogger log = Logger.of(EnvironmentImporter.class);
   private static EnvironmentImporter instance;

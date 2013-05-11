@@ -1,4 +1,4 @@
-package editor;
+package importer;
 
 import java.io.File;
 
@@ -7,7 +7,7 @@ import play.Logger.ALogger;
 
 import models.entity.game.Unit;
 
-public class UnitImporter extends AbstractImporter<Unit> {
+public class UnitImporter extends TreeImporter<Unit> {
   private static final Logger.ALogger log = Logger.of(UnitImporter.class);
   private static UnitImporter instance;
 

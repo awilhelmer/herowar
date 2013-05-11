@@ -1,6 +1,7 @@
-package editor;
+package importer;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -21,7 +22,6 @@ import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger.ALogger;
-import play.Play;
 import play.db.jpa.JPA;
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
@@ -44,31 +44,21 @@ public abstract class AbstractImporter<E extends Serializable> {
 
   public void sync() {
     getLogger().info("Starting synchronize between folder and database");
-    File baseFolder = new File(Play.application().path(), getBaseFolder());
-    E root = createEntry("Root", null);
-    if (root != null) {
-      readDirectory(baseFolder, root);
-      if (!JPA.em().contains(root)) {
-        JPA.em().persist(root);
-      } else {
-        root = JPA.em().merge(root);
-      }
-
-    }
+    process();
     getLogger().info("Finish synchronize between folder and database");
   }
 
   @SuppressWarnings("unchecked")
-  private void readDirectory(File folder, E parent) {
+  protected void readDirectory(File folder, E parent, boolean recursive) {
     try {
-      for (File file : folder.listFiles()) {
+      for (File file : folder.listFiles(new JsFileFilter())) {
         E child = null;
         boolean updateGeo = false;
 
-        if (file.isDirectory()) {
+        if (file.isDirectory() && recursive) {
           getLogger().info("Found directory: " + file.getAbsolutePath());
           child = createEntry(file, parent);
-          readDirectory(file, child);
+          readDirectory(file, child, recursive);
           updateGeo = true;
         } else {
           getLogger().info("Found geometry: " + file.getAbsolutePath());
@@ -123,7 +113,7 @@ public abstract class AbstractImporter<E extends Serializable> {
     }
   }
 
-  private E createEntry(File file, E parent) {
+  protected E createEntry(File file, E parent) {
     try {
       return createEntry(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
     } catch (Exception e) {
@@ -132,9 +122,8 @@ public abstract class AbstractImporter<E extends Serializable> {
     return null;
   }
 
-  private E createEntry(String name, E parent) {
+  protected E createEntry(String name, E parent) {
     E entry = null;
-
     entry = getByName(clazz, name);
     if (entry == null) {
       try {
@@ -152,9 +141,7 @@ public abstract class AbstractImporter<E extends Serializable> {
       } catch (Exception e) {
         getLogger().error("", e);
       }
-
     }
-
     return entry;
   }
 
@@ -169,7 +156,6 @@ public abstract class AbstractImporter<E extends Serializable> {
     } catch (NoResultException e) {
       // nothing
     }
-
     return result;
   }
 
@@ -179,7 +165,6 @@ public abstract class AbstractImporter<E extends Serializable> {
       for (Material mat : geo.getMaterials()) {
         mat.setName(mat.getDbgName());
       }
-
       Map<Integer, Material> matMap = MaterialDAO.mapAndSave(geo.getMaterials());
       GeometryDAO.createGeoMaterials(geo, matMap);
       return geo;
@@ -196,7 +181,23 @@ public abstract class AbstractImporter<E extends Serializable> {
     return (Class<E>) paramType.getActualTypeArguments()[0];
   }
 
+  public abstract void process();
+  
   public abstract String getBaseFolder();
 
   protected abstract ALogger getLogger();
+  
+  /**
+   * The JsFileFilter filters for js files.
+   * 
+   * @author Sebastian Sachtleben
+   */
+  public class JsFileFilter implements FileFilter {
+
+    @Override
+    public boolean accept(File pathname) {
+      return pathname.getName().toLowerCase().endsWith(".js");
+    }
+    
+  }
 }

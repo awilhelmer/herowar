@@ -1,3 +1,7 @@
+import importer.EnvironmentImporter;
+import importer.TowerImporter;
+import importer.UnitImporter;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -32,8 +36,6 @@ import dao.NewsDAO;
 import dao.SecurityRoleDAO;
 import dao.UserDAO;
 import dao.game.MapDAO;
-import editor.EnvironmentImporter;
-import editor.UnitImporter;
 import game.GamesHandler;
 import game.network.GameServer;
 import game.network.handler.WebSocketHandler;
@@ -91,6 +93,7 @@ public class Global extends GlobalSettings {
         initialSecurityRoles();
         initGameServer();
         EnvironmentImporter.getInstance().sync();
+        TowerImporter.getInstance().sync();
         UnitImporter.getInstance().sync();
         WebSocketHandler.getInstance();
         GamesHandler.getInstance();
@@ -190,7 +193,7 @@ public class Global extends GlobalSettings {
   }
 
   private void createDefaultMap() {
-    Map map = MapDAO.getMapById(2L);
+    Map map = MapDAO.getMapById(102L);
     if (map == null) {
       BufferedReader bReader = null;
       Session sess = (Session) JPA.em().getDelegate();
