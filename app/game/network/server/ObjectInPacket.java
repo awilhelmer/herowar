@@ -16,8 +16,8 @@ public class ObjectInPacket extends ObjectPacket {
   protected String name;
   protected long path;
   
-  public ObjectInPacket(long id, String name, long path, Vector3 position) {
-    super(id, position);
+  public ObjectInPacket(long id, String name, long path) {
+    super(id, null);
     this.type = PacketType.ObjectInPacket;
     this.name = name;
     this.path = path;

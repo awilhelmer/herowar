@@ -1,10 +1,11 @@
 package game.processor.plugin;
 
 import game.GameSession;
-import game.network.server.ObjectInPacket;
+import game.event.GameUnitEvent;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.Topic;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
@@ -31,7 +32,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private Wave next;
   private int index;
   private int total;
-  
+
   private double spawnRate;
   private int spawnCurrent;
   private int spawnTotal;
@@ -43,7 +44,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     super(processor);
     waves = getProcessor().getMap().getWaves();
   }
-  
+
   @Override
   public void process() {
     waveUpdated = checkWaveUpdate();
@@ -85,7 +86,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   public void removePlayer(GameSession player) {
     // TODO Auto-generated method stub
   }
-  
+
   private boolean checkWaveUpdate() {
     Date now = new Date();
     if (next != null && waveStartDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
@@ -94,7 +95,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     }
     return false;
   }
-  
+
   private void loadNextWave() {
     current = next;
     next = getNextWave();
@@ -119,22 +120,22 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     }
     return null;
   }
-  
+
   private long getWaveEta() {
     return next != null ? waveStartDate.getTime() + (next.getPrepareTime() * 1000) : 0;
   }
-  
+
   private void createUnit() {
     if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
       Date now = new Date();
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
+
         Iterator<Waypoint> iter = current.getPath().getDbWaypoints().iterator();
         Waypoint waypoint = iter.next();
         Iterator<Unit> iter2 = current.getUnits().iterator();
         Unit unit = iter2.next();
-        ObjectInPacket packet = new ObjectInPacket(getProcessor().getObjectIdGenerator(), unit.getName(), current.getPath().getId(), waypoint.getPosition());
-        log.debug("Spawn enemy for " + current.getName() + " " + packet.toString());
-        broadcast(packet);
+        log.debug("Create enemy for " + current.getName());
+        getProcessor().publish(Topic.UNIT, new GameUnitEvent(current.getPath(), unit));
         lastSpawnDate = now;
         spawnCurrent++;
         spawnTotal++;

@@ -2,12 +2,14 @@ package game.processor;
 
 import game.GameSession;
 import game.event.GameStateEvent;
+import game.models.UnitModel;
 import game.network.BasePacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
 import game.processor.plugin.GoldUpdatePlugin;
 import game.processor.plugin.PreloadUpdatePlugin;
+import game.processor.plugin.UnitUpdatePlugin;
 import game.processor.plugin.WaveUpdatePlugin;
 
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
+import models.entity.game.Unit;
 
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
@@ -51,14 +54,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
    * The session set contains all sessions for this game.
    */
   private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
-  
+
   /**
    * The plugins map contains all running plugins for each game state.
    */
   private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
-  
+
+  private Set<UnitModel> units = Collections.synchronizedSet(new HashSet<UnitModel>());
+
   /**
-   * The player cache contains player specific variables and properties like gold and is used by plugins.
+   * The player cache contains player specific variables and properties like
+   * gold and is used by plugins.
    */
   private ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> playerCache = new ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>>();
 
@@ -128,7 +134,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       }
     }
   }
-  
+
   public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
     for (GameSession session : sessions) {
       if (sendSelf || !connection.equals(session.getConnection())) {
@@ -148,19 +154,20 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.PRELOAD).add(new PreloadUpdatePlugin(this));
     plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
+    plugins.get(State.GAME).add(new UnitUpdatePlugin(this));
   }
-  
+
   @RuntimeTopicEventSubscriber(methodName = "getStateTopic")
   public void updateStateByEvent(String topic, GameStateEvent event) {
     updateState(event.getState());
   }
-  
+
   public String getStateTopic() {
     return getTopicName(Topic.STATE);
   }
-  
+
   private void updateState(State state) {
-    if (this.state != null) { 
+    if (this.state != null) {
       for (IPlugin plugin : plugins.get(this.state)) {
         plugin.unload();
       }
@@ -172,17 +179,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     }
     this.state = state;
   }
-  
+
   public void publish(Topic topic, Object obj) {
     EventBus.publish(getTopicName(topic), obj);
   }
-  
+
   public String getTopicName(Topic topic) {
     return getTopicName() + "-" + topic.name().toLowerCase();
   }
-  
+
   public enum Topic {
-    STATE, PRELOAD
+    STATE, PRELOAD, UNIT
   }
 
   // GETTER && SETTER //
@@ -210,12 +217,20 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   public Map getMap() {
     return map;
   }
-  
+
   public State getState() {
     return state;
   }
 
+  public void addUnit(UnitModel unit) {
+    this.units.add(unit);
+  }
+
+  public Set<UnitModel> getUnits() {
+    return units;
+  }
+
   public enum State {
-    PRELOAD, GAME, FINISH 
+    PRELOAD, GAME, FINISH
   }
 }

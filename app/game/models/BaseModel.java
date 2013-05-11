@@ -1,9 +1,23 @@
 package game.models;
 
+import java.io.Serializable;
+
 import com.ardor3d.scenegraph.Mesh;
 
-public class BaseModel extends Mesh {
+public class BaseModel extends Mesh implements Serializable {
+  private static final long serialVersionUID = 1L;
   private Long id;
+  private Long dbId;
+
+  public BaseModel() {
+
+  }
+
+  public BaseModel(Long id, Long dbId) {
+    super();
+    this.id = id;
+    this.dbId = dbId;
+  }
 
   public Long getId() {
     return id;
@@ -12,6 +26,14 @@ public class BaseModel extends Mesh {
   public void setId(Long id) {
     this.id = id;
     this.setName(id.toString());
+  }
+
+  public Long getDbId() {
+    return dbId;
+  }
+
+  public void setDbId(Long dbId) {
+    this.dbId = dbId;
   }
 
   @Override
