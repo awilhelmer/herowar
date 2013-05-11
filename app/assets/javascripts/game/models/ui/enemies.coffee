@@ -22,9 +22,9 @@ class Enemies extends PacketModel
 			quantity = if @get('quantity') then @get('quantity') else 0
 			quantity++
 			@set 'quantity', quantity
-			@createEnemy packet.id, packet.name, packet.path, packet.position
+			@createEnemy packet.id, packet.name, packet.path
 	
-	createEnemy: (id, name, pathId, position) ->
+	createEnemy: (id, name, pathId) ->
 		path = @getPathById pathId
 		loadedData = db.data().geometries[name]
 		dynObj = @createModel id, name, db.data().geometries[name], _.clone path.get 'waypoints'
