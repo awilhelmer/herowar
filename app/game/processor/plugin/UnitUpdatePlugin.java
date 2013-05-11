@@ -57,20 +57,23 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
 
-      rotateTo(unit.getActiveWaypoint().getPosition(), unit.getTranslation());
+      rotateTo(unit.getActiveWaypoint().getPosition(), unit);
       unit.addTranslation(0, 0, delta * 20); // TODO Speed of unit
     } else {
       // TODO enemy reached his goal ...
     }
   }
 
-  private void rotateTo(Vector3 position, ReadOnlyVector3 objPosition) {
+  private void rotateTo(Vector3 position, UnitModel unit) {
     com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
     target.setY(0D);
     Matrix3 m = new Matrix3();
-    MathUtils.matrixLookAt(objPosition, target, new com.ardor3d.math.Vector3(0, 1, 0), m);
-    Quaternion q = new Quaternion();
-    q.fromRotationMatrix(m);
+    MathUtils.matrixLookAt(target, unit.getTranslation(), new com.ardor3d.math.Vector3(0, 1, 0), m);
+    Quaternion qEnd = new Quaternion();
+    qEnd.fromRotationMatrix(m);
+    Quaternion qStart = new Quaternion();
+    qEnd.fromRotationMatrix(unit.getRotation());
+    unit.setRotation(qStart.slerp(qEnd, 0.07, null));
   }
 
   private void processWaypoints(UnitModel unit) {
