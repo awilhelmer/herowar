@@ -23,8 +23,8 @@ class Enemy extends BaseModel
 		# Create Object3D
 		obj = new THREE.Object3D()
 		obj.name = @name
+		obj.useQuaternion = true
 		obj.add @meshBody
-		#obj.useQuaternion = true
 		@setAnimation @meshBody.geometry.firstAnimation
 		
 		super obj
@@ -53,7 +53,12 @@ class Enemy extends BaseModel
 		@activeAnimation = name
 
 	_rotateTo: (position) ->
-		@object3d.lookAt new THREE.Vector3 position.x, 0, position.z
+		target = new THREE.Vector3 position.x, 0, position.z
+		m = new THREE.Matrix4()
+		m.lookAt target, @object3d.position, @object3d.up
+		dq = new THREE.Quaternion()
+		dq.setFromRotationMatrix m
+		@object3d.quaternion.slerp dq, 0.07
 	
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
