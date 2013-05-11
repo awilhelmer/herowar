@@ -88,9 +88,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     if (clock == null) {
       clock = new GameClock();
     }
+    Double delta = clock.getDelta();
     log.debug("Process " + getTopicName() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins.get(state)) {
-      plugin.process(clock.getDelta());
+      plugin.process(delta);
     }
   }
 
