@@ -59,6 +59,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
 
       rotateTo(unit.getActiveWaypoint().getPosition(), unit);
       unit.addTranslation(0, 0, delta * 20); // TODO Speed of unit
+      unit.updateWorldTransform(false);
     } else {
       // TODO enemy reached his goal ...
     }
@@ -68,20 +69,20 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
     target.setY(0D);
     Matrix3 m = new Matrix3();
-    MathUtils.matrixLookAt(target, unit.getTranslation(), new com.ardor3d.math.Vector3(0, 1, 0), m);
+    MathUtils.matrixLookAt(target, unit.getWorldTranslation(), new com.ardor3d.math.Vector3(0, 1, 0), m);
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(m);
     Quaternion qStart = new Quaternion();
-    qStart.fromRotationMatrix(unit.getRotation());
+    qStart.fromRotationMatrix(unit.getWorldRotation());
     unit.setRotation(qStart.slerp(qEnd, 0.07, null));
   }
 
   private void processWaypoints(UnitModel unit) {
     if (!unit.isEndPointReached()) {
       Waypoint waypoint = unit.getActiveWaypoint();
-      ReadOnlyVector3 position = unit.getTranslation();
+      ReadOnlyVector3 position = unit.getWorldTranslation();
       if (waypoint != null) {
-        log.info(String.format("Diff Pos x=%s y=%s", waypoint.getPosition().getX() - position.getX(), waypoint.getPosition().getZ() - position.getZ()));
+        log.info(String.format("Diff Pos x=%s z=%s", waypoint.getPosition().getX() - position.getX(), waypoint.getPosition().getZ() - position.getZ()));
         if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
@@ -109,6 +110,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       Waypoint waypoint = event.getPath().getWaypoints().get(0);
       model.setActiveWaypoint(waypoint);
       model.setTranslation(waypoint.getPosition().getArdorVector());
+      model.updateWorldTransform(false);
     } else {
       log.warn("No Waypoint found!");
     }
