@@ -17,13 +17,16 @@ class Enemy extends BaseModel
 	animationFPS: 6
 	
 	constructor: (@id, @name, @meshBody) ->
+		# Enable shadows
 		@meshBody.castShadow = true
 		@meshBody.receiveShadow = true
+		# Create Object3D
 		obj = new THREE.Object3D()
 		obj.name = @name
+		obj.add @meshBody
 		#obj.useQuaternion = true
 		@setAnimation @meshBody.geometry.firstAnimation
-		obj.add @meshBody
+		
 		super obj
 	
 	update: (delta) ->
