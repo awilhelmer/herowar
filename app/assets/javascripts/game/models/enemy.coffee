@@ -17,16 +17,17 @@ class Enemy extends BaseModel
 	animationFPS: 6
 	
 	constructor: (@id, @name, @meshBody) ->
+		@meshBody.castShadow = true
+		@meshBody.receiveShadow = true
 		obj = new THREE.Object3D()
 		obj.name = @name
 		#obj.useQuaternion = true
+		@setAnimation @meshBody.geometry.firstAnimation
 		obj.add @meshBody
 		super obj
 	
 	update: (delta) ->
-		if @meshBody and @activeAnimation
-			@meshBody.updateAnimation 1000 * delta 
-			console.log 'Animate mesh', @meshBody.currentKeyframe
+		@animate delta
 		@move delta
 	
 	move: (delta) ->
@@ -35,8 +36,11 @@ class Enemy extends BaseModel
 		return if @waypoints.length is 0
 		waypoint = @waypoints[0]
 		@setAnimation 'run' unless @activeAnimation is 'run'
-		#@_rotateTo waypoint.position
-		#@object3d.translateZ delta * 20
+		@_rotateTo waypoint.position
+		@object3d.translateZ delta * 20
+	
+	animate: (delta) ->
+		@meshBody.updateAnimation 1000 * delta  if @meshBody and @activeAnimation
 	
 	setAnimation: (name) ->
 		console.log "Enemy #{@name}-#{@id} set animation to #{name}"
