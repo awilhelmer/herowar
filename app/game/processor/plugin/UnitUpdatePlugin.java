@@ -24,6 +24,8 @@ import com.ardor3d.math.Matrix4;
 import com.ardor3d.math.Quaternion;
 import com.ardor3d.math.type.ReadOnlyVector3;
 
+import dao.game.PathDAO;
+
 /**
  * 
  * Handles all units for each game. It simulate the units moving and attacking
@@ -95,6 +97,9 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     Long id = getProcessor().getObjectIdGenerator();
     UnitModel model = new UnitModel(id, event.getUnit().getId());
     model.setActivePath(event.getPath());
+    if (event.getPath().getWaypoints() == null) {
+      PathDAO.mapWaypoints(event.getPath());
+    }
     if (!event.getPath().getWaypoints().isEmpty()) {
       Waypoint waypoint = event.getPath().getWaypoints().get(0);
       model.setActiveWaypoint(waypoint);
