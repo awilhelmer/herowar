@@ -39,6 +39,7 @@ class AddObject extends SelectorTerrain
 		obj = new THREE.Object3D()
 		obj.name = mesh.name
 		obj.add mesh
+		obj.visible = false
 		@tool.set 'currentObject', obj
 		@addMesh()
 

@@ -52,7 +52,6 @@ class AddEnvironment extends AddObject
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')
-		mesh.visible = false
 		@editor.engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
 		@editor.engine.render()
 
