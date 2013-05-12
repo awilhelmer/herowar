@@ -16,6 +16,8 @@ class Enemy extends BaseModel
 	scale: 1
 	animationFPS: 6
 	
+	first: true
+	
 	constructor: (@id, @name, @meshBody) ->
 		# Enable shadows
 		@meshBody.castShadow = true

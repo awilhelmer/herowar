@@ -56,7 +56,6 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   private void processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
-
       rotateTo(unit.getActiveWaypoint().getPosition(), unit);
       unit.addTranslation(0, 0, delta * 20); // TODO Speed of unit
       unit.updateWorldTransform(false);
@@ -68,13 +67,14 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void rotateTo(Vector3 position, UnitModel unit) {
     com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
     target.setY(0D);
-    Matrix3 m = new Matrix3();
-    MathUtils.matrixLookAt(target, unit.getWorldTranslation(), new com.ardor3d.math.Vector3(0, 1, 0), m);
+    Matrix3 m = game.math.Matrix3.lookAt(unit.getWorldTranslation(), target, new com.ardor3d.math.Vector3(0, 1, 0));
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(m);
     Quaternion qStart = new Quaternion();
     qStart.fromRotationMatrix(unit.getWorldRotation());
-    unit.setRotation(qStart.slerp(qEnd, 0.07, null));
+    Quaternion qFinal = new Quaternion();
+    qStart.slerp(qEnd, 0.07, qFinal);
+    unit.setRotation(qFinal);
   }
 
   private void processWaypoints(UnitModel unit) {
@@ -82,7 +82,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       Waypoint waypoint = unit.getActiveWaypoint();
       ReadOnlyVector3 position = unit.getWorldTranslation();
       if (waypoint != null) {
-        log.info(String.format("Diff Pos x=%s z=%s", waypoint.getPosition().getX() - position.getX(), waypoint.getPosition().getZ() - position.getZ()));
+        log.info(String.format("Current Pos x=%s y=%s z=%s - Diff Pos x=%s z=%s", position.getX(), position.getY(), position.getZ(), waypoint.getPosition().getX() - position.getX(), waypoint.getPosition().getZ() - position.getZ()));
         if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
@@ -102,6 +102,8 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   public void createUnit(String topic, GameUnitEvent event) {
     Long id = getProcessor().getObjectIdGenerator();
     UnitModel model = new UnitModel(id, event.getUnit().getId());
+    //Matrix3 m = model.getRotation().clone().applyRotationY(90);
+    //model.setRotation(m);
     model.setActivePath(event.getPath());
     if (event.getPath().getWaypoints() == null) {
       PathDAO.mapWaypoints(event.getPath());
@@ -109,7 +111,9 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     if (!event.getPath().getWaypoints().isEmpty()) {
       Waypoint waypoint = event.getPath().getWaypoints().get(0);
       model.setActiveWaypoint(waypoint);
-      model.setTranslation(waypoint.getPosition().getArdorVector());
+      com.ardor3d.math.Vector3 position = waypoint.getPosition().getArdorVector().clone();
+      position.setY(0d);
+      model.setTranslation(position);
       model.updateWorldTransform(false);
     } else {
       log.warn("No Waypoint found!");
