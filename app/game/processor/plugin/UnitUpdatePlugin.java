@@ -85,7 +85,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       Waypoint waypoint = unit.getActiveWaypoint();
       ReadOnlyVector3 position = unit.getWorldTranslation();
       if (waypoint != null) {
-        log.info(String.format("Diff Pos x=%s z=%s", Math.abs(waypoint.getPosition().getX() - position.getX()), Math.abs(waypoint.getPosition().getZ() - position.getZ())));
+        log.info(String.format("Distance %s - x=%s z=%s", unit.getTranslation().distance(waypoint.getPosition().getArdorVector()), Math.abs(waypoint.getPosition().getX() - position.getX()), Math.abs(waypoint.getPosition().getZ() - position.getZ())));
         if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
           log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
