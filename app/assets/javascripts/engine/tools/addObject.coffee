@@ -18,7 +18,6 @@ class AddObject extends SelectorTerrain
 			for child in @tool.get('currentObject').children
 				child.geometry.dispose() # TODO: is this enough clean up ?!?
 			@tool.unset 'currentObject'
-			@app.engine.render()
 
 	onIntersect: ->
 		@tool.get('currentObject').visible = true if @tool.get('currentObject') and !@tool.get('currentObject').visible
@@ -26,12 +25,10 @@ class AddObject extends SelectorTerrain
 	onNonIntersect: ->
 		if @tool.get('currentObject')?.visible
 			@tool.get('currentObject').visible = false
-			@app.engine.render()
 
 	update: (position, intersect) ->
 		if @tool.get('currentObject')
 			@tool.get('currentObject').position = position
-			@app.engine.render()
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1

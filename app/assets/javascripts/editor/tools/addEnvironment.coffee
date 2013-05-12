@@ -15,7 +15,19 @@ class AddEnvironment extends AddObject
 	bindEvents: ->
 		EditorEventbus.listSelectItem.add @onSelectItem
 		EditorEventbus.changeStaticObject.add @changeStaticObject
-	
+
+	onLeaveTool: ->
+		super()
+		@editor.engine.render()
+
+	onNonIntersect: ->
+		super()
+		@editor.engine.render()
+
+	update: (position, intersect) ->
+		super position, intersect
+		@editor.engine.render()
+
 	onSelectItem: (id, value, name) =>
 		if id is 'sidebar-environment-geometries-list' and @tool.get('currentObjectId') isnt value
 			log.debug 'Set Tool Build'

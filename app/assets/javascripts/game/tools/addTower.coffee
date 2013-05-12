@@ -1,5 +1,5 @@
-class AddTowerTool
-	
-	constructor: (@app, @intersectHelper) ->
+AddObject = require 'tools/addObject'
+
+class AddTowerTool extends AddObject
 	
 return AddTowerTool
