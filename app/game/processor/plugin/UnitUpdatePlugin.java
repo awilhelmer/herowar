@@ -57,7 +57,10 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
       rotateTo(unit.getActiveWaypoint().getPosition(), unit);
-      unit.addTranslation(0, 0, delta * 20); // TODO Speed of unit
+      final com.ardor3d.math.Vector3 loc = new com.ardor3d.math.Vector3();
+      loc.addLocal(unit.getRotation().getColumn(2, null));
+      loc.normalizeLocal().multiplyLocal(delta * 20).addLocal(unit.getTranslation());
+      unit.setTranslation(loc);
       unit.updateWorldTransform(false);
     } else {
       // TODO enemy reached his goal ...
@@ -82,16 +85,15 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       Waypoint waypoint = unit.getActiveWaypoint();
       ReadOnlyVector3 position = unit.getWorldTranslation();
       if (waypoint != null) {
-        log.info(String.format("Current Pos x=%s y=%s z=%s - Diff Pos x=%s z=%s", position.getX(), position.getY(), position.getZ(), waypoint.getPosition().getX() - position.getX(), waypoint.getPosition().getZ() - position.getZ()));
+        log.info(String.format("Diff Pos x=%s z=%s", Math.abs(waypoint.getPosition().getX() - position.getX()), Math.abs(waypoint.getPosition().getZ() - position.getZ())));
         if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
+          log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
-            log.info("Unit " + unit.getId() + " reached next waypoint!");
             unit.setActiveWaypoint(unit.getActivePath().getWaypoints().get(index + 1));
           } else {
             unit.setEndPointReached(true);
             unit.setActiveWaypoint(null);
-            log.info("Unit " + unit.getId() + " reached endwaypoint!");
           }
         }
       }
