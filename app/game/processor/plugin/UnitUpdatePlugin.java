@@ -70,11 +70,11 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void rotateTo(Vector3 position, UnitModel unit) {
     com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
     target.setY(0D);
-    Matrix3 m = game.math.Matrix3.lookAt(unit.getWorldTranslation(), target, new com.ardor3d.math.Vector3(0, 1, 0));
+    Matrix3 m = game.math.Matrix3.lookAt(unit.getTranslation(), target, new com.ardor3d.math.Vector3(0, 1, 0));
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(m);
     Quaternion qStart = new Quaternion();
-    qStart.fromRotationMatrix(unit.getWorldRotation());
+    qStart.fromRotationMatrix(unit.getRotation());
     Quaternion qFinal = new Quaternion();
     qStart.slerp(qEnd, 0.07, qFinal);
     unit.setRotation(qFinal);
@@ -83,7 +83,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void processWaypoints(UnitModel unit) {
     if (!unit.isEndPointReached()) {
       Waypoint waypoint = unit.getActiveWaypoint();
-      ReadOnlyVector3 position = unit.getWorldTranslation();
+      ReadOnlyVector3 position = unit.getTranslation();
       if (waypoint != null) {
         log.info(String.format("Distance %s - x=%s z=%s", unit.getTranslation().distance(waypoint.getPosition().getArdorVector()), Math.abs(waypoint.getPosition().getX() - position.getX()), Math.abs(waypoint.getPosition().getZ() - position.getZ())));
         if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
