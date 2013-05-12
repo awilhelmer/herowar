@@ -60,11 +60,13 @@ class Enemy extends BaseModel
 		m.lookAt target, @object3d.position, @object3d.up
 		dq = new THREE.Quaternion()
 		dq.setFromRotationMatrix m
-		@object3d.quaternion.slerp dq, delta
+		@object3d.quaternion.slerp dq, delta * 2
 	
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
-		@_waypointReached waypoint if Math.abs(waypoint.position.x - @object3d.position.x) < 1 and Math.abs(waypoint.position.z - @object3d.position.z) < 1
+		distance = @object3d.position.distanceTo waypoint.position
+		#console.log "Distance #{distance}"
+		@_waypointReached waypoint if distance < 2
 
 	_waypointReached: (waypoint) ->
 		console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"

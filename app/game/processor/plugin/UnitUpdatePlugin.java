@@ -76,7 +76,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     Quaternion qStart = new Quaternion();
     qStart.fromRotationMatrix(unit.getRotation());
     Quaternion qFinal = new Quaternion();
-    qStart.slerp(qEnd, delta, qFinal);
+    qStart.slerp(qEnd, delta * 2, qFinal);
     unit.setRotation(qFinal);
   }
 
@@ -85,8 +85,10 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       Waypoint waypoint = unit.getActiveWaypoint();
       ReadOnlyVector3 position = unit.getTranslation();
       if (waypoint != null) {
-        log.info(String.format("Distance %s - x=%s z=%s", unit.getTranslation().distance(waypoint.getPosition().getArdorVector()), Math.abs(waypoint.getPosition().getX() - position.getX()), Math.abs(waypoint.getPosition().getZ() - position.getZ())));
-        if (Math.abs(waypoint.getPosition().getX() - position.getX()) < 1 && Math.abs(waypoint.getPosition().getZ() - position.getZ()) < 1) {
+        com.ardor3d.math.Vector3 vWaypoint = waypoint.getPosition().getArdorVector();
+        double distance = position.distance(vWaypoint);
+        log.info(String.format("Distance %s", distance));
+        if (distance < 2) {
           log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
@@ -104,8 +106,8 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   public void createUnit(String topic, GameUnitEvent event) {
     Long id = getProcessor().getObjectIdGenerator();
     UnitModel model = new UnitModel(id, event.getUnit().getId());
-    //Matrix3 m = model.getRotation().clone().applyRotationY(90);
-    //model.setRotation(m);
+    // Matrix3 m = model.getRotation().clone().applyRotationY(90);
+    // model.setRotation(m);
     model.setActivePath(event.getPath());
     if (event.getPath().getWaypoints() == null) {
       PathDAO.mapWaypoints(event.getPath());
