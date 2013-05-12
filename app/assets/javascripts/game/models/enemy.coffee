@@ -41,7 +41,7 @@ class Enemy extends BaseModel
 		return if @waypoints.length is 0
 		waypoint = @waypoints[0]
 		@setAnimation 'run' unless @activeAnimation is 'run'
-		@_rotateTo waypoint.position
+		@_rotateTo waypoint.position, delta
 		@object3d.translateZ delta * 20
 	
 	animate: (delta) ->
@@ -54,13 +54,13 @@ class Enemy extends BaseModel
 			@meshBody.baseDuration = @meshBody.duration
 		@activeAnimation = name
 
-	_rotateTo: (position) ->
+	_rotateTo: (position, delta) ->
 		target = new THREE.Vector3 position.x, 0, position.z
 		m = new THREE.Matrix4()
 		m.lookAt target, @object3d.position, @object3d.up
 		dq = new THREE.Quaternion()
 		dq.setFromRotationMatrix m
-		@object3d.quaternion.slerp dq, 0.07
+		@object3d.quaternion.slerp dq, delta
 	
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
