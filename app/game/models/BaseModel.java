@@ -2,11 +2,18 @@ package game.models;
 
 import java.io.Serializable;
 
+import com.ardor3d.math.Matrix3;
+import com.ardor3d.math.Vector3;
 import com.ardor3d.math.type.ReadOnlyVector3;
 import com.ardor3d.scenegraph.Mesh;
-
+/**
+ * 
+ * @author Alexander Wilhelmer
+ *
+ */
 public class BaseModel extends Mesh implements Serializable {
   private static final long serialVersionUID = 1L;
+  public static final ReadOnlyVector3 up = new Vector3(0, 1, 0);
   private Long id;
   private Long dbId;
 
@@ -37,11 +44,43 @@ public class BaseModel extends Mesh implements Serializable {
     this.dbId = dbId;
   }
 
-  @Deprecated
-  // not implemented yet ...
-  public void lookAt(ReadOnlyVector3 vector) {
+  public void lookAt(final ReadOnlyVector3 vector) {
 
-    throw new UnsupportedOperationException();
+    final Vector3 x = Vector3.fetchTempInstance();
+    final Vector3 y = Vector3.fetchTempInstance();
+    final Vector3 z = Vector3.fetchTempInstance();
+
+    vector.subtract(this.getTranslation(), z);
+    z.normalizeLocal();
+    if (z.length() == 0) {
+      z.setZ(1);
+    }
+
+    up.cross(z, x);
+    x.normalizeLocal();
+    if (x.length() == 0) {
+      z.setX(z.getX() + 0.0001);
+      up.cross(z, x);
+      x.normalizeLocal();
+    }
+
+    z.cross(x, y);
+
+    Matrix3 m = new Matrix3();
+    m.fromAxes(x, y, z);
+
+    this.setRotation(m);
+    Vector3.releaseTempInstance(x);
+    Vector3.releaseTempInstance(y);
+    Vector3.releaseTempInstance(z);
+
+  }
+
+  public void move(double distance, int column) {
+    final Vector3 loc = new Vector3();
+    loc.addLocal(this.getRotation().getColumn(column, null));
+    loc.normalizeLocal().multiplyLocal(distance).addLocal(this.getTranslation());
+    this.setTranslation(loc);
   }
 
   @Override

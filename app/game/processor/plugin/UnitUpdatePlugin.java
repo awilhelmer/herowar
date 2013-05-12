@@ -57,10 +57,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
       rotateTo(unit.getActiveWaypoint().getPosition(), unit, delta);
-      final com.ardor3d.math.Vector3 loc = new com.ardor3d.math.Vector3();
-      loc.addLocal(unit.getRotation().getColumn(2, null));
-      loc.normalizeLocal().multiplyLocal(delta * 20).addLocal(unit.getTranslation());
-      unit.setTranslation(loc);
+      unit.move(delta * 20, 2);
       unit.updateWorldTransform(false);
     } else {
       // TODO enemy reached his goal ...
@@ -70,11 +67,11 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private void rotateTo(Vector3 position, UnitModel unit, Double delta) {
     com.ardor3d.math.Vector3 target = position.getArdorVector().clone();
     target.setY(0D);
-    Matrix3 m = game.math.Matrix3.lookAt(unit.getTranslation(), target, new com.ardor3d.math.Vector3(0, 1, 0));
-    Quaternion qEnd = new Quaternion();
-    qEnd.fromRotationMatrix(m);
     Quaternion qStart = new Quaternion();
-    qStart.fromRotationMatrix(unit.getRotation());
+    qStart.fromRotationMatrix(unit.getRotation().clone());
+    unit.lookAt(target);
+    Quaternion qEnd = new Quaternion();
+    qEnd.fromRotationMatrix(unit.getRotation());
     Quaternion qFinal = new Quaternion();
     qStart.slerp(qEnd, delta * 2, qFinal);
     unit.setRotation(qFinal);

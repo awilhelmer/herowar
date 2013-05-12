@@ -64,6 +64,7 @@ public abstract class BaseModel implements Serializable {
     this.version = version;
   }
 
+  
   @Override
   public int hashCode() {
     final int prime = 31;
