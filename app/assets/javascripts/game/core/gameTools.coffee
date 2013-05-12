@@ -1,9 +1,17 @@
 AddTower = require 'tools/addTower'
 Tools = require 'core/tools'
+events = require 'events'
 
-class EditorTools extends Tools
+class GameTools extends Tools
+	
+	addEventListeners: ->
+		events.on 'select:tower', @onSelectTower, @
+		super()
 	
 	createTools: ->
 		@addTower = new AddTower @app, @intersectHelper
 
-return EditorTools
+	onSelectTower: ->
+		@switchTool 'addTower'
+
+return GameTools

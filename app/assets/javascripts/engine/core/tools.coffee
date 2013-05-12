@@ -31,12 +31,14 @@ class Tools
 	
 	onMouseUp: (event) ->
 		@[@tool.get('active')].onMouseUp event if @tool.get('active')
-		if event.which is 3 and @tool.get('active') isnt @defaultTool
-			@[@tool.get('active')].onLeaveTool() if @tool.get('active')
-			log.debug 'Set default tool'
-			@tool.set 'active', @defaultTool
+		@switchTool @defaultTool if event.which is 3
 	
 	onMouseMove: ->
 		@[@tool.get('active')].onMouseMove() if @tool.get('active')
-	
+
+	switchTool: (tool) ->
+		if @tool.get('active') isnt tool
+			@[@tool.get('active')].onLeaveTool() if @tool.get('active')
+			@tool.set 'active', tool
+
 return Tools
