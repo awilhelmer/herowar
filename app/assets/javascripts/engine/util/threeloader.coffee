@@ -9,7 +9,10 @@ class JSONLoader extends THREE.JSONLoader
 					if xhr.status is 200 or xhr.status is 0  
 						if xhr.responseText
 							json = JSON.parse(xhr.responseText)
+							scale = json.scale
+							json.scale = 1
 							result = context.parse json, texturePath
+							json.scale = scale
 							callback result.geometry, result.materials, json
 						else
 							console.warn "JSONLoader: [#{url}] seems to be unreachable or file there is empty" 
