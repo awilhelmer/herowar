@@ -1,32 +1,37 @@
 Variables = require 'variables'
 Eventbus = require 'eventbus'
+db = require 'database'
 
 class ViewHandler
 
-	constructor: (@engine, @views) ->
-		@initCameras()
+	constructor: (@engine) ->
+		@viewports = db.get 'ui/viewports'
+		@initViewports()
 		@rendering = false
 
-	initCameras: ->
-		for view in @views
-			view.camera = @createCamera(view)
-			view.camera.position.x = view.eye[ 0 ]
-			view.camera.position.y = view.eye[ 1 ]
-			view.camera.position.z = view.eye[ 2 ]
-			view.camera.up.x = view.up[ 0 ]
-			view.camera.up.y = view.up[ 1 ]
-			view.camera.up.z = view.up[ 2 ]
-			view.isUpdate = _.isFunction(view.updateCamera)
-			view.skyboxCamera = new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
-			view.camera.lookAt @engine.scenegraph.scene.position
+	initViewports: ->
+		throw 'No Views declared' if @viewports.length is 0
+		for view in @viewports.models
+			camera = @createView view
+			camera.position.x = view.get('eye')[0]
+			camera.position.y = view.get('eye')[1]
+			camera.position.z = view.get('eye')[2]
+			camera.up.x = view.get('up')[0]
+			camera.up.y = view.get('up')[1]
+			camera.up.z = view.get('up')[2]
+			camera.lookAt @engine.scenegraph.scene.position
+			view.set
+				'camera' 				: camera
+				'isUpdate' 			: _.isFunction view.get 'updateCamera'
+				'skyboxCamera' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
 		null
 		
-	createCamera: (view) ->
-		switch view.type
+	createView: (view) ->
+		switch view.get 'type'
 			when Variables.CAMERA_TYPE_RTS 	
-				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
+				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 			when Variables.CAMERA_TYPE_FREE
-				camera = new THREE.PerspectiveCamera view.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
+				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 				#TODO we have only one control - for more we just need a control handler or an array
 				if @controls == undefined
 					@controls = new THREE.TrackballControls camera, @engine.main.get(0) 
@@ -46,7 +51,7 @@ class ViewHandler
 							Eventbus.cameraChanged.dispatch view
 						null
 					) 
-					Eventbus.controlsChanged.add(@onControlsChanged)
+					Eventbus.controlsChanged.add @onControlsChanged
 			else 
 				throw 'No camera type setted!'
 		camera
@@ -55,44 +60,44 @@ class ViewHandler
 		if (@rendering == false) 
 			@rendering = true
 			@controls.enable = false if @controls
-			for view in @views
-					@cameraRender(renderer, rendererType, scene, skyboxScene, view)	
+			for view in @viewports.models
+					@cameraRender renderer, rendererType, scene, skyboxScene, view
 			@rendering = false
 			@controls.enable = true if @controls
 		null
 
 	cameraRender : (renderer, rendererType, scene, skyboxScene, view) ->
 		@updateCamera view
-		if view.isUpdate
-			view.updateCamera view.camera, scene
-		left = Math.floor Variables.SCREEN_WIDTH * view.left 
-		bottom = Math.floor Variables.SCREEN_HEIGHT * view.bottom
-		width = Math.floor Variables.SCREEN_WIDTH * view.width 
-		height = Math.floor Variables.SCREEN_HEIGHT * view.height 
+		if view.get 'isUpdate'
+			view.get('updateCamera')(view.get('camera'), scene)
+		left = Math.floor Variables.SCREEN_WIDTH * view.get('left') 
+		bottom = Math.floor Variables.SCREEN_HEIGHT * view.get('bottom')
+		width = Math.floor Variables.SCREEN_WIDTH * view.get('width')
+		height = Math.floor Variables.SCREEN_HEIGHT * view.get('height') 
 		if rendererType is Variables.RENDERER_TYPE_WEBGL
 			renderer.setViewport left, bottom, width, height
 			renderer.setScissor left, bottom, width, height 
 			renderer.enableScissorTest  true 
 		aspect =  width / height
-		if view.camera.aspect isnt aspect
-			view.camera.aspect = aspect
-			view.camera.updateProjectionMatrix()
-			view.skyboxCamera.aspect = view.camera.aspect
-			view.skyboxCamera.updateProjectionMatrix()
-		view.skyboxCamera.rotation.copy view.camera.rotation
-		renderer.render skyboxScene, view.skyboxCamera
-		renderer.render scene, view.camera
+		if view.get('camera').aspect isnt aspect
+			view.get('camera').aspect = aspect
+			view.get('camera').updateProjectionMatrix()
+			view.get('skyboxCamera').aspect = view.get('camera').aspect
+			view.get('skyboxCamera').updateProjectionMatrix()
+		view.get('skyboxCamera').rotation.copy view.get('camera').rotation
+		renderer.render skyboxScene, view.get('skyboxCamera')
+		renderer.render scene, view.get('camera')
 		null
 		
 	updateCamera: (view)  ->
-		switch view.type
+		switch view.get 'type'
 			when Variables.CAMERA_TYPE_RTS 	
 				null
 			when Variables.CAMERA_TYPE_FREE
 				if @controls and not @engine.pause
 					@controls.update()
 			else
-				console.log "No camera logic for #{ view.type } setted"
+				console.log "No camera logic for #{view.get('type')} setted"
 		null
 
 	onControlsChanged: (event) =>

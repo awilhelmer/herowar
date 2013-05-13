@@ -28,4 +28,9 @@ class AddTowerTool extends AddObject
 		super geometry, materials, json
 		console.log "Mesh:", @tool.get 'currentObject'
 	
+	update: (position, intersect) ->
+		position.y = -10
+		console.log 'Update', position, intersect
+		super position, intersect
+	
 return AddTowerTool

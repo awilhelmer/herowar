@@ -6,6 +6,7 @@ class IntersectHelper extends THREE.Raycaster
 	constructor: (@app) ->
 		@input = db.get 'input'
 		super()
+		@viewports = db.get 'ui/viewports'
 		@projector = new THREE.Projector()
 		@sphere = new THREE.Sphere()
 		@localRay = new THREE.Ray()
@@ -19,7 +20,7 @@ class IntersectHelper extends THREE.Raycaster
 			((@input.get('mouse_position_x') - Variables.SCREEN_LEFT) / Variables.SCREEN_WIDTH) * 2 - 1
 			-((@input.get('mouse_position_y') - Variables.SCREEN_TOP) / Variables.SCREEN_HEIGHT) * 2 + 1
 			0.5)
-		camera = @app.engine.viewhandler.views[0].camera	# TODO: find out from which viewport this click comes
+		camera = @viewports.at(0).get('camera')	# TODO: find out from which viewport this click comes
 		@projector.unprojectVector vector, camera
 		@set camera.position, vector.sub(camera.position).normalize()
 		intersectList = @intersectObjects objects, true		

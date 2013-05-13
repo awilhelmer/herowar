@@ -8,7 +8,6 @@ class Engine
 
 	constructor: (@opts) ->
 		@opts = @opts || {}
-		throw 'No View declared' unless @opts.views
 		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @opts.rendererType
 		@main = @opts.container
 		@main = $ '#main' unless @main
@@ -23,7 +22,7 @@ class Engine
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph @
-		@viewhandler = new ViewHandler @, @opts.views
+		@viewhandler = new ViewHandler @
 		@clock = new THREE.Clock()
 		@pause = false
 		@initListener()
@@ -82,7 +81,7 @@ class Engine
 		null
 
 	onCameraChanged: (view) =>
-		@viewhandler.cameraRender(@renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene, view)
+		@viewhandler.cameraRender @renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene, view
 		null
 
 	getData: (type, name) ->

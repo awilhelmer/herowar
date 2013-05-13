@@ -25,14 +25,22 @@ class ApplicationController extends BaseController
 	initialize: (options) ->
 		super options
 		@data = db.data()
+		@initViewports()	
 		@initEngine()
 		@initCore()
-		
+	
+	initViewports: ->
+		for viewport in @viewports
+			@initViewport viewport	
+	
+	initViewport: (viewport) ->
+		viewports = db.get 'ui/viewports'
+		viewports.add viewport
+	
 	initEngine: ->
 		@engine = new Engine
 			container : $ '#viewport'
 			data : @data
-			views : @viewports
 		@engine.init()
 	
 	initCore: ->
