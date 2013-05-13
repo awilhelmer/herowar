@@ -26,7 +26,13 @@ public abstract class FolderImporter<E extends Serializable> extends AbstractImp
   @Override
   protected E createEntry(String name, E parent) {
     E entry = super.createEntry(name, parent);
-    JPA.em().persist(entry);
+    if (entry != null) {
+      if (!JPA.em().contains(entry)) {
+        JPA.em().persist(entry);
+      } else {
+        entry = JPA.em().merge(entry);
+      }
+    }
     return entry;
   }
 

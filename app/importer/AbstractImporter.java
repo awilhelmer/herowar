@@ -67,7 +67,7 @@ public abstract class AbstractImporter<E extends Serializable> {
             Geometry geo = (Geometry) PropertyUtils.getProperty(child, "geometry");
             if (geo == null || geo.getUdate() == null || geo.getUdate().getTime() < file.lastModified()) {
               Geometry newGeo = parseGeometryFile(file);
-              syncGeometry(geo, newGeo);
+              newGeo = syncGeometry(geo, newGeo);
               PropertyUtils.setProperty(child, "geometry", newGeo);
               updateGeo = true;
             }
@@ -75,6 +75,7 @@ public abstract class AbstractImporter<E extends Serializable> {
             getLogger().warn(String.format("Property geometry not found on Class <%s>", child.getClass()));
           }
         }
+
         if (PropertyUtils.isReadable(child, "children") && updateGeo) {
           Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
           Object id = PropertyUtils.getProperty(child, "id");
@@ -96,7 +97,7 @@ public abstract class AbstractImporter<E extends Serializable> {
     }
   }
 
-  private void syncGeometry(Geometry geo, Geometry newGeo) {
+  private Geometry syncGeometry(Geometry geo, Geometry newGeo) {
     if (geo != null && geo.getId() != null) {
       getLogger().info("Sync geo Id: " + geo.getId());
       newGeo.setId(geo.getId());
@@ -111,6 +112,7 @@ public abstract class AbstractImporter<E extends Serializable> {
 
       newGeo = JPA.em().merge(newGeo);
     }
+    return newGeo;
   }
 
   protected E createEntry(File file, E parent) {
