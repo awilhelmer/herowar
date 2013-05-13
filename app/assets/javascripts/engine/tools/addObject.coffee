@@ -36,11 +36,13 @@ class AddObject extends SelectorTerrain
 	onLoadGeometry: (geometry, materials, json) =>
 		unless json
 			json = _.extend id: @tool.get('currentObjectId'), json 
+		scale = json.scale
+		jscon.scale = 1
 		mesh = materialHelper.createMesh geometry, materials, @tool.get('currentObjectName'), json
 		if _.isObject json
-			mesh.scale.x = json.scale
-			mesh.scale.y = json.scale
-			mesh.scale.z = json.scale
+			mesh.scale.x = scale
+			mesh.scale.y = scale
+			mesh.scale.z = scale
 		obj = new THREE.Object3D()
 		obj.name = mesh.name
 		obj.add mesh
