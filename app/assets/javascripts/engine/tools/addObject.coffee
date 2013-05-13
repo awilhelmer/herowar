@@ -34,12 +34,18 @@ class AddObject extends SelectorTerrain
 		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
 
 	onLoadGeometry: (geometry, materials, json) =>
-		json = id: @tool.get('currentObjectId') unless json
+		unless json
+			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = materialHelper.createMesh geometry, materials, @tool.get('currentObjectName'), json
+		if _.isObject json
+			mesh.scale.x = json.scale
+			mesh.scale.y = json.scale
+			mesh.scale.z = json.scale
 		obj = new THREE.Object3D()
 		obj.name = mesh.name
 		obj.add mesh
 		obj.visible = false
+		
 		@tool.set 'currentObject', obj
 		@addMesh()
 

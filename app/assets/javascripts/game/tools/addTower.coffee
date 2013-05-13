@@ -16,10 +16,16 @@ class AddTowerTool extends AddObject
 		@tool.set
 			'currentObjectId' 	: @internalId++
 			'currentObjectName'	: name
-		@onLoadGeometry data[0], data[1]
+		@onLoadGeometry data[0], data[1], data[2]
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')
 		@app.engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
 
+	# TODO: SHOULD BE REMOVED LATER ON !!!
+	
+	onLoadGeometry: (geometry, materials, json) =>
+		super geometry, materials, json
+		console.log "Mesh:", @tool.get 'currentObject'
+	
 return AddTowerTool
