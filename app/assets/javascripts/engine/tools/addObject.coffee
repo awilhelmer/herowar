@@ -37,7 +37,7 @@ class AddObject extends SelectorTerrain
 		unless json
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		scale = json.scale
-		jscon.scale = 1
+		json.scale = 1
 		mesh = materialHelper.createMesh geometry, materials, @tool.get('currentObjectName'), json
 		if _.isObject json
 			mesh.scale.x = scale
