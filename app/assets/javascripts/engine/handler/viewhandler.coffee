@@ -29,7 +29,7 @@ class ViewHandler
 	createView: (view) ->
 		switch view.get 'type'
 			when Variables.CAMERA_TYPE_RTS 	
-				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
+				camera = new THREE.OrthographicCamera Variables.SCREEN_WIDTH / - 2, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2, Variables.SCREEN_HEIGHT / -2, 1, 10000
 			when Variables.CAMERA_TYPE_FREE
 				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 				#TODO we have only one control - for more we just need a control handler or an array
@@ -71,12 +71,12 @@ class ViewHandler
 		if view.get 'isUpdate'
 			view.get('updateCamera')(view.get('camera'), scene)
 		left = Math.floor Variables.SCREEN_WIDTH * view.get('left') 
-		bottom = Math.floor Variables.SCREEN_HEIGHT * view.get('bottom')
+		top = Math.floor Variables.SCREEN_HEIGHT * view.get('top')
 		width = Math.floor Variables.SCREEN_WIDTH * view.get('width')
 		height = Math.floor Variables.SCREEN_HEIGHT * view.get('height') 
 		if rendererType is Variables.RENDERER_TYPE_WEBGL
-			renderer.setViewport left, bottom, width, height
-			renderer.setScissor left, bottom, width, height 
+			renderer.setViewport left, top, width, height
+			renderer.setScissor left, top, width, height 
 			renderer.enableScissorTest  true 
 		aspect =  width / height
 		if view.get('camera').aspect isnt aspect
@@ -104,6 +104,14 @@ class ViewHandler
 		if (@controls)
 			@controls.update()
 		null
-	
-	
+
+	resizeViews: ->
+		for view in @viewports.models
+			if view.get('camera') instanceof THREE.OrthographicCamera
+				view.get('camera').left = Variables.SCREEN_WIDTH / - 2
+				view.get('camera').right = Variables.SCREEN_WIDTH / 2
+				view.get('camera').top = Variables.SCREEN_HEIGHT / 2
+				view.get('camera').bottom = Variables.SCREEN_HEIGHT / - 2
+		return
+			
 return ViewHandler

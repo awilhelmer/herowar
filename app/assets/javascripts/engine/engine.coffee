@@ -76,6 +76,7 @@ class Engine
 		Variables.SCREEN_WIDTH = @main.width()
 		Variables.SCREEN_HEIGHT = @main.height()
 		@renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
+		@viewhandler.resizeViews()
 		if (withReRender) 
 			@render()
 		null
