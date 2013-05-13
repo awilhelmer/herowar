@@ -20,7 +20,6 @@ class AddObject extends SelectorTerrain
 			@tool.unset 'currentObject'
 
 	onIntersect: ->
-		@tool.get('currentObject').visible = true if @tool.get('currentObject') and !@tool.get('currentObject').visible
 
 	onNonIntersect: ->
 		if @tool.get('currentObject')?.visible
@@ -29,6 +28,7 @@ class AddObject extends SelectorTerrain
 	update: (position, intersect) ->
 		if @tool.get('currentObject')
 			@tool.get('currentObject').position = position
+			@tool.get('currentObject').visible = true unless @tool.get('currentObject').visible
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
@@ -46,7 +46,6 @@ class AddObject extends SelectorTerrain
 		obj.name = mesh.name
 		obj.add mesh
 		obj.visible = false
-		
 		@tool.set 'currentObject', obj
 		@addMesh()
 
