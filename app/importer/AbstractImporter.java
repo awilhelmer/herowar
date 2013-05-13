@@ -187,6 +187,7 @@ public abstract class AbstractImporter<E extends Serializable> {
 
   protected abstract ALogger getLogger();
   
+  protected abstract boolean accept(File file);
   /**
    * The JsFileFilter filters for js files.
    * 
@@ -196,7 +197,7 @@ public abstract class AbstractImporter<E extends Serializable> {
 
     @Override
     public boolean accept(File pathname) {
-      return pathname.getName().toLowerCase().endsWith(".js");
+      return AbstractImporter.this.accept(pathname);
     }
     
   }

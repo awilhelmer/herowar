@@ -27,4 +27,9 @@ public class TowerImporter extends FolderImporter<Tower> {
     return log;
   }
 
+  @Override
+  protected boolean accept(File file) {
+    return file.getName().toLowerCase().endsWith(".js");
+  }
+
 }

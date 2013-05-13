@@ -31,4 +31,9 @@ public abstract class TreeImporter<E extends Serializable> extends AbstractImpor
     }
   }
 
+  @Override
+  protected boolean accept(File file) {
+    return true;
+  }
+
 }
