@@ -39,7 +39,7 @@ class Enemies extends PacketModel
 		
 	createMesh: (id, name, data) ->
 		mesh = materialHelper.createAnimMesh data[0], data[1], name, id: id
-		mesh.rotation.y = 90 * (Math.PI / 180)
+		mesh.rotation.y = -90 * (Math.PI / 180)
 		mesh
 	
 	getPathById: (id) ->
