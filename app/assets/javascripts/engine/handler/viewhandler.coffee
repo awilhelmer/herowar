@@ -13,9 +13,9 @@ class ViewHandler
 		throw 'No Views declared' if @viewports.length is 0
 		for view in @viewports.models
 			camera = @createView view
-			camera.position.x = view.get('eye')[0]
-			camera.position.y = view.get('eye')[1]
-			camera.position.z = view.get('eye')[2]
+			camera.position.x = view.get('position')[0]
+			camera.position.y = view.get('position')[1]
+			camera.position.z = view.get('position')[2]
 			#camera.up.x = view.get('up')[0]
 			#camera.up.y = view.get('up')[1]
 			#camera.up.z = view.get('up')[2]
