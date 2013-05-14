@@ -13,17 +13,12 @@ class ViewHandler
 		throw 'No Views declared' if @viewports.length is 0
 		for view in @viewports.models
 			camera = @createView view
-			camera.position.x = view.get('position')[0]
-			camera.position.y = view.get('position')[1]
-			camera.position.z = view.get('position')[2]
-			#camera.up.x = view.get('up')[0]
-			#camera.up.y = view.get('up')[1]
-			#camera.up.z = view.get('up')[2]
+			camera.position.set view.get('position')[0], view.get('position')[1], view.get('position')[2]
+			camera.rotation.set view.get('rotation')[0], view.get('rotation')[1], view.get('rotation')[2]
 			if camera instanceof THREE.PerspectiveCamera
 				camera.lookAt @engine.scenegraph.scene.position
 			else
 				camera.rotation.set -Math.PI/2, 0, 0
-				#camera.lookAt @engine.scenegraph.scene.position
 			view.set
 				'camera' 				: camera
 				'isUpdate' 			: _.isFunction view.get 'updateCamera'
