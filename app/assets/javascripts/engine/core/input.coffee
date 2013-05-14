@@ -61,9 +61,11 @@ class Input
 		@model.set 'mouse_moved', true
 	
 	onMouseWheel: (event) ->
+		@model.trigger 'mouse:wheel', event
 		Eventbus.controlsChanged.dispatch event
 		
 	onDOMMouseScroll: (event) ->
+		@model.trigger 'mouse:wheel', event
 		Eventbus.controlsChanged.dispatch event
 
 	onTouchStart: (event) ->
