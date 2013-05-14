@@ -3,6 +3,7 @@ packetType =
   # Client Packets
 	CLIENT_AUTH			         		: 1
 	CLIENT_PRELOAD_UPDATE	  		: 10
+	CLIENT_TOWER_REQUEST				: 80
 
 	# Server Packets
 	SERVER_ACCESS_DECLINED    	: 11

@@ -16,10 +16,14 @@ class ViewHandler
 			camera.position.x = view.get('eye')[0]
 			camera.position.y = view.get('eye')[1]
 			camera.position.z = view.get('eye')[2]
-			camera.up.x = view.get('up')[0]
-			camera.up.y = view.get('up')[1]
-			camera.up.z = view.get('up')[2]
-			camera.lookAt @engine.scenegraph.scene.position
+			#camera.up.x = view.get('up')[0]
+			#camera.up.y = view.get('up')[1]
+			#camera.up.z = view.get('up')[2]
+			if camera instanceof THREE.PerspectiveCamera
+				camera.lookAt @engine.scenegraph.scene.position
+			else
+				camera.rotation.set -Math.PI/2, 0, 0
+				#camera.lookAt @engine.scenegraph.scene.position
 			view.set
 				'camera' 				: camera
 				'isUpdate' 			: _.isFunction view.get 'updateCamera'

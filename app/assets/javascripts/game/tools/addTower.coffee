@@ -1,3 +1,4 @@
+TowerRequestPacket = require 'network/packets/towerRequestPacket'
 AddObject = require 'tools/addObject'
 events = require 'events'
 db = require 'database'
@@ -22,6 +23,10 @@ class AddTowerTool extends AddObject
 		mesh = @tool.get('currentObject')
 		@app.engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
 
+	placeMesh: ->
+		console.log 'Place tower', @tool.get('currentObject').position
+		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').position # TODO: fix hardcoded tower id
+
 	# TODO: SHOULD BE REMOVED LATER ON !!!
 	
 	onLoadGeometry: (geometry, materials, json) =>
@@ -29,8 +34,8 @@ class AddTowerTool extends AddObject
 		console.log "Mesh:", @tool.get 'currentObject'
 	
 	update: (position, intersect) ->
-		position.y = -10
+		position.y = 10	# TODO: fix this hotfix (positive y values hide the tower...)
 		console.log 'Update', position, intersect
-		super position, intersect
+		super position, intersect		
 	
 return AddTowerTool
