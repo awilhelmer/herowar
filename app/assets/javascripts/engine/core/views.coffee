@@ -1,8 +1,9 @@
 Variables = require 'variables'
 Eventbus = require 'eventbus'
+events = require 'events'
 db = require 'database'
 
-class ViewHandler
+class Views
 
 	constructor: (@engine) ->
 		@viewports = db.get 'ui/viewports'
@@ -23,7 +24,8 @@ class ViewHandler
 				'camera' 				: camera
 				'isUpdate' 			: _.isFunction view.get 'updateCamera'
 				'skyboxCamera' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
-		null
+			events.trigger 'controls:rts:view', view
+		return
 		
 	createView: (view) ->
 		switch view.get 'type'
@@ -63,7 +65,7 @@ class ViewHandler
 					@cameraRender renderer, rendererType, scene, skyboxScene, view
 			@rendering = false
 			@controls.enable = true if @controls
-		null
+		return
 
 	cameraRender : (renderer, rendererType, scene, skyboxScene, view) ->
 		@updateCamera view
@@ -86,7 +88,7 @@ class ViewHandler
 		view.get('skyboxCamera').rotation.copy view.get('camera').rotation
 		renderer.render skyboxScene, view.get('skyboxCamera')
 		renderer.render scene, view.get('camera')
-		null
+		return
 		
 	updateCamera: (view)  ->
 		switch view.get 'type'
@@ -97,12 +99,12 @@ class ViewHandler
 					@controls.update()
 			else
 				console.log "No camera logic for #{view.get('type')} setted"
-		null
+		return
 
 	onControlsChanged: (event) =>
 		if (@controls)
 			@controls.update()
-		null
+		return
 
 	resizeViews: ->
 		for view in @viewports.models
@@ -113,4 +115,4 @@ class ViewHandler
 				view.get('camera').bottom = Variables.SCREEN_HEIGHT / - 2
 		return
 			
-return ViewHandler
+return Views

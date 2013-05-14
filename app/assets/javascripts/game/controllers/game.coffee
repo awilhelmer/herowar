@@ -13,11 +13,11 @@ class GameController extends ApplicationController
 
 	initialize: (options) ->
 		log.info 'Initialize game...'
+		@controls = new RTSControls()
 		super options
 		# Show path during develop - Should be removed later
 		@pathingHelper = new PathingHelper @
 		@pathingHelper.showPath()
-		@controls = new RTSControls()
 		@engine.start()
 
 	initCore: ->
