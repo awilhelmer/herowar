@@ -1,6 +1,5 @@
 ApplicationController = require 'controllers/application'
 PathingHelper = require 'helper/pathingHelper'
-RTSControls = require 'controls/rtsControls'
 GameTools = require 'core/gameTools'
 log = require 'util/logger'
 
@@ -13,7 +12,6 @@ class GameController extends ApplicationController
 
 	initialize: (options) ->
 		log.info 'Initialize game...'
-		@controls = new RTSControls()
 		super options
 		# Show path during develop - Should be removed later
 		@pathingHelper = new PathingHelper @

@@ -25,8 +25,10 @@ class Editor extends ApplicationController
 		background: { r: 0, g: 0, b: 0, a: 1 },
 		position: [ 300, 150, 300 ],
 		rotation: [ 0, 0, 0 ],
+		zoom: 1.0,
 		fov: 75,
-		type: Variables.CAMERA_TYPE_FREE		
+		domId: '#viewport',
+		type: Variables.VIEWPORT_TYPE_EDITOR		
 	]
 
 	initialize: (options) ->

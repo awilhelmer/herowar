@@ -3,7 +3,7 @@ db = require 'database'
 
 class RTSControls
 	
-	constructor: ->
+	constructor: (@view) ->
 		_.extend @, Backbone.Events
 		@initialize()
 	
@@ -14,53 +14,37 @@ class RTSControls
 		return
 	
 	initVariables: ->
-		@view = null
-		@camera = null
+		@camera = @view.get 'camera'
 		@center = new THREE.Vector3()
 		@userZoomSpeed = 1.0
-		@scale = 1
-		@minDistance = 100
-		@maxDistance = 1000
+		@zoom = 1.0
 		@lastPosition = new THREE.Vector3()
 		return
 	
 	bindEvents: ->
-		events.on 'engine:render:before', @update, @
-		events.on 'controls:rts:view', @changeView, @
+		events.on 'engine:render', @update, @
+		events.on 'scene:terrain:build', @changeTerrain, @
 		@listenTo @input, 'mouse:wheel', @onMouseWheel
 	
 	onMouseWheel: (event) ->
-		delta = 0
-		if event.wheelDelta # WebKit / Opera / Explorer 9
-			delta = event.wheelDelta
-		else if event.detail # Firefox
-			delta = - event.detail
-		if delta > 0
-			@zoomOut()
-		else
-			@zoomIn()
+		return unless event or @view or @camera
+		delta = if event.wheelDelta then event.wheelDelta else if event.detail then -event.detail else 0
+		@changeZoom 0.1 if delta > 0
+		@changeZoom -0.1 if delta < 0
 		return
 
-	zoomIn: (zoomScale) ->
-		zoomScale = @getZoomScale() unless zoomScale
-		@scale /= zoomScale
+	changeZoom: (value) ->
+		@zoom += value
+		console.log 'RTSControls changeZoom()', value, 'to', @zoom
 		return
 
-	zoomOut: (zoomScale) ->
-		zoomScale = @getZoomScale() unless zoomScale
-		@scale *= zoomScale
-		return
-
-	getZoomScale: ->
-		Math.pow 0.95, @userZoomSpeed
-
-	changeView: (view) ->
-		@view = view
-		@camera = view.get 'camera'
+	changeTerrain: (terrain) ->
+		console.log 'RTSControls changeTerrain()', terrain
 		return
 
 	update: ->
 		return unless @view or @camera
+		###
 		position = @camera.position
 		offset = position.clone().sub @center
 		
@@ -86,6 +70,7 @@ class RTSControls
 			@view.trigger 'change:position'
 			@view.trigger 'change'
 			@lastPosition.copy @camera.position
+		###
 		return
 
 return RTSControls

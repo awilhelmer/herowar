@@ -8,7 +8,7 @@ db = require 'database'
 class ApplicationController extends BaseController
 
 	views:
-		'views/viewport'				: ''
+		'views/viewport' : ''
 
 	viewports: [
 		left: 0,
@@ -18,7 +18,9 @@ class ApplicationController extends BaseController
 		background: { r: 0, g: 0, b: 0, a: 1 },
 		position: [ 0, 350, 0 ],
 		rotation: [ -Math.PI/2, 0, 0 ],
-		type: Variables.CAMERA_TYPE_RTS
+		zoom: 1.0,
+		domId: '#viewport',
+		type: Variables.VIEWPORT_TYPE_RTS
 	]
 
 	initialize: (options) ->

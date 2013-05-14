@@ -5,6 +5,7 @@ Waypoint = require 'models/waypoint'
 Texture = require 'models/texture'
 Path = require 'models/path'
 Wave = require 'models/wave'
+events = require 'events'
 db = require 'database'
 
 class Scene
@@ -46,7 +47,9 @@ class Scene
 	buildTerrain: (map) =>
 		if !map and @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()
+			map.children[0].geometry.computeBoundingBox()
 			@app.engine.scenegraph.setMap map
+			events.trigger 'scene:terrain:build', map
 		if !map
 			throw 'Map is undefined'
 		map

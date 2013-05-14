@@ -11,7 +11,6 @@ class Views
 		@rendering = false
 
 	initViewports: ->
-		throw 'No Views declared' if @viewports.length is 0
 		for view in @viewports.models
 			camera = @createView view
 			camera.position.set view.get('position')[0], view.get('position')[1], view.get('position')[2]
@@ -29,9 +28,9 @@ class Views
 		
 	createView: (view) ->
 		switch view.get 'type'
-			when Variables.CAMERA_TYPE_RTS 	
+			when Variables.VIEWPORT_TYPE_RTS 	
 				camera = new THREE.OrthographicCamera Variables.SCREEN_WIDTH / - 2, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2, Variables.SCREEN_HEIGHT / -2, 1, 10000
-			when Variables.CAMERA_TYPE_FREE
+			when Variables.VIEWPORT_TYPE_EDITOR
 				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
 				#TODO we have only one control - for more we just need a control handler or an array
 				if @controls == undefined
@@ -92,9 +91,9 @@ class Views
 		
 	updateCamera: (view)  ->
 		switch view.get 'type'
-			when Variables.CAMERA_TYPE_RTS 	
+			when Variables.VIEWPORT_TYPE_RTS 	
 				null
-			when Variables.CAMERA_TYPE_FREE
+			when Variables.VIEWPORT_TYPE_EDITOR
 				if @controls and not @engine.pause
 					@controls.update()
 			else

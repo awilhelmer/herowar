@@ -2,6 +2,7 @@ EngineRenderer = require 'enginerenderer'
 Variables = require 'variables'
 SceneGraph = require 'scenegraph'
 Eventbus = require 'eventbus'
+Controls = require 'core/controls'
 Views = require 'core/views'
 events = require 'events'
 
@@ -24,6 +25,7 @@ class Engine
 		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph @
 		@views = new Views @
+		@controls = new Controls @
 		@clock = new THREE.Clock()
 		@pause = false
 		@initListener()
@@ -61,10 +63,9 @@ class Engine
 	render: ->
 		delta = @clock.getDelta()
 		@scenegraph.update delta
-		events.trigger 'engine:render:before', delta
 		Eventbus.beforeRender.dispatch()
 		@views.render @renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene
-		events.trigger 'engine:render:after', delta
+		events.trigger 'engine:render', delta
 		Eventbus.afterRender.dispatch()
 		return
 		
