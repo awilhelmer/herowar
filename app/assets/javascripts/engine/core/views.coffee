@@ -109,16 +109,32 @@ class Views
 		height = $domElement.height()
 		renderer.setSize width, height
 		aspect =  width / height
-		if camera.size
-			cameraScene.left = camera.size.left
-			cameraScene.right = camera.size.left + camera.size.width
-			cameraScene.top = camera.size.top + camera.size.height
-			cameraScene.bottom = camera.size.top
+		if cameraScene instanceof THREE.OrthographicCamera and camera.size
+			@calculateOrthographicCameraPosition cameraScene, camera.size, camera.offset, aspect
 		cameraScene.aspect = aspect
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
 		return
+		
+	calculateOrthographicCameraPosition: (camera, size, offset, aspect) ->
+		offset = left: 0, height: 0 # TODO: Reset offset right now since its hard to calculate with it on new values (need validation)
+		aspectSize = size.width / size.height # aspect of terrain object
+		aspectReal = Math.max aspect, aspectSize # get highest aspect
+		if aspectReal > 1
+			height = Math.round size.height / aspectReal
+			camera.left = size.left
+			camera.right = size.left + size.width
+			camera.top = size.top + size.height 
+			camera.bottom = size.top + (size.height - height)
+		else
+			width = Math.round size.width / aspectReal
+			left = size.left + Math.round width / 2
+			camera.left = left
+			camera.right = left + width
+			camera.top = size.top + size.height
+			camera.bottom = size.top
+		console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom 
 
 	onCameraChanged: (view) =>
 		@cameraRender view, @engine.scenegraph.scene, @engine.scenegraph.skyboxScene
