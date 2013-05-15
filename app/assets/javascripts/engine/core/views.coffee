@@ -102,17 +102,22 @@ class Views
 	updateViewSize: (view) ->
 		$domElement = $ view.get 'domElement'
 		renderer = view.get 'renderer'
+		camera = view.get 'camera'
 		cameraScene = view.get 'cameraScene'
 		cameraSkybox = view.get 'cameraSkybox'
 		width = $domElement.width()
 		height = $domElement.height()
 		renderer.setSize width, height
 		aspect =  width / height
-		if cameraScene.aspect isnt aspect
-			cameraScene.aspect = aspect
-			cameraScene.updateProjectionMatrix()
-			cameraSkybox.aspect = cameraScene.aspect
-			cameraSkybox.updateProjectionMatrix()
+		if camera.size
+			cameraScene.left = camera.size.left
+			cameraScene.right = camera.size.left + camera.size.width
+			cameraScene.top = camera.size.top + camera.size.height
+			cameraScene.bottom = camera.size.top
+		cameraScene.aspect = aspect
+		cameraScene.updateProjectionMatrix()
+		cameraSkybox.aspect = cameraScene.aspect
+		cameraSkybox.updateProjectionMatrix()
 		return
 
 	onCameraChanged: (view) =>
@@ -121,15 +126,19 @@ class Views
 
 	changeTerrain: (terrain) ->
 		boundingBox = terrain.children[0].geometry.boundingBox
-		console.log 'Views changeTerrain() Size=', boundingBox.min.x, boundingBox.min.y, boundingBox.max.x, boundingBox.max.y
 		for view in @viewports.models
-			camera = view.get 'cameraScene'
-			if camera instanceof THREE.OrthographicCamera
-				camera.left = boundingBox.min.x
-				camera.right = boundingBox.max.x
-				camera.top = boundingBox.max.y
-				camera.bottom = boundingBox.min.y
-				camera.updateProjectionMatrix()
+			cameraScene = view.get 'cameraScene'
+			if cameraScene instanceof THREE.OrthographicCamera
+				camera = view.get 'camera'
+				camera.size = 
+					left: boundingBox.min.x 
+					top: boundingBox.min.y
+					width: boundingBox.max.x - boundingBox.min.x
+					height: boundingBox.max.y - boundingBox.min.y
+				camera.offset = 
+					left: 0 
+					top: 0
+				@updateViewSize view
 		return
 			
 return Views
