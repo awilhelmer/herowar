@@ -1,4 +1,3 @@
-EngineRenderer = require 'enginerenderer'
 Variables = require 'variables'
 SceneGraph = require 'scenegraph'
 Eventbus = require 'eventbus'
@@ -10,7 +9,6 @@ class Engine
 
 	constructor: (@opts) ->
 		@opts = @opts || {}
-		@rendererType = Variables.RENDERER_TYPE_WEBGL unless @opts.rendererType
 		@main = @opts.container
 		@main = $ '#main' unless @main
 		@data = @opts.data || {}
@@ -22,31 +20,12 @@ class Engine
 		Variables.SCREEN_LEFT = position.left
 		Variables.SCREEN_WIDTH = @main.width()
 		Variables.SCREEN_HEIGHT = @main.height()
-		@renderer = @initRenderer()
 		@scenegraph = new SceneGraph @
 		@views = new Views @
 		@controls = new Controls @
 		@clock = new THREE.Clock()
 		@pause = false
-		@initListener()
 		console.log "Engine started!"
-		return
-		
-	initRenderer: ->
-		if @rendererType is Variables.RENDERER_TYPE_CANVAS
-			renderer = new THREE.CanvasRenderer
-				clearColor: 0xffffff
-		else
-			renderer = new EngineRenderer 
-				antialias: true
-			renderer.autoClear = false
-		renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
-		@main.append renderer.domElement
-		renderer
-		
-	initListener:  ->
-		Eventbus.cameraChanged.add @onCameraChanged
-		Eventbus.windowResize.add @onWindowResize
 		return
 		
 	start: ->
@@ -56,15 +35,11 @@ class Engine
 		@animate()
 		return
 
-	shutdown: ->
-		$(@renderer.domElement).remove()
-		return
-
 	render: ->
 		delta = @clock.getDelta()
 		@scenegraph.update delta
 		Eventbus.beforeRender.dispatch()
-		@views.render @renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene
+		@views.render @scenegraph.scene, @scenegraph.skyboxScene
 		events.trigger 'engine:render', delta
 		Eventbus.afterRender.dispatch()
 		return
@@ -75,24 +50,6 @@ class Engine
 			requestAnimationFrame(@animate)
 		else
 			console.log 'Main Loop stopped ...'
-		return
-	
-	onDocumentMouseMove : (event) =>
-		@mouseX = event.clientX - Variables.SCREEN_WIDTH / 2 
-		@mouseY = event.clientY - Variables.SCREEN_HEIGHT / 2 
-		return
-		
-	onWindowResize: (withReRender) =>
-		Variables.SCREEN_WIDTH = @main.width()
-		Variables.SCREEN_HEIGHT = @main.height()
-		@renderer.setSize Variables.SCREEN_WIDTH,Variables.SCREEN_HEIGHT
-		@views.resizeViews()
-		if (withReRender) 
-			@render()
-		return
-
-	onCameraChanged: (view) =>
-		@views.cameraRender @renderer, @rendererType, @scenegraph.scene, @scenegraph.skyboxScene, view
 		return
 
 	getData: (type, name) ->

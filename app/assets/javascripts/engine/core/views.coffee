@@ -1,3 +1,4 @@
+EngineRenderer = require 'enginerenderer'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 events = require 'events'
@@ -12,6 +13,7 @@ class Views
 				left: 0, top: 0, width: 1, height: 1
 			background: 
 				r: 0, g: 0, b: 0, a: 1
+			rendererType: Variables.RENDERER_TYPE_WEBGL
 		camera:
 			position: [ 0, 0, 0 ]
 			rotation: [ 0, 0, 0 ]
@@ -23,8 +25,14 @@ class Views
 	constructor: (@engine) ->
 		@viewports = db.get 'ui/viewports'
 		@initViewports()
+		@initListener()
 		@rendering = false
 		console.log @viewports
+
+	initListener:  ->
+		Eventbus.cameraChanged.add @onCameraChanged
+		Eventbus.windowResize.add @onWindowResize
+		return
 
 	initViewports: ->
 		for view in @viewports.models
@@ -35,6 +43,8 @@ class Views
 				'cameraScene'		: @createCamera view
 				'cameraSkybox' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
 				'domElement'		: $domElement.get 0
+				'renderer'			: @createRenderer view, $domElement
+			@updateViewSize view
 		return
 		
 	createCamera: (view) ->
@@ -50,45 +60,62 @@ class Views
 		cameraScene.rotation.set camera.rotation[0], camera.rotation[1], camera.rotation[2]
 		cameraScene
 	
-	render: (renderer, rendererType, scene, skyboxScene) ->
+	createRenderer: (view, $domElement) ->
+		switch view.get 'rendererType'
+			when Variables.RENDERER_TYPE_CANVAS
+				renderer = new THREE.CanvasRenderer
+					clearColor: 0xffffff
+			when Variables.RENDERER_TYPE_WEBGL
+				renderer = new EngineRenderer 
+					antialias: true
+				renderer.autoClear = false
+		$domElement.append renderer.domElement if renderer
+		renderer
+	
+	render: (scene, skyboxScene) ->
 		if (@rendering == false) 
 			@rendering = true
 			for view in @viewports.models
-					@cameraRender renderer, rendererType, scene, skyboxScene, view
+					@cameraRender view, scene, skyboxScene
 			@rendering = false
 		return
 
-	cameraRender : (renderer, rendererType, scene, skyboxScene, view) ->
-		size = view.get 'size'
-		left = Math.floor Variables.SCREEN_WIDTH * size.left
-		top = Math.floor Variables.SCREEN_HEIGHT * size.top
-		width = Math.floor Variables.SCREEN_WIDTH * size.width
-		height = Math.floor Variables.SCREEN_HEIGHT * size.height 
-		if rendererType is Variables.RENDERER_TYPE_WEBGL
-			renderer.setViewport left, top, width, height
-			renderer.setScissor left, top, width, height 
-			renderer.enableScissorTest  true 
-		aspect =  width / height
+	cameraRender : (view, scene, skyboxScene) ->
+		renderer = view.get 'renderer'
 		cameraScene = view.get 'cameraScene'
 		cameraSkybox = view.get 'cameraSkybox'
-		if cameraScene.aspect isnt aspect
-			cameraScene.aspect = aspect
-			cameraScene.updateProjectionMatrix()
-			cameraSkybox.aspect = cameraScene.aspect
-			cameraSkybox.updateProjectionMatrix()
 		cameraSkybox.rotation.copy cameraScene.rotation
 		renderer.render skyboxScene, cameraSkybox
 		renderer.render scene, cameraScene
 		return
 
-	resizeViews: ->
-		for view in @viewports.models
-			cameraScene = view.get 'cameraScene'
-			if cameraScene instanceof THREE.OrthographicCamera
-				cameraScene.left = Variables.SCREEN_WIDTH / - 2
-				cameraScene.right = Variables.SCREEN_WIDTH / 2
-				cameraScene.top = Variables.SCREEN_HEIGHT / 2
-				cameraScene.bottom = Variables.SCREEN_HEIGHT / - 2
+	onWindowResize: (withReRender) =>
+		# TODO: need refactoring
+		$viewport = $ '#viewport'
+		Variables.SCREEN_WIDTH = $viewport.width()
+		Variables.SCREEN_HEIGHT = $viewport.height()
+		@updateViewSize view for view in @viewports.models
+		@engine.render() if withReRender
+		return
+
+	updateViewSize: (view) ->
+		$domElement = $ view.get 'domElement'
+		renderer = view.get 'renderer'
+		cameraScene = view.get 'cameraScene'
+		cameraSkybox = view.get 'cameraSkybox'
+		width = $domElement.width()
+		height = $domElement.height()
+		renderer.setSize width, height
+		aspect =  width / height
+		if cameraScene.aspect isnt aspect
+			cameraScene.aspect = aspect
+			cameraScene.updateProjectionMatrix()
+			cameraSkybox.aspect = cameraScene.aspect
+			cameraSkybox.updateProjectionMatrix()
+		return
+
+	onCameraChanged: (view) =>
+		@cameraRender view, @engine.scenegraph.scene, @engine.scenegraph.skyboxScene
 		return
 			
 return Views
