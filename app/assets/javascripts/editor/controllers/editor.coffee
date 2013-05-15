@@ -27,7 +27,6 @@ class Editor extends ApplicationController
 	initialize: (options) ->
 		log.info 'Initialize editor...'
 		super options
-		@bindEvents()
 		
 	initEngine: ->
 		super()

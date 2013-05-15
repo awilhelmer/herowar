@@ -12,7 +12,7 @@ class RTSControls
 		@input = db.get 'input'
 		@initVariables()
 		@bindEvents()
-		@addInputListeners @view
+		@bindListeners()
 		return
 	
 	initVariables: ->
@@ -24,11 +24,15 @@ class RTSControls
 		return
 	
 	bindEvents: ->
-		events.on 'engine:render', @update, @
-		events.on 'scene:terrain:build', @changeTerrain, @
-		#@listenTo @input, 'mouse:wheel', @onMouseWheel
-	
-	onMouseWheel: (event) ->
+    events.on 'engine:render', @update, @
+    events.on 'scene:terrain:build', @changeTerrain, @
+
+  bindListeners: ->
+    domElement = @view.get 'domElement'
+    @registerInput domElement, 'mousewheel', @onMouseWheel
+    @registerInput domElement, 'DOMMouseScroll', @onMouseWheel
+				
+	onMouseWheel: (event) =>
 		return unless event or @view or @camera
 		delta = if event.wheelDelta then event.wheelDelta else if event.detail then -event.detail else 0
 		@changeZoom 0.1 if delta > 0
