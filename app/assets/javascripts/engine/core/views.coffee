@@ -45,7 +45,7 @@ class Views
 				'cameraSkybox' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
 				'domElement'		: $domElement.get 0
 				'renderer'			: @createRenderer view, $domElement
-			@updateViewSize view
+			view.updateSize()
 		return
 		
 	createCamera: (view) ->
@@ -95,46 +95,9 @@ class Views
 		$viewport = $ '#viewport'
 		Variables.SCREEN_WIDTH = $viewport.width()
 		Variables.SCREEN_HEIGHT = $viewport.height()
-		@updateViewSize view for view in @viewports.models
+		view.updateSize() for view in @viewports.models
 		@engine.render() if withReRender
 		return
-
-	updateViewSize: (view) ->
-		$domElement = $ view.get 'domElement'
-		renderer = view.get 'renderer'
-		camera = view.get 'camera'
-		cameraScene = view.get 'cameraScene'
-		cameraSkybox = view.get 'cameraSkybox'
-		width = $domElement.width()
-		height = $domElement.height()
-		renderer.setSize width, height
-		aspect =  width / height
-		if cameraScene instanceof THREE.OrthographicCamera and camera.size
-			@calculateOrthographicCameraPosition cameraScene, camera.size, camera.offset, aspect
-		cameraScene.aspect = aspect
-		cameraScene.updateProjectionMatrix()
-		cameraSkybox.aspect = cameraScene.aspect
-		cameraSkybox.updateProjectionMatrix()
-		return
-		
-	calculateOrthographicCameraPosition: (camera, size, offset, aspect) ->
-		offset = left: 0, height: 0 # TODO: Reset offset right now since its hard to calculate with it on new values (need validation)
-		aspectSize = size.width / size.height # aspect of terrain object
-		aspectReal = Math.max aspect, aspectSize # get highest aspect
-		if aspectReal > 1
-			height = Math.round size.height / aspectReal
-			camera.left = size.left
-			camera.right = size.left + size.width
-			camera.top = size.top + size.height 
-			camera.bottom = size.top + (size.height - height)
-		else
-			width = Math.round size.width / aspectReal
-			left = size.left + Math.round width / 2
-			camera.left = left
-			camera.right = left + width
-			camera.top = size.top + size.height
-			camera.bottom = size.top
-		console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom 
 
 	onCameraChanged: (view) =>
 		@cameraRender view, @engine.scenegraph.scene, @engine.scenegraph.skyboxScene
@@ -154,7 +117,7 @@ class Views
 				camera.offset = 
 					left: 0 
 					top: 0
-				@updateViewSize view
+				view.updateSize()
 		return
 			
 return Views
