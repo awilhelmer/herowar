@@ -1,6 +1,5 @@
 BaseController = require 'controllers/baseController'
 Variables = require 'variables'
-Input = require 'core/input'
 Scene = require 'core/scene'
 Engine = require 'engine'
 db = require 'database'
@@ -40,7 +39,6 @@ class ApplicationController extends BaseController
 		@engine.init()
 	
 	initCore: ->
-		@input = new Input @
 		@scene = new Scene @
 
 return ApplicationController
