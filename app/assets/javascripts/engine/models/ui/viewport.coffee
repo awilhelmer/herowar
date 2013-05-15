@@ -23,17 +23,23 @@ class Viewport extends Backbone.Model
 		aspectReal = Math.max aspect, aspectSize # get highest aspect
 		if aspectReal > 1
 			height = Math.round size.height / aspectReal
+			scrollable = size.height - height
+			offset.left = 0 if offset.left isnt 0
+			offset.top = scrollable if offset.top > scrollable
 			camera.left = size.left
 			camera.right = size.left + size.width
-			camera.top = size.top + size.height + offset.top
-			camera.bottom = size.top + (size.height - height)
+			camera.top = size.top + size.height - offset.top
+			camera.bottom = size.top + (size.height - height) - offset.top
 		else
 			width = Math.round size.width / aspectReal
 			left = size.left + Math.round(width / 2)
+			scrollable = size.width - width
+			offset.left = scrollable if offset.left > scrollable
+			offset.top = 0 if offset.top isnt 0
 			camera.left = left + offset.left
-			camera.right = left + width
+			camera.right = left + width + offset.left
 			camera.top = size.top + size.height
 			camera.bottom = size.top
-		console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom 
+		console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom, 'offset', offset
 
 return Viewport

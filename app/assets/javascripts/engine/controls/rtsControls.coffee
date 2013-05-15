@@ -78,9 +78,9 @@ class RTSControls
 		scrollDown = _.indexOf(@keysPressed, @KEY.DOWN) isnt -1
 		if scrollLeft or scrollUp or scrollRight or scrollDown
 			camera = @view.get 'camera'
-			camera.offset.left -= 1 if scrollLeft
+			camera.offset.left -= 1 if scrollLeft and camera.offset.left isnt 0
 			camera.offset.left += 1 if scrollRight
-			camera.offset.top -= 1 if scrollUp
+			camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
 			camera.offset.top += 1 if scrollDown
 			console.log 'Camera Offset', camera.offset
 			@view.updateSize()
