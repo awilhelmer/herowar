@@ -38,10 +38,8 @@ class Engine
 	render: ->
 		delta = @clock.getDelta()
 		@scenegraph.update delta
-		Eventbus.beforeRender.dispatch()
 		@views.render @scenegraph.scene, @scenegraph.skyboxScene
 		events.trigger 'engine:render', delta
-		Eventbus.afterRender.dispatch()
 		return
 		
 	animate: =>

@@ -37,11 +37,5 @@ class Editor extends ApplicationController
 		@input = new EditorInput @
 		@scene = new EditorScene @
 		@tools = new EditorTools @
-		
-	bindEvents: ->
-		EditorEventbus.render.add @render
-	
-	render: (resize) =>
-		if resize then @engine.onWindowResize true else	@engine.render()
 
 return Editor

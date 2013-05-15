@@ -15,7 +15,6 @@ class Input
 	
 	addEventListener: ->
 		log.debug 'Register input listeners'
-		window.addEventListener 'resize',  => Eventbus.windowResize.dispatch true
 		window.addEventListener 'keyup', (event) => @onKeyUp event
 		window.addEventListener 'keydown', (event) => @onKeyDown event
 		@editor.engine.main.get(0).addEventListener 'mouseup', (event) => @onMouseUp event

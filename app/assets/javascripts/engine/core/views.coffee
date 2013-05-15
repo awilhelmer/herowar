@@ -31,7 +31,7 @@ class Views
 
 	initListener:  ->
 		Eventbus.cameraChanged.add @onCameraChanged
-		Eventbus.windowResize.add @onWindowResize
+		window.addEventListener 'resize', => @onWindowResize true 
 		return
 
 	initViewports: ->

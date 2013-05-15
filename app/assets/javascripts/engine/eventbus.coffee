@@ -1,15 +1,4 @@
 eventbus = 
-	preloadComplete: new signals.Signal()
-	beforeRender: new signals.Signal()
-	afterRender: new signals.Signal()
-	rendererChanged: new signals.Signal()
-	sceneChanged: new signals.Signal()
 	controlsChanged: new signals.Signal()
-	objectAdded: new signals.Signal()
-	objectSelected: new signals.Signal()
-	objectChanged: new signals.Signal()
-	materialChanged: new signals.Signal()
-	clearColorChanged: new signals.Signal()
 	cameraChanged: new signals.Signal()
-	windowResize: new signals.Signal()
 return eventbus
