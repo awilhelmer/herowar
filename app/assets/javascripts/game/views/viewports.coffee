@@ -12,10 +12,10 @@ class ViewportsView extends BaseView
 	getTemplateData: ->
 		json = super()
 		for view in json
-			view.rotation_deg = []
-			view.rotation_deg.push Math.round view.rotation[0] * 180 / Math.PI
-			view.rotation_deg.push Math.round view.rotation[1] * 180 / Math.PI
-			view.rotation_deg.push Math.round view.rotation[2] * 180 / Math.PI
+			view.camera.rotation_deg = []
+			view.camera.rotation_deg.push Math.round (if view.camera.rotation then view.camera.rotation[0] else 0) * 180 / Math.PI
+			view.camera.rotation_deg.push Math.round (if view.camera.rotation then view.camera.rotation[1] else 0) * 180 / Math.PI
+			view.camera.rotation_deg.push Math.round (if view.camera.rotation then view.camera.rotation[2] else 0) * 180 / Math.PI
 		json
 	
 return ViewportsView

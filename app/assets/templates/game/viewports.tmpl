@@ -1,9 +1,10 @@
 {{#each []}}
 	<div>Viewport</div>
-	<div>Position X: {{position.[0]}}</div>
-	<div>Position Y: {{position.[1]}}</div>
-	<div>Position Z: {{position.[2]}}</div>
-	<div>Rotation X: {{rotation_deg.[0]}}&deg;</div>
-	<div>Rotation Y: {{rotation_deg.[1]}}&deg;</div>
-	<div>Rotation Z: {{rotation_deg.[2]}}&deg;</div>
+	<div>Zoom: {{camera.zoom}}</div>
+	<div>Position X: {{camera.position.[0]}}</div>
+	<div>Position Y: {{camera.position.[1]}}</div>
+	<div>Position Z: {{camera.position.[2]}}</div>
+	<div>Rotation X: {{camera.rotation_deg.[0]}}&deg;</div>
+	<div>Rotation Y: {{camera.rotation_deg.[1]}}&deg;</div>
+	<div>Rotation Z: {{camera.rotation_deg.[2]}}&deg;</div>
 {{/each}}

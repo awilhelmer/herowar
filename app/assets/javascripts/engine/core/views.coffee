@@ -5,113 +5,90 @@ db = require 'database'
 
 class Views
 
+	defaultProperties:
+		viewport: 
+			domId: 'body'
+			size: 
+				left: 0, top: 0, width: 1, height: 1
+			background: 
+				r: 0, g: 0, b: 0, a: 1
+		camera:
+			position: [ 0, 0, 0 ]
+			rotation: [ 0, 0, 0 ]
+			zoom: 1.0
+			fov: 75
+			near: 1
+			far: 10000
+
 	constructor: (@engine) ->
 		@viewports = db.get 'ui/viewports'
 		@initViewports()
 		@rendering = false
+		console.log @viewports
 
 	initViewports: ->
 		for view in @viewports.models
-			camera = @createView view
-			camera.position.set view.get('position')[0], view.get('position')[1], view.get('position')[2]
-			camera.rotation.set view.get('rotation')[0], view.get('rotation')[1], view.get('rotation')[2]
-			if camera instanceof THREE.PerspectiveCamera
-				camera.lookAt @engine.scenegraph.scene.position
-			else
-				camera.rotation.set -Math.PI/2, 0, 0
+			_.defaults view.attributes, @defaultProperties.viewport
+			_.defaults view.attributes.camera, @defaultProperties.camera
+			$domElement = $ view.get('domId')
 			view.set
-				'camera' 				: camera
-				'isUpdate' 			: _.isFunction view.get 'updateCamera'
-				'skyboxCamera' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
-			events.trigger 'controls:rts:view', view
+				'cameraScene'		: @createCamera view
+				'cameraSkybox' 	: new THREE.PerspectiveCamera 50, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 1000
+				'domElement'		: $domElement.get 0
 		return
 		
-	createView: (view) ->
+	createCamera: (view) ->
+		camera = view.get 'camera'
 		switch view.get 'type'
 			when Variables.VIEWPORT_TYPE_RTS 	
-				camera = new THREE.OrthographicCamera Variables.SCREEN_WIDTH / - 2, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2, Variables.SCREEN_HEIGHT / -2, 1, 10000
+				cameraScene = new THREE.OrthographicCamera Variables.SCREEN_WIDTH / - 2, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2, Variables.SCREEN_HEIGHT / -2, camera.near, camera.far
+				cameraScene.rotation.set -Math.PI/2, 0, 0
 			when Variables.VIEWPORT_TYPE_EDITOR
-				camera = new THREE.PerspectiveCamera view.get('fov'), Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, 1, 10000
-				#TODO we have only one control - for more we just need a control handler or an array
-				if @controls == undefined
-					@controls = new THREE.TrackballControls camera, @engine.main.get(0) 
-					@controls.rotateSpeed = 1.0
-					@controls.zoomSpeed = 1.2
-					@controls.panSpeed = 0.8
-					@controls.noZoom = false
-					@controls.noPan = false
-					@controls.noRotate = false
-					@controls.staticMoving = true
-					@controls.dynamicDampingFactor = 0.3 
-					@controls.enabled = true
-					@controls.controlLoopActive = false
-					#@controls.target.z = 0
-					@controls.addEventListener( 'change', =>
-						if (@engine.pause)
-							Eventbus.cameraChanged.dispatch view
-						null
-					) 
-					Eventbus.controlsChanged.add @onControlsChanged
-			else 
-				throw 'No camera type setted!'
-		camera
+				cameraScene = new THREE.PerspectiveCamera camera.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, camera.near, camera.far
+				cameraScene.lookAt @engine.scenegraph.scene.position
+		cameraScene.position.set camera.position[0], camera.position[1], camera.position[2]
+		cameraScene.rotation.set camera.rotation[0], camera.rotation[1], camera.rotation[2]
+		cameraScene
 	
 	render: (renderer, rendererType, scene, skyboxScene) ->
 		if (@rendering == false) 
 			@rendering = true
-			@controls.enable = false if @controls
 			for view in @viewports.models
 					@cameraRender renderer, rendererType, scene, skyboxScene, view
 			@rendering = false
-			@controls.enable = true if @controls
 		return
 
 	cameraRender : (renderer, rendererType, scene, skyboxScene, view) ->
-		@updateCamera view
-		if view.get 'isUpdate'
-			view.get('updateCamera')(view.get('camera'), scene)
-		left = Math.floor Variables.SCREEN_WIDTH * view.get('left') 
-		top = Math.floor Variables.SCREEN_HEIGHT * view.get('top')
-		width = Math.floor Variables.SCREEN_WIDTH * view.get('width')
-		height = Math.floor Variables.SCREEN_HEIGHT * view.get('height') 
+		size = view.get 'size'
+		left = Math.floor Variables.SCREEN_WIDTH * size.left
+		top = Math.floor Variables.SCREEN_HEIGHT * size.top
+		width = Math.floor Variables.SCREEN_WIDTH * size.width
+		height = Math.floor Variables.SCREEN_HEIGHT * size.height 
 		if rendererType is Variables.RENDERER_TYPE_WEBGL
 			renderer.setViewport left, top, width, height
 			renderer.setScissor left, top, width, height 
 			renderer.enableScissorTest  true 
 		aspect =  width / height
-		if view.get('camera').aspect isnt aspect
-			view.get('camera').aspect = aspect
-			view.get('camera').updateProjectionMatrix()
-			view.get('skyboxCamera').aspect = view.get('camera').aspect
-			view.get('skyboxCamera').updateProjectionMatrix()
-		view.get('skyboxCamera').rotation.copy view.get('camera').rotation
-		renderer.render skyboxScene, view.get('skyboxCamera')
-		renderer.render scene, view.get('camera')
-		return
-		
-	updateCamera: (view)  ->
-		switch view.get 'type'
-			when Variables.VIEWPORT_TYPE_RTS 	
-				null
-			when Variables.VIEWPORT_TYPE_EDITOR
-				if @controls and not @engine.pause
-					@controls.update()
-			else
-				console.log "No camera logic for #{view.get('type')} setted"
-		return
-
-	onControlsChanged: (event) =>
-		if (@controls)
-			@controls.update()
+		cameraScene = view.get 'cameraScene'
+		cameraSkybox = view.get 'cameraSkybox'
+		if cameraScene.aspect isnt aspect
+			cameraScene.aspect = aspect
+			cameraScene.updateProjectionMatrix()
+			cameraSkybox.aspect = cameraScene.aspect
+			cameraSkybox.updateProjectionMatrix()
+		cameraSkybox.rotation.copy cameraScene.rotation
+		renderer.render skyboxScene, cameraSkybox
+		renderer.render scene, cameraScene
 		return
 
 	resizeViews: ->
 		for view in @viewports.models
-			if view.get('camera') instanceof THREE.OrthographicCamera
-				view.get('camera').left = Variables.SCREEN_WIDTH / - 2
-				view.get('camera').right = Variables.SCREEN_WIDTH / 2
-				view.get('camera').top = Variables.SCREEN_HEIGHT / 2
-				view.get('camera').bottom = Variables.SCREEN_HEIGHT / - 2
+			cameraScene = view.get 'cameraScene'
+			if cameraScene instanceof THREE.OrthographicCamera
+				cameraScene.left = Variables.SCREEN_WIDTH / - 2
+				cameraScene.right = Variables.SCREEN_WIDTH / 2
+				cameraScene.top = Variables.SCREEN_HEIGHT / 2
+				cameraScene.bottom = Variables.SCREEN_HEIGHT / - 2
 		return
 			
 return Views

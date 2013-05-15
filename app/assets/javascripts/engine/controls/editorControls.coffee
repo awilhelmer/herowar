@@ -2,8 +2,8 @@ Eventbus = require 'eventbus'
 
 class EditorControls extends THREE.TrackballControls
 	
-	constructor: (@engine, @view, domElement) ->
-		super @view.get('camera'), domElement
+	constructor: (@engine, @view) ->
+		super @view.get('cameraScene'), @view.get('domElement')
 		@rotateSpeed = 1.0
 		@zoomSpeed = 1.2
 		@panSpeed = 0.8

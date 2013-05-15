@@ -18,17 +18,10 @@ class Editor extends ApplicationController
 		'views/modal'						: ''
 
 	viewports: [
-		left: 0,
-		top: 0,
-		width: 1.0,
-		height: 1.0,
-		background: { r: 0, g: 0, b: 0, a: 1 },
-		position: [ 300, 150, 300 ],
-		rotation: [ 0, 0, 0 ],
-		zoom: 1.0,
-		fov: 75,
 		domId: '#viewport',
-		type: Variables.VIEWPORT_TYPE_EDITOR		
+		type: Variables.VIEWPORT_TYPE_EDITOR
+		camera:
+			position: [ 300, 150, 300 ]	
 	]
 
 	initialize: (options) ->

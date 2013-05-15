@@ -11,16 +11,11 @@ class ApplicationController extends BaseController
 		'views/viewport' : ''
 
 	viewports: [
-		left: 0,
-		top: 0,
-		width: 1.0,
-		height: 1.0,
-		background: { r: 0, g: 0, b: 0, a: 1 },
-		position: [ 0, 350, 0 ],
-		rotation: [ -Math.PI/2, 0, 0 ],
-		zoom: 1.0,
 		domId: '#viewport',
-		type: Variables.VIEWPORT_TYPE_RTS
+		type: Variables.VIEWPORT_TYPE_RTS,
+		camera:
+			position: [ 0, 350, 0 ],
+			rotation: [ -Math.PI/2, 0, 0 ]
 	]
 
 	initialize: (options) ->

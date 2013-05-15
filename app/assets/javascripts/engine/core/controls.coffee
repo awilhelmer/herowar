@@ -20,7 +20,7 @@ class Controls
 				when Variables.VIEWPORT_TYPE_EDITOR
 					# TODO: refactor this ...
 					console.log 'Create EditorControls for', view
-					@controls.push new EditorControls @engine, view, @engine.main.get(0) 
+					@controls.push new EditorControls @engine, view
 					Eventbus.controlsChanged.add @onControlsChanged
 		return
 	
