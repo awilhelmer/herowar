@@ -25,7 +25,6 @@ class RTSControls
 	
 	bindEvents: ->
     events.on 'engine:render', @update, @
-    events.on 'scene:terrain:build', @changeTerrain, @
 
   bindListeners: ->
     domElement = @view.get 'domElement'
@@ -42,10 +41,6 @@ class RTSControls
 	changeZoom: (value) ->
 		@zoom += value
 		console.log 'RTSControls changeZoom()', value, 'to', @zoom
-		return
-
-	changeTerrain: (terrain) ->
-		console.log 'RTSControls changeTerrain()', terrain
 		return
 
 	update: ->

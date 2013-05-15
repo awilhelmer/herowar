@@ -32,6 +32,7 @@ class Views
 	initListener:  ->
 		Eventbus.cameraChanged.add @onCameraChanged
 		window.addEventListener 'resize', => @onWindowResize true 
+		events.on 'scene:terrain:build', @changeTerrain, @
 		return
 
 	initViewports: ->
@@ -116,6 +117,19 @@ class Views
 
 	onCameraChanged: (view) =>
 		@cameraRender view, @engine.scenegraph.scene, @engine.scenegraph.skyboxScene
+		return
+
+	changeTerrain: (terrain) ->
+		boundingBox = terrain.children[0].geometry.boundingBox
+		console.log 'Views changeTerrain() Size=', boundingBox.min.x, boundingBox.min.y, boundingBox.max.x, boundingBox.max.y
+		for view in @viewports.models
+			camera = view.get 'cameraScene'
+			if camera instanceof THREE.OrthographicCamera
+				camera.left = boundingBox.min.x
+				camera.right = boundingBox.max.x
+				camera.top = boundingBox.max.y
+				camera.bottom = boundingBox.min.y
+				camera.updateProjectionMatrix()
 		return
 			
 return Views
