@@ -19,8 +19,8 @@ class Viewport extends Backbone.Model
 		return
 		
 	calculateOrthographicCameraPosition: (camera, size, offset, aspect) ->
-		aspectSize = size.width / size.height # aspect of terrain object
-		aspectReal = Math.max aspect, aspectSize # get highest aspect
+		aspectSize = size.width / size.height
+		aspectReal = Math.max aspect, aspectSize
 		if aspectReal > 1
 			height = Math.round size.height / aspectReal
 			scrollable = size.height - height
@@ -31,6 +31,7 @@ class Viewport extends Backbone.Model
 			camera.top = size.top + size.height - offset.top
 			camera.bottom = size.top + (size.height - height) - offset.top
 		else
+			# TODO: here is something wrong, just make your browser higher than smaller ...
 			width = Math.round size.width / aspectReal
 			left = size.left + Math.round(width / 2)
 			scrollable = size.width - width
