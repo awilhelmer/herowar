@@ -34,7 +34,7 @@ class AddTowerTool extends AddObject
 		console.log "Mesh:", @tool.get 'currentObject'
 	
 	update: (position, intersect) ->
-		position.y = 10	# TODO: fix this hotfix (positive y values hide the tower...)
+		position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
 		console.log 'Update', position, intersect
 		super position, intersect		
 	
