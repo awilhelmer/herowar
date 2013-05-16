@@ -10,6 +10,7 @@ public class PacketType {
   // Client
   public static final Integer ClientInitPacket = 1;
   public static final Integer ClientPreloadUpdatePacket = 10;
+  public static final Integer ClientTowerRequestPacket = 80;
   // public static final Integer ClientRotationPacket = 2;
   // public static final Integer ClientShot1Packet = 5;
   // public static final Integer ClientInputKeyPacket = 6;
@@ -34,5 +35,6 @@ public class PacketType {
   // public static final Integer ChatMessagePacket = 70;
   public static final Integer WaveInitPacket = 60;
   public static final Integer WaveUpdatePacket = 61;
+  public static final Integer TowerBuildPacket = 81;
 
 }

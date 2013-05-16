@@ -8,12 +8,12 @@ import game.network.BasePacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
+import game.processor.models.Tower;
 import game.processor.plugin.GoldUpdatePlugin;
 import game.processor.plugin.PreloadUpdatePlugin;
 import game.processor.plugin.UnitUpdatePlugin;
 import game.processor.plugin.WaveUpdatePlugin;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
-import models.entity.game.Unit;
 
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
@@ -70,6 +69,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
    */
   private ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> playerCache = new ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>>();
 
+  /**
+   * The tower cache contains all placed towers on the map by any player.
+   */
+  private ConcurrentHashMap<Long, Tower> towerCache = new ConcurrentHashMap<Long, Tower>();
+
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId);
     this.gameId = gameId;
@@ -89,7 +93,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       clock = new GameClock();
     }
     Double delta = clock.getDelta();
-    //log.debug("Process " + getTopicName() + " with state " + state.toString() + " and players " + Arrays.toString(sessions.toArray()));
+    // log.debug("Process " + getTopicName() + " with state " + state.toString()
+    // + " and players " + Arrays.toString(sessions.toArray()));
     for (IPlugin plugin : plugins.get(state)) {
       plugin.process(delta);
     }
@@ -215,6 +220,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> getPlayerCache() {
     return playerCache;
+  }
+
+  public ConcurrentHashMap<Long, Tower> getTowerCache() {
+    return towerCache;
   }
 
   public Long getGameId() {
