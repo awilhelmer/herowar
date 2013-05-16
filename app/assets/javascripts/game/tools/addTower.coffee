@@ -22,7 +22,12 @@ class AddTowerTool extends AddObject
 		@onLoadGeometry data[0], data[1], data[2]
 
 	onBuildTower: (packet) ->
-		console.log 'Build Tower!!!!!!!!!!!', packet
+		console.log 'onBuildTower()', packet
+		name = "tower#{packet.towerId}"
+		data = db.data().geometries[name]
+		obj = @createThreeObject data[0], data[1], name, data[2]
+		obj.position.set packet.position.x, packet.position.y, packet.position.z
+		@app.engine.scenegraph.addStaticObject obj, packet.objectId
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')
@@ -40,7 +45,7 @@ class AddTowerTool extends AddObject
 	
 	update: (position, intersect) ->
 		position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
-		console.log 'Update', position, intersect
+		#console.log 'Update', position, intersect
 		super position, intersect		
 	
 return AddTowerTool
