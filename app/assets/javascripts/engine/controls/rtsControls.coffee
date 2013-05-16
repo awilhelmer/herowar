@@ -41,13 +41,49 @@ class RTSControls
 
   bindListeners: ->
     domElement = @view.get 'domElement'
+    @registerInput domElement, 'contextmenu', @onContextMenu
+    @registerInput domElement, 'mouseup', @onMouseUp
+    @registerInput domElement, 'mousedown', @onMouseDown
+    @registerInput domElement, 'mousemove', @onMouseMove
     @registerInput domElement, 'mousewheel', @onMouseWheel
     @registerInput domElement, 'DOMMouseScroll', @onMouseWheel
     @registerInput window, 'keydown', @onKeyDown
     @registerInput window, 'keyup', @onKeyUp
-				
+
+	onContextMenu: (event) =>
+		return unless event
+		event.preventDefault()
+		return
+
+	onMouseUp: (event) =>
+		return unless event
+		@input.set 'mouse_pressed_left', false if event.which is 1
+		@input.set 'mouse_pressed_middle', false if event.which is 2
+		@input.set 'mouse_pressed_right', false if event.which is 3
+		events.trigger 'mouse:up', event
+		@input.set 'mouse_moved', false unless @input.get('mouse_pressed_left') or @input.get('mouse_pressed_middle') or @input.get('mouse_pressed_right')
+		return
+		
+	onMouseDown: (event) =>
+		return unless event
+		@input.set 'mouse_pressed_left', true if event.which is 1
+		@input.set 'mouse_pressed_middle', true if event.which is 2
+		@input.set 'mouse_pressed_right', true if event.which is 3
+		@input.trigger 'mouse:down', event
+		@input.set 'mouse_moved', false
+		return
+
+	onMouseMove: (event) =>
+		return unless event
+		@input.set 
+			'mouse_position_x' : event.clientX
+			'mouse_position_y' : event.clientY
+			'mouse_moved'      : true
+		events.trigger 'mouse:move', event
+		return
+	
 	onMouseWheel: (event) =>
-		return unless event or @view or @camera
+		return unless event
 		delta = if event.wheelDelta then event.wheelDelta else if event.detail then -event.detail else 0
 		@changeZoom 0.1 if delta > 0
 		@changeZoom -0.1 if delta < 0
