@@ -1,6 +1,7 @@
 TowerRequestPacket = require 'network/packets/towerRequestPacket'
 PacketType = require 'network/packets/packetType'
 AddObject = require 'tools/addObject'
+Tower = require 'models/tower'
 events = require 'events'
 db = require 'database'
 
@@ -27,7 +28,8 @@ class AddTowerTool extends AddObject
 		data = db.data().geometries[name]
 		obj = @createThreeObject data[0], data[1], name, data[2]
 		obj.position.set packet.position.x, packet.position.y, packet.position.z
-		@app.engine.scenegraph.addStaticObject obj, packet.objectId
+		model = new Tower packet.objectId, name, obj
+		events.trigger 'add:dynamicObject', packet.objectId, model
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')
