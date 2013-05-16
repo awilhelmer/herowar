@@ -18,9 +18,6 @@ import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
 
-import com.ardor3d.math.MathUtils;
-import com.ardor3d.math.Matrix3;
-import com.ardor3d.math.Matrix4;
 import com.ardor3d.math.Quaternion;
 import com.ardor3d.math.type.ReadOnlyVector3;
 
@@ -84,7 +81,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       if (waypoint != null) {
         com.ardor3d.math.Vector3 vWaypoint = waypoint.getPosition().getArdorVector();
         double distance = position.distance(vWaypoint);
-        log.info(String.format("Distance %s", distance));
+        //log.info(String.format("Distance %s", distance));
         if (distance < 2) {
           log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);

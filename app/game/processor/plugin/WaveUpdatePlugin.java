@@ -15,7 +15,6 @@ import java.util.Set;
 
 import models.entity.game.Unit;
 import models.entity.game.Wave;
-import models.entity.game.Waypoint;
 import play.Logger;
 
 /**

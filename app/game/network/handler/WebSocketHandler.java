@@ -16,7 +16,6 @@ import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
-import play.db.jpa.Transactional;
 
 /**
  * The websocket handler controls every connection between server and clients.
