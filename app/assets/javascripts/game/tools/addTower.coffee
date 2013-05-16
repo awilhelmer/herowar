@@ -1,4 +1,5 @@
 TowerRequestPacket = require 'network/packets/towerRequestPacket'
+PacketType = require 'network/packets/packetType'
 AddObject = require 'tools/addObject'
 events = require 'events'
 db = require 'database'
@@ -9,6 +10,7 @@ class AddTowerTool extends AddObject
 	
 	bindEvents: ->
 		events.on 'select:tower', @onSelectTower, @
+		events.on "retrieve:packet:#{PacketType.SERVER_BUILD_TOWER}", @onBuildTower, @
 	
 	onSelectTower: (id) ->
 		name = "tower#{id}"
@@ -18,6 +20,9 @@ class AddTowerTool extends AddObject
 			'currentObjectId' 	: @internalId++
 			'currentObjectName'	: name
 		@onLoadGeometry data[0], data[1], data[2]
+
+	onBuildTower: (packet) ->
+		console.log 'Build Tower!!!!!!!!!!!', packet
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')

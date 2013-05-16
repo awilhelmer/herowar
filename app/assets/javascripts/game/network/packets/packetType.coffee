@@ -15,5 +15,6 @@ packetType =
 	SERVER_PRELOAD_DATA					: 50
 	SERVER_WAVE_INIT						: 60
 	SERVER_WAVE_UPDATE					: 61
+	SERVER_BUILD_TOWER					: 81
 
 return packetType
