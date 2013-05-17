@@ -4,6 +4,8 @@ class Tower extends AnimatedModel
 	
 	active: false
 	
+	range: 100
+	
 	meshRange: null
 	
 	update: (delta) ->
@@ -11,8 +13,8 @@ class Tower extends AnimatedModel
 
 	showRange: ->
 		unless @meshRange
-			resolution = 100
-			amplitude = 100
+			resolution = @range
+			amplitude = @range
 			size = 360 / resolution
 			geometry = new THREE.Geometry()
 			material = new THREE.LineBasicMaterial color: 0x000000, opacity: 1.0
