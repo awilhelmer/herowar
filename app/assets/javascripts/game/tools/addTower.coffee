@@ -29,6 +29,7 @@ class AddTowerTool extends AddObject
 		mesh = @createMesh data[0], data[1], name, data[2]
 		mesh.position.set packet.position.x, packet.position.y, packet.position.z
 		model = new Tower packet.objectId, name, mesh
+		model.active = true
 		events.trigger 'add:dynamicObject', packet.objectId, model
 
 	onLeaveTool: ->
