@@ -26,9 +26,9 @@ class AddTowerTool extends AddObject
 		console.log 'onBuildTower()', packet
 		name = "tower#{packet.towerId}"
 		data = db.data().geometries[name]
-		obj = @createThreeObject data[0], data[1], name, data[2]
-		obj.position.set packet.position.x, packet.position.y, packet.position.z
-		model = new Tower packet.objectId, name, obj
+		mesh = @createMesh data[0], data[1], name, data[2]
+		mesh.position.set packet.position.x, packet.position.y, packet.position.z
+		model = new Tower packet.objectId, name, mesh
 		events.trigger 'add:dynamicObject', packet.objectId, model
 
 	addMesh: ->

@@ -42,16 +42,20 @@ class AddObject extends SelectorTerrain
 		@addMesh()
 	
 	createThreeObject: (geometry, materials, name, json) ->
+		mesh = @createMesh geometry, materials, name, json
+		obj = new THREE.Object3D()
+		obj.name = mesh.name
+		obj.add mesh
+		return obj
+		
+	createMesh: (geometry, materials, name, json) ->
 		mesh = materialHelper.createMesh geometry, materials, name, json
 		if _.isObject json
 			mesh.scale.x = json.scale
 			mesh.scale.y = json.scale
 			mesh.scale.z = json.scale
 		mesh.geometry.computeBoundingBox()
-		obj = new THREE.Object3D()
-		obj.name = mesh.name
-		obj.add mesh
-		return obj
+		return mesh
 
 	addMesh: ->
 	
