@@ -30,6 +30,7 @@ class AddTowerTool extends AddObject
 		mesh.position.set packet.position.x, packet.position.y, packet.position.z
 		model = new Tower packet.objectId, name, mesh
 		model.active = true
+		model.showRange()
 		events.trigger 'add:dynamicObject', packet.objectId, model
 
 	onLeaveTool: ->
@@ -51,6 +52,7 @@ class AddTowerTool extends AddObject
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
 		model = new Tower @tool.get('currentObjectId'), name, mesh
+		model.showRange()
 		model.object3d.visible = false
 		@tool.set 'currentObject', model
 		@addMesh()
