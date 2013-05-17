@@ -27,8 +27,8 @@ class AddTowerTool extends AddObject
 		name = "tower#{packet.towerId}"
 		data = db.data().geometries[name]
 		mesh = @createMesh data[0], data[1], name, data[2]
-		mesh.position.set packet.position.x, packet.position.y, packet.position.z
 		model = new Tower packet.objectId, name, mesh
+		model.object3d.position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		model.showRange()
 		events.trigger 'add:dynamicObject', packet.objectId, model
