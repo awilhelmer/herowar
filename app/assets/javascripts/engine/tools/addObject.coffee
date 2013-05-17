@@ -22,8 +22,7 @@ class AddObject extends SelectorTerrain
 	onIntersect: ->
 
 	onNonIntersect: ->
-		if @tool.get('currentObject')?.visible
-			@tool.get('currentObject').visible = false
+		@tool.get('currentObject').visible = false if @tool.get('currentObject')?.visible
 
 	update: (position, intersect) ->
 		if @tool.get('currentObject')

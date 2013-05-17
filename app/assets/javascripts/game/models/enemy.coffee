@@ -1,5 +1,4 @@
 AnimatedModel = require 'models/animatedModel'
-events = require 'events'
 
 class Enemy extends AnimatedModel
 	
@@ -37,6 +36,6 @@ class Enemy extends AnimatedModel
 	_waypointReached: (waypoint) ->
 		console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
-		events.trigger 'remove:dynamicObject', @id if @waypoints.length is 0
+		@dispose() if @waypoints.length is 0
 
 return Enemy

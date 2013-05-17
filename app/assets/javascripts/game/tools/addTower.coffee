@@ -31,23 +31,42 @@ class AddTowerTool extends AddObject
 		model = new Tower packet.objectId, name, mesh
 		events.trigger 'add:dynamicObject', packet.objectId, model
 
+	onLeaveTool: ->
+		model = @tool.get 'currentObject'
+		if model
+			model.dispose()
+			@tool.unset 'currentObject'
+
 	addMesh: ->
-		mesh = @tool.get('currentObject')
-		@app.engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
+		model = @tool.get 'currentObject'
+		events.trigger 'add:dynamicObject', @tool.get('currentObjectId'), model
 
 	placeMesh: ->
-		console.log 'Place tower', @tool.get('currentObject').position
-		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').position # TODO: fix hardcoded tower id
-
-	# TODO: SHOULD BE REMOVED LATER ON !!!
+		console.log 'Place tower', @tool.get('currentObject').object3d.position
+		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').object3d.position # TODO: fix hardcoded tower id
 	
 	onLoadGeometry: (geometry, materials, json) =>
-		super geometry, materials, json
-		console.log "Mesh:", @tool.get 'currentObject'
-	
+		unless json
+			json = _.extend id: @tool.get('currentObjectId'), json 
+		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
+		model = new Tower @tool.get('currentObjectId'), name, mesh
+		model.object3d.visible = false
+		@tool.set 'currentObject', model
+		@addMesh()
+		console.log "Model:", model
+
+	onNonIntersect: ->
+		model = @tool.get 'currentObject'
+		model.object3d.visible = false if model.object3d.visible
+
 	update: (position, intersect) ->
-		position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
-		#console.log 'Update', position, intersect
-		super position, intersect		
+		model = @tool.get 'currentObject'
+		if model
+			position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
+			model.object3d.position = position
+			model.object3d.visible = true unless model.object3d.visible
+
+	onMouseUp: (event) ->
+		@placeMesh() if @tool.get('currentObject')?.object3d.visible and !@input.get('mouse_moved') if event.which is 1
 	
 return AddTowerTool
