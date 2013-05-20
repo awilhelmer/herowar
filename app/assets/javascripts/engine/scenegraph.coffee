@@ -1,13 +1,11 @@
 BaseModel = require 'models/basemodel'
 Variables = require 'variables'
 events = require 'events'
+db = require 'database'
 
-class SceneGraph
+sceneGraph =
 
-	constructor: (@engine) ->
-		@init()
-
-	init: ->
+	initialize: ->
 		@scene = new THREE.Scene()
 		@skyboxScene = new THREE.Scene()
 		@dynamicObjects = {}
@@ -79,7 +77,7 @@ class SceneGraph
 		@currentId++
 
 	addSkybox: (name) ->
-		cubeTexture = @engine.getData 'texturesCube', name
+		cubeTexture = db.data()['texturesCube'][name]
 		shader = THREE.ShaderLib['cube']
 		shader.uniforms['tCube'].value = cubeTexture
 		skyboxMaterial = new THREE.ShaderMaterial
@@ -104,4 +102,4 @@ class SceneGraph
 		console.log 'onRemoveDynamicObject', id
 		@removeDynObject id
 
-return SceneGraph
+return sceneGraph

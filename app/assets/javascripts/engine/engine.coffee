@@ -1,26 +1,22 @@
 Variables = require 'variables'
-SceneGraph = require 'scenegraph'
+sceneGraph = require 'scenegraph'
 Eventbus = require 'eventbus'
 Controls = require 'core/controls'
 Views = require 'core/views'
 events = require 'events'
 
-class Engine 
-
-	constructor: (@opts) ->
-		@opts = @opts || {}
-		@main = @opts.container
-		@main = $ '#main' unless @main
-		@data = @opts.data || {}
+engine = 
 
 	init: ->
 		console.log 'Engine starting...'
-		position = @main.position()
+		viewport = $ '#viewport'
+		position = viewport.position()
 		Variables.SCREEN_TOP = position.top
 		Variables.SCREEN_LEFT = position.left
-		Variables.SCREEN_WIDTH = @main.width()
-		Variables.SCREEN_HEIGHT = @main.height()
-		@scenegraph = new SceneGraph @
+		Variables.SCREEN_WIDTH = viewport.width()
+		Variables.SCREEN_HEIGHT = viewport.height()
+		@scenegraph = sceneGraph
+		@scenegraph.initialize()
 		@views = new Views @
 		@controls = new Controls @
 		@clock = new THREE.Clock()
@@ -29,10 +25,9 @@ class Engine
 		return
 		
 	start: ->
-		if (@main == undefined)
-			@init()
+		@init()
 		console.log "Starting main loop..."
-		@animate()
+		_animate()
 		return
 
 	render: ->
@@ -42,16 +37,12 @@ class Engine
 		events.trigger 'engine:render', delta
 		return
 		
-	animate: =>
-		unless @pause
-			@render()
-			requestAnimationFrame(@animate)
-		else
-			console.log 'Main Loop stopped ...'
-		return
+_animate = ->
+	unless engine.pause
+		engine.render()
+		requestAnimationFrame(_animate)
+	else
+		console.log 'Main Loop stopped ...'
+	return
 
-	getData: (type, name) ->
-		throw "Data of type #{type} with name #{name} not found" unless type of @data and name of @data[type]
-		@data[type][name]
-
-return Engine
+return engine

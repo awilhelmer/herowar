@@ -9,7 +9,9 @@ class Tower extends AnimatedModel
 	meshRange: null
 	
 	update: (delta) ->
-		super delta if @active
+		if @active
+			
+			super delta
 
 	showRange: ->
 		unless @meshRange
