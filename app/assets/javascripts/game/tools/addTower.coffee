@@ -1,9 +1,9 @@
 TowerRequestPacket = require 'network/packets/towerRequestPacket'
 PacketType = require 'network/packets/packetType'
 AddObject = require 'tools/addObject'
+scenegraph = require 'scenegraph'
 Tower = require 'models/tower'
 events = require 'events'
-engine = require 'engine'
 db = require 'database'
 
 class AddTowerTool extends AddObject
@@ -32,7 +32,7 @@ class AddTowerTool extends AddObject
 		model.object3d.position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		model.showRange()
-		engine.scenegraph.addDynObject model, packet.objectId
+		scenegraph.addDynObject model, packet.objectId
 
 	onLeaveTool: ->
 		model = @tool.get 'currentObject'
@@ -42,10 +42,10 @@ class AddTowerTool extends AddObject
 
 	addMesh: ->
 		model = @tool.get 'currentObject'
-		engine.scenegraph.addDynObject model, @tool.get 'currentObjectId'
+		scenegraph.addDynObject model, @tool.get 'currentObjectId'
 
 	placeMesh: ->
-		console.log 'Place tower', @tool.get('currentObject').object3d.position
+		console.log 'Place tower', @tool.get('currentObject').object3d
 		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').object3d.position # TODO: fix hardcoded tower id
 	
 	onLoadGeometry: (geometry, materials, json) =>

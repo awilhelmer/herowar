@@ -1,6 +1,7 @@
 EditorEventbus = require 'editorEventbus'
 materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
+scenegraph = require 'scenegraph'
 engine = require 'engine'
 db = require 'database'
 
@@ -26,7 +27,7 @@ class SelectorObject
 	
 	update: ->
 		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
-		objects = @intersectHelper.mouseIntersects engine.scenegraph.scene.children
+		objects = @intersectHelper.mouseIntersects scenegraph.scene.children
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
 			if @objectHelper.isTerrain obj
@@ -55,7 +56,7 @@ class SelectorObject
 		if @selectedObject and @selectedType isnt 'terrain'
 			@removeSelectionWireframe @selectedObject, @selectedType
 		if @selectedType isnt 'terrain'
-			@selectedObject = engine.scenegraph.getMap()
+			@selectedObject = scenegraph.getMap()
 			@selectedType = 'terrain'
 			@addSelectionWireframe @selectedObject, @selectedType
 			engine.render()
@@ -77,16 +78,16 @@ class SelectorObject
 	
 	materialUpdate: (idMapper) =>
 		if idMapper
-			mesh = @objectHelper.getModel engine.scenegraph.getMap()
+			mesh = @objectHelper.getModel scenegraph.getMap()
 			matIndex = materialHelper.updateMaterial mesh, idMapper
 			if matIndex > -1 and mesh.material.materials[matIndex].map and mesh.material.materials[matIndex].map.needsUpdate
-				engine.scenegraph.getMap().remove mesh
+				scenegraph.getMap().remove mesh
 				engine.render()
 				mesh.geometry.geometryGroups = undefined
 				mesh.geometry.geometryGroupsList = undefined
 				mesh.__webglInit = false
 				mesh.__webglActive = false			
-				engine.scenegraph.getMap().add mesh
+				scenegraph.getMap().add mesh
 			engine.render()
 		null
 

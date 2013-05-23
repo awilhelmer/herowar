@@ -1,5 +1,4 @@
 EditorEventbus = require 'editorEventbus'
-engine = require 'engine'
 
 class ObjectHelper
 	
@@ -65,9 +64,10 @@ class ObjectHelper
 		mesh
 	
 	isTerrain: (obj) ->
-		if _.isUndefined obj or _.isUndefined engine.scenegraph.map then return false
+		scenegraph = require 'scenegraph'
+		if _.isUndefined obj or _.isUndefined scenegraph.map then return false
 		obj = @getBaseObject obj unless obj.parent instanceof THREE.Scene
-		engine.scenegraph.map.id is obj.id
+		scenegraph.map.id is obj.id
 
 #For updating all geometry data ...
 	refreshWireframe: (obj) =>

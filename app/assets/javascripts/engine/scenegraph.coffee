@@ -28,6 +28,7 @@ sceneGraph =
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
 			@scene.add object.object3d
+			console.log 'addStaticObject()', object.object3d, 'to', @scene
 
 	removeDynObject: (id) ->
 		if @dynamicObjects.hasOwnProperty id
@@ -41,6 +42,7 @@ sceneGraph =
 		obj.userData.dbId = id
 		@staticObjects[id].push obj
 		@scene.add obj
+		console.log 'addStaticObject()', obj, 'to', @scene
 	
 	getStaticObject: (id, index) ->
 		@staticObjects[id][index]

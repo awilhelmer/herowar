@@ -4,6 +4,7 @@ Material = require 'models/material'
 Waypoint = require 'models/waypoint'
 Texture = require 'models/texture'
 Path = require 'models/path'
+scenegraph = require 'scenegraph'
 Wave = require 'models/wave'
 events = require 'events'
 engine = require 'engine'
@@ -27,7 +28,7 @@ class Scene
 		
 	reset: =>
 		@createTerrainMaterial()
-		engine.scenegraph.addSkybox @world.get 'skybox'
+		scenegraph.addSkybox @world.get 'skybox'
 		@buildTerrain()
 
 	createTerrainMaterial: ->
@@ -49,7 +50,7 @@ class Scene
 		if !map and @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()
 			map.children[0].geometry.computeBoundingBox()
-			engine.scenegraph.setMap map
+			scenegraph.setMap map
 			events.trigger 'scene:terrain:build', map
 		if !map
 			throw 'Map is undefined'
@@ -74,14 +75,14 @@ class Scene
 		if @world.attributes.staticGeometries
 			mesh = null
 			for instance in @world.attributes.objects
-				unless engine.scenegraph.hasStaticObject instance.geoId 
+				unless scenegraph.hasStaticObject instance.geoId 
 					for staticMesh in @world.attributes.staticGeometries
 						if staticMesh.userData.id is instance.geoId
 							mesh = staticMesh
 							mesh.name = instance.name
 							break
 				else
-					mesh = engine.scenegraph.staticObjects[instance.geoId][0]
+					mesh = scenegraph.staticObjects[instance.geoId][0]
 					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
 				#add position to mesh ... 
 				if mesh
@@ -89,8 +90,8 @@ class Scene
 					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
 					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
 					mesh.userData.meshId = instance.id
-					engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
-					id = engine.scenegraph.getNextId()
+					scenegraph.addStaticObject mesh, mesh.userData.dbId
+					id = scenegraph.getNextId()
 					environmentsStatic = db.get 'environmentsStatic'
 					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
 		engine.render()

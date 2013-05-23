@@ -1,6 +1,6 @@
 SelectorTerrain = require 'tools/selectorTerrain'
 materialHelper = require 'helper/materialHelper'
-engine = require 'engine'
+scenegraph = require 'scenegraph'
 db = require 'database'
 
 class AddObject extends SelectorTerrain
@@ -15,7 +15,7 @@ class AddObject extends SelectorTerrain
 
 	onLeaveTool: ->
 		if @tool.get('currentObject')
-			engine.scenegraph.scene.remove @tool.get('currentObject')
+			scenegraph.scene.remove @tool.get('currentObject')
 			for child in @tool.get('currentObject').children
 				child.geometry.dispose() # TODO: is this enough clean up ?!?
 			@tool.unset 'currentObject'

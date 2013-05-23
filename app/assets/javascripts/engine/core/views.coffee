@@ -1,4 +1,5 @@
 EngineRenderer = require 'enginerenderer'
+scenegraph = require 'scenegraph'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 events = require 'events'
@@ -57,7 +58,7 @@ class Views
 				cameraScene.rotation.set -Math.PI/2, 0, 0
 			when Variables.VIEWPORT_TYPE_EDITOR
 				cameraScene = new THREE.PerspectiveCamera camera.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, camera.near, camera.far
-				cameraScene.lookAt engine.scenegraph.scene.position
+				cameraScene.lookAt scenegraph.scene.position
 		cameraScene.position.set camera.position[0], camera.position[1], camera.position[2]
 		cameraScene.rotation.set camera.rotation[0], camera.rotation[1], camera.rotation[2]
 		cameraScene
@@ -101,7 +102,7 @@ class Views
 		return
 
 	onCameraChanged: (view) =>
-		@cameraRender view, engine.scenegraph.scene, engine.scenegraph.skyboxScene
+		@cameraRender view, scenegraph.scene, scenegraph.skyboxScene
 		return
 
 	changeTerrain: (terrain) ->

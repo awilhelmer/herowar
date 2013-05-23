@@ -1,4 +1,5 @@
 SelectorTerrain = require 'tools/selectorTerrain'
+scenegraph = require 'scenegraph'
 engine = require 'engine'
 
 class SelectorPlane extends SelectorTerrain
@@ -39,11 +40,11 @@ class SelectorPlane extends SelectorTerrain
 
 	addSel: ->
 		@isVisible = true
-		engine.scenegraph.scene.add @selector
+		scenegraph.scene.add @selector
 
 	removeSel: ->
 		@isVisible = false
-		engine.scenegraph.scene.remove @selector
+		scenegraph.scene.remove @selector
 		engine.render()
 
 return SelectorPlane

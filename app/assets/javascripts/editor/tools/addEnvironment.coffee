@@ -30,30 +30,33 @@ class AddEnvironment extends AddObject
 		engine.render()
 
 	onSelectItem: (id, value, name) =>
+		scenegraph = require 'scenegraph'
 		if id is 'sidebar-environment-geometries-list' and @tool.get('currentObjectId') isnt value
 			log.debug 'Set Tool Build'
 			@tool.set
 				'active'					: Constants.TOOL_BUILD
 				'currentObjectId' 	: value
 				'currentObjectName'	: name
-			unless engine.scenegraph.hasStaticObject @tool.get 'currentObjectId'
+			unless scenegraph.hasStaticObject @tool.get 'currentObjectId'
 				log.debug "Loading Geometry from Server ... "
 				now = new Date()
 				@loader.load "/api/game/geometry/env/#{@tool.get('currentObjectId')}", @onLoadGeometry, 'assets/images/game/textures'
 				log.debug "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
 			else
-				mesh = engine.scenegraph.staticObjects[@tool.get('currentObjectId')][0]
+				mesh = scenegraph.staticObjects[@tool.get('currentObjectId')][0]
 				@onLoadGeometry mesh.geometry, mesh.material.materials
 
 	changeStaticObject: (backboneModel) =>
-		mesh = engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
+		scenegraph = require 'scenegraph'
+		mesh = scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
 		attributes = _.pick _.clone(backboneModel.attributes), 'position', 'scale', 'rotation'
 		_.extend mesh, attributes
 		engine.render()
 
 	addMesh: ->
+		scenegraph = require 'scenegraph'
 		mesh = @tool.get('currentObject')
-		engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
+		scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
 		engine.render()
 
 	createModelFromMesh: (id, mesh) ->
@@ -79,7 +82,8 @@ class AddEnvironment extends AddObject
 		env
 	
 	placeMesh: ->
-		id = engine.scenegraph.getNextId()
+		scenegraph = require 'scenegraph'
+		id = scenegraph.getNextId()
 		environmentsStatic = db.get 'environmentsStatic'
 		envModel = @createModelFromMesh id, @tool.get('currentObject')
 		environmentsStatic.add envModel

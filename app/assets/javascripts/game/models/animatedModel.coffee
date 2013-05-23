@@ -1,4 +1,5 @@
 BaseModel = require 'models/basemodel'
+scenegraph = require 'scenegraph'
 
 class AnimatedModel extends BaseModel
 
@@ -38,7 +39,6 @@ class AnimatedModel extends BaseModel
 		@activeAnimation = name
 
 	dispose: ->
-		engine = require 'engine'
-		engine.scenegraph.removeDynObject @id
+		scenegraph.removeDynObject @id
 
 return AnimatedModel

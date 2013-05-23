@@ -56,17 +56,18 @@ class BrushMaterial extends SelectorPlane
 		super()
 
 	handleBrush: (intersect) ->
+		scenegraph = require 'scenegraph'
 		object = intersect.object
 		faceIndex = intersect.faceIndex
 		baseObject = @selectorObject.objectHelper.getBaseObject object
-		if baseObject is engine.scenegraph.map and @selectedMatId
+		if baseObject is scenegraph.map and @selectedMatId
 			newIndex = materialHelper.getThreeMaterialId object, @selectedMatId
 			for face in intersect.faces
 				oldIndex = face.materialIndex
 				if oldIndex isnt newIndex 
 					face.materialIndex = newIndex
 					unless update
-						scene = engine.scenegraph.scene
+						scene = scenegraph.scene
 						baseObject.remove object
 						engine.render()
 						object.geometry.geometryGroups = undefined

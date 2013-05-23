@@ -1,5 +1,5 @@
 Variables = require 'variables'
-sceneGraph = require 'scenegraph'
+scenegraph = require 'scenegraph'
 Eventbus = require 'eventbus'
 events = require 'events'
 
@@ -17,8 +17,7 @@ engine =
 			Variables.SCREEN_LEFT = position.left
 			Variables.SCREEN_WIDTH = viewport.width()
 			Variables.SCREEN_HEIGHT = viewport.height()
-			@scenegraph = sceneGraph
-			@scenegraph.initialize()
+			scenegraph.initialize()
 			Views = require 'core/views'
 			@views = new Views()
 			Controls = require 'core/controls'
@@ -36,8 +35,8 @@ engine =
 
 	render: ->
 		delta = @clock.getDelta()
-		@scenegraph.update delta
-		@views.render @scenegraph.scene, @scenegraph.skyboxScene
+		scenegraph.update delta
+		@views.render scenegraph.scene, scenegraph.skyboxScene
 		events.trigger 'engine:render', delta
 		return
 		
