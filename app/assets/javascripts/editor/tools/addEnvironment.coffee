@@ -4,13 +4,14 @@ JSONLoader = require 'util/threeloader'
 Constants = require 'constants'
 log = require 'util/logger'
 AddObject = require 'tools/addObject'
+engine = require 'engine'
 db = require 'database'
 
 class AddEnvironment extends AddObject
 
-	constructor: (@editor, @intersectHelper) ->
+	constructor: (@intersectHelper) ->
 		@loader = new JSONLoader()
-		super @editor, @intersectHelper
+		super @intersectHelper
 	
 	bindEvents: ->
 		EditorEventbus.listSelectItem.add @onSelectItem
@@ -18,15 +19,15 @@ class AddEnvironment extends AddObject
 
 	onLeaveTool: ->
 		super()
-		@editor.engine.render()
+		engine.render()
 
 	onNonIntersect: ->
 		super()
-		@editor.engine.render()
+		engine.render()
 
 	update: (position, intersect) ->
 		super position, intersect
-		@editor.engine.render()
+		engine.render()
 
 	onSelectItem: (id, value, name) =>
 		if id is 'sidebar-environment-geometries-list' and @tool.get('currentObjectId') isnt value
@@ -35,25 +36,25 @@ class AddEnvironment extends AddObject
 				'active'					: Constants.TOOL_BUILD
 				'currentObjectId' 	: value
 				'currentObjectName'	: name
-			unless @editor.engine.scenegraph.hasStaticObject @tool.get 'currentObjectId'
+			unless engine.scenegraph.hasStaticObject @tool.get 'currentObjectId'
 				log.debug "Loading Geometry from Server ... "
 				now = new Date()
 				@loader.load "/api/game/geometry/env/#{@tool.get('currentObjectId')}", @onLoadGeometry, 'assets/images/game/textures'
 				log.debug "Loading Geometry from Server completed, time  #{new Date().getTime() - now.getTime()} ms"
 			else
-				mesh = @editor.engine.scenegraph.staticObjects[@tool.get('currentObjectId')][0]
+				mesh = engine.scenegraph.staticObjects[@tool.get('currentObjectId')][0]
 				@onLoadGeometry mesh.geometry, mesh.material.materials
 
 	changeStaticObject: (backboneModel) =>
-		mesh = @editor.engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
+		mesh = engine.scenegraph.getStaticObject backboneModel.get('dbId'), backboneModel.get('listIndex')
 		attributes = _.pick _.clone(backboneModel.attributes), 'position', 'scale', 'rotation'
 		_.extend mesh, attributes
-		@editor.engine.render()
+		engine.render()
 
 	addMesh: ->
 		mesh = @tool.get('currentObject')
-		@editor.engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
-		@editor.engine.render()
+		engine.scenegraph.addStaticObject mesh, @tool.get('currentObjectId')
+		engine.render()
 
 	createModelFromMesh: (id, mesh) ->
 		env = new Environment()
@@ -78,7 +79,7 @@ class AddEnvironment extends AddObject
 		env
 	
 	placeMesh: ->
-		id = @editor.engine.scenegraph.getNextId()
+		id = engine.scenegraph.getNextId()
 		environmentsStatic = db.get 'environmentsStatic'
 		envModel = @createModelFromMesh id, @tool.get('currentObject')
 		environmentsStatic.add envModel

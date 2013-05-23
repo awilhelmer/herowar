@@ -14,13 +14,13 @@ class EditorTools extends Tools
 
 	createHelpers: ->
 		@objectHelper = new ObjectHelper()
-		@pathingHelper = new PathingHelper @app
+		@pathingHelper = new PathingHelper()
 		super()
 
 	createTools: ->
-		@addEnvironment = new AddEnvironment @app, @intersectHelper
-		@addWaypoint = new AddWaypoint @app, @intersectHelper
-		@selectorObject = new SelectorObject @app, @objectHelper, @intersectHelper
-		@brushMaterial = new BrushMaterial @app, @intersectHelper, @selectorObject	
+		@addEnvironment = new AddEnvironment  @intersectHelper
+		@addWaypoint = new AddWaypoint @intersectHelper
+		@selectorObject = new SelectorObject @objectHelper, @intersectHelper
+		@brushMaterial = new BrushMaterial @intersectHelper, @selectorObject	
 
 return EditorTools

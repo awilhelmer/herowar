@@ -6,7 +6,7 @@ db = require 'database'
 
 class Controls
 	
-	constructor: (@engine) ->
+	constructor: ->
 		@controls = []
 		@initialize()
 
@@ -20,7 +20,7 @@ class Controls
 				when Variables.VIEWPORT_TYPE_EDITOR
 					# TODO: refactor this ...
 					console.log 'Create EditorControls for', view
-					@controls.push new EditorControls @engine, view
+					@controls.push new EditorControls view
 					Eventbus.controlsChanged.add @onControlsChanged
 		return
 	

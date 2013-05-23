@@ -1,8 +1,9 @@
 Eventbus = require 'eventbus'
+engine = require 'engine'
 
 class EditorControls extends THREE.TrackballControls
 	
-	constructor: (@engine, @view) ->
+	constructor: (@view) ->
 		super @view.get('cameraScene'), @view.get('domElement')
 		@rotateSpeed = 1.0
 		@zoomSpeed = 1.2
@@ -15,7 +16,7 @@ class EditorControls extends THREE.TrackballControls
 		@enabled = true
 		@controlLoopActive = false
 		@addEventListener( 'change', =>
-			if (@engine.pause)
+			if (engine.pause)
 				Eventbus.cameraChanged.dispatch view
 			null
 		)

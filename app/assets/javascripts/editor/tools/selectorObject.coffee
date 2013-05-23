@@ -1,11 +1,12 @@
 EditorEventbus = require 'editorEventbus'
 materialHelper = require 'helper/materialHelper'
 Variables = require 'variables'
+engine = require 'engine'
 db = require 'database'
 
 class SelectorObject
 
-	constructor: (@editor, @objectHelper, @intersectHelper) ->
+	constructor: (@objectHelper, @intersectHelper) ->
 		@input = db.get 'input'
 		@tool = db.get 'ui/tool'
 		@world = db.get 'world'
@@ -25,7 +26,7 @@ class SelectorObject
 	
 	update: ->
 		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
-		objects = @intersectHelper.mouseIntersects @editor.engine.scenegraph.scene.children
+		objects = @intersectHelper.mouseIntersects engine.scenegraph.scene.children
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
 			if @objectHelper.isTerrain obj
@@ -42,22 +43,22 @@ class SelectorObject
 			@selectedType = 'world'
 			@selectedObject = null
 			EditorEventbus.dispatch 'selectWorldViewport'
-		@editor.engine.render()
+		engine.render()
 
 	selectWorld: =>
 		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
 		@selectedType = 'world'
 		@selectedObject = null
-		@editor.engine.render()
+		engine.render()
 
 	selectTerrain: =>
 		if @selectedObject and @selectedType isnt 'terrain'
 			@removeSelectionWireframe @selectedObject, @selectedType
 		if @selectedType isnt 'terrain'
-			@selectedObject = @editor.engine.scenegraph.getMap()
+			@selectedObject = engine.scenegraph.getMap()
 			@selectedType = 'terrain'
 			@addSelectionWireframe @selectedObject, @selectedType
-			@editor.engine.render()
+			engine.render()
 
 	selectObject: =>
 		# TODO: implement this ...
@@ -76,17 +77,17 @@ class SelectorObject
 	
 	materialUpdate: (idMapper) =>
 		if idMapper
-			mesh = @objectHelper.getModel @editor.engine.scenegraph.getMap()
+			mesh = @objectHelper.getModel engine.scenegraph.getMap()
 			matIndex = materialHelper.updateMaterial mesh, idMapper
 			if matIndex > -1 and mesh.material.materials[matIndex].map and mesh.material.materials[matIndex].map.needsUpdate
-				@editor.engine.scenegraph.getMap().remove mesh
-				@editor.engine.render()
+				engine.scenegraph.getMap().remove mesh
+				engine.render()
 				mesh.geometry.geometryGroups = undefined
 				mesh.geometry.geometryGroupsList = undefined
 				mesh.__webglInit = false
 				mesh.__webglActive = false			
-				@editor.engine.scenegraph.getMap().add mesh
-			@editor.engine.render()
+				engine.scenegraph.getMap().add mesh
+			engine.render()
 		null
 
 return SelectorObject

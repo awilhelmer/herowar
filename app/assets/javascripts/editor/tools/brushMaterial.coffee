@@ -4,12 +4,13 @@ EditorEventbus = require 'editorEventbus'
 Variables = require 'variables'
 Constants = require 'constants'
 log = require 'util/logger'
+engine = require 'engine'
 db = require 'database'
 
 class BrushMaterial extends SelectorPlane
 	
-	constructor: (@editor, @intersectHelper, @selectorObject) ->
-		super @editor, @intersectHelper
+	constructor: (@intersectHelper, @selectorObject) ->
+		super  @intersectHelper
 		
 	initialize: ->
 		@input = db.get 'input'
@@ -58,16 +59,16 @@ class BrushMaterial extends SelectorPlane
 		object = intersect.object
 		faceIndex = intersect.faceIndex
 		baseObject = @selectorObject.objectHelper.getBaseObject object
-		if baseObject is @editor.engine.scenegraph.map and @selectedMatId
+		if baseObject is engine.scenegraph.map and @selectedMatId
 			newIndex = materialHelper.getThreeMaterialId object, @selectedMatId
 			for face in intersect.faces
 				oldIndex = face.materialIndex
 				if oldIndex isnt newIndex 
 					face.materialIndex = newIndex
 					unless update
-						scene = @editor.engine.scenegraph.scene
+						scene = engine.scenegraph.scene
 						baseObject.remove object
-						@editor.engine.render()
+						engine.render()
 						object.geometry.geometryGroups = undefined
 						object.geometry.geometryGroupsList = undefined
 						object.__webglInit = false #hack

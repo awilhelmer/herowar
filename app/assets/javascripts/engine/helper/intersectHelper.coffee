@@ -3,7 +3,7 @@ db = require 'database'
 
 class IntersectHelper extends THREE.Raycaster
 
-	constructor: (@app) ->
+	constructor: ->
 		@input = db.get 'input'
 		super()
 		@viewports = db.get 'ui/viewports'

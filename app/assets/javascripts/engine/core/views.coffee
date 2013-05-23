@@ -2,6 +2,7 @@ EngineRenderer = require 'enginerenderer'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class Views
@@ -22,7 +23,7 @@ class Views
 			near: 1
 			far: 10000
 
-	constructor: (@engine) ->
+	constructor: ->
 		@viewports = db.get 'ui/viewports'
 		@initViewports()
 		@initListener()
@@ -56,7 +57,7 @@ class Views
 				cameraScene.rotation.set -Math.PI/2, 0, 0
 			when Variables.VIEWPORT_TYPE_EDITOR
 				cameraScene = new THREE.PerspectiveCamera camera.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, camera.near, camera.far
-				cameraScene.lookAt @engine.scenegraph.scene.position
+				cameraScene.lookAt engine.scenegraph.scene.position
 		cameraScene.position.set camera.position[0], camera.position[1], camera.position[2]
 		cameraScene.rotation.set camera.rotation[0], camera.rotation[1], camera.rotation[2]
 		cameraScene
@@ -96,11 +97,11 @@ class Views
 		Variables.SCREEN_WIDTH = $viewport.width()
 		Variables.SCREEN_HEIGHT = $viewport.height()
 		view.updateSize() for view in @viewports.models
-		@engine.render() if withReRender
+		engine.render() if withReRender
 		return
 
 	onCameraChanged: (view) =>
-		@cameraRender view, @engine.scenegraph.scene, @engine.scenegraph.skyboxScene
+		@cameraRender view, engine.scenegraph.scene, engine.scenegraph.skyboxScene
 		return
 
 	changeTerrain: (terrain) ->

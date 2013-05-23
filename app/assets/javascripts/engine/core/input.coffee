@@ -2,11 +2,12 @@ Eventbus = require 'eventbus'
 Variables = require 'variables'
 log = require 'util/logger'
 events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class Input
 
-	constructor: (@editor) ->
+	constructor: ->
 		@model = db.get 'input'
 		@initialize()
 		@addEventListener()
@@ -17,14 +18,14 @@ class Input
 		log.debug 'Register input listeners'
 		window.addEventListener 'keyup', (event) => @onKeyUp event
 		window.addEventListener 'keydown', (event) => @onKeyDown event
-		@editor.engine.main.get(0).addEventListener 'mouseup', (event) => @onMouseUp event
-		@editor.engine.main.get(0).addEventListener 'mousedown', (event) => @onMouseDown event
-		@editor.engine.main.get(0).addEventListener 'mousemove',(event) => @onMouseMove event
-		@editor.engine.main.get(0).addEventListener 'mousewheel', (event) => @onMouseWheel event
-		@editor.engine.main.get(0).addEventListener 'DOMMouseScroll', (event) => @onDOMMouseScroll event
-		@editor.engine.main.get(0).addEventListener 'touchstart', (event) => @onTouchStart event
-		@editor.engine.main.get(0).addEventListener 'touchend', (event) => @onTouchEnd event
-		@editor.engine.main.get(0).addEventListener 'touchmove', (event) => @onTouchMove event
+		engine.main.get(0).addEventListener 'mouseup', (event) => @onMouseUp event
+		engine.main.get(0).addEventListener 'mousedown', (event) => @onMouseDown event
+		engine.main.get(0).addEventListener 'mousemove',(event) => @onMouseMove event
+		engine.main.get(0).addEventListener 'mousewheel', (event) => @onMouseWheel event
+		engine.main.get(0).addEventListener 'DOMMouseScroll', (event) => @onDOMMouseScroll event
+		engine.main.get(0).addEventListener 'touchstart', (event) => @onTouchStart event
+		engine.main.get(0).addEventListener 'touchend', (event) => @onTouchEnd event
+		engine.main.get(0).addEventListener 'touchmove', (event) => @onTouchMove event
 
 	onKeyUp: (event) ->
 		Eventbus.controlsChanged.dispatch event

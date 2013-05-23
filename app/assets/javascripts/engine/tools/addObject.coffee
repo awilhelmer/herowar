@@ -1,20 +1,21 @@
 SelectorTerrain = require 'tools/selectorTerrain'
 materialHelper = require 'helper/materialHelper'
+engine = require 'engine'
 db = require 'database'
 
 class AddObject extends SelectorTerrain
 
-	constructor: (@app, @intersectHelper) ->
+	constructor: (@intersectHelper) ->
 		@input = db.get 'input'
 		@tool = db.get 'ui/tool'
 		@tool.set
 			'currentObjectId' 	: -1
 			'currentObjectName'	: null
-		super @app, @intersectHelper
+		super @intersectHelper
 
 	onLeaveTool: ->
 		if @tool.get('currentObject')
-			@app.engine.scenegraph.scene.remove @tool.get('currentObject')
+			engine.scenegraph.scene.remove @tool.get('currentObject')
 			for child in @tool.get('currentObject').children
 				child.geometry.dispose() # TODO: is this enough clean up ?!?
 			@tool.unset 'currentObject'

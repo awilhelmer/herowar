@@ -1,13 +1,14 @@
 EditorEventbus = require 'editorEventbus'
 log = require 'util/logger'
 events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class PathingHelper
 	
 	color: 0x0000FF
 	
-	constructor: (@editor) ->
+	constructor: ->
 		@sidebar = db.get 'ui/sidebar'
 		@waypoints = db.get 'waypoints'
 		@path = null
@@ -45,7 +46,7 @@ class PathingHelper
 			mesh = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: @color, transparent: true, opacity:1)
 			mesh.position = waypoint.get('position')
 			mesh.rotation.x = - Math.PI/2
-			@editor.engine.scenegraph.scene.add mesh
+			engine.scenegraph.scene.add mesh
 			@meshes.push mesh
 			index = _.indexOf @pathWaypoints, waypoint
 			if index isnt 0
@@ -54,9 +55,9 @@ class PathingHelper
 				geometry.vertices.push new THREE.Vector3 prevWaypoint.get('position').x, prevWaypoint.get('position').y, prevWaypoint.get('position').z
 				geometry.vertices.push new THREE.Vector3 waypoint.get('position').x, waypoint.get('position').y, waypoint.get('position').z
 				line = new THREE.Line geometry, @lineMaterial
-				@editor.engine.scenegraph.scene.add line
+				engine.scenegraph.scene.add line
 				@meshes.push line
-		@editor.engine.render()
+		engine.render()
 
 	removePath: ->
 		@editor.engine.scenegraph.scene.remove mesh for mesh in @meshes

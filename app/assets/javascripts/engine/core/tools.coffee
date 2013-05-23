@@ -7,7 +7,7 @@ class Tools
 
 	defaultTool: null
 
-	constructor: (@app) ->
+	constructor: ->
 		@initialize()
 		
 	initialize: ->
@@ -21,7 +21,7 @@ class Tools
 		@addEventListeners()
 	
 	createHelpers: ->
-		@intersectHelper = new IntersectHelper @app
+		@intersectHelper = new IntersectHelper()
 	
 	createTools: ->
 	

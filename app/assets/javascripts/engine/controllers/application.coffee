@@ -19,7 +19,6 @@ class ApplicationController extends BaseController
 
 	initialize: (options) ->
 		super options
-		@data = db.data()
 		@initViewports()	
 		@initEngine()
 		@initCore()
@@ -33,8 +32,7 @@ class ApplicationController extends BaseController
 		viewports.add viewport
 	
 	initEngine: ->
-		@engine = engine
-		@engine.init()
+		engine.init()
 	
 	initCore: ->
 		@scene = new Scene()

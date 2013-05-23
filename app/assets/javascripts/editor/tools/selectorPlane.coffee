@@ -1,4 +1,5 @@
 SelectorTerrain = require 'tools/selectorTerrain'
+engine = require 'engine'
 
 class SelectorPlane extends SelectorTerrain
 	
@@ -15,7 +16,7 @@ class SelectorPlane extends SelectorTerrain
 			@selector.position.x = pos.x
 			@selector.position.y = pos.y
 			@selector.position.z = pos.z
-		@editor.engine.render()
+		engine.render()
 	
 	calculatePossiblePosition: (position) ->
 		x: Math.floor(position.x / 10) * 10 + 5
@@ -38,11 +39,11 @@ class SelectorPlane extends SelectorTerrain
 
 	addSel: ->
 		@isVisible = true
-		@editor.engine.scenegraph.scene.add @selector
+		engine.scenegraph.scene.add @selector
 
 	removeSel: ->
 		@isVisible = false
-		@editor.engine.scenegraph.scene.remove @selector
-		@editor.engine.render()
+		engine.scenegraph.scene.remove @selector
+		engine.render()
 
 return SelectorPlane

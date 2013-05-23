@@ -17,8 +17,8 @@ engine =
 		Variables.SCREEN_HEIGHT = viewport.height()
 		@scenegraph = sceneGraph
 		@scenegraph.initialize()
-		@views = new Views @
-		@controls = new Controls @
+		@views = new Views()
+		@controls = new Controls()
 		@clock = new THREE.Clock()
 		@pause = false
 		console.log "Engine started!"
