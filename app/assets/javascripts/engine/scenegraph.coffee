@@ -3,15 +3,19 @@ Variables = require 'variables'
 events = require 'events'
 db = require 'database'
 
+_initialized = false
+
 sceneGraph =
 
 	initialize: ->
-		@scene = new THREE.Scene()
-		@skyboxScene = new THREE.Scene()
-		@dynamicObjects = {}
-		@staticObjects = {}
-		@currentId = 1
-		@addLights()
+		unless _initialized
+			_initialized = true
+			@scene = new THREE.Scene()
+			@skyboxScene = new THREE.Scene()
+			@dynamicObjects = {}
+			@staticObjects = {}
+			@currentId = 1
+			@addLights()
 	
 	addLights: ->
 		@scene.add new THREE.AmbientLight 0x666666
@@ -28,7 +32,6 @@ sceneGraph =
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
 			@scene.add object.object3d
-			console.log 'addStaticObject()', object.object3d, 'to', @scene
 
 	removeDynObject: (id) ->
 		if @dynamicObjects.hasOwnProperty id
@@ -42,7 +45,6 @@ sceneGraph =
 		obj.userData.dbId = id
 		@staticObjects[id].push obj
 		@scene.add obj
-		console.log 'addStaticObject()', obj, 'to', @scene
 	
 	getStaticObject: (id, index) ->
 		@staticObjects[id][index]
@@ -69,7 +71,6 @@ sceneGraph =
 			@scene.remove @map
 		@map = map
 		@scene.add @map
-		console.log 'setMap()', @map, 'to', @scene
 
 	getNextId: ->
 		@currentId++

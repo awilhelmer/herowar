@@ -3,13 +3,13 @@ scenegraph = require 'scenegraph'
 Eventbus = require 'eventbus'
 events = require 'events'
 
+_initialized = false
+
 engine = 
 
-	initialized: false
-
 	initialize: ->
-		unless initialized
-			initialized = true
+		unless _initialized
+			_initialized = true
 			console.log 'Engine starting...'
 			viewport = $ '#viewport'
 			position = viewport.position()

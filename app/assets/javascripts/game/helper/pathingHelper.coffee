@@ -35,7 +35,6 @@ class PathingHelper
 			mesh.position = waypoint.get('position')
 			mesh.rotation.x = - Math.PI/2
 			scenegraph.scene.add mesh
-			console.log 'buildPath()', mesh, 'to', scenegraph.scene
 			@meshes.push mesh
 			index = _.indexOf @pathWaypoints, waypoint
 			if index isnt 0
