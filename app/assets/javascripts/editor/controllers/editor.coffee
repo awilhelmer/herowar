@@ -4,7 +4,6 @@ EditorInput = require 'core/editorInput'
 EditorScene = require 'core/editorScene'
 EditorTools = require 'core/editorTools'
 Variables = require 'variables'
-engine = require 'engine'
 log = require 'util/logger'
 
 class Editor extends ApplicationController
@@ -30,7 +29,7 @@ class Editor extends ApplicationController
 		super options
 		
 	initEngine: ->
-		super()
+		engine = super()
 		engine.pause = true
 	
 	initCore: ->

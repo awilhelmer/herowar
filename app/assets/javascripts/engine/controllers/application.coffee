@@ -1,7 +1,6 @@
 BaseController = require 'controllers/baseController'
 Variables = require 'variables'
 Scene = require 'core/scene'
-engine = require 'engine'
 db = require 'database'
 
 class ApplicationController extends BaseController
@@ -32,7 +31,9 @@ class ApplicationController extends BaseController
 		viewports.add viewport
 	
 	initEngine: ->
-		engine.init()
+		engine = require 'engine'
+		engine.initialize()
+		engine
 	
 	initCore: ->
 		@scene = new Scene()

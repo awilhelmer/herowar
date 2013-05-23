@@ -1,5 +1,4 @@
 Eventbus = require 'eventbus'
-engine = require 'engine'
 
 class EditorControls extends THREE.TrackballControls
 	
@@ -16,8 +15,7 @@ class EditorControls extends THREE.TrackballControls
 		@enabled = true
 		@controlLoopActive = false
 		@addEventListener( 'change', =>
-			if (engine.pause)
-				Eventbus.cameraChanged.dispatch view
+			Eventbus.cameraChanged.dispatch view
 			null
 		)
 
