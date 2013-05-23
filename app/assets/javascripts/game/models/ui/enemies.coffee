@@ -2,7 +2,7 @@ materialHelper = require 'helper/materialHelper'
 PacketType = require 'network/packets/packetType'
 PacketModel = require 'models/ui/packetModel'
 Enemy = require 'models/enemy'
-events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class Enemies extends PacketModel
@@ -28,7 +28,7 @@ class Enemies extends PacketModel
 		path = @getPathById pathId
 		loadedData = db.data().geometries[name]
 		dynObj = @createModel id, name, db.data().geometries[name], _.clone path.get 'waypoints'
-		events.trigger 'add:dynamicObject', id, dynObj
+		engine.scenegraph.addDynObject dynObj, id
 	
 	createModel: (id, name, data, waypoints) ->
 		model = new Enemy id, name, @createMesh id, name, data

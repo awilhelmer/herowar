@@ -6,11 +6,12 @@ Texture = require 'models/texture'
 Path = require 'models/path'
 Wave = require 'models/wave'
 events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class Scene
 	
-	constructor: (@app) ->
+	constructor: ->
 		@isInitialized = false
 		@world = db.get 'world'
 		@initialize()
@@ -26,7 +27,7 @@ class Scene
 		
 	reset: =>
 		@createTerrainMaterial()
-		@app.engine.scenegraph.addSkybox @world.get 'skybox'
+		engine.scenegraph.addSkybox @world.get 'skybox'
 		@buildTerrain()
 
 	createTerrainMaterial: ->
@@ -48,7 +49,7 @@ class Scene
 		if !map and @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()
 			map.children[0].geometry.computeBoundingBox()
-			@app.engine.scenegraph.setMap map
+			engine.scenegraph.setMap map
 			events.trigger 'scene:terrain:build', map
 		if !map
 			throw 'Map is undefined'
@@ -58,7 +59,7 @@ class Scene
 		@textures = db.get 'textures'
 		nextTextureId = 1
 		@textures.add @createTexture nextTextureId++, 'Blank', '', undefined
-		@textures.add @createTexture nextTextureId++, key, val.sourceFile, val for key, val of @app.data.textures
+		@textures.add @createTexture nextTextureId++, key, val.sourceFile, val for key, val of db.data().textures
 
 	createTexture: (id, name, sourceFile, threeTexture) ->
 		texture = new Texture()
@@ -73,14 +74,14 @@ class Scene
 		if @world.attributes.staticGeometries
 			mesh = null
 			for instance in @world.attributes.objects
-				unless @app.engine.scenegraph.hasStaticObject instance.geoId 
+				unless engine.scenegraph.hasStaticObject instance.geoId 
 					for staticMesh in @world.attributes.staticGeometries
 						if staticMesh.userData.id is instance.geoId
 							mesh = staticMesh
 							mesh.name = instance.name
 							break
 				else
-					mesh = @app.engine.scenegraph.staticObjects[instance.geoId][0]
+					mesh = engine.scenegraph.staticObjects[instance.geoId][0]
 					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
 				#add position to mesh ... 
 				if mesh
@@ -88,11 +89,11 @@ class Scene
 					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
 					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
 					mesh.userData.meshId = instance.id
-					@app.engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
-					id = @app.engine.scenegraph.getNextId()
+					engine.scenegraph.addStaticObject mesh, mesh.userData.dbId
+					id = engine.scenegraph.getNextId()
 					environmentsStatic = db.get 'environmentsStatic'
 					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
-		@app.engine.render()
+		engine.render()
 		null
 
 	createPaths: ->

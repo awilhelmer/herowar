@@ -1,5 +1,4 @@
 BaseModel = require 'models/basemodel'
-events = require 'events'
 
 class AnimatedModel extends BaseModel
 
@@ -39,6 +38,7 @@ class AnimatedModel extends BaseModel
 		@activeAnimation = name
 
 	dispose: ->
-		events.trigger 'remove:dynamicObject', @id
+		engine = require 'engine'
+		engine.scenegraph.removeDynObject @id
 
 return AnimatedModel

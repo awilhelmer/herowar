@@ -34,7 +34,7 @@ class Editor extends ApplicationController
 	
 	initCore: ->
 		@input = new EditorInput @
-		@scene = new EditorScene @
+		@scene = new EditorScene()
 		@tools = new EditorTools @
 
 return Editor

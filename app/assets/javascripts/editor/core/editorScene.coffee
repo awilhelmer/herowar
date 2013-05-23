@@ -10,7 +10,7 @@ db = require 'database'
 class EditorScene extends Scene
 	
 	initialize: ->
-		@objectHelper = new ObjectHelper @app
+		@objectHelper = new ObjectHelper()
 		@randomPool = new RandomPool()
 		@randomPool.hook()
 		@addEventListeners()
@@ -51,12 +51,12 @@ class EditorScene extends Scene
 		@randomPool.seek 0
 		unless @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.terrainUpdate()
-			@app.engine.scenegraph.setMap map
+			engine.scenegraph.setMap map
 		map = super map
 		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
 		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe
-		@app.engine.render()
+		engine.render()
 
 	getWireframeColor: =>
 		if @isInitialized then 0xFFFF00 else 0xFFFFFF
@@ -68,17 +68,17 @@ class EditorScene extends Scene
 		width != parseInt(@world.get('terrain').width) or height != parseInt(@world.get('terrain').height) or smoothness != parseFloat(@world.get('terrain').smoothness) or zScale != parseInt(@world.get('terrain').zScale)
 
 	handleMaterials: =>
-		@world.handleMaterials @app.engine.scenegraph.getMap()
+		@world.handleMaterials engine.scenegraph.getMap()
 	
 	removeStaticObject: (obj) =>
 		log.info "Environment \"#{obj.get('name')}\" removed"
 		col = db.get 'environmentsStatic'
 		col.remove obj
-		@app.engine.scenegraph.removeStaticObject obj.attributes
+		engine.scenegraph.removeStaticObject obj.attributes
 		EditorEventbus.dispatch 'render'
 
 	afterCreatingPaths: (wayId, pathId) ->
-		@app.tools.addWaypoint.nextId = wayId
+		tools.addWaypoint.nextId = wayId
 		EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
 
 	afterCreatingWaves: (waveId) ->

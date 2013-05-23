@@ -12,11 +12,6 @@ sceneGraph =
 		@staticObjects = {}
 		@currentId = 1
 		@addLights()
-		@bindEvents()
-	
-	bindEvents: ->
-		events.on 'add:dynamicObject', @onAddDynamicObject, @
-		events.on 'remove:dynamicObject', @onRemoveDynamicObject, @
 	
 	addLights: ->
 		@scene.add new THREE.AmbientLight 0x666666
@@ -93,13 +88,5 @@ sceneGraph =
 		if _.isUndefined @skybox
 			@skyboxScene.remove @skybox
 			@skybox = undefined
-
-	onAddDynamicObject: (id, model) ->
-		console.log 'onAddDynamicObject', id, model
-		@addDynObject model, id
-
-	onRemoveDynamicObject: (id) ->
-		console.log 'onRemoveDynamicObject', id
-		@removeDynObject id
 
 return sceneGraph

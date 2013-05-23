@@ -3,6 +3,7 @@ PacketType = require 'network/packets/packetType'
 AddObject = require 'tools/addObject'
 Tower = require 'models/tower'
 events = require 'events'
+engine = require 'engine'
 db = require 'database'
 
 class AddTowerTool extends AddObject
@@ -31,7 +32,7 @@ class AddTowerTool extends AddObject
 		model.object3d.position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		model.showRange()
-		events.trigger 'add:dynamicObject', packet.objectId, model
+		engine.scenegraph.addDynObject model, packet.objectId
 
 	onLeaveTool: ->
 		model = @tool.get 'currentObject'
@@ -41,7 +42,7 @@ class AddTowerTool extends AddObject
 
 	addMesh: ->
 		model = @tool.get 'currentObject'
-		events.trigger 'add:dynamicObject', @tool.get('currentObjectId'), model
+		engine.scenegraph.addDynObject model, @tool.get 'currentObjectId'
 
 	placeMesh: ->
 		console.log 'Place tower', @tool.get('currentObject').object3d.position

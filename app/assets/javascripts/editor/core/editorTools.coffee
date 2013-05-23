@@ -13,7 +13,7 @@ class EditorTools extends Tools
 	defaultTool: Constants.TOOL_SELECTION
 
 	createHelpers: ->
-		@objectHelper = new ObjectHelper @app
+		@objectHelper = new ObjectHelper()
 		@pathingHelper = new PathingHelper @app
 		super()
 

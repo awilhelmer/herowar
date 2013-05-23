@@ -1,8 +1,9 @@
 EditorEventbus = require 'editorEventbus'
+engine = require 'engine'
 
 class ObjectHelper
 	
-	constructor: (@editor) ->
+	constructor: ->
 		EditorEventbus.resetWireframe.add @refreshWireframe
 		@wireFrameMaterials = new THREE.MeshFaceMaterial([new THREE.MeshBasicMaterial(color: 0xFFFF00, wireframe: true)])
 
@@ -64,9 +65,9 @@ class ObjectHelper
 		mesh
 	
 	isTerrain: (obj) ->
-		if _.isUndefined obj or _.isUndefined @editor.engine.scenegraph.map then return false
+		if _.isUndefined obj or _.isUndefined engine.scenegraph.map then return false
 		obj = @getBaseObject obj unless obj.parent instanceof THREE.Scene
-		@editor.engine.scenegraph.map.id is obj.id
+		engine.scenegraph.map.id is obj.id
 
 #For updating all geometry data ...
 	refreshWireframe: (obj) =>
