@@ -69,6 +69,7 @@ sceneGraph =
 			@scene.remove @map
 		@map = map
 		@scene.add @map
+		console.log 'setMap()', @map, 'to', @scene
 
 	getNextId: ->
 		@currentId++
