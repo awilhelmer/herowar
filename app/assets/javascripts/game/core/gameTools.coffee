@@ -9,7 +9,7 @@ class GameTools extends Tools
 		super()
 	
 	createTools: ->
-		@addTower = new AddTower @app, @intersectHelper
+		@addTower = new AddTower @intersectHelper
 
 	onSelectTower: ->
 		@switchTool 'addTower'
