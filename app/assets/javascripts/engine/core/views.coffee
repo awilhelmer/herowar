@@ -76,7 +76,7 @@ class Views
 		renderer
 	
 	render: (scene, skyboxScene) ->
-		if (@rendering == false) 
+		unless @rendering 
 			@rendering = true
 			for view in @viewports.models
 					@cameraRender view, scene, skyboxScene

@@ -41,6 +41,6 @@ class Viewport extends Backbone.Model
 			camera.right = left + width + offset.left
 			camera.top = size.top + size.height
 			camera.bottom = size.top
-		console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom, 'offset', offset
+		#console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom, 'offset', offset
 
 return Viewport

@@ -92,13 +92,13 @@ class RTSControls
 	onKeyDown: (event) =>
 		return unless event
 		@keysPressed.push event.keyCode if event.keyCode and _.indexOf(@keysPressed, event.keyCode) is -1
-		console.log 'onKeyUp() Active keys pressed: ', @keysPressed
+		#console.log 'onKeyUp() Active keys pressed: ', @keysPressed
 		return
 		
 	onKeyUp: (event) =>
 		return unless event
 		@keysPressed.splice _.indexOf(@keysPressed, event.keyCode), 1 if event.keyCode and _.indexOf(@keysPressed, event.keyCode) isnt -1
-		console.log 'onKeyUp() Active keys pressed: ', @keysPressed
+		#console.log 'onKeyUp() Active keys pressed: ', @keysPressed
 		return
 
 	changeZoom: (value) ->
@@ -118,7 +118,7 @@ class RTSControls
 			camera.offset.left += 1 if scrollRight
 			camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
 			camera.offset.top += 1 if scrollDown
-			console.log 'Camera Offset', camera.offset
+			#console.log 'Camera Offset', camera.offset
 			@view.updateSize()
 		return
 
