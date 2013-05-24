@@ -32,13 +32,13 @@ class GameScene extends Scene
 		target = scenegraph.dynamicObjects[packet.tower].target
 		
 		laser1 = new Laser @customId++, owner, target, packet.damage
-		laser1.object3d.position.x += 9
-		laser1.object3d.position.y += 12
+		laser1.root.position.x += 9
+		laser1.root.position.y += 12
 		scenegraph.addDynObject laser1, laser1.id
 		
 		laser2 = new Laser @customId++, owner, target, packet.damage
-		laser2.object3d.position.x -= 9
-		laser2.object3d.position.y += 12
+		laser2.root.position.x -= 9
+		laser2.root.position.y += 12
 		scenegraph.addDynObject laser2, laser2.id
 		
 		unless target.isDead()

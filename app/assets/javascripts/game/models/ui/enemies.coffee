@@ -41,7 +41,7 @@ class Enemies extends PacketModel
 		model = new Enemy id, name, @createMesh id, name, data
 		if _.isArray waypoints
 			model.waypoints = waypoints
-			model.object3d.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z
+			model.root.position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z
 		model
 		
 	createMesh: (id, name, data) ->

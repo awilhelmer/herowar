@@ -22,7 +22,7 @@ class Enemy extends AnimatedModel
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
 		@meshMaxHealth = @_createMesh 0x808080
-		@object3d.add @meshMaxHealth
+		@root.add @meshMaxHealth
 		@_updateCurrentHealthMesh()
 		
 	update: (delta) ->
@@ -43,7 +43,7 @@ class Enemy extends AnimatedModel
 		waypoint = @waypoints[0]
 		@setAnimation 'run' unless @activeAnimation is 'run'
 		@rotateTo waypoint.position, delta
-		@object3d.translateZ delta * @moveSpeed
+		@root.translateZ delta * @moveSpeed
 	
 	hit: (damage) ->
 		unless @isDead()
@@ -52,7 +52,7 @@ class Enemy extends AnimatedModel
 			@_updateCurrentHealthMesh()
 			if @currentHealth is 0
 				@setAnimation 'crdeath', true
-				@object3d.remove @meshMaxHealth
+				@root.remove @meshMaxHealth
 			
 	
 	isDead: ->
@@ -60,7 +60,7 @@ class Enemy extends AnimatedModel
 	
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
-		distance = @object3d.position.distanceTo waypoint.position
+		distance = @root.position.distanceTo waypoint.position
 		if distance < 2 or (lastDistance and lastDistance > distance)
 			@_waypointReached waypoint
 			lastDistance = null
@@ -74,12 +74,12 @@ class Enemy extends AnimatedModel
 
 	_updateCurrentHealthMesh: ->
 		if @meshCurrentHealth
-			@object3d.remove @meshCurrentHealth
+			@root.remove @meshCurrentHealth
 			@meshCurrentHealth = null
 		unless @currentHealth is 0
 			@meshCurrentHealth = @_createMesh 0xFF0000, @currentHealth / @maxHealth
 			@meshCurrentHealth.position.y += 1
-			@object3d.add @meshCurrentHealth
+			@root.add @meshCurrentHealth
 
 	_createMesh: (color, percent) ->
 		width = if percent then @meshHealthBarSize.width * percent else @meshHealthBarSize.width

@@ -28,16 +28,16 @@ class Tower extends AnimatedModel
 				geometry.vertices.push new THREE.Vector3 Math.cos(segment) * amplitude, 0, Math.sin(segment) * amplitude
 		  @meshRange = new THREE.Line geometry, material
 		  @meshRange.name = 'range'
-		  @object3d.add @meshRange
+		  @root.add @meshRange
 		@meshRange.visible = true
 
 	hideRange: ->
 		@meshRange.visible = false if @meshRange
 
 	_rotateToTarget: (delta) ->
-		@rotateTo @target.object3d.position, delta if @_isValidTarget()
+		@rotateTo @target.root.position, delta if @_isValidTarget()
 
 	_isValidTarget: ->
-		return if @target and not @target.isDead() and @target.object3d.position.distanceTo(@object3d.position) <= @range then true else false
+		return if @target and not @target.isDead() and @target.root.position.distanceTo(@root.position) <= @range then true else false
 
 return Tower

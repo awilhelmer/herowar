@@ -13,8 +13,8 @@ class LaserModel extends MeshModel
 		material = new THREE.MeshBasicMaterial color: 0xf43b3c, opacity: 0.5
 		@meshBody = @createMeshBody()
 		super @id, "Shot-#{@id}", @meshBody
-		@object3d.position.set @owner.object3d.position.x, @owner.object3d.position.y, @owner.object3d.position.z
-		@object3d.quaternion.setFromRotationMatrix @owner.object3d.matrix
+		@root.position.set @owner.root.position.x, @owner.root.position.y, @owner.root.position.z
+		@root.quaternion.setFromRotationMatrix @owner.root.matrix
 
 	createMeshBody: ->
 		geometry = new THREE.CubeGeometry 0.5, 7.5, 0.5
@@ -27,10 +27,10 @@ class LaserModel extends MeshModel
 		
 
 	update: (delta) ->
-		distance = @object3d.position.distanceTo @target.object3d.position
+		distance = @root.position.distanceTo @target.root.position
 		if distance > @distanceToDispose
-			@rotateTo @target.object3d.position, delta
-			@object3d.translateZ delta * @moveSpeed
+			@rotateTo @target.root.position, delta
+			@root.translateZ delta * @moveSpeed
 		else
 			@dispose()
 

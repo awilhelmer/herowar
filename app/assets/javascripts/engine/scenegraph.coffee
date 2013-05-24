@@ -33,11 +33,11 @@ sceneGraph =
 	addDynObject: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
-			@scene.add object.object3d
+			@scene.add object.root
 
 	removeDynObject: (id) ->
 		if @dynamicObjects.hasOwnProperty id
-			@scene.remove @dynamicObjects[id].object3d
+			@scene.remove @dynamicObjects[id].root
 			delete @dynamicObjects[id]
 
 	addStaticObject: (obj, id) ->

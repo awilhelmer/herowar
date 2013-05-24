@@ -4,7 +4,7 @@ class BaseModel
 
 	moveSpeed: 30
 
-	constructor: (@object3d) ->
+	constructor: (@root) ->
 	
 	update: (delta) ->
 		
@@ -15,10 +15,10 @@ class BaseModel
 	rotateTo: (position, delta) ->
 		target = new THREE.Vector3 position.x, 0, position.z
 		m = new THREE.Matrix4()
-		m.lookAt target, @object3d.position, @object3d.up
+		m.lookAt target, @root.position, @root.up
 		dq = new THREE.Quaternion()
 		dq.setFromRotationMatrix m
 		multipler = if @rotationMultipler then @rotationMultipler else @moveSpeed / 10
-		@object3d.quaternion.slerp dq, delta * multipler
+		@root.quaternion.slerp dq, delta * multipler
 
 return BaseModel 
