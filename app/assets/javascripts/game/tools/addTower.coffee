@@ -57,7 +57,6 @@ class AddTowerTool extends AddObject
 		model.object3d.visible = false
 		@tool.set 'currentObject', model
 		@addMesh()
-		console.log "Model:", model
 
 	onNonIntersect: ->
 		model = @tool.get 'currentObject'
