@@ -3,6 +3,8 @@ package game.processor.plugin;
 import game.GameSession;
 import game.models.TowerModel;
 import game.models.UnitModel;
+import game.network.server.ObjectInPacket;
+import game.network.server.TowerTargetPacket;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
@@ -36,7 +38,9 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
       UnitModel target = tower.findTarget(units);
       if (target != null && target != tower.getTarget()) {
         tower.setTarget(target);
-        log.info("Tower " + tower + " has new target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
+        //log.info("Tower " + tower + " has new target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
+        TowerTargetPacket packet = new TowerTargetPacket(tower.getId(), target.getId());
+        broadcast(packet);
       }
       if (tower.hasTarget()) {
         //log.info("Tower " + tower + " has target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");

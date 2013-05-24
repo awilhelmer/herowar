@@ -105,7 +105,6 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", event.getUnit().getName(), event.getPath().getId()));
     ObjectInPacket packet = new ObjectInPacket(id, event.getUnit().getName(), event.getPath().getId());
     broadcast(packet);
-
   }
 
   public String getUnitTopic() {
