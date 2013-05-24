@@ -17,7 +17,6 @@ class AnimatedModel extends MeshModel
 		@meshBody.updateAnimation 1000 * delta	if @meshBody and @activeAnimation
 	
 	setAnimation: (name) ->
-		console.log "Model #{@name}-#{@id} set animation to #{name}"
 		if @meshBody
 			@meshBody.playAnimation name, @animationFPS 
 			@meshBody.baseDuration = @meshBody.duration
