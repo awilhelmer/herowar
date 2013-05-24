@@ -6,8 +6,9 @@ class Waves extends PacketModel
 	type: [ PacketType.SERVER_WAVE_INIT, PacketType.SERVER_WAVE_UPDATE ]
 
 	update: =>
-		@calculateArrival() if @get 'eta'
-		@unset 'arrival' if @get('eta') is 0 and @get 'arrival'
+		if @get('_active') and not @has '_freeze'
+			@calculateArrival() if @get 'eta'
+			@unset 'arrival' if @get('eta') is 0 and @get 'arrival'
 
 	calculateArrival: ->
 		date = new Date()

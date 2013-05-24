@@ -17,7 +17,7 @@ class PacketModel extends Backbone.Model
 		@bindPacketEvents()
 	
 	update: =>
-		@updateTimeValue key, val for key, val of @timeValues
+		@updateTimeValue key, val for key, val of @timeValues if @get('_active') and not @has '_freeze'
 	
 	setDefaultValues: ->
 		@set @defaultValues

@@ -3,6 +3,7 @@ scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
 Laser = require 'models/laser'
 events = require 'events'
+db = require 'database'
 
 class GameScene extends Scene
 	
@@ -47,9 +48,19 @@ class GameScene extends Scene
 		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
 
 	onGameDefeat: ->
-		Backbone.history.loadUrl 'defeat'
+		@onFinish 'defeat'
+		return
 
 	onGameVictory: ->
-		Backbone.history.loadUrl 'victory'
+		@onFinish 'victory'
+		return
+	
+	onFinish: (url) ->
+		stats = db.get 'ui/stats'
+		stats.set '_freeze', true
+		waves = db.get 'ui/waves'
+		waves.set '_freeze', true
+		Backbone.history.loadUrl url
+		return
 	
 return GameScene
