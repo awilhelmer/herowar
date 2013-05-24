@@ -32,6 +32,10 @@ engine =
 		console.log "Starting main loop..."
 		_animate()
 		return
+	
+	stop: ->
+		engine.pause = true
+		return
 
 	render: ->
 		delta = @clock.getDelta()

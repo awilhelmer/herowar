@@ -6,5 +6,7 @@ class GameRouter extends Router
 		'game'	: 'authentication'
 		'game2'	: 'gamePreloader'
 		'game3'	: 'game'
-
+		'defeat' : 'defeat'
+		'victory' : 'victory'
+		
 return GameRouter

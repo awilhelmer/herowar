@@ -20,5 +20,7 @@ packetType =
 	SERVER_BUILD_TOWER					: 81
 	SERVER_TARGET_TOWER					: 82
 	SERVER_ATTACK_TOWER					: 83
+	SERVER_GAME_DEFEAT					: 90
+	SERVER_GAME_VICTORY					: 91
 
 return packetType

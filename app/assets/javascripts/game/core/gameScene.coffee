@@ -15,6 +15,8 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_OBJECT_OUT}", @onObjectOut, @
 		events.on "retrieve:packet:#{PacketType.SERVER_TARGET_TOWER}", @onTowerTarget, @
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
+		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
+		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 	
 	onObjectOut: (packet) ->
 		#console.log 'onObjectOut', scenegraph.dynamicObjects[packet.id]
@@ -43,5 +45,11 @@ class GameScene extends Scene
 		currHealth = 0 if currHealth < 0
 		percentage = Math.round currHealth / scenegraph.dynamicObjects[packet.tower].target.maxHealth * 100
 		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
+
+	onGameDefeat: ->
+		Backbone.history.loadUrl 'defeat'
+
+	onGameVictory: ->
+		Backbone.history.loadUrl 'victory'
 	
 return GameScene
