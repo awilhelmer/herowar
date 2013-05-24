@@ -17,5 +17,6 @@ packetType =
 	SERVER_WAVE_UPDATE					: 61
 	SERVER_BUILD_TOWER					: 81
 	SERVER_TARGET_TOWER					: 82
+	SERVER_ATTACK_TOWER					: 83
 
 return packetType

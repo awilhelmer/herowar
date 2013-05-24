@@ -2,6 +2,10 @@ AnimatedModel = require 'models/animatedModel'
 
 class Enemy extends AnimatedModel
 	
+	currentHealth: 1000
+	
+	maxHealth: 1000
+	
 	moveSpeed: 20
 	
 	waypoints: []
@@ -18,7 +22,15 @@ class Enemy extends AnimatedModel
 		@setAnimation 'run' unless @activeAnimation is 'run'
 		@rotateTo waypoint.position, delta
 		@object3d.translateZ delta * @moveSpeed
-		
+	
+	hit: (damage) ->
+		@currentHealth -= damage
+		@currentHealth = 0 if @currentHealth < 0
+		@dispose() if @currentHealth <= 0
+	
+	isDead: ->
+		@currentHealth <= 0
+	
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
 		distance = @object3d.position.distanceTo waypoint.position
