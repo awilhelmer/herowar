@@ -84,11 +84,15 @@ materialHelper =
 		null
 	
 	createAnimMesh: (geometry, materials, name, json) ->
-		# TODO: this is bad ...
+		newMats = []
 		if _.isArray(materials) and materials.length > 0
-			materials[0].morphTargets = true
-			materials[0].morphNormals = true
-		mesh = @updateMeshProperties new THREE.MorphAnimMesh(geometry), materials, name, json
+			for mat in materials
+				newMat = mat.clone()
+				newMat.morphTargets = true
+				newMat.morphNormals = true
+				newMat.transparent = true
+				newMats.push newMat
+		mesh = @updateMeshProperties new THREE.MorphAnimMesh(geometry), newMats, name, json
 		mesh.parseAnimations()
 		mesh
 	

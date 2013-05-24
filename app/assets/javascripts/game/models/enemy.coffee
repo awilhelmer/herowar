@@ -11,8 +11,15 @@ class Enemy extends AnimatedModel
 	waypoints: []
 	
 	update: (delta) ->
-		@move delta
 		super delta
+		unless @isDead()
+			@move delta
+		if @isDead() and not @activeAnimation
+			opacity = @meshBody.material.materials[0].opacity - delta
+			if opacity > 0
+				@meshBody.material.materials[0].opacity = opacity
+			else
+				@dispose()
 	
 	move: (delta) ->
 		return if @waypoints.length is 0
@@ -24,8 +31,10 @@ class Enemy extends AnimatedModel
 		@object3d.translateZ delta * @moveSpeed
 	
 	hit: (damage) ->
-		@currentHealth -= damage
-		@currentHealth = 0 if @currentHealth < 0
+		unless @isDead()
+			@currentHealth -= damage
+			@currentHealth = 0 if @currentHealth < 0
+			@setAnimation 'crdeath', true if @currentHealth is 0
 	
 	isDead: ->
 		@currentHealth <= 0
@@ -43,5 +52,10 @@ class Enemy extends AnimatedModel
 		#console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
 		@dispose() if @waypoints.length is 0
+
+	_cloneMaterial: (oldMat) ->
+		newMaterial = new THREE.MeshLambertMaterial()
+		newMaterial[key] = value for own key, value of oldMat when key isnt 'id'
+		return newMaterial			 
 
 return Enemy

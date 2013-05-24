@@ -21,7 +21,7 @@ class GameScene extends Scene
 	
 	onObjectOut: (packet) ->
 		#console.log 'onObjectOut', scenegraph.dynamicObjects[packet.id]
-		scenegraph.removeDynObject packet.id
+		#scenegraph.removeDynObject packet.id
 			
 	onTowerTarget: (packet) ->
 		scenegraph.dynamicObjects[packet.tower].target = scenegraph.dynamicObjects[packet.target]
@@ -41,11 +41,12 @@ class GameScene extends Scene
 		laser2.object3d.position.y += 12
 		scenegraph.addDynObject laser2, laser2.id
 		
-		scenegraph.dynamicObjects[packet.tower].target.hit packet.damage
-		currHealth = scenegraph.dynamicObjects[packet.tower].target.currentHealth
-		currHealth = 0 if currHealth < 0
-		percentage = Math.round currHealth / scenegraph.dynamicObjects[packet.tower].target.maxHealth * 100
-		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
+		unless target.isDead()
+			target.hit packet.damage
+			currHealth = target.currentHealth
+			currHealth = 0 if currHealth < 0
+			percentage = Math.round currHealth / target.maxHealth * 100
+			#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
 
 	onGameDefeat: ->
 		@onFinish 'defeat'
