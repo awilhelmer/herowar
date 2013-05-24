@@ -13,7 +13,7 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class TowerModel extends BaseModel {
   public static final int RANGE = 100;
-  public static final int RELOAD = 1000;
+  public static final int RELOAD = 500;
 
   private UnitModel target;
   private GameSession session;

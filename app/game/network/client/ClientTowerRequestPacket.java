@@ -63,9 +63,11 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getUser().getId(), this.position));
-    playerCache.replace(GOLD_VALUE, currentGold - towerPrice);
+    synchronized (playerCache) {
+      playerCache.replace(GOLD_VALUE, currentGold - towerPrice);
+      playerCache.replace(GOLD_SYNC, new Date());
+    }
     session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(session.getGame().getMap().getLives(), Math.round(currentGold - towerPrice))).toString());
-    playerCache.replace(GOLD_SYNC, new Date());
   }
 
   public Long getId() {

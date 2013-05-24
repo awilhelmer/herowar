@@ -33,24 +33,26 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     Date date = new Date();
     ConcurrentHashMap<String, Object> playerCache = getPlayerCache(playerId);
     if (playerCache.containsKey(GOLD_VALUE)) {
+      synchronized (playerCache) {
       // Update gold value
-      if (playerCache.containsKey(GOLD_UPDATE)) {
-        Long dif = date.getTime() - ((Date) playerCache.get(GOLD_UPDATE)).getTime();
-        double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
-        setPlayerCacheValue(playerCache, GOLD_VALUE, newGold);
-      }
-      // Update time update value
-      setPlayerCacheValue(playerCache, GOLD_UPDATE, date);
-      // Send info to client
-      if (!hashInitPacket(playerId)) {
-        sendPacket(session, new PlayerStatsInitPacket(getMap().getLives(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
-        getInitPacket().replace(playerId, true);
-        setPlayerCacheValue(playerCache, GOLD_SYNC, date);
-      } else {
-        Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
-        if (dif >= SYNC_PERIOD) {
-          sendPacket(session, new PlayerStatsUpdatePacket(getMap().getLives(), getRoundedGoldValue(playerCache)));
+        if (playerCache.containsKey(GOLD_UPDATE)) {
+          Long dif = date.getTime() - ((Date) playerCache.get(GOLD_UPDATE)).getTime();
+          double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
+          setPlayerCacheValue(playerCache, GOLD_VALUE, newGold);
+        }
+        // Update time update value
+        setPlayerCacheValue(playerCache, GOLD_UPDATE, date);
+        // Send info to client
+        if (!hashInitPacket(playerId)) {
+          sendPacket(session, new PlayerStatsInitPacket(getMap().getLives(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
+          getInitPacket().replace(playerId, true);
           setPlayerCacheValue(playerCache, GOLD_SYNC, date);
+        } else {
+          Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
+          if (dif >= SYNC_PERIOD) {
+            sendPacket(session, new PlayerStatsUpdatePacket(getMap().getLives(), getRoundedGoldValue(playerCache)));
+            setPlayerCacheValue(playerCache, GOLD_SYNC, date);
+          }
         }
       }
     }
