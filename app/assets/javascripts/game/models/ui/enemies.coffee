@@ -3,6 +3,7 @@ PacketType = require 'network/packets/packetType'
 PacketModel = require 'models/ui/packetModel'
 scenegraph = require 'scenegraph'
 Enemy = require 'models/enemy'
+events = require 'events'
 db = require 'database'
 
 class Enemies extends PacketModel
@@ -15,6 +16,13 @@ class Enemies extends PacketModel
 
 	initialize: (options) ->
 		super options
+
+	bindPacketEvents: ->
+		super()
+		events.on "retrieve:packet:#{PacketType.SERVER_OBJECT_OUT}", @onObjectOut, @
+
+	onObjectOut: ->
+		@set 'quantity', @get('quantity') - 1
 
 	onPacket: (packet) ->
 		if packet

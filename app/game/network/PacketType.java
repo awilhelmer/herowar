@@ -27,6 +27,7 @@ public class PacketType {
   public static final Integer PlayerInitPacket = 22;
   public static final Integer PlayerStatsInitPacket = 35;
   public static final Integer PlayerStatsUpdatePacket = 36;
+  public static final Integer PlayerLivesUpdatePacket = 37;
   // public static final Integer ObjectPositionPacket = 26;
   // public static final Integer PlayerInputPacket = 23;
   // public static final Integer ObjectRotationPacket = 30;

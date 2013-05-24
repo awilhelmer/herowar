@@ -5,13 +5,18 @@ import game.event.GameUnitEvent;
 import game.models.UnitModel;
 import game.network.server.ObjectInPacket;
 import game.network.server.ObjectOutPacket;
+import game.network.server.PlayerLivesUpdatePacket;
+import game.network.server.PlayerStatsUpdatePacket;
+import game.network.server.TowerBuildPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Unit;
 import models.entity.game.Waypoint;
@@ -19,6 +24,7 @@ import models.entity.game.Waypoint;
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
+import play.libs.Json;
 
 import com.ardor3d.math.type.ReadOnlyVector3;
 
@@ -39,6 +45,12 @@ import dao.game.PathDAO;
 public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(UnitUpdatePlugin.class);
 
+  private final static String GOLD_VALUE = "gold";
+  private final static String GOLD_SYNC = "gold_sync";
+  
+  private final static double MOVEMENT_SPEED = 30;
+  private final static double KILL_REWARD = 200;
+  
   public UnitUpdatePlugin(GameProcessor processor) {
     super(processor);
   }
@@ -46,28 +58,52 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void process(Double delta) {
     Set<UnitModel> units = getProcessor().getUnits();
-    Iterator<UnitModel> iter = units.iterator();
-    while (iter.hasNext()) {
-      UnitModel unit = iter.next();
-      if (unit.isDeath()) {
-        ObjectOutPacket packet = new ObjectOutPacket(unit.getId());
-        broadcast(packet);
-        iter.remove();
-      } else {
-        processWaypoints(unit);
-        processMoving(unit, delta);
+    synchronized (units) {
+      Iterator<UnitModel> iter = units.iterator();
+      while (iter.hasNext()) {
+        UnitModel unit = iter.next();
+        if (unit.isDeath()) {
+          handleUnitDeath(unit);
+          iter.remove();
+        } else {
+          processWaypoints(unit);
+          if (!processMoving(unit, delta)) {
+            handleUnitDeath(unit);
+            iter.remove();
+          }
+        }
       }
     }
   }
 
-  private void processMoving(UnitModel unit, Double delta) {
+  private void handleUnitDeath(UnitModel unit) {
+    ObjectOutPacket packet = new ObjectOutPacket(unit.getId());
+    broadcast(packet);
+    if (unit.isEndPointReached()) {
+      getProcessor().getMap().setLives(getProcessor().getMap().getLives() - 1);
+      PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(getProcessor().getMap().getLives());
+      broadcast(packet2);
+    }
+    if (unit.isDeath()) {
+      GameSession session = unit.getLastHitTower().getSession();
+      ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getUser().getId());
+      double newGold = ((double) playerCache.get(GOLD_VALUE)) + KILL_REWARD;
+      synchronized (playerCache) {
+        playerCache.replace(GOLD_VALUE, newGold);
+        playerCache.replace(GOLD_SYNC, new Date());
+      }
+      session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(session.getGame().getMap().getLives(), Math.round(newGold))).toString());
+    }
+  }
+
+  private boolean processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
       unit.rotateTo(delta);
-      unit.move(delta * 20, 2);
+      unit.move(delta * MOVEMENT_SPEED, 2);
       unit.updateWorldTransform(false);
-    } else {
-      // TODO enemy reached his goal ...
+      return true;
     }
+    return false;
   }
 
   private void processWaypoints(UnitModel unit) {

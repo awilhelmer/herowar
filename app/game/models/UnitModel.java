@@ -10,6 +10,7 @@ public class UnitModel extends BaseModel {
   private long maxHealth;
   private Path activePath;
   private Waypoint activeWaypoint;
+  private TowerModel lastHitTower;
   private boolean endPointReached = false;
 
   public UnitModel(Long id, Long dbId) {
@@ -31,11 +32,19 @@ public class UnitModel extends BaseModel {
   /**
    * Hit unit with damage.
    * 
+   * @param tower
+   *          The tower to set.
    * @param damage
    *          The damage to set.
    */
-  public void hit(long damage) {
+  public void hit(TowerModel tower, long damage) {
+    if (getCurrentHealth() <= 0) {
+      return;
+    }
     long newHealth = getCurrentHealth() - damage;
+    if (newHealth <= 0) {
+      setLastHitTower(tower);
+    }
     setCurrentHealth(newHealth > 0 ? newHealth : 0);
   }
 
@@ -90,6 +99,14 @@ public class UnitModel extends BaseModel {
 
   public void setActiveWaypoint(Waypoint activeWaypoint) {
     this.activeWaypoint = activeWaypoint;
+  }
+
+  public TowerModel getLastHitTower() {
+    return lastHitTower;
+  }
+
+  public void setLastHitTower(TowerModel lastHitTower) {
+    this.lastHitTower = lastHitTower;
   }
 
   public void setEndPointReached(boolean b) {

@@ -6,7 +6,7 @@ class Enemy extends AnimatedModel
 	
 	maxHealth: 1000
 	
-	moveSpeed: 20
+	moveSpeed: 30
 	
 	waypoints: []
 	
