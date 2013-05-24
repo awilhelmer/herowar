@@ -1,5 +1,5 @@
 ApplicationController = require 'controllers/application'
-PathingHelper = require 'helper/pathingHelper'
+#PathingHelper = require 'helper/pathingHelper'
 GameScene = require 'core/gameScene'
 GameTools = require 'core/gameTools'
 engine = require 'engine'
@@ -16,8 +16,8 @@ class GameController extends ApplicationController
 		log.info 'Initialize game...'
 		super options
 		# Show path during develop - Should be removed later
-		@pathingHelper = new PathingHelper()
-		@pathingHelper.showPath()
+		#@pathingHelper = new PathingHelper()
+		#@pathingHelper.showPath()
 		engine.start()
 
 	initCore: ->

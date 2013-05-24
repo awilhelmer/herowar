@@ -2,9 +2,11 @@ MeshModel = require 'models/mesh'
 
 class ShotModel extends MeshModel
 	
-	rotationMultipler: 20
+	rotationMultipler: 50
 	
-	moveSpeed: 80
+	moveSpeed: 150
+	
+	distanceToDispose: 4
 	
 	constructor: (@id, @owner, @target, @damage) ->
 		geometry = new THREE.CubeGeometry 1, 10, 1
@@ -17,7 +19,7 @@ class ShotModel extends MeshModel
 
 	update: (delta) ->
 		distance = @object3d.position.distanceTo @target.object3d.position
-		if distance > 2
+		if distance > @distanceToDispose
 			@rotateTo @target.object3d.position, delta
 			@object3d.translateZ delta * @moveSpeed
 		else

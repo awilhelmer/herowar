@@ -31,7 +31,7 @@ class AddTowerTool extends AddObject
 		model = new Tower packet.objectId, name, mesh
 		model.object3d.position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
-		model.showRange()
+		#model.showRange()
 		scenegraph.addDynObject model, packet.objectId
 
 	onLeaveTool: ->

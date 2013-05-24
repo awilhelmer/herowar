@@ -46,7 +46,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
   
-  private final static double KILL_REWARD = 200;
+  private final static double KILL_REWARD = 50;
   
   public UnitUpdatePlugin(GameProcessor processor) {
     super(processor);
