@@ -1,4 +1,5 @@
 AnimatedModel = require 'models/animatedModel'
+scenegraph = require 'scenegraph'
 
 class Tower extends AnimatedModel
 	
@@ -8,9 +9,13 @@ class Tower extends AnimatedModel
 	
 	meshRange: null
 	
+	target: null
+	
 	update: (delta) ->
 		if @active
-			
+			target = null if target and target.object3d.position.distanceTo(@object3d.position) > @range
+			target = @_getNextTarget() unless target
+			@rotateTo target, delta if target
 			super delta
 
 	showRange: ->
@@ -30,5 +35,12 @@ class Tower extends AnimatedModel
 
 	hideRange: ->
 		@meshRange.visible = false if @meshRange
+
+	_getNextTarget: ->
+		Enemy = require 'models/enemy'
+		for id, obj of scenegraph.dynamicObjects
+			# TODO: Improve calculation of best target and do it serverside ;)
+			return obj.object3d.position if obj instanceof Enemy and obj.object3d.position.distanceTo(@object3d.position) <= @range
+		return
 
 return Tower
