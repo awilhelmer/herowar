@@ -10,7 +10,6 @@ import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -55,6 +54,11 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     createUnit();
     super.process(delta);
     waveUpdated = false;
+    Date now = new Date();
+    if (!getProcessor().isWavesFinished() && waves.size() == 0 && getWaveEta() <= now.getTime()) {
+      getProcessor().setWavesFinished(true);
+      log.debug("Waves finished!!!!");
+    }
   }
 
   @Override
@@ -132,7 +136,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (current != null) {
       startTime += current.getWaveTime() * 1000;
     }
-    return next != null ? startTime + (next.getPrepareTime() * 1000) : 0;
+    return next != null ? startTime + (next.getPrepareTime() * 1000) : startTime;
   }
 
   private void createUnit() {
@@ -154,7 +158,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   public String toString() {
     return "WaveUpdatePlugin";
   }
-  
+
   public class WaveComparator implements Comparator<Wave> {
     @Override
     public int compare(Wave w1, Wave w2) {

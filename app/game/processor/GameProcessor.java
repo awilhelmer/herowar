@@ -49,6 +49,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Long objectIdGenerator = null;
   private Long gameId;
   private GameClock clock;
+  private boolean wavesFinished = false;
+  private boolean unitsFinished = false;
   private Map map;
   private State state;
 
@@ -246,6 +248,22 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public Set<UnitModel> getUnits() {
     return units;
+  }
+
+  public boolean isWavesFinished() {
+    return wavesFinished;
+  }
+
+  public void setWavesFinished(boolean wavesFinished) {
+    this.wavesFinished = wavesFinished;
+  }
+
+  public boolean isUnitsFinished() {
+    return unitsFinished;
+  }
+
+  public void setUnitsFinished(boolean unitsFinished) {
+    this.unitsFinished = unitsFinished;
   }
 
   public enum State {
