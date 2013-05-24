@@ -27,23 +27,27 @@ public class TowerModel extends BaseModel {
   /**
    * Rotate to current waypoint.
    * 
+   * @param target
+   *          The target to set
    * @param delta
    *          The delta to set
    */
-  public void rotateTo(Double delta) {
-    super.rotateTo(getTarget().getTranslation().clone(), delta);
+  public void rotateTo(UnitModel target, Double delta) {
+    super.rotateTo(target.getTranslation().clone(), delta);
   }
 
   /**
    * Check if the tower is allowed to shoot.
    * 
+   * @param target
+   *          The target to set
    * @return boolean If tower can shoot.
    */
-  public boolean shoot() {
+  public boolean shoot(UnitModel target) {
     Date now = new Date();
     // TODO: only shot if towers looks in the proper direction (dunno how to
     // check this yet...)
-    if (getTarget() != null && inRange(getTarget()) && (now.getTime() - TowerModel.RELOAD >= getLastShot().getTime())) {
+    if (target != null && inRange(target) && (now.getTime() - TowerModel.RELOAD >= getLastShot().getTime())) {
       setLastShot(now);
       return true;
     }
@@ -58,11 +62,11 @@ public class TowerModel extends BaseModel {
    * @return UnitModel The best target.
    */
   public UnitModel findTarget(Set<UnitModel> units) {
-    if (getTarget() != null && inRange(getTarget())) {
+    if (getTarget() != null && !getTarget().isDeath() && inRange(getTarget())) {
       return getTarget();
     }
     for (UnitModel unit : units) {
-      if (inRange(unit)) {
+      if (!unit.isDeath() && inRange(unit)) {
         return unit;
       }
     }

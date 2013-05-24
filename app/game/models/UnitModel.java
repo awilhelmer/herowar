@@ -35,7 +35,27 @@ public class UnitModel extends BaseModel {
    *          The damage to set.
    */
   public void hit(long damage) {
-    setCurrentHealth(getCurrentHealth() - damage);
+    long newHealth = getCurrentHealth() - damage;
+    setCurrentHealth(newHealth > 0 ? newHealth : 0);
+  }
+
+  /**
+   * Get current health in percentage.
+   * 
+   * @return long Percentage of health.
+   */
+  public long getHealthPercentage() {
+    double currHealth = getCurrentHealth() < 0 ? 0 : getCurrentHealth();
+    return Math.round(currHealth / ((double) getMaxHealth()) * 100);
+  }
+
+  /**
+   * Is this unit dealth?
+   * 
+   * @return boolean If this unit is dead.
+   */
+  public boolean isDeath() {
+    return getCurrentHealth() <= 0;
   }
 
   // GETTER & SETTER //

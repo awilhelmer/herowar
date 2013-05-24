@@ -38,23 +38,21 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
     while (iter.hasNext()) {
       TowerModel tower = iter.next();
       UnitModel target = tower.findTarget(units);
-      if (target != null && target != tower.getTarget()) {
-        tower.setTarget(target);
-        // log.info("Tower " + tower + " has new target " + tower.getTarget() +
-        // " (" + tower.getTargetDistance() + ")");
-        TowerTargetPacket packet = new TowerTargetPacket(tower.getId(), target.getId());
-        broadcast(packet);
-      }
-      if (tower.hasTarget()) {
-        tower.rotateTo(delta);
-        if (tower.shoot()) {
+      if (target != null) {
+        if (target != tower.getTarget()) {
+          TowerTargetPacket packet = new TowerTargetPacket(tower.getId(), target.getId());
+          broadcast(packet);
+        }
+        tower.rotateTo(target, delta);
+        if (tower.shoot(target)) {
           long damage = Math.round(MathUtils.nextRandomFloat() * 100);
-          tower.getTarget().hit(damage);
+          target.hit(damage);
           TowerAttackPacket packet = new TowerAttackPacket(tower.getId(), damage);
           broadcast(packet);
-          log.info("Tower " + tower + " hit target " + tower.getTarget() + " " + tower.getTarget().getCurrentHealth() + "/" + tower.getTarget().getMaxHealth());
+          log.info("Tower " + tower + " hit target " + target + " " + target.getCurrentHealth() + "/" + target.getMaxHealth() + " (" + target.getHealthPercentage() + "%)");
         }
       }
+      tower.setTarget(target);
     }
   }
 
