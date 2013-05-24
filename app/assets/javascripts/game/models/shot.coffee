@@ -27,7 +27,7 @@ class ShotModel extends MeshModel
 		meshShot2 = new THREE.Mesh geometry, material
 		meshShot2.position.x = -9
 		meshShot2.position.y = +12
-		@meshBody.add meshShot2
+		body.add meshShot2
 		body.rotation.x = Math.PI/2
 		return body
 		
