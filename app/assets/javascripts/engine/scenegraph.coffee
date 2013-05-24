@@ -23,10 +23,12 @@ sceneGraph =
 	update: (delta) ->
 		for id, obj of @dynamicObjects
 			obj.update delta
+		return
 
 	clear: ->
 		for id, obj of @dynamicObjects
 			@removeDynObject id
+		return
 
 	addDynObject: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id

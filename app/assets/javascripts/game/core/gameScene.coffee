@@ -1,9 +1,12 @@
 PacketType = require 'network/packets/packetType'
 scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
+Shot = require 'models/shot'
 events = require 'events'
 
 class GameScene extends Scene
+	
+	customId: 1000
 	
 	initialize: ->
 		@addEventListeners()
@@ -22,6 +25,10 @@ class GameScene extends Scene
 		console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "target now", scenegraph.dynamicObjects[packet.target]
 		
 	onTowerAttack: (packet) ->
+		owner = scenegraph.dynamicObjects[packet.tower]
+		target = scenegraph.dynamicObjects[packet.tower].target
+		shot = new Shot @customId++, owner, target, packet.damage
+		scenegraph.addDynObject shot, shot.id
 		scenegraph.dynamicObjects[packet.tower].target.hit packet.damage
 		currHealth = scenegraph.dynamicObjects[packet.tower].target.currentHealth
 		currHealth = 0 if currHealth < 0
