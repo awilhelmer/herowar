@@ -1,7 +1,7 @@
 PacketType = require 'network/packets/packetType'
 scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
-Shot = require 'models/shot'
+Laser = require 'models/laser'
 events = require 'events'
 
 class GameScene extends Scene
@@ -27,8 +27,17 @@ class GameScene extends Scene
 	onTowerAttack: (packet) ->
 		owner = scenegraph.dynamicObjects[packet.tower]
 		target = scenegraph.dynamicObjects[packet.tower].target
-		shot = new Shot @customId++, owner, target, packet.damage
-		scenegraph.addDynObject shot, shot.id
+		
+		laser1 = new Laser @customId++, owner, target, packet.damage
+		laser1.object3d.position.x += 9
+		laser1.object3d.position.y += 12
+		scenegraph.addDynObject laser1, laser1.id
+		
+		laser2 = new Laser @customId++, owner, target, packet.damage
+		laser2.object3d.position.x -= 9
+		laser2.object3d.position.y += 12
+		scenegraph.addDynObject laser2, laser2.id
+		
 		scenegraph.dynamicObjects[packet.tower].target.hit packet.damage
 		currHealth = scenegraph.dynamicObjects[packet.tower].target.currentHealth
 		currHealth = 0 if currHealth < 0

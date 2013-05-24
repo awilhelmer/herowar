@@ -9,14 +9,28 @@ class MeshModel extends BaseModel
 	meshBody: null
 	
 	constructor: (@id, @name, @meshBody) ->
-		# Enable shadows
-		@meshBody.castShadow = true
-		@meshBody.receiveShadow = true
-		# Create Object3D
+		@_enableShadows()
+		super @_createThreeObject()
+	
+	_enableShadows: ->
+		if _.isArray @meshBody
+			for mesh in @meshBody
+				mesh.castShadow = true
+				mesh.receiveShadow = true
+		else
+			@meshBody.castShadow = true
+			@meshBody.receiveShadow = true	
+		return
+
+	_createThreeObject: ->
 		obj = new THREE.Object3D()
 		obj.name = @name
 		obj.useQuaternion = true
-		obj.add @meshBody
-		super obj
-	
+		if _.isArray @meshBody
+			for mesh in @meshBody
+				obj.add mesh
+		else
+			obj.add @meshBody
+		return obj
+
 return MeshModel

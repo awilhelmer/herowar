@@ -1,12 +1,12 @@
 MeshModel = require 'models/mesh'
 
-class ShotModel extends MeshModel
+class LaserModel extends MeshModel
 	
 	rotationMultipler: 50
 	
 	moveSpeed: 150
 	
-	distanceToDispose: 4
+	distanceToDispose: 10
 	
 	constructor: (@id, @owner, @target, @damage) ->
 		geometry = new THREE.CubeGeometry 1, 10, 1
@@ -17,17 +17,11 @@ class ShotModel extends MeshModel
 		@object3d.quaternion.setFromRotationMatrix @owner.object3d.matrix
 
 	createMeshBody: ->
-		geometry = new THREE.CubeGeometry 1, 10, 1
+		geometry = new THREE.CubeGeometry 0.5, 7.5, 0.5
 		material = new THREE.MeshBasicMaterial color: 0xf43b3c, opacity: 0.5
 		body = new THREE.Object3D()
-		meshShot1 = new THREE.Mesh geometry, material
-		meshShot1.position.x = +9
-		meshShot1.position.y = +12
-		body.add meshShot1
-		meshShot2 = new THREE.Mesh geometry, material
-		meshShot2.position.x = -9
-		meshShot2.position.y = +12
-		body.add meshShot2
+		shot = new THREE.Mesh geometry, material
+		body.add shot
 		body.rotation.x = Math.PI/2
 		return body
 		
@@ -40,4 +34,4 @@ class ShotModel extends MeshModel
 		else
 			@dispose()
 
-return ShotModel
+return LaserModel
