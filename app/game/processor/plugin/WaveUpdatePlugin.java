@@ -9,8 +9,13 @@ import game.processor.GameProcessor.Topic;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import models.entity.game.Unit;
@@ -88,7 +93,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   private boolean checkWaveUpdate() {
     Date now = new Date();
-    if (next != null && waveStartDate.getTime() + next.getPrepareTime() * 1000 <= now.getTime()) {
+    if (next != null && getWaveEta() <= now.getTime()) {
       loadNextWave();
       return true;
     }
@@ -111,17 +116,23 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private Wave getNextWave() {
-    Iterator<Wave> wavesIterator = waves.iterator();
-    if (wavesIterator.hasNext()) {
-      Wave next = wavesIterator.next();
-      wavesIterator.remove();
-      return next;
+    List<Wave> sortedWaves = new ArrayList<Wave>(waves);
+    if (sortedWaves.size() > 0) {
+      Collections.sort(sortedWaves, new WaveComparator());
+      Wave wave = sortedWaves.get(0);
+      log.debug("Next wave: " + wave.getName());
+      waves.remove(wave);
+      return wave;
     }
     return null;
   }
 
   private long getWaveEta() {
-    return next != null ? waveStartDate.getTime() + (next.getPrepareTime() * 1000) : 0;
+    long startTime = waveStartDate.getTime();
+    if (current != null) {
+      startTime += current.getWaveTime() * 1000;
+    }
+    return next != null ? startTime + (next.getPrepareTime() * 1000) : 0;
   }
 
   private void createUnit() {
@@ -142,5 +153,12 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   @Override
   public String toString() {
     return "WaveUpdatePlugin";
+  }
+  
+  public class WaveComparator implements Comparator<Wave> {
+    @Override
+    public int compare(Wave w1, Wave w2) {
+      return w1.getSortOder().compareTo(w2.getSortOder());
+    }
   }
 }
