@@ -26,7 +26,6 @@ class Enemy extends AnimatedModel
 	hit: (damage) ->
 		@currentHealth -= damage
 		@currentHealth = 0 if @currentHealth < 0
-		@dispose() if @currentHealth <= 0
 	
 	isDead: ->
 		@currentHealth <= 0
@@ -34,7 +33,6 @@ class Enemy extends AnimatedModel
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
 		distance = @object3d.position.distanceTo waypoint.position
-		#console.log "Distance #{distance}"
 		@_waypointReached waypoint if distance < 2
 
 	_waypointReached: (waypoint) ->

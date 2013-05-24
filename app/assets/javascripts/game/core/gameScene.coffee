@@ -9,9 +9,14 @@ class GameScene extends Scene
 		@addEventListeners()
 		
 	addEventListeners: ->
+		events.on "retrieve:packet:#{PacketType.SERVER_OBJECT_OUT}", @onObjectOut, @
 		events.on "retrieve:packet:#{PacketType.SERVER_TARGET_TOWER}", @onTowerTarget, @
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 	
+	onObjectOut: (packet) ->
+		console.log 'onObjectOut', scenegraph.dynamicObjects[packet.id]
+		scenegraph.removeDynObject packet.id
+			
 	onTowerTarget: (packet) ->
 		scenegraph.dynamicObjects[packet.tower].target = scenegraph.dynamicObjects[packet.target]
 		console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "target now", scenegraph.dynamicObjects[packet.target]

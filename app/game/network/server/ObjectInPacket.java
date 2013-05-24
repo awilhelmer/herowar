@@ -1,6 +1,5 @@
 package game.network.server;
 
-import models.entity.game.Vector3;
 import game.network.ObjectPacket;
 import game.network.PacketType;
 

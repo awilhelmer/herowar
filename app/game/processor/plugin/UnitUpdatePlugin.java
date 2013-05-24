@@ -4,13 +4,16 @@ import game.GameSession;
 import game.event.GameUnitEvent;
 import game.models.UnitModel;
 import game.network.server.ObjectInPacket;
+import game.network.server.ObjectOutPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
+import java.util.Iterator;
 import java.util.Set;
 
+import models.entity.game.Unit;
 import models.entity.game.Waypoint;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
@@ -43,9 +46,17 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void process(Double delta) {
     Set<UnitModel> units = getProcessor().getUnits();
-    for (UnitModel unit : units) {
-      processWaypoints(unit);
-      processMoving(unit, delta);
+    Iterator<UnitModel> iter = units.iterator();
+    while (iter.hasNext()) {
+      UnitModel unit = iter.next();
+      if (unit.isDeath()) {
+        ObjectOutPacket packet = new ObjectOutPacket(unit.getId());
+        broadcast(packet);
+        iter.remove();
+      } else {
+        processWaypoints(unit);
+        processMoving(unit, delta);
+      }
     }
   }
 
