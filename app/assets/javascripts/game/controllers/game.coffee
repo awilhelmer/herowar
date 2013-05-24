@@ -1,5 +1,6 @@
 ApplicationController = require 'controllers/application'
 PathingHelper = require 'helper/pathingHelper'
+GameScene = require 'core/gameScene'
 GameTools = require 'core/gameTools'
 engine = require 'engine'
 log = require 'util/logger'
@@ -20,7 +21,7 @@ class GameController extends ApplicationController
 		engine.start()
 
 	initCore: ->
+		@scene = new GameScene()
 		@tools = new GameTools()
-		super()
-
+		
 return GameController

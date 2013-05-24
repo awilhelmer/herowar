@@ -13,7 +13,6 @@ db = require 'database'
 class Scene
 	
 	constructor: ->
-		@isInitialized = false
 		@world = db.get 'world'
 		@initialize()
 		@reset()
@@ -21,8 +20,7 @@ class Scene
 		@createStaticObjects()
 		@createPaths()
 		@createWaves()
-		@isInitialized = true
-	
+		
 	# Override for custom initialize
 	initialize: ->
 		

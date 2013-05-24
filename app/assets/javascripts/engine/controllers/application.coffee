@@ -36,6 +36,5 @@ class ApplicationController extends BaseController
 		engine
 	
 	initCore: ->
-		@scene = new Scene()
 
 return ApplicationController
