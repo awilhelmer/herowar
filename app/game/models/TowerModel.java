@@ -2,6 +2,7 @@ package game.models;
 
 import game.GameSession;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -12,12 +13,15 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class TowerModel extends BaseModel {
   public static final int RANGE = 100;
+  public static final int RELOAD = 1000;
 
   private UnitModel target;
   private GameSession session;
+  private Date lastShot;
 
   public TowerModel(Long id, Long dbId) {
     super(id, dbId);
+    lastShot = new Date();
   }
 
   /**
@@ -28,6 +32,22 @@ public class TowerModel extends BaseModel {
    */
   public void rotateTo(Double delta) {
     super.rotateTo(getTarget().getTranslation().clone(), delta);
+  }
+
+  /**
+   * Check if the tower is allowed to shoot.
+   * 
+   * @return boolean If tower can shoot.
+   */
+  public boolean shoot() {
+    Date now = new Date();
+    // TODO: only shot if towers looks in the proper direction (dunno how to
+    // check this yet...)
+    if (getTarget() != null && inRange(getTarget()) && (now.getTime() - TowerModel.RELOAD >= getLastShot().getTime())) {
+      setLastShot(now);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -94,5 +114,13 @@ public class TowerModel extends BaseModel {
 
   public void setSession(GameSession session) {
     this.session = session;
+  }
+
+  public Date getLastShot() {
+    return lastShot;
+  }
+
+  public void setLastShot(Date lastShot) {
+    this.lastShot = lastShot;
   }
 }

@@ -10,6 +10,7 @@ import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -43,8 +44,10 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
         broadcast(packet);
       }
       if (tower.hasTarget()) {
-        //log.info("Tower " + tower + " has target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
         tower.rotateTo(delta);
+        if (tower.shoot()) {
+          log.info("Tower " + tower + " shoots");
+        }
       }
     }
   }
