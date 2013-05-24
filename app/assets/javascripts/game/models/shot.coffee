@@ -2,9 +2,9 @@ MeshModel = require 'models/mesh'
 
 class ShotModel extends MeshModel
 	
-	rotationMultipler: 10
+	rotationMultipler: 20
 	
-	moveSpeed: 50
+	moveSpeed: 80
 	
 	constructor: (@id, @owner, @target, @damage) ->
 		geometry = new THREE.CubeGeometry 1, 10, 1
