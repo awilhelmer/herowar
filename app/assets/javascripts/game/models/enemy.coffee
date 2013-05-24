@@ -10,6 +10,21 @@ class Enemy extends AnimatedModel
 	
 	waypoints: []
 	
+	meshCurrentHealth: null
+	
+	meshMaxHealth: null
+	
+	meshHealthBarSize:
+		width: 15
+		height: 1.5
+		depth: 1
+	
+	constructor: (@id, @name, @meshBody) ->
+		super @id, @name, @meshBody
+		@meshMaxHealth = @_createMesh 0x808080
+		@object3d.add @meshMaxHealth
+		@_updateCurrentHealthMesh()
+		
 	update: (delta) ->
 		super delta
 		unless @isDead()
@@ -34,7 +49,11 @@ class Enemy extends AnimatedModel
 		unless @isDead()
 			@currentHealth -= damage
 			@currentHealth = 0 if @currentHealth < 0
-			@setAnimation 'crdeath', true if @currentHealth is 0
+			@_updateCurrentHealthMesh()
+			if @currentHealth is 0
+				@setAnimation 'crdeath', true
+				@object3d.remove @meshMaxHealth
+			
 	
 	isDead: ->
 		@currentHealth <= 0
@@ -53,9 +72,23 @@ class Enemy extends AnimatedModel
 		@waypoints.splice 0, 1
 		@dispose() if @waypoints.length is 0
 
-	_cloneMaterial: (oldMat) ->
-		newMaterial = new THREE.MeshLambertMaterial()
-		newMaterial[key] = value for own key, value of oldMat when key isnt 'id'
-		return newMaterial			 
+	_updateCurrentHealthMesh: ->
+		if @meshCurrentHealth
+			@object3d.remove @meshCurrentHealth
+			@meshCurrentHealth = null
+		unless @currentHealth is 0
+			@meshCurrentHealth = @_createMesh 0xFF0000, @currentHealth / @maxHealth
+			@meshCurrentHealth.position.y += 1
+			@object3d.add @meshCurrentHealth
+
+	_createMesh: (color, percent) ->
+		width = if percent then @meshHealthBarSize.width * percent else @meshHealthBarSize.width
+		geometry = new THREE.CubeGeometry @meshHealthBarSize.height, @meshHealthBarSize.depth, width
+		material = new THREE.MeshBasicMaterial color: color, opacity: 0.5
+		mesh = new THREE.Mesh geometry, material
+		mesh.position.x -= @meshBody.geometry.boundingBox.max.x * 1.2
+		mesh.position.y = @meshBody.geometry.boundingBox.max.y * 1.2
+		mesh.position.z += (@meshHealthBarSize.width - width) / 2 if percent
+		mesh
 
 return Enemy
