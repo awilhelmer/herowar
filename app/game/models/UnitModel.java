@@ -6,8 +6,9 @@ import models.entity.game.Waypoint;
 @SuppressWarnings("serial")
 public class UnitModel extends BaseModel {
 
-  private long currentHealth;
-  private long maxHealth;
+  private long currentHealth = 1000;
+  private long maxHealth = 1000;
+  private double lastDistance = Double.MAX_VALUE;
   private Path activePath;
   private Waypoint activeWaypoint;
   private TowerModel lastHitTower;
@@ -15,8 +16,6 @@ public class UnitModel extends BaseModel {
 
   public UnitModel(Long id, Long dbId) {
     super(id, dbId);
-    currentHealth = 1000;
-    maxHealth = 1000;
   }
 
   /**
@@ -87,6 +86,14 @@ public class UnitModel extends BaseModel {
 
   public void setMaxHealth(long maxHealth) {
     this.maxHealth = maxHealth;
+  }
+
+  public double getLastDistance() {
+    return lastDistance;
+  }
+
+  public void setLastDistance(double lastDistance) {
+    this.lastDistance = lastDistance;
   }
 
   public void setActivePath(Path activePath) {

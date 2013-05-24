@@ -1,6 +1,6 @@
 class BaseModel
 
-	rotationMultipler: 2
+	moveSpeed: 30
 
 	constructor: (@object3d) ->
 	
@@ -16,6 +16,6 @@ class BaseModel
 		m.lookAt target, @object3d.position, @object3d.up
 		dq = new THREE.Quaternion()
 		dq.setFromRotationMatrix m
-		@object3d.quaternion.slerp dq, delta * @rotationMultipler		
+		@object3d.quaternion.slerp dq, delta * (@moveSpeed / 10)
 
 return BaseModel 

@@ -6,7 +6,7 @@ class Enemy extends AnimatedModel
 	
 	maxHealth: 1000
 	
-	moveSpeed: 20
+	lastDistance: null
 	
 	waypoints: []
 	
@@ -33,7 +33,11 @@ class Enemy extends AnimatedModel
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
 		distance = @object3d.position.distanceTo waypoint.position
-		@_waypointReached waypoint if distance < 2
+		if distance < 2 or (lastDistance and lastDistance > distance)
+			@_waypointReached waypoint
+			lastDistance = null
+		else
+			lastDistance = distance
 
 	_waypointReached: (waypoint) ->
 		console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"

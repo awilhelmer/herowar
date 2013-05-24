@@ -21,6 +21,7 @@ public class BaseModel extends Mesh implements Serializable {
 
   private Long id;
   private Long dbId;
+  private double movespeed = 30;
 
   public BaseModel() {
     // empty
@@ -44,7 +45,7 @@ public class BaseModel extends Mesh implements Serializable {
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(getRotation());
     Quaternion qFinal = new Quaternion();
-    qStart.slerp(qEnd, delta * 2, qFinal);
+    qStart.slerp(qEnd, delta * (movespeed / 10), qFinal);
     setRotation(qFinal);
   }
 
@@ -78,10 +79,10 @@ public class BaseModel extends Mesh implements Serializable {
     Vector3.releaseTempInstance(z);
   }
 
-  public void move(double distance, int column) {
+  public void move(double delta, int column) {
     final Vector3 loc = new Vector3();
     loc.addLocal(this.getRotation().getColumn(column, null));
-    loc.normalizeLocal().multiplyLocal(distance).addLocal(this.getTranslation());
+    loc.normalizeLocal().multiplyLocal(delta * movespeed).addLocal(this.getTranslation());
     this.setTranslation(loc);
   }
 

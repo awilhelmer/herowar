@@ -46,7 +46,6 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
   
-  private final static double MOVEMENT_SPEED = 20;
   private final static double KILL_REWARD = 200;
   
   public UnitUpdatePlugin(GameProcessor processor) {
@@ -97,7 +96,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private boolean processMoving(UnitModel unit, Double delta) {
     if (!unit.isEndPointReached() && unit.getActiveWaypoint() != null) {
       unit.rotateTo(delta);
-      unit.move(delta * MOVEMENT_SPEED, 2);
+      unit.move(delta, 2);
       unit.updateWorldTransform(false);
       return true;
     }
@@ -112,15 +111,18 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
         com.ardor3d.math.Vector3 vWaypoint = waypoint.getPosition().getArdorVector();
         double distance = position.distance(vWaypoint);
         //log.info(String.format("Distance %s", distance));
-        if (distance < 2) {
+        if (distance < 2 || distance > unit.getLastDistance()) {
           log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
             unit.setActiveWaypoint(unit.getActivePath().getWaypoints().get(index + 1));
+            unit.setLastDistance(Double.MAX_VALUE);
           } else {
             unit.setEndPointReached(true);
             unit.setActiveWaypoint(null);
           }
+        } else {
+          unit.setLastDistance(distance);
         }
       }
     }
