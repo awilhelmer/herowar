@@ -7,7 +7,6 @@ import game.network.server.ObjectInPacket;
 import game.network.server.ObjectOutPacket;
 import game.network.server.PlayerLivesUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
-import game.network.server.TowerBuildPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
@@ -18,7 +17,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import models.entity.game.Unit;
 import models.entity.game.Waypoint;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
@@ -48,7 +46,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
   
-  private final static double MOVEMENT_SPEED = 30;
+  private final static double MOVEMENT_SPEED = 20;
   private final static double KILL_REWARD = 200;
   
   public UnitUpdatePlugin(GameProcessor processor) {
