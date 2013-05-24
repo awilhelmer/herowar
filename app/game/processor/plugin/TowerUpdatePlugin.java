@@ -3,18 +3,19 @@ package game.processor.plugin;
 import game.GameSession;
 import game.models.TowerModel;
 import game.models.UnitModel;
-import game.network.server.ObjectInPacket;
+import game.network.server.TowerAttackPacket;
 import game.network.server.TowerTargetPacket;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
 import play.Logger;
+
+import com.ardor3d.math.MathUtils;
 
 /**
  * The TowerUpdatePlugin handles all tower on the map and calculates the current
@@ -39,14 +40,19 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
       UnitModel target = tower.findTarget(units);
       if (target != null && target != tower.getTarget()) {
         tower.setTarget(target);
-        //log.info("Tower " + tower + " has new target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
+        // log.info("Tower " + tower + " has new target " + tower.getTarget() +
+        // " (" + tower.getTargetDistance() + ")");
         TowerTargetPacket packet = new TowerTargetPacket(tower.getId(), target.getId());
         broadcast(packet);
       }
       if (tower.hasTarget()) {
         tower.rotateTo(delta);
         if (tower.shoot()) {
-          log.info("Tower " + tower + " shoots");
+          long damage = Math.round(MathUtils.nextRandomFloat() * 100);
+          tower.getTarget().hit(damage);
+          TowerAttackPacket packet = new TowerAttackPacket(tower.getId(), damage);
+          broadcast(packet);
+          log.info("Tower " + tower + " hit target " + tower.getTarget() + " " + tower.getTarget().getCurrentHealth() + "/" + tower.getTarget().getMaxHealth());
         }
       }
     }

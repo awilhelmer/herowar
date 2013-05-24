@@ -6,14 +6,16 @@ import models.entity.game.Waypoint;
 @SuppressWarnings("serial")
 public class UnitModel extends BaseModel {
 
+  private long currentHealth;
+  private long maxHealth;
   private Path activePath;
-
   private Waypoint activeWaypoint;
-
   private boolean endPointReached = false;
 
   public UnitModel(Long id, Long dbId) {
     super(id, dbId);
+    currentHealth = 1000;
+    maxHealth = 1000;
   }
 
   /**
@@ -26,10 +28,36 @@ public class UnitModel extends BaseModel {
     super.rotateTo(getActiveWaypoint().getPosition(), delta);
   }
 
+  /**
+   * Hit unit with damage.
+   * 
+   * @param damage
+   *          The damage to set.
+   */
+  public void hit(long damage) {
+    setCurrentHealth(getCurrentHealth() - damage);
+  }
+
   // GETTER & SETTER //
 
   public Path getActivePath() {
     return activePath;
+  }
+
+  public long getCurrentHealth() {
+    return currentHealth;
+  }
+
+  public void setCurrentHealth(long currentHealth) {
+    this.currentHealth = currentHealth;
+  }
+
+  public long getMaxHealth() {
+    return maxHealth;
+  }
+
+  public void setMaxHealth(long maxHealth) {
+    this.maxHealth = maxHealth;
   }
 
   public void setActivePath(Path activePath) {

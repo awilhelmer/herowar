@@ -37,5 +37,6 @@ public class PacketType {
   public static final Integer WaveUpdatePacket = 61;
   public static final Integer TowerBuildPacket = 81;
   public static final Integer TowerTargetPacket = 82;
+  public static final Integer TowerAttackPacket = 83;
 
 }
