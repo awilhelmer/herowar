@@ -17,12 +17,12 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 	
 	onObjectOut: (packet) ->
-		console.log 'onObjectOut', scenegraph.dynamicObjects[packet.id]
+		#console.log 'onObjectOut', scenegraph.dynamicObjects[packet.id]
 		scenegraph.removeDynObject packet.id
 			
 	onTowerTarget: (packet) ->
 		scenegraph.dynamicObjects[packet.tower].target = scenegraph.dynamicObjects[packet.target]
-		console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "target now", scenegraph.dynamicObjects[packet.target]
+		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "target now", scenegraph.dynamicObjects[packet.target]
 		
 	onTowerAttack: (packet) ->
 		owner = scenegraph.dynamicObjects[packet.tower]
@@ -33,6 +33,6 @@ class GameScene extends Scene
 		currHealth = scenegraph.dynamicObjects[packet.tower].target.currentHealth
 		currHealth = 0 if currHealth < 0
 		percentage = Math.round currHealth / scenegraph.dynamicObjects[packet.tower].target.maxHealth * 100
-		console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
+		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "hit target", scenegraph.dynamicObjects[packet.tower].target, "for", packet.damage, "Percent", percentage 
 	
 return GameScene

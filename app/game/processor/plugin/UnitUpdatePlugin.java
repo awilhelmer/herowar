@@ -77,9 +77,11 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     ObjectOutPacket packet = new ObjectOutPacket(unit.getId());
     broadcast(packet);
     if (unit.isEndPointReached()) {
-      getProcessor().getMap().setLives(getProcessor().getMap().getLives() - 1);
-      PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(getProcessor().getMap().getLives());
-      broadcast(packet2);
+      if (getProcessor().getMap().getLives() > 0) {
+        getProcessor().getMap().setLives(getProcessor().getMap().getLives() - 1);
+        PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(getProcessor().getMap().getLives());
+        broadcast(packet2);
+      }
     }
     if (unit.isDeath()) {
       GameSession session = unit.getLastHitTower().getSession();

@@ -40,7 +40,7 @@ class Enemy extends AnimatedModel
 			lastDistance = distance
 
 	_waypointReached: (waypoint) ->
-		console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
+		#console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
 		@dispose() if @waypoints.length is 0
 

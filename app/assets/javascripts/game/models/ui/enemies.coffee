@@ -8,29 +8,28 @@ db = require 'database'
 
 class Enemies extends PacketModel
 
-	type: PacketType.SERVER_OBJECT_IN
+	type: [ PacketType.SERVER_OBJECT_IN, PacketType.SERVER_OBJECT_OUT ]
 
 	defaultValues:
 		'_active' : true
+		'current' : 0
 		'quantity' : 0
 
 	initialize: (options) ->
 		super options
 
-	bindPacketEvents: ->
-		super()
-		events.on "retrieve:packet:#{PacketType.SERVER_OBJECT_OUT}", @onObjectOut, @
-
-	onObjectOut: ->
-		@set 'quantity', @get('quantity') - 1
-
 	onPacket: (packet) ->
-		if packet
-			# TODO: we need here the info how much enemies are on the field for late joiner
-			quantity = if @get('quantity') then @get('quantity') else 0
-			quantity++
-			@set 'quantity', quantity
-			@createEnemy packet.id, packet.name, packet.path
+		if packet 
+			current = if @get('current') then @get('current') else 0
+			if packet.type is PacketType.SERVER_OBJECT_IN
+				quantity = if @get('quantity') then @get('quantity') else 0
+				# TODO: we need here the info how much enemies are on the field for late joiner
+				@createEnemy packet.id, packet.name, packet.path
+				@set 
+					'current': ++current
+					'quantity': ++quantity
+			else if packet.type is PacketType.SERVER_OBJECT_OUT
+				@set 'current', --current
 	
 	createEnemy: (id, name, pathId) ->
 		path = @getPathById pathId
