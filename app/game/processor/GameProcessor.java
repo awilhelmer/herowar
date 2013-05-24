@@ -11,6 +11,7 @@ import game.processor.meta.IProcessor;
 import game.processor.models.Tower;
 import game.processor.plugin.GoldUpdatePlugin;
 import game.processor.plugin.PreloadUpdatePlugin;
+import game.processor.plugin.TowerUpdatePlugin;
 import game.processor.plugin.UnitUpdatePlugin;
 import game.processor.plugin.WaveUpdatePlugin;
 
@@ -165,8 +166,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     }
     plugins.get(State.PRELOAD).add(new PreloadUpdatePlugin(this));
     plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
-    plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
+    plugins.get(State.GAME).add(new TowerUpdatePlugin(this));
     plugins.get(State.GAME).add(new UnitUpdatePlugin(this));
+    plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
   }
 
   @RuntimeTopicEventSubscriber(methodName = "getStateTopic")

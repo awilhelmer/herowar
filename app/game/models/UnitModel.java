@@ -3,8 +3,8 @@ package game.models;
 import models.entity.game.Path;
 import models.entity.game.Waypoint;
 
+@SuppressWarnings("serial")
 public class UnitModel extends BaseModel {
-  private static final long serialVersionUID = 1L;
 
   private Path activePath;
 
@@ -15,6 +15,18 @@ public class UnitModel extends BaseModel {
   public UnitModel(Long id, Long dbId) {
     super(id, dbId);
   }
+
+  /**
+   * Rotate to current waypoint.
+   * 
+   * @param delta
+   *          The delta to set
+   */
+  public void rotateTo(Double delta) {
+    super.rotateTo(getActiveWaypoint().getPosition(), delta);
+  }
+
+  // GETTER & SETTER //
 
   public Path getActivePath() {
     return activePath;
@@ -39,6 +51,5 @@ public class UnitModel extends BaseModel {
   public boolean isEndPointReached() {
     return endPointReached;
   }
-
 
 }

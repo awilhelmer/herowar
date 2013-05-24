@@ -1,6 +1,10 @@
 package game.processor.models;
 
 import game.GameSession;
+
+import java.io.Serializable;
+
+import models.entity.game.Unit;
 import models.entity.game.Vector3;
 
 /**
@@ -8,11 +12,13 @@ import models.entity.game.Vector3;
  * 
  * @author Sebastian Sachtleben
  */
-public class Tower {
+@SuppressWarnings("serial")
+public class Tower implements Serializable {
 
   private Long objectId;
   private Long towerId;
   private Vector3 postion;
+  private Unit target;
   private GameSession session;
 
   public Long getObjectId() {
@@ -37,6 +43,14 @@ public class Tower {
 
   public void setPostion(Vector3 postion) {
     this.postion = postion;
+  }
+
+  public Unit getTarget() {
+    return target;
+  }
+
+  public void setTarget(Unit target) {
+    this.target = target;
   }
 
   public GameSession getSession() {
