@@ -11,14 +11,12 @@ import game.processor.meta.IPlugin;
 
 import java.util.Set;
 
-import models.entity.game.Vector3;
 import models.entity.game.Waypoint;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
 import play.Logger;
 
-import com.ardor3d.math.Quaternion;
 import com.ardor3d.math.type.ReadOnlyVector3;
 
 import dao.game.PathDAO;

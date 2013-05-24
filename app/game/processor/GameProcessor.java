@@ -3,12 +3,12 @@ package game.processor;
 import game.GameClock;
 import game.GameSession;
 import game.event.GameStateEvent;
+import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.BasePacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
-import game.processor.models.Tower;
 import game.processor.plugin.GoldUpdatePlugin;
 import game.processor.plugin.PreloadUpdatePlugin;
 import game.processor.plugin.TowerUpdatePlugin;
@@ -73,7 +73,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   /**
    * The tower cache contains all placed towers on the map by any player.
    */
-  private ConcurrentHashMap<Long, Tower> towerCache = new ConcurrentHashMap<Long, Tower>();
+  private ConcurrentHashMap<Long, TowerModel> towerCache = new ConcurrentHashMap<Long, TowerModel>();
 
   public GameProcessor(Long gameId, Map map, GameSession session) {
     super("game-" + gameId);
@@ -224,7 +224,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     return playerCache;
   }
 
-  public ConcurrentHashMap<Long, Tower> getTowerCache() {
+  public ConcurrentHashMap<Long, TowerModel> getTowerCache() {
     return towerCache;
   }
 

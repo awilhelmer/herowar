@@ -1,13 +1,15 @@
 package game.processor.plugin;
 
 import game.GameSession;
+import game.models.TowerModel;
+import game.models.UnitModel;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
-import game.processor.models.Tower;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import play.Logger;
 
@@ -26,10 +28,20 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void process(Double delta) {
-    Collection<Tower> towers = getProcessor().getTowerCache().values();
-    Iterator<Tower> iter = towers.iterator();
+    Set<UnitModel> units = getProcessor().getUnits();
+    Collection<TowerModel> towers = getProcessor().getTowerCache().values();
+    Iterator<TowerModel> iter = towers.iterator();
     while (iter.hasNext()) {
-      Tower tower = iter.next();
+      TowerModel tower = iter.next();
+      UnitModel target = tower.findTarget(units);
+      if (target != null && target != tower.getTarget()) {
+        tower.setTarget(target);
+        log.info("Tower " + tower + " has new target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
+      }
+      if (tower.hasTarget()) {
+        //log.info("Tower " + tower + " has target " + tower.getTarget() + " (" + tower.getTargetDistance() + ")");
+        tower.rotateTo(delta);
+      }
     }
   }
 
