@@ -12,7 +12,7 @@ class ApplicationController extends BaseController
 		domId: '#viewport',
 		type: Variables.VIEWPORT_TYPE_RTS,
 		camera:
-			type: Variables.CAMERA_TYPE_PERSPECTIVE
+			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
 			position: [ 0, 350, 0 ],
 			rotation: [ THREE.Math.degToRad(-90), 0, 0 ]
 	]

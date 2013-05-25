@@ -45,6 +45,7 @@ class Views
 			view.createCameraSkybox()
 			view.createRenderer()
 			view.updateSize()
+			console.log 'View', view, 'initialized'
 		return
 	
 	render: (scene, skyboxScene) ->

@@ -44,10 +44,8 @@ class Viewport extends Backbone.Model
 		height = $domElement.height()
 		renderer.setSize width, height
 		aspect =  width / height
-		if cameraScene instanceof THREE.OrthographicCamera and camera.size
-			@calculateOrthographicCameraPosition cameraScene, camera.size, camera.offset, aspect
-		else if cameraScene instanceof THREE.PerspectiveCamera
-			@calculatePerspectiveCameraPosition cameraScene, camera.position, camera.rotation
+		@updateCamera cameraScene, camera.position, camera.rotation
+		@updateOrthographic cameraScene, camera.size, camera.offset, aspect if cameraScene instanceof THREE.OrthographicCamera
 		cameraScene.aspect = aspect
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
@@ -55,7 +53,8 @@ class Viewport extends Backbone.Model
 		console.log 'Camera', @, 'updated'
 		return
 		
-	calculateOrthographicCameraPosition: (camera, size, offset, aspect) ->
+	updateOrthographic: (camera, size, offset, aspect) ->
+		return unless size or offset
 		aspectSize = size.width / size.height
 		aspectReal = Math.max aspect, aspectSize
 		if aspectReal > 1
@@ -81,7 +80,7 @@ class Viewport extends Backbone.Model
 		#console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom, 'offset', offset
 		return
 
-	calculatePerspectiveCameraPosition: (camera, position, rotation) ->
+	updateCamera: (camera, position, rotation) ->
 		camera.position.set position[0], position[1], position[2]
 		camera.rotation.set rotation[0], rotation[1], rotation[2]
 		return
