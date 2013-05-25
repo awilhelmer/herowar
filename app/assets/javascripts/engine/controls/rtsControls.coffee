@@ -102,8 +102,15 @@ class RTSControls
 		return
 
 	changeZoom: (value) ->
-		@zoom += value
-		console.log 'RTSControls changeZoom()', value, 'to', @zoom
+		camera = @view.get 'camera'
+		cameraScene = @view.get 'cameraScene'
+		if cameraScene instanceof THREE.OrthographicCamera
+			@zoom += value
+			console.log 'RTSControls changeZoom()', value, 'to', @zoom
+		else
+			camera.position.z += value
+			cameraScene.position.z = camera.position.z
+			cameraScene.updateProjectionMatrix()
 		return
 
 	update: ->
@@ -114,11 +121,25 @@ class RTSControls
 		scrollDown = _.indexOf(@keysPressed, @KEY.DOWN) isnt -1
 		if scrollLeft or scrollUp or scrollRight or scrollDown
 			camera = @view.get 'camera'
-			camera.offset.left -= 1 if scrollLeft and camera.offset.left isnt 0
-			camera.offset.left += 1 if scrollRight
-			camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
-			camera.offset.top += 1 if scrollDown
-			#console.log 'Camera Offset', camera.offset
+			cameraScene = @view.get 'cameraScene'
+			if cameraScene instanceof THREE.OrthographicCamera
+				camera.offset.left -= 1 if scrollLeft and camera.offset.left isnt 0
+				camera.offset.left += 1 if scrollRight
+				camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
+				camera.offset.top += 1 if scrollDown
+			else
+				if scrollLeft
+					camera.position.x -= 1 
+					cameraScene.position.x -= cameraScene.position.x 
+				if scrollRight
+					camera.position.x += 1
+					cameraScene.position.x = cameraScene.position.x 
+				if scrollUp
+					camera.position.y -= 1 
+					camera.position.y += 1 if scrollDown
+				@view.trigger 'change:camera'
+				@view.trigger 'change'
+				cameraScene.updateProjectionMatrix()
 			@view.updateSize()
 		return
 

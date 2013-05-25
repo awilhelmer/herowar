@@ -35,7 +35,7 @@ class SelectorPlane extends SelectorTerrain
 
 	createSel: ->
 		@selector = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: @color, transparent: true, opacity:1)
-		@selector.rotation.x = - Math.PI/2
+		@selector.rotation.x = THREE.Math.degToRad -90
 		@selector.material.opacity = 0.3
 
 	addSel: ->

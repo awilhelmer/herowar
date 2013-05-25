@@ -46,7 +46,7 @@ class PathingHelper
 		for waypoint in @pathWaypoints
 			mesh = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: @color, transparent: true, opacity:1)
 			mesh.position = waypoint.get('position')
-			mesh.rotation.x = - Math.PI/2
+			mesh.rotation.x = THREE.Math.degToRad -90
 			scenegraph.scene.add mesh
 			@meshes.push mesh
 			index = _.indexOf @pathWaypoints, waypoint

@@ -17,6 +17,7 @@ class Views
 				r: 0, g: 0, b: 0, a: 1
 			rendererType: Variables.RENDERER_TYPE_WEBGL
 		camera:
+			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
 			position: [ 0, 0, 0 ]
 			rotation: [ 0, 0, 0 ]
 			zoom: 1.0
@@ -52,11 +53,10 @@ class Views
 		
 	createCamera: (view) ->
 		camera = view.get 'camera'
-		switch view.get 'type'
-			when Variables.VIEWPORT_TYPE_RTS 	
+		switch camera.type
+			when Variables.CAMERA_TYPE_ORTHOGRAPHIC 	
 				cameraScene = new THREE.OrthographicCamera Variables.SCREEN_WIDTH / - 2, Variables.SCREEN_WIDTH / 2, Variables.SCREEN_HEIGHT / 2, Variables.SCREEN_HEIGHT / -2, camera.near, camera.far
-				cameraScene.rotation.set -Math.PI/2, 0, 0
-			when Variables.VIEWPORT_TYPE_EDITOR
+			when Variables.CAMERA_TYPE_PERSPECTIVE
 				cameraScene = new THREE.PerspectiveCamera camera.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, camera.near, camera.far
 				cameraScene.lookAt scenegraph.scene.position
 		cameraScene.position.set camera.position[0], camera.position[1], camera.position[2]

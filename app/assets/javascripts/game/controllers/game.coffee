@@ -12,6 +12,7 @@ class GameController extends ApplicationController
 		'views/build'			: ''
 		'views/stats'	    : ''
 		'views/viewport'	: ''
+		'views/debug'	    : ''
 
 	initialize: (options) ->
 		log.info 'Initialize game...'

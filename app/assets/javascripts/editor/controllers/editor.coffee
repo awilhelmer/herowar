@@ -21,6 +21,7 @@ class Editor extends ApplicationController
 		domId: '#viewport',
 		type: Variables.VIEWPORT_TYPE_EDITOR
 		camera:
+			type: Variables.CAMERA_TYPE_PERSPECTIVE
 			position: [ 300, 150, 300 ]	
 	]
 

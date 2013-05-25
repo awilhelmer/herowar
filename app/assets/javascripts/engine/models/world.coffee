@@ -52,7 +52,7 @@ class World extends Backbone.Model
 		mesh = new THREE.Mesh geometry, new THREE.MeshFaceMaterial([])
 		mesh.name = (@get 'name') + '_mesh'
 		mesh.geometry.dynamic = true
-		mesh.rotation.x = - Math.PI/2
+		mesh.rotation.x = THREE.Math.degToRad -90
 		materialHelper.loadGlobalMaterials mesh
 		obj.add mesh
 		obj
