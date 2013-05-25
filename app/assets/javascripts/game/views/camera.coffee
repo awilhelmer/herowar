@@ -1,5 +1,6 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
+Variables = require 'variables'
 
 class CameraView extends BaseView
 
@@ -19,7 +20,14 @@ class CameraView extends BaseView
 		console.log 'CameraView model=', @model
 	
 	switchCamera: (event) ->
-		console.log 'switchCamera'
+		view = @model.at 0
+		camera = view.get 'camera'
+		camera.type = if camera.type is Variables.CAMERA_TYPE_ORTHOGRAPHIC then Variables.CAMERA_TYPE_PERSPECTIVE else Variables.CAMERA_TYPE_ORTHOGRAPHIC
+		view.trigger 'change:camera'
+		view.trigger 'change'
+		view.createCameraScene()
+		view.updateSize()
+		return
 
 	getTemplateData: ->
 		json = super()
