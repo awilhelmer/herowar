@@ -4,23 +4,47 @@
 
 #progress {
     position: absolute;
+    width: 200px;
+    left: 50%;
     top: 10px;
-    left: 10px;
+    margin-left: -100px;
+    background-color: rgba(51, 51, 51, 0.5);
     z-index: 2;
 }
 
 #progress #waves {
-    margin-top: 10px;
+    color: white;
+    text-shadow: black 0.1em 0.1em 0.2em;
+    font-size: 30px;
+    line-height: 40px;
+    .clearfix();
+}
+
+#progress #waves .wave {
+    margin-left: 10px;
+}
+
+#progress #waves .off {
+    font-size: 20px;
+    color: rgb(187, 187, 187);
+}
+
+#progress #waves .eta {
+    margin-right: 10px;
+    float: right;   
 }
 
 #progress #enemies {
     margin-top: 10px;
+    display: none;
 }
 
 #progress #mouse {
     margin-top: 10px;
+    display: none;
 }
 
 #progress #viewports {
     margin-top: 10px;
+    display: none;
 }

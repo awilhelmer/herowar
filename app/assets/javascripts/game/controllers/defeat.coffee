@@ -7,6 +7,7 @@ class DefeatController extends BaseController
 	views:
 		'views/progress'	: ''
 		'views/defeat'		: ''
+		'views/stats'	    : ''
 		'views/viewport'	: ''
 
 	initialize: (options) ->

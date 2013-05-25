@@ -1,6 +1,6 @@
 {{#if _active}}
-	<div>Wave {{current}} / {{total}}</div>
+	<span class="wave">{{current}}</span><span class="off">/{{total}}</span>
 	{{#if arrival}}
-		<div>Eta {{arrival}}</div>
+		<span class="eta">{{arrival}}</span>
 	{{/if}}
 {{/if}}
