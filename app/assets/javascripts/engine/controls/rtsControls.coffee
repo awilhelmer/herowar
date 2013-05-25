@@ -108,9 +108,13 @@ class RTSControls
 			@zoom += value
 			console.log 'RTSControls changeZoom()', value, 'to', @zoom
 		else
-			camera.position.z += value
-			cameraScene.position.z = camera.position.z
-			cameraScene.updateProjectionMatrix()
+			camera.position[1] = Math.round(camera.position[1] - value * 100)
+			camera.position[1] = 350 if camera.position[1] > 350
+			camera.position[1] = 100 if camera.position[1] < 100
+			console.log 'RTSControls changeZoom()', value, 'to', camera.position[1]
+		@view.trigger 'change:camera'
+		@view.trigger 'change'
+		@view.updateSize()
 		return
 
 	update: ->
@@ -128,18 +132,12 @@ class RTSControls
 				camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
 				camera.offset.top += 1 if scrollDown
 			else
-				if scrollLeft
-					camera.position.x -= 1 
-					cameraScene.position.x -= cameraScene.position.x 
-				if scrollRight
-					camera.position.x += 1
-					cameraScene.position.x = cameraScene.position.x 
-				if scrollUp
-					camera.position.y -= 1 
-					camera.position.y += 1 if scrollDown
-				@view.trigger 'change:camera'
-				@view.trigger 'change'
-				cameraScene.updateProjectionMatrix()
+				camera.position[0] -= 1 if scrollLeft
+				camera.position[0] += 1 if scrollRight
+				camera.position[2] -= 1 if scrollUp
+				camera.position[2] += 1 if scrollDown
+			@view.trigger 'change:camera'
+			@view.trigger 'change'
 			@view.updateSize()
 		return
 
