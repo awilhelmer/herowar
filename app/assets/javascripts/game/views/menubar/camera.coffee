@@ -8,7 +8,7 @@ class CameraView extends BaseView
 	
 	entity: 'ui/viewports'
 	
-	template: templates.get 'camera.tmpl'
+	template: templates.get 'menubar/camera.tmpl'
 
 	modes: [ 'Orthograpgic', 'Perspective' ]
 
