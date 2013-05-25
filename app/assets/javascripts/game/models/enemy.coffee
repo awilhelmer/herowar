@@ -15,14 +15,23 @@ class Enemy extends AnimatedModel
 	
 	meshMaxHealth: null
 	
-	meshHealthBarSize:
-		width: 15
-		height: 1.5
-		depth: 1
+	meshHealthSize:
+		bar:
+			width   : 25
+			height  : 2.5
+			depth   : 1
+			color   : 0xFF0000
+			opacity : 1.0
+		border:
+			width   : 27
+			height  : 4.5
+			depth   : 1
+			color   : 0x000000
+			opacity : 0.8
 	
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
-		@meshMaxHealth = @_createMesh 0x808080
+		@meshMaxHealth = @_createMesh @meshHealthSize.border
 		scenegraph.scene.add @meshMaxHealth
 		@_updateCurrentHealthMesh()
 		
@@ -62,11 +71,11 @@ class Enemy extends AnimatedModel
 	
 	_updateHealthBarPosition: ->
 		percent = @currentHealth / @maxHealth
-		width = if percent or percent is 0 then @meshHealthBarSize.width * percent else @meshHealthBarSize.width
-		newY = @meshBody.geometry.boundingBox.max.y - @meshBody.geometry.boundingBox.min.y
-		newZ = @meshBody.geometry.boundingBox.max.z - @meshBody.geometry.boundingBox.min.z
+		width = if percent or percent is 0 then @meshHealthSize.bar.width * percent else @meshHealthSize.bar.width
+		newY = (@meshBody.geometry.boundingBox.max.y - @meshBody.geometry.boundingBox.min.y) * 0.8
+		newZ = (@meshBody.geometry.boundingBox.max.x - @meshBody.geometry.boundingBox.min.x) * 0.8
 		@meshCurrentHealth.position.copy @root.position if @meshCurrentHealth
-		@meshCurrentHealth.position.x += (@meshHealthBarSize.width - width) / 2
+		@meshCurrentHealth.position.x -= (@meshHealthSize.bar.width - width) / 2
 		@meshCurrentHealth.position.y += newY + 1
 		@meshCurrentHealth.position.z -= newZ
 		@meshMaxHealth.position.copy @root.position if @meshMaxHealth
@@ -92,18 +101,17 @@ class Enemy extends AnimatedModel
 			scenegraph.scene.remove @meshCurrentHealth
 			@meshCurrentHealth = null
 		unless @currentHealth is 0
-			@meshCurrentHealth = @_createMesh 0xFF0000, @currentHealth / @maxHealth
+			@meshCurrentHealth = @_createMesh @meshHealthSize.bar, @currentHealth / @maxHealth
 			scenegraph.scene.add @meshCurrentHealth
 			@_updateHealthBarPosition()
 
-	_createMesh: (color, percent) ->
-		width = if percent then @meshHealthBarSize.width * percent else @meshHealthBarSize.width
-		geometry = new THREE.CubeGeometry width, @meshHealthBarSize.height, @meshHealthBarSize.depth
-		material = new THREE.MeshBasicMaterial color: color, opacity: 0.5
-		mesh = new THREE.Mesh geometry, material
-		mesh.position.x -= @meshBody.geometry.boundingBox.max.x * 1.2
-		mesh.position.y = @meshBody.geometry.boundingBox.max.y * 1.2
-		mesh.position.z += (@meshHealthBarSize.width - width) / 2 if percent
-		mesh
+	_createMesh: (size, percent) ->
+		width = if percent then size.width * percent else size.width
+		geometry = new THREE.CubeGeometry width, size.depth, size.height
+		if size.opacity is 1.0
+			material = new THREE.MeshPhongMaterial ambient: 0x000000, color: size.color, specular: 0x555555, shininess: 30
+		else
+			material = new THREE.MeshBasicMaterial color: size.color, opacity: size.opacity, transparent: true
+		return new THREE.Mesh geometry, material
 
 return Enemy

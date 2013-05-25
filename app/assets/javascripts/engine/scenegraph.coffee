@@ -18,7 +18,10 @@ sceneGraph =
 			@addLights()
 	
 	addLights: ->
-		@scene.add new THREE.AmbientLight 0x666666
+		@scene.add new THREE.AmbientLight 0x101010
+		directionalLight = new THREE.DirectionalLight 0xffffff 
+		directionalLight.position.set(0, 1, 1).normalize()
+		@scene.add directionalLight
 
 	update: (delta) ->
 		for id, obj of @dynamicObjects
