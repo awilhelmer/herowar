@@ -28,6 +28,7 @@ class AddTowerTool extends AddObject
 		name = "tower#{packet.towerId}"
 		data = db.data().geometries[name]
 		mesh = @createMesh data[0], data[1], name, data[2]
+		mesh.rotation.x = THREE.Math.degToRad -180
 		model = new Tower packet.objectId, name, mesh
 		model.root.position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
@@ -52,6 +53,7 @@ class AddTowerTool extends AddObject
 		unless json
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
+		mesh.rotation.x = THREE.Math.degToRad -180
 		model = new Tower @tool.get('currentObjectId'), name, mesh
 		model.showRange()
 		model.root.visible = false

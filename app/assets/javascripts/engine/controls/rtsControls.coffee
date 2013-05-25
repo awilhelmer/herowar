@@ -108,9 +108,12 @@ class RTSControls
 			@zoom += value
 			console.log 'RTSControls changeZoom()', value, 'to', @zoom
 		else
+			maxPos = 500
+			minPos = 100
 			camera.position[1] = Math.round(camera.position[1] - value * 100)
-			camera.position[1] = 350 if camera.position[1] > 350
-			camera.position[1] = 100 if camera.position[1] < 100
+			camera.position[1] = maxPos if camera.position[1] > maxPos
+			camera.position[1] = minPos if camera.position[1] < minPos
+			camera.rotation[0] = THREE.Math.degToRad((camera.position[1] - minPos) / (maxPos - minPos) * -90)
 			console.log 'RTSControls changeZoom()', value, 'to', camera.position[1]
 		@view.trigger 'change:camera'
 		@view.trigger 'change'
