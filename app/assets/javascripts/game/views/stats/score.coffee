@@ -12,8 +12,4 @@ class StatsScoreView extends BaseView
 	bindEvents: ->
 		@listenTo @model, 'change:score', @render
 
-	render: ->
-		console.log 'Render score view...', @model
-		super()
-
 return StatsScoreView

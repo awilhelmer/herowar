@@ -12,8 +12,8 @@ public class PlayerStatsInitPacket extends PlayerStatsUpdatePacket {
 
   protected Integer goldPerTick;
 
-  public PlayerStatsInitPacket(Integer lives, Long gold, Integer goldPerTick) {
-    super(lives, gold);
+  public PlayerStatsInitPacket(Long lives, Long gold, Integer goldPerTick) {
+    super(0L, lives, gold, 0L, lives, gold);
     this.type = PacketType.PlayerStatsInitPacket;
     this.goldPerTick = goldPerTick;
   }

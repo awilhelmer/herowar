@@ -43,10 +43,12 @@ import dao.game.PathDAO;
 public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(UnitUpdatePlugin.class);
 
+  private final static String SCORE_VALUE = "score";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
   
-  private final static double KILL_REWARD = 50;
+  private final static long KILL_REWARD_SCORE = 200;
+  private final static double KILL_REWARD_GOLD = 50;
   
   public UnitUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -90,12 +92,16 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     if (unit.isDeath()) {
       GameSession session = unit.getLastHitTower().getSession();
       ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getUser().getId());
-      double newGold = ((double) playerCache.get(GOLD_VALUE)) + KILL_REWARD;
+      long newScore = 0L;
+      double newGold = 0L;
       synchronized (playerCache) {
+        newScore = ((long) playerCache.get(SCORE_VALUE)) + KILL_REWARD_SCORE;
+        playerCache.replace(SCORE_VALUE, newScore);
+        newGold = ((double) playerCache.get(GOLD_VALUE)) + KILL_REWARD_GOLD;
         playerCache.replace(GOLD_VALUE, newGold);
         playerCache.replace(GOLD_SYNC, new Date());
       }
-      session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(session.getGame().getMap().getLives(), Math.round(newGold))).toString());
+      session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());
     }
   }
 

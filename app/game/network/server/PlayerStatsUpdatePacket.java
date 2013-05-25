@@ -11,21 +11,37 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class PlayerStatsUpdatePacket extends BasePacket {
 
-  protected Integer lives;
+  protected Long score;
+  protected Long lives;
   protected Long gold;
+  protected Long changedScore;
+  protected Long changedLives;
+  protected Long changedGold;
   
-  public PlayerStatsUpdatePacket(Integer lives, Long gold) {
+  public PlayerStatsUpdatePacket(Long score, Long lives, Long gold, Long changedScore, Long changedLives, Long changedGold) {
     super();
     this.type = PacketType.PlayerStatsUpdatePacket;
+    this.score = score;
     this.lives = lives;
     this.gold = gold;
+    this.changedScore = changedScore;
+    this.changedLives = changedLives;
+    this.changedGold = changedGold;
   }
 
-  public Integer getLives() {
+  public Long getScore() {
+    return score;
+  }
+  
+  public void setScore(Long score) {
+    this.score = score;
+  }
+
+  public Long getLives() {
     return lives;
   }
 
-  public void setLives(Integer lives) {
+  public void setLives(Long lives) {
     this.lives = lives;
   }
 
@@ -35,6 +51,30 @@ public class PlayerStatsUpdatePacket extends BasePacket {
 
   public void setGold(Long gold) {
     this.gold = gold;
+  }
+
+  public Long getChangedScore() {
+    return changedScore;
+  }
+
+  public void setChangedScore(Long changedScore) {
+    this.changedScore = changedScore;
+  }
+
+  public Long getChangedLives() {
+    return changedLives;
+  }
+
+  public void setChangedLives(Long changedLives) {
+    this.changedLives = changedLives;
+  }
+
+  public Long getChangedGold() {
+    return changedGold;
+  }
+
+  public void setChangedGold(Long changedGold) {
+    this.changedGold = changedGold;
   }
 
   @Override

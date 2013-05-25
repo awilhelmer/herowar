@@ -41,11 +41,14 @@ class PacketModel extends Backbone.Model
 
 	onPacket: (packet) ->
 		if packet
-			_.extend @attributes, _.extend _.omit(packet, 'type', 'createdTime'), { retrieveTime: packet.createdTime }
+			values = _.extend _.omit(packet, 'type', 'createdTime'), { retrieveTime: packet.createdTime }
+			delete values[key] for own key, value of values when value is null
+			_.extend @attributes, values
 			unless @get '_active'
 				_.extend @attributes, { _active : true }
 				@calculateRate()
 				@start() if @rate > 0
+			@trigger "change:#{key}" for own key, value of values
 			@trigger 'change'
 
 	updateTimeValue: (valueKey, incrementKey, timeKey) ->

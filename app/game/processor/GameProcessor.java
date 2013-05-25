@@ -125,6 +125,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     long playerId = player.getUser().getId();
     if (!playerCache.containsKey(playerId)) {
       playerCache.put(playerId, new ConcurrentHashMap<String, Object>());
+      playerCache.get(playerId).put("score", 0L);
     }
     for (Set<IPlugin> statePlugins : plugins.values()) {
       for (IPlugin plugin : statePlugins) {

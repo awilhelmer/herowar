@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
+  private final static String SCORE_VALUE = "SCORE_VALUE";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_UPDATE = "gold_update";
   private final static String GOLD_SYNC = "gold_sync";
@@ -44,13 +45,13 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
         setPlayerCacheValue(playerCache, GOLD_UPDATE, date);
         // Send info to client
         if (!hashInitPacket(playerId)) {
-          sendPacket(session, new PlayerStatsInitPacket(getMap().getLives(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
+          sendPacket(session, new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
           getInitPacket().replace(playerId, true);
           setPlayerCacheValue(playerCache, GOLD_SYNC, date);
         } else {
           Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
           if (dif >= SYNC_PERIOD) {
-            sendPacket(session, new PlayerStatsUpdatePacket(getMap().getLives(), getRoundedGoldValue(playerCache)));
+            sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(SCORE_VALUE), getMap().getLives().longValue(), getRoundedGoldValue(playerCache), null, null, null));
             setPlayerCacheValue(playerCache, GOLD_SYNC, date);
           }
         }

@@ -30,6 +30,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 
   private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);
 
+  private final static String SCORE_VALUE = "score";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
   
@@ -67,7 +68,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
       playerCache.replace(GOLD_VALUE, currentGold - towerPrice);
       playerCache.replace(GOLD_SYNC, new Date());
     }
-    session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(session.getGame().getMap().getLives(), Math.round(currentGold - towerPrice))).toString());
+    session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - towerPrice), null, null, new Long(towerPrice * -1))).toString());
   }
 
   public Long getId() {
