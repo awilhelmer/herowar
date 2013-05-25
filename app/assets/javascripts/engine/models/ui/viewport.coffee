@@ -3,6 +3,19 @@ Variables = require 'variables'
 
 class Viewport extends Backbone.Model
 
+	stats: null
+
+	render: (scene, skyboxScene) ->
+		renderer = @get 'renderer'
+		cameraScene = @get 'cameraScene'
+		cameraSkybox = @get 'cameraSkybox'
+		if skyboxScene and cameraSkybox
+			cameraSkybox.rotation.copy cameraScene.rotation
+			renderer.render skyboxScene, cameraSkybox
+		renderer.render scene, cameraScene
+		@stats.update() if @stats
+		return
+
 	createCameraScene: ->
 		camera = @get 'camera'
 		switch camera.type
@@ -83,6 +96,24 @@ class Viewport extends Backbone.Model
 	updateCamera: (camera, position, rotation) ->
 		camera.position.set position[0], position[1], position[2]
 		camera.rotation.set rotation[0], rotation[1], rotation[2]
+		return
+
+	updateStats: ->
+		showStats = @get 'showStats'
+		if showStats then @createStats() else @removeStats()
+		return
+	
+	createStats: ->
+		unless @stats
+			@stats = new Stats()
+			@stats.domElement.id = 'fps'
+			$('body').append @stats.domElement
+		return
+
+	removeStats: ->
+		if @stats
+			$('body').remove @stats.domElement
+			@stats = null
 		return
 
 return Viewport

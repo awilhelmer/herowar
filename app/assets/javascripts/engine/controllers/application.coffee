@@ -9,11 +9,12 @@ class ApplicationController extends BaseController
 		'views/viewport' : ''
 
 	viewports: [
-		domId: '#viewport',
-		type: Variables.VIEWPORT_TYPE_RTS,
+		domId: '#viewport'
+		type: Variables.VIEWPORT_TYPE_RTS
+		showStats: true
 		camera:
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
-			position: [ 0, 350, 0 ],
+			position: [ 0, 350, 0 ]
 			rotation: [ THREE.Math.degToRad(-90), 0, 0 ]
 	]
 
@@ -22,7 +23,7 @@ class ApplicationController extends BaseController
 		@initViewports()	
 		@initEngine()
 		@initCore()
-	
+		
 	initViewports: ->
 		for viewport in @viewports
 			@initViewport viewport	
@@ -35,7 +36,7 @@ class ApplicationController extends BaseController
 		engine = require 'engine'
 		engine.initialize()
 		engine
-	
+		
 	initCore: ->
 
 return ApplicationController

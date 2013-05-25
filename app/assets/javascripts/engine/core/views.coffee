@@ -15,6 +15,7 @@ class Views
 			background: 
 				r: 0, g: 0, b: 0, a: 1
 			rendererType: Variables.RENDERER_TYPE_WEBGL
+			showStats: false
 		camera:
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
 			position: [ 0, 350, 0 ]
@@ -44,6 +45,7 @@ class Views
 			view.createCameraScene()
 			view.createCameraSkybox()
 			view.createRenderer()
+			view.updateStats()
 			view.updateSize()
 			console.log 'View', view, 'initialized'
 		return
@@ -51,18 +53,8 @@ class Views
 	render: (scene, skyboxScene) ->
 		unless @rendering 
 			@rendering = true
-			for view in @viewports.models
-					@cameraRender view, scene, skyboxScene
+			view.render scene, skyboxScene for view in @viewports.models
 			@rendering = false
-		return
-
-	cameraRender : (view, scene, skyboxScene) ->
-		renderer = view.get 'renderer'
-		cameraScene = view.get 'cameraScene'
-		cameraSkybox = view.get 'cameraSkybox'
-		cameraSkybox.rotation.copy cameraScene.rotation
-		renderer.render skyboxScene, cameraSkybox
-		renderer.render scene, cameraScene
 		return
 
 	onWindowResize: (withReRender) =>
@@ -75,7 +67,7 @@ class Views
 		return
 
 	onCameraChanged: (view) =>
-		@cameraRender view, scenegraph.scene, scenegraph.skyboxScene
+		view.render scenegraph.scene, scenegraph.skyboxScene
 		return
 
 	changeTerrain: (terrain) ->
