@@ -19,13 +19,13 @@ class Enemy extends AnimatedModel
 		bar:
 			width   : 25
 			height  : 2.5
-			depth   : 1
+			depth   : 0.1
 			color   : 0xFF0000
 			opacity : 1.0
 		border:
 			width   : 27
 			height  : 4.5
-			depth   : 1
+			depth   : 0.1
 			color   : 0x000000
 			opacity : 0.8
 	
@@ -76,7 +76,7 @@ class Enemy extends AnimatedModel
 		newZ = (@meshBody.geometry.boundingBox.max.x - @meshBody.geometry.boundingBox.min.x) * 0.8
 		@meshCurrentHealth.position.copy @root.position if @meshCurrentHealth
 		@meshCurrentHealth.position.x -= (@meshHealthSize.bar.width - width) / 2
-		@meshCurrentHealth.position.y += newY + 1
+		@meshCurrentHealth.position.y += newY + @meshHealthSize.bar.depth
 		@meshCurrentHealth.position.z -= newZ
 		@meshMaxHealth.position.copy @root.position if @meshMaxHealth
 		@meshMaxHealth.position.y += newY
