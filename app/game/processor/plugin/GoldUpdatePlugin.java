@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
-  private final static String SCORE_VALUE = "SCORE_VALUE";
+  private final static String SCORE_VALUE = "score";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_UPDATE = "gold_update";
   private final static String GOLD_SYNC = "gold_sync";
