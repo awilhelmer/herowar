@@ -11,6 +11,7 @@ import game.network.server.GameVictoryPacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
+import game.processor.plugin.FinishPlugin;
 import game.processor.plugin.GoldUpdatePlugin;
 import game.processor.plugin.PreloadUpdatePlugin;
 import game.processor.plugin.TowerUpdatePlugin;
@@ -175,18 +176,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.GAME).add(new TowerUpdatePlugin(this));
     plugins.get(State.GAME).add(new UnitUpdatePlugin(this));
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
+    plugins.get(State.FINISH).add(new FinishPlugin(this));
   }
   
   private void checkGameState() {
     if (getState().equals(State.GAME) && (getMap().getLives() <= 0 || (isWavesFinished() && isUnitsFinished()))) {
       updateState(State.FINISH);
-      if (getMap().getLives() <= 0) {
-        GameDefeatPacket packet = new GameDefeatPacket();
-        broadcast(packet);
-      } else {
-        GameVictoryPacket packet = new GameVictoryPacket();
-        broadcast(packet);
-      }
     }
   }
 
