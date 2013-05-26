@@ -1,15 +1,11 @@
-BaseView = require 'views/baseView'
+BaseStatsView = require 'views/stats/baseStatsView'
 templates = require 'templates'
+events = require 'events'
 
-class StatsGoldView extends BaseView
+class StatsGoldView extends BaseStatsView
 
-	className: 'item'
+	statsName: 'gold'
 
-	entity: 'ui/stats'
-	
 	template: templates.get 'stats/gold.tmpl'
-
-	bindEvents: ->
-		@listenTo @model, 'change:gold', @render
 
 return StatsGoldView

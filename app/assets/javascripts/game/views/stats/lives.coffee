@@ -1,15 +1,10 @@
-BaseView = require 'views/baseView'
+BaseStatsView = require 'views/stats/baseStatsView'
 templates = require 'templates'
 
-class StatsLivesView extends BaseView
+class StatsLivesView extends BaseStatsView
 
-	className: 'item'
+	statsName: 'lives'
 
-	entity: 'ui/stats'
-	
 	template: templates.get 'stats/lives.tmpl'
-
-	bindEvents: ->
-		@listenTo @model, 'change:lives', @render
 
 return StatsLivesView

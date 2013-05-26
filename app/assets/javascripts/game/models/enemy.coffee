@@ -114,4 +114,16 @@ class Enemy extends AnimatedModel
 			material = new THREE.MeshBasicMaterial color: size.color, opacity: size.opacity, transparent: true
 		return new THREE.Mesh geometry, material
 
+	dispose: ->
+		if @meshCurrentHealth
+			scenegraph.scene.remove @meshCurrentHealth
+			@meshCurrentHealth.geometry.dispose()
+			@meshCurrentHealth = null
+		if @meshMaxHealth
+			scenegraph.scene.remove @meshMaxHealth
+			@meshMaxHealth.geometry.dispose()
+			@meshMaxHealth = null
+		super()
+		
+
 return Enemy
