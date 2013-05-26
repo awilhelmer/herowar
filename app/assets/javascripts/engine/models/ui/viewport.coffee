@@ -63,7 +63,6 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
-		console.log 'Camera', @, 'updated'
 		return
 		
 	updateOrthographic: (camera, size, offset, aspect) ->

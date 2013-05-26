@@ -13,6 +13,7 @@ class AnimatedModel extends MeshModel
 		@setAnimation @meshBody.geometry.firstAnimation if @meshBody.geometry.firstAnimation
 
 	update: (delta) ->
+		super delta
 		@animate delta
 
 	animate: (delta) ->
@@ -20,8 +21,7 @@ class AnimatedModel extends MeshModel
 			if @playOnce and @meshBody.currentKeyframe is @meshBody.endKeyframe
 				@activeAnimation = null
 			else 
-				@meshBody.updateAnimation 1000 * delta
-				
+				@meshBody.updateAnimation 1000 * delta			
 	
 	setAnimation: (name, playOnce) ->
 		if _.isBoolean playOnce then @playOnce = playOnce else @playOnce = false

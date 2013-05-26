@@ -69,13 +69,14 @@ sceneGraph =
 		null
 		
 	getMap: ->
-		@map
+		return @map
 
 	setMap: (map) ->
 		if @map
 			@scene.remove @map
 		@map = map
 		@scene.add @map
+		return @map
 
 	getNextId: ->
 		@currentId++

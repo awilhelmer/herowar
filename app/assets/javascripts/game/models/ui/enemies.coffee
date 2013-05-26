@@ -47,6 +47,7 @@ class Enemies extends PacketModel
 	createMesh: (id, name, data) ->
 		mesh = materialHelper.createAnimMesh data[0], data[1], name, id: id
 		mesh.rotation.y = THREE.Math.degToRad -90
+		mesh.position.y -= mesh.geometry.boundingBox.min.y
 		mesh
 	
 	getPathById: (id) ->

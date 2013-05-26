@@ -95,6 +95,7 @@ class Preloader extends RendererCanvasController
 					(geometry, materials, json) =>
 						geometry.name = name
 						geometry.computeBoundingBox()
+						geometry.computeBoundingSphere()
 						geometry.computeMorphNormals()
 						@data[type][name] = [geometry, materials, json]
 						@updateState type, name, true

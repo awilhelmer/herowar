@@ -106,7 +106,7 @@ class RTSControls
 		cameraScene = @view.get 'cameraScene'
 		if cameraScene instanceof THREE.OrthographicCamera
 			@zoom += value
-			console.log 'RTSControls changeZoom()', value, 'to', @zoom
+			#console.log 'RTSControls changeZoom()', value, 'to', @zoom
 		else
 			maxPos = 500
 			minPos = 100
@@ -114,7 +114,7 @@ class RTSControls
 			camera.position[1] = maxPos if camera.position[1] > maxPos
 			camera.position[1] = minPos if camera.position[1] < minPos
 			camera.rotation[0] = THREE.Math.degToRad((camera.position[1] - minPos) / (maxPos - minPos) * -90)
-			console.log 'RTSControls changeZoom()', value, 'to', camera.position[1]
+			#console.log 'RTSControls changeZoom()', value, 'to', camera.position[1]
 		@view.trigger 'change:camera'
 		@view.trigger 'change'
 		@view.updateSize()

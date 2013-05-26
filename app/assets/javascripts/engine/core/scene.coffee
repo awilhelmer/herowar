@@ -48,6 +48,7 @@ class Scene
 		if !map and @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()
 			map.children[0].geometry.computeBoundingBox()
+			map.children[0].geometry.computeBoundingSphere()
 			scenegraph.setMap map
 			events.trigger 'scene:terrain:build', map
 		if !map
