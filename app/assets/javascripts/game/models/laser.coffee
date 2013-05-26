@@ -15,14 +15,11 @@ class LaserModel extends MeshModel
 		@root.quaternion.setFromRotationMatrix @owner.root.matrix
 
 	createMeshBody: ->
-		geometry = new THREE.CubeGeometry 1, 7.5, 1
+		geometry = new THREE.CubeGeometry 1, 1, 7.5
 		material = new THREE.MeshBasicMaterial color: 0x0066CC
-		body = new THREE.Object3D()
-		shot = new THREE.Mesh geometry, material
-		body.add shot
-		body.rotation.x = THREE.Math.degToRad 90
-		return body
-		
+		mesh = new THREE.Mesh geometry, material
+		mesh.position.y = @_getOwnerCenterPointY()
+		return mesh
 
 	update: (delta) ->
 		distance = @root.position.distanceTo @target.root.position
@@ -31,5 +28,8 @@ class LaserModel extends MeshModel
 			@root.translateZ delta * @moveSpeed
 		else
 			@dispose()
+			
+	_getOwnerCenterPointY: ->
+		return (Math.abs(@owner.meshBody.geometry.boundingBox.min.y) + @owner.meshBody.geometry.boundingBox.max.y) * @owner.meshBody.scale.y / 2
 
 return LaserModel
