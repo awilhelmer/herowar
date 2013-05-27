@@ -1,0 +1,6 @@
+<select name="model" class="model">
+	<option>Choose ...</option>
+	{{#each enemies}}
+ 		<option data-id="{{id}}" data-type="{{type}}">{{name}}</option>
+ 	{{/each}}
+</select>

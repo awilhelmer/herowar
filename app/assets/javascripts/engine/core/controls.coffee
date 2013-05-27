@@ -1,5 +1,6 @@
 EditorControls = require 'controls/editorControls'
 RTSControls = require 'controls/rtsControls'
+ViewerControls = require 'controls/viewerControls'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
 db = require 'database'
@@ -22,6 +23,9 @@ class Controls
 					console.log 'Create EditorControls for', view
 					@controls.push new EditorControls view
 					Eventbus.controlsChanged.add @onControlsChanged
+				when Variables.VIEWPORT_TYPE_VIEWER
+					console.log 'Create ViewerControls for', view
+					@controls.push new ViewerControls view
 		return
 	
 	onControlsChanged: (event) =>

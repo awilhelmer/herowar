@@ -39,7 +39,7 @@ class Viewport extends Backbone.Model
 			when Variables.RENDERER_TYPE_WEBGL
 				renderer = new EngineRenderer 
 					antialias: true
-				renderer.autoClear = false
+				# renderer.autoClear = false
 		$domElement = $ @get 'domId'
 		@set
 			'domElement' : $domElement.get 0

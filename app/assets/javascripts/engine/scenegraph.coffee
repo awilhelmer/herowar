@@ -10,11 +10,11 @@ sceneGraph =
 	initialize: ->
 		unless _initialized
 			_initialized = true
+			@currentId = 1
 			@scene = new THREE.Scene()
 			@skyboxScene = new THREE.Scene()
 			@dynamicObjects = {}
 			@staticObjects = {}
-			@currentId = 1
 			@addLights()
 	
 	addLights: ->
