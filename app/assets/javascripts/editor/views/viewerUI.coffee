@@ -29,6 +29,7 @@ class ViewerUI extends BaseView
 		json = {}
 		json.towers = []
 		json.towers.push { id: 1, name: 'Tower', type: 1 }
+		json.towers.push { id: 2, name: 'Tower 2', type: 1 }
 		json.enemies = []
 		json.enemies.push { id: unit.id, name: unit.get('name'), type: 2 } for unit in @units.models
 		json
@@ -73,12 +74,14 @@ class ViewerUI extends BaseView
 		return
 
 	createMesh: (geometry, materials, name, json) ->
-		mesh = materialHelper.createAnimMesh geometry, materials, name, json
+		mesh = materialHelper.createMesh geometry, materials, name, json if json.morphTargets.length is 0
+		mesh = materialHelper.createAnimMesh geometry, materials, name, json if json.morphTargets.length isnt 0
 		if _.isObject json
 			mesh.scale.x = json.scale
 			mesh.scale.y = json.scale
 			mesh.scale.z = json.scale
-		#mesh.geometry.computeBoundingBox()
+		mesh.geometry.computeBoundingBox()
+		mesh.position.y = - json.scale * mesh.geometry.boundingBox.min.y
 		return mesh
 
 return ViewerUI
