@@ -79,6 +79,7 @@ GET			/game																controllers.Game.index()
 ########## EDITOR ###########
 
 GET			/editor															controllers.Editor.index()
+GET			/viewer															controllers.Editor.viewer()
 
 ########## ADMIN ###########
 

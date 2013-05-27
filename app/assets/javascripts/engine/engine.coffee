@@ -11,19 +11,19 @@ engine =
 		unless _initialized
 			_initialized = true
 			console.log 'Engine starting...'
-			viewport = $ '#viewport'
+			Views = require 'core/views'
+			@views = new Views()
+			viewport = $ @views.viewports.at(0).get 'domElement'
 			position = viewport.position()
 			Variables.SCREEN_TOP = position.top
 			Variables.SCREEN_LEFT = position.left
 			Variables.SCREEN_WIDTH = viewport.width()
 			Variables.SCREEN_HEIGHT = viewport.height()
-			scenegraph.initialize()
-			Views = require 'core/views'
-			@views = new Views()
 			Controls = require 'core/controls'
 			@controls = new Controls()
 			@clock = new THREE.Clock()
 			@pause = false
+			scenegraph.initialize()
 			console.log "Engine started!"
 		return
 		

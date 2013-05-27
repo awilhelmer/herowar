@@ -1,6 +1,6 @@
 class Particle
 	
-	position: new THREE.Vector3 -10000,-10000,-10000
+	position: new THREE.Vector3(-10000, -10000, -10000)
 	
 	velocity: new THREE.Vector3()
 	
