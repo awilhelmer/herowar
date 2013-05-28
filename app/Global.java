@@ -13,6 +13,7 @@ import java.util.Arrays;
 import models.entity.SecurityRole;
 import models.entity.game.GeoMaterial;
 import models.entity.game.GeometryType;
+import models.entity.game.LevelRange;
 import models.entity.game.Map;
 import models.entity.game.Material;
 
@@ -90,6 +91,7 @@ public class Global extends GlobalSettings {
     JPA.withTransaction(new play.libs.F.Callback0() {
       @Override
       public void invoke() throws Throwable {
+    	createLevelRanges();
         initialSecurityRoles();
         initGameServer();
         EnvironmentImporter.getInstance().sync();
@@ -224,5 +226,18 @@ public class Global extends GlobalSettings {
           }
       }
     }
+  }
+  
+  private void createLevelRanges() {
+	  LevelRange range = JPA.em().find(LevelRange.class, 1L);
+	  if (range != null) {
+		  return;
+	  }
+	  Logger.info("Creating level ranges");
+	  JPA.em().persist(new LevelRange(5000L));
+	  JPA.em().persist(new LevelRange(15000L));
+	  JPA.em().persist(new LevelRange(50000L));
+	  JPA.em().persist(new LevelRange(250000L));
+	  JPA.em().persist(new LevelRange(750000L));
   }
 }
