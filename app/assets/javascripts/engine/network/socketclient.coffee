@@ -6,7 +6,7 @@ class SocketClient
 
 	constructor: ->
 		throw 'Oh no, you need a browser that supports WebSockets. How about Google Chrome?' unless _.has window, 'WebSocket'
-		host = 'ws://localhost:8081/'
+		host = 'ws://localhost:9005/'
 		@socket = new WebSocket host
 		@isOpen = false
 		@isAuthenticated = false

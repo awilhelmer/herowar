@@ -16,7 +16,7 @@ class LaserModel extends MeshModel
 
 	createMeshBody: ->
 		geometry = new THREE.CubeGeometry 1, 1, 7.5
-		material = new THREE.MeshBasicMaterial color: 0x0066CC
+		material = new THREE.MeshBasicMaterial color: 0x0066CC, opacity: 0.8, transparent: true
 		mesh = new THREE.Mesh geometry, material
 		mesh.position.y = @_getCenterPointY @owner.meshBody
 		return mesh

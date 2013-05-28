@@ -14,7 +14,9 @@ class Waves extends PacketModel
 		date = new Date()
 		time = @get('eta') - date.getTime()
 		arrival = @calculateCountdown time
-		@set 'arrival', arrival
+		@set 
+			'arrival_short' : arrival[1]
+			'arrival': arrival[0]
 			
 	calculateCountdown: (t) ->
 		if t <= 0 then return ''
@@ -25,11 +27,13 @@ class Waves extends PacketModel
 		m = Math.floor(t / 60) % 60
 		s = t % 60
 		# Format values
+		sv = s + m * 60
+		sh = if sv < 10 then "0#{sv}" else sv
 		d = if d > 0 then "#{d}d " else ''
 		h = if h < 10 then "0#{h}:" else if h isnt 0 then "#{h}:" else ''
 		m = if m < 10 then "0#{m}" else m
 		s = if s < 10 then "0#{s}" else s
-		# Format output
-		"#{d}#{h}#{m}:#{s}"
+		# return output
+		return [ "#{d}#{h}#{m}:#{s}", "#{sh}" ]
 
 return Waves

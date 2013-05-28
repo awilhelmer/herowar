@@ -8,12 +8,13 @@ log = require 'util/logger'
 class GameController extends ApplicationController
 
 	views:
-		'views/progress'	: ''
-		'views/build'			: ''
-		'views/stats'	    : ''
-		'views/viewport'	: ''
-		'views/debug'	    : ''
-		'views/menubar'   : ''
+		'views/progress'    : ''
+		'views/build'       : ''
+		'views/stats'       : ''
+		'views/viewport'    : ''
+		'views/debug'       : ''
+		'views/menubar'     : ''
+		'views/hud'         : ''
 
 	initialize: (options) ->
 		log.info 'Initialize game...'
