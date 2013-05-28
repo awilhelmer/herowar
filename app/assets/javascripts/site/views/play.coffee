@@ -13,7 +13,7 @@ class Play extends AuthView
 
 	events:
 		'click .map' : 'joinMap'
-	
+
 	joinMap: (event) ->
 		unless event then return
 		$currentTarget = $ event.currentTarget
