@@ -16,6 +16,7 @@ class Views
 				r: 0, g: 0, b: 0, a: 1
 			rendererType: Variables.RENDERER_TYPE_WEBGL
 			showStats: false
+			hud: null
 		camera:
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
 			position: [ 0, 350, 0 ]
@@ -47,6 +48,7 @@ class Views
 			view.createRenderer()
 			view.updateStats()
 			view.updateSize()
+			view.createHUD()
 			console.log 'View', view, 'initialized'
 		return
 	

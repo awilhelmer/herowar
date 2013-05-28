@@ -12,6 +12,7 @@ class ApplicationController extends BaseController
 		domId: '#viewport'
 		type: Variables.VIEWPORT_TYPE_RTS
 		showStats: true
+		hud: Variables.HUD_GAME
 		camera:
 			fov: 40
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC

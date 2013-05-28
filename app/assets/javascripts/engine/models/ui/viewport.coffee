@@ -115,4 +115,10 @@ class Viewport extends Backbone.Model
 			@stats = null
 		return
 
+	createHUD: ->
+		hud = @get 'hud'
+		if hud is Variables.HUD_GAME
+			GameHUD = require 'hud/game'
+			@hud = new GameHUD @
+
 return Viewport
