@@ -3,7 +3,6 @@ package models.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,9 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import models.entity.game.GameResult;
+import models.entity.game.Player;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
@@ -60,14 +61,18 @@ public class User extends BaseModel implements Subject, Serializable {
   @JsonIgnore
   private List<UserPermission> permissions;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
-  private Set<GameResult> gameResults;
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @PrimaryKeyJoinColumn
+  private Player player;
 
   @Override
   public String getIdentifier() {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  public User() {
+    this.setPlayer(new Player(this));
   }
 
   // GETTER & SETTER //
@@ -152,14 +157,11 @@ public class User extends BaseModel implements Subject, Serializable {
     this.permissions = permissions;
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.ALL })
-  @JsonIgnore
-  public Set<GameResult> getGameResults() {
-    return gameResults;
+  public Player getPlayer() {
+    return player;
   }
 
-  public void setGameResults(Set<GameResult> gameResults) {
-    this.gameResults = gameResults;
+  public void setPlayer(Player player) {
+    this.player = player;
   }
-
 }
