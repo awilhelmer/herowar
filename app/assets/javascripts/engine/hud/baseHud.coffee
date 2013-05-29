@@ -30,6 +30,12 @@ class BaseHUD
 
 	update: (delta) ->
 
+	_drawRect: (size, color) ->
+		@ctx.beginPath()
+		@ctx.rect size.x, size.y, size.w, size.h
+		@ctx.fillStyle = color
+		@ctx.fill()
+
 	_drawText: (content, x, y, width) ->
 		baseFontSize = 24
 		size = @_measureText "#{content}", @font, baseFontSize, false

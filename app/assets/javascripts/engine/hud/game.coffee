@@ -33,19 +33,28 @@ class GameHUD extends BaseHUD
 				@_drawText "GAME START", screen_hw, screen_hh / 2, ((1 - @alpha) * width * 4) + width * 2
 				@alpha = @alpha - delta
 				@state++ if @alpha <= 0
-		widthHalf = @canvas.width / 2
-		heightHalf = @canvas.height / 2
-		for id, obj of scenegraph.dynamicObjects
-			if obj.showHealth
-				position = obj.root.position.clone()
-				@projector.projectVector position, @view.get 'cameraScene'
-				position.x = ( position.x * widthHalf ) + widthHalf
-				position.y = - ( position.y * heightHalf ) + heightHalf
-				#width = @canvas.height / 5
-				#@_setShadow width / 50, width / 50, width / 15
-				#@ctx.fillStyle = 'rgba(255, 255, 255, 1.0)'
-				#@_drawText "MOB", position.x, position.y, width
-				
+		@_drawHealthBars()
+		
+	_drawHealthBars: ->
+		viewportWidthHalf = @canvas.width / 2
+		viewportHeightHalf = @canvas.height / 2
+		@_setShadow 0, 0, 0
+		for id, obj of scenegraph.dynamicObjects when obj.showHealth and not obj.isDead()
+			@_drawHealthBar obj, viewportWidthHalf, viewportHeightHalf
+
+	_drawHealthBar: (obj, viewportWidthHalf, viewportHeightHalf) ->
+		boundaryBox = obj.meshBody.geometry.boundingBox
+		position = obj.root.position.clone()
+		position.x -= Math.abs boundaryBox.min.x
+		position.y += boundaryBox.max.y - boundaryBox.min.y
+		@projector.projectVector position, @view.get 'cameraScene'
+		position.x = ( position.x * viewportWidthHalf ) + viewportWidthHalf
+		position.y = - ( position.y * viewportHeightHalf ) + viewportHeightHalf
+		percent = obj.currentHealth / obj.maxHealth
+		width = @canvas.height / 10
+		height = width / 5
+		@_drawRect { x: position.x, y: position.y, w: width, h: height }, 'black'
+		@_drawRect { x: position.x + 2, y: position.y + 2, w: percent * (width - 4), h: height - 4 }, 'red'
 
 	_gameIsInitialized: ->
 		return @waves.get '_active' 
