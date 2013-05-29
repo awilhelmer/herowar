@@ -1,9 +1,11 @@
+scenegraph = require 'scenegraph'
 BaseHUD = require 'hud/baseHud'
 db = require 'database'
 
 class GameHUD extends BaseHUD
 	
-	initialize: (options) ->
+	initialize: ->
+		@projector = new THREE.Projector()
 		@waves = db.get 'ui/waves'
 		@state = 0
 
@@ -28,9 +30,22 @@ class GameHUD extends BaseHUD
 				width = @canvas.height / 5
 				@_setShadow width / 50, width / 50, width / 15
 				@ctx.fillStyle = "rgba(255, 255, 255, #{@alpha})"
-				@_drawMultilineBlockText "GAME START", screen_hw, screen_hh / 2, ((1 - @alpha) * width * 4) + width * 2
+				@_drawText "GAME START", screen_hw, screen_hh / 2, ((1 - @alpha) * width * 4) + width * 2
 				@alpha = @alpha - delta
 				@state++ if @alpha <= 0
+		widthHalf = @canvas.width / 2
+		heightHalf = @canvas.height / 2
+		for id, obj of scenegraph.dynamicObjects
+			if obj.showHealth
+				position = obj.root.position.clone()
+				@projector.projectVector position, @view.get 'cameraScene'
+				position.x = ( position.x * widthHalf ) + widthHalf
+				position.y = - ( position.y * heightHalf ) + heightHalf
+				#width = @canvas.height / 5
+				#@_setShadow width / 50, width / 50, width / 15
+				#@ctx.fillStyle = 'rgba(255, 255, 255, 1.0)'
+				#@_drawText "MOB", position.x, position.y, width
+				
 
 	_gameIsInitialized: ->
 		return @waves.get '_active' 
