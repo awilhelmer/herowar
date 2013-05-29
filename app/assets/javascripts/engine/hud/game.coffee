@@ -48,13 +48,33 @@ class GameHUD extends BaseHUD
 		position.x -= Math.abs boundaryBox.min.x
 		position.y += boundaryBox.max.y - boundaryBox.min.y
 		@projector.projectVector position, @view.get 'cameraScene'
-		position.x = ( position.x * viewportWidthHalf ) + viewportWidthHalf
-		position.y = - ( position.y * viewportHeightHalf ) + viewportHeightHalf
+		position.x = (position.x * viewportWidthHalf) + viewportWidthHalf
+		position.y = - (position.y * viewportHeightHalf) + viewportHeightHalf
 		percent = obj.currentHealth / obj.maxHealth
-		width = @canvas.height / 10
-		height = width / 5
-		@_drawRect { x: position.x, y: position.y, w: width, h: height }, 'black'
-		@_drawRect { x: position.x + 2, y: position.y + 2, w: percent * (width - 4), h: height - 4 }, 'red'
+		width = Math.round @canvas.height / 10
+		height = Math.round width / 7.5
+		@_drawRect 
+			size: 
+				x: position.x
+				y: position.y
+				w: width
+				h: height
+			fillStyle: 'rgba(0, 0, 0, 0.7)'
+			lineWidth: 1
+			strokeStyle: 'black'
+		@_drawLinearGradient 
+			size: 
+				x: position.x + 1
+				y: position.y + 1
+				w: percent * (width - 2)
+				h: height - 2
+			stops: [ 
+				stop: 0, color: '#f85032'
+				stop: 0.5, color: '#f16f5c'
+				stop: 0.51, color: '#f6290c'
+				stop: 0.71, color: '#f02f17'
+				stop: 1, color: '#e73827'
+			]
 
 	_gameIsInitialized: ->
 		return @waves.get '_active' 

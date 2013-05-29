@@ -30,12 +30,21 @@ class BaseHUD
 
 	update: (delta) ->
 
-	_drawRect: (size, color) ->
+	_drawRect: (opts) ->
+		opts = _.defaults opts, fillStyle: 'black', lineWidth: 0, strokeStyle: 'black' 
 		@ctx.beginPath()
-		@ctx.rect size.x, size.y, size.w, size.h
-		@ctx.fillStyle = color
+		@ctx.rect opts.size.x, opts.size.y, opts.size.w, opts.size.h
+		@ctx[key] = value for key, value of _.omit opts, 'size'
 		@ctx.fill()
-
+		@ctx.stroke() if opts.lineWidth
+	
+	_drawLinearGradient: (opts) ->
+		lingrad = @ctx.createLinearGradient 0, 0, 0, opts.size.h
+		lingrad.addColorStop stop.stop, stop.color for stop in opts.stops
+		@ctx.beginPath()
+		@ctx.fillStyle = lingrad
+		@ctx.fillRect opts.size.x, opts.size.y, opts.size.w, opts.size.h
+	
 	_drawText: (content, x, y, width) ->
 		baseFontSize = 24
 		size = @_measureText "#{content}", @font, baseFontSize, false
