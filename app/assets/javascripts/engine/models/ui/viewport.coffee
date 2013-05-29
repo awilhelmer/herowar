@@ -1,18 +1,23 @@
+FXAAShader = require 'shaders/fxaaShader'
 EngineRenderer = require 'enginerenderer'
+scenegraph = require 'scenegraph'
 Variables = require 'variables'
 
 class Viewport extends Backbone.Model
 
 	stats: null
 
-	render: (scene, skyboxScene) ->
+	render: (delta) ->
 		renderer = @get 'renderer'
 		cameraScene = @get 'cameraScene'
 		cameraSkybox = @get 'cameraSkybox'
-		if skyboxScene and cameraSkybox
+		renderer.clear()
+		if scenegraph.skyboxScene and cameraSkybox
 			cameraSkybox.rotation.copy cameraScene.rotation
-			renderer.render skyboxScene, cameraSkybox
-		renderer.render scene, cameraScene
+			renderer.render scenegraph.skyboxScene, cameraSkybox
+		renderer.render scenegraph.scene, cameraScene
+		#renderer.render scenegraph.sceneLasers, cameraScene
+		@composer.render()
 		@stats.update() if @stats
 		return
 
@@ -31,14 +36,37 @@ class Viewport extends Backbone.Model
 		@set 'cameraSkybox', cameraSkybox
 		cameraSkybox
 
+	createEffects: ->
+		$domElement = $ @get 'domElement'
+		renderTargetParameters = 
+			minFilter: THREE.LinearFilter
+			magFilter: THREE.LinearFilter
+			format: THREE.RGBAFormat
+			stencilBuffer: true
+		renderTarget = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
+		@composer = new THREE.EffectComposer @get 'renderer', renderTarget
+		@renderModel = new THREE.RenderPass scenegraph.scene, @get 'cameraScene'
+		@composer.addPass @renderModel
+		@effectBloom = new THREE.BloomPass 1.3
+		@composer.addPass @effectBloom
+		#@effectCopy = new THREE.ShaderPass THREE.CopyShader
+		#@effectFXAA = new THREE.ShaderPass THREE.FXAAShader
+		#@composer.addPass @effectFXAA
+		#@effectCopy.renderToScreen = true
+		#@composer.addPass @effectCopy
+
 	createRenderer: ->
 		switch @get 'rendererType'
 			when Variables.RENDERER_TYPE_CANVAS
 				renderer = new THREE.CanvasRenderer
-					clearColor: 0xffffff
+					antialias: false
 			when Variables.RENDERER_TYPE_WEBGL
 				renderer = new EngineRenderer 
 					antialias: true
+				renderer.setClearColorHex 0xFFFFFF, 0.0
+				renderer.gammaInput = true
+				renderer.gammaOutput = true
+				renderer.physicallyBasedShading = true
 				# renderer.autoClear = false
 		$domElement = $ @get 'domId'
 		@set
@@ -63,6 +91,8 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
+		#@effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()
+		@composer.reset()
 		return
 		
 	updateOrthographic: (camera, size, offset, aspect) ->

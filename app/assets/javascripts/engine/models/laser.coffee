@@ -34,4 +34,8 @@ class LaserModel extends MeshModel
 	_getCenterPointY: (obj) ->
 		return (Math.abs(obj.geometry.boundingBox.min.y) + obj.geometry.boundingBox.max.y) * obj.scale.y / 2
 
+	dispose: ->
+		scenegraph = require 'scenegraph'
+		scenegraph.removeLaser @id
+
 return LaserModel

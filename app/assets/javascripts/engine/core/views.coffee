@@ -46,6 +46,7 @@ class Views
 			view.createCameraScene()
 			view.createCameraSkybox()
 			view.createRenderer()
+			view.createEffects()
 			view.updateStats()
 			view.updateSize()
 			view.createHUD()
@@ -55,7 +56,7 @@ class Views
 	render: (scene, skyboxScene) ->
 		unless @rendering 
 			@rendering = true
-			view.render scene, skyboxScene for view in @viewports.models
+			view.render() for view in @viewports.models
 			@rendering = false
 		return
 

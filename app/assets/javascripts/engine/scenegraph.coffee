@@ -7,12 +7,16 @@ _initialized = false
 
 sceneGraph =
 
+	scene: new THREE.Scene()
+	
+	sceneSkybox: new THREE.Scene()
+	
+	sceneLasers: new THREE.Scene()
+
 	initialize: ->
 		unless _initialized
 			_initialized = true
 			@currentId = 1
-			@scene = new THREE.Scene()
-			@skyboxScene = new THREE.Scene()
 			@dynamicObjects = {}
 			@staticObjects = {}
 			@addLights()
@@ -67,7 +71,17 @@ sceneGraph =
 			if @staticObjects[obj.dbId][arrIndex]
 				@staticObjects[obj.dbId].slice arrIndex, 1
 		null
-		
+	
+	addLaser: (object, id) ->
+		unless @dynamicObjects.hasOwnProperty id
+			@dynamicObjects[id] = object
+			@sceneLasers.add object.root	
+
+	removeLaser: (id) ->
+		if @dynamicObjects.hasOwnProperty id
+			@sceneLasers.remove @dynamicObjects[id].root
+			delete @dynamicObjects[id]
+	
 	getMap: ->
 		return @map
 
@@ -92,11 +106,11 @@ sceneGraph =
 			depthWrite      : false
 			side            : THREE.BackSide
 		@skybox = new THREE.Mesh new THREE.CubeGeometry(1000, 1000, 1000), skyboxMaterial
-		@skyboxScene.add @skybox
+		@sceneSkybox.add @skybox
 
 	removeSkybox: ->
 		if _.isUndefined @skybox
-			@skyboxScene.remove @skybox
+			@sceneSkybox.remove @skybox
 			@skybox = undefined
 
 return sceneGraph

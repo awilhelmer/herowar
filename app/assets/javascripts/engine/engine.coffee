@@ -40,7 +40,7 @@ engine =
 	render: ->
 		delta = @clock.getDelta()
 		scenegraph.update delta
-		@views.render scenegraph.scene, scenegraph.skyboxScene
+		@views.render delta
 		events.trigger 'engine:render', delta
 		return
 		
