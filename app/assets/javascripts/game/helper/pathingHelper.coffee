@@ -34,7 +34,7 @@ class PathingHelper
 			mesh = new THREE.Mesh new THREE.PlaneGeometry(10, 10), new THREE.MeshBasicMaterial (color: @color, transparent: true, opacity:1)
 			mesh.position = waypoint.get('position')
 			mesh.rotation.x = THREE.Math.degToRad -90
-			scenegraph.scene.add mesh
+			scenegraph.scene().add mesh
 			@meshes.push mesh
 			index = _.indexOf @pathWaypoints, waypoint
 			if index isnt 0
@@ -43,7 +43,7 @@ class PathingHelper
 				geometry.vertices.push new THREE.Vector3 prevWaypoint.get('position').x, prevWaypoint.get('position').y, prevWaypoint.get('position').z
 				geometry.vertices.push new THREE.Vector3 waypoint.get('position').x, waypoint.get('position').y, waypoint.get('position').z
 				line = new THREE.Line geometry, @lineMaterial
-				scenegraph.scene.add line
+				scenegraph.scene().add line
 				@meshes.push line
 		engine.render()
 

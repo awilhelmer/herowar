@@ -67,7 +67,7 @@ class BrushMaterial extends SelectorPlane
 				if oldIndex isnt newIndex 
 					face.materialIndex = newIndex
 					unless update
-						scene = scenegraph.scene
+						scene = scenegraph.scene()
 						baseObject.remove object
 						engine.render()
 						object.geometry.geometryGroups = undefined

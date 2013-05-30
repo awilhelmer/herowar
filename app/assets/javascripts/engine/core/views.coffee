@@ -70,7 +70,7 @@ class Views
 		return
 
 	onCameraChanged: (view) =>
-		view.render scenegraph.scene, scenegraph.skyboxScene
+		view.render scenegraph.scene(), scenegraph.skyboxScene
 		return
 
 	changeTerrain: (terrain) ->

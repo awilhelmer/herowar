@@ -26,7 +26,7 @@ class MeshModel extends BaseModel
 		unless @groundArrowHelper
 			console.log 'BoundingBox', @meshBody.geometry.boundingBox
 			@groundArrowHelper = new THREE.ArrowHelper @groundDirection, position, @meshBody.geometry.boundingBox.max.y - @meshBody.geometry.boundingBox.min.y
-			scenegraph.scene.add @groundArrowHelper
+			scenegraph.scene().add @groundArrowHelper
 		@groundArrowHelper.position.copy position
 		if @raycaster
 			@raycaster.set position, @groundDirection

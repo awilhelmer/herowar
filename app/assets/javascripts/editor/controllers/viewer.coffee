@@ -26,22 +26,22 @@ class ViewerController extends ApplicationController
 		engine.start()
 
 	initCore: ->
-		scenegraph.scene.fog = new THREE.Fog 0x050505, 400, 1000
+		scenegraph.scene().fog = new THREE.Fog 0x050505, 400, 1000
 		@addGround()
 		for view in engine.views.viewports.models
-			view.get('renderer').setClearColor scenegraph.scene.fog.color, 1
-			view.get('cameraScene').lookAt scenegraph.scene.position
+			view.get('renderer').setClearColor scenegraph.scene().fog.color, 1
+			view.get('cameraScene').lookAt scenegraph.scene().position
 		
 	addGround: ->		
 		grid = new THREE.GridHelper 500, 50
-		scenegraph.scene.add grid
+		scenegraph.scene().add grid
 		###
 		groundGeometry = new THREE.PlaneGeometry 1000, 1000
 		groundMaterial = new THREE.MeshPhongMaterial color: 0xFFFFFF
 		groundMesh = new THREE.Mesh groundGeometry, groundMaterial
 		groundMesh.rotation.x = THREE.Math.degToRad -90
 		groundMesh.receiveShadow = true
-		scenegraph.scene.add groundMesh
+		scenegraph.scene().add groundMesh
 		###
 		
 return ViewerController

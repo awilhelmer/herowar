@@ -15,7 +15,7 @@ class AddObject extends SelectorTerrain
 
 	onLeaveTool: ->
 		if @tool.get('currentObject')
-			scenegraph.scene.remove @tool.get('currentObject')
+			scenegraph.scene().remove @tool.get('currentObject')
 			for child in @tool.get('currentObject').children
 				child.geometry.dispose() # TODO: is this enough clean up ?!?
 			@tool.unset 'currentObject'

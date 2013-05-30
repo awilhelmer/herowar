@@ -40,11 +40,11 @@ class SelectorPlane extends SelectorTerrain
 
 	addSel: ->
 		@isVisible = true
-		scenegraph.scene.add @selector
+		scenegraph.scene().add @selector
 
 	removeSel: ->
 		@isVisible = false
-		scenegraph.scene.remove @selector
+		scenegraph.scene().remove @selector
 		engine.render()
 
 return SelectorPlane

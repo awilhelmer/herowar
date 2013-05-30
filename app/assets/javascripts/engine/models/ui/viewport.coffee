@@ -12,11 +12,11 @@ class Viewport extends Backbone.Model
 		cameraScene = @get 'cameraScene'
 		cameraSkybox = @get 'cameraSkybox'
 		renderer.clear()
-		if scenegraph.skyboxScene and cameraSkybox
-			cameraSkybox.rotation.copy cameraScene.rotation
-			renderer.render scenegraph.skyboxScene, cameraSkybox
-		renderer.render scenegraph.scene, cameraScene
-		#renderer.render scenegraph.sceneLasers, cameraScene
+		#if scenegraph.skyboxScene and cameraSkybox
+		#	cameraSkybox.rotation.copy cameraScene.rotation
+		#	renderer.render scenegraph.skyboxScene, cameraSkybox
+		#renderer.render scenegraph.scene(), cameraScene
+		#renderer.render scenegraph.scene('glow'), cameraScene
 		@composer.render()
 		@stats.update() if @stats
 		return
@@ -44,17 +44,21 @@ class Viewport extends Backbone.Model
 			format: THREE.RGBAFormat
 			stencilBuffer: true
 		renderTarget = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
-		@composer = new THREE.EffectComposer @get 'renderer', renderTarget
-		@renderModel = new THREE.RenderPass scenegraph.scene, @get 'cameraScene'
+		@composer = new THREE.EffectComposer @get('renderer') renderTarget
+		@renderGlow = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
+		@composer.addPass @renderGlow
+		@renderModel = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
 		@composer.addPass @renderModel
-		@effectBloom = new THREE.BloomPass 1.3
-		@composer.addPass @effectBloom
-		#@effectCopy = new THREE.ShaderPass THREE.CopyShader
 		#@effectFXAA = new THREE.ShaderPass THREE.FXAAShader
+		#@effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()
 		#@composer.addPass @effectFXAA
-		#@effectCopy.renderToScreen = true
-		#@composer.addPass @effectCopy
+		#@effectBloom = new THREE.BloomPass 1.3
+		#@composer.addPass @effectBloom
+		@effectCopy = new THREE.ShaderPass THREE.CopyShader
+		@effectCopy.renderToScreen = true
+		@composer.addPass @effectCopy
 
+		
 	createRenderer: ->
 		switch @get 'rendererType'
 			when Variables.RENDERER_TYPE_CANVAS
@@ -91,7 +95,6 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
-		#@effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()
 		@composer.reset()
 		return
 		

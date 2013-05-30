@@ -4,8 +4,15 @@ events = require 'events'
 db = require 'database'
 
 _initialized = false
+_scenes = {}
 
 sceneGraph =
+
+	currentId: 1
+
+	dynamicObjects: {}
+	
+	staticObjects: {}
 
 	scene: new THREE.Scene()
 	
@@ -13,20 +20,19 @@ sceneGraph =
 	
 	sceneLasers: new THREE.Scene()
 
-	initialize: ->
-		unless _initialized
-			_initialized = true
-			@currentId = 1
-			@dynamicObjects = {}
-			@staticObjects = {}
-			@addLights()
+	scene: (name) ->
+		name = 'main' unless name
+		_scenes[name] = @createScene() unless _.has _scenes, name
+		return _scenes[name]
 	
-	addLights: ->
-		@scene.add new THREE.AmbientLight 0x101010
+	createScene: ->
+		scene = new THREE.Scene()
+		scene.add new THREE.AmbientLight 0x101010
 		directionalLight = new THREE.DirectionalLight 0xffffff 
 		directionalLight.position.set(0, 1, 1).normalize()
-		@scene.add directionalLight
-
+		scene.add directionalLight
+		return scene
+	
 	update: (delta) ->
 		for id, obj of @dynamicObjects
 			obj.update delta
@@ -40,11 +46,11 @@ sceneGraph =
 	addDynObject: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
-			@scene.add object.root
+			@scene().add object.root
 
 	removeDynObject: (id) ->
 		if @dynamicObjects.hasOwnProperty id
-			@scene.remove @dynamicObjects[id].root
+			@scene().remove @dynamicObjects[id].root
 			delete @dynamicObjects[id]
 
 	addStaticObject: (obj, id) ->
@@ -53,7 +59,7 @@ sceneGraph =
 		obj.userData.listIndex = @staticObjects[id].length
 		obj.userData.dbId = id
 		@staticObjects[id].push obj
-		@scene.add obj
+		@scene().add obj
 	
 	getStaticObject: (id, index) ->
 		@staticObjects[id][index]
@@ -67,7 +73,7 @@ sceneGraph =
 		if _.has(@staticObjects, obj.dbId)
 			threeModel = @staticObjects[obj.dbId][obj.listIndex]
 			arrIndex = threeModel.userData.listIndex
-			@scene.remove threeModel
+			@scene().remove threeModel
 			if @staticObjects[obj.dbId][arrIndex]
 				@staticObjects[obj.dbId].slice arrIndex, 1
 		null
@@ -75,11 +81,11 @@ sceneGraph =
 	addLaser: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
-			@sceneLasers.add object.root	
+			@scene('glow').add object.root	
 
 	removeLaser: (id) ->
 		if @dynamicObjects.hasOwnProperty id
-			@sceneLasers.remove @dynamicObjects[id].root
+			@scene('glow').remove @dynamicObjects[id].root
 			delete @dynamicObjects[id]
 	
 	getMap: ->
@@ -87,9 +93,9 @@ sceneGraph =
 
 	setMap: (map) ->
 		if @map
-			@scene.remove @map
+			@scene().remove @map
 		@map = map
-		@scene.add @map
+		@scene().add @map
 		return @map
 
 	getNextId: ->
@@ -106,11 +112,11 @@ sceneGraph =
 			depthWrite      : false
 			side            : THREE.BackSide
 		@skybox = new THREE.Mesh new THREE.CubeGeometry(1000, 1000, 1000), skyboxMaterial
-		@sceneSkybox.add @skybox
+		@scene('skybox').add @skybox
 
 	removeSkybox: ->
 		if _.isUndefined @skybox
-			@sceneSkybox.remove @skybox
+			@scene('skybox').remove @skybox
 			@skybox = undefined
 
 return sceneGraph

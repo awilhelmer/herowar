@@ -27,7 +27,7 @@ class SelectorObject
 	
 	update: ->
 		@removeSelectionWireframe @selectedObject, @selectedType if @selectedObject
-		objects = @intersectHelper.mouseIntersects scenegraph.scene.children
+		objects = @intersectHelper.mouseIntersects scenegraph.scene().children
 		if objects.length > 0
 			obj = @objectHelper.getBaseObject objects[0].object
 			if @objectHelper.isTerrain obj

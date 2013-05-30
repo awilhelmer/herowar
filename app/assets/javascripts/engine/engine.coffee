@@ -23,7 +23,6 @@ engine =
 			@controls = new Controls()
 			@clock = new THREE.Clock()
 			@pause = false
-			scenegraph.initialize()
 			console.log "Engine started!"
 		return
 		
