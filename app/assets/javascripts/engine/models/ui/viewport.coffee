@@ -12,12 +12,12 @@ class Viewport extends Backbone.Model
 		cameraScene = @get 'cameraScene'
 		cameraSkybox = @get 'cameraSkybox'
 		renderer.clear()
+		composer.render delta for composer in @get 'composers'
 		#if scenegraph.skyboxScene and cameraSkybox
 		#	cameraSkybox.rotation.copy cameraScene.rotation
 		#	renderer.render scenegraph.skyboxScene, cameraSkybox
 		#renderer.render scenegraph.scene(), cameraScene
 		#renderer.render scenegraph.scene('glow'), cameraScene
-		@composer.render()
 		@stats.update() if @stats
 		return
 
@@ -44,11 +44,11 @@ class Viewport extends Backbone.Model
 			format: THREE.RGBAFormat
 			stencilBuffer: true
 		renderTarget = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
-		@composer = new THREE.EffectComposer @get('renderer') renderTarget
+		finalcomposer = new THREE.EffectComposer @get('renderer'), renderTarget
 		@renderGlow = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
-		@composer.addPass @renderGlow
+		finalcomposer.addPass @renderGlow
 		@renderModel = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
-		@composer.addPass @renderModel
+		finalcomposer.addPass @renderModel
 		#@effectFXAA = new THREE.ShaderPass THREE.FXAAShader
 		#@effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()
 		#@composer.addPass @effectFXAA
@@ -56,7 +56,8 @@ class Viewport extends Backbone.Model
 		#@composer.addPass @effectBloom
 		@effectCopy = new THREE.ShaderPass THREE.CopyShader
 		@effectCopy.renderToScreen = true
-		@composer.addPass @effectCopy
+		finalcomposer.addPass @effectCopy
+		@set 'composers', [ finalcomposer ]
 
 		
 	createRenderer: ->
@@ -95,7 +96,7 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
-		@composer.reset()
+		composer.reset() for composer in @get 'composers'
 		return
 		
 	updateOrthographic: (camera, size, offset, aspect) ->
