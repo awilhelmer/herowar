@@ -81,10 +81,12 @@ sceneGraph =
 	addLaser: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
-			@scene('glow').add object.root	
+			@scene().add object.root
+			@scene('glow').add object.root
 
 	removeLaser: (id) ->
 		if @dynamicObjects.hasOwnProperty id
+			@scene().remove @dynamicObjects[id].root
 			@scene('glow').remove @dynamicObjects[id].root
 			delete @dynamicObjects[id]
 	

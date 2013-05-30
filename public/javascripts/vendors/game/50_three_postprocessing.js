@@ -260,7 +260,7 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
   // render targets
 
-  var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat };
+  var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
 
   this.renderTargetX = new THREE.WebGLRenderTarget( resolution, resolution, pars );
   this.renderTargetY = new THREE.WebGLRenderTarget( resolution, resolution, pars );
@@ -368,7 +368,7 @@ THREE.EffectComposer = function ( renderer, renderTarget ) {
 
     var width = window.innerWidth || 1;
     var height = window.innerHeight || 1;
-    var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
+    var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
 
     renderTarget = new THREE.WebGLRenderTarget( width, height, parameters );
 
@@ -600,7 +600,7 @@ THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clear
   this.overrideMaterial = overrideMaterial;
 
   this.clearColor = clearColor;
-  this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 0;
+  this.clearAlpha = ( clearAlpha !== undefined ) ? clearAlpha : 1;
 
   this.oldClearColor = new THREE.Color();
   this.oldClearAlpha = 1;

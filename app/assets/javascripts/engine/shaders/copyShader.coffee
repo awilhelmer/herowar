@@ -1,18 +1,7 @@
-class CopyShader
-	
-	uniforms:
-		tDiffuse: 
-			type: 't' 
-			value: null
-	
-	vertexShader: [
-		'varying vec2 vUv;'
-		'void main() {'
-		'vUv = uv;'
-		'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );'
-		'}'
-	].join '\n'
-	
+BaseShader = require 'shaders/baseShader'
+
+class CopyShader extends BaseShader
+		
 	fragmentShader: [
 		'uniform float opacity;'
 		'uniform sampler2D tDiffuse;'

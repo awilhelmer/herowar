@@ -1,3 +1,6 @@
+HorizontalBlurShader = require 'shaders/horizontalBlurShader'
+VerticalBlurShader = require 'shaders/verticalBlurShader'
+FinalShader = require 'shaders/finalShader'
 FXAAShader = require 'shaders/fxaaShader'
 EngineRenderer = require 'enginerenderer'
 scenegraph = require 'scenegraph'
@@ -41,23 +44,34 @@ class Viewport extends Backbone.Model
 		renderTargetParameters = 
 			minFilter: THREE.LinearFilter
 			magFilter: THREE.LinearFilter
-			format: THREE.RGBAFormat
-			stencilBuffer: true
+			format: THREE.RGBFormat
+			stencilBuffer: false
+		renderTargetGlow = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
+		effectFXAA = new THREE.ShaderPass THREE.FXAAShader
+		effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()		
+		hblur = new THREE.ShaderPass new HorizontalBlurShader()
+		vblur = new THREE.ShaderPass new VerticalBlurShader()
+		bluriness = 3
+		hblur.uniforms[ 'h' ].value = bluriness / $domElement.width()
+		vblur.uniforms[ 'v' ].value = bluriness / $domElement.height()
+		renderModelGlow = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
+		glowcomposer = new THREE.EffectComposer @get('renderer') #, renderTargetGlow
+		glowcomposer.addPass renderModelGlow
+		glowcomposer.addPass hblur
+		glowcomposer.addPass vblur
+		glowcomposer.addPass hblur
+		glowcomposer.addPass vblur
+		renderModel = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
+		finalShader = new FinalShader()
+		finalShader.uniforms['tGlow'].texture = glowcomposer.renderTarget2
+		finalPass = new THREE.ShaderPass finalShader
+		finalPass.renderToScreen = true
 		renderTarget = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
-		finalcomposer = new THREE.EffectComposer @get('renderer'), renderTarget
-		@renderGlow = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
-		finalcomposer.addPass @renderGlow
-		@renderModel = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
-		finalcomposer.addPass @renderModel
-		#@effectFXAA = new THREE.ShaderPass THREE.FXAAShader
-		#@effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()
-		#@composer.addPass @effectFXAA
-		#@effectBloom = new THREE.BloomPass 1.3
-		#@composer.addPass @effectBloom
-		@effectCopy = new THREE.ShaderPass THREE.CopyShader
-		@effectCopy.renderToScreen = true
-		finalcomposer.addPass @effectCopy
-		@set 'composers', [ finalcomposer ]
+		finalcomposer = new THREE.EffectComposer @get('renderer') #, renderTarget
+		finalcomposer.addPass renderModel
+		finalcomposer.addPass finalPass
+		@set 'composers', [ glowcomposer, finalcomposer ]
+		#@set 'composers', [ finalcomposer ]
 
 		
 	createRenderer: ->

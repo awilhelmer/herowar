@@ -1,4 +1,6 @@
-class FXAAShader
+BaseShader = require 'shaders/baseShader'
+
+class FXAAShader extends BaseShader
 	
 	uniforms:
 		tDiffuse: 
@@ -7,14 +9,6 @@ class FXAAShader
 		resolution:
 			type: 'v2'
 			value:  new THREE.Vector2 1/1024, 1/512
-	
-	vertexShader: [
-		'varying vec2 vUv;'
-		'void main() {'
-		'vUv = uv;'
-		'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );'
-		'}'
-	].join '\n'
 	
 	fragmentShader: [
 		'uniform sampler2D tDiffuse;'
