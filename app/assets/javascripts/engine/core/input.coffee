@@ -8,6 +8,7 @@ db = require 'database'
 class Input
 
 	constructor: ->
+		@views = db.get 'ui/viewports'
 		@model = db.get 'input'
 		@initialize()
 		@addEventListener()
@@ -16,16 +17,17 @@ class Input
 	
 	addEventListener: ->
 		log.debug 'Register input listeners'
+		domElement = @views.at(0).get 'domElement'
 		window.addEventListener 'keyup', (event) => @onKeyUp event
 		window.addEventListener 'keydown', (event) => @onKeyDown event
-		engine.main.get(0).addEventListener 'mouseup', (event) => @onMouseUp event
-		engine.main.get(0).addEventListener 'mousedown', (event) => @onMouseDown event
-		engine.main.get(0).addEventListener 'mousemove',(event) => @onMouseMove event
-		engine.main.get(0).addEventListener 'mousewheel', (event) => @onMouseWheel event
-		engine.main.get(0).addEventListener 'DOMMouseScroll', (event) => @onDOMMouseScroll event
-		engine.main.get(0).addEventListener 'touchstart', (event) => @onTouchStart event
-		engine.main.get(0).addEventListener 'touchend', (event) => @onTouchEnd event
-		engine.main.get(0).addEventListener 'touchmove', (event) => @onTouchMove event
+		domElement.addEventListener 'mouseup', (event) => @onMouseUp event
+		domElement.addEventListener 'mousedown', (event) => @onMouseDown event
+		domElement.addEventListener 'mousemove',(event) => @onMouseMove event
+		domElement.addEventListener 'mousewheel', (event) => @onMouseWheel event
+		domElement.addEventListener 'DOMMouseScroll', (event) => @onDOMMouseScroll event
+		domElement.addEventListener 'touchstart', (event) => @onTouchStart event
+		domElement.addEventListener 'touchend', (event) => @onTouchEnd event
+		domElement.addEventListener 'touchmove', (event) => @onTouchMove event
 
 	onKeyUp: (event) ->
 		Eventbus.controlsChanged.dispatch event

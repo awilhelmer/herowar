@@ -77,8 +77,8 @@ sceneGraph =
 
 	setMap: (mesh) ->
 		@scene(scene).remove obj for scene, obj of @map.root if @map
-		Map = require 'models/map'
-		@map = new Map @getNextId(), 'Terrain', mesh
+		Terrain = require 'models/terrain'
+		@map = new Terrain @getNextId(), 'Terrain', mesh
 		@scene(scene).add obj for scene, obj of @map.root
 		return @map
 

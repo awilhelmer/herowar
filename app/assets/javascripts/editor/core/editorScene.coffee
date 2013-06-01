@@ -57,6 +57,7 @@ class EditorScene extends Scene
 		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
 		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe
+		engine = require 'engine'
 		engine.render()
 
 	getWireframeColor: =>
