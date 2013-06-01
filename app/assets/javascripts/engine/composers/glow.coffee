@@ -10,16 +10,16 @@ class GlowComposer extends BaseComposer
 		composer.addPass model
 		blurHLevel = 0.003
 		blurVLevel = 0.006
-		effectHBlur = new THREE.ShaderPass THREE.HorizontalBlurShader # new HorizontalBlurShader()
+		effectHBlur = new THREE.ShaderPass new HorizontalBlurShader()
 		effectHBlur.uniforms['h'].value = blurHLevel
 		composer.addPass effectHBlur
-		effectVBlur = new THREE.ShaderPass THREE.VerticalBlurShader # new VerticalBlurShader()
+		effectVBlur = new THREE.ShaderPass new VerticalBlurShader()
 		effectVBlur.uniforms['v'].value = blurVLevel
 		composer.addPass effectVBlur
-		effectHBlur2 = new THREE.ShaderPass THREE.HorizontalBlurShader # new HorizontalBlurShader()
+		effectHBlur2 = new THREE.ShaderPass new HorizontalBlurShader()
 		effectHBlur2.uniforms['h'].value = blurHLevel
 		composer.addPass effectHBlur2
-		effectVBlur2 = new THREE.ShaderPass THREE.VerticalBlurShader # new VerticalBlurShader()
+		effectVBlur2 = new THREE.ShaderPass new VerticalBlurShader()
 		effectVBlur2.uniforms['v'].value = blurVLevel
 		composer.addPass effectVBlur2
 
