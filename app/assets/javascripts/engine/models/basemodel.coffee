@@ -84,10 +84,7 @@ class BaseModel
 	
 	_copyGeometry: (name, scene, geometry) ->
 			geo = db.geometry name, scene
-			if geo
-				console.log 'Loaded geometry from cache', geo
-			else
-				geo = GeometryUtils.clone geometry
+			geo = GeometryUtils.clone geometry unless geo
 			return geo
 	
 	_getGlowMaterials: (obj) ->
