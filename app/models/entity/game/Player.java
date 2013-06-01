@@ -34,7 +34,7 @@ public class Player implements Serializable {
   @JsonIgnore
   private Set<GameResult> gameResults;
 
-	private Player() {
+	public Player() {
 	  gameResults = new HashSet<GameResult>();
 	}
 	
