@@ -1,0 +1,1 @@
+python C:\Users\NIEMAND\Downloads\mrdoob-three.js-r58-0-g28136e7\mrdoob-three.js-28136e7\utils\converters\obj\convert_obj_three.py -i spaceship-1-v1.obj -o spaceship-1-v1.js
