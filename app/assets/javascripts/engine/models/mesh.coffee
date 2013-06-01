@@ -11,7 +11,7 @@ class MeshModel extends BaseModel
 	
 	constructor: (@id, @name, @meshBody) ->
 		@_enableShadows()
-		super @_createThreeObject()
+		super @_createThreeObject @meshBody
 
 	update: (delta) ->
 		super delta
@@ -35,7 +35,7 @@ class MeshModel extends BaseModel
 		intersects = @raycaster.intersectObject scenegraph.getMap(), true
 		if intersects.length isnt 0 and intersects[0].distance < @meshBody.geometry.boundingBox.max.y
 			console.log 'Ground Collision detected', intersects[0].distance, intersects[0]
-			@root.translateY intersects[0].distance
+			@getMainObject().translateY intersects[0].distance
 	
 	_enableShadows: ->
 		if _.isArray @meshBody
@@ -47,15 +47,15 @@ class MeshModel extends BaseModel
 			@meshBody.receiveShadow = true	
 		return
 
-	_createThreeObject: ->
+	_createThreeObject: (mesh) ->
 		obj = new THREE.Object3D()
 		obj.name = @name
 		obj.useQuaternion = true
-		if _.isArray @meshBody
-			for mesh in @meshBody
+		if _.isArray mesh
+			for mesh in mesh
 				obj.add mesh
 		else
-			obj.add @meshBody
+			obj.add mesh
 		return obj
 
 return MeshModel

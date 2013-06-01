@@ -27,7 +27,7 @@ class SelectorTerrain
 		if radius > 1
 			radius /=2
 			radius += 0.33
-		intersectList = @intersectHelper.mouseIntersects [ scenegraph.getMap() ], radius
+		intersectList = @intersectHelper.mouseIntersects [ scenegraph.getMap().getMainObject() ], radius
 		if intersectList.length > 0
 			@lastIntersect = @intersectHelper.getIntersectObject intersectList
 			@lastPosition = new THREE.Vector3().addVectors @lastIntersect.point, @lastIntersect.face.normal.clone().applyMatrix4 @lastIntersect.object.matrixRotationWorld

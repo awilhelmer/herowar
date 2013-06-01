@@ -29,7 +29,7 @@ class AddTowerTool extends AddObject
 		data = db.data().geometries[name]
 		mesh = @createMesh data[0], data[1], name, data[2]
 		model = new Tower packet.objectId, name, mesh
-		model.root.position.set packet.position.x, packet.position.y, packet.position.z
+		model.getMainObject().position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		#model.showRange()
 		scenegraph.addDynObject model, packet.objectId
@@ -45,8 +45,8 @@ class AddTowerTool extends AddObject
 		scenegraph.addDynObject model, @tool.get 'currentObjectId'
 
 	placeMesh: ->
-		console.log 'Place tower', @tool.get('currentObject').root
-		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').root.position # TODO: fix hardcoded tower id
+		console.log 'Place tower', @tool.get('currentObject').getMainObject()
+		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').getMainObject().position # TODO: fix hardcoded tower id
 	
 	onLoadGeometry: (geometry, materials, json) =>
 		unless json
@@ -54,23 +54,23 @@ class AddTowerTool extends AddObject
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
 		model = new Tower @tool.get('currentObjectId'), name, mesh
 		model.showRange()
-		model.root.visible = false
+		model.getMainObject().visible = false
 		@tool.set 'currentObject', model
 		console.log 'onLoadGeometry', model
 		@addMesh()
 
 	onNonIntersect: ->
 		model = @tool.get 'currentObject'
-		model.root.visible = false if model.root.visible
+		model.getMainObject().visible = false if model.getMainObject().visible
 
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
 		if model
 			position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
-			model.root.position = position
-			model.root.visible = true unless model.root.visible
+			model.getMainObject().position = position
+			model.getMainObject().visible = true unless model.getMainObject().visible
 
 	onMouseUp: (event) ->
-		@placeMesh() if @tool.get('currentObject')?.root.visible and !@input.get('mouse_moved') if event.which is 1
+		@placeMesh() if @tool.get('currentObject')?.getMainObject().visible and !@input.get('mouse_moved') if event.which is 1
 	
 return AddTowerTool

@@ -1,6 +1,6 @@
 HorizontalBlurShader = require 'shaders/horizontalBlurShader'
 VerticalBlurShader = require 'shaders/verticalBlurShader'
-FinalShader = require 'shaders/finalShader'
+AdditiveBlendShader = require 'shaders/additiveBlendShader'
 FXAAShader = require 'shaders/fxaaShader'
 EngineRenderer = require 'enginerenderer'
 scenegraph = require 'scenegraph'
@@ -41,48 +41,25 @@ class Viewport extends Backbone.Model
 
 	createEffects: ->
 		$domElement = $ @get 'domElement'
-		renderTargetParameters = 
-			minFilter: THREE.LinearFilter
-			magFilter: THREE.LinearFilter
-			format: THREE.RGBFormat
-			stencilBuffer: false
-		renderTargetGlow = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
-		effectFXAA = new THREE.ShaderPass THREE.FXAAShader
-		effectFXAA.uniforms[ 'resolution' ].value.set 1 / $domElement.width(), 1 / $domElement.height()		
-		hblur = new THREE.ShaderPass new HorizontalBlurShader()
-		vblur = new THREE.ShaderPass new VerticalBlurShader()
-		bluriness = 3
-		hblur.uniforms[ 'h' ].value = bluriness / $domElement.width()
-		vblur.uniforms[ 'v' ].value = bluriness / $domElement.height()
-		renderModelGlow = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
-		glowcomposer = new THREE.EffectComposer @get('renderer') #, renderTargetGlow
-		glowcomposer.addPass renderModelGlow
-		glowcomposer.addPass hblur
-		glowcomposer.addPass vblur
-		glowcomposer.addPass hblur
-		glowcomposer.addPass vblur
-		renderModel = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
-		finalShader = new FinalShader()
-		finalShader.uniforms['tGlow'].texture = glowcomposer.renderTarget2
-		finalPass = new THREE.ShaderPass finalShader
-		finalPass.renderToScreen = true
-		renderTarget = new THREE.WebGLRenderTarget $domElement.width(), $domElement.height(), renderTargetParameters 
-		finalcomposer = new THREE.EffectComposer @get('renderer') #, renderTarget
-		finalcomposer.addPass renderModel
-		finalcomposer.addPass finalPass
-		@set 'composers', [ glowcomposer, finalcomposer ]
-		#@set 'composers', [ finalcomposer ]
-
-		
+		width = $domElement.width()
+		height = $domElement.height()
+		renderParams = @_createRenderParameters()
+		maincomposer = @_createMainComposer width, height, renderParams
+		#maincomposer = null
+		#glowcomposer = @_createGlowComposer width, height, renderParams
+		#finalcomposer = @_createFinalComposer width, height, renderParams, maincomposer, glowcomposer
+		#@set 'composers', [ glowcomposer, finalcomposer ]
+		@set 'composers', [ maincomposer ]
+	
 	createRenderer: ->
 		switch @get 'rendererType'
 			when Variables.RENDERER_TYPE_CANVAS
 				renderer = new THREE.CanvasRenderer
 					antialias: false
 			when Variables.RENDERER_TYPE_WEBGL
-				renderer = new EngineRenderer 
-					antialias: true
+				renderer = new EngineRenderer()
 				renderer.setClearColorHex 0xFFFFFF, 0.0
+				renderer.autoClear = false
 				renderer.gammaInput = true
 				renderer.gammaOutput = true
 				renderer.physicallyBasedShading = true
@@ -168,5 +145,50 @@ class Viewport extends Backbone.Model
 		if hud is Variables.HUD_GAME
 			GameHUD = require 'hud/game'
 			@hud = new GameHUD @
+
+	_createMainComposer: (width, height, renderParams) ->
+		composer = @_createComposer width, height, renderParams
+		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
+		effectFXAA = new THREE.ShaderPass THREE.FXAAShader
+		effectFXAA.uniforms['resolution'].value.set 1 / width, 1 / height
+		effectFXAA.renderToScreen = true
+		composer.addPass model
+		composer.addPass effectFXAA
+		return composer
+
+	_createGlowComposer: (width, height, renderParams) ->
+		composer = @_createComposer width, height, renderParams
+		model = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
+		effectHBlur = new THREE.ShaderPass new HorizontalBlurShader()
+		effectVBlur = new THREE.ShaderPass new VerticalBlurShader()
+		bluriness = 3
+		effectHBlur.uniforms['h'].value = bluriness / width
+		effectVBlur.uniforms['v'].value = bluriness / height
+		#effectVBlur.renderToScreen = true
+		composer.addPass model
+		composer.addPass effectHBlur
+		composer.addPass effectVBlur
+		return composer
+
+	_createFinalComposer: (width, height, renderParams, maincomposer, glowcomposer) ->
+		composer = @_createComposer width, height, renderParams
+		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
+		#blendShader = new AdditiveBlendShader()
+		blendPass = new THREE.ShaderPass THREE.BlendShader, 'tDiffuse1' #blendShader
+		#blendPass.uniforms['tDiffuse1'].value = maincomposer.renderTarget1
+		blendPass.uniforms['tDiffuse2'].value = glowcomposer.renderTarget1
+		blendPass.uniforms['mixRatio'].value = 0.5
+		blendPass.uniforms['opacity'].value = 2
+		blendPass.renderToScreen = true
+		composer.addPass model
+		composer.addPass blendPass
+		return composer
+	
+	_createComposer: (width, height, params) ->
+		target = new THREE.WebGLRenderTarget width, height, params
+		return new THREE.EffectComposer @get('renderer'), target
+		
+	_createRenderParameters: ->
+		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: true
 
 return Viewport

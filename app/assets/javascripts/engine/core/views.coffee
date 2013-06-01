@@ -53,10 +53,10 @@ class Views
 			console.log 'View', view, 'initialized'
 		return
 	
-	render: (scene, skyboxScene) ->
+	render: (delta) ->
 		unless @rendering 
 			@rendering = true
-			view.render() for view in @viewports.models
+			view.render delta for view in @viewports.models
 			@rendering = false
 		return
 

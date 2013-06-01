@@ -1,4 +1,3 @@
-BaseModel = require 'models/basemodel'
 Variables = require 'variables'
 events = require 'events'
 db = require 'database'
@@ -13,12 +12,6 @@ sceneGraph =
 	dynamicObjects: {}
 	
 	staticObjects: {}
-
-	scene: new THREE.Scene()
-	
-	sceneSkybox: new THREE.Scene()
-	
-	sceneLasers: new THREE.Scene()
 
 	scene: (name) ->
 		name = 'main' unless name
@@ -46,11 +39,11 @@ sceneGraph =
 	addDynObject: (object, id) ->
 		unless @dynamicObjects.hasOwnProperty id
 			@dynamicObjects[id] = object
-			@scene().add object.root
+			@scene(scene).add obj for scene, obj of object.root
 
 	removeDynObject: (id) ->
 		if @dynamicObjects.hasOwnProperty id
-			@scene().remove @dynamicObjects[id].root
+			@scene(scene).remove obj for scene, obj of @dynamicObjects[id].root
 			delete @dynamicObjects[id]
 
 	addStaticObject: (obj, id) ->
@@ -78,26 +71,14 @@ sceneGraph =
 				@staticObjects[obj.dbId].slice arrIndex, 1
 		null
 	
-	addLaser: (object, id) ->
-		unless @dynamicObjects.hasOwnProperty id
-			@dynamicObjects[id] = object
-			@scene().add object.root
-			@scene('glow').add object.root
-
-	removeLaser: (id) ->
-		if @dynamicObjects.hasOwnProperty id
-			@scene().remove @dynamicObjects[id].root
-			@scene('glow').remove @dynamicObjects[id].root
-			delete @dynamicObjects[id]
-	
 	getMap: ->
 		return @map
 
-	setMap: (map) ->
-		if @map
-			@scene().remove @map
-		@map = map
-		@scene().add @map
+	setMap: (mesh) ->
+		@scene(scene).remove obj for scene, obj of @map.root if @map
+		Map = require 'models/map'
+		@map = new Map @getNextId(), 'Terrain', mesh
+		@scene(scene).add obj for scene, obj of @map.root
 		return @map
 
 	getNextId: ->
