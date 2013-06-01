@@ -24,7 +24,9 @@ class GameScene extends Scene
 		#scenegraph.removeDynObject packet.id
 			
 	onTowerTarget: (packet) ->
-		scenegraph.dynamicObjects[packet.tower].target = scenegraph.dynamicObjects[packet.target]
+		tower = scenegraph.dynamicObjects[packet.tower]
+		target = scenegraph.dynamicObjects[packet.target]
+		tower.target = target if tower and target
 		#console.log 'onTowerTarget', scenegraph.dynamicObjects[packet.tower], "target now", scenegraph.dynamicObjects[packet.target]
 		
 	onTowerAttack: (packet) ->

@@ -24,7 +24,6 @@ class GlowComposer extends BaseComposer
 		composer.addPass effectVBlur2
 
 	setSize: (width, height) ->
-		console.log 'Set GlowComposer size', width / 4, height / 4
 		@composer.setSize Math.floor(width / 4), Math.floor(height / 4)
 
 	_createRenderTarget: (width, height) ->

@@ -1,4 +1,4 @@
-#AdditiveBlendShader = require 'shaders/additiveBlendShader'
+BlendShader = require 'shaders/blendShader'
 BaseComposer = require 'composers/baseComposer'
 MainComposer = require 'composers/main'
 GlowComposer = require 'composers/glow'
@@ -13,9 +13,8 @@ class FinalComposer extends BaseComposer
 	initialize: (composer, width, height) ->
 		model = new THREE.RenderPass scenegraph.scene(), @view.get 'cameraScene'
 		composer.addPass model
-		#blendShader = new AdditiveBlendShader()
 		blendPass = new THREE.ShaderPass THREE.BlendShader, 'tDiffuse1' #blendShader
-		#blendPass.uniforms['tDiffuse1'].value = maincomposer.renderTarget1
+		#blendPass = new THREE.ShaderPass new BlendShader()
 		blendPass.uniforms['tDiffuse2'].value = @glowcomposer.renderTarget
 		blendPass.uniforms['mixRatio'].value = 0.5
 		blendPass.uniforms['opacity'].value = 2

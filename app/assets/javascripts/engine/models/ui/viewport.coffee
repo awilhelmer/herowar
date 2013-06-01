@@ -46,8 +46,6 @@ class Viewport extends Backbone.Model
 					antialias: false
 			when Variables.RENDERER_TYPE_WEBGL
 				renderer = new EngineRenderer()
-				#renderer.setClearColorHex 0xFFFFFF, 0.0
-				#renderer.autoClear = false
 				#renderer.gammaInput = true
 				#renderer.gammaOutput = true
 				#renderer.physicallyBasedShading = true
