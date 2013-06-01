@@ -10,8 +10,8 @@
 "materials": [  {
 	"DbgColor" : 15658734,
 	"DbgIndex" : 0,
-	"DbgName" : "enemies-ratamahattapng",
-	"mapDiffuse" : "enemies/ratamahatta.png",
+	"DbgName" : "units-ratamahattapng",
+	"mapDiffuse" : "units/ratamahatta.png",
 	"mapDiffuseWrap" : ["repeat", "repeat"],
 	"blending" : "NormalBlending",
 	"colorAmbient" : [1.0, 1.0, 1.0],

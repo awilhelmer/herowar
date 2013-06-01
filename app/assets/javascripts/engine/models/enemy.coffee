@@ -1,4 +1,5 @@
 AnimatedModel = require 'models/animatedModel'
+BlackSmoke = require 'effects/blackSmoke'
 scenegraph = require 'scenegraph'
 
 class Enemy extends AnimatedModel
@@ -15,6 +16,7 @@ class Enemy extends AnimatedModel
 
 	update: (delta) ->
 		super delta
+		@blackSmoke.update delta, Date.now() / 1000, @_getBlackSmokePosition() if @blackSmoke
 		if not @isDead()
 			return if @waypoints.length is 0
 			@_waypointArrivalCheck()
@@ -29,6 +31,7 @@ class Enemy extends AnimatedModel
 				if opacity > 0
 					material.opacity = opacity
 				else
+					@blackSmoke.dispose() if @blackSmoke
 					@dispose()
 					break
 	
@@ -36,8 +39,12 @@ class Enemy extends AnimatedModel
 		unless @isDead()
 			@currentHealth -= damage
 			@currentHealth = 0 if @currentHealth < 0
+			percent = @currentHealth / @maxHealth * 100
+			@_createBlackSmoke() if percent <= 50 and not @blackSmoke and @meshBody.name is 'Spaceship-1-v1'
 			if @currentHealth is 0
-				@setAnimation 'crdeath', true
+				@setAnimation 'crdeath', true 
+				@blackSmoke.stop() if @blackSmoke
+		return
 	
 	isDead: ->
 		@currentHealth <= 0
@@ -55,5 +62,16 @@ class Enemy extends AnimatedModel
 		#console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
 		@dispose() if @waypoints.length is 0
+
+	_createBlackSmoke: ->
+		console.log 'Create black smoke ...'
+		@blackSmoke = new BlackSmoke scenegraph.scene()
+		@blackSmoke.start @_getBlackSmokePosition()
+
+	_getBlackSmokePosition: ->
+		boundingBox = @meshBody.geometry.boundingBox
+		position = @root.main.position.clone()
+		position.y += (boundingBox.max.y - boundingBox.min.y) * @meshBody.scale.y / 2
+		return position
 
 return Enemy
