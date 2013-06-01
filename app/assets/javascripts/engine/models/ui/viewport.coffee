@@ -1,6 +1,5 @@
 EngineRenderer = require 'enginerenderer'
 FinalComposer = require 'composers/final'
-#scenegraph = require 'scenegraph'
 Variables = require 'variables'
 
 class Viewport extends Backbone.Model

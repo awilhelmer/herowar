@@ -18,5 +18,6 @@ class EditorControls extends THREE.TrackballControls
 			Eventbus.cameraChanged.dispatch view
 			null
 		)
+		@update()
 
 return EditorControls
