@@ -18,7 +18,7 @@
     "materials": [	{
 	"DbgColor" : 15658734,
 	"DbgIndex" : 0,
-	"DbgName" : "default",
+	"DbgName" : "units-spaceship-1-v1-1",
 	"blending" : "NormalBlending",
 	"colorAmbient" : [1.0, 1.0, 1.0],
 	"colorDiffuse" : [1.0, 1.0, 1.0],
@@ -33,7 +33,7 @@
 	},{
 	"DbgColor" : 15658734,
 	"DbgIndex" : 1,
-	"DbgName" : "default",
+	"DbgName" : "units-spaceship-1-v1-2",
 	"blending" : "NormalBlending",
 	"colorAmbient" : [1.0, 1.0, 1.0],
 	"colorDiffuse" : [1.0, 1.0, 1.0],
