@@ -3,7 +3,7 @@ Scene = require 'models/scene'
 events = require 'events'
 db = require 'database'
 
-_data = new Scene()
+_data = db.get 'scene'
 
 sceneGraph =
 
@@ -20,7 +20,7 @@ sceneGraph =
 
 	clear: ->
 		dynamicObjects = _data.get 'dynamicObjects'
-		for own id, obj of dynamicObjects
+		for id, obj of dynamicObjects
 			@removeDynObject id
 		_data.trigger 'change:dynamicObjects'
 		_data.trigger 'change'
@@ -35,7 +35,7 @@ sceneGraph =
 
 	addDynObject: (object, id) ->
 		dynamicObjects = _data.get 'dynamicObjects'
-		unless dynamicObjects.hasOwnProperty id
+		unless _.has dynamicObjects, id
 			dynamicObjects[id] = object
 			@_addToScenes object
 			_data.trigger 'change:dynamicObjects'
@@ -43,7 +43,7 @@ sceneGraph =
 
 	removeDynObject: (id) ->
 		dynamicObjects = _data.get 'dynamicObjects'
-		if dynamicObjects.hasOwnProperty id
+		if _.has dynamicObjects, id
 			@_removeFromScenes dynamicObjects[id]
 			delete dynamicObjects[id]
 			_data.trigger 'change:dynamicObjects'
@@ -61,7 +61,7 @@ sceneGraph =
 
 	addStaticObject: (obj, id) ->
 		staticObjects = _data.get 'staticObjects'
-		unless _.has(staticObjects, id)
+		unless _.has staticObjects, id
 			staticObjects[id] = [] 
 		obj.userData.listIndex = staticObjects[id].length
 		obj.userData.dbId = id
@@ -72,7 +72,7 @@ sceneGraph =
 	
 	removeStaticObject: (obj) ->
 		staticObjects = _data.get 'staticObjects'
-		if _.has(staticObjects, obj.dbId)
+		if _.has staticObjects, obj.dbId
 			threeModel = staticObjects[obj.dbId][obj.listIndex]
 			arrIndex = threeModel.userData.listIndex
 			@_removeFromScenes threeModel
