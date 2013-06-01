@@ -53,24 +53,24 @@ class AddTowerTool extends AddObject
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
 		model = new Tower @tool.get('currentObjectId'), name, mesh
-		model.showRange()
-		model.getMainObject().visible = false
+		#model.showRange()
+		model.visible false
 		@tool.set 'currentObject', model
 		console.log 'onLoadGeometry', model
 		@addMesh()
 
 	onNonIntersect: ->
 		model = @tool.get 'currentObject'
-		model.getMainObject().visible = false if model.getMainObject().visible
+		model.visible = false if model.visible
 
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
 		if model
 			position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
 			model.getMainObject().position = position
-			model.getMainObject().visible = true unless model.getMainObject().visible
+			model.visible = true unless model.visible
 
 	onMouseUp: (event) ->
-		@placeMesh() if @tool.get('currentObject')?.getMainObject().visible and !@input.get('mouse_moved') if event.which is 1
+		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
 	
 return AddTowerTool

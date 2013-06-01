@@ -10,7 +10,7 @@ class GameHUD extends BaseHUD
 		@state = 0
 
 	update: (delta) ->
-		return unless @waves.get('_active') and @waves.get('arrival_short')
+		return unless @waves and @waves.get('_active') and @waves.get('arrival_short')
 		screen_hw = @canvas.width / 2
 		screen_hh = @canvas.height / 2
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
@@ -31,7 +31,7 @@ class GameHUD extends BaseHUD
 				@_setShadow width / 50, width / 50, width / 15
 				@ctx.fillStyle = "rgba(255, 255, 255, #{@alpha})"
 				@_drawText "GAME START", screen_hw, screen_hh / 2, ((1 - @alpha) * width * 4) + width * 2
-				@alpha = @alpha - delta
+				@alpha = @alpha - delta if delta
 				@state++ if @alpha <= 0
 		@_drawHealthBars()
 		

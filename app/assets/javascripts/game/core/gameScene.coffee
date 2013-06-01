@@ -30,6 +30,7 @@ class GameScene extends Scene
 	onTowerAttack: (packet) ->
 		owner = scenegraph.dynamicObjects[packet.tower]
 		target = scenegraph.dynamicObjects[packet.tower].target
+		return unless owner and target
 		
 		laser1 = new Laser @customId++, owner, target, packet.damage
 		laser1.getMainObject().position.x += 12

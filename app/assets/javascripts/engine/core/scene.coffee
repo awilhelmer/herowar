@@ -47,6 +47,7 @@ class Scene
 	buildTerrain: (map) =>
 		if !map and @world.get('terrain').geometry instanceof THREE.Geometry
 			map = @world.getTerrainMeshFromGeometry()
+			map.children[0].userData.glowing = true
 			map.children[0].geometry.computeBoundingBox()
 			map.children[0].geometry.computeBoundingSphere()
 			scenegraph.setMap map

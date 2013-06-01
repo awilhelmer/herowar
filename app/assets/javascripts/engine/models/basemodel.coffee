@@ -23,12 +23,17 @@ class BaseModel
 		dq.setFromRotationMatrix m
 		multipler = if @rotationMultipler then @rotationMultipler else @moveSpeed / 10
 		@getMainObject().quaternion.slerp dq, delta * multipler
-		object.quaternion.setFromRotationMatrix @getMainObject().matrix for scene, object of @root when scene isnt 'main'
+		obj.quaternion.copy @getMainObject().quaternion for scene, obj of @root when scene isnt 'main'
 		return
 	
 	move: (delta) ->
 		@getMainObject().translateZ delta * @moveSpeed
-		object.position.clone @getMainObject().position for scene, object of @root when scene isnt 'main'
+		obj.position.copy @getMainObject().position for scene, obj of @root when scene isnt 'main'
+		return
+	
+	visible: (value) ->
+		obj.visible = value for scene, obj of @root if value
+		return @getMainObject().visible
 	
 	dispose: ->
 		scenegraph = require 'scenegraph'
@@ -37,25 +42,63 @@ class BaseModel
 
 	_cloneRoot: ->
 		for scene in ['glow']
-			@root[scene] = @root.main.clone()
-			@_convertGlowMaterials @root[scene] if scene is 'glow'
+			@root[scene] = @_copyObject null, @root.main, scene
+		return
+
+	_copyObject: (destObject, srcObject, scene) ->
+		if srcObject instanceof THREE.Scene
+			destObject = new THREE.Scene
+		else if srcObject instanceof THREE.MorphAnimMesh 
+			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
+			destObject	= new THREE.MorphAnimMesh srcObject.geometry, material
+		else if srcObject instanceof THREE.Mesh
+			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
+			destObject	= new THREE.Mesh srcObject.geometry, material
+		else if srcObject instanceof THREE.Object3D
+			destObject	= new THREE.Object3D()
+		destObject.position.copy srcObject.position
+		destObject.rotation.copy srcObject.rotation
+		destObject.scale.copy srcObject.scale
+		destObject.userData = _.clone srcObject.userData
+		if srcObject.useQuaternion
+			destObject.quaternion.copy srcObject.quaternion
+			destObject.useQuaternion = true
+		destObject.add @_copyObject null, srcChild, scene for srcChild in srcObject.children if srcObject.children.length isnt 0
+		return destObject
+	
+	_copyUserData: (objDestination, objSource) ->
+		for i in [0..objSource.children.length-1]
+			objDestination.children[i].userData = _.clone objSource.children[i].userData if objSource.children[i] instanceof THREE.Mesh
+			@_copyUserData objSource.children[i], objDestination.children[i] if objSource.children[i].children.length isnt 0
 		return
 	
-	_convertGlowMaterials: (obj) ->
+	_getGlowMaterials: (obj) ->
 		if obj instanceof THREE.Mesh
-			glowMaterial = if obj.userData.glowing then @_getGlowOnMaterial() else @_getGlowOffMaterial()
+			isAnimated = obj instanceof THREE.MorphAnimMesh
+			glowMaterial = if obj.userData.glowing then @_getGlowOnMaterial isAnimated else @_getGlowOffMaterial isAnimated
 			if obj.material instanceof THREE.MeshFaceMaterial
 				materials = []
-				materials.push new THREE.MeshBasicMaterial glowMaterial for material in obj.material.materials
-				obj.material = new THREE.MeshFaceMaterial materials
-			else obj.material = glowMaterial
-		@_convertGlowMaterials child for child in obj.children if obj.children
-		return
+				for mat in obj.material.materials
+					if materials.length is 0 
+						materials.push glowMaterial
+					else
+						materials.push glowMaterial.clone()
+				return new THREE.MeshFaceMaterial materials
+			else return glowMaterial
+		return null
+	
+	_getGlowOnMaterial: (isAnimated) ->
+		material = new THREE.MeshBasicMaterial color: 0x88ccff
+		if isAnimated
+			material.morphTargets = true
+			material.morphNormals = true
+		return material
 
-	_getGlowOnMaterial: ->
-		return new THREE.MeshBasicMaterial color: 0x88ccff
-
-	_getGlowOffMaterial: ->
-		return new THREE.MeshBasicMaterial color: 'black'
+	_getGlowOffMaterial: (isAnimated) ->
+		material = new THREE.MeshBasicMaterial color: 'black'
+		if isAnimated
+			material.morphTargets = true
+			material.morphNormals = true
+		return material
 
 return BaseModel 

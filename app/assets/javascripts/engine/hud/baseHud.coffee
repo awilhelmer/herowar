@@ -18,10 +18,15 @@ class BaseHUD
 		$domElement.append @canvas
 		@$canvas = $ @canvas
 		@$canvas.addClass 'hud'
+		@font = 'Arial'
+		@resize()
+		
+	resize: ->
 		@canvas.width = @$canvas.parent().width()
 		@canvas.height = @$canvas.parent().height()
-		@font = 'Arial'
+		#console.log 'Set hud canvas size', @canvas.width, @canvas.height
 		@initCtx()
+		@update()
 
 	initCtx: ->
 		@ctx = @canvas.getContext '2d'

@@ -1,9 +1,6 @@
-HorizontalBlurShader = require 'shaders/horizontalBlurShader'
-VerticalBlurShader = require 'shaders/verticalBlurShader'
-AdditiveBlendShader = require 'shaders/additiveBlendShader'
-FXAAShader = require 'shaders/fxaaShader'
 EngineRenderer = require 'enginerenderer'
-scenegraph = require 'scenegraph'
+MainComposer = require 'composers/main'
+#scenegraph = require 'scenegraph'
 Variables = require 'variables'
 
 class Viewport extends Backbone.Model
@@ -11,10 +8,10 @@ class Viewport extends Backbone.Model
 	stats: null
 
 	render: (delta) ->
-		renderer = @get 'renderer'
-		cameraScene = @get 'cameraScene'
-		cameraSkybox = @get 'cameraSkybox'
-		renderer.clear()
+		#renderer = @get 'renderer'
+		#cameraScene = @get 'cameraScene'
+		#cameraSkybox = @get 'cameraSkybox'
+		#renderer.clear()
 		composer.render delta for composer in @get 'composers'
 		#if scenegraph.skyboxScene and cameraSkybox
 		#	cameraSkybox.rotation.copy cameraScene.rotation
@@ -40,17 +37,17 @@ class Viewport extends Backbone.Model
 		cameraSkybox
 
 	createEffects: ->
-		$domElement = $ @get 'domElement'
-		width = $domElement.width()
-		height = $domElement.height()
-		renderParams = @_createRenderParameters()
-		maincomposer = @_createMainComposer width, height, renderParams
-		#maincomposer = null
+		#$domElement = $ @get 'domElement'
+		#width = $domElement.width()
+		#height = $domElement.height()
+		#renderParams = @_createRenderParameters()
+		#maincomposer = @_createMainComposer width, height, renderParams
 		#glowcomposer = @_createGlowComposer width, height, renderParams
-		#finalcomposer = @_createFinalComposer width, height, renderParams, maincomposer, glowcomposer
+		mainComposer = new MainComposer @
+		@set 'composers', [ mainComposer ]
+		#finalcomposer = @_createFinalComposer width, height, renderParams, glowcomposer
 		#@set 'composers', [ glowcomposer, finalcomposer ]
-		@set 'composers', [ maincomposer ]
-	
+		
 	createRenderer: ->
 		switch @get 'rendererType'
 			when Variables.RENDERER_TYPE_CANVAS
@@ -58,12 +55,11 @@ class Viewport extends Backbone.Model
 					antialias: false
 			when Variables.RENDERER_TYPE_WEBGL
 				renderer = new EngineRenderer()
-				renderer.setClearColorHex 0xFFFFFF, 0.0
-				renderer.autoClear = false
+				#renderer.setClearColorHex 0xFFFFFF, 0.0
+				#renderer.autoClear = false
 				renderer.gammaInput = true
 				renderer.gammaOutput = true
 				renderer.physicallyBasedShading = true
-				# renderer.autoClear = false
 		$domElement = $ @get 'domId'
 		@set
 			'domElement' : $domElement.get 0
@@ -87,7 +83,10 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
-		composer.reset() for composer in @get 'composers'
+		for composer in @get 'composers'
+			composer.setSize width, height
+			composer.reset()
+		@hud.resize() if @hud
 		return
 		
 	updateOrthographic: (camera, size, offset, aspect) ->
@@ -146,6 +145,7 @@ class Viewport extends Backbone.Model
 			GameHUD = require 'hud/game'
 			@hud = new GameHUD @
 
+	###
 	_createMainComposer: (width, height, renderParams) ->
 		composer = @_createComposer width, height, renderParams
 		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
@@ -164,13 +164,13 @@ class Viewport extends Backbone.Model
 		bluriness = 3
 		effectHBlur.uniforms['h'].value = bluriness / width
 		effectVBlur.uniforms['v'].value = bluriness / height
-		#effectVBlur.renderToScreen = true
+		effectVBlur.renderToScreen = true
 		composer.addPass model
 		composer.addPass effectHBlur
 		composer.addPass effectVBlur
 		return composer
 
-	_createFinalComposer: (width, height, renderParams, maincomposer, glowcomposer) ->
+	_createFinalComposer: (width, height, renderParams, glowcomposer) ->
 		composer = @_createComposer width, height, renderParams
 		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
 		#blendShader = new AdditiveBlendShader()
@@ -189,6 +189,7 @@ class Viewport extends Backbone.Model
 		return new THREE.EffectComposer @get('renderer'), target
 		
 	_createRenderParameters: ->
-		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: true
+		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat
+	###
 
 return Viewport

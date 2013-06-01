@@ -38,7 +38,9 @@ class Enemies extends PacketModel
 		scenegraph.addDynObject dynObj, id
 	
 	createModel: (id, name, data, waypoints) ->
-		model = new Enemy id, name, @createMesh id, name, data
+		mesh = @createMesh id, name, data
+		mesh.userData.glowing = true
+		model = new Enemy id, name, mesh
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z

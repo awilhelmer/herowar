@@ -11,7 +11,12 @@ class MeshModel extends BaseModel
 	
 	constructor: (@id, @name, @meshBody) ->
 		@_enableShadows()
-		super @_createThreeObject @meshBody
+		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
+			super @_createThreeObject @meshBody
+		else
+			obj = @meshBody
+			@meshBody = obj.children[0] # TODO: this is super cheap and needs improvement
+			super obj
 
 	update: (delta) ->
 		super delta
