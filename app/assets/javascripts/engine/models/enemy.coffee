@@ -24,11 +24,13 @@ class Enemy extends AnimatedModel
 			@rotateTo waypoint.position, delta
 			@move delta
 		else if @isDead() and not @activeAnimation
-			opacity = @meshBody.material.materials[0].opacity - delta
-			if opacity > 0
-				@meshBody.material.materials[0].opacity = opacity
-			else
-				@dispose()
+			for material in @meshBody.material.materials
+				opacity = material.opacity - delta
+				if opacity > 0
+					material.opacity = opacity
+				else
+					@dispose()
+					break
 	
 	hit: (damage) ->
 		unless @isDead()

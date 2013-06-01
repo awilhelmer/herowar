@@ -49,7 +49,15 @@ class Enemies extends PacketModel
 		model
 		
 	createMesh: (id, name, data) ->
-		mesh = materialHelper.createAnimMesh data[0], data[1], name, id: id
+		if data[0].morphTargets.length isnt 0
+			mesh = materialHelper.createAnimMesh data[0], data[1], name, id: id
+		else
+			mesh = materialHelper.createMesh data[0], data[1], name, id: id
+		if _.isObject data[2]
+			mesh.scale.x = data[2].scale
+			mesh.scale.y = data[2].scale
+			mesh.scale.z = data[2].scale
+		THREE.GeometryUtils.center mesh.geometry
 		mesh.rotation.y = THREE.Math.degToRad -90
 		mesh.position.y -= mesh.geometry.boundingBox.min.y
 		mesh

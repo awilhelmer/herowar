@@ -45,8 +45,8 @@ class GameHUD extends BaseHUD
 	_drawHealthBar: (obj, viewportWidthHalf, viewportHeightHalf) ->
 		boundaryBox = obj.meshBody.geometry.boundingBox
 		position = obj.getMainObject().position.clone()
-		position.x -= Math.abs boundaryBox.min.x
-		position.y += boundaryBox.max.y - boundaryBox.min.y
+		position.x -= Math.abs(boundaryBox.min.x) * obj.meshBody.scale.x
+		position.y += (boundaryBox.max.y - boundaryBox.min.y) * obj.meshBody.scale.y
 		@projector.projectVector position, @view.get 'cameraScene'
 		position.x = (position.x * viewportWidthHalf) + viewportWidthHalf
 		position.y = - (position.y * viewportHeightHalf) + viewportHeightHalf

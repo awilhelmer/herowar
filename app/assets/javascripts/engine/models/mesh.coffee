@@ -9,6 +9,8 @@ class MeshModel extends BaseModel
 	
 	meshBody: null
 	
+	showBoundingBox: false
+	
 	constructor: (@id, @name, @meshBody) ->
 		obj = null
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
@@ -18,6 +20,7 @@ class MeshModel extends BaseModel
 			obj = @meshBody
 			@meshBody = obj.children[0] # TODO: this is super cheap and needs improvement
 			@_calculateGeometry @meshBody.geometry
+		@_createBoundingBox obj if @showBoundingBox
 		@_enableShadows()
 		super obj
 
@@ -59,6 +62,19 @@ class MeshModel extends BaseModel
 		else
 			@meshBody.castShadow = true
 			@meshBody.receiveShadow = true	
+		return
+
+	_createBoundingBox: (obj) ->
+		scale = @meshBody.scale
+		boundingBox = @meshBody.geometry.boundingBox
+		x = (boundingBox.max.x - boundingBox.min.x) * scale.x
+		y = (boundingBox.max.y - boundingBox.min.y) * scale.y
+		z = (boundingBox.max.z - boundingBox.min.z) * scale.z
+		geometry = new THREE.CubeGeometry x, y, z 
+		material = new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true 
+		mesh = new THREE.Mesh geometry, material
+		mesh.name = 'boundingBox'
+		obj.add mesh
 		return
 
 	_createThreeObject: (mesh) ->

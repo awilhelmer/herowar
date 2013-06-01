@@ -57,7 +57,7 @@ materialHelper =
 				index = @getGlobalMatIndexById(idMapper.materialId)
 				if index > -1
 					mat = @transformMaterial globalMat.models[index], idMapper.materialId
-					materials.push mat 
+					materials.push mat
 		mesh.material = new THREE.MeshFaceMaterial materials
 
 	#For Geometries without global materials binding 
@@ -97,7 +97,12 @@ materialHelper =
 		mesh
 	
 	createMesh: (geometry, materials, name, json) ->
-		@updateMeshProperties new THREE.Mesh(geometry), materials, name, json
+		newMats = []
+		if _.isArray(materials) and materials.length > 0
+			for mat in materials
+				newMat = mat.clone()
+				newMats.push newMat
+		@updateMeshProperties new THREE.Mesh(geometry), newMats, name, json
 	
 	updateMeshProperties: (mesh, materials, name, json) ->
 		mesh.name = name
