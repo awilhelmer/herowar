@@ -1,4 +1,5 @@
 GeometryUtils = require 'util/geometryUtils'
+db = require 'database'
 
 class BaseModel
 
@@ -62,12 +63,12 @@ class BaseModel
 			destObject = new THREE.Scene
 		else if srcObject instanceof THREE.MorphAnimMesh 
 			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			geometry = GeometryUtils.clone srcObject.geometry
+			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
 			destObject	= new THREE.MorphAnimMesh geometry, material
 			destObject.parseAnimations()
 		else if srcObject instanceof THREE.Mesh
 			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			geometry = GeometryUtils.clone srcObject.geometry
+			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
 			destObject	= new THREE.Mesh geometry, material
 		else if srcObject instanceof THREE.Object3D
 			destObject	= new THREE.Object3D()
@@ -81,11 +82,13 @@ class BaseModel
 		destObject.add @_copyObject null, srcChild, scene for srcChild in srcObject.children if srcObject.children.length isnt 0
 		return destObject
 	
-	_copyUserData: (objDestination, objSource) ->
-		for i in [0..objSource.children.length-1]
-			objDestination.children[i].userData = _.clone objSource.children[i].userData if objSource.children[i] instanceof THREE.Mesh
-			@_copyUserData objSource.children[i], objDestination.children[i] if objSource.children[i].children.length isnt 0
-		return
+	_copyGeometry: (name, scene, geometry) ->
+			geo = db.geometry name, scene
+			if geo
+				console.log 'Loaded geometry from cache', geo
+			else
+				geo = GeometryUtils.clone geometry
+			return geo
 	
 	_getGlowMaterials: (obj) ->
 		if obj instanceof THREE.Mesh

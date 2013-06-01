@@ -1,5 +1,6 @@
 _db = {}
 _data = {}
+_geometries = {}
 
 database =
 
@@ -33,5 +34,11 @@ database =
 	data: (data) ->
 		_data = data if data
 		_data
+	
+	geometry: (name, scene, geometry) ->
+		if geometry
+			_geometries[name] = {} unless _geometries[name]
+			_geometries[name][scene] = geometry
+		return if _geometries[name] then _geometries[name][scene] else null
 
 return database

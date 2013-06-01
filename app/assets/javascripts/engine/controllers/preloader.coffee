@@ -1,5 +1,6 @@
 RendererCanvasController = require 'controllers/rendererCanvas'
 materialHelper = require 'helper/materialHelper'
+GeometryUtils = require 'util/geometryUtils'
 JSONLoader = require 'util/threeloader'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
@@ -97,6 +98,8 @@ class Preloader extends RendererCanvasController
 						geometry.computeBoundingBox()
 						geometry.computeBoundingSphere()
 						geometry.computeMorphNormals()
+						db.geometry name, 'main', geometry
+						db.geometry name, 'glow', GeometryUtils.clone geometry
 						@data[type][name] = [geometry, materials, json]
 						@updateState type, name, true
 					, 'assets/images/game/textures'
