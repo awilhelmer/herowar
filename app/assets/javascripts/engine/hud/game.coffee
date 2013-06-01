@@ -6,11 +6,12 @@ class GameHUD extends BaseHUD
 	
 	initialize: ->
 		@projector = new THREE.Projector()
+		@initalized = false
 		@waves = db.get 'ui/waves'
 		@state = 0
 
 	update: (delta) ->
-		return unless @waves and @waves.get('_active') and @waves.get('arrival_short')
+		return unless @_gameIsInitialized()
 		screen_hw = @canvas.width / 2
 		screen_hh = @canvas.height / 2
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
@@ -77,7 +78,8 @@ class GameHUD extends BaseHUD
 			]
 
 	_gameIsInitialized: ->
-		return @waves.get '_active' 
+		@initalized = @waves and @waves.get '_active' unless @initalized
+		return @initalized
 	
 	_gameIsStarted: ->
 		return @waves.get('current') isnt 0
