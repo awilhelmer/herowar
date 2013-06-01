@@ -39,7 +39,7 @@ class GameHUD extends BaseHUD
 		viewportWidthHalf = @canvas.width / 2
 		viewportHeightHalf = @canvas.height / 2
 		@_setShadow 0, 0, 0
-		for id, obj of scenegraph.dynamicObjects when obj.showHealth and not obj.isDead()
+		for id, obj of scenegraph.getDynObjects() when obj.showHealth and not obj.isDead()
 			@_drawHealthBar obj, viewportWidthHalf, viewportHeightHalf
 
 	_drawHealthBar: (obj, viewportWidthHalf, viewportHeightHalf) ->
