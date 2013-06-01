@@ -7,6 +7,8 @@ class LaserModel extends MeshModel
 	moveSpeed: 150
 	
 	distanceToDispose: 10
+	
+	glowColor: 0xffa500
 		
 	constructor: (@id, @owner, @target, @damage) ->
 		@meshBody = @createMeshBody()
@@ -15,8 +17,8 @@ class LaserModel extends MeshModel
 		@getMainObject().quaternion.setFromRotationMatrix @owner.getMainObject().matrix
 
 	createMeshBody: ->
-		geometry = new THREE.CubeGeometry 1, 1, 7.5
-		material = new THREE.MeshPhongMaterial color: 0xFFA500, transparent: true, opacity: 0.3
+		geometry = new THREE.CubeGeometry 1, 1, 8.5
+		material = new THREE.MeshBasicMaterial color: 0xFFA500, transparent: true, opacity: 0.7
 		mesh = new THREE.Mesh geometry, material
 		mesh.userData.glowing = true
 		mesh.position.y = @_getCenterPointY @owner.meshBody

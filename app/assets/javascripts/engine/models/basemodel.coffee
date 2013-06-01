@@ -5,6 +5,8 @@ class BaseModel
 	rotationMultipler: null
 
 	moveSpeed: 30
+	
+	glowColor: 0x88ccff
 
 	constructor: (root) ->
 		@root = {}
@@ -101,7 +103,7 @@ class BaseModel
 		return null
 	
 	_getGlowOnMaterial: (isAnimated) ->
-		material = new THREE.MeshBasicMaterial color: 0x88ccff
+		material = new THREE.MeshBasicMaterial color: @glowColor
 		if isAnimated
 			material.morphTargets = true
 			material.morphNormals = true

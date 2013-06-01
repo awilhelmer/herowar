@@ -41,7 +41,7 @@ class Enemies extends PacketModel
 			
 	createModel: (id, name, data, waypoints) ->
 		mesh = @createMesh id, name, data
-		#mesh.userData.glowing = true
+		mesh.userData.glowing = true
 		model = new Enemy id, name, mesh
 		if _.isArray waypoints
 			model.waypoints = waypoints
