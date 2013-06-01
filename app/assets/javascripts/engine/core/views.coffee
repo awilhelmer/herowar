@@ -48,7 +48,7 @@ class Views
 			view.createRenderer()
 			view.createEffects()
 			view.updateStats()
-			view.updateSize()
+			view.updateCamera()
 			view.createHUD()
 			console.log 'View', view, 'initialized'
 		return
@@ -65,7 +65,7 @@ class Views
 		$viewport = $ '#viewport'
 		Variables.SCREEN_WIDTH = $viewport.width()
 		Variables.SCREEN_HEIGHT = $viewport.height()
-		view.updateSize() for view in @viewports.models
+		view.resize() for view in @viewports.models
 		engine.render() if withReRender
 		return
 
@@ -87,7 +87,7 @@ class Views
 				camera.offset = 
 					left: 0 
 					top: 0
-				view.updateSize()
+				view.updateCamera()
 		return
 			
 return Views

@@ -18,7 +18,7 @@ class CameraView extends BaseView
 		view.trigger 'change:camera'
 		view.trigger 'change'
 		view.createCameraScene()
-		view.updateSize()
+		view.updateCamera()
 		return
 
 return CameraView

@@ -8,10 +8,6 @@ class Viewport extends Backbone.Model
 	stats: null
 
 	render: (delta) ->
-		#renderer = @get 'renderer'
-		#cameraScene = @get 'cameraScene'
-		#cameraSkybox = @get 'cameraSkybox'
-		#renderer.clear()
 		@get('composer').render delta if @has 'composer'
 		#if scenegraph.skyboxScene and cameraSkybox
 		#	cameraSkybox.rotation.copy cameraScene.rotation
@@ -29,6 +25,7 @@ class Viewport extends Backbone.Model
 			when Variables.CAMERA_TYPE_PERSPECTIVE
 				cameraScene = new THREE.PerspectiveCamera camera.fov, Variables.SCREEN_WIDTH / Variables.SCREEN_HEIGHT, camera.near, camera.far
 		@set 'cameraScene', cameraScene
+		@get('composer').setCamera cameraScene if @has 'composer'
 		cameraScene
 
 	createCameraSkybox: ->
@@ -57,22 +54,14 @@ class Viewport extends Backbone.Model
 		$domElement.append renderer.domElement if renderer
 		renderer
 
-	updateSize: ->
+	resize: ->
 		$domElement = $ @get 'domElement'
-		renderer = @get 'renderer'
-		camera = @get 'camera'
-		cameraScene = @get 'cameraScene'
-		cameraSkybox = @get 'cameraSkybox'
 		width = $domElement.width()
 		height = $domElement.height()
+		renderer = @get 'renderer'
 		renderer.setSize width, height
 		aspect =  width / height
-		@updateCamera cameraScene, camera.position, camera.rotation
-		@updateOrthographic cameraScene, camera.size, camera.offset, aspect if cameraScene instanceof THREE.OrthographicCamera
-		cameraScene.aspect = aspect
-		cameraScene.updateProjectionMatrix()
-		cameraSkybox.aspect = cameraScene.aspect
-		cameraSkybox.updateProjectionMatrix()
+		@updateCamera aspect
 		if @has 'composer'
 			composer = @get 'composer'
 			composer.setSize width, height
@@ -107,9 +96,22 @@ class Viewport extends Backbone.Model
 		#console.log 'New Camera Position -> left=', camera.left, 'right=', camera.right, 'top=', camera.top, 'bottom=', camera.bottom, 'offset', offset
 		return
 
-	updateCamera: (camera, position, rotation) ->
-		camera.position.set position[0], position[1], position[2]
-		camera.rotation.set rotation[0], rotation[1], rotation[2]
+	updateCamera: (aspect) ->
+		unless aspect
+			renderer = @get 'renderer'
+			width = renderer.domElement.offsetWidth
+			height = renderer.domElement.offsetHeight
+			aspect = width / height
+		cameraProperties = @get 'camera'
+		cameraScene = @get 'cameraScene'
+		cameraScene.position.set cameraProperties.position[0], cameraProperties.position[1], cameraProperties.position[2]
+		cameraScene.rotation.set cameraProperties.rotation[0], cameraProperties.rotation[1], cameraProperties.rotation[2]
+		@updateOrthographic cameraScene, cameraProperties.size, cameraProperties.offset, aspect if cameraScene instanceof THREE.OrthographicCamera
+		cameraScene.aspect = aspect
+		cameraScene.updateProjectionMatrix()
+		cameraSkybox = @get 'cameraSkybox'
+		cameraSkybox.aspect = cameraScene.aspect
+		cameraSkybox.updateProjectionMatrix()
 		return
 
 	updateStats: ->

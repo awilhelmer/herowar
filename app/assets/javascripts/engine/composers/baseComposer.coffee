@@ -12,12 +12,20 @@ class BaseComposer
 
 	render: (delta) ->
 		@composer.render delta
+		return
 		
 	setSize: (width, height) ->
 		@composer.setSize width, height
+		return
+
+	setCamera: (camera) ->
+		camera = @view.get 'cameraScene' unless camera
+		pass.camera = camera for pass in @composer.passes when pass instanceof THREE.RenderPass
+		return
 
 	reset: ->
 		@composer.reset()
+		return
 
 	_createComposer: (width, height) ->
 		@renderTarget = @_createRenderTarget width, height unless @renderTarget

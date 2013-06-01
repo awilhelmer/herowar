@@ -117,7 +117,7 @@ class RTSControls
 			#console.log 'RTSControls changeZoom()', value, 'to', camera.position[1]
 		@view.trigger 'change:camera'
 		@view.trigger 'change'
-		@view.updateSize()
+		@view.updateCamera()
 		return
 
 	update: ->
@@ -141,7 +141,7 @@ class RTSControls
 				camera.position[2] += 1 if scrollDown
 			@view.trigger 'change:camera'
 			@view.trigger 'change'
-			@view.updateSize()
+			@view.updateCamera()
 		return
 
 return RTSControls
