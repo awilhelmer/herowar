@@ -53,7 +53,7 @@ class AddTowerTool extends AddObject
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
 		model = new Tower @tool.get('currentObjectId'), name, mesh
-		#model.showRange()
+		model.showRange()
 		model.visible false
 		@tool.set 'currentObject', model
 		console.log 'onLoadGeometry', model
