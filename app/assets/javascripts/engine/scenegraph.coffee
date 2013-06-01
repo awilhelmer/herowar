@@ -15,11 +15,12 @@ sceneGraph =
 
 	scene: (name) ->
 		name = 'main' unless name
-		_scenes[name] = @createScene() unless _.has _scenes, name
+		_scenes[name] = @createScene name unless _.has _scenes, name
 		return _scenes[name]
 	
-	createScene: ->
+	createScene: (name) ->
 		scene = new THREE.Scene()
+		scene.name = "scene-#{name}"
 		scene.add new THREE.AmbientLight 0x101010
 		directionalLight = new THREE.DirectionalLight 0xffffff 
 		directionalLight.position.set(0, 1, 1).normalize()

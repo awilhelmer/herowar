@@ -1,3 +1,5 @@
+GeometryUtils = require 'util/geometryUtils'
+
 class BaseModel
 
 	rotationMultipler: null
@@ -31,6 +33,13 @@ class BaseModel
 		obj.position.copy @getMainObject().position for scene, obj of @root when scene isnt 'main'
 		return
 	
+	position: (position) ->
+		if position
+			for scene, obj of @root 
+				obj.position.copy position 
+				console.log 'New position:', obj
+		return @getMainObject().position
+	
 	visible: (value) ->
 		obj.visible = value for scene, obj of @root if value
 		return @getMainObject().visible
@@ -43,6 +52,7 @@ class BaseModel
 	_cloneRoot: ->
 		for scene in ['glow']
 			@root[scene] = @_copyObject null, @root.main, scene
+		#console.log 'Compare', @root.main.children[0].geometry, @root.glow.children[0].geometry
 		return
 
 	_copyObject: (destObject, srcObject, scene) ->
@@ -50,10 +60,13 @@ class BaseModel
 			destObject = new THREE.Scene
 		else if srcObject instanceof THREE.MorphAnimMesh 
 			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			destObject	= new THREE.MorphAnimMesh srcObject.geometry, material
+			geometry = GeometryUtils.clone srcObject.geometry
+			destObject	= new THREE.MorphAnimMesh geometry, material
+			destObject.parseAnimations()
 		else if srcObject instanceof THREE.Mesh
 			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			destObject	= new THREE.Mesh srcObject.geometry, material
+			geometry = GeometryUtils.clone srcObject.geometry
+			destObject	= new THREE.Mesh geometry, material
 		else if srcObject instanceof THREE.Object3D
 			destObject	= new THREE.Object3D()
 		destObject.position.copy srcObject.position

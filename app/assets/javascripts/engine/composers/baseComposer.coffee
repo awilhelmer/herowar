@@ -6,6 +6,7 @@ class BaseComposer
 		height = $domElement.height()
 		@composer = @_createComposer width, height
 		@initialize @composer, width, height
+		@composer.passes[@composer.passes.length-1].renderToScreen = true
 
 	initialize: (composer, width, height) ->
 
@@ -19,10 +20,13 @@ class BaseComposer
 		@composer.reset()
 
 	_createComposer: (width, height) ->
-		@renderTarget = new THREE.WebGLRenderTarget width, height, @_createRenderTarget() unless @renderTarget
+		@renderTarget = @_createRenderTarget width, height unless @renderTarget
 		return new THREE.EffectComposer @view.get('renderer'), @renderTarget
-		
-	_createRenderTarget: ->
-		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat
+	
+	_createRenderTarget: (width, height) ->
+		return new THREE.WebGLRenderTarget width, height, @_createRenderParams()
+	
+	_createRenderParams: ->
+		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false
 
 return BaseComposer

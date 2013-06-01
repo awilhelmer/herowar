@@ -16,10 +16,10 @@ class LaserModel extends MeshModel
 
 	createMeshBody: ->
 		geometry = new THREE.CubeGeometry 1, 1, 7.5
-		material = new THREE.MeshPhongMaterial color: 0x0066CC, ambient: 0xffffff
+		material = new THREE.MeshPhongMaterial color: 0xFFA500, transparent: true, opacity: 0.3
 		mesh = new THREE.Mesh geometry, material
+		mesh.userData.glowing = true
 		mesh.position.y = @_getCenterPointY @owner.meshBody
-		mesh.overdraw = true
 		return mesh
 
 	update: (delta) ->

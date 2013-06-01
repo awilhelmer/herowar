@@ -1,14 +1,12 @@
 class EngineRenderer extends THREE.WebGLRenderer
 		
-		
 	addEngineObject: (object, scene) ->
 		addObject(object, scene)
-		null
+		return
 		
 	removeEngineObject: (object, scene) ->
 		removeObject(object, scene)
-		null
-
+		return
 	
 return EngineRenderer
 	

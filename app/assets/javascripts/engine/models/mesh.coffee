@@ -12,16 +12,18 @@ class MeshModel extends BaseModel
 	constructor: (@id, @name, @meshBody) ->
 		@_enableShadows()
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
+			@_calculateGeometry @meshBody.geometry
 			super @_createThreeObject @meshBody
 		else
 			obj = @meshBody
 			@meshBody = obj.children[0] # TODO: this is super cheap and needs improvement
+			@_calculateGeometry @meshBody.geometry
 			super obj
 
 	update: (delta) ->
 		super delta
 		#@checkGroundCollision()
-	
+
 	checkGroundCollision: ->
 		unless @groundDirection
 			@groundDirection = new THREE.Vector3 0, -1, 0
@@ -41,6 +43,12 @@ class MeshModel extends BaseModel
 		if intersects.length isnt 0 and intersects[0].distance < @meshBody.geometry.boundingBox.max.y
 			console.log 'Ground Collision detected', intersects[0].distance, intersects[0]
 			@getMainObject().translateY intersects[0].distance
+
+	_calculateGeometry: (geometry) ->
+		unless geometry.boundingBox
+			geometry.computeBoundingBox()
+			geometry.computeBoundingSphere()
+			geometry.computeMorphNormals()
 	
 	_enableShadows: ->
 		if _.isArray @meshBody

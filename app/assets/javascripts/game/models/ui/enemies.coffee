@@ -30,16 +30,18 @@ class Enemies extends PacketModel
 					'quantity': ++quantity
 			else if packet.type is PacketType.SERVER_OBJECT_OUT
 				@set 'current', --current
+		return
 	
 	createEnemy: (id, name, pathId) ->
 		path = @getPathById pathId
 		loadedData = db.data().geometries[name]
 		dynObj = @createModel id, name, db.data().geometries[name], _.clone path.get 'waypoints'
 		scenegraph.addDynObject dynObj, id
-	
+		return
+			
 	createModel: (id, name, data, waypoints) ->
 		mesh = @createMesh id, name, data
-		mesh.userData.glowing = true
+		#mesh.userData.glowing = true
 		model = new Enemy id, name, mesh
 		if _.isArray waypoints
 			model.waypoints = waypoints

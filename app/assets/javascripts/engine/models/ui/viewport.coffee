@@ -1,5 +1,5 @@
 EngineRenderer = require 'enginerenderer'
-MainComposer = require 'composers/main'
+FinalComposer = require 'composers/final'
 #scenegraph = require 'scenegraph'
 Variables = require 'variables'
 
@@ -12,7 +12,7 @@ class Viewport extends Backbone.Model
 		#cameraScene = @get 'cameraScene'
 		#cameraSkybox = @get 'cameraSkybox'
 		#renderer.clear()
-		composer.render delta for composer in @get 'composers'
+		@get('composer').render delta if @has 'composer'
 		#if scenegraph.skyboxScene and cameraSkybox
 		#	cameraSkybox.rotation.copy cameraScene.rotation
 		#	renderer.render scenegraph.skyboxScene, cameraSkybox
@@ -37,16 +37,7 @@ class Viewport extends Backbone.Model
 		cameraSkybox
 
 	createEffects: ->
-		#$domElement = $ @get 'domElement'
-		#width = $domElement.width()
-		#height = $domElement.height()
-		#renderParams = @_createRenderParameters()
-		#maincomposer = @_createMainComposer width, height, renderParams
-		#glowcomposer = @_createGlowComposer width, height, renderParams
-		mainComposer = new MainComposer @
-		@set 'composers', [ mainComposer ]
-		#finalcomposer = @_createFinalComposer width, height, renderParams, glowcomposer
-		#@set 'composers', [ glowcomposer, finalcomposer ]
+		@set 'composer', new FinalComposer @
 		
 	createRenderer: ->
 		switch @get 'rendererType'
@@ -57,10 +48,11 @@ class Viewport extends Backbone.Model
 				renderer = new EngineRenderer()
 				#renderer.setClearColorHex 0xFFFFFF, 0.0
 				#renderer.autoClear = false
-				renderer.gammaInput = true
-				renderer.gammaOutput = true
-				renderer.physicallyBasedShading = true
+				#renderer.gammaInput = true
+				#renderer.gammaOutput = true
+				#renderer.physicallyBasedShading = true
 		$domElement = $ @get 'domId'
+		renderer.setSize $domElement.width(), $domElement.height()
 		@set
 			'domElement' : $domElement.get 0
 			'renderer'   : renderer
@@ -83,7 +75,8 @@ class Viewport extends Backbone.Model
 		cameraScene.updateProjectionMatrix()
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
-		for composer in @get 'composers'
+		if @has 'composer'
+			composer = @get 'composer'
 			composer.setSize width, height
 			composer.reset()
 		@hud.resize() if @hud
@@ -144,52 +137,5 @@ class Viewport extends Backbone.Model
 		if hud is Variables.HUD_GAME
 			GameHUD = require 'hud/game'
 			@hud = new GameHUD @
-
-	###
-	_createMainComposer: (width, height, renderParams) ->
-		composer = @_createComposer width, height, renderParams
-		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
-		effectFXAA = new THREE.ShaderPass THREE.FXAAShader
-		effectFXAA.uniforms['resolution'].value.set 1 / width, 1 / height
-		effectFXAA.renderToScreen = true
-		composer.addPass model
-		composer.addPass effectFXAA
-		return composer
-
-	_createGlowComposer: (width, height, renderParams) ->
-		composer = @_createComposer width, height, renderParams
-		model = new THREE.RenderPass scenegraph.scene('glow'), @get 'cameraScene'
-		effectHBlur = new THREE.ShaderPass new HorizontalBlurShader()
-		effectVBlur = new THREE.ShaderPass new VerticalBlurShader()
-		bluriness = 3
-		effectHBlur.uniforms['h'].value = bluriness / width
-		effectVBlur.uniforms['v'].value = bluriness / height
-		effectVBlur.renderToScreen = true
-		composer.addPass model
-		composer.addPass effectHBlur
-		composer.addPass effectVBlur
-		return composer
-
-	_createFinalComposer: (width, height, renderParams, glowcomposer) ->
-		composer = @_createComposer width, height, renderParams
-		model = new THREE.RenderPass scenegraph.scene(), @get 'cameraScene'
-		#blendShader = new AdditiveBlendShader()
-		blendPass = new THREE.ShaderPass THREE.BlendShader, 'tDiffuse1' #blendShader
-		#blendPass.uniforms['tDiffuse1'].value = maincomposer.renderTarget1
-		blendPass.uniforms['tDiffuse2'].value = glowcomposer.renderTarget1
-		blendPass.uniforms['mixRatio'].value = 0.5
-		blendPass.uniforms['opacity'].value = 2
-		blendPass.renderToScreen = true
-		composer.addPass model
-		composer.addPass blendPass
-		return composer
-	
-	_createComposer: (width, height, params) ->
-		target = new THREE.WebGLRenderTarget width, height, params
-		return new THREE.EffectComposer @get('renderer'), target
-		
-	_createRenderParameters: ->
-		return minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat
-	###
 
 return Viewport

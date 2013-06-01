@@ -33,7 +33,7 @@ class SocketClient
 		if event and event.data
 			packet = JSON.parse event.data
 			if packet.type
-				log.debug "[SocketClient] Trigger 'retrieve:packet:#{packet.type}' event for packet '#{event.data}'"
+				#log.debug "[SocketClient] Trigger 'retrieve:packet:#{packet.type}' event for packet '#{event.data}'"
 				events.trigger "retrieve:packet:#{packet.type}", packet
 
 	onError: (event) =>
