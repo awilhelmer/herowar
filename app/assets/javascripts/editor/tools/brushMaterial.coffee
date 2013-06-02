@@ -60,7 +60,7 @@ class BrushMaterial extends SelectorPlane
 		object = intersect.object
 		faceIndex = intersect.faceIndex
 		baseObject = @selectorObject.objectHelper.getBaseObject object
-		if baseObject is scenegraph.map and @selectedMatId
+		if baseObject is scenegraph.getMap().getMainObject() and @selectedMatId
 			newIndex = materialHelper.getThreeMaterialId object, @selectedMatId
 			for face in intersect.faces
 				oldIndex = face.materialIndex

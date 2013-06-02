@@ -78,7 +78,7 @@ class SelectorObject
 	
 	materialUpdate: (idMapper) =>
 		if idMapper
-			mesh = @objectHelper.getModel scenegraph.getMap()
+			mesh = @objectHelper.getModel scenegraph.getMap().getMainObject()
 			matIndex = materialHelper.updateMaterial mesh, idMapper
 			if matIndex > -1 and mesh.material.materials[matIndex].map and mesh.material.materials[matIndex].map.needsUpdate
 				scenegraph.getMap().remove mesh
