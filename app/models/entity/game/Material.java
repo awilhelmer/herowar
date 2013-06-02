@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -73,6 +74,20 @@ public class Material implements Serializable {
   private String colorSpecular;
   private String mapDiffuse;
 
+  @Lob
+  @StringArray(type = ArrayType.OBJECT)
+  private String attributes;
+  @Lob
+  @StringArray(type = ArrayType.OBJECT)
+  private String uniforms;
+
+  @Lob
+  @StringArray(type = ArrayType.SHADER)
+  private String vertexShader;
+
+  @Lob
+  @StringArray(type = ArrayType.SHADER)
+  private String fragmentShader;
   @Transient
   private Long materialId;
 
@@ -289,6 +304,38 @@ public class Material implements Serializable {
 
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  public String getAttributes() {
+    return attributes;
+  }
+
+  public void setAttributes(String attributes) {
+    this.attributes = attributes;
+  }
+
+  public String getUniforms() {
+    return uniforms;
+  }
+
+  public void setUniforms(String uniforms) {
+    this.uniforms = uniforms;
+  }
+
+  public String getVertexShader() {
+    return vertexShader;
+  }
+
+  public void setVertexShader(String vertexShader) {
+    this.vertexShader = vertexShader;
+  }
+
+  public String getFragmentShader() {
+    return fragmentShader;
+  }
+
+  public void setFragmentShader(String fragmentShader) {
+    this.fragmentShader = fragmentShader;
   }
 
   @Override
