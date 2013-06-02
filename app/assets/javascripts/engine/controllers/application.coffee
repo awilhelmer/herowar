@@ -16,8 +16,8 @@ class ApplicationController extends BaseController
 		camera:
 			fov: 40
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
-			position: [ 0, 500, 0 ]
-			rotation: [ THREE.Math.degToRad(-90), 0, 0 ]
+			position: [ 0, 800, 350 ]
+			rotation: [ THREE.Math.degToRad(-70), 0, 0 ]
 	]
 
 	initialize: (options) ->

@@ -25,6 +25,7 @@ class Views
 			fov: 75
 			near: 1
 			far: 10000
+			
 
 	constructor: ->
 		@viewports = db.get 'ui/viewports'

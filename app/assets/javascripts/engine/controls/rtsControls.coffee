@@ -108,7 +108,7 @@ class RTSControls
 			@zoom += value
 			#console.log 'RTSControls changeZoom()', value, 'to', @zoom
 		else
-			maxPos = 500
+			maxPos = 800 #TODO what is that? 
 			minPos = 100
 			camera.position[1] = Math.round(camera.position[1] - value * 100)
 			camera.position[1] = maxPos if camera.position[1] > maxPos
@@ -130,10 +130,15 @@ class RTSControls
 			camera = @view.get 'camera'
 			cameraScene = @view.get 'cameraScene'
 			if cameraScene instanceof THREE.OrthographicCamera
-				camera.offset.left -= 1 if scrollLeft and camera.offset.left isnt 0
-				camera.offset.left += 1 if scrollRight
-				camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
-				camera.offset.top += 1 if scrollDown
+				#camera.offset.left -= 1 if scrollLeft and camera.offset.left isnt 0
+				#camera.offset.left += 1 if scrollRight
+				#camera.offset.top -= 1 if scrollUp and camera.offset.top isnt 0
+				#camera.offset.top += 1 if scrollDown
+				camera.position[0] -= 1 if scrollLeft
+				camera.position[0] += 1 if scrollRight
+				camera.position[2] -= 1 if scrollUp
+				camera.position[2] += 1 if scrollDown
+				
 			else
 				camera.position[0] -= 1 if scrollLeft
 				camera.position[0] += 1 if scrollRight
