@@ -56,7 +56,7 @@ class SelectorObject
 		if @selectedObject and @selectedType isnt 'terrain'
 			@removeSelectionWireframe @selectedObject, @selectedType
 		if @selectedType isnt 'terrain'
-			@selectedObject = scenegraph.getMap()
+			@selectedObject = scenegraph.getMap().getMainObject()
 			@selectedType = 'terrain'
 			@addSelectionWireframe @selectedObject, @selectedType
 			engine.render()
