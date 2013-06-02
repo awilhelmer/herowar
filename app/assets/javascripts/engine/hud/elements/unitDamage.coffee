@@ -15,7 +15,6 @@ class UnitDamageHudElement extends BaseHUDElement
 	update: (delta, now) ->
 		age	= now - @birthDate
 		opacity = 1 - age / @maxAge
-		#console.log "Show damage #{@damage} at #{@positionScreen.x}x#{@positionScreen.y} with opacity #{opacity}"
 		@active = false if age >= @maxAge
 		width = @canvas.height / 20
 		canvasUtils.setShadow @ctx, 0, 0, 0

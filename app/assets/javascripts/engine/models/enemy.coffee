@@ -64,7 +64,6 @@ class Enemy extends AnimatedModel
 		@dispose() if @waypoints.length is 0
 
 	_createBlackSmoke: ->
-		console.log 'Create black smoke ...'
 		@blackSmoke = new BlackSmoke scenegraph.scene()
 		@blackSmoke.start @_getBlackSmokePosition()
 

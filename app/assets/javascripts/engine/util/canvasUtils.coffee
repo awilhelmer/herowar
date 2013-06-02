@@ -23,6 +23,21 @@ canvasUtils =
 			size = @_measureText "#{line}", @font, newFontSize, false
 			addToY += size[1]
 
+	drawRect: (ctx, opts) ->
+		opts = _.defaults opts, fillStyle: 'black', lineWidth: 0, strokeStyle: 'black' 
+		ctx.beginPath()
+		ctx.rect opts.size.x, opts.size.y, opts.size.w, opts.size.h
+		ctx[key] = value for key, value of _.omit opts, 'size'
+		ctx.fill()
+		ctx.stroke() if opts.lineWidth
+	
+	drawLinearGradient: (ctx, opts) ->
+		lingrad = ctx.createLinearGradient 0, 0, 0, opts.size.h
+		lingrad.addColorStop stop.stop, stop.color for stop in opts.stops
+		ctx.beginPath()
+		ctx.fillStyle = lingrad
+		ctx.fillRect opts.size.x, opts.size.y, opts.size.w, opts.size.h
+
 	setShadow: (ctx, shadowOffsetX, shadowOffsetY, shadowBlur) ->
 		ctx.shadowOffsetX = shadowOffsetX
 		ctx.shadowOffsetY = shadowOffsetY
