@@ -44,7 +44,7 @@ class GameHUD extends BaseHUD
 				@state++ if @alpha <= 0
 		@_drawHealthBars()
 		@elements.forEach (element) =>
-			element.update delta, now # if @elements.indexOf(element) is 0
+			element.update delta, now
 			@elements.splice @elements.indexOf(element), 1 unless element.active
 		return
 	
@@ -90,7 +90,7 @@ class GameHUD extends BaseHUD
 		return
 
 	_gameIsInitialized: ->
-		@initalized = @waves and @waves.get '_active' unless @initalized
+		@initalized = @waves and @waves.get('_active') and @waves.get('total') isnt 0 unless @initalized
 		return @initalized
 	
 	_gameIsStarted: ->
