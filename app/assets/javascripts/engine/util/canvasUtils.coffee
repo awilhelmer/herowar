@@ -11,6 +11,18 @@ canvasUtils =
 		ctx.font = "#{newFontSize}px #{@font}"
 		ctx.fillText "#{content}", x, y
 
+	drawMultilineBlockText: (ctx, content, x, y, width) ->
+		splittedLines = content.split '\n'
+		baseFontSize = 24
+		addToY = 0
+		for line in splittedLines
+			size = @_measureText "#{line}", @font, baseFontSize, false
+			newFontSize = baseFontSize * (width / size[0])
+			ctx.font = "#{newFontSize}px #{@font}"
+			ctx.fillText "#{line}", x, y + addToY
+			size = @_measureText "#{line}", @font, newFontSize, false
+			addToY += size[1]
+
 	setShadow: (ctx, shadowOffsetX, shadowOffsetY, shadowBlur) ->
 		ctx.shadowOffsetX = shadowOffsetX
 		ctx.shadowOffsetY = shadowOffsetY

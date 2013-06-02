@@ -2,10 +2,14 @@ events = require 'events'
 
 class BaseHUD
 	
+	default: []
+	
 	constructor: (@view) ->
+		@elements = []
 		@bindEvents()
 		@createCanvas()
 		@initialize()
+		@elements.push new (require val) @canvas, @view  for val in @default
 	
 	bindEvents: ->
 		events.on 'engine:render', @update, @
@@ -33,7 +37,11 @@ class BaseHUD
 		@ctx.textAlign = 'center'
 		@ctx.textBaseline = 'top'
 
-	update: (delta) ->
+	update: (delta, now) ->
+		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
+		@elements.forEach (element) =>
+			element.update delta, now
+			@elements.splice @elements.indexOf(element), 1 unless element.active
 
 	_drawRect: (opts) ->
 		opts = _.defaults opts, fillStyle: 'black', lineWidth: 0, strokeStyle: 'black' 

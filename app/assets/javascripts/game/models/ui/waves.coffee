@@ -10,10 +10,12 @@ class Waves extends PacketModel
 			@calculateArrival() if @get 'eta'
 			@unset 'arrival' if @get('eta') is 0 and @get 'arrival'
 
+	onPacket: (packet) ->
+		super packet
+		@update()
+
 	calculateArrival: ->
-		date = new Date()
-		time = @get('eta') - date.getTime()
-		arrival = @calculateCountdown time
+		arrival = @calculateCountdown @get('eta') - Date.now()
 		@set 
 			'arrival_short' : arrival[1]
 			'arrival': arrival[0]

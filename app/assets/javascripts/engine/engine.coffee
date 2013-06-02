@@ -37,10 +37,11 @@ engine =
 		return
 
 	render: ->
+		now = Date.now()
 		delta = @clock.getDelta()
 		scenegraph.update delta
 		@views.render delta
-		events.trigger 'engine:render', delta
+		events.trigger 'engine:render', delta, now
 		return
 		
 _animate = ->

@@ -1,8 +1,8 @@
-BaseHUDElement = require 'hud/baseHudElement'
+BaseHUDElement = require 'hud/elements/baseHudElement'
 objectUtils = require 'util/objectUtils'
 canvasUtils = require 'util/canvasUtils'
 
-class UnitDamage extends BaseHUDElement
+class UnitDamageHudElement extends BaseHUDElement
 	
 	maxAge: 1500
 	
@@ -24,4 +24,4 @@ class UnitDamage extends BaseHUDElement
 		@positionScreen.y -= 2
 		return
 
-return UnitDamage
+return UnitDamageHudElement
