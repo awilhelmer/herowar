@@ -1,0 +1,15 @@
+class BaseHUDElement
+	
+	constructor: (@canvas, @view) ->
+		@ctx = @canvas.getContext '2d'
+		@active = true
+		
+	update: (delta) ->
+
+	getHalfWidth: ->
+		return @canvas.width / 2
+		
+	getHalfHeight: ->
+		return @canvas.height / 2
+
+return BaseHUDElement

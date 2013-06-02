@@ -42,7 +42,7 @@ class BlackSmoke
 		sprite.rotation	= Math.random() * Math.PI * 2
 		material.opacity = @age2Opacity 0
 		
-		birthDate	= Date.now()/1000
+		birthDate	= Date.now() / 1000
 		@updateFcts.push callback = (delta, now) =>
 			age	= now - birthDate
 			if age >= @maxAge

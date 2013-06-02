@@ -47,6 +47,7 @@ class GameScene extends Scene
 			currHealth = target.currentHealth
 			currHealth = 0 if currHealth < 0
 			percentage = Math.round currHealth / target.maxHealth * 100
+			events.trigger 'unit:damage', target, packet.damage
 			#console.log 'onTowerTarget', scenegraph.getDynObject(packet.tower), "hit target", scenegraph.getDynObject(packet.tower).target, "for", packet.damage, "Percent", percentage 
 
 	onGameDefeat: ->

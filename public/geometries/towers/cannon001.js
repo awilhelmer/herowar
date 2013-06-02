@@ -18,7 +18,9 @@
     "materials": [	{
 	"DbgColor" : 15658734,
 	"DbgIndex" : 0,
-	"DbgName" : "default",
+	"DbgName" : "cannon001",
+	"mapDiffuse" : "units/Spaceship-1-v1.png",
+	"mapDiffuseWrap" : ["repeat", "repeat"],
 	"blending" : "NormalBlending",
 	"colorAmbient" : [1.0, 1.0, 1.0],
 	"colorDiffuse" : [1.0, 1.0, 1.0],

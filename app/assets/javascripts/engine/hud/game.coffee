@@ -1,20 +1,28 @@
+objectUtils = require 'util/objectUtils'
+UnitDamage = require 'hud/unitDamage'
 scenegraph = require 'scenegraph'
 BaseHUD = require 'hud/baseHud'
+events = require 'events'
 db = require 'database'
 
 class GameHUD extends BaseHUD
 	
 	initialize: ->
-		@projector = new THREE.Projector()
 		@initalized = false
 		@waves = db.get 'ui/waves'
+		@elements = []
 		@state = 0
+
+	bindEvents: ->
+		events.on 'unit:damage', @showUnitDamage, @
+		super()
 
 	update: (delta) ->
 		return unless @_gameIsInitialized()
 		screen_hw = @canvas.width / 2
 		screen_hh = @canvas.height / 2
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
+		now = Date.now()
 		switch @state
 			when 0
 				# State: Preparing game
@@ -35,22 +43,25 @@ class GameHUD extends BaseHUD
 				@alpha = @alpha - delta if delta
 				@state++ if @alpha <= 0
 		@_drawHealthBars()
-		
+		@elements.forEach (element) =>
+			element.update delta, now # if @elements.indexOf(element) is 0
+			@elements.splice @elements.indexOf(element), 1 unless element.active
+		return
+	
+	showUnitDamage: (unit, damage) ->
+		@elements.push new UnitDamage @canvas, @view, unit, damage
+		return
+	
 	_drawHealthBars: ->
 		viewportWidthHalf = @canvas.width / 2
 		viewportHeightHalf = @canvas.height / 2
 		@_setShadow 0, 0, 0
 		for id, obj of scenegraph.getDynObjects() when obj.showHealth and not obj.isDead()
 			@_drawHealthBar obj, viewportWidthHalf, viewportHeightHalf
+		return
 
 	_drawHealthBar: (obj, viewportWidthHalf, viewportHeightHalf) ->
-		boundaryBox = obj.meshBody.geometry.boundingBox
-		position = obj.getMainObject().position.clone()
-		position.x -= Math.abs(boundaryBox.min.x) * obj.meshBody.scale.x
-		position.y += (boundaryBox.max.y - boundaryBox.min.y) * obj.meshBody.scale.y
-		@projector.projectVector position, @view.get 'cameraScene'
-		position.x = (position.x * viewportWidthHalf) + viewportWidthHalf
-		position.y = - (position.y * viewportHeightHalf) + viewportHeightHalf
+		position = objectUtils.positionToScreen obj, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 		percent = obj.currentHealth / obj.maxHealth
 		width = Math.round @canvas.height / 10
 		height = Math.round width / 7.5
@@ -76,6 +87,7 @@ class GameHUD extends BaseHUD
 				stop: 0.71, color: '#f02f17'
 				stop: 1, color: '#e73827'
 			]
+		return
 
 	_gameIsInitialized: ->
 		@initalized = @waves and @waves.get '_active' unless @initalized
