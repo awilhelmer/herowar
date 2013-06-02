@@ -101,6 +101,9 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
                 case OBJECT:
                   writeStringAsObjectArray(jgen, fieldName, value.toString());
                   break;
+                case SHADER:
+                  jgen.writeStringField(fieldName, value.toString());
+                  break;
                 default:
                   log.warn(String.format("Field <%s> in Bean <%s>: StringArray Type <%s> not supported!", fieldName, clazz.getSimpleName(), anno.type()));
                   break;
@@ -259,7 +262,7 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
       jgen.writeEndArray();
     }
   }
-  
+
   private Map<String, String> parseObjectProperties(String object) {
     Map<String, String> properties = new HashMap<String, String>();
     int index = object.indexOf(",\"");

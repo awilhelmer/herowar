@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface StringArray {
 
   enum ArrayType {
-    INTEGER, DOUBLE, STRING, OBJECT
+    INTEGER, DOUBLE, STRING, OBJECT, SHADER
   }
 
   ArrayType type();

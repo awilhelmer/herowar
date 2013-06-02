@@ -121,7 +121,10 @@ materialHelper =
 	#Transform own materials (backbone model) to THREE.materials model 
 	# @see MaterialManagerMenu for all properties 
 	transformMaterial:(material, materialId) ->
-		result = new THREE.MeshBasicMaterial()
+		if @isShader material.attributes
+			result = new THREE.MeshShaderMaterial()
+		else
+			result = new THREE.MeshBasicMaterial()
 		result.name = 'matID' + materialId
 		for key,value of material.attributes
 			switch key
@@ -145,10 +148,24 @@ materialHelper =
 					result.wireframe = value
 				when 'wireframeLinewidth'
 					result.wireframeLinewidth = value
+				when 'attributes'
+					result.attributes = value
+				when 'uniforms'
+					result.uniforms = value
+				when 'vertexShader'
+					result.vertexShader = value
+				when 'fragmentShader'
+					result.fragmentShader = value
 				when 'id', 'materialId', 'name', 'nocolor'
 					#ignore
 				else
 					console.log "Material Key #{key} is unknown" 
 		result
+	
+	isShader:(attributes) ->
+		for key,value of attributes
+				if value and value isnt '' and (key is 'vertexShader' or key is 'fragmentShader')
+					return true
+		false
 
 return materialHelper
