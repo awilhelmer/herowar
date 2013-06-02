@@ -59,7 +59,7 @@ class Enemies extends PacketModel
 			mesh.scale.z = data[2].scale
 		THREE.GeometryUtils.center mesh.geometry
 		mesh.rotation.y = THREE.Math.degToRad -90
-		mesh.position.y -= mesh.geometry.boundingBox.min.y
+		mesh.position.y -= mesh.scale.y * mesh.geometry.boundingBox.min.y
 		mesh
 	
 	getPathById: (id) ->

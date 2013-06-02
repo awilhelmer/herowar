@@ -35,6 +35,6 @@ class LaserModel extends MeshModel
 			@dispose()
 			
 	_getCenterPointY: (obj) ->
-		return (Math.abs(obj.geometry.boundingBox.min.y) + obj.geometry.boundingBox.max.y) * obj.scale.y / 2
+		return (obj.geometry.boundingBox.max.y - obj.geometry.boundingBox.min.y) * obj.scale.y / 2
 
 return LaserModel
