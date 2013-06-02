@@ -43,7 +43,7 @@ class MeshModel extends BaseModel
 			@raycaster.set position, @groundDirection
 		else
 			@raycaster = new THREE.Raycaster position, @groundDirection
-		intersects = @raycaster.intersectObject scenegraph.getMap(), true
+		intersects = @raycaster.intersectObject scenegraph.getMap().getMainObject(), true
 		if intersects.length isnt 0 and intersects[0].distance < @meshBody.geometry.boundingBox.max.y
 			console.log 'Ground Collision detected', intersects[0].distance, intersects[0]
 			@getMainObject().translateY intersects[0].distance

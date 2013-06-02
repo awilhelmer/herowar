@@ -71,7 +71,7 @@ class EditorScene extends Scene
 
 	handleMaterials: =>
 		scenegraph = require 'scenegraph'
-		@world.handleMaterials scenegraph.getMap()
+		@world.handleMaterials scenegraph.getMap().getMainObject()
 	
 	removeStaticObject: (obj) =>
 		log.info "Environment \"#{obj.get('name')}\" removed"

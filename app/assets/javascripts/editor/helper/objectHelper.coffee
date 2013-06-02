@@ -65,9 +65,9 @@ class ObjectHelper
 	
 	isTerrain: (obj) ->
 		scenegraph = require 'scenegraph'
-		if _.isUndefined obj or _.isUndefined scenegraph.map then return false
+		if _.isUndefined obj or _.isUndefined scenegraph.getMap().getMainObject() then return false
 		obj = @getBaseObject obj unless obj.parent instanceof THREE.Scene
-		scenegraph.map.id is obj.id
+		scenegraph.getMap().getMainObject().id is obj.id
 
 #For updating all geometry data ...
 	refreshWireframe: (obj) =>
