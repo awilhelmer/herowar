@@ -5,7 +5,6 @@ log = require 'util/logger'
 class VictoryController extends BaseController
 
 	views:
-		'views/progress'	: ''
 		'views/stats'	    : ''
 		'views/victory'		: ''
 		'views/viewport'	: ''

@@ -5,7 +5,7 @@ events = require 'events'
 class GameHUD extends BaseHUD
 	
 	default: [
-		'hud/elements/wave'
+		'hud/elements/waveProgress'
 		'hud/elements/unitHealthBars'
 	]
 
