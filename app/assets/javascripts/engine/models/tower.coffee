@@ -22,7 +22,7 @@ class Tower extends AnimatedModel
 	attack: (target, damage) ->
 		for weapon in @weapons
 			positionWeapon = new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
-			muzzleFlash = new MuzzleFlash owner: @, positionWeapon: positionWeapon
+			muzzleFlash = new MuzzleFlash owner: @, positionWeapon: positionWeapon.clone()
 			@effects.push muzzleFlash
 			Weapon = require "models/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, damage

@@ -35,12 +35,11 @@ class MuzzleFlash extends BaseEffect
 			blending: THREE.AdditiveBlending
 			transparent: true
 		sprite = new THREE.Sprite @material
-		sprite.position = ownerObj.position.clone().add @opts.positionWeapon
+		sprite.position = ownerObj.localToWorld @opts.positionWeapon
 		sprite.scale.set 0.075, 0.075, 0.075
 		sprite.rotation = Math.random() * Math.PI * 2
 		@obj = new THREE.Object3D()
 		@obj.name = 'MuzzleFlash'
-		@obj.useQuaternion = true
 		#@obj.quaternion.copy ownerObj.quaternion
 		@obj.add sprite
 		scenegraph.scene().add @obj
