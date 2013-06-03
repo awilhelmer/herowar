@@ -1,6 +1,6 @@
 BasePropertiesView = require 'views/basePropertiesView'
 EditorEventbus = require 'editorEventbus'
-Wave = require 'models/wave'
+Wave = require 'models/db/wave'
 templates = require 'templates'
 log = require 'util/logger'
 db = require 'database'
@@ -22,7 +22,7 @@ class Waves extends BasePropertiesView
 		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
-		@paths = db.get 'paths'
+		@paths = db.get 'db/paths'
 		@nextId = 1
 		@nextDbId = -1
 		@selectedItem = null
@@ -30,7 +30,7 @@ class Waves extends BasePropertiesView
 
 	listSelectItem: (id, value, name) =>
 		if id is 'sidebar-waves-list'
-			@selectedItem = db.get 'waves', value
+			@selectedItem = db.get 'db/waves', value
 			$removeButton = @$ '#sidebar-waves-remove'
 			$removeButton.addClass 'show' unless $removeButton.hasClass 'show'
 
@@ -43,12 +43,12 @@ class Waves extends BasePropertiesView
 			'dbId'	: dbId
 			'name' 	: "Wave-#{id}"
 		wave.set 'path', @paths.models[0].get('id') if @paths.length > 0
-		col = db.get 'waves'
+		col = db.get 'db/waves'
 		col.add wave
 		log.info "Wave \"#{wave.get('name')}\" created"
 
 	removeItem: ->
-		col = db.get 'waves'
+		col = db.get 'db/waves'
 		index = col.indexOf @selectedItem
 		col.remove @selectedItem
 		log.info "Wave \"#{@selectedItem.get('name')}\" removed"

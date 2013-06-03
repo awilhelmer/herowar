@@ -1,11 +1,11 @@
 materialHelper = require 'helper/materialHelper'
 Environment = require 'models/environment'
 Material = require 'models/material'
-Waypoint = require 'models/waypoint'
+Waypoint = require 'models/db/waypoint'
 Texture = require 'models/texture'
-Path = require 'models/path'
+Path = require 'models/db/path'
 scenegraph = require 'scenegraph'
-Wave = require 'models/wave'
+Wave = require 'models/db/wave'
 events = require 'events'
 engine = require 'engine'
 db = require 'database'
@@ -97,8 +97,8 @@ class Scene
 		null
 
 	createPaths: ->
-		paths = db.get 'paths'
-		waypoints = db.get 'waypoints'
+		paths = db.get 'db/paths'
+		waypoints = db.get 'db/waypoints'
 		if @world.attributes.paths
 			wayId = 1
 			pathId = 1
@@ -123,7 +123,7 @@ class Scene
 	afterCreatingPaths: (wayId, pathId) ->
 
 	createWaves: ->
-		waves = db.get 'waves'
+		waves = db.get 'db/waves'
 		if @world.attributes.waves
 			waveId = 1
 			for wave in @world.attributes.waves

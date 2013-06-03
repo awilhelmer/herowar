@@ -63,7 +63,7 @@ class Enemies extends PacketModel
 		mesh
 	
 	getPathById: (id) ->
-		allPaths = db.get 'paths'
+		allPaths = db.get 'db/paths'
 		foundPaths = allPaths.where dbId : id
 		unless foundPaths.length isnt 0 then throw "Couldnt find path for unit #{name}"
 		return foundPaths[0]

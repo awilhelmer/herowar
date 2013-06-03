@@ -17,7 +17,7 @@ class ViewerUI extends BaseView
 	
 	initialize: (options) ->
 		@jsonLoader = new JSONLoader()
-		@units = db.get 'units'
+		@units = db.get 'db/units'
 		@units.fetch()
 		@data = 1: [], 2: []
 		super options

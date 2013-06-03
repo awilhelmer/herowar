@@ -21,7 +21,7 @@ class PathingProperties extends BasePropertiesView
 		EditorEventbus.selectPathUI.add @selectItem
 
 	selectItem: (value) =>
-		@model = db.get 'paths', value
+		@model = db.get 'db/paths', value
 		@render()
 
 	createWaypoint: ->

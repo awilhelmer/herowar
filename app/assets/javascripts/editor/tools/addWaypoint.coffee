@@ -1,6 +1,6 @@
 SelectorPlane = require 'tools/selectorPlane'
 EditorEventbus = require 'editorEventbus'
-Waypoint = require 'models/waypoint'
+Waypoint = require 'models/db/waypoint'
 log = require 'util/logger'
 db = require 'database'
 
@@ -32,7 +32,7 @@ class AddWaypoint extends SelectorPlane
 			'position'	: pos
 			'path'			: @currentPathId
 		log.info "Created new waypoint at #{pos.x} x #{pos.y} x #{pos.z}"
-		col = db.get 'waypoints'
+		col = db.get 'db/waypoints'
 		col.add waypoint
 	
 	selectPathId: (value) =>

@@ -5,7 +5,7 @@ db = require 'database'
 
 class PathingExplorer extends BaseView
 
-	entity: 'paths'
+	entity: 'db/paths'
 
 	template: templates.get 'explorer/item.tmpl'
 

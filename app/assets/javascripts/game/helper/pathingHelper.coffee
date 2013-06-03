@@ -9,7 +9,7 @@ class PathingHelper
 	color: 0x0000FF
 	
 	constructor: ->
-		@waypoints = db.get 'waypoints'
+		@waypoints = db.get 'db/waypoints'
 		@path = db.get 'paths', 1
 		
 		@pathWaypoints = []
@@ -26,7 +26,7 @@ class PathingHelper
 		
 	updateWaypoints: =>
 		if @path
-			@pathWaypoints = db.get('waypoints').where path: @path.get('id')
+			@pathWaypoints = db.get('db/waypoints').where path: @path.get('id')
 			@removePath() if @meshes.length isnt 0
 
 	buildPath: ->

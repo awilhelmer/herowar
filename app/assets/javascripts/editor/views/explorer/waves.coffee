@@ -5,7 +5,7 @@ db = require 'database'
 
 class WavesExplorer extends BaseView
 
-	entity: 'waves'
+	entity: 'db/waves'
 
 	template: templates.get 'explorer/item.tmpl'
 

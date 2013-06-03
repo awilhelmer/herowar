@@ -38,11 +38,11 @@ class WaveProperties extends BasePropertiesView
 		@tabs.set 'waveProperties', tab
 		if tab is '#wp-unit' and not @unitsLoaded
 			@unitsLoaded = true
-			units = db.get 'units'
+			units = db.get 'db/units'
 			units.fetch()
 
 	selectWave: (value) =>
-		@model = db.get 'waves', value
+		@model = db.get 'db/waves', value
 		EditorEventbus.dispatch 'listSetItem', 'sidebar-properties-wave-unit-list', @model.get 'unit'
 		@render()
 
@@ -57,9 +57,9 @@ class WaveProperties extends BasePropertiesView
 		json
 
 	getPathsFromDB: ->
-		paths = db.get('paths').toJSON()
+		paths = db.get('db/paths').toJSON()
 		for path in paths
-			if path.id is @model.get('path') then path.selected = true else path.selected = false
+			if path.id is @model.get('db/path') then path.selected = true else path.selected = false
 		paths
 
 return WaveProperties

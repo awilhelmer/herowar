@@ -1,6 +1,6 @@
 BasePropertiesView = require 'views/basePropertiesView'
 EditorEventbus = require 'editorEventbus'
-Path = require 'models/path'
+Path = require 'models/db/path'
 templates = require 'templates'
 log = require 'util/logger'
 db = require 'database'
@@ -22,7 +22,7 @@ class Pathing extends BasePropertiesView
 		EditorEventbus.initIdChanged.add @setStartId
 
 	initialize: (options) ->
-		@waves = db.get 'waves'
+		@waves = db.get 'db/waves'
 		@nextId = 1
 		@nextDbId = -1
 		@selectedItem = null
@@ -30,7 +30,7 @@ class Pathing extends BasePropertiesView
 
 	listSelectItem: (id, value, name) =>
 		if id is 'sidebar-pathing-list'
-			@selectedItem = db.get 'paths', value
+			@selectedItem = db.get 'db/paths', value
 			$removeButton = @$ '#sidebar-pathing-remove'
 			$removeButton.addClass 'show' unless $removeButton.hasClass 'show'
 
@@ -42,7 +42,7 @@ class Pathing extends BasePropertiesView
 			'id'		: id
 			'dbId'	: dbId
 			'name' 	: "Path-#{id}"
-		col = db.get 'paths'
+		col = db.get 'db/paths'
 		col.add path
 		log.info "Path \"#{path.get('name')}\" created"
 		@addPathToIncompleteWaves id
@@ -52,7 +52,7 @@ class Pathing extends BasePropertiesView
 			wave.set 'path', id unless wave.has('path')
 
 	removeItem: ->
-		col = db.get 'paths'
+		col = db.get 'db/paths'
 		index = col.indexOf @selectedItem
 		col.remove @selectedItem
 		log.info "Path \"#{@selectedItem.get('name')}\" removed"

@@ -10,7 +10,7 @@ class PathingHelper
 	
 	constructor: ->
 		@sidebar = db.get 'ui/sidebar'
-		@waypoints = db.get 'waypoints'
+		@waypoints = db.get 'db/waypoints'
 		@path = null
 		@pathWaypoints = []
 		@meshes = []
@@ -23,7 +23,7 @@ class PathingHelper
 		events.listenTo @waypoints, 'add remove reset', @updateWaypoints
 
 	selectPath: (id) =>
-		@path = db.get 'paths', id
+		@path = db.get 'db/paths', id
 		@updateWaypoints()
 
 	updatePath: =>
@@ -37,7 +37,7 @@ class PathingHelper
 	updateWaypoints: =>
 		# TODO: check waypoint arrays for differences
 		if @path
-			@pathWaypoints = db.get('waypoints').where path: @path.get('id')
+			@pathWaypoints = db.get('db/waypoints').where path: @path.get('id')
 			@removePath() if @meshes.length isnt 0
 			@updatePath()
 

@@ -107,8 +107,8 @@ worldToObjectConverter =
 		obj.objects = objects
 
 	addPaths: (obj) ->
-		paths = db.get 'paths'
-		waypoints = db.get 'waypoints'
+		paths = db.get 'db/paths'
+		waypoints = db.get 'db/waypoints'
 		obj.paths = []
 		for currentPath in paths.models
 			currentWaypoints = waypoints.where path : currentPath.get 'id'
@@ -122,7 +122,7 @@ worldToObjectConverter =
 			obj.paths.push path
 
 	addWaves: (obj) ->
-		waves = db.get 'waves'
+		waves = db.get 'db/waves'
 		obj.waves = []
 		for currentWave in waves.models
 			wave = _.pick currentWave.attributes, 'id', 'name', 'prepareTime', 'waveTime', 'quantity'

@@ -4,7 +4,7 @@ templates = require 'templates'
 
 class PathingWaypoints extends BaseView
 
-	entity: 'waypoints'
+	entity: 'db/waypoints'
 		
 	template: templates.get 'util/list.tmpl'
 
