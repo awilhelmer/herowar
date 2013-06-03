@@ -34,9 +34,7 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
   }
 
   protected Result listAll() {
-    CriteriaQuery<T> query = getCriteria();
-    query.from(entityClass);
-    return ok(toJson(getEntityManager().createQuery(query).getResultList()));
+    return ok(toJson(getAll()));
   }
 
   protected List<T> getAll() {

@@ -62,6 +62,12 @@ PUT			/api/game/terrain/:id								controllers.api.game.Terrains.update(id: Long
 DELETE	/api/game/terrain/:id								controllers.api.game.Terrains.delete(id: Long)
 POST		/api/game/terrain										controllers.api.game.Terrains.add()
 
+GET			/api/game/tower/all									controllers.api.game.Towers.list()
+GET			/api/game/tower/:id									controllers.api.game.Towers.show(id: Long)
+PUT			/api/game/tower/:id									controllers.api.game.Towers.update(id: Long)
+DELETE	/api/game/tower/:id									controllers.api.game.Towers.delete(id: Long)
+POST		/api/game/tower											controllers.api.game.Towers.add()
+
 GET			/api/game/unit/all									controllers.api.game.Units.list()
 GET			/api/game/unit/root									controllers.api.game.Units.root()
 GET			/api/game/unit/:id									controllers.api.game.Units.show(id: Long)

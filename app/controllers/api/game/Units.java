@@ -22,7 +22,7 @@ import dao.game.UnitDAO;
 public class Units extends BaseAPI<Long, Unit> {
 
   private static final Logger.ALogger log = Logger.of(Environments.class);
-  
+
   private Units() {
     super(Long.class, Unit.class);
   }
@@ -31,10 +31,16 @@ public class Units extends BaseAPI<Long, Unit> {
 
   @Transactional
   public static Result list() {
-    log.warn("called listAll without Excludes!");
-    return instance.listAll(); 
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(Unit.class, ExcludeGeometryMixin.class);
+    try {
+      return ok(mapper.writeValueAsString(instance.getAll()));
+    } catch (IOException e) {
+      log.error("Failed to serialize unit:", e);
+    }
+    return badRequest("Unexpected error occurred");
   }
-  
+
   @Transactional
   public static Result root() {
     ObjectMapper mapper = new ObjectMapper();
