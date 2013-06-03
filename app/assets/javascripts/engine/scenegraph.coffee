@@ -13,9 +13,9 @@ sceneGraph =
 		scenes[name] = @_createScene name unless _.has scenes, name
 		return scenes[name]
 	
-	update: (delta) ->
+	update: (delta, now) ->
 		for id, obj of _data.get 'dynamicObjects'
-			obj.update delta
+			obj.update delta, now
 		return
 
 	clear: ->

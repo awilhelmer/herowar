@@ -10,14 +10,18 @@ class AnimatedModel extends MeshModel
 
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
+		@effects = []
 		meshes = @_findAnimatedMeshes()
 		if meshes.length isnt 0
 			for mesh in meshes
 				@setAnimation mesh.geometry.firstAnimation if mesh.geometry.firstAnimation
 
-	update: (delta) ->
+	update: (delta, now) ->
 		super delta
 		@animate delta
+		@effects.forEach (effect) =>
+			effect.update delta, now
+			@effects.splice @effects.indexOf(effect), 1 unless effect.active
 		return
 
 	animate: (delta) ->

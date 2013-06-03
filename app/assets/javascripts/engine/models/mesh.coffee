@@ -24,8 +24,8 @@ class MeshModel extends BaseModel
 		@_enableShadows()
 		super obj
 
-	update: (delta) ->
-		super delta
+	update: (delta, now) ->
+		super delta, now
 		#@checkGroundCollision()
 
 	checkGroundCollision: ->

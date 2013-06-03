@@ -24,7 +24,7 @@ class LaserModel extends MeshModel
 		mesh.position.y = @_getCenterPointY @owner.meshBody
 		return mesh
 
-	update: (delta) ->
+	update: (delta, now) ->
 		targetPosition = @target.getMainObject().position.clone()
 		targetPosition.y = @meshBody.position.y
 		distance = @getMainObject().position.distanceTo targetPosition

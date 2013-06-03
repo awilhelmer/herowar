@@ -14,7 +14,7 @@ class BaseModel
 		@root.main = root
 		@_cloneRoot()
 	
-	update: (delta) ->
+	update: (delta, now) ->
 		return
 
 	getMainObject: ->

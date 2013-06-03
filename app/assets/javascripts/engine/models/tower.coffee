@@ -1,19 +1,34 @@
 AnimatedModel = require 'models/animatedModel'
+MuzzleFlash = require 'effects/muzzleFlash'
 scenegraph = require 'scenegraph'
 
 class Tower extends AnimatedModel
 	
+	shotId: 5000 # TODO: this must be dynamic somehow
+	
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
+		@weapons = []
 		@active = false
 		@range = 0
 		@meshRange = null
 		@target = null
 	
-	update: (delta) ->
+	update: (delta, now) ->
 		if @active
 			@_rotateToTarget delta
-			super delta
+			super delta, now
+
+	attack: (target, damage) ->
+		for weapon in @weapons
+			positionWeapon = new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
+			muzzleFlash = new MuzzleFlash owner: @, positionWeapon: positionWeapon
+			@effects.push muzzleFlash
+			Weapon = require "models/#{weapon.type.toLowerCase()}"
+			laser = new Weapon @shotId++, @, target, damage
+			laser.getMainObject().position.add positionWeapon
+			scenegraph.addDynObject laser, laser.id
+		return
 
 	showRange: ->
 		unless @meshRange

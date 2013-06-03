@@ -16,9 +16,9 @@ class Enemy extends AnimatedModel
 		@lastDistance = null
 		@waypoints = []
 
-	update: (delta) ->
-		super delta
-		@blackSmoke.update delta, Date.now() / 1000, @_getBlackSmokePosition() if @blackSmoke
+	update: (delta, now) ->
+		super delta, now
+		@blackSmoke.update delta, now / 1000, @_getBlackSmokePosition() if @blackSmoke
 		if not @isDead()
 			return if @waypoints.length is 0
 			@_waypointArrivalCheck()

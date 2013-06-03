@@ -1,6 +1,7 @@
+BaseEffect = require 'effects/baseEffect'
 db = require 'database'
 
-class BlackSmoke
+class BlackSmoke extends BaseEffect
 
 	maxAge: 1.5
 	

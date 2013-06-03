@@ -39,8 +39,8 @@ engine =
 	render: ->
 		now = Date.now()
 		delta = @clock.getDelta()
-		scenegraph.update delta
-		@views.render delta
+		scenegraph.update delta, now
+		@views.render delta, now
 		events.trigger 'engine:render', delta, now
 		return
 		

@@ -1,7 +1,6 @@
 PacketType = require 'network/packets/packetType'
 scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
-Laser = require 'models/laser'
 events = require 'events'
 db = require 'database'
 
@@ -33,15 +32,7 @@ class GameScene extends Scene
 		owner = scenegraph.getDynObject packet.tower
 		target = owner.target
 		return unless owner and target
-		
-		laser1 = new Laser @customId++, owner, target, packet.damage
-		laser1.getMainObject().position.x += 12
-		scenegraph.addDynObject laser1, laser1.id
-		
-		laser2 = new Laser @customId++, owner, target, packet.damage
-		laser2.getMainObject().position.x -= 12
-		scenegraph.addDynObject laser2, laser2.id
-		
+		owner.attack target, packet.damage		
 		unless target.isDead()
 			target.hit packet.damage
 			currHealth = target.currentHealth
