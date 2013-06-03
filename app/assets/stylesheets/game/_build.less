@@ -7,13 +7,27 @@
     bottom: 10px;
     left: 10px;
     z-index: 3;
+    .clearfix()
 }
 
 #build .item {
+    position: relative;
+    float: left;
     cursor: pointer;
     border-radius: 50%;
     border: 1px groove #CCCCCC;
     width: 100px;
     height: 100px;
     background-image: url("../geometries/towers/cannon001.png");
+}
+
+#build .item .price {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #000000;
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
 }

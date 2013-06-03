@@ -8,6 +8,8 @@ class BuildView extends BaseView
 		
 	template: templates.get 'build.tmpl'
 
+	entity: 'db/towers'
+
 	events:
 		'click .item' : 'selectTower'
 	

@@ -19,5 +19,7 @@ app =
 		db.get 'ui/preload'
 		db.get 'ui/stats'
 		db.get 'ui/waves'
+		towers = db.get 'db/towers'
+		towers.fetch()
 
 return app
