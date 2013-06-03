@@ -15,7 +15,8 @@ class BuildView extends BaseView
 	
 	selectTower: (event) ->
 		unless event then return
-		towerId = 1 # TODO: this should not be hardcoded...
+		$currentTarget = $ event.currentTarget
+		towerId = $currentTarget.data 'id'
 		events.trigger 'select:tower', towerId
 
 return BuildView

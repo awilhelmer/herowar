@@ -45,7 +45,6 @@ class Enemies extends PacketModel
 		model.maxShield = opts.shield
 		model.currentShield = opts.shield
 		model.type = opts.utype
-		console.log 'Set values:', model.maxHealth, model.currentHealth, model.maxShield, model.currentShield, model.type
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z

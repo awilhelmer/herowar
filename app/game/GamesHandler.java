@@ -10,17 +10,23 @@ import game.processor.ProcessorHandler;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
+import models.entity.game.Tower;
+import models.entity.game.Unit;
+import models.entity.game.Wave;
 
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import play.libs.Json;
+import dao.game.TowerDAO;
 
 /**
  * The GamesHandler control all current running games.
@@ -51,13 +57,18 @@ public class GamesHandler implements Serializable {
   }
 
   @EventSubscriber
-  public void observePlayerJoinEvent(GameJoinEvent event) {
+  public void observePlayerJoinEvent(final GameJoinEvent event) {
     GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(), event.getConnection());
-    GameProcessor game = createGame(event.getGameToken().getMap(), session);
+    final GameProcessor game = createGame(event.getGameToken().getMap(), session);
     session.setGame(game);
     connections.put(event.getConnection(), session);
     log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken().getCreatedByUser().getUsername(), game.getTopicName()));
-    sendPreloadDataPacket(event.getConnection(), game);
+    JPA.withTransaction(new play.libs.F.Callback0() {
+      @Override
+      public void invoke() throws Throwable {
+        sendPreloadDataPacket(event.getConnection(), game);
+      }
+    });
   }
 
   @EventSubscriber
@@ -113,9 +124,21 @@ public class GamesHandler implements Serializable {
     java.util.Map<String, String> texturesCube = new HashMap<String, String>();
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
     java.util.Map<String, String> geometries = new HashMap<String, String>();
-    geometries.put("Ratamahatta", "api/game/geometry/unit/3");
-    geometries.put("Spaceship-1-v1", "api/game/geometry/unit/2");
-    geometries.put("tower1", "api/game/geometry/tower/1");
+    Iterator<Wave> iter = game.getMap().getWaves().iterator();
+    while (iter.hasNext()) {
+      Wave wave = iter.next();
+      Iterator<Unit> iter2 = wave.getUnits().iterator();
+      while (iter2.hasNext()) {
+        Unit unit = iter2.next();
+        geometries.put(unit.getName(), "api/game/geometry/unit/" + unit.getId());
+      }
+    }
+    List<Tower> towers = TowerDAO.getInstance().getAll();
+    Iterator<Tower> iter3 = towers.iterator();
+    while (iter3.hasNext()) {
+      Tower tower = iter3.next();
+      geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());
+    }
     PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube, geometries));
     connection.send(Json.toJson(packet).toString());
   }
@@ -145,7 +168,7 @@ public class GamesHandler implements Serializable {
     processors.clear();
     games.clear();
   }
-  
+
   // GETTER && SETTER //
 
   public java.util.Map<Long, List<GameProcessor>> getGames() {

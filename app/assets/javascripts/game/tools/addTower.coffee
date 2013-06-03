@@ -15,9 +15,10 @@ class AddTowerTool extends AddObject
 		events.on "retrieve:packet:#{PacketType.SERVER_BUILD_TOWER}", @onBuildTower, @
 	
 	onSelectTower: (id) ->
-		name = "tower#{id}"
+		tower = db.get 'db/towers', id
+		name = tower.get 'name'
 		data = db.data().geometries[name]
-		console.log 'Found geometry', data
+		@towerId = id
 		@tool.set
 			'currentObjectId' 	: @internalId++
 			'currentObjectName'	: name
@@ -25,7 +26,8 @@ class AddTowerTool extends AddObject
 
 	onBuildTower: (packet) ->
 		console.log 'onBuildTower()', packet
-		name = "tower#{packet.towerId}"
+		tower = db.get 'db/towers', packet.towerId
+		name = tower.get 'name'
 		data = db.data().geometries[name]
 		mesh = @createMesh data[0], data[1], name, data[2]
 		model = new Tower packet.objectId, name, mesh
@@ -46,7 +48,7 @@ class AddTowerTool extends AddObject
 
 	placeMesh: ->
 		console.log 'Place tower', @tool.get('currentObject').getMainObject()
-		events.trigger 'send:packet', new TowerRequestPacket 1, @tool.get('currentObject').getMainObject().position # TODO: fix hardcoded tower id
+		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position # TODO: fix hardcoded tower id
 	
 	onLoadGeometry: (geometry, materials, json) =>
 		unless json

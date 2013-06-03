@@ -1,6 +1,7 @@
 package dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,13 +19,17 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     this.entityClass = entityClass;
   }
   
+  public List<T> getAll() {
+    return JPA.em().createQuery(getCriteriaWithRoot()).getResultList();
+  }
+  
   public T getById(Object id) {
     return getSingleByPropertyValue("id", id);
   }
 
   public T getByName(String name) {
     return getSingleByPropertyValue("name", name);
-  }  
+  }
   
   protected CriteriaQuery<T> getCriteria() {
     return getCriteriaBuilder().createQuery(entityClass);
@@ -34,6 +39,12 @@ public abstract class BaseDAO<K extends Serializable, T extends Object> {
     return crit.from(entityClass);
   }
 
+  protected CriteriaQuery<T> getCriteriaWithRoot() {
+    CriteriaQuery<T> query = getCriteriaBuilder().createQuery(entityClass);
+    getRoot(query);
+    return query;
+  }
+  
   protected CriteriaBuilder getCriteriaBuilder() {
     return JPA.em().getCriteriaBuilder();
   }
