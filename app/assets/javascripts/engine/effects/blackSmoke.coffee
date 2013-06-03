@@ -38,7 +38,7 @@ class BlackSmoke
 		velocity.z += (Math.random() - 0.5) * 0.3;
 		velocity.setLength 1.15 + (Math.random() - 0.5) * 0.3
 		material.color.setHex 0x010101 * Math.floor(255 * (Math.random() * 0.1 + 0.3))
-		sprite.scale.set(0.2,0.2,0.2).multiplyScalar 0.8 + Math.random() * 0.2
+		sprite.scale.set(0.1,0.1,0.1).multiplyScalar 0.8 + Math.random() * 0.2
 		sprite.rotation	= Math.random() * Math.PI * 2
 		material.opacity = @age2Opacity 0
 		
