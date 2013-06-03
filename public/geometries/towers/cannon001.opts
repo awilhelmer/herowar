@@ -1,0 +1,7 @@
+{
+    "price" : 500,
+	"coverage" : 100,
+	"reload" : 500,
+	"damageMin" : 50,
+	"damageMax" : 100
+}

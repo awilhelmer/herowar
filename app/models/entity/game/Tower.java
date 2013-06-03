@@ -1,6 +1,8 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -37,6 +40,9 @@ public class Tower implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Geometry geometry;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy="tower")
+  private Set<TowerWeapon> weapons = new HashSet<TowerWeapon>();
+  
   public Tower() {
   }
 
@@ -108,6 +114,14 @@ public class Tower implements Serializable {
 
   public void setGeometry(Geometry geometry) {
     this.geometry = geometry;
+  }
+
+  public Set<TowerWeapon> getWeapons() {
+    return weapons;
+  }
+
+  public void setWeapons(Set<TowerWeapon> weapons) {
+    this.weapons = weapons;
   }
 
   @Override

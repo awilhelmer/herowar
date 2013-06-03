@@ -10,8 +10,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -27,10 +29,13 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.WordUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger.ALogger;
 import play.db.jpa.JPA;
+import util.JsonUtils;
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
 
@@ -91,33 +96,20 @@ public abstract class AbstractImporter<E extends Serializable> {
     } else {
       getLogger().warn(String.format("Property geometry not found on class <%s>", model.getClass()));
     }
-    File propertiesFile = new File(file.getAbsolutePath().replace(".js", ".properties"));
-    getLogger().info("Looking for properties: " + propertiesFile);
-    if (!propertiesFile.exists() || !propertiesFile.isFile()) {
+    updateByOpts(file, model);
+  }
+  
+  private void updateByOpts(File file, E model) throws JsonProcessingException, IOException {
+    File optsFile = new File(file.getAbsolutePath().replace(".js", ".opts"));
+    getLogger().info("Looking for properties: " + optsFile);
+    if (!optsFile.exists() || !optsFile.isFile()) {
       return;
     }
-    getLogger().info("Found!!!");
-    InputStream is = new FileInputStream(propertiesFile);
-    Properties props = new Properties();
-    props.load(is);
-    Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator();
-    while (iter.hasNext()) {
-      Map.Entry<Object, Object> entry = iter.next();
-      String name = (String) entry.getKey();
-      getLogger().info("Replace " + name + "=" + entry.getKey());
-      if (PropertyUtils.isReadable(model, name)) {
-        Class<?> type = PropertyUtils.getPropertyType(model, name);
-        Object value = ConvertUtils.convert(entry.getValue(), type);
-        if (value != null) {
-          PropertyUtils.setProperty(model, name, value);
-        } else {
-          getLogger().warn(String.format("Type <%s> dismatch for <%s> of property <%s> not found on class <%s>", type.getName(), entry.getValue(), name, model.getClass()));
-        }
-      } else {
-        getLogger().warn(String.format("Property <%s> not found on class <%s>", name, model.getClass()));
-      }
-    }
-    is.close();
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode node = mapper.readTree(optsFile);
+    List<Class<?>> classes = new ArrayList<Class<?>>();
+    classes.add(clazz);
+    JsonUtils.parse(model, node, classes);
   }
 
   @SuppressWarnings("unchecked")
