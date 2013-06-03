@@ -6,6 +6,7 @@ import game.json.StringArray;
 import game.json.StringArray.ArrayType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,34 +47,34 @@ public class Geometry extends BaseModel implements Serializable {
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE)
-  private String vertices;
+  private String vertices = "[]";
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE)
-  private String faces;
+  private String faces = "[]";
 
   @Lob
   @StringArray(type = ArrayType.OBJECT)
-  private String morphTargets;
+  private String morphTargets = "[]";
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE)
-  private String morphColors;
+  private String morphColors = "[]";
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE)
-  private String normals;
+  private String normals = "[]";
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE)
-  private String colors;
+  private String colors = "[]";
 
   @Lob
   @StringArray(type = ArrayType.DOUBLE, dimensions = 2)
-  private String uvs;
+  private String uvs = "[[]]";
 
   @Column(scale = 6)
-  private Double scale;
+  private Double scale = 1D;
 
   @Enumerated(EnumType.STRING)
   private GeometryType type;
@@ -87,29 +88,17 @@ public class Geometry extends BaseModel implements Serializable {
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, mappedBy = "geometry")
   @JsonIgnore
-  private Set<Mesh> meshes;
+  private Set<Mesh> meshes = new HashSet<Mesh>();
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "id.geometry")
   @JsonIgnore
-  private Set<GeoMaterial> geoMaterials;
+  private Set<GeoMaterial> geoMaterials = new HashSet<GeoMaterial>();
 
   @Transient
-  private List<GeoMatId> matIdMapper;
+  private List<GeoMatId> matIdMapper = new ArrayList<GeoMatId>();
 
   @Transient
-  private List<Material> materials;
-
-  public Geometry() {
-    vertices = "[]";
-    faces = "[]";
-    morphTargets = "[]";
-    morphColors = "[]";
-    normals = "[]";
-    colors = "[]";
-    uvs = "[[]]";
-    scale = 1D;
-    geoMaterials = new HashSet<GeoMaterial>();
-  }
+  private List<Material> materials = new ArrayList<Material>();
 
   // GETTER & SETTER //
 

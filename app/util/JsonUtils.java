@@ -130,18 +130,27 @@ public class JsonUtils {
               ParameterizedType pt = (ParameterizedType) javaField.getGenericType();
               Class<?> genericType = (Class<?>) pt.getActualTypeArguments()[0];
               if (classes.contains(genericType)) {
-                Collection<Object> col = null;
-                if (propClass.isAssignableFrom(List.class)) {
-                  col = new ArrayList<Object>();
-                } else {
-                  col = new HashSet<Object>();
-                }
+                Collection<Object> col = (Collection<Object>) PropertyUtils.getProperty(result, field);
+                int currentIndex = 0;
                 Iterator<JsonNode> nodes = fieldNode.getElements();
                 while (nodes.hasNext()) {
                   JsonNode colNode = (JsonNode) nodes.next();
-                  Object element = genericType.newInstance();
-                  parse(element, result, colNode, classes);
-                  col.add(element);
+                  if (col.size() > currentIndex) {
+                    Object element = col.toArray()[currentIndex];
+                    parse(element, result, colNode, classes);
+                    log.info("Changed collection entry: " + element.toString());
+                  } else {
+                    Object element = genericType.newInstance();
+                    parse(element, result, colNode, classes);
+                    log.info("Added collection entry: " + element.toString());
+                    col.add(element);
+                  }
+                  currentIndex++;
+                }
+                log.info("Index " + currentIndex + " of " + col.size());
+                while (col.size() > currentIndex) {
+                  log.info("Remove col index " + currentIndex + " of " + col.size());
+                  col.remove(col.toArray()[currentIndex]);
                 }
                 value = col;
               }
@@ -175,14 +184,17 @@ public class JsonUtils {
     }
     try {
       if (parent != null) {
-        Field[] fields = result.getClass().getDeclaredFields();
-        for (Field field : fields) {
-          Class<?> fieldClass = PropertyUtils.getPropertyType(result, field.getName());
-          if (fieldClass.equals(parent.getClass())) {
-            PropertyUtils.setProperty(result, field.getName(), parent);
-            break;
+        Long id = (Long) PropertyUtils.getProperty(parent, "id");
+        if (id != null) {
+          Field[] fields = result.getClass().getDeclaredFields();
+          for (Field field : fields) {
+            Class<?> fieldClass = PropertyUtils.getPropertyType(result, field.getName());
+            if (fieldClass != null && fieldClass.equals(parent.getClass())) {
+              PropertyUtils.setProperty(result, field.getName(), parent);
+              break;
+            }
           }
-        }
+        }        
       }
     } catch (Exception e) {
       log.error("", e);

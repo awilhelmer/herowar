@@ -45,14 +45,6 @@ public class Environment implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Geometry geometry;
 
-  public Environment() {
-    children = new HashSet<Environment>();
-  }
-
-  public Environment(String name) {
-    this.name = name;
-  }
-
   // GETTER & SETTER //
 
   public Long getId() {
