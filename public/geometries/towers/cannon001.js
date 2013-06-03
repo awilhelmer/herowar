@@ -13,7 +13,7 @@
         "materials"     : 0
     },
 
-    "scale" : 0.020000,
+    "scale" : 0.100000,
 
     "materials": [	{
 	"DbgColor" : 15658734,
