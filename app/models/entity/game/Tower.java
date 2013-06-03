@@ -42,13 +42,6 @@ public class Tower implements Serializable {
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy="tower")
   private Set<TowerWeapon> weapons = new HashSet<TowerWeapon>();
-  
-  public Tower() {
-  }
-
-  public Tower(String name) {
-    this.name = name;
-  }
 
   // GETTER & SETTER //
 

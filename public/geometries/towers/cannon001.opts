@@ -3,5 +3,16 @@
 	"coverage" : 100,
 	"reload" : 500,
 	"damageMin" : 50,
-	"damageMax" : 100
+	"damageMax" : 100,
+	"weapons" : [
+		{
+			"position" : 
+			{
+				"x" : 50.0,
+				"y" : 25.0,
+				"z" : 0.0
+			},
+			"type" : "LASER"
+		}
+	]
 }

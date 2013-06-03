@@ -1,0 +1,5 @@
+{
+    "health" : 2000,
+	"shield" : 500,
+	"type" : "AIRPLANE"
+}

@@ -77,9 +77,13 @@ public class JsonUtils {
       }
     }
   }
+  
+  public static void parse(Object result, JsonNode node, List<Class<?>> classes) {
+    parse(result, null, node, classes);
+  }
 
   @SuppressWarnings("unchecked")
-  public static void parse(Object result, JsonNode node, List<Class<?>> classes) {
+  public static void parse(Object result, Object parent, JsonNode node, List<Class<?>> classes) {
     Iterator<String> fieldIt = node.getFieldNames();
     while (fieldIt.hasNext()) {
       String field = fieldIt.next();
@@ -120,6 +124,7 @@ public class JsonUtils {
                 vector.setY(fieldNode.get("y").getDoubleValue());
               if (fieldNode.get("z") != null)
                 vector.setZ(fieldNode.get("z").getDoubleValue());
+              value = vector;
             } else if (propClass.isAssignableFrom(List.class) || propClass.isAssignableFrom(Set.class)) {
               Field javaField = result.getClass().getDeclaredField(field);
               ParameterizedType pt = (ParameterizedType) javaField.getGenericType();
@@ -135,7 +140,7 @@ public class JsonUtils {
                 while (nodes.hasNext()) {
                   JsonNode colNode = (JsonNode) nodes.next();
                   Object element = genericType.newInstance();
-                  parse(element, colNode, classes);
+                  parse(element, result, colNode, classes);
                   col.add(element);
                 }
                 value = col;
@@ -145,16 +150,14 @@ public class JsonUtils {
               Class<? extends Enum<?>> enumClass = (Class<? extends Enum<?>>) propClass;
               Enum<?>[] enums = enumClass.getEnumConstants();
               for (Enum<?> elem : enums) {
-                if (elem.toString().equals(value)) {
+                if (elem.name().equals(value)) {
                   value = elem;
                   break;
                 }
               }
-
             } else if (classes.contains(propClass)) {
-              // Self defined Object
               Object element = propClass.newInstance();
-              parse(element, fieldNode, classes);
+              parse(element, result, fieldNode, classes);
               value = element;
             } else {
               log.warn(String.format("Ignored parsing Class: <%s> in Bean <%s> Field <%s>", propClass.getSimpleName(), result.getClass().getSimpleName(), field));
@@ -169,6 +172,20 @@ public class JsonUtils {
           log.error("", e);
         }
       }
+    }
+    try {
+      if (parent != null) {
+        Field[] fields = result.getClass().getDeclaredFields();
+        for (Field field : fields) {
+          Class<?> fieldClass = PropertyUtils.getPropertyType(result, field.getName());
+          if (fieldClass.equals(parent.getClass())) {
+            PropertyUtils.setProperty(result, field.getName(), parent);
+            break;
+          }
+        }
+      }
+    } catch (Exception e) {
+      log.error("", e);
     }
   }
 
