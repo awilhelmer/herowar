@@ -3,13 +3,12 @@ scenegraph = require 'scenegraph'
 
 class Tower extends AnimatedModel
 	
-	active: false
-	
-	range: 100
-	
-	meshRange: null
-	
-	target: null
+	constructor: (@id, @name, @meshBody) ->
+		super @id, @name, @meshBody
+		@active = false
+		@range = 0
+		@meshRange = null
+		@target = null
 	
 	update: (delta) ->
 		if @active
@@ -26,9 +25,9 @@ class Tower extends AnimatedModel
 			for i in [0..resolution]
 				segment = (i * size) * Math.PI / 180
 				geometry.vertices.push new THREE.Vector3 Math.cos(segment) * amplitude, 0, Math.sin(segment) * amplitude
-		  @meshRange = new THREE.Line geometry, material
-		  @meshRange.name = 'range'
-		  @getMainObject().add @meshRange
+			@meshRange = new THREE.Line geometry, material
+			@meshRange.name = 'range'
+			@getMainObject().add @meshRange
 		@meshRange.visible = true
 
 	hideRange: ->

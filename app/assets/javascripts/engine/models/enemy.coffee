@@ -5,10 +5,6 @@ scenegraph = require 'scenegraph'
 class Enemy extends AnimatedModel
 	
 	showHealth: true
-	
-	lastDistance: null
-	
-	waypoints: []
 
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
@@ -17,6 +13,8 @@ class Enemy extends AnimatedModel
 		@maxShield = 0
 		@currentShield = 0
 		@type = 0
+		@lastDistance = null
+		@waypoints = []
 
 	update: (delta) ->
 		super delta

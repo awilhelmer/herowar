@@ -33,6 +33,7 @@ class AddTowerTool extends AddObject
 		model = new Tower packet.objectId, name, mesh
 		model.getMainObject().position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
+		model.range = tower.get 'coverage'
 		#model.showRange()
 		scenegraph.addDynObject model, packet.objectId
 
@@ -51,10 +52,12 @@ class AddTowerTool extends AddObject
 		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position # TODO: fix hardcoded tower id
 	
 	onLoadGeometry: (geometry, materials, json) =>
+		tower = db.get 'db/towers', @towerId
 		unless json
 			json = _.extend id: @tool.get('currentObjectId'), json 
 		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
 		model = new Tower @tool.get('currentObjectId'), name, mesh
+		model.range = tower.get 'coverage'
 		model.showRange()
 		model.visible false
 		@tool.set 'currentObject', model
