@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 
-import com.ardor3d.math.type.ReadOnlyVector3;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Embeddable
 public class Vector3 implements Serializable {
@@ -16,6 +16,7 @@ public class Vector3 implements Serializable {
   private Double z;
 
   @Transient
+  @JsonIgnore
   private com.ardor3d.math.Vector3 ardorVector;
 
   public Vector3() {

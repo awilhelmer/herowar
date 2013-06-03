@@ -2,20 +2,12 @@ package importer;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,7 +18,6 @@ import models.entity.game.Geometry;
 import models.entity.game.Material;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.JsonNode;
@@ -98,18 +89,16 @@ public abstract class AbstractImporter<E extends Serializable> {
     }
     updateByOpts(file, model);
   }
-  
+
   private void updateByOpts(File file, E model) throws JsonProcessingException, IOException {
     File optsFile = new File(file.getAbsolutePath().replace(".js", ".opts"));
-    getLogger().info("Looking for properties: " + optsFile);
+    getLogger().info("Looking for opts file: " + optsFile);
     if (!optsFile.exists() || !optsFile.isFile()) {
       return;
     }
     ObjectMapper mapper = new ObjectMapper();
     JsonNode node = mapper.readTree(optsFile);
-    List<Class<?>> classes = new ArrayList<Class<?>>();
-    classes.add(clazz);
-    JsonUtils.parse(model, node, classes);
+    JsonUtils.parse(model, node);
   }
 
   @SuppressWarnings("unchecked")
@@ -128,7 +117,7 @@ public abstract class AbstractImporter<E extends Serializable> {
       getLogger().warn(String.format("Property children not found on class <%s>", entity.getClass()));
     }
   }
-  
+
   private Geometry syncGeometry(Geometry geo, Geometry newGeo) {
     if (geo != null && geo.getId() != null) {
       getLogger().info("Sync geo Id: " + geo.getId());
@@ -215,12 +204,13 @@ public abstract class AbstractImporter<E extends Serializable> {
   }
 
   public abstract void process();
-  
+
   public abstract String getBaseFolder();
 
   protected abstract ALogger getLogger();
-  
+
   protected abstract boolean accept(File file);
+
   /**
    * The JsFileFilter filters for js files.
    * 
@@ -232,6 +222,6 @@ public abstract class AbstractImporter<E extends Serializable> {
     public boolean accept(File pathname) {
       return AbstractImporter.this.accept(pathname);
     }
-    
+
   }
 }

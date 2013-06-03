@@ -3,9 +3,11 @@ package util;
 import game.json.JsonFieldName;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,13 +16,68 @@ import java.util.Set;
 import models.entity.game.Vector3;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.ClassUtils;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.Hibernate;
 
 import play.Logger;
 
 public class JsonUtils {
 
   private static final Logger.ALogger log = Logger.of(JsonUtils.class);
+
+  public static void parse(Object result, JsonNode node) {
+    try {
+      List<Class<?>> classes = new ArrayList<Class<?>>();
+      findClasses(result, classes);
+      parse(result, node, classes);
+    } catch (Exception e) {
+      log.error("", e);
+    }
+  }
+
+  private static void findClasses(Object obj, List<Class<?>> classes) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    if (obj == null) {
+      return;
+    }
+    Class<?> root = obj.getClass();
+    if (Hibernate.getClass(obj) != null) {
+      root = Hibernate.getClass(obj);
+    }
+    if (!classes.contains(root)) {
+      classes.add(root);
+    }
+    Field[] fields = root.getDeclaredFields();
+    for (Field field : fields) {
+      if (!field.getType().isPrimitive() && ClassUtils.wrapperToPrimitive(field.getType()) == null && !field.getType().isAssignableFrom(String.class)
+          && !field.getType().isAssignableFrom(Date.class) && PropertyUtils.isWriteable(obj, field.getName()) && !field.getType().isEnum()
+          && !field.isAnnotationPresent(JsonIgnore.class)) {
+        Object propertyObj = null;
+        if (field.getType().isAssignableFrom(List.class) || field.getType().isAssignableFrom(Set.class)) {
+          ParameterizedType pt = (ParameterizedType) field.getGenericType();
+          Class<?> argumentClass = (Class<?>) pt.getActualTypeArguments()[0];
+          try {
+            propertyObj = argumentClass.newInstance();
+          } catch (InstantiationException e) {
+            log.error("Failed to create instance of " + argumentClass);
+          }
+        } else {
+          propertyObj = PropertyUtils.getProperty(obj, field.getName());
+        }
+        if (propertyObj == null) {
+          try {
+            propertyObj = field.getType().newInstance();
+          } catch (InstantiationException e) {
+            log.error("Failed to create instance of " + field.getType());
+          }
+        }
+        if (propertyObj != null) {
+          findClasses(propertyObj, classes);
+        }
+      }
+    }
+  }
 
   @SuppressWarnings("unchecked")
   public static void parse(Object result, JsonNode node, List<Class<?>> classes) {

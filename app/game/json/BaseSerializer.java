@@ -77,8 +77,6 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
             fieldName = annoName.name();
           }
           if (value != null && !field.isAnnotationPresent(JsonIgnore.class)) {
-            if (obj.getClass() == GeoMetaData.class && fieldName.toLowerCase().startsWith("geometry"))
-              log.info("ILLEGAL CIRCLE IN GEOMETADATA");
             if (type.isAssignableFrom(String.class)) {
               if (field != null && field.isAnnotationPresent(StringArray.class)) {
                 StringArray anno = field.getAnnotation(StringArray.class);
