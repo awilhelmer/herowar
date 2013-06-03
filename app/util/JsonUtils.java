@@ -23,6 +23,9 @@ import org.hibernate.Hibernate;
 
 import play.Logger;
 
+/**
+ * @author Sebastian Sachtleben
+ */
 public class JsonUtils {
 
   private static final Logger.ALogger log = Logger.of(JsonUtils.class);
@@ -50,26 +53,22 @@ public class JsonUtils {
     }
     Field[] fields = root.getDeclaredFields();
     for (Field field : fields) {
-      if (!field.getType().isPrimitive() && ClassUtils.wrapperToPrimitive(field.getType()) == null && !field.getType().isAssignableFrom(String.class)
-          && !field.getType().isAssignableFrom(Date.class) && PropertyUtils.isWriteable(obj, field.getName()) && !field.getType().isEnum()
-          && !field.isAnnotationPresent(JsonIgnore.class)) {
-        Object propertyObj = null;
-        if (field.getType().isAssignableFrom(List.class) || field.getType().isAssignableFrom(Set.class)) {
-          ParameterizedType pt = (ParameterizedType) field.getGenericType();
-          Class<?> argumentClass = (Class<?>) pt.getActualTypeArguments()[0];
+      boolean isCollection = false;
+      Class<?> propertyType = field.getType();
+      if (field.getType().isAssignableFrom(List.class) || field.getType().isAssignableFrom(Set.class)) {
+        ParameterizedType pt = (ParameterizedType) field.getGenericType();
+        propertyType = (Class<?>) pt.getActualTypeArguments()[0];
+        isCollection = true;
+      }
+      if (!classes.contains(propertyType) && !propertyType.isPrimitive() && ClassUtils.wrapperToPrimitive(propertyType) == null
+          && !propertyType.isAssignableFrom(String.class) && !propertyType.isAssignableFrom(Date.class) && PropertyUtils.isWriteable(obj, field.getName())
+          && !propertyType.isEnum() && !field.isAnnotationPresent(JsonIgnore.class)) {
+        Object propertyObj = PropertyUtils.getProperty(obj, field.getName());
+        if (propertyObj == null || isCollection) {
           try {
-            propertyObj = argumentClass.newInstance();
+            propertyObj = propertyType.newInstance();
           } catch (InstantiationException e) {
-            log.error("Failed to create instance of " + argumentClass);
-          }
-        } else {
-          propertyObj = PropertyUtils.getProperty(obj, field.getName());
-        }
-        if (propertyObj == null) {
-          try {
-            propertyObj = field.getType().newInstance();
-          } catch (InstantiationException e) {
-            log.error("Failed to create instance of " + field.getType());
+            log.error("Failed to create instance of " + propertyType);
           }
         }
         if (propertyObj != null) {

@@ -49,14 +49,6 @@ public class Unit implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Geometry geometry;
 
-  public Unit() {
-    children = new HashSet<Unit>();
-  }
-
-  public Unit(String name) {
-    this.name = name;
-  }
-
   // GETTER & SETTER //
 
   public Long getId() {
