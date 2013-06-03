@@ -11,8 +11,10 @@ import models.entity.game.Waypoint;
 public class UnitModel extends BaseModel<Unit> {
 
   private Unit entity;
-  private long currentHealth = 0;
-  private long maxHealth = 0;
+  private long currentHealth;
+  private long maxHealth;
+  private long currentShield;
+  private long maxShield;
   private double lastDistance = Double.MAX_VALUE;
   private Path activePath;
   private Waypoint activeWaypoint;
@@ -23,6 +25,8 @@ public class UnitModel extends BaseModel<Unit> {
     super(id, dbId, entity);
     this.currentHealth = entity.getHealth();
     this.maxHealth = entity.getHealth();
+    this.currentShield = entity.getShield();
+    this.maxShield = entity.getShield();
   }
 
   /**
@@ -101,6 +105,22 @@ public class UnitModel extends BaseModel<Unit> {
 
   public void setMaxHealth(long maxHealth) {
     this.maxHealth = maxHealth;
+  }
+
+  public long getCurrentShield() {
+    return currentShield;
+  }
+
+  public void setCurrentShield(long currentShield) {
+    this.currentShield = currentShield;
+  }
+
+  public long getMaxShield() {
+    return maxShield;
+  }
+
+  public void setMaxShield(long maxShield) {
+    this.maxShield = maxShield;
   }
 
   public double getLastDistance() {
