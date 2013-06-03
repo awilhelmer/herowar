@@ -27,7 +27,6 @@ class MuzzleFlash extends BaseEffect
 		return
 	
 	_createParticle: ->
-		ownerObj = @opts.owner.getMainObject()
 		@material = new THREE.SpriteMaterial
 			color: 0xffa500
 			useScreenCoordinates : false
@@ -35,12 +34,10 @@ class MuzzleFlash extends BaseEffect
 			blending: THREE.AdditiveBlending
 			transparent: true
 		sprite = new THREE.Sprite @material
-		sprite.position = ownerObj.localToWorld @opts.positionWeapon
+		sprite.position = @opts.position
 		sprite.scale.set 0.075, 0.075, 0.075
-		sprite.rotation = Math.random() * Math.PI * 2
 		@obj = new THREE.Object3D()
 		@obj.name = 'MuzzleFlash'
-		#@obj.quaternion.copy ownerObj.quaternion
 		@obj.add sprite
 		scenegraph.scene().add @obj
 		return

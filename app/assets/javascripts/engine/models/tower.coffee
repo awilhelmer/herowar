@@ -21,12 +21,12 @@ class Tower extends AnimatedModel
 
 	attack: (target, damage) ->
 		for weapon in @weapons
-			positionWeapon = new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
-			muzzleFlash = new MuzzleFlash owner: @, positionWeapon: positionWeapon.clone()
+			position = @getMainObject().localToWorld new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
+			muzzleFlash = new MuzzleFlash position: position
 			@effects.push muzzleFlash
 			Weapon = require "models/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, damage
-			laser.getMainObject().position.add positionWeapon
+			laser.getMainObject().position.copy position
 			scenegraph.addDynObject laser, laser.id
 		return
 
