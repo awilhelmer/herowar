@@ -33,6 +33,10 @@ public class Unit implements Serializable {
 
   @NotNull
   private String name;
+  
+  private Integer health = 0;
+  private Integer shield = 0;
+  private UnitType type; 
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy="parent")
   private Set<Unit> children = new HashSet<Unit>();
@@ -70,6 +74,30 @@ public class Unit implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
+  
+  public Integer getHealth() {
+    return health;
+  }
+
+  public void setHealth(Integer health) {
+    this.health = health;
+  }
+
+  public Integer getShield() {
+    return shield;
+  }
+
+  public void setShield(Integer shield) {
+    this.shield = shield;
+  }
+
+  public UnitType getType() {
+    return type;
+  }
+
+  public void setType(UnitType type) {
+    this.type = type;
+  }
 
   public Set<Unit> getChildren() {
     return children;
@@ -104,8 +132,11 @@ public class Unit implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((health == null) ? 0 : health.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((shield == null) ? 0 : shield.hashCode());
+    result = prime * result + ((type == null) ? 0 : type.hashCode());
     return result;
   }
 
@@ -118,6 +149,11 @@ public class Unit implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Unit other = (Unit) obj;
+    if (health == null) {
+      if (other.health != null)
+        return false;
+    } else if (!health.equals(other.health))
+      return false;
     if (id == null) {
       if (other.id != null)
         return false;
@@ -128,7 +164,13 @@ public class Unit implements Serializable {
         return false;
     } else if (!name.equals(other.name))
       return false;
+    if (shield == null) {
+      if (other.shield != null)
+        return false;
+    } else if (!shield.equals(other.shield))
+      return false;
+    if (type != other.type)
+      return false;
     return true;
   }
-
 }

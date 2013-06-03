@@ -2,12 +2,18 @@ package importer;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,6 +23,8 @@ import javax.persistence.criteria.Root;
 import models.entity.game.Geometry;
 import models.entity.game.Material;
 
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.WordUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,9 +45,11 @@ public abstract class AbstractImporter<E extends Serializable> {
   private static ObjectMapper mapper = new ObjectMapper();
 
   private Class<E> clazz;
+  private boolean updateGeo;
 
   public AbstractImporter() {
     this.clazz = getTypeParameterClass();
+    BeanUtilsBean.setInstance(new BeanUtilsBean(new EnumAwareConvertUtilsBean()));
   }
 
   public void sync() {
@@ -48,48 +58,20 @@ public abstract class AbstractImporter<E extends Serializable> {
     getLogger().info("Finish synchronize between folder and database");
   }
 
-  @SuppressWarnings("unchecked")
   protected void readDirectory(File folder, E parent, boolean recursive) {
     try {
       for (File file : folder.listFiles(new JsFileFilter())) {
-        E child = null;
-        boolean updateGeo = false;
-
+        E entity = createEntry(file, parent);
+        updateGeo = false;
         if (file.isDirectory() && recursive) {
           getLogger().info("Found directory: " + file.getAbsolutePath());
-          child = createEntry(file, parent);
-          readDirectory(file, child, recursive);
+          readDirectory(file, entity, recursive);
           updateGeo = true;
         } else {
           getLogger().info("Found geometry: " + file.getAbsolutePath());
-          child = createEntry(file, parent);
-          if (PropertyUtils.isReadable(child, "geometry")) {
-            Geometry geo = (Geometry) PropertyUtils.getProperty(child, "geometry");
-            if (geo == null || geo.getUdate() == null || geo.getUdate().getTime() < file.lastModified()) {
-              Geometry newGeo = parseGeometryFile(file);
-              newGeo = syncGeometry(geo, newGeo);
-              PropertyUtils.setProperty(child, "geometry", newGeo);
-              updateGeo = true;
-            }
-          } else {
-            getLogger().warn(String.format("Property geometry not found on Class <%s>", child.getClass()));
-          }
+          updateEntity(file, entity);
         }
-
-        if (PropertyUtils.isReadable(child, "children") && updateGeo) {
-          Collection<E> childs = (Collection<E>) PropertyUtils.getProperty(parent, "children");
-          Object id = PropertyUtils.getProperty(child, "id");
-          if (id != null && JPA.em().contains(child)) {
-            child = JPA.em().merge(child);
-          } else if (JPA.em().contains(parent)) {
-            JPA.em().persist(child);
-          }
-          childs.add(child);
-
-        } else if (!updateGeo) {
-          getLogger().warn(String.format("Property children not found on Class <%s>", child.getClass()));
-        }
-
+        saveEntity(entity, parent);
       }
 
     } catch (Exception e) {
@@ -97,6 +79,64 @@ public abstract class AbstractImporter<E extends Serializable> {
     }
   }
 
+  protected void updateEntity(File file, E model) throws Exception {
+    if (PropertyUtils.isReadable(model, "geometry")) {
+      Geometry geo = (Geometry) PropertyUtils.getProperty(model, "geometry");
+      if (geo == null || geo.getUdate() == null || geo.getUdate().getTime() < file.lastModified()) {
+        Geometry newGeo = parseGeometryFile(file);
+        newGeo = syncGeometry(geo, newGeo);
+        PropertyUtils.setProperty(model, "geometry", newGeo);
+        updateGeo = true;
+      }
+    } else {
+      getLogger().warn(String.format("Property geometry not found on class <%s>", model.getClass()));
+    }
+    File propertiesFile = new File(file.getAbsolutePath().replace(".js", ".properties"));
+    getLogger().info("Looking for properties: " + propertiesFile);
+    if (!propertiesFile.exists() || !propertiesFile.isFile()) {
+      return;
+    }
+    getLogger().info("Found!!!");
+    InputStream is = new FileInputStream(propertiesFile);
+    Properties props = new Properties();
+    props.load(is);
+    Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator();
+    while (iter.hasNext()) {
+      Map.Entry<Object, Object> entry = iter.next();
+      String name = (String) entry.getKey();
+      getLogger().info("Replace " + name + "=" + entry.getKey());
+      if (PropertyUtils.isReadable(model, name)) {
+        Class<?> type = PropertyUtils.getPropertyType(model, name);
+        Object value = ConvertUtils.convert(entry.getValue(), type);
+        if (value != null) {
+          PropertyUtils.setProperty(model, name, value);
+        } else {
+          getLogger().warn(String.format("Type <%s> dismatch for <%s> of property <%s> not found on class <%s>", type.getName(), entry.getValue(), name, model.getClass()));
+        }
+      } else {
+        getLogger().warn(String.format("Property <%s> not found on class <%s>", name, model.getClass()));
+      }
+    }
+    is.close();
+  }
+
+  @SuppressWarnings("unchecked")
+  protected void saveEntity(E entity, E parent) throws Exception {
+    if (PropertyUtils.isReadable(entity, "children") && updateGeo) {
+      Collection<E> children = (Collection<E>) PropertyUtils.getProperty(parent, "children");
+      Object id = PropertyUtils.getProperty(entity, "id");
+      if (id != null && JPA.em().contains(entity)) {
+        entity = JPA.em().merge(entity);
+      } else if (JPA.em().contains(parent)) {
+        JPA.em().persist(entity);
+      }
+      children.add(entity);
+
+    } else if (!updateGeo) {
+      getLogger().warn(String.format("Property children not found on class <%s>", entity.getClass()));
+    }
+  }
+  
   private Geometry syncGeometry(Geometry geo, Geometry newGeo) {
     if (geo != null && geo.getId() != null) {
       getLogger().info("Sync geo Id: " + geo.getId());
@@ -109,7 +149,6 @@ public abstract class AbstractImporter<E extends Serializable> {
       newGeo.setMetadata(JPA.em().merge(newGeo.getMetadata()));
       newGeo.setMeshes(geo.getMeshes());
       newGeo.setCdate(geo.getCdate());
-
       newGeo = JPA.em().merge(newGeo);
     }
     return newGeo;
@@ -133,12 +172,12 @@ public abstract class AbstractImporter<E extends Serializable> {
         if (PropertyUtils.isReadable(entry, "name")) {
           PropertyUtils.setProperty(entry, "name", name);
         } else {
-          getLogger().warn(String.format("Property name not found on Class <%s>", entry.getClass()));
+          getLogger().warn(String.format("Property name not found on class <%s>", entry.getClass()));
         }
         if (parent != null && PropertyUtils.isReadable(entry, "parent")) {
           PropertyUtils.setProperty(entry, "parent", parent);
         } else {
-          getLogger().warn(String.format("Property parent not found on Class <%s>", entry.getClass()));
+          getLogger().warn(String.format("Property parent not found on class <%s>", entry.getClass()));
         }
       } catch (Exception e) {
         getLogger().error("", e);

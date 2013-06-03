@@ -31,5 +31,4 @@ public class TowerImporter extends FolderImporter<Tower> {
   protected boolean accept(File file) {
     return file.getName().toLowerCase().endsWith(".js");
   }
-
 }
