@@ -1,8 +1,5 @@
 package game.network.client;
 
-import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
-
 import game.GameSession;
 import game.GamesHandler;
 import game.models.TowerModel;
@@ -12,11 +9,17 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
+
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+
+import models.entity.game.Tower;
 import models.entity.game.Vector3;
 
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import play.libs.Json;
 
 /**
@@ -30,10 +33,9 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 
   private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);
 
-  private final static String SCORE_VALUE = "score";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
-  
+
   private Long id;
   private Vector3 position;
 
@@ -52,12 +54,15 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     if (playerCache.containsKey(GOLD_VALUE)) {
       currentGold = (double) playerCache.get(GOLD_VALUE);
     }
-    int towerPrice = 500; // TODO: this should be real price...
-    if (currentGold < towerPrice) {
+    Tower entity = JPA.em().find(Tower.class, id);
+    if (entity == null) {
+      return;
+    }
+    if (currentGold < entity.getPrice()) {
       // TODO: not enough gold ...
       return;
     }
-    TowerModel tower = new TowerModel(session.getGame().getObjectIdGenerator(), id);
+    TowerModel tower = new TowerModel(session.getGame().getObjectIdGenerator(), id, entity);
     com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
     tower.setTranslation(position);
     tower.updateWorldTransform(false);
@@ -65,10 +70,12 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getUser().getId(), this.position));
     synchronized (playerCache) {
-      playerCache.replace(GOLD_VALUE, currentGold - towerPrice);
+      playerCache.replace(GOLD_VALUE, currentGold - entity.getPrice());
       playerCache.replace(GOLD_SYNC, new Date());
     }
-    session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - towerPrice), null, null, new Long(towerPrice * -1))).toString());
+    session.getConnection().send(
+        Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, new Long(entity.getPrice() * -1)))
+            .toString());
   }
 
   public Long getId() {

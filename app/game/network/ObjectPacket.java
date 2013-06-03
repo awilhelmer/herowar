@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("serial")
 public abstract class ObjectPacket extends BasePacket {
-  
+
   protected long id;
   protected Vector3 position;
 

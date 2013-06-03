@@ -15,16 +15,13 @@ class Enemies extends PacketModel
 		'current' : 0
 		'quantity' : 0
 
-	initialize: (options) ->
-		super options
-
 	onPacket: (packet) ->
 		if packet 
 			current = if @get('current') then @get('current') else 0
 			if packet.type is PacketType.SERVER_OBJECT_IN
 				quantity = if @get('quantity') then @get('quantity') else 0
 				# TODO: we need here the info how much enemies are on the field for late joiner
-				@createEnemy packet.id, packet.name, packet.path
+				@createEnemy packet
 				@set 
 					'current': ++current
 					'quantity': ++quantity
@@ -32,17 +29,23 @@ class Enemies extends PacketModel
 				@set 'current', --current
 		return
 	
-	createEnemy: (id, name, pathId) ->
-		path = @getPathById pathId
-		loadedData = db.data().geometries[name]
-		dynObj = @createModel id, name, db.data().geometries[name], _.clone path.get 'waypoints'
-		scenegraph.addDynObject dynObj, id
+	createEnemy: (opts) ->
+		path = @getPathById opts.path
+		loadedData = db.data().geometries[opts.name]
+		dynObj = @createModel opts, db.data().geometries[opts.name], _.clone path.get 'waypoints'
+		scenegraph.addDynObject dynObj, opts.id
 		return
 			
-	createModel: (id, name, data, waypoints) ->
-		mesh = @createMesh id, name, data
+	createModel: (opts, data, waypoints) ->
+		mesh = @createMesh opts.id, opts.name, data
 		#mesh.userData.glowing = true
-		model = new Enemy id, name, mesh
+		model = new Enemy opts.id, opts.name, mesh
+		model.maxHealth = opts.health
+		model.currentHealth = opts.health
+		model.maxShield = opts.shield
+		model.currentShield = opts.shield
+		model.type = opts.utype
+		console.log 'Set values:', model.maxHealth, model.currentHealth, model.maxShield, model.currentShield, model.type
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z

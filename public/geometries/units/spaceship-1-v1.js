@@ -13,7 +13,7 @@
         "materials"     : 2
     },
 
-    "scale" : 0.050000,
+    "scale" : 0.030000,
 
 	"materials": [	{
 		"DbgColor" : 15658734,
@@ -37,7 +37,6 @@
 		"DbgIndex" : 1,
 		"DbgName" : "spaceship-1-v1-2",
 		"mapDiffuse" : "units/Spaceship-1-v1.png",
-		"mapDiffuseWrap" : ["repeat", "repeat"],
 		"blending" : "NormalBlending",
 		"colorAmbient" : [1.0, 1.0, 1.0],
 		"colorDiffuse" : [1.0, 1.0, 1.0],

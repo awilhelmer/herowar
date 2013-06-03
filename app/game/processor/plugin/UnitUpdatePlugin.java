@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import models.entity.game.Unit;
 import models.entity.game.Waypoint;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
@@ -46,10 +47,10 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static String SCORE_VALUE = "score";
   private final static String GOLD_VALUE = "gold";
   private final static String GOLD_SYNC = "gold_sync";
-  
+
   private final static long KILL_REWARD_SCORE = 200;
   private final static double KILL_REWARD_GOLD = 50;
-  
+
   public UnitUpdatePlugin(GameProcessor processor) {
     super(processor);
   }
@@ -101,7 +102,8 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
         playerCache.replace(GOLD_VALUE, newGold);
         playerCache.replace(GOLD_SYNC, new Date());
       }
-      session.getConnection().send(Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());
+      session.getConnection().send(
+          Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());
     }
   }
 
@@ -122,9 +124,10 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       if (waypoint != null) {
         com.ardor3d.math.Vector3 vWaypoint = waypoint.getPosition().getArdorVector();
         double distance = position.distance(vWaypoint);
-        //log.info(String.format("Distance %s", distance));
+        // log.info(String.format("Distance %s", distance));
         if (distance < 2 || distance > unit.getLastDistance()) {
-          //log.info("Unit " + unit.getId() + " reached " + waypoint.getName());
+          // log.info("Unit " + unit.getId() + " reached " +
+          // waypoint.getName());
           int index = unit.getActivePath().getWaypoints().indexOf(waypoint);
           if (index > -1 && index + 1 < unit.getActivePath().getWaypoints().size()) {
             unit.setActiveWaypoint(unit.getActivePath().getWaypoints().get(index + 1));
@@ -143,7 +146,8 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   @RuntimeTopicEventSubscriber(methodName = "getUnitTopic")
   public void createUnit(String topic, GameUnitEvent event) {
     Long id = getProcessor().getObjectIdGenerator();
-    UnitModel model = new UnitModel(id, event.getUnit().getId());
+    Unit entity = event.getUnit();
+    UnitModel model = new UnitModel(id, entity.getId(), entity);
     // Matrix3 m = model.getRotation().clone().applyRotationY(90);
     // model.setRotation(m);
     model.setActivePath(event.getPath());
@@ -161,8 +165,9 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       log.warn("No Waypoint found!");
     }
     getProcessor().getUnits().add(model);
-    log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", event.getUnit().getName(), event.getPath().getId()));
-    ObjectInPacket packet = new ObjectInPacket(id, event.getUnit().getName(), event.getPath().getId());
+    log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), event.getPath().getId()));
+    ObjectInPacket packet = new ObjectInPacket(id, entity.getName(), entity.getType().ordinal(), entity.getHealth(), entity.getShield(), event.getPath()
+        .getId());
     broadcast(packet);
   }
 

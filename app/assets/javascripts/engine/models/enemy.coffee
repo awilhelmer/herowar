@@ -4,15 +4,19 @@ scenegraph = require 'scenegraph'
 
 class Enemy extends AnimatedModel
 	
-	currentHealth: 1000
-	
-	maxHealth: 1000
-	
 	showHealth: true
 	
 	lastDistance: null
 	
 	waypoints: []
+
+	constructor: (@id, @name, @meshBody) ->
+		super @id, @name, @meshBody
+		@maxHealth = 0
+		@currentHealth = 0
+		@maxShield = 0
+		@currentShield = 0
+		@type = 0
 
 	update: (delta) ->
 		super delta
@@ -47,7 +51,7 @@ class Enemy extends AnimatedModel
 		return
 	
 	isDead: ->
-		@currentHealth <= 0
+		return @currentHealth <= 0
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]

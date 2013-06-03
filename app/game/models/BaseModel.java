@@ -16,21 +16,23 @@ import com.ardor3d.scenegraph.Mesh;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class BaseModel extends Mesh implements Serializable {
+public class BaseModel<T extends Serializable> extends Mesh implements Serializable {
   public static final ReadOnlyVector3 up = new Vector3(0, 1, 0);
 
   private Long id;
   private Long dbId;
+  private T entity;
   private double movespeed = 30;
 
   public BaseModel() {
     // empty
   }
 
-  public BaseModel(Long id, Long dbId) {
+  public BaseModel(Long id, Long dbId, T entity) {
     super();
     this.id = id;
     this.dbId = dbId;
+    this.entity = entity;
   }
 
   public void rotateTo(models.entity.game.Vector3 position, Double delta) {
@@ -103,6 +105,14 @@ public class BaseModel extends Mesh implements Serializable {
 
   public void setDbId(Long dbId) {
     this.dbId = dbId;
+  }
+
+  public T getEntity() {
+    return entity;
+  }
+
+  public void setEntity(T entity) {
+    this.entity = entity;
   }
 
   @Override

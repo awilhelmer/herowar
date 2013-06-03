@@ -1,11 +1,16 @@
 package game.models;
 
 import models.entity.game.Path;
+import models.entity.game.Unit;
 import models.entity.game.Waypoint;
 
+/**
+ * @author Sebastian Sachtleben
+ */
 @SuppressWarnings("serial")
-public class UnitModel extends BaseModel {
+public class UnitModel extends BaseModel<Unit> {
 
+  private Unit entity;
   private long currentHealth = 1000;
   private long maxHealth = 1000;
   private double lastDistance = Double.MAX_VALUE;
@@ -14,8 +19,8 @@ public class UnitModel extends BaseModel {
   private TowerModel lastHitTower;
   private boolean endPointReached = false;
 
-  public UnitModel(Long id, Long dbId) {
-    super(id, dbId);
+  public UnitModel(Long id, Long dbId, Unit entity) {
+    super(id, dbId, entity);
   }
 
   /**
@@ -70,6 +75,14 @@ public class UnitModel extends BaseModel {
 
   public Path getActivePath() {
     return activePath;
+  }
+
+  public Unit getEntity() {
+    return entity;
+  }
+
+  public void setEntity(Unit entity) {
+    this.entity = entity;
   }
 
   public long getCurrentHealth() {

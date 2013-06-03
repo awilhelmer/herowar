@@ -5,22 +5,22 @@ import game.GameSession;
 import java.util.Date;
 import java.util.Set;
 
+import models.entity.game.Tower;
+
 /**
  * The Tower is placed somewhere on the map by any player.
  * 
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class TowerModel extends BaseModel {
-  public static final int RANGE = 100;
-  public static final int RELOAD = 500;
+public class TowerModel extends BaseModel<Tower> {
 
   private UnitModel target;
   private GameSession session;
   private Date lastShot;
 
-  public TowerModel(Long id, Long dbId) {
-    super(id, dbId);
+  public TowerModel(Long id, Long dbId, Tower entity) {
+    super(id, dbId, entity);
     lastShot = new Date();
   }
 
@@ -47,7 +47,7 @@ public class TowerModel extends BaseModel {
     Date now = new Date();
     // TODO: only shot if towers looks in the proper direction (dunno how to
     // check this yet...)
-    if (target != null && inRange(target) && (now.getTime() - TowerModel.RELOAD >= getLastShot().getTime())) {
+    if (target != null && inRange(target) && (now.getTime() - getEntity().getReload() >= getLastShot().getTime())) {
       setLastShot(now);
       return true;
     }
@@ -99,7 +99,7 @@ public class TowerModel extends BaseModel {
    * @return boolean If model is in range.
    */
   public boolean inRange(UnitModel model) {
-    return getTranslation().distance(model.getTranslation()) <= RANGE ? true : false;
+    return getTranslation().distance(model.getTranslation()) <= getEntity().getCoverage() ? true : false;
   }
 
   // GETTER & SETTER
