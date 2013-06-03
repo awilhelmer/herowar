@@ -27,6 +27,7 @@ class Tower extends AnimatedModel
 			Weapon = require "models/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, damage
 			laser.getMainObject().position.copy position
+			laser.getMainObject().quaternion.copy @getMainObject().quaternion
 			scenegraph.addDynObject laser, laser.id
 		return
 
