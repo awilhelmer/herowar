@@ -82,7 +82,7 @@ class EditorScene extends Scene
 		EditorEventbus.dispatch 'render'
 
 	afterCreatingPaths: (wayId, pathId) ->
-		tools.addWaypoint.nextId = wayId
+		EditorEventbus.dispatch 'initIdChanged', 'wayoint', wayId
 		EditorEventbus.dispatch 'initIdChanged', 'pathing', pathId
 
 	afterCreatingWaves: (waveId) ->

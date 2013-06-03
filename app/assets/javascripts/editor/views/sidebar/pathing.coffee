@@ -69,4 +69,5 @@ class Pathing extends BasePropertiesView
 		if module is 'pathing'
 			log.info "Setting Start Id of pathing to #{startId}"
 			@nextId = startId
+			
 return Pathing

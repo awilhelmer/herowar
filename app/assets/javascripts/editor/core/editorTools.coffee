@@ -1,3 +1,4 @@
+EditorEventbus = require 'editorEventbus'
 ObjectHelper = require 'helper/objectHelper'
 PathingHelper = require 'helper/pathingHelper'
 AddEnvironment = require 'tools/addEnvironment'
@@ -12,6 +13,9 @@ class EditorTools extends Tools
 	
 	defaultTool: Constants.TOOL_SELECTION
 
+	bindEvents: ->
+		EditorEventbus.initIdChanged.add @setStartId
+
 	createHelpers: ->
 		@objectHelper = new ObjectHelper()
 		@pathingHelper = new PathingHelper()
@@ -22,5 +26,8 @@ class EditorTools extends Tools
 		@addWaypoint = new AddWaypoint @intersectHelper
 		@selectorObject = new SelectorObject @objectHelper, @intersectHelper
 		@brushMaterial = new BrushMaterial @intersectHelper, @selectorObject	
+
+	setStartId: (module, startId) =>
+		@addWaypoint.nextId = startId if module is 'waypoint'
 
 return EditorTools
