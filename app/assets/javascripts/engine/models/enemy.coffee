@@ -51,9 +51,7 @@ class Enemy extends AnimatedModel
 				@currentHealth = 0 if @currentHealth < 0
 			percent = @currentHealth / @maxHealth * 100
 			@_createBlackSmoke() if percent <= 50 and not @blackSmoke and @meshBody.name is 'Spaceship-1-v1'
-			if @currentHealth is 0
-				@setAnimation 'crdeath', true 
-				@blackSmoke.stop() if @blackSmoke
+			@kill() if @currentHealth is 0
 			events.trigger 'unit:damage', @, damage
 		return
 	
@@ -66,6 +64,8 @@ class Enemy extends AnimatedModel
 	kill: ->
 		@currentShield = 0
 		@currentHealth = 0
+		@setAnimation 'crdeath', true 
+		@blackSmoke.stop() if @blackSmoke
 		return
 		
 	_waypointArrivalCheck: ->

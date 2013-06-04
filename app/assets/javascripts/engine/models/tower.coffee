@@ -20,6 +20,8 @@ class Tower extends AnimatedModel
 			super delta, now
 
 	attack: (target, damage) ->
+		return unless @weapons.length isnt 0
+		damage = damage / @weapons.length
 		for weapon in @weapons
 			position = @getMainObject().localToWorld new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
 			muzzleFlash = new MuzzleFlash position: position
