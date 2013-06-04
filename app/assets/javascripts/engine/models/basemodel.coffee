@@ -48,6 +48,10 @@ class BaseModel
 		obj.visible = value for scene, obj of @root if value
 		return @getMainObject().visible
 	
+	kill: ->
+		@dispose()
+		return
+	
 	dispose: ->
 		scenegraph = require 'scenegraph'
 		scenegraph.removeDynObject @id

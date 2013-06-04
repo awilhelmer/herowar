@@ -39,6 +39,13 @@ class Enemy extends AnimatedModel
 	
 	hit: (damage) ->
 		unless @isDead()
+			if @currentShield
+				if @currentShield >= damage
+					@currentShield -= damage
+					damage = 0
+				else
+					damage -= @currentShield
+					@currentShield = 0					
 			@currentHealth -= damage
 			@currentHealth = 0 if @currentHealth < 0
 			percent = @currentHealth / @maxHealth * 100
@@ -50,6 +57,11 @@ class Enemy extends AnimatedModel
 	
 	isDead: ->
 		return @currentHealth <= 0
+	
+	kill: ->
+		@currentShield = 0
+		@currentHealth = 0
+		return
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]

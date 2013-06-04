@@ -19,8 +19,8 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 	
 	onObjectOut: (packet) ->
-		#console.log 'onObjectOut', scenegraph.getDynObject(packet.id)
-		#scenegraph.removeDynObject packet.id
+		obj = scenegraph.getDynObject packet.id
+		obj.kill()
 			
 	onTowerTarget: (packet) ->
 		tower = scenegraph.getDynObject packet.tower
@@ -35,9 +35,6 @@ class GameScene extends Scene
 		owner.attack target, packet.damage		
 		unless target.isDead()
 			target.hit packet.damage
-			currHealth = target.currentHealth
-			currHealth = 0 if currHealth < 0
-			percentage = Math.round currHealth / target.maxHealth * 100
 			events.trigger 'unit:damage', target, packet.damage
 			#console.log 'onTowerTarget', scenegraph.getDynObject(packet.tower), "hit target", scenegraph.getDynObject(packet.tower).target, "for", packet.damage, "Percent", percentage 
 
