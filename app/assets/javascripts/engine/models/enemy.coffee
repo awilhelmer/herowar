@@ -1,6 +1,7 @@
 AnimatedModel = require 'models/animatedModel'
 BlackSmoke = require 'effects/blackSmoke'
 scenegraph = require 'scenegraph'
+events = require 'events'
 
 class Enemy extends AnimatedModel
 	
@@ -8,6 +9,7 @@ class Enemy extends AnimatedModel
 
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
+		@damageIncoming = 0
 		@maxHealth = 0
 		@currentHealth = 0
 		@maxShield = 0
@@ -38,25 +40,28 @@ class Enemy extends AnimatedModel
 					break
 	
 	hit: (damage) ->
+		@damageIncoming -= damage
 		unless @isDead()
-			if @currentShield
-				if @currentShield >= damage
-					@currentShield -= damage
-					damage = 0
-				else
-					damage -= @currentShield
-					@currentShield = 0					
-			@currentHealth -= damage
-			@currentHealth = 0 if @currentHealth < 0
+			if @currentShield >= damage
+				@currentShield -= damage
+			else
+				realDamage = damage - @currentShield
+				@currentShield = 0					
+				@currentHealth -= realDamage
+				@currentHealth = 0 if @currentHealth < 0
 			percent = @currentHealth / @maxHealth * 100
 			@_createBlackSmoke() if percent <= 50 and not @blackSmoke and @meshBody.name is 'Spaceship-1-v1'
 			if @currentHealth is 0
 				@setAnimation 'crdeath', true 
 				@blackSmoke.stop() if @blackSmoke
+			events.trigger 'unit:damage', @, damage
 		return
 	
 	isDead: ->
 		return @currentHealth <= 0
+	
+	isSoonDead: ->
+		return @currentHealth <= 0 or @currentHealth + @currentShield + @maxHealth * 0.1 <= @damageIncoming
 	
 	kill: ->
 		@currentShield = 0

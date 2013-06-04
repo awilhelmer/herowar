@@ -13,6 +13,7 @@ class LaserModel extends MeshModel
 	constructor: (@id, @owner, @target, @damage) ->
 		@meshBody = @createMeshBody()
 		super @id, "Shot-#{@id}", @meshBody
+		@target.damageIncoming += @damage
 
 	createMeshBody: ->
 		geometry = new THREE.CubeGeometry 1, 1, 8.5
@@ -29,6 +30,7 @@ class LaserModel extends MeshModel
 			@rotateTo targetPosition, delta
 			@move delta
 		else
+			@target.hit @damage
 			@dispose()
 
 return LaserModel

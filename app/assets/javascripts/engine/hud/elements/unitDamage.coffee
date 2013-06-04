@@ -11,6 +11,7 @@ class UnitDamageHudElement extends BaseHUDElement
 		@positionWorld = @unit.getMainObject().position
 		@positionScreen = objectUtils.positionToScreen @unit, @getHalfWidth(), @getHalfHeight(), view.get 'cameraScene'
 		@birthDate	= Date.now()
+		@color = if @unit.currentShield > 0 then '32,124,202' else '205,24,31'
 
 	update: (delta, now) ->
 		age	= now - @birthDate
@@ -18,7 +19,7 @@ class UnitDamageHudElement extends BaseHUDElement
 		@active = false if age >= @maxAge
 		width = @canvas.height / 20
 		canvasUtils.setShadow @ctx, 0, 0, 0
-		@ctx.fillStyle = "rgba(205,24,31, #{opacity})"
+		@ctx.fillStyle = "rgba(#{@color}, #{opacity})"
 		canvasUtils.drawText @ctx, "-#{@damage}", @positionScreen.x, @positionScreen.y, width
 		@positionScreen.y -= 2
 		return
