@@ -21,13 +21,19 @@ class Tower extends AnimatedModel
 
 	attack: (target, damage) ->
 		return unless @weapons.length isnt 0
-		damage = damage / @weapons.length
+		damagePerWeapon = Math.round damage / @weapons.length
 		for weapon in @weapons
+			if damagePerWeapon > damage
+				currentDamage = damage
+				damage = 0
+			else
+				currentDamage = damagePerWeapon
+				damage -= damagePerWeapon
 			position = @getMainObject().localToWorld new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
 			muzzleFlash = new MuzzleFlash position: position
 			@effects.push muzzleFlash
 			Weapon = require "models/#{weapon.type.toLowerCase()}"
-			laser = new Weapon @shotId++, @, target, damage
+			laser = new Weapon @shotId++, @, target, currentDamage
 			laser.getMainObject().position.copy position
 			laser.getMainObject().quaternion.copy @getMainObject().quaternion
 			scenegraph.addDynObject laser, laser.id
