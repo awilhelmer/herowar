@@ -9,10 +9,13 @@ class BaseModel
 	moveSpeed: 30
 	
 	glowColor: 0x88ccff
+	
+	glowing: false
 
 	constructor: (root) ->
 		@root = {}
 		@root.main = root
+		@glowMeshes = []
 		@_cloneRoot()
 	
 	update: (delta, now) ->
@@ -58,6 +61,16 @@ class BaseModel
 		if _.isArray @root objectUtils.dispose obj for obj in @root	else objectUtils.dispose @root
 		return
 
+	enableGlow: ->
+		@glowing = true
+		mesh.material = @_getGlowMaterials mesh for mesh in @glowMeshes
+		return
+		
+	disableGlow: ->
+		@glowing = false
+		mesh.material = @_getGlowMaterials mesh for mesh in @glowMeshes
+		return
+
 	_cloneRoot: ->
 		for scene in ['glow']
 			@root[scene] = @_copyObject null, @root.main, scene
@@ -72,10 +85,12 @@ class BaseModel
 			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
 			destObject	= new THREE.MorphAnimMesh geometry, material
 			destObject.parseAnimations()
+			@glowMeshes.push destObject if scene is 'glow'
 		else if srcObject instanceof THREE.Mesh
 			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
 			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
 			destObject	= new THREE.Mesh geometry, material
+			@glowMeshes.push destObject if scene is 'glow'
 		else if srcObject instanceof THREE.Object3D
 			destObject	= new THREE.Object3D()
 		destObject.position.copy srcObject.position
@@ -96,7 +111,7 @@ class BaseModel
 	_getGlowMaterials: (obj) ->
 		if obj instanceof THREE.Mesh
 			isAnimated = obj instanceof THREE.MorphAnimMesh
-			glowMaterial = if obj.userData.glowing then @_getGlowOnMaterial isAnimated else @_getGlowOffMaterial isAnimated
+			glowMaterial = if obj.userData.glowing or @glowing then @_getGlowOnMaterial isAnimated else @_getGlowOffMaterial isAnimated
 			if obj.material instanceof THREE.MeshFaceMaterial
 				materials = []
 				for mat in obj.material.materials

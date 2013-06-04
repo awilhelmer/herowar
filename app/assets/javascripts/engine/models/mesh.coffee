@@ -74,6 +74,8 @@ class MeshModel extends BaseModel
 		material = new THREE.MeshBasicMaterial color: 0xff0000, wireframe: true 
 		mesh = new THREE.Mesh geometry, material
 		mesh.name = 'boundingBox'
+		mesh.position.copy @meshBody.position
+		mesh.rotation.copy @meshBody.rotation
 		obj.add mesh
 		return
 

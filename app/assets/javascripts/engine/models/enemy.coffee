@@ -6,6 +6,8 @@ events = require 'events'
 class Enemy extends AnimatedModel
 	
 	showHealth: true
+	
+	glowing: false
 
 	constructor: (@id, @name, @meshBody) ->
 		super @id, @name, @meshBody
@@ -15,6 +17,7 @@ class Enemy extends AnimatedModel
 		@maxShield = 0
 		@currentShield = 0
 		@type = 0
+		@glowIsActive = false
 		@lastDistance = null
 		@waypoints = []
 
@@ -44,6 +47,13 @@ class Enemy extends AnimatedModel
 		unless @isDead()
 			if @currentShield >= damage
 				@currentShield -= damage
+				unless @glowIsActive
+					@glowIsActive = true
+					@enableGlow()
+					setTimeout =>
+						@disableGlow()
+						@glowIsActive = false
+					, 50
 			else
 				realDamage = damage - @currentShield
 				@currentShield = 0					

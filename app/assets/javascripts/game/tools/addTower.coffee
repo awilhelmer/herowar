@@ -35,7 +35,6 @@ class AddTowerTool extends AddObject
 		model.active = true
 		model.range = tower.get 'coverage'
 		model.weapons = tower.get 'weapons'
-		console.log "Weapons", model.weapons
 		scenegraph.addDynObject model, packet.objectId
 
 	onLeaveTool: ->
