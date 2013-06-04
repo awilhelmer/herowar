@@ -122,7 +122,7 @@ materialHelper =
 	# @see MaterialManagerMenu for all properties 
 	transformMaterial:(material, materialId) ->
 		if @isShader material.attributes
-			result = new THREE.MeshShaderMaterial()
+			result = new THREE.ShaderMaterial()
 		else
 			result = new THREE.MeshBasicMaterial()
 		result.name = 'matID' + materialId
@@ -149,9 +149,9 @@ materialHelper =
 				when 'wireframeLinewidth'
 					result.wireframeLinewidth = value
 				when 'attributes'
-					result.attributes = value
+					result.attributes = eval "(#{value})"
 				when 'uniforms'
-					result.uniforms = value
+					result.uniforms = eval "(#{value})"
 				when 'vertexShader'
 					result.vertexShader = value
 				when 'fragmentShader'

@@ -47,6 +47,7 @@ import game.network.handler.WebSocketHandler;
  * @author Sebastian Sachtleben
  */
 public class Global extends GlobalSettings {
+  private static final Logger.ALogger log = Logger.of(Global.class);
 
   @Override
   public void onStart(Application app) {
@@ -91,7 +92,7 @@ public class Global extends GlobalSettings {
     JPA.withTransaction(new play.libs.F.Callback0() {
       @Override
       public void invoke() throws Throwable {
-    	createLevelRanges();
+        createLevelRanges();
         initialSecurityRoles();
         initGameServer();
         EnvironmentImporter.getInstance().sync();
@@ -202,17 +203,27 @@ public class Global extends GlobalSettings {
       try {
         File file = Play.application().getFile("external" + File.separator + "sql" + File.separator + "defaultmap.sql");
         bReader = new BufferedReader(new FileReader(file));
+        StringBuffer sql = new StringBuffer();
         String line;
-        while ((line = bReader.readLine()) != null) {
-          if (line.startsWith("--") || line.trim().isEmpty())
+        while ((line = bReader.readLine().trim()) != null) {
+          if (line.startsWith("--") || line.isEmpty())
             continue;
-          final String tmp = line;
-          sess.doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-              connection.createStatement().execute(tmp);
-            }
-          });
+
+          sql.append(line);
+          if (line.endsWith(");")) {
+
+            final String tmp = sql.toString();
+
+            sql = new StringBuffer();
+            log.info(String.format("Process SQL: %s", tmp));
+            sess.doWork(new Work() {
+              @Override
+              public void execute(Connection connection) throws SQLException {
+                connection.createStatement().execute(tmp);
+              }
+            });
+
+          }
 
         }
       } catch (Exception ex) {
@@ -227,17 +238,17 @@ public class Global extends GlobalSettings {
       }
     }
   }
-  
+
   private void createLevelRanges() {
-	  LevelRange range = JPA.em().find(LevelRange.class, 1L);
-	  if (range != null) {
-		  return;
-	  }
-	  Logger.info("Creating level ranges");
-	  JPA.em().persist(new LevelRange(5000L));
-	  JPA.em().persist(new LevelRange(15000L));
-	  JPA.em().persist(new LevelRange(50000L));
-	  JPA.em().persist(new LevelRange(250000L));
-	  JPA.em().persist(new LevelRange(750000L));
+    LevelRange range = JPA.em().find(LevelRange.class, 1L);
+    if (range != null) {
+      return;
+    }
+    Logger.info("Creating level ranges");
+    JPA.em().persist(new LevelRange(5000L));
+    JPA.em().persist(new LevelRange(15000L));
+    JPA.em().persist(new LevelRange(50000L));
+    JPA.em().persist(new LevelRange(250000L));
+    JPA.em().persist(new LevelRange(750000L));
   }
 }
