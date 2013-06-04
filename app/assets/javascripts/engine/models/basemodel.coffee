@@ -1,4 +1,5 @@
-GeometryUtils = require 'util/geometryUtils'
+geometryUtils = require 'util/geometryUtils'
+objectUtils = require 'util/objectUtils'
 db = require 'database'
 
 class BaseModel
@@ -47,9 +48,14 @@ class BaseModel
 		obj.visible = value for scene, obj of @root if value
 		return @getMainObject().visible
 	
+	kill: ->
+		@dispose()
+		return
+	
 	dispose: ->
 		scenegraph = require 'scenegraph'
 		scenegraph.removeDynObject @id
+		if _.isArray @root objectUtils.dispose obj for obj in @root	else objectUtils.dispose @root
 		return
 
 	_cloneRoot: ->
@@ -84,7 +90,7 @@ class BaseModel
 	
 	_copyGeometry: (name, scene, geometry) ->
 			geo = db.geometry name, scene
-			geo = GeometryUtils.clone geometry unless geo
+			geo = geometryUtils.clone geometry unless geo
 			return geo
 	
 	_getGlowMaterials: (obj) ->

@@ -51,6 +51,16 @@ public class UnitModel extends BaseModel<Unit> {
     if (getCurrentHealth() <= 0) {
       return;
     }
+    if (getCurrentShield() > 0) {
+      long newShield = getCurrentShield() - damage;
+      if (newShield >= 0) {
+        setCurrentShield(newShield);
+        damage = 0;
+      } else {
+        damage -= getCurrentShield();
+        setCurrentShield(0);
+      }
+    }
     long newHealth = getCurrentHealth() - damage;
     if (newHealth <= 0) {
       setLastHitTower(tower);
