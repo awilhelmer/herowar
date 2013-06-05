@@ -36,7 +36,7 @@ class World extends Backbone.Model
 		geo.userData = @get('terrain').geometry.userData
 		unless geo.userData
 			geo.userData = matIdMapper: matIdMapper
-		unless geo.userData.matIdMapper
+		unless geo.userData.matIdMapper?.length > 0
 			geo.userData.matIdMapper = matIdMapper
 		obj = @createTerrainMesh(geo)
 		for mesh in obj.children
