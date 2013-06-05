@@ -87,12 +87,12 @@ insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, so
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (5, 'Wave-5', 5, 50, 60, 102, 2, 4);
 
 insert into wave_units (Wave_id, units_id)
-select 1, u.id from unit u where u.name = "Spaceship-1-v1";
+(select 1, u.id from unit u where u.name = "Spaceship-1-v1");
 insert into wave_units (Wave_id, units_id)
-select 2, u.id from unit u where u.name = "Ratamahatta";
+(select 2, u.id from unit u where u.name = "Ratamahatta");
 insert into wave_units (Wave_id, units_id)
-select 3, u.id from unit u where u.name = "Spaceship-1-v1";
+(select 3, u.id from unit u where u.name = "Spaceship-1-v1");
 insert into wave_units (Wave_id, units_id)
-select 4, u.id from unit u where u.name = "Ratamahatta";
+(select 4, u.id from unit u where u.name = "Ratamahatta");
 insert into wave_units (Wave_id, units_id)
-select 5, u.id from unit u where u.name = "Spaceship-1-v1";
+(select 5, u.id from unit u where u.name = "Spaceship-1-v1");
