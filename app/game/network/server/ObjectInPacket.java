@@ -2,6 +2,7 @@ package game.network.server;
 
 import game.network.ObjectPacket;
 import game.network.PacketType;
+import models.entity.game.Unit;
 
 /**
  * The ObjectInPacket will be send from server to client to tell a new object
@@ -16,15 +17,19 @@ public class ObjectInPacket extends ObjectPacket {
   protected int utype;
   protected int health;
   protected int shield;
+  protected boolean burning;
+  protected boolean explode;
   protected long path;
 
-  public ObjectInPacket(long id, String name, int utype, int health, int shield, long path) {
+  public ObjectInPacket(long id, Unit unit, long path) {
     super(id, null);
     this.type = PacketType.ObjectInPacket;
-    this.name = name;
-    this.utype = utype;
-    this.health = health;
-    this.shield = shield;
+    this.name = unit.getName();
+    this.utype = unit.getType().ordinal();
+    this.health = unit.getHealth();
+    this.shield = unit.getShield();
+    this.burning = unit.getBurning();
+    this.explode = unit.getExplode();
     this.path = path;
   }
 
@@ -58,6 +63,22 @@ public class ObjectInPacket extends ObjectPacket {
 
   public void setShield(int shield) {
     this.shield = shield;
+  }
+
+  public boolean isBurning() {
+    return burning;
+  }
+
+  public void setBurning(boolean burning) {
+    this.burning = burning;
+  }
+
+  public boolean isExplode() {
+    return explode;
+  }
+
+  public void setExplode(boolean explode) {
+    this.explode = explode;
   }
 
   public long getPath() {

@@ -117,6 +117,8 @@ public class GamesHandler implements Serializable {
 
   private void sendPreloadDataPacket(WebSocketConnection connection, GameProcessor game) {
     // TODO: replace hardcoded preload data
+    java.util.Map<String, String> images = new HashMap<String, String>();
+    images.put("explosion", "assets/images/game/textures/effects/explosion.png");
     java.util.Map<String, String> textures = new HashMap<String, String>();
     textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
     textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
@@ -140,7 +142,7 @@ public class GamesHandler implements Serializable {
       Tower tower = iter3.next();
       geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());
     }
-    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(textures, texturesCube, geometries));
+    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(images, textures, texturesCube, geometries));
     connection.send(Json.toJson(packet).toString());
   }
 

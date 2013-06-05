@@ -12,6 +12,7 @@ class BaseModel
 		@root = {}
 		@root.main = root
 		@glowMeshes = []
+		@isDisposed = false
 		@_cloneRoot()
 	
 	update: (delta, now) ->
@@ -52,9 +53,11 @@ class BaseModel
 		return
 	
 	dispose: ->
-		scenegraph = require 'scenegraph'
-		scenegraph.removeDynObject @id
-		if _.isArray @root objectUtils.dispose obj for obj in @root	else objectUtils.dispose @root
+		unless @isDisposed
+			@isDisposed = true
+			scenegraph = require 'scenegraph'
+			scenegraph.removeDynObject @id
+			if _.isArray @root objectUtils.dispose obj for obj in @root	else objectUtils.dispose @root
 		return
 
 	enableGlow: ->

@@ -32,6 +32,7 @@ class AddTowerTool extends AddObject
 		model.getMainObject().position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		model.range = tower.get 'coverage'
+		model.reload = tower.get 'reload'
 		model.weapons = tower.get 'weapons'
 		scenegraph.addDynObject model, packet.objectId
 		return

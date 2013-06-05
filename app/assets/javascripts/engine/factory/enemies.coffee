@@ -12,10 +12,7 @@ enemies =
 		return
 
 	_createModel: (opts, waypoints) ->
-		model = new Enemy opts.id, opts.name, @_createMesh opts.id, opts.name
-		model.setHealth opts.health
-		model.setShield opts.shield
-		model.type = opts.utype
+		model = new Enemy opts, @_createMesh opts.id, opts.name
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z

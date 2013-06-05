@@ -1,6 +1,6 @@
 AnimatedModel = require 'models/animatedModel'
 BlackSmoke = require 'effects/blackSmoke'
-scenegraph = require 'scenegraph'
+Explosion = require 'effects/explosion'
 events = require 'events'
 
 class Enemy extends AnimatedModel
@@ -9,21 +9,27 @@ class Enemy extends AnimatedModel
 	
 	glowing: false
 
-	constructor: (@id, @name, @meshBody) ->
-		super @id, @name, @meshBody
+	constructor: (opts, @meshBody) ->
+		opts = _.extend {}, opts
+		super opts.id, opts.name, @meshBody
+		@initialize opts
+		
+	initialize: (opts) ->
+		@setHealth opts.health
+		@setShield opts.shield
+		@type = opts.type
+		@burning = opts.burning
+		@explode = opts.explode
 		@damageIncoming = 0
-		@maxHealth = 0
-		@currentHealth = 0
-		@maxShield = 0
-		@currentShield = 0
-		@type = 0
 		@glowIsActive = false
 		@lastDistance = null
+		@dead = false
 		@waypoints = []
+		@effects.push new BlackSmoke @ if @burning
+		return
 
 	update: (delta, now) ->
 		super delta, now
-		@blackSmoke.update delta, now / 1000, @_getBlackSmokePosition() if @blackSmoke
 		if not @isDead()
 			return if @waypoints.length is 0
 			@_waypointArrivalCheck()
@@ -33,14 +39,18 @@ class Enemy extends AnimatedModel
 			@rotateTo waypoint.position, delta
 			@move delta
 		else if @isDead() and not @activeAnimation
-			for material in @meshBody.material.materials
-				opacity = material.opacity - delta
-				if opacity > 0
-					material.opacity = opacity
-				else
-					@blackSmoke.dispose() if @blackSmoke
+			setTimeout =>
+				if @explode
 					@dispose()
-					break
+					return
+				for material in @meshBody.material.materials
+					opacity = material.opacity - delta
+					if opacity > 0
+						material.opacity = opacity
+					else
+						@dispose()
+						return
+			, 2000
 	
 	hit: (damage) ->
 		@damageIncoming -= damage
@@ -54,7 +64,6 @@ class Enemy extends AnimatedModel
 				@currentHealth -= realDamage
 				@currentHealth = 0 if @currentHealth < 0
 			percent = @currentHealth / @maxHealth * 100
-			@_createBlackSmoke() if percent <= 50 and not @blackSmoke and @meshBody.name is 'Spaceship-1-v1'
 			@kill() if @currentHealth is 0
 			events.trigger 'unit:damage', @, damage
 		return
@@ -66,11 +75,16 @@ class Enemy extends AnimatedModel
 		return @currentHealth <= 0 or @currentHealth + @currentShield + @maxHealth * 0.1 <= @damageIncoming
 	
 	kill: ->
-		@currentShield = 0
-		@currentHealth = 0
-		@setAnimation 'crdeath', true 
-		@blackSmoke.stop() if @blackSmoke
+		unless @dead
+			@dead = true
+			@currentShield = 0
+			@currentHealth = 0
+			@setAnimation 'crdeath', true
+			@effects.push new Explosion @ if @explode
 		return
+	
+	getHealthPercentage: ->
+		return @currentHealth / @maxHealth * 100
 	
 	setHealth: (@currentHealth, max) ->
 		if max then @maxHealth = max else @maxHealth = @currentHealth
@@ -87,7 +101,7 @@ class Enemy extends AnimatedModel
 		setTimeout =>
 			@disableGlow()
 			@glowIsActive = false
-		, 50		
+		, 100		
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
@@ -99,18 +113,7 @@ class Enemy extends AnimatedModel
 		return
 
 	_waypointReached: (waypoint) ->
-		#console.log "Enemy #{@name}-#{@id} reached #{waypoint.name}"
 		@waypoints.splice 0, 1
 		@dispose() if @waypoints.length is 0
-
-	_createBlackSmoke: ->
-		@blackSmoke = new BlackSmoke scenegraph.scene()
-		@blackSmoke.start @_getBlackSmokePosition()
-
-	_getBlackSmokePosition: ->
-		boundingBox = @meshBody.geometry.boundingBox
-		position = @root.main.position.clone()
-		position.y += (boundingBox.max.y - boundingBox.min.y) * @meshBody.scale.y / 2
-		return position
 
 return Enemy

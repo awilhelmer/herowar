@@ -46,6 +46,11 @@ class AnimatedModel extends MeshModel
 			@activeAnimation = name
 		return
 
+	dispose: ->
+		effect.dispose() for effect in @effects
+		@effects.length = 0
+		super()
+
 	_findAnimatedMeshes: ->
 		meshes = []
 		for scene, obj of @root

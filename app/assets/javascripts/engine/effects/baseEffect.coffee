@@ -5,4 +5,7 @@ class BaseEffect
 		
 	update: (delta, now) ->
 
+	dispose: ->
+		@active = false
+
 return BaseEffect

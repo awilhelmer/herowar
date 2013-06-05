@@ -33,12 +33,14 @@ public class Unit implements Serializable {
 
   @NotNull
   private String name;
-  
+
   private Integer health = 0;
   private Integer shield = 0;
-  private UnitType type; 
+  private UnitType type;
+  private Boolean burning = false;
+  private Boolean explode = false;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy="parent")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
   private Set<Unit> children = new HashSet<Unit>();
 
   @JsonIgnore
@@ -66,7 +68,7 @@ public class Unit implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
-  
+
   public Integer getHealth() {
     return health;
   }
@@ -89,6 +91,22 @@ public class Unit implements Serializable {
 
   public void setType(UnitType type) {
     this.type = type;
+  }
+
+  public Boolean getBurning() {
+    return burning;
+  }
+
+  public void setBurning(Boolean burning) {
+    this.burning = burning;
+  }
+
+  public Boolean getExplode() {
+    return explode;
+  }
+
+  public void setExplode(Boolean explode) {
+    this.explode = explode;
   }
 
   public Set<Unit> getChildren() {
@@ -124,6 +142,8 @@ public class Unit implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((burning == null) ? 0 : burning.hashCode());
+    result = prime * result + ((explode == null) ? 0 : explode.hashCode());
     result = prime * result + ((health == null) ? 0 : health.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -141,6 +161,16 @@ public class Unit implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Unit other = (Unit) obj;
+    if (burning == null) {
+      if (other.burning != null)
+        return false;
+    } else if (!burning.equals(other.burning))
+      return false;
+    if (explode == null) {
+      if (other.explode != null)
+        return false;
+    } else if (!explode.equals(other.explode))
+      return false;
     if (health == null) {
       if (other.health != null)
         return false;

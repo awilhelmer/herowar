@@ -7,6 +7,7 @@ class MuzzleFlash extends BaseEffect
 	maxAge: 200
 	
 	constructor: (@opts) ->
+		super()
 		data = db.data()
 		if data['textures'] and data['textures']['particle001']
 			@texture = db.data()['textures']['particle001']
@@ -14,7 +15,6 @@ class MuzzleFlash extends BaseEffect
 			@texture = THREE.ImageUtils.loadTexture 'assets/images/game/textures/effects/particle001.png'
 		@birthDate	= Date.now()
 		@_createParticle()
-		super()
 		
 	update: (delta, now) ->
 		age	= now - @birthDate
@@ -23,8 +23,7 @@ class MuzzleFlash extends BaseEffect
 			@sprite.position = @opts.target.localToWorld @opts.origin.clone()
 			@material.opacity = opacity
 		else
-			@active = false
-			scenegraph.scene().remove @sprite
+			@dispose()
 		return
 	
 	_createParticle: ->
@@ -40,5 +39,9 @@ class MuzzleFlash extends BaseEffect
 		@sprite.scale.set 0.075, 0.075, 0.075
 		scenegraph.scene().add @sprite
 		return
+
+	dispose: ->
+			scenegraph.scene().remove @sprite
+			super()
 	
 return MuzzleFlash

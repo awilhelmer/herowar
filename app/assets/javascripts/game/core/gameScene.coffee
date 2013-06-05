@@ -19,6 +19,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 	
 	onObjectOut: (packet) ->
+		#console.log 'onObjectOut', packet.id
 		obj = scenegraph.getDynObject packet.id
 		setTimeout =>
 			obj.kill() if obj
@@ -34,6 +35,7 @@ class GameScene extends Scene
 		target = owner.target
 		return unless owner and target
 		owner.attack target, packet.damage unless target.isSoonDead()
+		#console.log 'onTowerAttack', target.id, packet.damage, target.isSoonDead()
 		
 	onGameDefeat: ->
 		@onFinish 'defeat'

@@ -1,5 +1,7 @@
 {
     "health" : 2000,
 	"shield" : 500,
-	"type" : "AIRPLANE"
+	"type" : "AIRPLANE",
+	"burning" : true,
+	"explode" : true
 }

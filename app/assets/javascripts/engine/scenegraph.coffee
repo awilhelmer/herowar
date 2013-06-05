@@ -37,14 +37,14 @@ sceneGraph =
 		dynamicObjects = _data.get 'dynamicObjects'
 		unless _.has dynamicObjects, id
 			dynamicObjects[id] = object
-			@_addToScenes object
+			@addToScenes object
 			_data.trigger 'change:dynamicObjects'
 			_data.trigger 'change'
 
 	removeDynObject: (id) ->
 		dynamicObjects = _data.get 'dynamicObjects'
 		if _.has dynamicObjects, id
-			@_removeFromScenes dynamicObjects[id]
+			@removeFromScenes dynamicObjects[id]
 			delete dynamicObjects[id]
 			_data.trigger 'change:dynamicObjects'
 			_data.trigger 'change'
@@ -66,7 +66,7 @@ sceneGraph =
 		obj.userData.listIndex = staticObjects[id].length
 		obj.userData.dbId = id
 		staticObjects[id].push obj
-		@_addToScenes obj
+		@addToScenes obj
 		_data.trigger 'change:staticObjects'
 		_data.trigger 'change'
 	
@@ -75,7 +75,7 @@ sceneGraph =
 		if _.has staticObjects, obj.dbId
 			threeModel = staticObjects[obj.dbId][obj.listIndex]
 			arrIndex = threeModel.userData.listIndex
-			@_removeFromScenes threeModel
+			@removeFromScenes threeModel
 			if staticObjects[obj.dbId][arrIndex]
 				staticObjects[obj.dbId].slice arrIndex, 1
 		_data.trigger 'change:staticObjects'
@@ -86,10 +86,10 @@ sceneGraph =
 		return @map
 
 	setMap: (mesh) ->
-		@_removeFromScenes @map
+		@removeFromScenes @map
 		Terrain = require 'models/terrain'
 		@map = new Terrain @getNextId(), 'Terrain', mesh
-		@_addToScenes @map
+		@addToScenes @map
 		return @map
 
 	getNextId: ->
@@ -124,14 +124,14 @@ sceneGraph =
 		scene.add directionalLight
 		return scene
 
-	_addToScenes: (object) ->
+	addToScenes: (object) ->
 		return unless object
 		@scene(scene).add obj for scene, obj of object.root
 		return
 
-	_removeFromScenes: (object) ->
+	removeFromScenes: (object) ->
 		return unless object
-		@scene(scene).remove obj for scene, obj of object.root
+		@scene(scene).remove obj for scene, obj of object.root when obj.parent
 		return
 
 return sceneGraph

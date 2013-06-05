@@ -23,7 +23,7 @@ class GameHUD extends BaseHUD
 			setTimeout =>
 				@elements.push new UnitDamage @canvas, @view, unit, __damage__[unit.id]
 				delete __damage__[unit.id]
-			, 100
+			, 200
 		return
 
 return GameHUD
