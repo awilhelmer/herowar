@@ -20,21 +20,21 @@ class GameScene extends Scene
 	
 	onObjectOut: (packet) ->
 		obj = scenegraph.getDynObject packet.id
-		obj.kill() if obj
+		setTimeout =>
+			obj.kill() if obj
+		, 500
 			
 	onTowerTarget: (packet) ->
 		tower = scenegraph.getDynObject packet.tower
 		target = scenegraph.getDynObject packet.target
 		tower.target = target if tower and target
-		#console.log 'onTowerTarget', scenegraph.getDynObject(packet.tower), "target now", scenegraph.getDynObject(packet.target)
 		
 	onTowerAttack: (packet) ->
 		owner = scenegraph.getDynObject packet.tower
 		target = owner.target
 		return unless owner and target
 		owner.attack target, packet.damage unless target.isSoonDead()
-		#console.log 'onTowerTarget', scenegraph.getDynObject(packet.tower), "hit target", scenegraph.getDynObject(packet.tower).target, "for", packet.damage, "Percent", percentage 
-
+		
 	onGameDefeat: ->
 		@onFinish 'defeat'
 		return

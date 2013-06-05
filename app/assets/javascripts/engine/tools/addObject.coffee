@@ -1,5 +1,6 @@
 SelectorTerrain = require 'tools/selectorTerrain'
 materialHelper = require 'helper/materialHelper'
+meshesFactory = require 'factory/meshes'
 scenegraph = require 'scenegraph'
 db = require 'database'
 
@@ -34,28 +35,19 @@ class AddObject extends SelectorTerrain
 		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
 
 	onLoadGeometry: (geometry, materials, json) =>
-		unless json
-			json = _.extend id: @tool.get('currentObjectId'), json 
-		obj = @createThreeObject geometry, materials, @tool.get('currentObjectName'), json
+		obj = @createThreeObject @tool.get('currentObjectId'), @tool.get('currentObjectName')
 		obj.visible = false
 		@tool.set 'currentObject', obj
 		@addMesh()
 	
-	createThreeObject: (geometry, materials, name, json) ->
-		mesh = @createMesh geometry, materials, name, json
+	createThreeObject: (id, name) ->
 		obj = new THREE.Object3D()
-		obj.name = mesh.name
-		obj.add mesh
+		obj.name = name
+		obj.add @createMesh id, name
 		return obj
 		
-	createMesh: (geometry, materials, name, json) ->
-		mesh = materialHelper.createMesh geometry, materials, name, json
-		if _.isObject json
-			mesh.scale.x = json.scale
-			mesh.scale.y = json.scale
-			mesh.scale.z = json.scale
-		mesh.geometry.computeBoundingBox()
-		return mesh
+	createMesh: (id, name) ->
+		return meshesFactory.create id, name
 
 	addMesh: ->
 	

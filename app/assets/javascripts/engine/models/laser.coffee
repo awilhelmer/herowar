@@ -23,10 +23,9 @@ class LaserModel extends MeshModel
 		return mesh
 
 	update: (delta, now) ->
-		targetPosition = @target.getMainObject().position.clone()
-		#targetPosition.y = @meshBody.position.y
+		targetPosition = @target.getMainObject().position
 		distance = @getMainObject().position.distanceTo targetPosition
-		if distance > @distanceToDispose + @meshBody.position.y
+		if distance > @distanceToDispose
 			@rotateTo targetPosition, delta
 			@move delta
 		else

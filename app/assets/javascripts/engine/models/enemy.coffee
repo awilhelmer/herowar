@@ -47,13 +47,7 @@ class Enemy extends AnimatedModel
 		unless @isDead()
 			if @currentShield >= damage
 				@currentShield -= damage
-				unless @glowIsActive
-					@glowIsActive = true
-					@enableGlow()
-					setTimeout =>
-						@disableGlow()
-						@glowIsActive = false
-					, 50
+				@showShield() 
 			else
 				realDamage = damage - @currentShield
 				@currentShield = 0					
@@ -77,6 +71,23 @@ class Enemy extends AnimatedModel
 		@setAnimation 'crdeath', true 
 		@blackSmoke.stop() if @blackSmoke
 		return
+	
+	setHealth: (@currentHealth, max) ->
+		if max then @maxHealth = max else @maxHealth = @currentHealth
+		return
+		
+	setShield: (@currentShield, max) ->
+		if max then @maxShield = max else @maxShield = @currentShield
+		return
+
+	showShield: ->
+		return if @glowIsActive
+		@glowIsActive = true
+		@enableGlow()
+		setTimeout =>
+			@disableGlow()
+			@glowIsActive = false
+		, 50		
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]

@@ -18,12 +18,13 @@ class MuzzleFlash extends BaseEffect
 		
 	update: (delta, now) ->
 		age	= now - @birthDate
-		opacity = 1 - age / @maxAge
 		if age < @maxAge
+			opacity = 1 - age / @maxAge
+			@sprite.position = @opts.target.localToWorld @opts.origin.clone()
 			@material.opacity = opacity
 		else
 			@active = false
-			scenegraph.scene().remove @obj
+			scenegraph.scene().remove @sprite
 		return
 	
 	_createParticle: ->
@@ -33,13 +34,11 @@ class MuzzleFlash extends BaseEffect
 			map: @texture
 			blending: THREE.AdditiveBlending
 			transparent: true
-		sprite = new THREE.Sprite @material
-		sprite.position = @opts.position
-		sprite.scale.set 0.075, 0.075, 0.075
-		@obj = new THREE.Object3D()
-		@obj.name = 'MuzzleFlash'
-		@obj.add sprite
-		scenegraph.scene().add @obj
+		@sprite = new THREE.Sprite @material
+		@sprite.name = 'MuzzleFlash'
+		@sprite.position = @opts.position
+		@sprite.scale.set 0.075, 0.075, 0.075
+		scenegraph.scene().add @sprite
 		return
 	
 return MuzzleFlash

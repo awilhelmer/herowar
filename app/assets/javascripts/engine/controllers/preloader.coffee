@@ -98,6 +98,7 @@ class Preloader extends RendererCanvasController
 						geometry.computeBoundingBox()
 						geometry.computeBoundingSphere()
 						geometry.computeMorphNormals()
+						THREE.GeometryUtils.center geometry
 						db.geometry name, 'main', geometry
 						db.geometry name, 'glow', GeometryUtils.clone geometry
 						@data[type][name] = [geometry, materials, json]

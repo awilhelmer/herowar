@@ -1,6 +1,4 @@
-geometryUtils = require 'util/geometryUtils'
 objectUtils = require 'util/objectUtils'
-db = require 'database'
 
 class BaseModel
 
@@ -10,8 +8,6 @@ class BaseModel
 	
 	glowColor: 0x88ccff
 	
-	glowing: false
-
 	constructor: (root) ->
 		@root = {}
 		@root.main = root
@@ -62,79 +58,23 @@ class BaseModel
 		return
 
 	enableGlow: ->
-		@glowing = true
-		mesh.material = @_getGlowMaterials mesh for mesh in @glowMeshes
+		mesh.material = objectUtils.getGlowMaterials mesh, @glowColor, true for mesh in @glowMeshes
 		return
 		
 	disableGlow: ->
-		@glowing = false
-		mesh.material = @_getGlowMaterials mesh for mesh in @glowMeshes
+		mesh.material = objectUtils.getGlowMaterials mesh, 'black' for mesh in @glowMeshes
 		return
 
 	_cloneRoot: ->
 		for scene in ['glow']
-			@root[scene] = @_copyObject null, @root.main, scene
-		#console.log 'Compare', @root.main.children[0].geometry, @root.glow.children[0].geometry
+			@root[scene] = objectUtils.clone null, @root.main, 
+				materialCallback: (srcObject) =>
+					return if scene is 'glow' then objectUtils.getGlowMaterials srcObject, @glowColor else srcObject.material.clone()
+				geometryCallback: (srcObject) ->
+					return objectUtils.copyGeometry srcObject.name, scene, srcObject.geometry
+				onMeshCreated: (mesh) =>
+					@glowMeshes.push mesh if scene is 'glow'						
+					return
 		return
-
-	_copyObject: (destObject, srcObject, scene) ->
-		if srcObject instanceof THREE.Scene
-			destObject = new THREE.Scene
-		else if srcObject instanceof THREE.MorphAnimMesh 
-			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
-			destObject	= new THREE.MorphAnimMesh geometry, material
-			destObject.parseAnimations()
-			@glowMeshes.push destObject if scene is 'glow'
-		else if srcObject instanceof THREE.Mesh
-			material = if scene is 'glow' then @_getGlowMaterials srcObject else srcObject.material.clone()
-			geometry = @_copyGeometry srcObject.name, scene, srcObject.geometry
-			destObject	= new THREE.Mesh geometry, material
-			@glowMeshes.push destObject if scene is 'glow'
-		else if srcObject instanceof THREE.Object3D
-			destObject	= new THREE.Object3D()
-		destObject.position.copy srcObject.position
-		destObject.rotation.copy srcObject.rotation
-		destObject.scale.copy srcObject.scale
-		destObject.userData = _.clone srcObject.userData
-		if srcObject.useQuaternion
-			destObject.quaternion.copy srcObject.quaternion
-			destObject.useQuaternion = true
-		destObject.add @_copyObject null, srcChild, scene for srcChild in srcObject.children if srcObject.children.length isnt 0
-		return destObject
-	
-	_copyGeometry: (name, scene, geometry) ->
-			geo = db.geometry name, scene
-			geo = geometryUtils.clone geometry unless geo
-			return geo
-	
-	_getGlowMaterials: (obj) ->
-		if obj instanceof THREE.Mesh
-			isAnimated = obj instanceof THREE.MorphAnimMesh
-			glowMaterial = if obj.userData.glowing or @glowing then @_getGlowOnMaterial isAnimated else @_getGlowOffMaterial isAnimated
-			if obj.material instanceof THREE.MeshFaceMaterial
-				materials = []
-				for mat in obj.material.materials
-					if materials.length is 0 
-						materials.push glowMaterial
-					else
-						materials.push glowMaterial.clone()
-				return new THREE.MeshFaceMaterial materials
-			else return glowMaterial
-		return null
-	
-	_getGlowOnMaterial: (isAnimated) ->
-		material = new THREE.MeshBasicMaterial color: @glowColor
-		if isAnimated
-			material.morphTargets = true
-			material.morphNormals = true
-		return material
-
-	_getGlowOffMaterial: (isAnimated) ->
-		material = new THREE.MeshBasicMaterial color: 'black'
-		if isAnimated
-			material.morphTargets = true
-			material.morphNormals = true
-		return material
 
 return BaseModel 

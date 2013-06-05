@@ -36,6 +36,7 @@ class AnimatedModel extends MeshModel
 		return
 	
 	setAnimation: (name, playOnce) ->
+		return if @activeAnimation is name
 		meshes = @_findAnimatedMeshes()
 		if meshes.length isnt 0
 			if _.isBoolean playOnce then @playOnce = playOnce else @playOnce = false

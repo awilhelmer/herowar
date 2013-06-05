@@ -29,8 +29,9 @@ class Tower extends AnimatedModel
 			else
 				currentDamage = damagePerWeapon
 				damage -= damagePerWeapon
-			position = @getMainObject().localToWorld new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
-			muzzleFlash = new MuzzleFlash position: position
+			origin = new THREE.Vector3 weapon.position.x, weapon.position.y, weapon.position.z
+			position = @getMainObject().localToWorld origin.clone()
+			muzzleFlash = new MuzzleFlash target: @getMainObject(), origin: origin, start: position
 			@effects.push muzzleFlash
 			Weapon = require "models/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, currentDamage

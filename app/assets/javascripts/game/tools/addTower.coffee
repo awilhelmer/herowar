@@ -28,14 +28,13 @@ class AddTowerTool extends AddObject
 		console.log 'onBuildTower()', packet
 		tower = db.get 'db/towers', packet.towerId
 		name = tower.get 'name'
-		data = db.data().geometries[name]
-		mesh = @createMesh data[0], data[1], name, data[2]
-		model = new Tower packet.objectId, name, mesh
+		model = new Tower packet.objectId, name, @createMesh packet.objectId, name
 		model.getMainObject().position.set packet.position.x, packet.position.y, packet.position.z
 		model.active = true
 		model.range = tower.get 'coverage'
 		model.weapons = tower.get 'weapons'
 		scenegraph.addDynObject model, packet.objectId
+		return
 
 	onLeaveTool: ->
 		model = @tool.get 'currentObject'
@@ -53,10 +52,7 @@ class AddTowerTool extends AddObject
 	
 	onLoadGeometry: (geometry, materials, json) =>
 		tower = db.get 'db/towers', @towerId
-		unless json
-			json = _.extend id: @tool.get('currentObjectId'), json 
-		mesh = @createMesh geometry, materials, @tool.get('currentObjectName'), json
-		model = new Tower @tool.get('currentObjectId'), name, mesh
+		model = new Tower @tool.get('currentObjectId'), name, @createMesh @tool.get('currentObjectId'), @tool.get 'currentObjectName'
 		model.range = tower.get 'coverage'
 		model.showRange()
 		model.visible false
