@@ -9,11 +9,8 @@ class MuzzleFlash extends BaseEffect
 	
 	constructor: (@opts) ->
 		super()
-		data = db.data()
-		if data['textures'] and data['textures']['particle001']
-			@texture = db.data()['textures']['particle001']
-		else 
-			@texture = THREE.ImageUtils.loadTexture 'assets/images/game/textures/effects/particle001.png'
+		@texture = db.data()['textures']['particle001'].clone()
+		@texture.needsUpdate = true
 		@birthDate	= Date.now()
 		@_createParticle()
 		
