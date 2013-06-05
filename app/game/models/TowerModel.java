@@ -65,12 +65,18 @@ public class TowerModel extends BaseModel<Tower> {
     if (getTarget() != null && !getTarget().isDeath() && inRange(getTarget())) {
       return getTarget();
     }
+    UnitModel optimalUnit = null;
+    double shortestDistance = Double.MAX_VALUE;
     for (UnitModel unit : units) {
-      if (!unit.isDeath() && inRange(unit)) {
-        return unit;
+      if (!unit.isDeath() && inViewRange(unit)) {
+        double distance = distance(unit);
+        if (distance < shortestDistance) {
+          optimalUnit = unit;
+          shortestDistance = distance;
+        }
       }
     }
-    return null;
+    return optimalUnit;
   }
 
   /**
@@ -100,6 +106,28 @@ public class TowerModel extends BaseModel<Tower> {
    */
   public boolean inRange(UnitModel model) {
     return getTranslation().distance(model.getTranslation()) <= getEntity().getCoverage() ? true : false;
+  }
+
+  /**
+   * Check if UnitModel is in view range.
+   * 
+   * @param model
+   *          The model to set.
+   * @return boolean If model is in view range.
+   */
+  public boolean inViewRange(UnitModel model) {
+    return getTranslation().distance(model.getTranslation()) <= getEntity().getCoverage() * 1.2 ? true : false;
+  }
+
+  /**
+   * Distance to object.
+   * 
+   * @param model
+   *          The model toset
+   * @return distance
+   */
+  public double distance(UnitModel model) {
+    return getTranslation().distance(model.getTranslation());
   }
 
   // GETTER & SETTER
