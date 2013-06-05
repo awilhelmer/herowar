@@ -157,9 +157,9 @@ materialHelper =
 						u.texture = db.data().textures[u.texture].clone()
 						u.texture.needsUpdate = true
 				when 'vertexShader'
-					result.vertexShader = value
+					params.vertexShader = value
 				when 'fragmentShader'
-					result.fragmentShader = value
+					params.fragmentShader = value
 				when 'id', 'materialId', 'name', 'nocolor'
 					#ignore
 				else
