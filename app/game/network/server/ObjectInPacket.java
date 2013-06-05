@@ -17,6 +17,7 @@ public class ObjectInPacket extends ObjectPacket {
   protected int utype;
   protected int health;
   protected int shield;
+  protected double scaleGlow;
   protected boolean burning;
   protected boolean explode;
   protected long path;
@@ -28,6 +29,7 @@ public class ObjectInPacket extends ObjectPacket {
     this.utype = unit.getType().ordinal();
     this.health = unit.getHealth();
     this.shield = unit.getShield();
+    this.scaleGlow = unit.getScaleGlow();
     this.burning = unit.getBurning();
     this.explode = unit.getExplode();
     this.path = path;
@@ -63,6 +65,14 @@ public class ObjectInPacket extends ObjectPacket {
 
   public void setShield(int shield) {
     this.shield = shield;
+  }
+  
+  public double getScaleGlow() {
+    return scaleGlow;
+  }
+
+  public void setScaleGlow(double scaleGlow) {
+    this.scaleGlow = scaleGlow;
   }
 
   public boolean isBurning() {

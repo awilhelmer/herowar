@@ -11,21 +11,22 @@ class Enemy extends AnimatedModel
 
 	constructor: (opts, @meshBody) ->
 		opts = _.extend {}, opts
-		super opts.id, opts.name, @meshBody
 		@initialize opts
-		
+		super opts.id, opts.name, @meshBody
+		@effects.push new BlackSmoke @ if @burning
+			
 	initialize: (opts) ->
 		@setHealth opts.health
 		@setShield opts.shield
+		@scaleGlow = opts.scaleGlow || 1
 		@type = opts.type
-		@burning = opts.burning
-		@explode = opts.explode
+		@burning = opts.burning || false
+		@explode = opts.explode || false
 		@damageIncoming = 0
 		@glowIsActive = false
 		@lastDistance = null
 		@dead = false
 		@waypoints = []
-		@effects.push new BlackSmoke @ if @burning
 		return
 
 	update: (delta, now) ->

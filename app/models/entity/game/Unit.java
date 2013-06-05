@@ -36,6 +36,7 @@ public class Unit implements Serializable {
 
   private Integer health = 0;
   private Integer shield = 0;
+  private Double scaleGlow = 1d;
   private UnitType type;
   private Boolean burning = false;
   private Boolean explode = false;
@@ -83,6 +84,14 @@ public class Unit implements Serializable {
 
   public void setShield(Integer shield) {
     this.shield = shield;
+  }
+
+  public Double getScaleGlow() {
+    return scaleGlow;
+  }
+
+  public void setScaleGlow(Double scaleGlow) {
+    this.scaleGlow = scaleGlow;
   }
 
   public UnitType getType() {
