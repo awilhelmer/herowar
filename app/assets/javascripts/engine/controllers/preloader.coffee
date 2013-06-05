@@ -28,6 +28,8 @@ class Preloader extends RendererCanvasController
 				textures:
 					'stone-natural-001'	: 'assets/images/game/textures/stone/natural-001.jpg'
 					'stone-rough-001'		: 'assets/images/game/textures/stone/rough-001.jpg'
+					'ground-rock'		: 'assets/images/game/textures/ground/rock.jpg'
+					'ground-grass'		: 'assets/images/game/textures/ground/grass.jpg'
 				texturesCube:
 					'default' 					: 'assets/images/game/skybox/default/%1.jpg'
 
