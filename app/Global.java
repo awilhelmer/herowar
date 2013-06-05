@@ -211,7 +211,6 @@ public class Global extends GlobalSettings {
 
           sql.append(line);
           if (line.endsWith(");")) {
-
             final String tmp = sql.toString();
 
             sql = new StringBuffer();
@@ -222,7 +221,6 @@ public class Global extends GlobalSettings {
                 connection.createStatement().execute(tmp);
               }
             });
-
           }
 
         }
