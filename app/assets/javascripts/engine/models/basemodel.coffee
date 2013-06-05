@@ -76,7 +76,11 @@ class BaseModel
 				geometryCallback: (srcObject) ->
 					return objectUtils.copyGeometry srcObject.name, scene, srcObject.geometry
 				onMeshCreated: (mesh) =>
-					@glowMeshes.push mesh if scene is 'glow'						
+					if scene is 'glow'
+						if @scaleGlow
+							console.log 'Multiply glow', @scaleGlow
+							mesh.scale.multiplyScalar @scaleGlow
+						@glowMeshes.push mesh 						
 					return
 		return
 

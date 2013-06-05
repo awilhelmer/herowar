@@ -3,5 +3,6 @@
 	"shield" : 500,
 	"type" : "AIRPLANE",
 	"burning" : true,
-	"explode" : true
+	"explode" : true,
+	"scaleGlow" : 1.2
 }

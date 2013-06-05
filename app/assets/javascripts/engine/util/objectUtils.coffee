@@ -9,6 +9,7 @@ objectUtils =
 		opts = _.extend {}, opts
 		if srcObject instanceof THREE.Scene
 			destObject = new THREE.Scene
+			@_copyObjectData destObject, srcObject
 		else if srcObject instanceof THREE.Mesh
 			if _.isFunction opts.materialCallback
 				material = opts.materialCallback srcObject
@@ -21,18 +22,15 @@ objectUtils =
 			if srcObject instanceof THREE.MorphAnimMesh 
 				destObject	= new THREE.MorphAnimMesh geometry, material
 				destObject.parseAnimations()
+				@_copyObjectData destObject, srcObject
 			else
 				destObject	= new THREE.Mesh geometry, material
+				@_copyObjectData destObject, srcObject
 			opts.onMeshCreated destObject if _.isFunction opts.onMeshCreated
 		else if srcObject instanceof THREE.Object3D
 			destObject	= new THREE.Object3D()
-		destObject.position.copy srcObject.position
-		destObject.rotation.copy srcObject.rotation
-		destObject.scale.copy srcObject.scale
-		destObject.userData = _.clone srcObject.userData
-		if srcObject.useQuaternion
-			destObject.quaternion.copy srcObject.quaternion
-			destObject.useQuaternion = true
+			@_copyObjectData destObject, srcObject
+			opts.onObjectCreated destObject if _.isFunction opts.onObjectCreated
 		destObject.add @clone null, srcChild, opts for srcChild in srcObject.children if srcObject.children.length isnt 0
 		return destObject
 	
@@ -95,5 +93,14 @@ objectUtils =
 			material.morphTargets = true
 			material.morphNormals = true
 		return material
+
+	_copyObjectData: (destObject, srcObject) ->
+		destObject.position.copy srcObject.position
+		destObject.rotation.copy srcObject.rotation
+		destObject.scale.copy srcObject.scale
+		destObject.userData = _.clone srcObject.userData
+		if srcObject.useQuaternion
+			destObject.quaternion.copy srcObject.quaternion
+			destObject.useQuaternion = true		
 
 return objectUtils
