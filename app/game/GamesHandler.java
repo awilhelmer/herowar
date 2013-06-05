@@ -120,6 +120,8 @@ public class GamesHandler implements Serializable {
     java.util.Map<String, String> images = new HashMap<String, String>();
     images.put("explosion", "assets/images/game/textures/effects/explosion.png");
     java.util.Map<String, String> textures = new HashMap<String, String>();
+    textures.put("ground-rock", "assets/images/game/textures/ground/rock.jpg");
+    textures.put("ground-grass", "assets/images/game/textures/ground/grass.jpg");
     textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
     textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
     textures.put("particle001", "assets/images/game/textures/effects/particle001.png");

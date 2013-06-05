@@ -149,9 +149,12 @@ materialHelper =
 				when 'wireframeLinewidth'
 					result.wireframeLinewidth = value
 				when 'attributes'
-					result.attributes = eval "(#{value})"
+					result.attributes = eval.call @, "(#{value})"
 				when 'uniforms'
-					result.uniforms = eval "(#{value})"
+					result.uniforms = eval.call @, "(#{value})"
+					for key, u of result.uniforms when u.texture
+						u.texture = db.data().textures[u.texture].clone()
+						u.texture.needsUpdate = true
 				when 'vertexShader'
 					result.vertexShader = value
 				when 'fragmentShader'
