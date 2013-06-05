@@ -8,8 +8,13 @@ class BlackSmoke extends BaseEmitterEffect
 
 	update: (delta, now) ->
 		super delta, now
-		@start() if not @run and @owner.getHealthPercentage() <= 50
+		@start() if not @run and @owner.getHealthPercentage() <= 70
 		@stop() if @run and @owner.currentHealth is 0
+		return
+
+	setSpriteScale: (sprite) ->
+		scale = 1 - @owner.getHealthPercentage() / 150
+		sprite.scale.set(scale,scale,scale).multiplyScalar 0.1 + Math.random() * 0.05
 		return
 
 return BlackSmoke
