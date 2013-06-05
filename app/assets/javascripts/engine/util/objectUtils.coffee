@@ -60,6 +60,8 @@ objectUtils =
 		if obj instanceof THREE.Mesh
 			obj.geometry.dispose()
 			@_disposeMaterial obj.material
+		else if obj instanceof THREE.Sprite
+			@_disposeMaterial obj.material
 		@dispose child for child in obj.children
 
 	positionToScreen: (obj, viewportWidthHalf, viewportHeightHalf, camera) ->

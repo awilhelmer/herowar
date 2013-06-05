@@ -7,6 +7,8 @@ __texture__ = null
 
 class Explosion extends BaseEmitterEffect
 	
+	maxAge: 0.75
+	
 	tiles: 25
 	
 	constructor: (@owner) ->
@@ -24,7 +26,7 @@ class Explosion extends BaseEmitterEffect
 
 	updateSpawn: (velocity, sprite, material, delta, age, maxAge) ->
 		super velocity, sprite, material, delta, age, maxAge
-		if not @removedFromScene and age / maxAge >= 0.3
+		if not @removedFromScene and age / maxAge >= 0.4
 			@removedFromScene = true
 			scenegraph.removeFromScenes @owner
 		return
@@ -47,7 +49,7 @@ class Explosion extends BaseEmitterEffect
 		return tween age / maxAge
 	
 	setSpriteScale: (sprite) ->
-		sprite.scale.set(0.18, 0.18, 0.18).multiplyScalar 0.8
+		sprite.scale.set(0.16, 0.16, 0.16).multiplyScalar 0.8
 		return
 
 	createVelocity: ->
@@ -62,7 +64,7 @@ class Explosion extends BaseEmitterEffect
 
 	updateSprite: (sprite, velocity, delta) ->
 		sprite.position.add velocity.clone().multiplyScalar delta
-		sprite.scale.multiplyScalar 1.015
+		sprite.scale.multiplyScalar 1.010
 		return
 
 	getTexture: ->

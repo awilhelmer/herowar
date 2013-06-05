@@ -20,8 +20,10 @@ class AnimatedModel extends MeshModel
 		super delta
 		@animate delta
 		@effects.forEach (effect) =>
-			effect.update delta, now
-			@effects.splice @effects.indexOf(effect), 1 unless effect.active
+			if effect.active
+				effect.update delta, now
+			else
+				@effects.splice @effects.indexOf(effect), 1 unless effect.active
 		return
 
 	animate: (delta) ->

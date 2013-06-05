@@ -44,8 +44,10 @@ class BaseHUD
 	update: (delta, now) ->
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
 		@elements.forEach (element) =>
-			element.update delta, now
-			@elements.splice @elements.indexOf(element), 1 unless element.active
+			if element.active
+				element.update delta, now
+			else
+				@elements.splice @elements.indexOf(element), 1 unless element.active
 		return
 
 return BaseHUD

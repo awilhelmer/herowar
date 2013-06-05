@@ -1,4 +1,5 @@
 BaseEffect = require 'effects/baseEffect'
+objectUtils = require 'util/objectUtils'
 scenegraph = require 'scenegraph'
 db = require 'database'
 
@@ -42,6 +43,7 @@ class MuzzleFlash extends BaseEffect
 
 	dispose: ->
 			scenegraph.scene().remove @sprite
+			objectUtils.dispose @sprite
 			super()
 	
 return MuzzleFlash
