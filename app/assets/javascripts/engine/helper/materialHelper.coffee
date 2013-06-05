@@ -125,8 +125,9 @@ materialHelper =
 			result = new THREE.ShaderMaterial()
 		else
 			result = new THREE.MeshBasicMaterial()
+		params = {}
 		result.name = 'matID' + materialId
-		for key,value of material.attributes
+		for key,value of material.attributes when value
 			switch key
 				when 'color'
 					nocolor = $(material.attributes).attr('nocolor')
@@ -149,10 +150,10 @@ materialHelper =
 				when 'wireframeLinewidth'
 					result.wireframeLinewidth = value
 				when 'attributes'
-					result.attributes = eval.call @, "(#{value})"
+					params.attributes = eval.call @, "(#{value})"
 				when 'uniforms'
-					result.uniforms = eval.call @, "(#{value})"
-					for key, u of result.uniforms when u.texture
+					params.uniforms = eval.call @, "(#{value})"
+					for key, u of params.uniforms when u.texture
 						u.texture = db.data().textures[u.texture].clone()
 						u.texture.needsUpdate = true
 				when 'vertexShader'
@@ -163,6 +164,7 @@ materialHelper =
 					#ignore
 				else
 					console.log "Material Key #{key} is unknown" 
+		result.setValues params
 		result
 	
 	isShader:(attributes) ->
