@@ -82,7 +82,7 @@ worldToObjectConverter =
 			morphColors: geometry.morphColors
 			normals:	geometry.normals
 			colors: geometry.colors
-			uvs:	geometry.uvs
+			uvs:	geometry.faceVertexUvs
 			scale: geometry.scale
 			type:	geometry.userData.type
 			metadata: geometry.userData.metadata
