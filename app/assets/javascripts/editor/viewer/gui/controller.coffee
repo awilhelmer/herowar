@@ -4,7 +4,7 @@ db = require 'database'
 
 __run__ = false
 __root__ = null
-__models__ = [ 'rotation', 'debug' ]
+__models__ = [ 'rotation', 'scale', 'animations', 'effects', 'debug' ]
 
 GUIController = 
 
@@ -18,7 +18,8 @@ GUIController =
 	update: (obj) ->
 		for mod in __models__
 			Model = require "viewer/gui/#{mod}"
-			__root__.add new Model obj
+			current = new Model obj
+			__root__.add current if current.isAllowed()
 
 	_bindEvents: ->
 		console.log 'Bind events on gui controller'

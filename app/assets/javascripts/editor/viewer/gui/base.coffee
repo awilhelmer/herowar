@@ -21,4 +21,7 @@ class BaseGUI
 		@parent.removeChild @root if removable and @root and @parent
 		return
 
+	isAllowed: ->
+		return true
+
 return BaseGUI
