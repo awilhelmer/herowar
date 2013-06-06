@@ -18,6 +18,7 @@ class Viewer extends Backbone.Model
 		scenegraph.removeDynObject @id if @id
 		if db.data().geometries[name]
 			@placeModel id, name, type
+			@trigger 'fetched:data', @sceneObject
 			return
 		url = null
 		if type is 1

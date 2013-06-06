@@ -8,14 +8,17 @@ class ModelGUI extends BaseGUI
 	constructor: ->
 		@viewer = db.get 'viewer'
 		@units = db.get 'db/units'
-		@units.fetch()
 		super 'Models'
+		@units.fetch() if @units.models.length is 0
+		@isFirst = true
 
 	bindEvents: ->
 		@listenTo @units, 'add remove change reset', @updateUnit
 	
 	create: ->
-		return @parent.addFolder @name
+		@root = @parent.addFolder @name
+		@updateUnit() unless @units.models.length is 0
+		return @root
 	
 	updateUnit: ->
 		for unit, idx in @units.models
@@ -27,7 +30,9 @@ class ModelGUI extends BaseGUI
 				cb = (id, type, name) =>
 					return () => @viewer.load id, type, name
 				@model[name] = cb obj.id, type, name
-				@model[name]()
+				if @isFirst and not @viewer.sceneObject
+					@model[name]()
+					@isFirst = false
 				@children[name] = @root.add(@model, name).name name
 	
 return ModelGUI

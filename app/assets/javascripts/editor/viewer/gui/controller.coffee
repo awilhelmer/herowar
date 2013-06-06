@@ -10,20 +10,29 @@ GUIController =
 
 	start: ->
 		unless __run__
-			__root__ = new RootGUI()
-			__root__.add new ModelsGUI()
+			@reset()
 			@_bindEvents()
 			__run__ = true
+		return
+
+	reset: ->
+		if __root__
+			__root__.root.destroy()
+			delete __root__
+		__root__ = new RootGUI()
+		__root__.add new ModelsGUI()
 
 	update: (obj) ->
+		@reset()
 		for mod in __models__
 			Model = require "viewer/gui/#{mod}"
 			current = new Model obj
 			__root__.add current if current.isAllowed()
+		return;
 
 	_bindEvents: ->
-		console.log 'Bind events on gui controller'
 		@viewer = db.get 'viewer'
 		@viewer.on 'fetched:data', @update, @
+		return
 
 return GUIController

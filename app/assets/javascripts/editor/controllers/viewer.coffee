@@ -24,8 +24,8 @@ class ViewerController extends ApplicationController
 
 	initialize: (options) ->
 		log.info 'Initialize viewer...'
-		super options
 		db.data().geometries = {}
+		super options
 		engine.start()
 		gui.start()
 
