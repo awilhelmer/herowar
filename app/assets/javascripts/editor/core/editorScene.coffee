@@ -54,8 +54,7 @@ class EditorScene extends Scene
 			scenegraph = require 'scenegraph'
 			scenegraph.setMap map
 		map = super map
-		@world.get('terrain').geometry.faces = map.children[0].geometry.faces
-		@world.get('terrain').geometry.vertices = map.children[0].geometry.vertices
+		@world.saveGeometry map.children[0].geometry
 		@objectHelper.addWireframe map, @getWireframeColor() if !@objectHelper.hasWireframe(map) or @world.get('terrain').wireframe
 		engine = require 'engine'
 		engine.render()

@@ -8,6 +8,7 @@ worldToObjectConverter =
 		@handleMaterials()	
 		@fillMaterialArray obj
 		@convertGeometryVertices obj
+		@convertGeometryUvs obj
 		@convertGeometryFaces obj
 		@convertThreeGeometry obj
 		@addObjects obj
@@ -45,7 +46,7 @@ worldToObjectConverter =
 				
 			hasMaterial = true 							# for the moment OBJs without materials get default material
 			hasFaceUvs = false 							# not supported in OBJ
-			hasFaceVertexUvs = obj.terrain.geometry.uvs and obj.terrain.geometry.uvs.length >= nVertices
+			hasFaceVertexUvs = obj.terrain.geometry.uvs and obj.terrain.geometry.uvs.length > 0
 			hasFaceNormals = false 					# don't export any face normals (as they are computed in engine)
 			hasFaceVertexNormals = false 		# not sure what this means...
 			hasFaceColors = false						# not sure what this means...
@@ -64,7 +65,25 @@ worldToObjectConverter =
 			faces.push faceType
 			faces.push val for key, val of _.pick face, 'a', 'b', 'c', 'd'
 			faces.push face.materialIndex if hasMaterial
+			faces.push obj.terrain.geometry.uvs[0][i] for i in [0..nVertices-1] if hasFaceVertexUvs
 		obj.terrain.geometry.faces = faces
+	
+	convertGeometryUvs: (obj) ->
+		newUvs = []
+		for uvs in obj.terrain.geometry.uvs
+			for uvs2 in uvs
+				for uvs3 in uvs2
+					newUvs.push uvs3.x
+					newUvs.push uvs3.y
+		obj.terrain.geometry.uvs = [ newUvs ]
+	
+	convertUvs: (uvs) ->
+		for uvs in obj.terrain.geometry.uvs
+			if _.isArray uvs
+				@convertUvs uvs
+			else
+				
+			
 	
 	setBit: (value, position, bool) ->
 		if bool then value | (1 << position) else value & ~(1 << position)
@@ -82,7 +101,7 @@ worldToObjectConverter =
 			morphColors: geometry.morphColors
 			normals:	geometry.normals
 			colors: geometry.colors
-			uvs:	geometry.faceVertexUvs
+			uvs:	geometry.uvs
 			scale: geometry.scale
 			type:	geometry.userData.type
 			metadata: geometry.userData.metadata

@@ -60,6 +60,7 @@ class World extends Backbone.Model
 	saveGeometry: (geometry) ->
 		@get('terrain').geometry.faces = geometry.faces
 		@get('terrain').geometry.vertices = geometry.vertices
+		@get('terrain').geometry.uvs = geometry.faceVertexUvs
 		@trigger 'change:terrain'
 		@trigger 'change'
 
