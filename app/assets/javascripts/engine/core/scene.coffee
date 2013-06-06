@@ -49,6 +49,8 @@ class Scene
 			map = @world.getTerrainMeshFromGeometry()
 			map.children[0].geometry.computeBoundingBox()
 			map.children[0].geometry.computeBoundingSphere()
+			map.children[0].geometry.computeFaceNormals()
+			map.children[0].geometry.computeVertexNormals()
 			scenegraph.setMap map
 			events.trigger 'scene:terrain:build', map
 		if !map

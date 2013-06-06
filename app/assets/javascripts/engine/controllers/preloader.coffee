@@ -105,6 +105,8 @@ class Preloader extends RendererCanvasController
 						geometry.computeBoundingBox()
 						geometry.computeBoundingSphere()
 						geometry.computeMorphNormals()
+						geometry.computeFaceNormals()
+						geometry.computeVertexNormals()
 						THREE.GeometryUtils.center geometry
 						db.geometry name, 'main', geometry
 						db.geometry name, 'glow', GeometryUtils.clone geometry
