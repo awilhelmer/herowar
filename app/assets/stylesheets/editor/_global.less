@@ -26,9 +26,27 @@ canvas {
 
 #viewerUI {
     position: absolute;
-    right: 275px;
-    top: 0;
-    z-index: 2;
+    top: 25%;
+    left: 50%;
+    width: 100px;
+    margin-left: -50px;
+    text-align: center;
+    opacity: 1;
+    -moz-transition: top 1s ease-out, opacity 1s ease;
+    -webkit-transition: top 1s ease-out, opacity 1s ease;
+    -o-transition: top 1s ease-out, opacity 1s ease;
+    transition: top 1s ease-out, opacity 1s ease;
+    
+    span {
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+
+#viewerUI.hidden {
+    top: -30px;
+    opacity: 0;
 }
 
 .fd-slider {
