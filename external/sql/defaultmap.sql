@@ -80,7 +80,7 @@ insert into waypoint (name, position_x, position_y, position_z, path_id, sortOde
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 3 - 145 x 1 x -45', 145.0, 1.0, -45.0, 2, 2);
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 4 - 105 x 1 x 5', 105.0, 1.0, 5.0, 2, 3);
 
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (1, 'Wave-1', 5, 6, 12, 102, 2, 0);
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (1, 'Wave-1', 5, 12, 12, 102, 2, 0);
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (2, 'Wave-2', 5, 10, 20, 102, 2, 1);
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (3, 'Wave-3', 5, 20, 60, 102, 2, 2);
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (4, 'Wave-4', 5, 40, 60, 102, 2, 3);

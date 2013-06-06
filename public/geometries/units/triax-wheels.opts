@@ -5,7 +5,7 @@
 	"burning" : true,
 	"explode" : true,
 	"rotation" : {
-		"x": -90,
+		"x": 0,
 		"y": 0,
 		"z": 0
 	},

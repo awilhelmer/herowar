@@ -26,9 +26,7 @@ class Enemy extends AnimatedModel
 		@glowIsActive = false
 		@lastDistance = null
 		@dead = false
-		if opts.rotation
-			console.log 'Rotation from opts:', opts.rotation
-			@meshBody.rotation.set THREE.Math.degToRad(opts.rotation.x), THREE.Math.degToRad(opts.rotation.y), THREE.Math.degToRad(opts.rotation.z)
+		@meshBody.rotation.set THREE.Math.degToRad(opts.rotation.x), THREE.Math.degToRad(opts.rotation.y), THREE.Math.degToRad(opts.rotation.z) if opts.rotation
 		@waypoints = []
 		return
 

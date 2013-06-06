@@ -1,10 +1,13 @@
 materialHelper = require 'helper/materialHelper'
 AnimatedModel = require 'models/animatedModel'
+enemiesFactory = require 'factory/enemies'
 JSONLoader = require 'util/threeloader'
 BaseView = require 'views/baseView'
 scenegraph = require 'scenegraph'
 templates = require 'templates'
 db = require 'database'
+
+__previous_id__ = null
 
 class ViewerUI extends BaseView
 
@@ -12,38 +15,42 @@ class ViewerUI extends BaseView
 	
 	template: templates.get 'viewerUI.tmpl'
 	
-	events:
-		'change .model' : 'selectModel'
+	defaultModelState:
+		rotationX: 0
+		rotationY: 0
+		rotationZ: 0
+		
+	sceneObject: null
 	
 	initialize: (options) ->
+		db.data().geometries = {}
+		@initializeGUI()
+		@isLoading = false
 		@jsonLoader = new JSONLoader()
 		@units = db.get 'db/units'
 		@units.fetch()
-		@data = 1: [], 2: []
 		super options
 		
 	bindEvents: ->
-		@listenTo @units, 'add remove change reset', @render
-	
-	getTemplateData: ->
-		json = {}
-		json.towers = []
-		json.towers.push { id: 1, name: 'Tower', type: 1 }
-		json.towers.push { id: 2, name: 'Tower 2', type: 1 }
-		json.enemies = []
-		json.enemies.push { id: unit.id, name: unit.get('name'), type: 2 } for unit in @units.models
-		json
-	
-	selectModel: (event) ->
-		return unless event
-		$currentTarget = $(event.currentTarget).find 'option:selected'
-		id = $currentTarget.data 'id'
-		type = $currentTarget.data 'type'
-		return unless id and type
-		@loadModel id, type, $currentTarget.val()
+		@listenTo @units, 'add remove change reset', @updateSelection
+
+	initializeGUI: ->
+		@gui = new dat.GUI()
+		@modelState = _.clone @defaultModelState
+		@guiModelFolder = @gui.addFolder 'Model'
+		@guiModelElements = {}
+		@gui.add(@modelState, 'rotationX', -360, 360).listen().onChange =>
+			if @sceneObject
+				console.log 'Set rotation x', THREE.Math.degToRad @modelState.rotationX 
+				@sceneObject.meshBody.rotation.x = THREE.Math.degToRad @modelState.rotationX 
+		@gui.add(@modelState, 'rotationY', -360, 360).listen().onChange =>
+			@sceneObject.meshBody.rotation.y = THREE.Math.degToRad @modelState.rotationY if @sceneObject		
+		@gui.add(@modelState, 'rotationZ', -360, 360).listen().onChange =>
+			@sceneObject.meshBody.rotation.z = THREE.Math.degToRad @modelState.rotationZ if @sceneObject		
 
 	loadModel: (id, type, name) ->
-		if @data[type][id]
+		return if @isLoading
+		if db.data().geometries[name]
 			@placeModel id, name, type
 			return
 		url = null
@@ -52,26 +59,53 @@ class ViewerUI extends BaseView
 		else if type is 2
 			url = "api/game/geometry/unit/#{id}"
 		return unless url
+		@isLoading = true
 		@jsonLoader.load url, 
 			(geometry, materials, json) =>
 				geometry.name = name
 				geometry.computeBoundingBox()
 				geometry.computeBoundingSphere()
 				geometry.computeMorphNormals()
-				@data[type][id] = [geometry, materials, json]
-				#console.log 'Loaded:', geometry, materials, json
+				db.data().geometries[name] = [geometry, materials, json]
 				@placeModel id, name, type
+				@isLoading = false
 			, 'assets/images/game/textures'
 		return
 
 	placeModel: (id, name, type) ->
-		scenegraph.removeDynObject 1
-		data = @data[type][id]
-		mesh = @createMesh data[0], data[1], name, data[2]
-		model = new AnimatedModel 1, name, mesh
-		console.log 'Show model', model
-		scenegraph.addDynObject model, 1
+		scenegraph.removeDynObject __previous_id__ if __previous_id__
+		if type is 2
+			@sceneObject = enemiesFactory.create @units.get(id).attributes
+		else
+			data = db.data().geometries[name]
+			mesh = @createMesh data[0], data[1], name, data[2]
+			@sceneObject = new AnimatedModel id, name, mesh
+			scenegraph.addDynObject @sceneObject, id
+		__previous_id__ = @sceneObject.id
+		@resetGUI()
+		console.log 'Show model', @sceneObject, 'Set previous id', __previous_id__
 		return
+
+	resetGUI: ->
+		@modelState[key] = value for key, value of @defaultModelState
+		if @sceneObject
+			console.log 'Set rotation from mesh', @sceneObject.meshBody.rotation
+			@modelState.rotationX = THREE.Math.radToDeg @sceneObject.meshBody.rotation.x
+			@modelState.rotationY = THREE.Math.radToDeg @sceneObject.meshBody.rotation.y
+			@modelState.rotationZ = THREE.Math.radToDeg @sceneObject.meshBody.rotation.z
+		return
+	
+	updateSelection: ->
+		selection = {}
+		selection.enemies = []
+		for unit, idx in @units.models
+			name = unit.get 'name'
+			unless _.has @guiModelElements, name
+				cb = (id, type, name) =>
+					return () => @loadModel id, type, name
+				@modelState[name] = cb unit.id, 2, name
+				@modelState[name]() unless @isLoading and @sceneObject
+				@guiModelElements[name] = @guiModelFolder.add(@modelState, name).name name
 
 	createMesh: (geometry, materials, name, json) ->
 		mesh = materialHelper.createMesh geometry, materials, name, json if json.morphTargets.length is 0

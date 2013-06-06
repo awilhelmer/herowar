@@ -5,7 +5,7 @@
 "description"	: "Md 2 model converted from triax_wheels.md2 using MD2 to json converter."
 },
 
-"scale" : 0.100000,
+"scale" : 0.200000,
 
 "materials": [  {
 	"DbgColor" : 15658734,
