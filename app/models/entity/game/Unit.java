@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -40,6 +44,11 @@ public class Unit implements Serializable {
   private UnitType type;
   private Boolean burning = false;
   private Boolean explode = false;
+
+  @Embedded
+  @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "rotation_x")),
+      @AttributeOverride(name = "y", column = @Column(name = "rotation_y")), @AttributeOverride(name = "z", column = @Column(name = "rotation_z")) })
+  private Vector3 rotation = new Vector3();
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "parent")
   private Set<Unit> children = new HashSet<Unit>();
@@ -116,6 +125,14 @@ public class Unit implements Serializable {
 
   public void setExplode(Boolean explode) {
     this.explode = explode;
+  }
+  
+  public Vector3 getRotation() {
+    return rotation;
+  }
+
+  public void setRotation(Vector3 rotation) {
+    this.rotation = rotation;
   }
 
   public Set<Unit> getChildren() {

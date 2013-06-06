@@ -11,18 +11,15 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public class Vector3 implements Serializable {
   private static final long serialVersionUID = 6203694060229875926L;
 
-  private Double x;
-  private Double y;
-  private Double z;
+  private Double x = 0d;
+  private Double y = 0d;
+  private Double z = 0d;
 
   @Transient
   @JsonIgnore
   private com.ardor3d.math.Vector3 ardorVector;
 
   public Vector3() {
-    this.x = 0d;
-    this.y = 0d;
-    this.z = 0d;
   }
 
   public Vector3(Double x, Double y, Double z) {

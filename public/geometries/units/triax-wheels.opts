@@ -1,0 +1,13 @@
+{
+    "health" : 1000,
+	"shield" : 500,
+	"type" : "TANK",
+	"burning" : true,
+	"explode" : true,
+	"rotation" : {
+		"x": -90,
+		"y": 0,
+		"z": 0
+	},
+	"scaleGlow" : 1.2
+}

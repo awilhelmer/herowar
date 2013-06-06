@@ -3,6 +3,7 @@ package game.network.server;
 import game.network.ObjectPacket;
 import game.network.PacketType;
 import models.entity.game.Unit;
+import models.entity.game.Vector3;
 
 /**
  * The ObjectInPacket will be send from server to client to tell a new object
@@ -20,6 +21,7 @@ public class ObjectInPacket extends ObjectPacket {
   protected double scaleGlow;
   protected boolean burning;
   protected boolean explode;
+  protected Vector3 rotation;
   protected long path;
 
   public ObjectInPacket(long id, Unit unit, long path) {
@@ -32,6 +34,7 @@ public class ObjectInPacket extends ObjectPacket {
     this.scaleGlow = unit.getScaleGlow();
     this.burning = unit.getBurning();
     this.explode = unit.getExplode();
+    this.rotation = unit.getRotation();
     this.path = path;
   }
 
@@ -89,6 +92,14 @@ public class ObjectInPacket extends ObjectPacket {
 
   public void setExplode(boolean explode) {
     this.explode = explode;
+  }
+
+  public Vector3 getRotation() {
+    return rotation;
+  }
+
+  public void setRotation(Vector3 rotation) {
+    this.rotation = rotation;
   }
 
   public long getPath() {
