@@ -9,8 +9,8 @@ class MeshModel extends BaseModel
 	
 	meshBody: null
 	
-	showBoundingBox: false
-	
+	boundingBoxMesh: null
+		
 	constructor: (@id, @name, @meshBody) ->
 		obj = null
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
@@ -20,13 +20,21 @@ class MeshModel extends BaseModel
 			obj = @meshBody
 			@meshBody = obj.children[0] # TODO: this is super cheap and needs improvement
 			@_calculateGeometry @meshBody.geometry
-		@_createBoundingBox obj if @showBoundingBox
 		@_enableShadows()
 		super obj
 
 	update: (delta, now) ->
 		super delta, now
 		#@checkGroundCollision()
+
+	showBoundingBox: ->
+		@boundingBoxMesh = @_createBoundingBox() unless @boundingBoxMesh
+		@boundingBoxMesh.visible = true unless @boundingBoxMesh.visible
+		return
+		
+	hideBoundingBox: ->
+		@boundingBoxMesh.visible = false if @boundingBoxMesh?.visible
+		return
 
 	checkGroundCollision: ->
 		unless @groundDirection
@@ -64,7 +72,7 @@ class MeshModel extends BaseModel
 			@meshBody.receiveShadow = true	
 		return
 
-	_createBoundingBox: (obj) ->
+	_createBoundingBox: ->
 		scale = @meshBody.scale
 		boundingBox = @meshBody.geometry.boundingBox
 		x = (boundingBox.max.x - boundingBox.min.x) * scale.x
@@ -76,8 +84,8 @@ class MeshModel extends BaseModel
 		mesh.name = 'boundingBox'
 		mesh.position.copy @meshBody.position
 		mesh.rotation.copy @meshBody.rotation
-		obj.add mesh
-		return
+		@getMainObject().add mesh
+		return mesh
 
 	_createThreeObject: (mesh) ->
 		obj = new THREE.Object3D()
