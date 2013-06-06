@@ -4,5 +4,10 @@
 	"type" : "AIRPLANE",
 	"burning" : true,
 	"explode" : true,
-	"scaleGlow" : 1.2
+	"scaleGlow" : 1.2,
+	"rotation" : {
+		"x": -90,
+		"y": 0,
+		"z": 0
+	}
 }
