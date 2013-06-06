@@ -6,8 +6,8 @@
 	"explode" : true,
 	"scaleGlow" : 1.2,
 	"rotation" : {
-		"x": -90,
-		"y": 0,
+		"x": 0,
+		"y": -90,
 		"z": 0
 	}
 }

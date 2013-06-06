@@ -3,8 +3,8 @@
 	"shield" : 0,
 	"type" : "TROOPER",
 	"rotation" : {
-		"x": -90,
-		"y": 0,
+		"x": 0,
+		"y": -90,
 		"z": 0
 	}
 }
