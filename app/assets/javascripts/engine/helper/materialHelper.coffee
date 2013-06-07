@@ -153,9 +153,9 @@ materialHelper =
 					params.attributes = eval.call @, "(#{value})"
 				when 'uniforms'
 					params.uniforms = eval.call @, "(#{value})"
-					for key, u of params.uniforms when u.texture
-						u.texture = db.data().textures[u.texture].clone()
-						u.texture.needsUpdate = true
+					for key, u of params.uniforms when u.value
+						u.value = db.data().textures[u.value].clone()
+						u.value.needsUpdate = true
 				when 'vertexShader'
 					params.vertexShader = value
 				when 'fragmentShader'

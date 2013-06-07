@@ -17,7 +17,7 @@ insert into material (id, attributes, blending, color, colorAmbient, colorDiffus
 \n        color = mix(
 \n            diffuseSand,
 \n            color,
-\n            min(abs(.0 - vPosition.z) / .03, 1.0)
+\n            min(abs(.1 - vPosition.z) / .03, 1.0)
 \n        ) ;
 \n      
 \n        color = mix(
@@ -33,8 +33,8 @@ insert into material (id, attributes, blending, color, colorAmbient, colorDiffus
 \n        ) ;
 \n        gl_FragColor = color;
 \n    }', null, null, 'Terrain', 1.0, null, 0, null, null, true, '{
-\n   texture_grass: { type: \"t\", value: 0, texture: "ground-grass" },
-\n   texture_rock: { type: \"t\", value: 1, texture: "ground-rock" }
+\n   texture_grass: { type: \"t\", value: "ground-grass" },
+\n   texture_rock: { type: \"t\", value: "ground-rock" }
 \n}', null, 'varying vec2 vUv;
 \n    varying vec3 vPosition;
 \n    void main( void ) {
