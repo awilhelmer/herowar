@@ -73,6 +73,20 @@ public class Geometry extends BaseModel implements Serializable {
   @StringArray(type = ArrayType.DOUBLE, dimensions = 2)
   private String uvs = "[[]]";
 
+  @Lob
+  private String bones;
+  
+  @Lob
+  @StringArray(type = ArrayType.DOUBLE)
+  private String skinIndices;
+  
+  @Lob
+  @StringArray(type = ArrayType.DOUBLE)
+  private String skinWeights;
+  
+  @Lob
+  private String animation;
+  
   @Column(scale = 6)
   private Double scale = 1D;
 
@@ -164,6 +178,38 @@ public class Geometry extends BaseModel implements Serializable {
 
   public void setUvs(String uvs) {
     this.uvs = uvs;
+  }
+  
+  public String getBones() {
+    return bones;
+  }
+
+  public void setBones(String bones) {
+    this.bones = bones;
+  }
+
+  public String getSkinIndices() {
+    return skinIndices;
+  }
+
+  public void setSkinIndices(String skinIndices) {
+    this.skinIndices = skinIndices;
+  }
+
+  public String getSkinWeights() {
+    return skinWeights;
+  }
+
+  public void setSkinWeights(String skinWeights) {
+    this.skinWeights = skinWeights;
+  }
+
+  public String getAnimation() {
+    return animation;
+  }
+
+  public void setAnimation(String animation) {
+    this.animation = animation;
   }
 
   public Double getScale() {
