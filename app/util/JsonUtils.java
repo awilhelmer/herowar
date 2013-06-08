@@ -100,6 +100,8 @@ public class JsonUtils {
                 value = fieldNode.toString();
               } else {
                 value = fieldNode.getTextValue();
+                if (value == null)
+                  value = play.libs.Json.stringify(fieldNode);
               }
             } else if (propClass.isAssignableFrom(Float.class)) {
               value = Double.valueOf(fieldNode.getDoubleValue()).floatValue();
