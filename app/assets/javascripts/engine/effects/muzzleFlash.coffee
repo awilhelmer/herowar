@@ -18,7 +18,9 @@ class MuzzleFlash extends BaseEffect
 		age	= now - @birthDate
 		if age < @maxAge
 			opacity = 1 - age / @maxAge
-			@sprite.position = @opts.target.localToWorld @opts.origin.clone()
+			if @opts.target and @opts.target.position
+				newPosition = @opts.target.localToWorld @opts.origin.clone() 
+				@sprite.position = newPosition if newPosition
 			@material.opacity = opacity
 		else
 			@dispose()
@@ -36,6 +38,8 @@ class MuzzleFlash extends BaseEffect
 		@sprite.position = @opts.position
 		@sprite.scale.set 0.075, 0.075, 0.075
 		scenegraph.scene().add @sprite
+		unless @opts.position
+			console.log 'Created muzzle flash with false position', @opts.position
 		return
 
 	dispose: ->

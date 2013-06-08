@@ -11,18 +11,21 @@ class Explosion extends BaseEmitterEffect
 	
 	tiles: 25
 	
+	runOnce: true
+	
 	constructor: (@owner) ->
 		super @owner
 		__texture__ = @getTexture() unless __texture__
 		@removedFromScene = false
+		@start()
 	
 	update: (delta, now) ->
-		unless @done
-			@done = true
-			@start()
 		super delta, now
-		@stop() if @run
+		@stop() if @isDone()
 		return
+		
+	isDone: ->
+		return true
 
 	updateSpawn: (velocity, sprite, material, delta, age, maxAge) ->
 		super velocity, sprite, material, delta, age, maxAge

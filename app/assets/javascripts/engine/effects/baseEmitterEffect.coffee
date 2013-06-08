@@ -22,23 +22,25 @@ class BaseEmitterEffect extends BaseEffect
 		return
 
 	dispose: ->
-		@stop if @run
+		@stop() if @run
 		sprite.parent.remove sprite for sprite in @sprites
 		@sprites.length = 0
 		super()
 
 	start: ->
-		@run = true
-		lastEmit = 0
-		@updateFcts.push @_loopCb = (delta, now) =>
-			return if @rate is 1 or now - lastEmit < 1 / @rate
-			lastEmit = now
-			@emit()
+		unless @run
+			@run = true
+			lastEmit = 0
+			@updateFcts.push @_loopCb = (delta, now) =>
+				return if @rate is 1 or now - lastEmit < 1 / @rate
+				lastEmit = now
+				@emit()
 		return
 		
 	stop: ->
-		@run = false
-		@updateFcts.splice @updateFcts.indexOf(@_loopCb), 1 if @_loopCb
+		if @run
+			@run = false
+			@updateFcts.splice @updateFcts.indexOf(@_loopCb), 1 if @_loopCb
 		return
 
 	emit: ->
