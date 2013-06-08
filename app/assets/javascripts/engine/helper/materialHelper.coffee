@@ -101,6 +101,9 @@ materialHelper =
 		if _.isArray(materials) and materials.length > 0
 			for mat in materials
 				newMat = mat.clone()
+				newMat.skinning = true
+				newMat.wrapAround = true
+				newMat.needsUpdate = true
 				newMats.push newMat
 		return @updateMeshProperties new THREE.SkinnedMesh(geometry), newMats, name, json
 	
