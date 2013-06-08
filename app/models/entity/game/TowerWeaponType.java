@@ -1,5 +1,5 @@
 package models.entity.game;
 
 public enum TowerWeaponType {
-  LASER, ROCKET
+  LASER, ROCKET, TESLA
 }
