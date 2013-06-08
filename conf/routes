@@ -58,6 +58,7 @@ POST		/api/game/map												controllers.api.game.Maps.add()
 
 GET			/api/game/player/:id								controllers.api.game.Players.show(id: Long)
 GET			/api/game/player/:id/settings				controllers.api.game.Players.showSettings(id: Long)
+PUT			/api/game/player/:id/settings			  controllers.api.game.Players.updateSettings(id: Long)
 
 GET			/api/game/terrain/all								controllers.api.game.Terrains.list()
 GET			/api/game/terrain/:id								controllers.api.game.Terrains.show(id: Long)

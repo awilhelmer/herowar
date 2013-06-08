@@ -1,7 +1,7 @@
-BaseView = require 'views/baseView'
+BaseModelView = require 'views/baseModelView'
 templates = require 'templates'
 
-class VideoSettingsView extends BaseView
+class VideoSettingsView extends BaseModelView
 
 	template: templates.get 'settings/video.tmpl'
 	
