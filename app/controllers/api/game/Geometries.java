@@ -3,6 +3,7 @@ package controllers.api.game;
 import static play.libs.Json.toJson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import models.entity.game.Environment;
 import models.entity.game.GeoMaterial;
@@ -17,6 +18,7 @@ import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
+import util.MaterialComparator;
 import controllers.api.BaseAPI;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
@@ -88,11 +90,11 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   private static void handleGeo(Geometry geo) {
     GeometryDAO.mapMaterials(geo); // For global binding ... TODO
-    geo.setMaterials(new ArrayList<Material>());
+    geo.getMaterials().clear();
     for (GeoMaterial geoMap : geo.getGeoMaterials()) {
       geo.getMaterials().add(geoMap.getId().getMaterial());
     }
-
+    Collections.sort(geo.getMaterials(), new MaterialComparator());
   }
 
   @Transactional

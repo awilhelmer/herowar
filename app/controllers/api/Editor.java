@@ -28,7 +28,7 @@ import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import controllers.utils.EnvironmentComparator;
+import util.EnvironmentComparator;
 import dao.game.EnvironmentDAO;
 import dao.game.GeometryDAO;
 import dao.game.MapDAO;

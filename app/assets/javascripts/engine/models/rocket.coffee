@@ -1,6 +1,6 @@
 MeshModel = require 'models/mesh'
 
-class LaserModel extends MeshModel
+class RocketModel extends MeshModel
 	
 	rotationMultipler: 50
 	
@@ -8,7 +8,7 @@ class LaserModel extends MeshModel
 	
 	distanceToDispose: 10
 	
-	glowColor: 0xffa500
+	glowColor: 0x00a5ff
 		
 	constructor: (@id, @owner, @target, @damage) ->
 		@meshBody = @createMeshBody()
@@ -32,4 +32,4 @@ class LaserModel extends MeshModel
 			@target.hit @damage
 			@dispose()
 
-return LaserModel
+return RocketModel

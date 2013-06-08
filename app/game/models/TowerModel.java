@@ -3,6 +3,7 @@ package game.models;
 import game.GameSession;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 import models.entity.game.Tower;
@@ -67,7 +68,9 @@ public class TowerModel extends BaseModel<Tower> {
     }
     UnitModel optimalUnit = null;
     double shortestDistance = Double.MAX_VALUE;
-    for (UnitModel unit : units) {
+    Iterator<UnitModel> iter = units.iterator();
+    while (iter.hasNext()) {
+      UnitModel unit = iter.next();
       if (!unit.isDeath() && inViewRange(unit)) {
         double distance = distance(unit);
         if (distance < shortestDistance) {

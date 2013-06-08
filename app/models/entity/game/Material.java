@@ -49,6 +49,7 @@ public class Material implements Serializable {
   @Column(length = 100)
   private String name;
 
+  @NotNull
   private Integer sortIndex;
 
   private String color = "#ffffff";
