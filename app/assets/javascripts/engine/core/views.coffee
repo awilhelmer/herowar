@@ -93,8 +93,7 @@ class Views
 		return
 
 	updateStats: ->
-		val = true
-		val = @settings.get 'displayFPS' if @settings.has 'displayFPS'
+		val = if @settings.has 'displayFPS' then @settings.get 'displayFPS' else false
 		if val then @_createStats() else @_removeStats()
 		return
 

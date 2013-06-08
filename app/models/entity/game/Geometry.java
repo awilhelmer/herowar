@@ -74,6 +74,7 @@ public class Geometry extends BaseModel implements Serializable {
   private String uvs = "[[]]";
 
   @Lob
+  @StringArray(type = ArrayType.OBJECT)
   private String bones;
   
   @Lob

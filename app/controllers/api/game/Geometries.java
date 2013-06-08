@@ -88,7 +88,6 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   private static void handleGeo(Geometry geo) {
     GeometryDAO.mapMaterials(geo); // For global binding ... TODO
-
     geo.setMaterials(new ArrayList<Material>());
     for (GeoMaterial geoMap : geo.getGeoMaterials()) {
       geo.getMaterials().add(geoMap.getId().getMaterial());
