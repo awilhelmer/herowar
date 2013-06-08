@@ -26,6 +26,8 @@ class SettingsView extends BaseView
 
 	cancel: (event) ->
 		console.log 'Settings cancel'
+		settings = db.get 'db/settings'
+		settings.fetch()
 		popup.close()
 
 return SettingsView
