@@ -8,7 +8,7 @@ class GameRouter extends Router
 		'game3'	           : 'game'
 		'game/defeat'      : 'defeat'
 		'game/victory'     : 'victory'
-		'game/preferences' : 'preferences'
+		'game/settings'    : 'settings'
 		'test'             : 'test'
 		
 return GameRouter

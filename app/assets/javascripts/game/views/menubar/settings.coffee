@@ -10,6 +10,6 @@ class SettingsView extends BaseView
 		'click' : 'invoke'
 		
 	invoke: (event) ->
-		Backbone.history.loadUrl 'game/preferences'
+		Backbone.history.loadUrl 'game/settings'
 
 return SettingsView
