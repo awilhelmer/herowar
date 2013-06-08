@@ -7,8 +7,9 @@ class VideoSettingsView extends BaseModelView
 	
 	entity: 'db/settings'
 
-	render: ->
-		console.log 'Render video settings:', @getTemplateData()
-		super()
+	getTemplateData: ->
+		json = super()
+		console.log 'Render video settings:', json
+		return json;
 
 return VideoSettingsView

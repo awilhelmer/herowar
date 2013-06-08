@@ -28,10 +28,10 @@ public class PlayerSettings implements Serializable {
 
   // VIDEO SETTINGS //
 
-  private Boolean displayFPS = true;
-  private Integer shadowsQuality = 2;
+  private Boolean displayFPS = false;
+  private Integer shadowsQuality = 1;
   private Integer textureQuality = 2;
-  private Integer shaderQuality = 2;
+  private Integer shaderQuality = 4;
 
   // CONSTRUCTOR //
 

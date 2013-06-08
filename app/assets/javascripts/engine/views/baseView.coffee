@@ -36,7 +36,8 @@ class BaseView extends Backbone.View
 			@$el.empty()
 			html = ''
 			if @template
-					html = if @getTemplateData() then @template @getTemplateData() else @template()
+					data = @getTemplateData()
+					html = if data then @template data else @template()
 					html = @_stripWhitespaces html
 			$html = $ html
 			@_renderSubviews $html

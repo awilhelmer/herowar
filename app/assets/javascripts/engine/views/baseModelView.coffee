@@ -2,38 +2,74 @@ BaseView = require 'views/baseView'
 
 class BaseModelView extends BaseView
 
+	initialize: (options) ->
+		@inputListeners = []
+		super options
+
 	afterRender: =>
-		@processFormData()
+		@_processFormData()
 		super()	
 
-	processFormData: ->
+	remove: ->
+		@_removeListeners()
+		super()
+
+	_processFormData: =>
+		isBound = @inputListeners.length isnt 0
 		console.log 'Change input field values for ', @$el
 		@$el.find('input,textarea,select').each (index, element) =>
 			$element = $ element
-			@processField $element
+			@_processField $element
+			@_addListener $element unless isBound
+		console.log 'Model', @model.attributes
 		return
 
-	processField: ($element) ->
-		[ model, property ] = @analyseFieldName $element
-		if @model.has property
-			value = @model.get property
-			console.log 'Process', model, property, 'Value=', value
-			console.log 'Checkbox=', $element.is(':checkbox'), 'Select=', $element.is('select'), 'Input=', $element.is(':input')
-			@setFieldValue $element, value
+	_processField: ($element) ->
+		name = $element.attr 'name'
+		if @model.has name
+			value = @model.get name
+			console.log 'Set input', name, 'to', value
+			@_setFieldValue $element, value
 		return
 		
-	setFieldValue: ($element, value) ->
+	_setFieldValue: ($element, value) ->
 		if $element.is ':checkbox'
-			if value then $element.attr('checked', 'checked') else $element.attr('checked', '')
+			$element.attr 'checked', value 
 		else if $element.is 'select'
-			$element.find("option[value='#{value}']").attr 'selected', 'selected'
+			$element.val value
+		# TODO: handle input type text ...
 		return
 
-	analyseFieldName: ($element) ->
+	_setModelValue: ($element) ->
 		name = $element.attr 'name'
-		split = name.split '-'
-		property = split.pop()
-		model = split.join '/'
-		return [ model, property ]
+		if $element.is ':checkbox'
+			console.log 'Changed input', name, 'to', $element.is ':checked'
+			@model.set name, $element.is ':checked'
+		else if $element.is 'select'
+			console.log 'Changed input', name, 'to', $element.find(':selected').attr 'value'
+			@model.set name, $element.find(':selected').attr 'value'
+		# TODO: handle input type text ...
+		return
+
+	_onChange: (event) =>
+		return unless event
+		$target = $ event.currentTarget
+		@_setModelValue $target
+		console.log 'Model', @model.attributes
+		return true
+
+	_addListener: ($element) ->
+		selector = "#{$element.get(0).tagName}[name='#{$element.attr('name')}']".toString()
+		console.log 'Bind change on ', selector
+		@$el.on 'change', selector, @_onChange
+		@inputListeners.push selector
+		return
+		
+	_removeListeners: ->
+		for selector in @inputListeners
+			console.log 'Unbind change on ', selector
+			@$el.off 'change', selector, @_onChange
+		@inputListeners.length = 0
+		return
 	
 return BaseModelView
