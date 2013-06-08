@@ -136,16 +136,17 @@ public class JsonUtils {
                 Iterator<JsonNode> nodes = fieldNode.getElements();
                 while (nodes.hasNext()) {
                   JsonNode colNode = (JsonNode) nodes.next();
+                  Object element = null;
                   if (col.size() > currentIndex) {
-                    Object element = col.toArray()[currentIndex];
+                    element = col.toArray()[currentIndex];
                     parse(element, result, colNode, classes);
                     log.info("Changed collection entry: " + element.toString());
                   } else {
-                    Object element = genericType.newInstance();
+                    element = genericType.newInstance();
                     parse(element, result, colNode, classes);
                     log.info("Added collection entry: " + element.toString());
-                    col.add(element);
                   }
+                  col.add(element);
                   currentIndex++;
                 }
                 log.info("Index " + currentIndex + " of " + col.size());
