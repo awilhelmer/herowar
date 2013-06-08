@@ -30,7 +30,7 @@ public class Me extends Controller {
   public static Result show() {
     User user = getLoggedInUser();
     if (user != null) {
-      return ok(toJson(getLoggedInUser()));
+      return ok(toJson(user));
     }
     return ok("{}");
   }
@@ -87,7 +87,6 @@ public class Me extends Controller {
     return ok(toJson(UserDAO.findByUserEmail(email) != null));
   }
 
-  @Transactional
   private static User getLoggedInUser() {
     return Application.getLocalUser(session());
   }

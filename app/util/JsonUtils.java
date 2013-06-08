@@ -8,7 +8,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +76,7 @@ public class JsonUtils {
       }
     }
   }
-  
+
   public static void parse(Object result, JsonNode node, List<Class<?>> classes) {
     parse(result, null, node, classes);
   }
@@ -194,7 +193,7 @@ public class JsonUtils {
               break;
             }
           }
-        }        
+        }
       }
     } catch (Exception e) {
       log.error("", e);
