@@ -13,7 +13,6 @@ class Viewport extends Backbone.Model
 		#	renderer.render scenegraph.skyboxScene, cameraSkybox
 		#renderer.render scenegraph.scene(), cameraScene
 		#renderer.render scenegraph.scene('glow'), cameraScene
-		@stats.update() if @stats
 		return
 
 	createCameraScene: ->
@@ -112,25 +111,7 @@ class Viewport extends Backbone.Model
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()
 		return
-
-	updateStats: ->
-		showStats = @get 'showStats'
-		if showStats then @createStats() else @removeStats()
-		return
 	
-	createStats: ->
-		unless @stats
-			@stats = new Stats()
-			@stats.domElement.id = 'fps'
-			$('body').append @stats.domElement
-		return
-
-	removeStats: ->
-		if @stats
-			$('body').remove @stats.domElement
-			@stats = null
-		return
-
 	createHUD: ->
 		hud = @get 'hud'
 		if hud is Variables.HUD_GAME

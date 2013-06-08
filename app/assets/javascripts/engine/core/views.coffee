@@ -15,7 +15,6 @@ class Views
 			background: 
 				r: 0, g: 0, b: 0, a: 1
 			rendererType: Variables.RENDERER_TYPE_WEBGL
-			showStats: false
 			hud: null
 		camera:
 			type: Variables.CAMERA_TYPE_ORTHOGRAPHIC
@@ -25,19 +24,21 @@ class Views
 			fov: 75
 			near: 1
 			far: 10000
-			
 
 	constructor: ->
+		_.extend @, Backbone.Events
 		@viewports = db.get 'ui/viewports'
+		@settings = db.get 'db/settings'
+		@rendering = false
 		@initViewports()
 		@initListener()
-		@rendering = false
-		console.log @viewports
+		@updateStats()
 
 	initListener:  ->
 		Eventbus.cameraChanged.add @onCameraChanged
 		window.addEventListener 'resize', => @onWindowResize true 
 		events.on 'scene:terrain:build', @changeTerrain, @
+		@listenTo @settings, 'change:displayFPS', @updateStats
 		return
 
 	initViewports: ->
@@ -48,7 +49,6 @@ class Views
 			view.createCameraSkybox()
 			view.createRenderer()
 			view.createEffects()
-			view.updateStats()
 			view.updateCamera()
 			view.createHUD()
 			console.log 'View', view, 'initialized'
@@ -59,6 +59,7 @@ class Views
 			@rendering = true
 			view.render delta for view in @viewports.models
 			@rendering = false
+			@stats.update() if @stats
 		return
 
 	onWindowResize: (withReRender) =>
@@ -89,6 +90,25 @@ class Views
 					left: 0 
 					top: 0
 				view.updateCamera()
+		return
+
+	updateStats: ->
+		val = true
+		val = @settings.get 'displayFPS' if @settings.has 'displayFPS'
+		if val then @_createStats() else @_removeStats()
+		return
+
+	_createStats: ->
+		unless @stats
+			@stats = new Stats()
+			@stats.domElement.id = 'fps'
+			$('body').append @stats.domElement
+		return
+
+	_removeStats: ->
+		if @stats
+			$('#fps').remove()
+			@stats = null
 		return
 			
 return Views
