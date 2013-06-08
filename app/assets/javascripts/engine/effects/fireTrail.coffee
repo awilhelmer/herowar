@@ -1,8 +1,11 @@
-Explosion = require 'effects/explosion'
+Fire = require 'effects/fire'
 
-class FireTrail extends Explosion
+class FireTrail extends Fire
 	
-		isDone: ->
-			return @owner.isDisposed
-
+	rate: 50
+	
+	maxAge: 0.5
+	
+	scale: new THREE.Vector3 0.05, 0.05, 0.05
+	
 return FireTrail

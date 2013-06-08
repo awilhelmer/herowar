@@ -1,6 +1,5 @@
 AnimatedModel = require 'models/animatedModel'
 BlackSmoke = require 'effects/blackSmoke'
-Explosion = require 'effects/explosion'
 events = require 'events'
 
 class Enemy extends AnimatedModel
@@ -82,7 +81,7 @@ class Enemy extends AnimatedModel
 			@currentShield = 0
 			@currentHealth = 0
 			@setAnimation 'crdeath', true
-			@effects.push new Explosion @ if @explode
+			@showExplosion 400 if @explode
 		return
 	
 	getHealthPercentage: ->

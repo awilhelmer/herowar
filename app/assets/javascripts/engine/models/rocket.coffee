@@ -1,35 +1,32 @@
-MeshModel = require 'models/mesh'
+WeaponModel = require 'models/weapon'
+meshesFactory = require 'factory/meshes'
+FireTrail = require 'effects/fireTrail'
 
-class RocketModel extends MeshModel
-	
-	rotationMultipler: 50
-	
-	moveSpeed: 150
-	
-	distanceToDispose: 10
+class RocketModel extends WeaponModel
 	
 	glowColor: 0x00a5ff
 		
 	constructor: (@id, @owner, @target, @damage) ->
-		@meshBody = @createMeshBody()
-		super @id, "Shot-#{@id}", @meshBody
-		@target.damageIncoming += @damage
+		super @id, @owner, @target, @damage
+		@isNew = true
 
 	createMeshBody: ->
-		geometry = new THREE.CubeGeometry 1, 1, 8.5
-		material = new THREE.MeshBasicMaterial color: @glowColor, transparent: true, opacity: 0.7
-		mesh = new THREE.Mesh geometry, material
-		mesh.userData.glowing = true
-		return mesh
+		return meshesFactory.create @id, 'rocket'
 
 	update: (delta, now) ->
-		targetPosition = @target.getMainObject().position
-		distance = @getMainObject().position.distanceTo targetPosition
-		if distance > @distanceToDispose
-			@rotateTo targetPosition, delta
-			@move delta
-		else
-			@target.hit @damage
-			@dispose()
+		super delta, now
+		if @isNew
+			@isNew = false
+			@effects.push new FireTrail @
+		@dispose() if @effects.length is 0
+		return
+		
+	onHit: ->
+		super()
+		for effect in @effects
+			effect.done = true
+			effect.stop()
+		@showExplosion()
+		return
 
 return RocketModel

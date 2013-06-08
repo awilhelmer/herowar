@@ -24,6 +24,8 @@ class ViewerController extends ApplicationController
 
 	initialize: (options) ->
 		log.info 'Initialize viewer...'
+		db.data().images = 
+			explosion: @createImage 'assets/images/game/textures/effects/explosion.png'
 		db.data().geometries = {}
 		super options
 		engine.start()
@@ -39,5 +41,10 @@ class ViewerController extends ApplicationController
 	addGround: ->		
 		grid = new THREE.GridHelper 500, 50
 		scenegraph.scene().add grid		
-		
+	
+	createImage: (url) ->
+		img = new Image
+		img.src = url
+		return img
+	
 return ViewerController

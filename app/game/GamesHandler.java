@@ -129,6 +129,7 @@ public class GamesHandler implements Serializable {
     java.util.Map<String, String> texturesCube = new HashMap<String, String>();
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
     java.util.Map<String, String> geometries = new HashMap<String, String>();
+    geometries.put("rocket","assets/geometries/weapons/rocket.js");
     Iterator<Wave> iter = game.getMap().getWaves().iterator();
     while (iter.hasNext()) {
       Wave wave = iter.next();

@@ -1,3 +1,4 @@
+Explosion = require 'effects/explosion'
 MeshModel = require 'models/mesh'
 
 class AnimatedModel extends MeshModel
@@ -46,6 +47,15 @@ class AnimatedModel extends MeshModel
 				mesh.playAnimation name, @animationFPS 
 				mesh.baseDuration = mesh.duration
 			@activeAnimation = name
+		return
+
+	showExplosion: (removeTime) ->
+		removeTime = 1 unless removeTime
+		@effects.push new Explosion @ 
+		setTimeout =>
+			scenegraph = require 'scenegraph'
+			scenegraph.removeFromScenes @
+		, removeTime
 		return
 
 	dispose: ->
