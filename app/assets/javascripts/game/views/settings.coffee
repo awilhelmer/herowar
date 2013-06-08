@@ -1,8 +1,9 @@
-BasePopupView = require 'views/basePopupView'
+BaseView = require 'views/baseView'
 templates = require 'templates'
+popup = require 'popup'
 db = require 'database'
 
-class SettingsView extends BasePopupView
+class SettingsView extends BaseView
 
 	id: 'settings'
 		
@@ -21,8 +22,10 @@ class SettingsView extends BasePopupView
 	save: (event) ->
 		console.log 'Settings save'
 		@apply()
+		popup.close()
 
 	cancel: (event) ->
 		console.log 'Settings cancel'
+		popup.close()
 
 return SettingsView

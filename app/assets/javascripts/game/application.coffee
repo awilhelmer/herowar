@@ -7,6 +7,8 @@ app =
 
 	views: {}
 	
+	history: []
+	
 	start: ->
 		app.socketClient = new SocketClient()
 		app.router = new GameRouter()
