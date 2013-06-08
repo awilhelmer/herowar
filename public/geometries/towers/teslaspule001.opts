@@ -1,0 +1,26 @@
+{
+    "price" : 2000,
+	"coverage" : 100,
+	"reload" : 1800,
+	"damageMin" : 1000,
+	"damageMax" : 2500,
+	"weapons" : [
+		{
+			"position" : 
+			{
+				"x" : -8.0,
+				"y" : 27.0,
+				"z" : 14.0
+			},
+			"type" : "ROCKET"
+		}, {
+			"position" : 
+			{
+				"x" : 8.0,
+				"y" : 27.0,
+				"z" : 14.0
+			},
+			"type" : "ROCKET"
+		}
+	]
+}

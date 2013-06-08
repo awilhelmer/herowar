@@ -3,6 +3,7 @@ PacketType = require 'network/packets/packetType'
 AddObject = require 'tools/addObject'
 scenegraph = require 'scenegraph'
 Tower = require 'models/tower'
+towers = require 'factory/towers'
 events = require 'events'
 db = require 'database'
 
@@ -27,14 +28,17 @@ class AddTowerTool extends AddObject
 	onBuildTower: (packet) ->
 		console.log 'onBuildTower()', packet
 		tower = db.get 'db/towers', packet.towerId
-		name = tower.get 'name'
-		model = new Tower packet.objectId, name, @createMesh packet.objectId, name
-		model.getMainObject().position.set packet.position.x, packet.position.y, packet.position.z
+		model = towers.create
+			id: packet.objectId
+			name: tower.get 'name'
+			position:
+				x: packet.position.x
+				y: packet.position.y
+				z: packet.position.z
 		model.active = true
 		model.range = tower.get 'coverage'
 		model.reload = tower.get 'reload'
 		model.weapons = tower.get 'weapons'
-		scenegraph.addDynObject model, packet.objectId
 		return
 
 	onLeaveTool: ->
@@ -44,16 +48,16 @@ class AddTowerTool extends AddObject
 			@tool.unset 'currentObject'
 
 	addMesh: ->
-		model = @tool.get 'currentObject'
-		scenegraph.addDynObject model, @tool.get 'currentObjectId'
 
 	placeMesh: ->
 		console.log 'Place tower', @tool.get('currentObject').getMainObject()
-		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position # TODO: fix hardcoded tower id
+		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position
 	
 	onLoadGeometry: (geometry, materials, json) =>
 		tower = db.get 'db/towers', @towerId
-		model = new Tower @tool.get('currentObjectId'), name, @createMesh @tool.get('currentObjectId'), @tool.get 'currentObjectName'
+		model = towers.create
+			id: @tool.get 'currentObjectId'
+			name: tower.get 'name'
 		model.range = tower.get 'coverage'
 		model.showRange()
 		model.visible false
@@ -68,7 +72,7 @@ class AddTowerTool extends AddObject
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
 		if model
-			position.y = 0	# TODO: fix this hotfix (positive y values hide the tower...)
+			# position.y = 200
 			model.getMainObject().position = position
 			model.visible = true unless model.visible
 

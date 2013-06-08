@@ -15,12 +15,10 @@ enemies =
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if waypoints.length > 0
-		model
+		return model
 		
 	_createMesh: (id, name) ->
-		mesh = meshesFactory.create id, name
-		#mesh.rotation.y = THREE.Math.degToRad -90
-		mesh
+		return meshesFactory.create id, name
 	
 	_getWaypoints: (id) ->
 		path = @_getPathById id
