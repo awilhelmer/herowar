@@ -1,6 +1,7 @@
 RendererCanvasController = require 'controllers/rendererCanvas'
 materialHelper = require 'helper/materialHelper'
 GeometryUtils = require 'util/geometryUtils'
+textureUtils = require 'util/textureUtils'
 JSONLoader = require 'util/threeloader'
 Variables = require 'variables'
 Eventbus = require 'eventbus'
@@ -84,6 +85,9 @@ class Preloader extends RendererCanvasController
 			when 'images'
 				img = new Image
 				img.onload = () =>
+					@data['textures'][name] = textureUtils.createFromImage
+						image: @data['images'][name]
+						alpha: true
 					@updateState type, name, true
 				img.src = url
 				@data[type][name] = img

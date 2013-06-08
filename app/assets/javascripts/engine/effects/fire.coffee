@@ -1,9 +1,6 @@
 BaseEmitterEffect = require 'effects/baseEmitterEffect'
-textureUtils = require 'util/textureUtils'
 scenegraph = require 'scenegraph'
 db = require 'database'
-
-__texture__ = null
 
 class Fire extends BaseEmitterEffect
 	
@@ -19,7 +16,6 @@ class Fire extends BaseEmitterEffect
 		
 	constructor: (@owner) ->
 		super @owner
-		__texture__ = @getTexture() unless __texture__
 		@start()
 	
 	update: (delta, now) ->
@@ -36,7 +32,7 @@ class Fire extends BaseEmitterEffect
 	
 	createMaterial: ->
 		material = new THREE.SpriteMaterial
-			map: __texture__
+			map: @getTexture()
 			useScreenCoordinates: false
 			transparent: true
 			blending: THREE.AdditiveBlending
@@ -70,8 +66,6 @@ class Fire extends BaseEmitterEffect
 		return
 
 	getTexture: ->
-		return textureUtils.createFromImage
-			image: db.data().images.explosion
-			alpha: true
+		return db.data().textures.explosion
 
 return Fire
