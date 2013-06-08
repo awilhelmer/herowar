@@ -184,8 +184,10 @@ public abstract class AbstractImporter<E extends Serializable> {
   private Geometry parseGeometryFile(File file) {
     try {
       Geometry geo = mapper.readValue(file, Geometry.class);
+      int sortIndex = 0;
       for (Material mat : geo.getMaterials()) {
         mat.setName(mat.getDbgName());
+        mat.setSortIndex(sortIndex++);
       }
       Map<Integer, Material> matMap = MaterialDAO.mapAndSave(geo.getMaterials());
       GeometryDAO.createGeoMaterials(geo, matMap);
