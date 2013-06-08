@@ -21,6 +21,8 @@ app =
 		db.get 'ui/preload'
 		db.get 'ui/stats'
 		db.get 'ui/waves'
+		settings = db.get 'db/settings'
+		settings.fetch()
 		towers = db.get 'db/towers'
 		towers.fetch()
 
