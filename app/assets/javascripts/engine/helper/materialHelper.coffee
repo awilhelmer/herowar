@@ -94,7 +94,15 @@ materialHelper =
 				newMats.push newMat
 		mesh = @updateMeshProperties new THREE.MorphAnimMesh(geometry), newMats, name, json
 		mesh.parseAnimations()
-		mesh
+		return mesh
+
+	createSkinnedMesh: (geometry, materials, name, json) ->
+		newMats = []
+		if _.isArray(materials) and materials.length > 0
+			for mat in materials
+				newMat = mat.clone()
+				newMats.push newMat
+		return @updateMeshProperties new THREE.SkinnedMesh(geometry), newMats, name, json
 	
 	createMesh: (geometry, materials, name, json) ->
 		newMats = []
@@ -102,7 +110,7 @@ materialHelper =
 			for mat in materials
 				newMat = mat.clone()
 				newMats.push newMat
-		@updateMeshProperties new THREE.Mesh(geometry), newMats, name, json
+		return @updateMeshProperties new THREE.Mesh(geometry), newMats, name, json
 	
 	updateMeshProperties: (mesh, materials, name, json) ->
 		mesh.name = name

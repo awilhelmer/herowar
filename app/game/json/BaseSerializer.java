@@ -19,6 +19,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.beanutils.converters.StringConverter;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
@@ -249,7 +250,12 @@ public abstract class BaseSerializer<T> extends JsonSerializer<T> {
             if (entry.getValue().startsWith("[")) {
               writeStringAsDoubleArray(jgen, entry.getKey(), entry.getValue());
             } else {
-              jgen.writeStringField(entry.getKey(), entry.getValue());
+              String val = entry.getValue();
+              if (NumberUtils.isNumber(val)) {
+                jgen.writeNumberField(entry.getKey(), Double.parseDouble(entry.getValue()));
+              } else {
+                jgen.writeStringField(entry.getKey(), entry.getValue());
+              }
             }
           }
           jgen.writeEndObject();
