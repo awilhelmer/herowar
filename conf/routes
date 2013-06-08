@@ -56,6 +56,9 @@ PUT			/api/game/map/:id										controllers.api.game.Maps.update(id: Long)
 DELETE	/api/game/map/:id										controllers.api.game.Maps.delete(id: Long)
 POST		/api/game/map												controllers.api.game.Maps.add()
 
+GET			/api/game/player/:id								controllers.api.game.Players.show(id: Long)
+GET			/api/game/player/:id/settings				controllers.api.game.Players.showSettings(id: Long)
+
 GET			/api/game/terrain/all								controllers.api.game.Terrains.list()
 GET			/api/game/terrain/:id								controllers.api.game.Terrains.show(id: Long)
 PUT			/api/game/terrain/:id								controllers.api.game.Terrains.update(id: Long)
@@ -81,6 +84,7 @@ GET			/api/editor/environment/:id					controllers.api.Editor.envShow(id: Long)
 ########## GAME ###########
 
 GET			/game																controllers.Game.index()
+GET			/test																controllers.Game.test()
 
 ########## EDITOR ###########
 

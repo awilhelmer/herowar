@@ -65,14 +65,18 @@ public class User extends BaseModel implements Subject, Serializable {
   @PrimaryKeyJoinColumn
   private Player player;
 
+  // CONSTRUCTOR //
+  
+  public User() {
+    this.player = new Player(this);
+  }
+  
+  // METHODS //
+  
   @Override
   public String getIdentifier() {
     // TODO Auto-generated method stub
     return null;
-  }
-
-  public User() {
-    this.setPlayer(new Player(this));
   }
 
   // GETTER & SETTER //

@@ -55,6 +55,10 @@ public abstract class BaseAPI<K extends Serializable, T extends Object> extends 
     return getEntityManager().getCriteriaBuilder();
   }
 
+  protected T find(K id) {
+    return getEntityManager().find(entityClass, id);
+  }
+  
   protected Result showEntry(K id) {
     try {
       return ok(toJson(getEntityManager().find(entityClass, id)));

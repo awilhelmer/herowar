@@ -9,4 +9,8 @@ public class Game extends Controller {
   public static Result index() {
     return ok(index.render());
   }
+  
+  public static Result test() {
+    return ok(index.render());
+  }
 }

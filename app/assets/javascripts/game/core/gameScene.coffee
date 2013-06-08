@@ -38,11 +38,11 @@ class GameScene extends Scene
 		#console.log 'onTowerAttack', target.id, packet.damage, target.isSoonDead()
 		
 	onGameDefeat: ->
-		@onFinish 'defeat'
+		@onFinish 'game/defeat'
 		return
 
 	onGameVictory: ->
-		@onFinish 'victory'
+		@onFinish 'game/victory'
 		return
 	
 	onFinish: (url) ->
