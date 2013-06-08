@@ -7,7 +7,7 @@ meshes =
 		data = db.data().geometries[name]
 		if data[0].morphTargets.length isnt 0
 			mesh = materialHelper.createAnimMesh data[0], data[1], name, id: id
-		else if data[0].bones.length isnt 0
+		else if data[0].bones
 			mesh = materialHelper.createSkinnedMesh data[0], data[1], name, id: id
 		else
 			mesh = materialHelper.createMesh data[0], data[1], name, id: id

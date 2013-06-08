@@ -26,7 +26,7 @@
 	"shading" : "Phong",
 	"blending" : "AdditiveBlending",
 	"depthWrite" : false,
-	"transparent" : true,
+	"transparent" : false,
 	"visible" : false,
 	"specularCoef" : 20,
 	"vertexColors" : false
@@ -42,7 +42,7 @@
 	"shading" : "Phong",
 	"blending" : "AdditiveBlending",
 	"depthWrite" : false,
-	"transparent" : true,
+	"transparent" : false,
 	"visible" : false,
 	"specularCoef" : 20,
 	"vertexColors" : false
@@ -58,7 +58,7 @@
 	"shading" : "Phong",
 	"blending" : "AdditiveBlending",
 	"depthWrite" : false,
-	"transparent" : true,
+	"transparent" : false,
 	"visible" : false,
 	"specularCoef" : 20,
 	"vertexColors" : false
@@ -74,7 +74,7 @@
 	"shading" : "Phong",
 	"blending" : "AdditiveBlending",
 	"depthWrite" : false,
-	"transparent" : true,
+	"transparent" : false,
 	"visible" : false,
 	"specularCoef" : 20,
 	"vertexColors" : false

@@ -65,6 +65,8 @@ public class Material implements Serializable {
   private String blending = "NormalBlending";
   private String shading = "SmoothShading";
 
+  private Boolean visible = Boolean.TRUE;
+
   private Boolean depthTest = Boolean.FALSE;
   private Boolean depthWrite = Boolean.FALSE;
 
@@ -206,6 +208,14 @@ public class Material implements Serializable {
 
   public void setShading(String shading) {
     this.shading = shading;
+  }
+
+  public Boolean getVisible() {
+    return visible;
+  }
+
+  public void setVisible(Boolean visible) {
+    this.visible = visible;
   }
 
   public Boolean getDepthTest() {

@@ -105,6 +105,7 @@ materialHelper =
 				newMat.wrapAround = true
 				newMat.needsUpdate = true
 				newMats.push newMat
+		newMats.reverse()
 		return @updateMeshProperties new THREE.SkinnedMesh(geometry), newMats, name, json
 	
 	createMesh: (geometry, materials, name, json) ->
