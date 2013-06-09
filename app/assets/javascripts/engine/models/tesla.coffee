@@ -6,8 +6,11 @@ class TeslaModel extends WeaponModel
 	glowColor: 0xffa500
 
 	createMeshBody: ->
-		material = new THREE.MeshBasicMaterial color: @glowColor, transparent: true, opacity: 0.7
-		mesh = new Bolt material, 10
+		material = new THREE.MeshBasicMaterial color: @glowColor, transparent: true, opacity: 0.4
+		mesh = new Bolt material, 5 # 10
+		mesh.userData.glowing = true
+		mesh.scale.x = 0.1
+		#mesh.branchPoint.lookAt @target.getMainObject()
 		mesh.build()
 		console.log 'Created bolt', mesh
 		return mesh
@@ -23,6 +26,6 @@ class TeslaModel extends WeaponModel
 		super()
 		setTimeout =>
 			@dispose()
-		, 300
+		, 200
 
 return TeslaModel
