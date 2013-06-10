@@ -1,4 +1,4 @@
-WeaponModel = require 'models/scene/weapon/weapon'
+WeaponModel = require 'models/weapon/base'
 meshesFactory = require 'factory/meshes'
 FireTrail = require 'effects/fireTrail'
 

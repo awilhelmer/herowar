@@ -42,7 +42,7 @@ class Tower extends AnimatedModel
 			position = @getMainObject().localToWorld origin.clone()
 			muzzleFlash = new MuzzleFlash target: @getMainObject(), origin: origin, position: position
 			@effects.push muzzleFlash
-			Weapon = require "models/scene/weapon/#{weapon.type.toLowerCase()}"
+			Weapon = require "models/weapon/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, currentDamage
 			laser.getMainObject().position.copy position
 			laser.getMainObject().quaternion.copy @getMainObject().quaternion

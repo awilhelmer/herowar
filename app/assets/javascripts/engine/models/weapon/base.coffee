@@ -1,6 +1,6 @@
 AnimatedModel = require 'models/scene/animatedModel'
 
-class Weapon extends AnimatedModel
+class BaseWeapon extends AnimatedModel
 	
 	rotationMultipler: 50
 	
@@ -37,4 +37,4 @@ class Weapon extends AnimatedModel
 		@target.hit @damage
 		return
 		
-return Weapon
+return BaseWeapon

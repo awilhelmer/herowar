@@ -1,4 +1,4 @@
-WeaponModel = require 'models/scene/weapon/weapon'
+WeaponModel = require 'models/weapon/base'
 
 class LaserModel extends WeaponModel
 	
