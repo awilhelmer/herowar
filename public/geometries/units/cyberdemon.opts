@@ -1,6 +1,7 @@
 {
     "health" : 15000,
 	"shield" : 0,
+	"moveSpeed" : 30,
 	"type" : "TROOPER",
 	"rotation" : {
 		"x": 0,

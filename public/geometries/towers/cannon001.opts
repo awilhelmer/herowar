@@ -4,6 +4,7 @@
 	"reload" : 600,
 	"damageMin" : 50,
 	"damageMax" : 100,
+	"rotationSpeed" : 3,
 	"weapons" : [
 		{
 			"position" : 

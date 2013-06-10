@@ -1,6 +1,7 @@
 {
     "health" : 1000,
 	"shield" : 500,
+	"moveSpeed" : 30,
 	"type" : "TANK",
 	"burning" : true,
 	"explode" : true,
