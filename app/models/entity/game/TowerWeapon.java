@@ -62,8 +62,6 @@ public class TowerWeapon implements Serializable {
     this.position = position;
   }
 
-
-
   @Override
   public String toString() {
     return "TowerWeapon [id=" + id + ", type=" + type + ", position=" + (position != null ? position.toString() : null) + "]";

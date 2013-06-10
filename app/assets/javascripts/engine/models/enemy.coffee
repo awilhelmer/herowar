@@ -1,5 +1,6 @@
 AnimatedModel = require 'models/animatedModel'
 BlackSmoke = require 'effects/blackSmoke'
+meshesFactory = require 'factory/meshes'
 events = require 'events'
 
 class Enemy extends AnimatedModel
@@ -8,8 +9,9 @@ class Enemy extends AnimatedModel
 	
 	glowing: false
 
-	constructor: (opts, @meshBody) ->
+	constructor: (opts) ->
 		opts = _.extend {}, opts
+		@meshBody = meshesFactory.create opts.id, opts.name
 		@initialize opts
 		super opts.id, opts.name, @meshBody
 		@effects.push new BlackSmoke @ if @burning

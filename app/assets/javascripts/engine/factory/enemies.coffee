@@ -1,4 +1,3 @@
-meshesFactory = require 'factory/meshes'
 scenegraph = require 'scenegraph'
 Enemy = require 'models/enemy'
 db = require 'database'
@@ -11,14 +10,11 @@ enemies =
 		return dynObj
 
 	_createModel: (opts, waypoints) ->
-		model = new Enemy opts, @_createMesh opts.id, opts.name
+		model = new Enemy opts
 		if _.isArray waypoints
 			model.waypoints = waypoints
 			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if waypoints.length > 0
 		return model
-		
-	_createMesh: (id, name) ->
-		return meshesFactory.create id, name
 	
 	_getWaypoints: (id) ->
 		path = @_getPathById id
