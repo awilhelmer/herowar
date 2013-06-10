@@ -1,5 +1,5 @@
 scenegraph = require 'scenegraph'
-Enemy = require 'models/enemy'
+Enemy = require 'models/scene/enemy'
 db = require 'database'
 
 enemies =

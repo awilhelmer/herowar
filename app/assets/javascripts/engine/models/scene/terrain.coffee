@@ -1,4 +1,4 @@
-MeshModel = require 'models/mesh'
+MeshModel = require 'models/scene/mesh'
 
 class Terrain extends MeshModel
 	

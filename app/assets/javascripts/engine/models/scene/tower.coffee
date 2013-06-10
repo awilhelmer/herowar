@@ -1,13 +1,22 @@
-AnimatedModel = require 'models/animatedModel'
+AnimatedModel = require 'models/scene/animatedModel'
 MuzzleFlash = require 'effects/muzzleFlash'
+meshesFactory = require 'factory/meshes'
 scenegraph = require 'scenegraph'
 
 class Tower extends AnimatedModel
 	
 	shotId: 5000 # TODO: this must be dynamic somehow
 	
-	constructor: (@id, @name, @meshBody) ->
-		super @id, @name, @meshBody
+	attributes:
+		active   : false
+		range    : 0
+		weapons  : []
+		position : undefined
+	
+	constructor: (opts) ->
+		opts = _.extend {}, opts
+		@meshBody = meshesFactory.create opts.id, opts.name
+		super opts.id, opts.name, @meshBody
 		@weapons = []
 		@active = false
 		@range = 0
@@ -33,7 +42,7 @@ class Tower extends AnimatedModel
 			position = @getMainObject().localToWorld origin.clone()
 			muzzleFlash = new MuzzleFlash target: @getMainObject(), origin: origin, position: position
 			@effects.push muzzleFlash
-			Weapon = require "models/#{weapon.type.toLowerCase()}"
+			Weapon = require "models/scene/weapon/#{weapon.type.toLowerCase()}"
 			laser = new Weapon @shotId++, @, target, currentDamage
 			laser.getMainObject().position.copy position
 			laser.getMainObject().quaternion.copy @getMainObject().quaternion

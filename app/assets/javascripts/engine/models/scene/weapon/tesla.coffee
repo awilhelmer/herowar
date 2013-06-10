@@ -1,5 +1,5 @@
-WeaponModel = require 'models/weapon'
-Bolt = require 'models/bolt'
+WeaponModel = require 'models/scene/weapon/weapon'
+Bolt = require 'models/scene/bolt'
 
 class TeslaModel extends WeaponModel
 	

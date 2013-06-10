@@ -1,4 +1,4 @@
-AnimatedModel = require 'models/animatedModel'
+AnimatedModel = require 'models/scene/animatedModel'
 BlackSmoke = require 'effects/blackSmoke'
 meshesFactory = require 'factory/meshes'
 events = require 'events'

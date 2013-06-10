@@ -1,4 +1,4 @@
-AnimatedModel = require 'models/animatedModel'
+AnimatedModel = require 'models/scene/animatedModel'
 
 class Weapon extends AnimatedModel
 	

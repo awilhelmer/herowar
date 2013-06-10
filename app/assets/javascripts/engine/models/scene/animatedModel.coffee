@@ -1,5 +1,5 @@
+MeshModel = require 'models/scene/mesh'
 Explosion = require 'effects/explosion'
-MeshModel = require 'models/mesh'
 
 class AnimatedModel extends MeshModel
 

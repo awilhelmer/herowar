@@ -1,4 +1,4 @@
-BaseModel = require 'models/basemodel'
+BaseModel = require 'models/scene/basemodel'
 scenegraph = require 'scenegraph'
 
 class MeshModel extends BaseModel
