@@ -31,11 +31,12 @@ public class Tower implements Serializable {
   @NotNull
   private String name;
 
-  private Integer price;
-  private Integer coverage;
-  private Integer reload;
-  private Integer damageMin;
-  private Integer damageMax;
+  private Integer price = 0;
+  private Integer coverage = 0;
+  private Integer reload = 0;
+  private Integer damageMin = 0;
+  private Integer damageMax = 0;
+  private Integer rotationSpeed = 0;
   
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private Geometry geometry;
@@ -99,6 +100,14 @@ public class Tower implements Serializable {
 
   public void setDamageMax(Integer damageMax) {
     this.damageMax = damageMax;
+  }
+
+  public Integer getRotationSpeed() {
+    return rotationSpeed;
+  }
+
+  public void setRotationSpeed(Integer rotationSpeed) {
+    this.rotationSpeed = rotationSpeed;
   }
 
   public Geometry getGeometry() {

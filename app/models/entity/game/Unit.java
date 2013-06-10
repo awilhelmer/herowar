@@ -40,6 +40,7 @@ public class Unit implements Serializable {
 
   private Integer health = 0;
   private Integer shield = 0;
+  private Integer moveSpeed = 0;
   private Double scaleGlow = 1d;
   private UnitType type;
   private Boolean burning = false;
@@ -93,6 +94,14 @@ public class Unit implements Serializable {
 
   public void setShield(Integer shield) {
     this.shield = shield;
+  }
+
+  public Integer getMoveSpeed() {
+    return moveSpeed;
+  }
+
+  public void setMoveSpeed(Integer moveSpeed) {
+    this.moveSpeed = moveSpeed;
   }
 
   public Double getScaleGlow() {
