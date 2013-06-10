@@ -6,9 +6,11 @@ class Fire extends BaseEmitterEffect
 	
 	maxAge: 0.75
 	
+	rate: 50
+	
 	tiles: 25
 	
-	scale: new THREE.Vector3 0.15, 0.15, 0.15
+	scale: new THREE.Vector3 0.05, 0.05, 0.05
 	
 	scaleMultiplier: 1.010
 	

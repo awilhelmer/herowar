@@ -1,6 +1,6 @@
 objectUtils = require 'util/objectUtils'
 
-class BaseModel
+class BaseModel # extends Backbone.Model
 
 	rotationMultipler: null
 

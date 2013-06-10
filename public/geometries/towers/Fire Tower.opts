@@ -2,8 +2,8 @@
     "price" : 1500,
 	"coverage" : 80,
 	"reload" : 10,
-	"damageMin" : 10,
-	"damageMax" : 25,
+	"damageMin" : 100,
+	"damageMax" : 250,
 	"weapons" : [
 		{
 			"position" : 
