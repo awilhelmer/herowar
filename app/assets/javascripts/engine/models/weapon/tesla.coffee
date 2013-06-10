@@ -12,7 +12,7 @@ class TeslaModel extends WeaponModel
 		mesh.scale.x = 0.1
 		#mesh.branchPoint.lookAt @target.getMainObject()
 		mesh.build()
-		console.log 'Created bolt', mesh
+		#console.log 'Created bolt', mesh
 		return mesh
 
 	update: (delta, now) ->
