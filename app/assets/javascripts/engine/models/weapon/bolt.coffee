@@ -28,7 +28,7 @@ class Bolt extends THREE.Mesh
 			diffVector = new THREE.Vector3()
 			diffVector.subVectors @branchPoint.position, @basePoint
 			transformPoint = new THREE.Vector3()
-			transformPoint.addVectors diffVector, new THREE.Vector3 10, 0, 0
+			transformPoint.addVectors diffVector, new THREE.Vector3 0, 10, 0
 			@R = new THREE.Vector3()
 			@R.crossVectors transformPoint, diffVector
 			@S = new THREE.Vector3()
