@@ -11,7 +11,21 @@ class BuildView extends BaseView
 	entity: 'db/towers'
 
 	events:
-		'click .item' : 'selectTower'
+		'mouseover .item' : 'showDescription'
+		'mouseout .item'  : 'hideDescription' 
+		'click .item'     : 'selectTower'
+	
+	showDescription: (event) ->
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		$desc = $ "#description-#{$currentTarget.data('id')}"
+		$desc.removeClass 'hidden'
+
+	hideDescription: (event) ->
+		unless event then return
+		$currentTarget = $ event.currentTarget
+		$desc = $ "#description-#{$currentTarget.data('id')}"
+		$desc.addClass 'hidden'
 	
 	selectTower: (event) ->
 		unless event then return

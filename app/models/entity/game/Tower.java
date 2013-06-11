@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,12 +31,18 @@ public class Tower implements Serializable {
 
   @NotNull
   private String name;
+  
+  @Column(length = 2000)
+  private String description;
 
   private Integer price = 0;
   private Integer coverage = 0;
   private Integer reload = 0;
   private Integer damageMin = 0;
   private Integer damageMax = 0;
+  private Integer damageAirplane = 0;
+  private Integer damageTank = 0;
+  private Integer damageTrooper = 0;
   private Integer rotationSpeed = 0;
   
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -62,6 +69,14 @@ public class Tower implements Serializable {
     this.name = name;
   }
   
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public Integer getPrice() {
     return price;
   }
@@ -100,6 +115,30 @@ public class Tower implements Serializable {
 
   public void setDamageMax(Integer damageMax) {
     this.damageMax = damageMax;
+  }
+  
+  public Integer getDamageAirplane() {
+    return damageAirplane;
+  }
+
+  public void setDamageAirplane(Integer damageAirplane) {
+    this.damageAirplane = damageAirplane;
+  }
+
+  public Integer getDamageTank() {
+    return damageTank;
+  }
+
+  public void setDamageTank(Integer damageTank) {
+    this.damageTank = damageTank;
+  }
+
+  public Integer getDamageTrooper() {
+    return damageTrooper;
+  }
+
+  public void setDamageTrooper(Integer damageTrooper) {
+    this.damageTrooper = damageTrooper;
   }
 
   public Integer getRotationSpeed() {

@@ -31,3 +31,19 @@
     font-weight: bold;
     font-size: 120%;
 }
+
+#build .description {
+    position: absolute;
+    bottom: 120px;
+    padding: 0 10px;
+    background-color: rgba(0, 0, 0, 0.75);
+    opacity: 1;
+    -moz-transition: opacity 0.5s ease;
+    -webkit-transition: opacity 0.5s ease;
+    -o-transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
+}
+
+#build .description.hidden {
+    opacity: 0;   
+}

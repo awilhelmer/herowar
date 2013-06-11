@@ -1,9 +1,13 @@
 {
+	"description" : "The Rocket Tower attack only airplanes but with high damage.",
     "price" : 1000,
 	"coverage" : 180,
 	"reload" : 900,
 	"damageMin" : 180,
 	"damageMax" : 250,
+	"damageAirplane" : 100,
+	"damageTank" : 0,
+	"damageTrooper" : 0,
 	"rotationSpeed" : 3,
 	"weapons" : [
 		{

@@ -1,9 +1,13 @@
 {
+	"description" : "The Fire Tower burns down every trooper but does low damage to vehicles.",
     "price" : 1500,
 	"coverage" : 80,
 	"reload" : 10,
 	"damageMin" : 100,
 	"damageMax" : 250,
+	"damageAirplane" : 0,
+	"damageTank" : 50,
+	"damageTrooper" : 100,
 	"weapons" : [
 		{
 			"position" : 

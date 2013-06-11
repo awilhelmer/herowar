@@ -1,3 +1,10 @@
 {{#each []}}
 	<div class="item" data-id="{{id}}"><span class="price">{{price}}</span></div>
+	<div id="description-{{id}}" class="description hidden">
+		<h1>{{name}}</h1>
+		<p>{{description}}</p>
+		<p>Trooper: {{damageTrooper}}%</p>
+		<p>Tank: {{damageTank}}%</p>
+		<p>Airplane: {{damageAirplane}}%</p>
+	</div>
 {{/each}}

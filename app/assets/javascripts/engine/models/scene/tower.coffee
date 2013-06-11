@@ -7,14 +7,12 @@ class Tower extends AnimatedModel
 	
 	shotId: 5000 # TODO: this must be dynamic somehow
 	
-	attributes:
-		active   : false
-		range    : 0
-		weapons  : []
-		position : undefined
-	
 	constructor: (opts) ->
-		opts = _.extend {}, opts
+		opts = _.defaults {}, opts, 
+			active   : false
+			range    : 0
+			weapons  : []
+			position : undefined
 		@meshBody = meshesFactory.create opts.id, opts.name
 		super opts.id, opts.name, @meshBody
 		@weapons = []
