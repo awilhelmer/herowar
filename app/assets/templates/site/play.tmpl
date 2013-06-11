@@ -1,16 +1,16 @@
 <div class="container">
 	<div class="head" data-view="views/play/head"></div>
-	<div class="mapselect">
-		<h2>Choose Map</h2>
+	<div class="panel mapselect">
+		<div class="header">Choose Map</div>
 		<ul>
 			{{#each []}}
-				<li><a class="map" data-id="{{id}}">{{name}}</a></li>
+				<li data-id="{{id}}"><span>{{name}}</span></li>
 			{{/each}}
 		</ul>
 	</div>
 	{{#if results}}
-		<div class="results">
-			<h3>Results</h3>
+		<div class="panel results">
+			<div class="header">Results</div>
 			{{#each results}}
 				<div class="entry">
 					<span class="cdate">{{formattedCdate}}</span>

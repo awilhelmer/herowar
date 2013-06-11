@@ -13,7 +13,7 @@ class Play extends AuthView
 	template: templates.get 'play.tmpl'
 
 	events:
-		'click .map' : 'joinMap'
+		'click li' : 'joinMap'
 		
 	initialize: (options) ->
 		@me = db.get 'ui/me'
