@@ -1,6 +1,7 @@
 package models.entity.game;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,9 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import models.entity.User;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * @author Sebastian Sachtleben
@@ -28,17 +28,22 @@ public class GameResult implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Long score;
-  private Integer health;
-  private Integer kills;
-  private Integer shots;
-  private Integer accuracy;
+  private Integer lives;
   private Boolean victory;
+  private Date cdate;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "user_id")
-  private User user;
+  @JoinColumn(name = "map_id")
+  @JsonIgnore
+  private Map map;
+
+  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+  @JoinColumn(name = "player_id")
+  @JsonIgnore
+  private Player player;
 
   @OneToOne(mappedBy = "result", optional = false)
+  @JsonIgnore
   private GameToken token;
 
   public Long getId() {
@@ -57,36 +62,28 @@ public class GameResult implements Serializable {
     this.score = score;
   }
 
-  public Integer getHealth() {
-    return health;
+  public Integer getLives() {
+    return lives;
   }
 
-  public void setHealth(Integer health) {
-    this.health = health;
+  public void setLives(Integer lives) {
+    this.lives = lives;
   }
 
-  public Integer getKills() {
-    return kills;
+  public Date getCdate() {
+    return cdate;
   }
 
-  public void setKills(Integer kills) {
-    this.kills = kills;
+  public void setCdate(Date cdate) {
+    this.cdate = cdate;
   }
 
-  public Integer getShots() {
-    return shots;
+  public Map getMap() {
+    return map;
   }
 
-  public void setShots(Integer shots) {
-    this.shots = shots;
-  }
-
-  public Integer getAccuracy() {
-    return accuracy;
-  }
-
-  public void setAccuracy(Integer accuracy) {
-    this.accuracy = accuracy;
+  public void setMap(Map map) {
+    this.map = map;
   }
 
   public Boolean getVictory() {
@@ -97,12 +94,12 @@ public class GameResult implements Serializable {
     this.victory = victory;
   }
 
-  public User getUser() {
-    return user;
+  public Player getPlayer() {
+    return player;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setPlayer(Player player) {
+    this.player = player;
   }
 
   public GameToken getToken() {
@@ -112,92 +109,4 @@ public class GameResult implements Serializable {
   public void setToken(GameToken token) {
     this.token = token;
   }
-
-  @Transient
-  public Long getHealthBonus() {
-    return ((long) kills * (long) health);
-  }
-
-  @Transient
-  public Long getKillsBonus() {
-    return kills * 100l;
-  }
-
-  @Transient
-  public Long getAccuracyBonus() {
-    return ((long) accuracy * (long) kills);
-  }
-
-  @Transient
-  public Long getTotalScore() {
-    return getScore() + getHealthBonus() + getKillsBonus() + getAccuracyBonus();
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((accuracy == null) ? 0 : accuracy.hashCode());
-    result = prime * result + ((health == null) ? 0 : health.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((kills == null) ? 0 : kills.hashCode());
-    result = prime * result + ((score == null) ? 0 : score.hashCode());
-    result = prime * result + ((shots == null) ? 0 : shots.hashCode());
-    result = prime * result + ((victory == null) ? 0 : victory.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    GameResult other = (GameResult) obj;
-    if (accuracy == null) {
-      if (other.accuracy != null)
-        return false;
-    } else if (!accuracy.equals(other.accuracy))
-      return false;
-    if (health == null) {
-      if (other.health != null)
-        return false;
-    } else if (!health.equals(other.health))
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (kills == null) {
-      if (other.kills != null)
-        return false;
-    } else if (!kills.equals(other.kills))
-      return false;
-    if (score == null) {
-      if (other.score != null)
-        return false;
-    } else if (!score.equals(other.score))
-      return false;
-    if (shots == null) {
-      if (other.shots != null)
-        return false;
-    } else if (!shots.equals(other.shots))
-      return false;
-    if (victory == null) {
-      if (other.victory != null)
-        return false;
-    } else if (!victory.equals(other.victory))
-      return false;
-    return true;
-  }
-
-  @Override
-  public String toString() {
-    return "GameResult [id=" + id + ", score=" + score + ", health=" + health + ", kills=" + kills + ", shots=" + shots + ", accuracy=" + accuracy
-        + ", victory=" + victory + "]";
-  }
-
 }

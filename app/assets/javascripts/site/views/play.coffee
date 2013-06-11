@@ -1,3 +1,4 @@
+DateFormat = require 'util/dateFormat'
 AuthView = require 'views/authView'
 templates = require 'templates'
 app = require 'application'
@@ -13,6 +14,17 @@ class Play extends AuthView
 
 	events:
 		'click .map' : 'joinMap'
+		
+	initialize: (options) ->
+		@me = db.get 'ui/me'
+		super options
+
+	getTemplateData: ->
+		json = super()
+		if @me.get 'player'
+			json.results = @me.get('player').gameResults
+			result.formattedCdate = DateFormat.format new Date(result.cdate), 'ddd mmm dd hh:nn:ss' for result in json.results
+		return json
 
 	joinMap: (event) ->
 		unless event then return

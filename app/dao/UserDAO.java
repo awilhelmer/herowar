@@ -31,6 +31,10 @@ public class UserDAO extends BaseDAO<Long, User> {
   }
 
   private static final UserDAO instance = new UserDAO();
+  
+  public static UserDAO getInstance() {
+    return instance;
+  }
 
   public static void addLinkedAccount(AuthUser oldUser, AuthUser newUser) {
     // TODO Auto-generated method stub

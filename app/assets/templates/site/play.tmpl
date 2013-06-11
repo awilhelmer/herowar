@@ -1,11 +1,30 @@
 <div class="container">
 	<div class="head" data-view="views/play/head"></div>
-	<h2>Choose Map</h2>
-	<ul>
-		{{#each []}}
-			<li><a class="map" data-id="{{id}}">{{name}}</a></li>
-		{{/each}}
-	</ul>
+	<div class="mapselect">
+		<h2>Choose Map</h2>
+		<ul>
+			{{#each []}}
+				<li><a class="map" data-id="{{id}}">{{name}}</a></li>
+			{{/each}}
+		</ul>
+	</div>
+	{{#if results}}
+		<div class="results">
+			<h3>Results</h3>
+			{{#each results}}
+				<div class="entry">
+					<span class="cdate">{{formattedCdate}}</span>
+					<span>{{lives}} lives left ... </span>
+					{{#if victory}}
+						<span>Victory</span>
+					{{else}}
+						<span>Defeat</span>
+					{{/if}}
+					<span class="score">{{score}}</span>
+				</div>
+			{{/each}}
+		</div>
+	{{/if}}
 </div>
 
 <footer class="footer" data-view="views/footer"></footer>

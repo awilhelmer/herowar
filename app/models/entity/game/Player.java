@@ -41,8 +41,7 @@ public class Player implements Serializable {
   private Long kills = 0L;
   private Long assists = 0L;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.ALL })
-  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "player", cascade = { CascadeType.ALL })
   private Set<GameResult> gameResults = new HashSet<GameResult>();
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
