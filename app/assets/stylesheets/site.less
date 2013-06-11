@@ -92,7 +92,10 @@ body {
     font-size: 120%;
     line-height: 140%;
     padding-left: 5px;
-    margin-bottom: 10px;
+}
+
+#play .panel .body {
+    margin: 10px 5px 0 5px;
 }
 
 
@@ -140,22 +143,25 @@ body {
 
 #play .results .entry {
     margin-bottom: 10px;
+    
+    .clearfix()
 }
 
-#play .results span {
-    display: inline-block;
+#play .results .entry .victory {
+    color: rgb(0, 199, 0);
+    font-weight: bold;
+    font-size: 160%;
 }
 
-#play .results .cdate {
-    display: block;   
+#play .results .entry .defeat {
+    color: rgb(226, 53, 53);
+    font-weight: bold;
+    font-size: 160%;
 }
 
-#play .results .score {
-    display: block;   
-}
 
-#play .map {
-    cursor: pointer;
+#play .results p {
+    margin: 0;
 }
 
 .footer {

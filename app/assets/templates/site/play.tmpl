@@ -2,29 +2,37 @@
 	<div class="head" data-view="views/play/head"></div>
 	<div class="panel mapselect">
 		<div class="header">Choose Map</div>
-		<ul>
-			{{#each []}}
-				<li data-id="{{id}}"><span>{{name}}</span></li>
-			{{/each}}
-		</ul>
+		<div class="body">
+			<ul>
+				{{#each []}}
+					<li data-id="{{id}}"><span>{{name}}</span></li>
+				{{/each}}
+			</ul>
+		</div>
 	</div>
-	{{#if results}}
-		<div class="panel results">
-			<div class="header">Results</div>
+	<div class="panel results">
+		<div class="header">Recent Matches</div>
+		<div class="body">
 			{{#each results}}
 				<div class="entry">
-					<span class="cdate">{{formattedCdate}}</span>
-					<span>{{lives}} lives left ... </span>
-					{{#if victory}}
-						<span>Victory</span>
-					{{else}}
-						<span>Defeat</span>
-					{{/if}}
-					<span class="score">{{score}}</span>
+					<div style="float: left">
+						{{#if victory}}
+							<p class="victory">Victory</p>
+						{{else}}
+							<p class="defeat">Defeat</p>
+						{{/if}}
+						<p>{{formattedCdate}}</p>
+					</div>
+					<div style="float: right">
+						<p>{{lives}} lives left ... </p>
+						<p>Score: <b>{{score}}</b></p>
+					</div>
 				</div>
+			{{else}}
+				<span>No matches played...</span>
 			{{/each}}
 		</div>
-	{{/if}}
+	</div>
 </div>
 
 <footer class="footer" data-view="views/footer"></footer>
