@@ -24,6 +24,7 @@ class TeslaModel extends WeaponModel
 
 	onHit: ->
 		super()
+		@owner.showGlow 200
 		setTimeout =>
 			@dispose()
 		, 200

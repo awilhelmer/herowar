@@ -26,11 +26,21 @@ class MeshModel extends BaseModel
 			@_calculateGeometry @meshBody.geometry
 		@_enableShadows()
 		attributes.root = obj
+		@glowIsActive = false
 		super attributes
 
 	update: (delta, now) ->
 		super delta, now
 		#@checkGroundCollision()
+
+	showGlow: (time) ->
+		return if @glowIsActive
+		@glowIsActive = true
+		@enableGlow()
+		setTimeout =>
+			@disableGlow()
+			@glowIsActive = false
+		, time
 
 	showBoundingBox: ->
 		@boundingBoxMesh = @_createBoundingBox() unless @boundingBoxMesh

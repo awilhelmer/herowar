@@ -7,6 +7,8 @@ class Tower extends AnimatedModel
 	
 	shotId: 5000 # TODO: this must be dynamic somehow
 	
+	glowColor: 0xffa500
+	
 	constructor: (opts) ->
 		opts = _.defaults {}, opts, 
 			active   : false

@@ -24,7 +24,6 @@ class Enemy extends AnimatedModel
 		@burning = opts.burning || false
 		@explode = opts.explode || false
 		@damageIncoming = 0
-		@glowIsActive = false
 		@lastDistance = null
 		@dead = false
 		@meshBody.rotation.set THREE.Math.degToRad(opts.rotation.x), THREE.Math.degToRad(opts.rotation.y), THREE.Math.degToRad(opts.rotation.z) if opts.rotation
@@ -98,13 +97,8 @@ class Enemy extends AnimatedModel
 		return
 
 	showShield: ->
-		return if @glowIsActive
-		@glowIsActive = true
-		@enableGlow()
-		setTimeout =>
-			@disableGlow()
-			@glowIsActive = false
-		, 100		
+		@showGlow 100
+		return
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]

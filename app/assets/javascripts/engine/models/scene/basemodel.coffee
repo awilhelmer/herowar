@@ -41,7 +41,6 @@ class BaseModel # extends Backbone.Model
 		if position
 			for scene, obj of @root 
 				obj.position.copy position 
-				console.log 'New position:', obj
 		return @getMainObject().position
 	
 	visible: (value) ->

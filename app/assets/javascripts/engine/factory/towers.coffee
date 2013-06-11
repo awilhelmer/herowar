@@ -11,7 +11,7 @@ towers =
 
 	_createModel: (opts) ->
 		model = new Tower opts
-		model.getMainObject().position.set opts.position.x, opts.position.y, opts.position.z if opts.position
+		model.position opts.position
 		return model
 		
 return towers
