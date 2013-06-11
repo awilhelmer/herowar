@@ -26,6 +26,16 @@ class Tower extends AnimatedModel
 			@_rotateToTarget delta
 			super delta, now
 
+	rotateTo: (position, delta) ->
+		if @attributes.rotationSpeed isnt 0 
+			super position, delta
+		else
+			unless @rotationObject
+				@rotationObject = new THREE.Object3D()
+				@getMainObject().add @rotationObject
+			dq = @_getQuaternionRotationFromPosition position
+			@rotationObject.quaternion.slerp dq, 1.0
+
 	attack: (target, damage) ->
 		return unless @weapons.length isnt 0
 		damagePerWeapon = Math.round damage / @weapons.length
@@ -40,10 +50,11 @@ class Tower extends AnimatedModel
 			position = @getMainObject().localToWorld origin.clone()
 			muzzleFlash = new MuzzleFlash target: @getMainObject(), origin: origin, position: position
 			@effects.push muzzleFlash
+			quaternion = if @rotationObject then @rotationObject.quaternion else @getMainObject().quaternion
 			Weapon = require "models/weapon/#{weapon.type.toLowerCase()}"
 			weaponObj = new Weapon @shotId++, @, target, currentDamage
 			weaponObj.getMainObject().position.copy position
-			weaponObj.getMainObject().quaternion.copy @getMainObject().quaternion
+			weaponObj.getMainObject().quaternion.copy quaternion
 			scenegraph.addDynObject weaponObj, weaponObj.id
 		return
 

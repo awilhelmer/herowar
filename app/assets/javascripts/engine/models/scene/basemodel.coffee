@@ -26,11 +26,7 @@ class BaseModel # extends Backbone.Model
 		return @root.main
 		
 	rotateTo: (position, delta) ->
-		target = new THREE.Vector3 position.x, 0, position.z
-		m = new THREE.Matrix4()
-		m.lookAt target, @getMainObject().position, @getMainObject().up
-		dq = new THREE.Quaternion()
-		dq.setFromRotationMatrix m
+		dq = @_getQuaternionRotationFromPosition position
 		multipler = if @rotationMultipler then @rotationMultipler else @moveSpeed / 10
 		@getMainObject().quaternion.slerp dq, delta * multipler
 		obj.quaternion.copy @getMainObject().quaternion for scene, obj of @root when scene isnt 'main'
@@ -71,6 +67,14 @@ class BaseModel # extends Backbone.Model
 	disableGlow: ->
 		mesh.material = objectUtils.getGlowMaterials mesh, 'black' for mesh in @glowMeshes
 		return
+
+	_getQuaternionRotationFromPosition: (position) ->
+		target = new THREE.Vector3 position.x, 0, position.z
+		m = new THREE.Matrix4()
+		m.lookAt target, @getMainObject().position, @getMainObject().up
+		dq = new THREE.Quaternion()
+		dq.setFromRotationMatrix m
+		return dq
 
 	_cloneRoot: ->
 		for scene in ['glow']
