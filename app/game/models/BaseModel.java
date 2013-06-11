@@ -22,7 +22,7 @@ public class BaseModel<T extends Serializable> extends Mesh implements Serializa
   private Long id;
   private Long dbId;
   private T entity;
-  private double movespeed = 30;
+  protected double movespeed = 30;
 
   public BaseModel() {
     // empty

@@ -1,7 +1,7 @@
 {
     "health" : 2000,
 	"shield" : 1000,
-	"moveSpeed" : 30,
+	"moveSpeed" : 20,
 	"type" : "AIRPLANE",
 	"burning" : true,
 	"explode" : true,

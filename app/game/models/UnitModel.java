@@ -30,6 +30,7 @@ public class UnitModel extends BaseModel<Unit> {
     this.maxHealth = entity.getHealth();
     this.currentShield = entity.getShield();
     this.maxShield = entity.getShield();
+    this.movespeed = entity.getMoveSpeed();
   }
 
   /**

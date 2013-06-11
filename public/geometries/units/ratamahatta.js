@@ -5,7 +5,7 @@
 "description" : "Md 2 model converted from ratamahatta.md2 using MD2 to json converter."
 },
 
-"scale" : 1.000000,
+"scale" : 0.800000,
 
 "materials": [  {
 	"DbgColor" : 15658734,
