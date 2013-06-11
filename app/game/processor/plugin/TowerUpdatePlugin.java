@@ -45,7 +45,7 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
         }
         tower.rotateTo(target, delta);
         if (tower.inRange(target) && tower.shoot(target)) {
-          long damage = Math.round(tower.getEntity().getDamageMin() + ((tower.getEntity().getDamageMax() - tower.getEntity().getDamageMin()) * MathUtils.nextRandomFloat()));
+          long damage = tower.calculateDamage(target);
           target.hit(tower, damage);
           TowerAttackPacket packet = new TowerAttackPacket(tower.getId(), damage);
           broadcast(packet);

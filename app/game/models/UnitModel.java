@@ -2,6 +2,7 @@ package game.models;
 
 import models.entity.game.Path;
 import models.entity.game.Unit;
+import models.entity.game.UnitType;
 import models.entity.game.Waypoint;
 
 /**
@@ -11,6 +12,7 @@ import models.entity.game.Waypoint;
 public class UnitModel extends BaseModel<Unit> {
 
   private Unit entity;
+  private UnitType type;
   private long currentHealth;
   private long maxHealth;
   private long currentShield;
@@ -23,6 +25,7 @@ public class UnitModel extends BaseModel<Unit> {
 
   public UnitModel(Long id, Long dbId, Unit entity) {
     super(id, dbId, entity);
+    this.type = entity.getType();
     this.currentHealth = entity.getHealth();
     this.maxHealth = entity.getHealth();
     this.currentShield = entity.getShield();
@@ -167,6 +170,14 @@ public class UnitModel extends BaseModel<Unit> {
 
   public boolean isEndPointReached() {
     return endPointReached;
+  }
+
+  public UnitType getType() {
+    return type;
+  }
+
+  public void setType(UnitType type) {
+    this.type = type;
   }
 
 }

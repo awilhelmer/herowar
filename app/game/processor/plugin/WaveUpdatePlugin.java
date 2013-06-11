@@ -1,11 +1,11 @@
 package game.processor.plugin;
 
 import game.GameSession;
-import game.event.GameUnitEvent;
+import game.models.UnitModel;
+import game.network.server.ObjectInPacket;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
-import game.processor.GameProcessor.Topic;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
@@ -17,9 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import models.entity.game.Path;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
+import models.entity.game.Waypoint;
 import play.Logger;
+import dao.game.PathDAO;
 
 /**
  * The WaveUpdatePlugin controls the wave behaviors and update all units.
@@ -51,7 +54,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   @Override
   public void process(Double delta) {
     waveUpdated = checkWaveUpdate();
-    createUnit();
+    checkForUnitSpawn();
     super.process(delta);
     waveUpdated = false;
     Date now = new Date();
@@ -139,19 +142,42 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     return next != null ? startTime + (next.getPrepareTime() * 1000) : startTime;
   }
 
-  private void createUnit() {
+  private void checkForUnitSpawn() {
     if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
       Date now = new Date();
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
         Iterator<Unit> iter2 = current.getUnits().iterator();
         Unit unit = iter2.next();
         log.debug("Create enemy for " + current.getName());
-        getProcessor().publish(Topic.UNIT, new GameUnitEvent(current.getPath(), unit));
+        createUnit(current.getPath(), unit);
         lastSpawnDate = now;
         spawnCurrent++;
         spawnTotal++;
       }
     }
+  }
+  
+  public void createUnit(Path path, Unit entity) {
+    Long id = getProcessor().getObjectIdGenerator();
+    UnitModel model = new UnitModel(id, entity.getId(), entity);
+    model.setActivePath(path);
+    if (path.getWaypoints() == null) {
+      PathDAO.mapWaypoints(path);
+    }
+    if (!path.getWaypoints().isEmpty()) {
+      Waypoint waypoint = path.getWaypoints().get(0);
+      model.setActiveWaypoint(waypoint);
+      com.ardor3d.math.Vector3 position = waypoint.getPosition().getArdorVector().clone();
+      position.setY(0d);
+      model.setTranslation(position);
+      model.updateWorldTransform(false);
+    } else {
+      log.warn("No Waypoint found!");
+    }
+    getProcessor().getUnits().add(model);
+    log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), path.getId()));
+    ObjectInPacket packet = new ObjectInPacket(id, entity, path.getId());
+    broadcast(packet);
   }
 
   @Override

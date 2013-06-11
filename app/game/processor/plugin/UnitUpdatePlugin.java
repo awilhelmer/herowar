@@ -1,14 +1,11 @@
 package game.processor.plugin;
 
 import game.GameSession;
-import game.event.GameUnitEvent;
 import game.models.UnitModel;
-import game.network.server.ObjectInPacket;
 import game.network.server.ObjectOutPacket;
 import game.network.server.PlayerLivesUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.processor.GameProcessor;
-import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
@@ -17,17 +14,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import models.entity.game.Unit;
 import models.entity.game.Waypoint;
-
-import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
-
 import play.Logger;
 import play.libs.Json;
 
 import com.ardor3d.math.type.ReadOnlyVector3;
-
-import dao.game.PathDAO;
 
 /**
  * 
@@ -141,37 +132,6 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
         }
       }
     }
-  }
-
-  @RuntimeTopicEventSubscriber(methodName = "getUnitTopic")
-  public void createUnit(String topic, GameUnitEvent event) {
-    Long id = getProcessor().getObjectIdGenerator();
-    Unit entity = event.getUnit();
-    UnitModel model = new UnitModel(id, entity.getId(), entity);
-    // Matrix3 m = model.getRotation().clone().applyRotationY(90);
-    // model.setRotation(m);
-    model.setActivePath(event.getPath());
-    if (event.getPath().getWaypoints() == null) {
-      PathDAO.mapWaypoints(event.getPath());
-    }
-    if (!event.getPath().getWaypoints().isEmpty()) {
-      Waypoint waypoint = event.getPath().getWaypoints().get(0);
-      model.setActiveWaypoint(waypoint);
-      com.ardor3d.math.Vector3 position = waypoint.getPosition().getArdorVector().clone();
-      position.setY(0d);
-      model.setTranslation(position);
-      model.updateWorldTransform(false);
-    } else {
-      log.warn("No Waypoint found!");
-    }
-    getProcessor().getUnits().add(model);
-    log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), event.getPath().getId()));
-    ObjectInPacket packet = new ObjectInPacket(id, entity, event.getPath().getId());
-    broadcast(packet);
-  }
-
-  public String getUnitTopic() {
-    return getProcessor().getTopicName(Topic.UNIT);
   }
 
   @Override

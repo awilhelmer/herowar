@@ -6,7 +6,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+import play.Logger;
+
+import com.ardor3d.math.MathUtils;
+
 import models.entity.game.Tower;
+import models.entity.game.UnitType;
 
 /**
  * The Tower is placed somewhere on the map by any player.
@@ -54,6 +59,20 @@ public class TowerModel extends BaseModel<Tower> {
     }
     return false;
   }
+  
+  public int calculateDamage(UnitModel target) {
+    UnitType type = target.getType();
+    float multipler = 1;
+    if (type == UnitType.TROOPER) {
+      multipler = getEntity().getDamageTrooper().floatValue() / 100f;
+    } else if (type == UnitType.TANK) {
+      multipler = getEntity().getDamageTank().floatValue() / 100f;
+    } else if (type == UnitType.AIRPLANE) {
+      multipler = getEntity().getDamageAirplane().floatValue() / 100f;
+    }
+    float damage = getEntity().getDamageMin() + ((getEntity().getDamageMax() - getEntity().getDamageMin()) * MathUtils.nextRandomFloat());
+    return Math.round(damage * multipler);
+  }
 
   /**
    * Find a valid target for this tower.
@@ -71,7 +90,7 @@ public class TowerModel extends BaseModel<Tower> {
     Iterator<UnitModel> iter = units.iterator();
     while (iter.hasNext()) {
       UnitModel unit = iter.next();
-      if (!unit.isDeath() && inViewRange(unit)) {
+      if (unit != null && !unit.isDeath() && inViewRange(unit) && allowToTarget(unit)) {
         double distance = distance(unit);
         if (distance < shortestDistance) {
           optimalUnit = unit;
@@ -131,6 +150,11 @@ public class TowerModel extends BaseModel<Tower> {
    */
   public double distance(UnitModel model) {
     return getTranslation().distance(model.getTranslation());
+  }
+  
+  private boolean allowToTarget(UnitModel unit) {
+    UnitType type = unit.getType();
+    return (type == UnitType.TROOPER && getEntity().getDamageTrooper() > 0) || (type == UnitType.TANK && getEntity().getDamageTank() > 0) || (type == UnitType.AIRPLANE && getEntity().getDamageAirplane() > 0);
   }
 
   // GETTER & SETTER
