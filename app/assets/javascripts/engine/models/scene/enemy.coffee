@@ -28,6 +28,7 @@ class Enemy extends AnimatedModel
 		@dead = false
 		@meshBody.rotation.set THREE.Math.degToRad(opts.rotation.x), THREE.Math.degToRad(opts.rotation.y), THREE.Math.degToRad(opts.rotation.z) if opts.rotation
 		@waypoints = []
+		@moveSpeed = opts.moveSpeed
 		return
 
 	update: (delta, now) ->
