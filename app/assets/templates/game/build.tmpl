@@ -3,8 +3,10 @@
 	<div id="description-{{id}}" class="description hidden">
 		<h1>{{name}}</h1>
 		<p>{{description}}</p>
-		<p>Trooper: {{damageTrooper}}%</p>
-		<p>Tank: {{damageTank}}%</p>
-		<p>Airplane: {{damageAirplane}}%</p>
+		<div class="damage">
+			<p><span class="name">Trooper:</span> <span class="value">{{damageTrooper}}%</span> <span class="barometer"><span class="p{{damageTrooper}}"></span></span></p>
+			<p><span class="name">Tank:</span> <span class="value">{{damageTank}}%</span> <span class="barometer"><span class="p{{damageTank}}"></span></span></p>
+			<p><span class="name">Airplane:</span> <span class="value">{{damageAirplane}}%</span> <spanp class="barometer"><span class="p{{damageAirplane}}"></span></span></p>
+		</div>
 	</div>
 {{/each}}
