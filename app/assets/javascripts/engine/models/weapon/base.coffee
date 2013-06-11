@@ -9,8 +9,13 @@ class BaseWeapon extends AnimatedModel
 	distanceToDispose: 10
 
 	constructor: (@id, @owner, @target, @damage) ->
-		@meshBody = @createMeshBody()
-		super @id, "Shot-#{@id}", @meshBody
+		opts = 
+			id: @id
+			owner: @owner
+			target: @target
+			damge: @damage
+		@meshBody = opts.meshBody = @createMeshBody()
+		super opts
 		@target.damageIncoming += @damage
 
 	createMeshBody: ->

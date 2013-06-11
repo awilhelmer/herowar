@@ -88,7 +88,10 @@ sceneGraph =
 	setMap: (mesh) ->
 		@removeFromScenes @map
 		Terrain = require 'models/scene/terrain'
-		@map = new Terrain @getNextId(), 'Terrain', mesh
+		@map = new Terrain 
+			id       : @getNextId() 
+			name     :'Terrain'
+			meshBody : mesh
 		@addToScenes @map
 		return @map
 

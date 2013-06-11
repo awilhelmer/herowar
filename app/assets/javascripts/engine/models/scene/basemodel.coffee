@@ -8,9 +8,13 @@ class BaseModel # extends Backbone.Model
 	
 	glowColor: 0x88ccff
 	
-	constructor: (root) ->
+	constructor: (attributes) ->
+		@attributes = _.defaults {}, attributes,
+			rotationSpeed : 0
+			moveSpeed     : 0
+			glowColor     : 0x88ccff
 		@root = {}
-		@root.main = root
+		@root.main = attributes.root
 		@glowMeshes = []
 		@isDisposed = false
 		@_cloneRoot()

@@ -11,9 +11,9 @@ class Enemy extends AnimatedModel
 
 	constructor: (opts) ->
 		opts = _.extend {}, opts
-		@meshBody = meshesFactory.create opts.id, opts.name
+		@meshBody = opts.meshBody = meshesFactory.create opts.id, opts.name
 		@initialize opts
-		super opts.id, opts.name, @meshBody
+		super opts
 		@effects.push new BlackSmoke @ if @burning
 			
 	initialize: (opts) ->

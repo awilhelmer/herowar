@@ -13,8 +13,8 @@ class Tower extends AnimatedModel
 			range    : 0
 			weapons  : []
 			position : undefined
-		@meshBody = meshesFactory.create opts.id, opts.name
-		super opts.id, opts.name, @meshBody
+		@meshBody = opts.meshBody = meshesFactory.create opts.id, opts.name
+		super opts
 		@weapons = []
 		@active = false
 		@range = 0
@@ -41,10 +41,10 @@ class Tower extends AnimatedModel
 			muzzleFlash = new MuzzleFlash target: @getMainObject(), origin: origin, position: position
 			@effects.push muzzleFlash
 			Weapon = require "models/weapon/#{weapon.type.toLowerCase()}"
-			laser = new Weapon @shotId++, @, target, currentDamage
-			laser.getMainObject().position.copy position
-			laser.getMainObject().quaternion.copy @getMainObject().quaternion
-			scenegraph.addDynObject laser, laser.id
+			weaponObj = new Weapon @shotId++, @, target, currentDamage
+			weaponObj.getMainObject().position.copy position
+			weaponObj.getMainObject().quaternion.copy @getMainObject().quaternion
+			scenegraph.addDynObject weaponObj, weaponObj.id
 		return
 
 	showRange: ->

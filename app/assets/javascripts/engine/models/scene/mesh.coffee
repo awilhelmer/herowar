@@ -11,7 +11,11 @@ class MeshModel extends BaseModel
 	
 	boundingBoxMesh: null
 		
-	constructor: (@id, @name, @meshBody) ->
+	constructor: (attributes) ->
+		@attributes = _.defaults {}, attributes
+		@id = @attributes.id
+		@name = @attributes.name
+		@meshBody = @attributes.meshBody	
 		obj = null
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
 			@_calculateGeometry @meshBody.geometry
@@ -21,7 +25,8 @@ class MeshModel extends BaseModel
 			@meshBody = obj.children[0] # TODO: this is super cheap and needs improvement
 			@_calculateGeometry @meshBody.geometry
 		@_enableShadows()
-		super obj
+		attributes.root = obj
+		super attributes
 
 	update: (delta, now) ->
 		super delta, now

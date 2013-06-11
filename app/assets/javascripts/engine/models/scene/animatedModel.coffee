@@ -9,8 +9,8 @@ class AnimatedModel extends MeshModel
 	
 	animationFPS: 6	
 
-	constructor: (@id, @name, @meshBody) ->
-		super @id, @name, @meshBody
+	constructor: (attributes) ->
+		super attributes
 		@effects = []
 		meshes = @_findAnimatedMeshes()
 		if meshes.length isnt 0
