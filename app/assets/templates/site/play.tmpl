@@ -15,17 +15,18 @@
 		<div class="body">
 			{{#each results}}
 				<div class="entry">
-					<div style="float: left">
+					<div class="left">
 						{{#if victory}}
 							<p class="victory">Victory</p>
 						{{else}}
 							<p class="defeat">Defeat</p>
 						{{/if}}
+						<p>{{map.name}}</p>
 						<p>{{formattedCdate}}</p>
 					</div>
-					<div style="float: right">
-						<p>{{lives}} lives left ... </p>
-						<p>Score: <b>{{score}}</b></p>
+					<div class="right">
+						<p><span class="icon-heart"></span> <span>{{lives}} / {{map.lives}}</span></p>
+						<p><span class="icon-star"></span> <span>{{score}}</span></p>
 					</div>
 				</div>
 			{{else}}
