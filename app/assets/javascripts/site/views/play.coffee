@@ -16,13 +16,14 @@ class Play extends AuthView
 		'click li' : 'joinMap'
 		
 	initialize: (options) ->
-		@me = db.get 'ui/me'
+		@matchesRecent = db.get 'ui/matchesRecent'
 		super options
 
 	getTemplateData: ->
 		json = super()
-		if @me.get 'player'
-			json.results = @me.get('player').gameResults
+		json.results = []
+		if @matchesRecent?.length isnt 0
+			json.results.push model.toJSON() for model in @matchesRecent.models
 			result.formattedCdate = DateFormat.format new Date(result.cdate), 'ddd mmm dd hh:nn:ss' for result in json.results
 		return json
 
