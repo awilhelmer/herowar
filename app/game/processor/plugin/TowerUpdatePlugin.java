@@ -15,8 +15,6 @@ import java.util.Set;
 
 import play.Logger;
 
-import com.ardor3d.math.MathUtils;
-
 /**
  * The TowerUpdatePlugin handles all tower on the map and calculates the current
  * target and handle shots.
@@ -33,11 +31,16 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void process(Double delta) {
     Set<UnitModel> units = getProcessor().getUnits();
+
     Collection<TowerModel> towers = getProcessor().getTowerCache().values();
+
     Iterator<TowerModel> iter = towers.iterator();
     while (iter.hasNext()) {
       TowerModel tower = iter.next();
-      UnitModel target = tower.findTarget(units);
+      UnitModel target = null;
+      synchronized (units) {
+        target = tower.findTarget(units);
+      }
       if (target != null) {
         if (target != tower.getTarget()) {
           TowerTargetPacket packet = new TowerTargetPacket(tower.getId(), target.getId());
@@ -52,6 +55,7 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
         }
       }
       tower.setTarget(target);
+
     }
   }
 

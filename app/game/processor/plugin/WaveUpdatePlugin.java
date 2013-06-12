@@ -156,7 +156,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       }
     }
   }
-  
+
   public void createUnit(Path path, Unit entity) {
     Long id = getProcessor().getObjectIdGenerator();
     UnitModel model = new UnitModel(id, entity.getId(), entity);
@@ -174,7 +174,9 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     } else {
       log.warn("No Waypoint found!");
     }
-    getProcessor().getUnits().add(model);
+    synchronized (getProcessor().getUnits()) {
+      getProcessor().getUnits().add(model);
+    }
     log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), path.getId()));
     ObjectInPacket packet = new ObjectInPacket(id, entity, path.getId());
     broadcast(packet);

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import models.entity.game.Map;
 
@@ -68,7 +69,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
 
   private Set<UnitModel> units = Collections.synchronizedSet(new HashSet<UnitModel>());
-
+  
   /**
    * The player cache contains player specific variables and properties like
    * gold and is used by plugins.
