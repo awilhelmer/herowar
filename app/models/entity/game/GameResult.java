@@ -19,6 +19,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @author Sebastian Sachtleben
  */
 @Entity
+@Deprecated
 @Table(name = "gameresult")
 public class GameResult implements Serializable {
 
@@ -43,7 +44,7 @@ public class GameResult implements Serializable {
 
   @OneToOne(mappedBy = "result", optional = false)
   @JsonIgnore
-  private GameToken token;
+  private MatchToken token;
 
   public Long getId() {
     return id;
@@ -101,11 +102,11 @@ public class GameResult implements Serializable {
     this.player = player;
   }
 
-  public GameToken getToken() {
+  public MatchToken getToken() {
     return token;
   }
 
-  public void setToken(GameToken token) {
+  public void setToken(MatchToken token) {
     this.token = token;
   }
 }

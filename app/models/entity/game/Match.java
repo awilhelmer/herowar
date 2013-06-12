@@ -5,14 +5,19 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import models.entity.BaseModel;
+
+import org.hibernate.annotations.Type;
 
 /**
  * The match entity represents a played match in our application.
@@ -20,6 +25,7 @@ import models.entity.BaseModel;
  * @author Sebastian Sachtleben
  */
 @Entity
+@Table(name = "matches")
 @SuppressWarnings("serial")
 public class Match extends BaseModel {
 
@@ -29,12 +35,17 @@ public class Match extends BaseModel {
   private Long preloadTime;
   private Long gameTime;
   private Integer lives;
+
+  @Type(type = "yes_no")
   private Boolean victory;
+
+  @Enumerated(EnumType.STRING)
+  private MatchState type = MatchState.INIT;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "map_id")
   private Map map;
-  
+
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
   private Set<MatchResult> playerResults = new HashSet<MatchResult>();
 
@@ -53,7 +64,7 @@ public class Match extends BaseModel {
   public void setPreloadTime(Long preloadTime) {
     this.preloadTime = preloadTime;
   }
-  
+
   public Long getGameTime() {
     return gameTime;
   }
@@ -77,7 +88,15 @@ public class Match extends BaseModel {
   public void setVictory(Boolean victory) {
     this.victory = victory;
   }
-  
+
+  public MatchState getType() {
+    return type;
+  }
+
+  public void setType(MatchState type) {
+    this.type = type;
+  }
+
   public Map getMap() {
     return map;
   }

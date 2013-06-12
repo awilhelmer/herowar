@@ -58,11 +58,11 @@ public class GamesHandler implements Serializable {
 
   @EventSubscriber
   public void observePlayerJoinEvent(final GameJoinEvent event) {
-    GameSession session = new GameSession(event.getGameToken().getCreatedByUser(), event.getGameToken(), event.getConnection());
-    final GameProcessor game = createGame(event.getGameToken().getMap(), session);
+    GameSession session = new GameSession(event.getToken().getPlayer(), event.getToken(), event.getConnection());
+    final GameProcessor game = createGame(event.getToken().getResult().getMatch().getMap(), session);
     session.setGame(game);
     connections.put(event.getConnection(), session);
-    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getGameToken().getCreatedByUser().getUsername(), game.getTopicName()));
+    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getToken().getPlayer().getUser().getUsername(), game.getTopicName()));
     JPA.withTransaction(new play.libs.F.Callback0() {
       @Override
       public void invoke() throws Throwable {

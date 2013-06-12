@@ -83,7 +83,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
     }
     if (unit.isDeath()) {
       GameSession session = unit.getLastHitTower().getSession();
-      ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getUser().getId());
+      ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
       long newScore = 0L;
       double newGold = 0L;
       synchronized (playerCache) {

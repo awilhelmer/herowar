@@ -50,7 +50,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     // TODO: validate and reduce player and and check if the tower has a valid
     // position.
     double currentGold = 0;
-    ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getUser().getId());
+    ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
     if (playerCache.containsKey(GOLD_VALUE)) {
       currentGold = (double) playerCache.get(GOLD_VALUE);
     }
@@ -68,7 +68,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.updateWorldTransform(false);
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
-    session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getUser().getId(), this.position));
+    session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
     synchronized (playerCache) {
       playerCache.replace(GOLD_VALUE, currentGold - entity.getPrice());
       playerCache.replace(GOLD_SYNC, new Date());

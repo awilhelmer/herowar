@@ -1,53 +1,44 @@
 package models.entity.game;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import models.entity.User;
+import models.entity.BaseModel;
+
+import org.hibernate.annotations.Type;
 
 /**
+ * The MatchToken is like an access card for a match. Without a valid gametoken
+ * the player cant join the current match.
+ * 
  * @author Sebastian Sachtleben
  */
 @Entity
-@Table(name = "gametoken")
-public class GameToken implements Serializable {
+public class MatchToken extends BaseModel {
 
   private static final long serialVersionUID = -5699234192975949575L;
 
   @Id
   private String token;
-  private Boolean invalid;
+
+  @Type(type = "yes_no")
+  private Boolean invalid = Boolean.FALSE;
 
   @ManyToOne(cascade = { CascadeType.REFRESH })
-  @JoinColumn(name = "createdbyuser_id")
-  private User createdByUser;
-
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date createdDate;
+  @JoinColumn(name = "player_id")
+  private Player player;
 
   @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
-  private GameResult result;
+  private MatchResult result;
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = true)
-  @JoinColumn(name = "map_id")
-  private Map map;
-
-  public GameToken() {
-    this.invalid = false;
-    this.createdDate = new Date();
+  public MatchToken() {
   }
 
-  public GameToken(String token) {
+  public MatchToken(String token) {
     this();
     this.token = token;
 
@@ -69,36 +60,20 @@ public class GameToken implements Serializable {
     this.invalid = invalid;
   }
 
-  public User getCreatedByUser() {
-    return createdByUser;
+  public Player getPlayer() {
+    return player;
   }
 
-  public void setCreatedByUser(User createdByUser) {
-    this.createdByUser = createdByUser;
+  public void setPlayer(Player player) {
+    this.player = player;
   }
 
-  public Date getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public GameResult getResult() {
+  public MatchResult getResult() {
     return result;
   }
 
-  public void setResult(GameResult result) {
+  public void setResult(MatchResult result) {
     this.result = result;
-  }
-
-  public Map getMap() {
-    return map;
-  }
-
-  public void setMap(Map map) {
-    this.map = map;
   }
 
   @Override
@@ -118,7 +93,7 @@ public class GameToken implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    GameToken other = (GameToken) obj;
+    MatchToken other = (MatchToken) obj;
     if (invalid == null) {
       if (other.invalid != null)
         return false;
@@ -134,7 +109,7 @@ public class GameToken implements Serializable {
 
   @Override
   public String toString() {
-    return "GameToken [token=" + token + ", invalid=" + invalid + "]";
+    return "MatchToken [token=" + token + ", invalid=" + invalid + "]";
   }
 
 }

@@ -35,11 +35,12 @@ PUT			/api/news/:id												controllers.api.News.update(id: Long)
 DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
 POST		/api/news														controllers.api.News.add()
 
+GET			/api/game/match/create/:mapId				controllers.api.game.Matches.create(mapId: Long)
+GET			/api/game/match/join/:id						controllers.api.game.Matches.join(id: Long)
+
 GET			/api/game/environment/all						controllers.api.game.Environments.list()
 GET			/api/game/environment/root					controllers.api.game.Environments.root()
 GET			/api/game/environment/:id						controllers.api.game.Environments.show(id: Long)
-
-GET			/api/game/gametoken/:mapId					controllers.api.game.GameTokens.create(mapId: Long)
 
 GET			/api/game/geometry/all							controllers.api.game.Geometries.list()
 GET			/api/game/geometry/env/:id					controllers.api.game.Geometries.showByEnv(id: Long)

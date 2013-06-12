@@ -65,7 +65,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void processSession(GameSession session) {
-    long playerId = session.getUser().getId();
+    long playerId = session.getPlayer().getId();
     if (!hashInitPacket(playerId)) {
       long eta = getWaveEta();
       sendPacket(session, new WaveInitPacket(index, eta, total));
@@ -87,13 +87,13 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
-    long playerId = player.getUser().getId();
+  public void addPlayer(GameSession session) {
+    long playerId = session.getPlayer().getId();
     getInitPacket().put(playerId, false);
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(GameSession session) {
     // TODO Auto-generated method stub
   }
 

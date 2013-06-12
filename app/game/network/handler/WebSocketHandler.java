@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.entity.User;
+import models.entity.game.Player;
 
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.EventServiceLocator;
@@ -29,7 +30,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 
   private static WebSocketHandler instance = new WebSocketHandler();
 
-  private Map<WebSocketConnection, User> authConnections = new HashMap<WebSocketConnection, User>();
+  private Map<WebSocketConnection, Player> authConnections = new HashMap<WebSocketConnection, Player>();
 
   private WebSocketHandler() {
   }
@@ -38,7 +39,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     return instance;
   }
 
-  public Map<WebSocketConnection, User> getAuthConnections() {
+  public Map<WebSocketConnection, Player> getAuthConnections() {
     return authConnections;
   }
 
@@ -84,7 +85,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
     if (session != null) {
       Long latency = Long.parseLong(new String(msg));
       latency = (System.currentTimeMillis() - latency) / 2;
-      log.info(String.format("Player <%s> has latency of <%s>", session.getUser().getUsername(), latency));
+      log.info(String.format("Player <%s> has latency of <%s>", session.getPlayer().getUser().getUsername(), latency));
       session.setLatency(latency);
 
     }

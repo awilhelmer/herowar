@@ -1,0 +1,23 @@
+<div class="header">Recent Matches</div>
+<div class="body">
+	{{#each []}}
+		<div class="entry">
+			<div class="left">
+				{{#if victory}}
+					<p class="victory">Victory</p>
+				{{else}}
+					<p class="defeat">Defeat</p>
+				{{/if}}
+				<p>{{map.name}}</p>
+				<p>{{formattedCdate}}</p>
+			</div>
+			<div class="right">
+				<p><span class="icon-heart"></span> <span>{{lives}} / {{map.lives}}</span></p>
+				<p><span class="icon-skull"></span> <span>0</span></p>
+				<p><span class="icon-star"></span> <span>{{score}}</span></p>
+			</div>
+		</div>
+	{{else}}
+		<span>No matches played...</span>
+	{{/each}}
+</div>

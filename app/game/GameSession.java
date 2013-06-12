@@ -6,8 +6,8 @@ import game.processor.PlayerProcessor;
 
 import java.io.Serializable;
 
-import models.entity.User;
-import models.entity.game.GameToken;
+import models.entity.game.MatchToken;
+import models.entity.game.Player;
 
 import org.webbitserver.WebSocketConnection;
 
@@ -18,9 +18,9 @@ public class GameSession implements Serializable {
   public final static long PING_INTERVAL = 2000l;
   private static final long serialVersionUID = 7587205545547734770L;
 
-  private User user;
+  private Player player;
   private GameClock clock;
-  private GameToken token;
+  private MatchToken token;
 
   private BaseModel model;
   private WebSocketConnection connection;
@@ -29,8 +29,8 @@ public class GameSession implements Serializable {
   private long latency;
   private PlayerProcessor playerProcessor;
 
-  public GameSession(User user, GameToken token, WebSocketConnection connection) {
-    this.user = user;
+  public GameSession(Player player, MatchToken token, WebSocketConnection connection) {
+    this.player = player;
     this.token = token;
     this.connection = connection;
     this.clock = new GameClock();
@@ -44,19 +44,19 @@ public class GameSession implements Serializable {
     this.latency = latency;
   }
 
-  public User getUser() {
-    return user;
+  public Player getPlayer() {
+    return player;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setUser(Player player) {
+    this.player = player;
   }
 
-  public GameToken getToken() {
+  public MatchToken getToken() {
     return token;
   }
 
-  public void setToken(GameToken token) {
+  public void setToken(MatchToken token) {
     this.token = token;
   }
 
@@ -102,7 +102,7 @@ public class GameSession implements Serializable {
 
   @Override
   public String toString() {
-    return user != null ? user.getUsername() : "GameSession";
+    return player != null && player.getUser() != null ? player.getUser().getUsername() : "GameSession";
   }
 
 }

@@ -115,18 +115,18 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     super.stop();
   }
 
-  public void addPlayer(GameSession player) {
+  public void addPlayer(GameSession session) {
     synchronized (sessions) {
-      sessions.add(player);
+      sessions.add(session);
     }
-    long playerId = player.getUser().getId();
+    long playerId = session.getPlayer().getId();
     if (!playerCache.containsKey(playerId)) {
       playerCache.put(playerId, new ConcurrentHashMap<String, Object>());
       playerCache.get(playerId).put("score", 0L);
     }
     for (Set<IPlugin> statePlugins : plugins.values()) {
       for (IPlugin plugin : statePlugins) {
-        plugin.addPlayer(player);
+        plugin.addPlayer(session);
       }
     }
   }

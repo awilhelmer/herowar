@@ -26,12 +26,17 @@ public class MatchResult implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long score;
+  private Long score = 0L;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "player_id")
   @JsonIgnore
   private Player player;
+
+  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+  @JoinColumn(name = "token_id")
+  @JsonIgnore
+  private MatchToken token;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "match_id")
@@ -60,6 +65,14 @@ public class MatchResult implements Serializable {
 
   public void setPlayer(Player player) {
     this.player = player;
+  }
+
+  public MatchToken getToken() {
+    return token;
+  }
+
+  public void setToken(MatchToken token) {
+    this.token = token;
   }
 
   public Match getMatch() {

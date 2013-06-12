@@ -13,8 +13,8 @@ public interface IPlugin {
 
   public void unload();
 
-  public void addPlayer(GameSession player);
+  public void addPlayer(GameSession session);
 
-  public void removePlayer(GameSession player);
+  public void removePlayer(GameSession session);
 
 }

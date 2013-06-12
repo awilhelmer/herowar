@@ -1,6 +1,6 @@
 package game.event;
 
-import models.entity.game.GameToken;
+import models.entity.game.MatchToken;
 
 import org.webbitserver.WebSocketConnection;
 
@@ -12,11 +12,11 @@ import org.webbitserver.WebSocketConnection;
  */
 public class GameJoinEvent {
 
-  private GameToken gameToken;
+  private MatchToken token;
   private WebSocketConnection connection;
 
-  public GameJoinEvent(GameToken gameToken, WebSocketConnection connection) {
-    this.gameToken = gameToken;
+  public GameJoinEvent(MatchToken token, WebSocketConnection connection) {
+    this.token = token;
     this.connection = connection;
   }
 
@@ -24,12 +24,12 @@ public class GameJoinEvent {
     // empty
   }
 
-  public GameToken getGameToken() {
-    return gameToken;
+  public MatchToken getToken() {
+    return token;
   }
 
-  public void setGameToken(GameToken gameToken) {
-    this.gameToken = gameToken;
+  public void setToken(MatchToken token) {
+    this.token = token;
   }
 
   public WebSocketConnection getConnection() {

@@ -52,8 +52,8 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
-    long playerId = player.getUser().getId();
+  public void addPlayer(GameSession session) {
+    long playerId = session.getPlayer().getId();
     if (!preloadProgress.containsKey(playerId)) {
       preloadPlayerMissing++;
       preloadProgress.put(playerId, 0);
@@ -61,7 +61,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(GameSession session) {
     // Do nothing, the preload state should not change when a user disconnects.
     // Once the timeout will be reached the game should start automatically...
   }

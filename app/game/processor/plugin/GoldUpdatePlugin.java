@@ -30,12 +30,12 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void processSession(GameSession session) {
-    long playerId = session.getUser().getId();
+    long playerId = session.getPlayer().getId();
     Date date = new Date();
     ConcurrentHashMap<String, Object> playerCache = getPlayerCache(playerId);
     if (playerCache.containsKey(GOLD_VALUE)) {
       synchronized (playerCache) {
-      // Update gold value
+        // Update gold value
         if (playerCache.containsKey(GOLD_UPDATE)) {
           Long dif = date.getTime() - ((Date) playerCache.get(GOLD_UPDATE)).getTime();
           double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
@@ -51,7 +51,8 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
         } else {
           Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
           if (dif >= SYNC_PERIOD) {
-            sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(SCORE_VALUE), getMap().getLives().longValue(), getRoundedGoldValue(playerCache), null, null, null));
+            sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(SCORE_VALUE), getMap().getLives().longValue(),
+                getRoundedGoldValue(playerCache), null, null, null));
             setPlayerCacheValue(playerCache, GOLD_SYNC, date);
           }
         }
@@ -60,8 +61,8 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
-    long playerId = player.getUser().getId();
+  public void addPlayer(GameSession session) {
+    long playerId = session.getPlayer().getId();
     if (!getPlayerCache(playerId).containsKey(GOLD_VALUE)) {
       double startValue = getProcessor().getMap().getGoldStart().doubleValue();
       getPlayerCache(playerId).put(GOLD_VALUE, startValue);
@@ -70,7 +71,7 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(GameSession session) {
     // Do nothing, the gold should still updated when the player disconnects.
     // Maybe he returns after while...
   }

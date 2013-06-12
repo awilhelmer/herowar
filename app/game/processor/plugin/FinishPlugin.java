@@ -13,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.User;
 import models.entity.game.GameResult;
-import models.entity.game.GameToken;
+import models.entity.game.MatchToken;
 import play.db.jpa.JPA;
 import dao.UserDAO;
-import dao.game.GameTokenDAO;
+import dao.game.MatchTokenDAO;
 
 /**
  * The FinishPlugin sends informations about the state of the game and clean up.
@@ -64,18 +64,18 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
       result.setLives(getMap().getLives());
       result.setMap(getMap());
       result.setVictory(victory);
-      ConcurrentHashMap<String, Object> cache = getPlayerCache(session.getUser().getId());
+      ConcurrentHashMap<String, Object> cache = getPlayerCache(session.getPlayer().getId());
       result.setScore(Math.round(Double.parseDouble(cache.get("score").toString())));
       JPA.withTransaction(new play.libs.F.Callback0() {
         @Override
         public void invoke() throws Throwable {
-          GameToken token = GameTokenDAO.getTokenById(session.getToken().getToken());
-          User user = UserDAO.getInstance().getById(session.getUser().getId());
+          MatchToken token = MatchTokenDAO.getTokenById(session.getToken().getToken());
+          User user = UserDAO.getInstance().getById(session.getPlayer().getId());
           if (user != null && !token.getInvalid()) {
             result.setPlayer(user.getPlayer());
             result.setToken(token);
             JPA.em().persist(result);
-            token.setResult(result);
+            // token.setResult(result);
             token.setInvalid(true);
           }
         }
