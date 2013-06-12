@@ -46,7 +46,7 @@ insert into material (id, blending, color, colorAmbient, colorDiffuse, colorSpec
 
 insert into terrain (id, height, smoothness, width, wireframe, zScale, geometry_id) values (102, 500, 0.1, 500, true, 0, 113);
 
-insert into map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) values (102,now(), now(), 3, '', 5, 2000, 20, 'Default Map', 500, 'default', 1, 102, null);
+insert into map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) values (102,now(), now(), 3, '', 5, 2000, 20, 'Path of Evil', 500, 'default', 1, 102, null);
 
 insert into map_materials (Map_id, allMaterials_id) values (102, 105);
 insert into map_materials (Map_id, allMaterials_id) values (102, 106);
