@@ -1,9 +1,17 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
+import game.json.excludes.GameResultExcludeMapDataMixin;
+
+import java.io.IOException;
+
 import models.api.error.AuthenticationError;
 import models.api.error.FormValidationError;
 import models.entity.User;
+import models.entity.game.Map;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
 import play.Logger;
 import play.data.Form;
 import play.db.jpa.Transactional;
@@ -25,12 +33,19 @@ import dao.UserDAO;
  * @author Sebastian Sachtleben
  */
 public class Me extends Controller {
+  private static final Logger.ALogger log = Logger.of(Me.class);
 
   @Transactional
   public static Result show() {
     User user = getLoggedInUser();
     if (user != null) {
-      return ok(toJson(user));
+      ObjectMapper mapper = new ObjectMapper();
+      mapper.getSerializationConfig().addMixInAnnotations(Map.class, GameResultExcludeMapDataMixin.class);
+      try {
+        return ok(mapper.writeValueAsString(user));
+      } catch (IOException e) {
+        log.error("Failed to create me json:", e);
+      }
     }
     return ok("{}");
   }

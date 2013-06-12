@@ -1,8 +1,8 @@
 package game.json.excludes;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import models.entity.game.Geometry;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Mix-In class entity to json but exclude the geometry object.
@@ -11,7 +11,8 @@ import models.entity.game.Geometry;
  */
 public class ExcludeGeometryMixin {
 
+  @SuppressWarnings("unused")
   @JsonIgnore
   private Geometry geometry;
-  
+
 }

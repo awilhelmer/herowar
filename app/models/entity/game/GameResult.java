@@ -34,7 +34,6 @@ public class GameResult implements Serializable {
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "map_id")
-  @JsonIgnore
   private Map map;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
