@@ -27,7 +27,6 @@ import play.Logger;
  */
 @SuppressWarnings("serial")
 public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket {
-
 	private static final Logger.ALogger log = Logger.of(ClientPreloadUpdatePacket.class);
 
 	private Integer progress;
