@@ -104,7 +104,7 @@ class Enemy extends AnimatedModel
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]
 		distance = @getMainObject().position.distanceTo waypoint.position
-		if distance < 2 or (lastDistance and lastDistance > distance)
+		if distance < 2 or (lastDistance and lastDistance >= distance)
 			@_waypointReached waypoint
 			lastDistance = null
 		else lastDistance = distance
