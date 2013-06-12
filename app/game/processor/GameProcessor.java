@@ -6,8 +6,6 @@ import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.BasePacket;
-import game.network.server.GameDefeatPacket;
-import game.network.server.GameVictoryPacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
@@ -24,7 +22,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import models.entity.game.Map;
 
@@ -52,7 +49,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private final Node rootNode;
   private Long objectIdGenerator = null;
   private Long gameId;
-  private GameClock clock;
+  private GameClock clock = new GameClock();
   private boolean wavesFinished = false;
   private boolean unitsFinished = false;
   private Map map;
@@ -69,7 +66,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
 
   private Set<UnitModel> units = Collections.synchronizedSet(new HashSet<UnitModel>());
-  
+
   /**
    * The player cache contains player specific variables and properties like
    * gold and is used by plugins.
@@ -96,14 +93,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   @Override
   public void process() {
-    if (clock == null) {
-      clock = new GameClock();
-    }
-    Double delta = clock.getDelta();
-    // log.debug("Process " + getTopicName() + " with state " + state.toString()
-    // + " and players " + Arrays.toString(sessions.toArray()));
-    for (IPlugin plugin : plugins.get(state)) {
-      plugin.process(delta);
+    double delta = clock.getDelta();
+    long now = clock.getCurrentTime();
+    Iterator<IPlugin> iter = plugins.get(state).iterator();
+    while (iter.hasNext()) {
+      IPlugin plugin = iter.next();
+      plugin.process(delta, now);
     }
     checkGameState();
   }
@@ -179,7 +174,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
     plugins.get(State.FINISH).add(new FinishPlugin(this));
   }
-  
+
   private void checkGameState() {
     if (getState().equals(State.GAME) && (getMap().getLives() <= 0 || (isWavesFinished() && isUnitsFinished()))) {
       updateState(State.FINISH);
@@ -189,6 +184,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   @RuntimeTopicEventSubscriber(methodName = "getStateTopic")
   public void updateStateByEvent(String topic, GameStateEvent event) {
     updateState(event.getState());
+    clock.reset();
   }
 
   public String getStateTopic() {

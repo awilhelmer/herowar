@@ -37,7 +37,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process(Double delta) {
+  public void process(double delta, long now) {
     // TODO: This maybe cause the PreloadUpdatePlugin to start the game to
     // early. The first player connects and reach fast 100% before the other
     // players even connected and the map will start. We need to get somewhere

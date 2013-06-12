@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.Type;
 
 /**
  * @author Sebastian Sachtleben
@@ -36,7 +37,13 @@ public class Wave implements Serializable {
   private Integer waveTime;
   private Integer quantity;
   private Integer sortOder;
-  
+
+  @Type(type = "yes_no")
+  private Boolean requestable = Boolean.TRUE;
+
+  @Type(type = "yes_no")
+  private Boolean autostart = Boolean.FALSE;
+
   @ManyToOne(cascade = CascadeType.REFRESH)
   @JoinColumn(name = "map_id")
   @JsonIgnore
@@ -149,6 +156,33 @@ public class Wave implements Serializable {
 
   public void setSortOder(Integer sortOder) {
     this.sortOder = sortOder;
+  }
+
+  /**
+   * Is it possible to call this wave before the current running wave is over?
+   * 
+   * @return Boolean
+   */
+  public Boolean isRequestable() {
+    return requestable;
+  }
+
+  public void setRequestable(Boolean requestable) {
+    this.requestable = requestable;
+  }
+
+  /**
+   * The wave is starting after the wave before is done, this should be usually
+   * on false (maybe the tutorial map needs true here).
+   * 
+   * @return Boolean
+   */
+  public Boolean isAutostart() {
+    return autostart;
+  }
+
+  public void setAutostart(Boolean autostart) {
+    this.autostart = autostart;
   }
 
   // public Set<Army> getArmies() {

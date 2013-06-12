@@ -47,7 +47,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process(Double delta) {
+  public void process(double delta, long now) {
     Set<UnitModel> units = getProcessor().getUnits();
     synchronized (units) {
       Iterator<UnitModel> iter = units.iterator();

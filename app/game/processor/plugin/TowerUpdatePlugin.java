@@ -29,7 +29,7 @@ public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process(Double delta) {
+  public void process(double delta, long now) {
     Set<UnitModel> units = getProcessor().getUnits();
 
     Collection<TowerModel> towers = getProcessor().getTowerCache().values();

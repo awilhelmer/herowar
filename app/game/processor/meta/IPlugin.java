@@ -7,7 +7,7 @@ import game.GameSession;
  */
 public interface IPlugin {
 
-  public void process(Double delta);
+  public void process(double delta, long now);
 
   public void load();
 

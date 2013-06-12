@@ -25,7 +25,7 @@ import dao.game.GameTokenDAO;
  */
 public class FinishPlugin extends AbstractPlugin implements IPlugin {
 
-  private Date finishTimer;
+  private long finishTimer = -1;
   private boolean done = false;
 
   public FinishPlugin(GameProcessor processor) {
@@ -33,12 +33,11 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void process(Double delta) {
-    Date now = new Date();
-    if (finishTimer == null) {
+  public void process(double delta, long now) {
+    if (finishTimer == -1) {
       finishTimer = now;
     }
-    if (!done && finishTimer.getTime() + 2000 <= now.getTime()) {
+    if (!done && finishTimer + 2000 <= now) {
       done = true;
       finishTimer = now;
       if (getMap().getLives() <= 0) {
@@ -49,7 +48,7 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
         broadcast(packet);
       }
       saveResults();
-    } else if (done && finishTimer.getTime() + 2000 <= now.getTime()) {
+    } else if (done && finishTimer + 2000 <= now) {
       // TODO: stop properly the game here and cleanup
       getProcessor().stop();
     }

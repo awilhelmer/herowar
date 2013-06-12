@@ -52,13 +52,12 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void process(Double delta) {
+  public void process(double delta, long now) {
     waveUpdated = checkWaveUpdate();
     checkForUnitSpawn();
-    super.process(delta);
+    super.process(delta, now);
     waveUpdated = false;
-    Date now = new Date();
-    if (!getProcessor().isWavesFinished() && waves.size() == 0 && getWaveEta() <= now.getTime()) {
+    if (!getProcessor().isWavesFinished() && waves.size() == 0 && getWaveEta() <= now) {
       getProcessor().setWavesFinished(true);
       log.debug("Waves finished!!!!");
     }
