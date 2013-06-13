@@ -6,6 +6,9 @@ import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.BasePacket;
+import game.network.server.ObjectInPacket;
+import game.network.server.TowerBuildPacket;
+import game.network.server.TowerTargetPacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
@@ -25,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
 import models.entity.game.Match;
+import models.entity.game.Vector3;
 
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
@@ -188,6 +192,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     }
   }
 
+  /**
+   * Broadcast a packet to all clients. Its possible to set if the trigger
+   * connection should also retrieve the message.
+   * 
+   * @param connection
+   *          The connection to set
+   * @param message
+   *          The message to set
+   * @param sendSelf
+   *          The sendSelf to set
+   */
   public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
     Iterator<GameSession> iter = sessions.iterator();
     while (iter.hasNext()) {
@@ -198,8 +213,45 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     }
   }
 
+  /**
+   * Broadcast a packet to all clients.
+   * 
+   * @param message
+   *          The message to set
+   */
   public void broadcast(BasePacket message) {
     broadcast(null, message, true);
+  }
+
+  /**
+   * Syncronize the player with the current game szenario.
+   * 
+   * @param session
+   *          The session to set
+   */
+  public void syncronizePlayer(GameSession session) {
+    log.info("Start sycronizing for player " + session.getPlayerId());
+    Iterator<UnitModel> iter = session.getGame().getUnits().iterator();
+    while (iter.hasNext()) {
+      UnitModel unit = iter.next();
+      log.info("Send player info about unit " + unit.getId() + " at " + unit.getTranslation().toString());
+      session.getConnection().send(Json.toJson(new ObjectInPacket(unit.getId(), unit.getEntity(), unit.getActivePath().getId())).toString());
+    }
+    Iterator<TowerModel> iter2 = session.getGame().getTowerCache().values().iterator();
+    while (iter2.hasNext()) {
+      TowerModel tower = iter2.next();
+      Vector3 position = new Vector3();
+      position.setX(tower.getTranslation().getX());
+      position.setY(tower.getTranslation().getY());
+      position.setZ(tower.getTranslation().getZ());
+      log.info("Send player info about tower " + tower.getId() + " at " + position.toString());
+      session.getConnection().send(Json.toJson(new TowerBuildPacket(tower.getId(), tower.getDbId(), tower.getSession().getPlayerId(), position)).toString());
+      if (tower.getTarget() != null) {
+        log.info("Send player info about tower " + tower.getId() + " target unit " + tower.getTarget().getId());
+        session.getConnection().send(Json.toJson(new TowerTargetPacket(tower.getId(), tower.getTarget().getId())).toString());
+      }
+    }
+    log.info("Finish sycronizing for player " + session.getPlayerId());
   }
 
   private void registerPlugins() {

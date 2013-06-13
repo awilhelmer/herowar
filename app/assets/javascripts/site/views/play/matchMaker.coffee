@@ -28,7 +28,6 @@ class MatchMakerView extends BaseView
 	getTemplateData: ->
 		json = super()
 		json.matchOpen = @matchOpen.has 'token'
-		console.log 'getTemplateData', json
 		return json
 		
 	updateMatch: =>

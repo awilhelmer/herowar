@@ -15,8 +15,4 @@ class HomeNews extends BaseView
 	bindEvents: ->
 		@listenTo @model, 'add remove change reset', @render if @model
 
-	render: ->
-		console.log @getTemplateData()
-		super()		
-
 return HomeNews
