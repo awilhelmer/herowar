@@ -19,6 +19,7 @@ import java.util.Set;
 
 import models.entity.game.Path;
 import models.entity.game.Unit;
+import models.entity.game.Vector3;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
 import play.Logger;
@@ -30,7 +31,6 @@ import dao.game.PathDAO;
  * @author Sebastian Sachtleben
  */
 public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
-
   private final static Logger.ALogger log = Logger.of(WaveUpdatePlugin.class);
 
   private Set<Wave> waves;
@@ -68,12 +68,14 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     long playerId = session.getPlayer().getId();
     if (!hashInitPacket(playerId)) {
       long eta = getWaveEta();
-      sendPacket(session, new WaveInitPacket(index, eta, total));
+      List<Vector3> positions = getNextWavePositions();
+      sendPacket(session, new WaveInitPacket(index, eta, total, positions));
       getInitPacket().replace(playerId, true);
     }
     if (waveUpdated) {
       long eta = getWaveEta();
-      sendPacket(session, new WaveUpdatePacket(index, eta));
+      List<Vector3> positions = getNextWavePositions();
+      sendPacket(session, new WaveUpdatePacket(index, eta, positions));
     }
   }
 
@@ -97,11 +99,24 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     // TODO Auto-generated method stub
   }
 
+  private List<Vector3> getNextWavePositions() {
+    List<Vector3> positions = new ArrayList<Vector3>();
+    if (next != null && next.isRequestable() && next.getPath().getDbWaypoints().size() > 0) {
+      Iterator<Waypoint> iter = next.getPath().getDbWaypoints().iterator();
+      Waypoint waypoint = iter.next();
+      positions.add(waypoint.getPosition());
+    }
+    return positions;
+  }
+
   private boolean checkWaveUpdate() {
     Date now = new Date();
-    if (next != null && getWaveEta() <= now.getTime()) {
-      loadNextWave();
-      return true;
+    if (next != null) {
+      if ((next.isAutostart() && getWaveEta() <= now.getTime()) || (next.isRequestable() && getProcessor().isWaveRequest())) {
+        getProcessor().setWaveRequest(false);
+        loadNextWave();
+        return true;
+      }
     }
     return false;
   }
@@ -111,6 +126,9 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     next = getNextWave();
     if (current != null) {
       index++;
+      if (index == 1) {
+        getProcessor().setUpdateGold(true);
+      }
     } else {
       index = 0;
     }

@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import models.entity.game.Match;
 import models.entity.game.MatchResult;
 import models.entity.game.MatchState;
+import play.Logger;
 import play.db.jpa.JPA;
 import dao.game.MatchDAO;
 
@@ -23,6 +24,7 @@ import dao.game.MatchDAO;
  * @author Sebastian Sachtleben
  */
 public class FinishPlugin extends AbstractPlugin implements IPlugin {
+  private final static Logger.ALogger log = Logger.of(FinishPlugin.class);
 
   private long finishTimer = -1;
   private boolean done = false;
@@ -42,9 +44,11 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
       if (getMap().getLives() <= 0) {
         GameDefeatPacket packet = new GameDefeatPacket();
         broadcast(packet);
+        log.info("<" + getProcessor().getTopicName() + "> Game is defeated");
       } else {
         GameVictoryPacket packet = new GameVictoryPacket();
         broadcast(packet);
+        log.info("<" + getProcessor().getTopicName() + "> Game is victory");
       }
       saveResults();
     } else if (done && finishTimer + 2000 <= now) {

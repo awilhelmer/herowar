@@ -8,6 +8,7 @@ class GameHUD extends BaseHUD
 	
 	default: [
 		'hud/elements/waveProgress'
+		'hud/elements/waveIncoming'
 		'hud/elements/unitHealthBars'
 	]
 

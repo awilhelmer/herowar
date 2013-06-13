@@ -1,3 +1,4 @@
+WaveRequestPacket = require 'network/packets/waveRequestPacket'
 PacketType = require 'network/packets/packetType'
 scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
@@ -17,6 +18,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
+		$('body').on 'click', '.wave-position', @onWaveCall
 	
 	onObjectOut: (packet) ->
 		#console.log 'onObjectOut', packet.id
@@ -36,7 +38,11 @@ class GameScene extends Scene
 		return unless owner and target
 		owner.attack target, packet.damage unless target.isSoonDead()
 		#console.log 'onTowerAttack', target.id, packet.damage, target.isSoonDead()
-		
+	
+	onWaveCall: (event) ->
+		console.log 'onWaveCall...'
+		events.trigger 'send:packet', new WaveRequestPacket()
+	
 	onGameDefeat: ->
 		@onFinish 'game/defeat'
 		return

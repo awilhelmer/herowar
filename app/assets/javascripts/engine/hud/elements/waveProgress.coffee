@@ -17,13 +17,13 @@ class WaveProgressHUDElement extends BaseHUDElement
 		return
 	
 	_drawGameStartInfo: (delta) ->
-		if @waves.get('current') is 0 and @waves.get('total') isnt 0
+		if @waves.get('current') is 0 and @waves.get('total') isnt 0 and @waves.get('positions').length is 0
 			# Preparing game
 			width = @canvas.height / 5
 			canvasUtils.setShadow @ctx, width / 50, width / 50, width / 15
 			@ctx.fillStyle = 'rgba(255, 255, 255, 1.0)'
 			canvasUtils.drawMultilineBlockText @ctx, "GAME\nSTART\n#{@waves.get('arrival_short')}\nSECONDS", @getHalfWidth(), @getHalfHeight() / 2, width
-		else
+		else if @waves.get('current') isnt 0 
 			# Game starting
 			width = @canvas.height / 5
 			canvasUtils.setShadow @ctx, width / 50, width / 50, width / 15
@@ -37,7 +37,7 @@ class WaveProgressHUDElement extends BaseHUDElement
 		total = @waves.get 'total'
 		arrival = @waves.get 'arrival'
 		width = @canvas.height / 10
-		if arrival
+		if arrival and @waves.get('positions').length is 0
 			text = "#{current} / #{total} - #{arrival}"
 		else
 			text = "#{current} / #{total}"

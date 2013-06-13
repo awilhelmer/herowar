@@ -55,6 +55,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private GameClock clock = new GameClock();
   private boolean wavesFinished = false;
   private boolean unitsFinished = false;
+  private boolean waveRequest = false;
+  private boolean updateGold = false;
   private State state;
 
   private final Node rootNode = new Node();
@@ -290,6 +292,22 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public void setUnitsFinished(boolean unitsFinished) {
     this.unitsFinished = unitsFinished;
+  }
+
+  public boolean isWaveRequest() {
+    return waveRequest;
+  }
+
+  public void setWaveRequest(boolean waveRequest) {
+    this.waveRequest = waveRequest;
+  }
+
+  public boolean isUpdateGold() {
+    return updateGold;
+  }
+
+  public void setUpdateGold(boolean updateGold) {
+    this.updateGold = updateGold;
   }
 
   public enum State {

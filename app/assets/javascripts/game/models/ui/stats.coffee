@@ -1,6 +1,7 @@
 PacketType = require 'network/packets/packetType'
 PacketModel = require 'models/ui/packetModel'
 events = require 'events'
+db = require 'database'
 
 class Stats extends PacketModel
 
@@ -8,6 +9,10 @@ class Stats extends PacketModel
 
 	timeValues:
 		'gold' : 'goldPerTick'
+
+	initialize: (options) ->
+		@waves = db.get 'ui/waves'
+		super options
 
 	bindPacketEvents: ->
 		super()
@@ -18,6 +23,12 @@ class Stats extends PacketModel
 		events.trigger 'stats:score:changed', (if packet.changedScore > 0 then "+#{packet.changedScore}" else "#{packet.changedScore}") if packet.changedScore
 		events.trigger 'stats:lives:changed', (if packet.changedLives > 0 then "+#{packet.changedLives}" else "#{packet.changedLives}") if packet.changedLives
 		events.trigger 'stats:gold:changed', (if packet.changedGold > 0 then "+#{packet.changedGold}" else "#{packet.changedGold}") if packet.changedGold
+
+	updateTimeValue: (valueKey, incrementKey, timeKey) ->
+		if @waves.get('current') is 0
+			@set 'updateTime', (new Date()).getTime()
+			return		
+		super valueKey, incrementKey, timeKey
 
 	onUpdateLives: (packet) ->
 		changed = @get('lives') - packet.lives

@@ -1,4 +1,5 @@
 geometryUtils = require 'util/geometryUtils'
+viewUtils = require 'util/viewUtils'
 db = require 'database'
 
 _projector = new THREE.Projector()
@@ -67,8 +68,7 @@ objectUtils =
 		position = obj.getMainObject().position.clone()
 		position.x -= Math.abs(boundaryBox.min.x) * obj.meshBody.scale.x
 		position.y += (boundaryBox.max.y - boundaryBox.min.y) * obj.meshBody.scale.y
-		_projector.projectVector position, camera
-		return x: Math.round((position.x * viewportWidthHalf) + viewportWidthHalf), y: Math.round(- (position.y * viewportHeightHalf) + viewportHeightHalf)
+		return viewUtils.positionToScreen position, viewportWidthHalf, viewportHeightHalf, camera
 
 	_disposeMaterial: (material) ->
 		if _.isArray material.materials

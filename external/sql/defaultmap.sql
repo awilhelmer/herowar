@@ -80,15 +80,15 @@ insert into waypoint (name, position_x, position_y, position_z, path_id, sortOde
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 3 - 145 x 1 x -45', 145.0, 1.0, -45.0, 2, 2);
 insert into waypoint (name, position_x, position_y, position_z, path_id, sortOder) values ('Waypoint 4 - 105 x 1 x 5', 105.0, 1.0, 5.0, 2, 3);
 
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (1, 'Wave-1', 5, 12, 12, 102, 2, 0);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (2, 'Wave-2', 0, 14, 30, 102, 2, 1);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (3, 'Wave-3', 0, 12, 12, 102, 2, 2);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (4, 'Wave-4', 0,  3, 10, 102, 2, 3);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (5, 'Wave-5', 0, 20, 30, 102, 2, 4);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (6, 'Wave-6', 0, 30, 12, 102, 2, 5);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (7, 'Wave-7', 0, 40, 50, 102, 2, 6);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (8, 'Wave-8', 0, 30, 12, 102, 2, 7);
-insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder) values (9, 'Wave-9', 0, 45, 50, 102, 2, 8);
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (1, 'Wave-1', 5, 12, 12, 102, 2, 0, 'n', 'y');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (2, 'Wave-2', 0, 14, 30, 102, 2, 1, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (3, 'Wave-3', 0, 12, 12, 102, 2, 2, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (4, 'Wave-4', 0,  3, 10, 102, 2, 3, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (5, 'Wave-5', 0, 20, 30, 102, 2, 4, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (6, 'Wave-6', 0, 30, 12, 102, 2, 5, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (7, 'Wave-7', 0, 40, 50, 102, 2, 6, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (8, 'Wave-8', 0, 30, 12, 102, 2, 7, 'y', 'n');
+insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) values (9, 'Wave-9', 0, 45, 50, 102, 2, 8, 'y', 'n');
 
 insert into wave_units (Wave_id, units_id)
 (select 1, u.id from unit u where u.name = "Ratamahatta");

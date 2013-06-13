@@ -27,7 +27,7 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   public GoldUpdatePlugin(GameProcessor processor) {
     super(processor);
   }
-
+  
   @Override
   public void processSession(GameSession session, double delta, long now) {
     Date date = new Date();
@@ -35,7 +35,7 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (playerCache.containsKey(GOLD_VALUE)) {
       synchronized (playerCache) {
         // Update gold value
-        if (playerCache.containsKey(GOLD_UPDATE)) {
+        if (getProcessor().isUpdateGold() && playerCache.containsKey(GOLD_UPDATE)) {
           Long dif = date.getTime() - ((Date) playerCache.get(GOLD_UPDATE)).getTime();
           double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
           setPlayerCacheValue(playerCache, GOLD_VALUE, newGold);

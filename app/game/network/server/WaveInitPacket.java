@@ -2,6 +2,10 @@ package game.network.server;
 
 import game.network.PacketType;
 
+import java.util.List;
+
+import models.entity.game.Vector3;
+
 /**
  * The WaveInitPacket will be send from server to client with initial waves
  * informations. It contains the current wave information from WaveUpdatePacket
@@ -14,8 +18,8 @@ public class WaveInitPacket extends WaveUpdatePacket {
 
   private int total;
 
-  public WaveInitPacket(int current, long eta, int total) {
-    super(current, eta);
+  public WaveInitPacket(int current, long eta, int total, List<Vector3> positions) {
+    super(current, eta, positions);
     this.type = PacketType.WaveInitPacket;
     this.total = total;
   }
