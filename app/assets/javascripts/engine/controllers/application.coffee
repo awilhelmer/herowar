@@ -1,6 +1,7 @@
 BaseController = require 'controllers/baseController'
 Variables = require 'variables'
 Scene = require 'core/scene'
+events = require 'events'
 db = require 'database'
 
 class ApplicationController extends BaseController
@@ -24,6 +25,8 @@ class ApplicationController extends BaseController
 		@initViewports()	
 		@initEngine()
 		@initCore()
+		events.trigger 'created:controller:application'
+		return
 		
 	initViewports: ->
 		for viewport in @viewports

@@ -1,15 +1,21 @@
 package game.network.client;
 
+import java.util.Iterator;
+
 import game.GameSession;
 import game.GamesHandler;
 import game.event.PreloadUpdateEvent;
+import game.models.TowerModel;
 import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.GameStartPacket;
+import game.network.server.TowerBuildPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
+
+import models.entity.game.Vector3;
 
 import org.webbitserver.WebSocketConnection;
 
@@ -45,6 +51,16 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
       session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
     } else if (progress == 100) {
       session.getConnection().send(Json.toJson(new GameStartPacket()).toString());
+      Iterator<TowerModel> iter = session.getGame().getTowerCache().values().iterator();
+      while (iter.hasNext()) {
+        TowerModel tower = iter.next();
+        Vector3 position = new Vector3();
+        position.setX(tower.getTranslation().getX());
+        position.setY(tower.getTranslation().getY());
+        position.setZ(tower.getTranslation().getZ());
+        log.info("Send player info about tower " + tower.getId() + " at " + position.toString());
+        session.getConnection().send(Json.toJson(new TowerBuildPacket(tower.getId(), tower.getDbId(), tower.getSession().getPlayerId(), position)).toString());
+      }
     }
   }
 
