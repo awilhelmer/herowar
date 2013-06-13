@@ -7,11 +7,14 @@ import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
+import game.network.server.GameStartPacket;
+import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
 
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
+import play.libs.Json;
 
 /**
  * Send from client when preloading is updated. The progress represents the
@@ -35,10 +38,14 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
       log.error("GameSession should not be null");
       return;
     }
-    if (progress == 100) {
-      log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getPlayer().getUser().getUsername());
+    if (GameProcessor.State.PRELOAD.equals(session.getGame().getState())) {
+      if (progress == 100) {
+        log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getPlayer().getUser().getUsername());
+      }
+      session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
+    } else if (progress == 100) {
+      session.getConnection().send(Json.toJson(new GameStartPacket()).toString());
     }
-    session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
   }
 
   public Integer getProgress() {
