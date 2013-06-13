@@ -126,6 +126,16 @@ public class Matches extends BaseAPI<Long, Match> {
     return ok(toJson(token));
   }
 
+  @Transactional
+  public static Result joinMatch() {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
+    Match match = MatchDAO.getInstance().getOpenMatch();
+    return ok(toJson(match));
+  }
+
   /**
    * Get the history of current logged in player.
    * 

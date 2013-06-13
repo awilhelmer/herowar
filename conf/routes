@@ -37,6 +37,7 @@ POST		/api/news														controllers.api.News.add()
 
 GET			/api/game/match/create/:mapId				controllers.api.game.Matches.create(mapId: Long)
 GET			/api/game/match/join/:id						controllers.api.game.Matches.join(id: Long)
+GET	    /api/game/match/join	  					  controllers.api.game.Matches.joinMatch()
 GET			/api/game/match/history							controllers.api.game.Matches.history()
 GET			/api/game/match/:id									controllers.api.game.Matches.show(id: Long)
 

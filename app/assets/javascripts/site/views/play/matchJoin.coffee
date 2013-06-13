@@ -12,5 +12,9 @@ class MatchJoinView extends BaseView
 	
 	events:
 		'click' : 'gameJoin'
-	
+
+	gameJoin: (event) ->
+		@model.clear()
+		@model.fetch()
+
 return MatchJoinView
