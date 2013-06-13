@@ -5,6 +5,7 @@ import game.json.excludes.MatchExcludeMapDataMixin;
 import game.json.excludes.MatchResultSimpleMixin;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import models.api.error.NotLoggedInError;
@@ -16,15 +17,14 @@ import models.entity.game.MatchState;
 import models.entity.game.MatchToken;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
 import play.mvc.Result;
 import controllers.Application;
+import controllers.api.BaseAPI;
 import dao.game.MapDAO;
 import dao.game.MatchDAO;
 import dao.game.MatchResultDAO;
@@ -34,8 +34,27 @@ import dao.game.MatchResultDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public class Matches extends Controller {
+public class Matches extends BaseAPI<Long, Match> {
   private static final Logger.ALogger log = Logger.of(Matches.class);
+
+  private Matches() {
+    super(Long.class, Match.class);
+  }
+
+  public static final Matches instance = new Matches();
+
+  @Transactional
+  public static Result show(Long id) {
+    Match match = MatchDAO.getInstance().getById(id);
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(Map.class, MatchExcludeMapDataMixin.class);
+    try {
+      return ok(mapper.writeValueAsString(match));
+    } catch (IOException e) {
+      log.error("Failed parse match to json:", e);
+    }
+    return badRequest();
+  }
 
   /**
    * Create a new match for the given map id and returns the map as json.
@@ -100,6 +119,8 @@ public class Matches extends Controller {
     result.setToken(token);
     result.setMatch(match);
     JPA.em().persist(result);
+    match.getPlayerResults().add(result);
+    match.setUdate(new Date());
     token.setResult(result);
 
     return ok(toJson(token));

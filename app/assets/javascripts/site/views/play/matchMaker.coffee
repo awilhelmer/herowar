@@ -8,11 +8,15 @@ class MatchMakerView extends BaseView
 				
 	template: templates.get 'play/matchMaker.tmpl'
 	
-	entity: 'api/match'
+	entity: 'api/matchMaker'
 	
 	events:
 		'click .create' : 'gameCreate'
 		'click .join' : 'gameJoin'
+		
+	bindEvents: ->
+		@listenTo @model, 'change:id', @joinOwnGame
+		@listenTo @model, 'change:udate', @render
 
 	gameCreate: (event) ->
 		unless event then return
@@ -22,7 +26,18 @@ class MatchMakerView extends BaseView
 		@model.clear()
 		@model.set 'mapId', id
 		@model.fetch()
-		
+
+	joinOwnGame: ->
+		@matchToken = db.get 'api/matchToken'
+		@matchToken.set 'id', @model.get 'id'
+		@matchToken.fetch()
+		@render()
+		setTimeout @checkOwnGame, 1000
+	
+	checkOwnGame: =>
+		@model.fetch()
+		setTimeout @checkOwnGame, 1000
+	
 	gameJoin: (event) ->
 	
 return MatchMakerView

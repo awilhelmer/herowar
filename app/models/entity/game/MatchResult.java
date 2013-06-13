@@ -30,7 +30,6 @@ public class MatchResult implements Serializable {
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "player_id")
-  @JsonIgnore
   private Player player;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
@@ -40,6 +39,7 @@ public class MatchResult implements Serializable {
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "match_id")
+  @JsonIgnore
   private Match match;
 
   public Long getId() {

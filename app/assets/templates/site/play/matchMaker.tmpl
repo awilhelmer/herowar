@@ -7,6 +7,11 @@
 		</ul>
 	{{else}}
 		<p>Players:</p>
-		<a class="btn btn-primary">Start</a>
+		{{#each playerResults}}
+			Player #{{player.id}}
+		{{/each}}
+		<div class="buttons">
+			<a class="btn btn-primary">Start Game</a>
+		</div>
 	{{/unless}}
 </div>
