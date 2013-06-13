@@ -94,6 +94,17 @@ public class Matches extends BaseAPI<Long, Match> {
     return badRequest();
   }
 
+  @Transactional
+  public static Result start(Long id) {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
+    Match match = MatchDAO.getInstance().getById(id);
+    match.setState(MatchState.PRELOAD);
+    return ok(toJson(match));
+  }
+
   /**
    * Join a match with given id.
    * 

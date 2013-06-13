@@ -17,11 +17,11 @@ class MatchMakerView extends BaseView
 	
 	bindEvents: ->
 		@listenTo @model, 'change:id', @updateMatch
+		@listenTo @model, 'change:state', @joinMatch
 		super()
 			
 	updateMatch: =>
 		if @model.has 'id'
-			console.log 'Update match id=', @model.get('id')
 			@xhr = @model.fetch merge: true
 			setTimeout @updateMatch, 2000
 		return
@@ -31,13 +31,20 @@ class MatchMakerView extends BaseView
 		@model.clear()
 		$.ajax
 			url: "#{app.resourcePath()}game/match/quit"
-		console.log 'Quit match', @model.attributes
 		return
 		
 	matchStart: ->
 		console.log 'Start match'
-		matchToken = db.get 'api/matchToken'
-		window.location = "/game?token=#{matchToken.get('token')}" if matchToken.has 'token'
+		@$('.start').addClass 'disabled'
+		@$('.quit').addClass 'disabled'
+		$.ajax
+			url: "#{app.resourcePath()}game/match/start/#{@model.get('id')}"		
+		return
+
+	joinMatch: ->
+		if @model.has('state') and (@model.get('state') is 'PRELOAD' or @model.get('state') is 'GAME')
+			matchToken = db.get 'api/matchToken'
+			window.location = "/game?token=#{matchToken.get('token')}" if matchToken.has 'token'
 		return
 
 return MatchMakerView
