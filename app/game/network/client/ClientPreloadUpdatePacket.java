@@ -8,12 +8,6 @@ import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.processor.GameProcessor.Topic;
-import game.processor.PlayerProcessor;
-import game.processor.ProcessorHandler;
-import game.processor.meta.IProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.webbitserver.WebSocketConnection;
 
@@ -41,17 +35,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
       log.error("GameSession should not be null");
       return;
     }
-    // TODO: this could be end badly if the user send multiple times 100
-    // progress...
     if (progress == 100) {
-      session.getClock().reset();
-      List<IProcessor> list = new ArrayList<IProcessor>();
-      PlayerProcessor playerProcessor = new PlayerProcessor(session.getToken().getToken(), connection);
-      session.setPlayerProcessor(playerProcessor);
-      list.add(playerProcessor);
-      ProcessorHandler handler = new ProcessorHandler(list);
-      handler.start();
-      GamesHandler.getInstance().getProcessors().put(session, handler);
       log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getPlayer().getUser().getUsername());
     }
     session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayer().getId(), progress));

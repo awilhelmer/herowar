@@ -27,23 +27,17 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(PreloadUpdatePlugin.class);
 
   private ConcurrentHashMap<Long, Integer> preloadProgress = new ConcurrentHashMap<Long, Integer>();
-  // private EventTopicSubscriber<PreloadUpdateEvent> preloadUpdateSubscriber =
-  // createPreloadUpdateSubscriber();
 
   private Integer preloadPlayerMissing = 0;
 
   public PreloadUpdatePlugin(GameProcessor processor) {
     super(processor);
+    preloadPlayerMissing = getMatch().getPlayerResults().size();
+    log.info("Start preloading phase for " + preloadPlayerMissing + " players");
   }
 
   @Override
   public void process(double delta, long now) {
-    // TODO: This maybe cause the PreloadUpdatePlugin to start the game to
-    // early. The first player connects and reach fast 100% before the other
-    // players even connected and the map will start. We need to get somewhere
-    // the full player list for this game before starting this preload stuff and
-    // we also missing disconnected player and some kind of timeout before the
-    // game starts even when the players are not connected.
     if (preloadProgress.size() > 0 && preloadPlayerMissing == 0) {
       log.info("All player finshed preloading - switching game state to " + State.GAME);
       getProcessor().publish(Topic.STATE, new GameStateEvent(State.GAME));
@@ -53,10 +47,8 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void addPlayer(GameSession session) {
-    long playerId = session.getPlayer().getId();
-    if (!preloadProgress.containsKey(playerId)) {
-      preloadPlayerMissing++;
-      preloadProgress.put(playerId, 0);
+    if (!preloadProgress.containsKey(session.getPlayerId())) {
+      preloadProgress.put(session.getPlayerId(), 0);
     }
   }
 

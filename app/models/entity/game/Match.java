@@ -40,7 +40,7 @@ public class Match extends BaseModel {
   private Boolean victory;
 
   @Enumerated(EnumType.STRING)
-  private MatchState type = MatchState.INIT;
+  private MatchState state = MatchState.INIT;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "map_id")
@@ -89,12 +89,12 @@ public class Match extends BaseModel {
     this.victory = victory;
   }
 
-  public MatchState getType() {
-    return type;
+  public MatchState getState() {
+    return state;
   }
 
-  public void setType(MatchState type) {
-    this.type = type;
+  public void setState(MatchState state) {
+    this.state = state;
   }
 
   public Map getMap() {

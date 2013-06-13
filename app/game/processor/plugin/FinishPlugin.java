@@ -11,12 +11,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
-import models.entity.User;
-import models.entity.game.GameResult;
-import models.entity.game.MatchToken;
+import models.entity.game.Match;
+import models.entity.game.MatchResult;
+import models.entity.game.MatchState;
 import play.db.jpa.JPA;
-import dao.UserDAO;
-import dao.game.MatchTokenDAO;
+import dao.game.MatchDAO;
 
 /**
  * The FinishPlugin sends informations about the state of the game and clean up.
@@ -55,32 +54,25 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
   }
 
   private void saveResults() {
-    boolean victory = getMap().getLives() > 0;
-    Iterator<GameSession> iter = getProcessor().getSessions().iterator();
-    while (iter.hasNext()) {
-      final GameSession session = iter.next();
-      final GameResult result = new GameResult();
-      result.setCdate(new Date());
-      result.setLives(getMap().getLives());
-      result.setMap(getMap());
-      result.setVictory(victory);
-      ConcurrentHashMap<String, Object> cache = getPlayerCache(session.getPlayer().getId());
-      result.setScore(Math.round(Double.parseDouble(cache.get("score").toString())));
-      JPA.withTransaction(new play.libs.F.Callback0() {
-        @Override
-        public void invoke() throws Throwable {
-          MatchToken token = MatchTokenDAO.getTokenById(session.getToken().getToken());
-          User user = UserDAO.getInstance().getById(session.getPlayer().getId());
-          if (user != null && !token.getInvalid()) {
-            result.setPlayer(user.getPlayer());
-            result.setToken(token);
-            JPA.em().persist(result);
-            // token.setResult(result);
-            token.setInvalid(true);
-          }
+    final boolean victory = getMap().getLives() > 0;
+    final int lives = getMap().getLives();
+    JPA.withTransaction(new play.libs.F.Callback0() {
+      @Override
+      public void invoke() throws Throwable {
+        Match match = MatchDAO.getInstance().getById(getMatch().getId());
+        match.setState(MatchState.FINISH);
+        match.setVictory(victory);
+        match.setLives(lives);
+        match.setGameTime(new Date().getTime() - match.getPreloadTime());
+        Iterator<MatchResult> results = match.getPlayerResults().iterator();
+        while (results.hasNext()) {
+          MatchResult result = results.next();
+          ConcurrentHashMap<String, Object> cache = getPlayerCache(result.getPlayer().getId());
+          result.setScore(Math.round(Double.parseDouble(cache.get("score").toString())));
+          result.getToken().setInvalid(true);
         }
-      });
-    }
+      }
+    });
   }
 
   @Override

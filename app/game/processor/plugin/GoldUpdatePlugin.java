@@ -29,10 +29,9 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void processSession(GameSession session) {
-    long playerId = session.getPlayer().getId();
+  public void processSession(GameSession session, double delta, long now) {
     Date date = new Date();
-    ConcurrentHashMap<String, Object> playerCache = getPlayerCache(playerId);
+    ConcurrentHashMap<String, Object> playerCache = getPlayerCache(session.getPlayerId());
     if (playerCache.containsKey(GOLD_VALUE)) {
       synchronized (playerCache) {
         // Update gold value
@@ -44,9 +43,9 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
         // Update time update value
         setPlayerCacheValue(playerCache, GOLD_UPDATE, date);
         // Send info to client
-        if (!hashInitPacket(playerId)) {
+        if (!hashInitPacket(session.getPlayerId())) {
           sendPacket(session, new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
-          getInitPacket().replace(playerId, true);
+          getInitPacket().replace(session.getPlayerId(), true);
           setPlayerCacheValue(playerCache, GOLD_SYNC, date);
         } else {
           Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
@@ -62,12 +61,11 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void addPlayer(GameSession session) {
-    long playerId = session.getPlayer().getId();
-    if (!getPlayerCache(playerId).containsKey(GOLD_VALUE)) {
+    if (!getPlayerCache(session.getPlayerId()).containsKey(GOLD_VALUE)) {
       double startValue = getProcessor().getMap().getGoldStart().doubleValue();
-      getPlayerCache(playerId).put(GOLD_VALUE, startValue);
+      getPlayerCache(session.getPlayerId()).put(GOLD_VALUE, startValue);
     }
-    getInitPacket().put(playerId, false);
+    getInitPacket().put(session.getPlayerId(), false);
   }
 
   @Override

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
+import models.entity.game.Match;
 
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 
@@ -105,6 +106,15 @@ public class AbstractPlugin {
    */
   public Set<GameSession> getSessions() {
     return getProcessor().getSessions();
+  }
+
+  /**
+   * Get match from GameProcessor.
+   * 
+   * @return The match
+   */
+  public Match getMatch() {
+    return getProcessor().getMatch();
   }
 
   /**

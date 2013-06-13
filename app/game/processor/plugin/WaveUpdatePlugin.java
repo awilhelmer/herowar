@@ -64,7 +64,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void processSession(GameSession session) {
+  public void processSession(GameSession session, double delta, long now) {
     long playerId = session.getPlayer().getId();
     if (!hashInitPacket(playerId)) {
       long eta = getWaveEta();
@@ -157,7 +157,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   public void createUnit(Path path, Unit entity) {
-    Long id = getProcessor().getObjectIdGenerator();
+    Long id = getProcessor().getNextObjectId();
     UnitModel model = new UnitModel(id, entity.getId(), entity);
     model.setActivePath(path);
     if (path.getWaypoints() == null) {

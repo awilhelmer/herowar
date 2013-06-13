@@ -62,7 +62,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
       // TODO: not enough gold ...
       return;
     }
-    TowerModel tower = new TowerModel(session.getGame().getObjectIdGenerator(), id, entity);
+    TowerModel tower = new TowerModel(session.getGame().getNextObjectId(), id, entity);
     com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
     tower.setTranslation(position);
     tower.updateWorldTransform(false);

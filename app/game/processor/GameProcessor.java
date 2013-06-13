@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
+import models.entity.game.Match;
 
 import org.bushe.swing.event.EventBus;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
@@ -46,14 +47,17 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private final static Logger.ALogger log = Logger.of(GameProcessor.class);
 
-  private final Node rootNode;
-  private Long objectIdGenerator = null;
   private Long gameId;
+  private Long objectId;
+  private Match match;
+  private Map map;
+
   private GameClock clock = new GameClock();
   private boolean wavesFinished = false;
   private boolean unitsFinished = false;
-  private Map map;
   private State state;
+
+  private final Node rootNode = new Node();
 
   /**
    * The session set contains all sessions for this game.
@@ -78,14 +82,15 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
    */
   private ConcurrentHashMap<Long, TowerModel> towerCache = new ConcurrentHashMap<Long, TowerModel>();
 
-  public GameProcessor(Long gameId, Map map, GameSession session) {
-    super("game-" + gameId);
-    this.gameId = gameId;
-    this.map = map;
-    this.objectIdGenerator = 0l;
-    this.rootNode = new Node();
-
+  public GameProcessor(Match match) {
+    super("match-" + match.getId());
+    this.match = match;
+    this.map = match.getMap();
     AnnotationProcessor.process(this);
+  }
+
+  public GameProcessor(Match match, GameSession session) {
+    this(match);
     this.registerPlugins();
     this.updateState(State.PRELOAD);
     this.addPlayer(session);
@@ -219,8 +224,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   // GETTER && SETTER //
 
-  public synchronized Long getObjectIdGenerator() {
-    return new Long(objectIdGenerator++);
+  public synchronized Long getNextObjectId() {
+    return new Long(objectId++);
   }
 
   public Set<GameSession> getSessions() {
@@ -241,6 +246,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public Long getGameId() {
     return gameId;
+  }
+  
+  public Match getMatch() {
+    return match;
   }
 
   public Map getMap() {

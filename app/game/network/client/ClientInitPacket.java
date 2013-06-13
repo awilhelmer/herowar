@@ -49,7 +49,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
         Hibernate.initialize(wave.getUnits());
         Hibernate.initialize(wave.getPath());
       }
-      EventBus.publish(new GameJoinEvent(matchToken, connection));
+      EventBus.publish(new GameJoinEvent(matchToken.getResult().getMatch(), matchToken, connection));
       connection.send(Json.toJson(new AccessGrantedPacket()).toString());
     } else {
       connection.send(Json.toJson(new AccessDeniedPacket()).toString());

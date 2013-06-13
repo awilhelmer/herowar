@@ -1,15 +1,12 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
+import game.json.excludes.GameResultExcludeMapDataMixin;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
-import game.json.excludes.ExcludeGeometryMixin;
-import game.json.excludes.GameResultExcludeMapDataMixin;
 import models.api.error.NotLoggedInError;
 import models.entity.User;
-import models.entity.game.Environment;
 import models.entity.game.Map;
 import models.entity.game.Match;
 import models.entity.game.MatchResult;
@@ -25,7 +22,6 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import controllers.Application;
-import dao.game.EnvironmentDAO;
 import dao.game.MapDAO;
 import dao.game.MatchDAO;
 
@@ -79,7 +75,7 @@ public class Matches extends Controller {
       return badRequest(toJson(new NotLoggedInError()));
     }
     Match match = MatchDAO.getInstance().getById(id);
-    if (match == null || !MatchState.INIT.equals(match.getType())) {
+    if (match == null || !MatchState.INIT.equals(match.getState())) {
       log.error("User " + user.getUsername() + " tried to join not existing match or a match without INIT state.");
       return badRequest();
     }

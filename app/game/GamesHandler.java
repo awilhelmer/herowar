@@ -8,13 +8,12 @@ import game.processor.GameProcessor;
 import game.processor.ProcessorHandler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import models.entity.game.Map;
+import models.entity.game.Match;
 import models.entity.game.Tower;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
@@ -39,11 +38,9 @@ public class GamesHandler implements Serializable {
 
   private static final Logger.ALogger log = Logger.of(GamesHandler.class);
 
-  private ConcurrentHashMap<Long, List<GameProcessor>> games = new ConcurrentHashMap<Long, List<GameProcessor>>();
+  private ConcurrentHashMap<Long, GameProcessor> games = new ConcurrentHashMap<Long, GameProcessor>();
   private ConcurrentHashMap<WebSocketConnection, GameSession> connections = new ConcurrentHashMap<WebSocketConnection, GameSession>();
   private ConcurrentHashMap<GameSession, ProcessorHandler> processors = new ConcurrentHashMap<GameSession, ProcessorHandler>();
-
-  private long gameId = 1;
 
   private static GamesHandler instance = new GamesHandler();
 
@@ -58,8 +55,8 @@ public class GamesHandler implements Serializable {
 
   @EventSubscriber
   public void observePlayerJoinEvent(final GameJoinEvent event) {
-    GameSession session = new GameSession(event.getToken().getPlayer(), event.getToken(), event.getConnection());
-    final GameProcessor game = createGame(event.getToken().getResult().getMatch().getMap(), session);
+    GameSession session = new GameSession(event.getMatch(), event.getToken().getPlayer(), event.getToken(), event.getConnection());
+    final GameProcessor game = findGame(event.getMatch(), session);
     session.setGame(game);
     connections.put(event.getConnection(), session);
     log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getToken().getPlayer().getUser().getUsername(), game.getTopicName()));
@@ -84,33 +81,21 @@ public class GamesHandler implements Serializable {
     }
   }
 
-  private GameProcessor createGame(Map map, GameSession session) {
-    GameProcessor game = getOpenGame(map);
+  private GameProcessor findGame(Match match, GameSession session) {
+    GameProcessor game = getOpenGame(match);
     if (game != null) {
       game.addPlayer(session);
     } else {
-      game = new GameProcessor(gameId, map, session);
+      game = new GameProcessor(match, session);
       game.start();
-      gameId++;
-      if (games.containsKey(map.getId())) {
-        games.get(map.getId()).add(game);
-      } else {
-        List<GameProcessor> newGameList = new ArrayList<GameProcessor>();
-        newGameList.add(game);
-        games.put(map.getId(), newGameList);
-      }
+      games.put(match.getId(), game);
     }
     return game;
   }
 
-  private GameProcessor getOpenGame(Map map) {
-    if (games.containsKey(map.getId())) {
-      List<GameProcessor> processors = games.get(map.getId());
-      for (GameProcessor game : processors) {
-        if (game.getSessions().size() < map.getTeamSize()) {
-          return game;
-        }
-      }
+  private GameProcessor getOpenGame(Match match) {
+    if (games.containsKey(match.getId())) {
+      return games.get(match.getId());
     }
     return null;
   }
@@ -129,7 +114,7 @@ public class GamesHandler implements Serializable {
     java.util.Map<String, String> texturesCube = new HashMap<String, String>();
     texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
     java.util.Map<String, String> geometries = new HashMap<String, String>();
-    geometries.put("rocket","assets/geometries/weapons/rocket.js");
+    geometries.put("rocket", "assets/geometries/weapons/rocket.js");
     Iterator<Wave> iter = game.getMap().getWaves().iterator();
     while (iter.hasNext()) {
       Wave wave = iter.next();
@@ -158,12 +143,6 @@ public class GamesHandler implements Serializable {
     game.removePlayer(connection);
     connections.remove(connection);
     processors.remove(session);
-    // TODO: Current we shutdown the games without users, later they should go
-    // on...
-    if (game.getSessions().size() == 0) {
-      game.stop();
-      games.get(game.getMap().getId()).remove(game);
-    }
   }
 
   public void stop() {
@@ -177,7 +156,7 @@ public class GamesHandler implements Serializable {
 
   // GETTER && SETTER //
 
-  public java.util.Map<Long, List<GameProcessor>> getGames() {
+  public java.util.Map<Long, GameProcessor> getGames() {
     return games;
   }
 
