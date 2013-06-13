@@ -9,6 +9,7 @@ class APIMatchCreate extends Backbone.Model
 	parse: (resp) ->
 		matchMaker = db.get 'api/matchMaker'
 		matchMaker.clear()
+		resp.host = true if resp.id
 		matchMaker.set resp
 		return resp
 

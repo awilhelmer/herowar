@@ -26,6 +26,7 @@ class MatchMakerView extends BaseView
 		return
 
 	matchQuit: ->
+		@model.quit()
 		@model.clear()
 		console.log 'Quit match', @model.attributes
 		return

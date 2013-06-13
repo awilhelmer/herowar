@@ -14,8 +14,7 @@ class MatchCreateView extends BaseView
 		'click' : 'gameCreate'
 		
 	bindEvents: ->
-		@listenTo @model, 'change:id', @joinOwnGame
-		@listenTo @model, 'change:udate', @render
+		@listenTo @model, 'change:id', @joinGame
 
 	gameCreate: (event) ->
 		@model.clear()
@@ -23,7 +22,7 @@ class MatchCreateView extends BaseView
 		console.log 'Create match for', @model
 		@model.fetch()
 
-	joinOwnGame: ->
+	joinGame: ->
 		if @model.has 'id'
 			@matchToken = db.get 'api/matchToken'
 			@matchToken.set 'id', @model.get 'id'

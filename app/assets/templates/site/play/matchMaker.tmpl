@@ -7,12 +7,20 @@
 		</ul>
 	{{else}}
 		<p>Map: {{map.name}}</p>
-		<p>Players:</p>
-		{{#each playerResults}}
-			Player #{{player.id}}
-		{{/each}}
-		<div class="buttons">
-			<a class="btn quit">Quit</a>&nbsp;<a class="btn btn-primary start">Start Game</a>
-		</div>
+		{{#if playerResults}}
+			<p>Players:</p>
+			{{#each playerResults}}
+				<div>Player #{{player.id}}</div>
+			{{/each}}
+			<div class="buttons">
+				{{#if host}}
+					<a class="btn quit">Quit</a>&nbsp;<a class="btn btn-primary start">Start Game</a>
+				{{else}}
+					<span>Waiting for Host</span>
+				{{/if}}
+			</div>
+		{{else}}
+			<p>Creating game...</p>
+		{{/if}}
 	{{/unless}}
 </div>

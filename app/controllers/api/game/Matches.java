@@ -6,6 +6,7 @@ import game.json.excludes.MatchResultSimpleMixin;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import models.api.error.NotLoggedInError;
@@ -133,7 +134,31 @@ public class Matches extends BaseAPI<Long, Match> {
       return badRequest(toJson(new NotLoggedInError()));
     }
     Match match = MatchDAO.getInstance().getOpenMatch();
-    return ok(toJson(match));
+    if (match != null) {
+      return ok(toJson(match));
+    }
+    return badRequest();
+  }
+
+  @Transactional
+  public static Result quit() {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
+    List<MatchResult> matchResults = MatchResultDAO.findOpen(user.getPlayer());
+    Iterator<MatchResult> iter = matchResults.iterator();
+    while (iter.hasNext()) {
+      MatchResult result = iter.next();
+      Match match = result.getMatch();
+      match.getPlayerResults().remove(result);
+      if (match.getPlayerResults().size() == 0) {
+        JPA.em().remove(match);
+      }
+      result.getToken().setInvalid(true);
+      JPA.em().remove(result);
+    }
+    return ok();
   }
 
   /**
