@@ -58,10 +58,14 @@ public class GamesHandler implements Serializable {
 
   @EventSubscriber
   public void observePlayerJoinEvent(final GameJoinEvent event) {
-    if (!games.contains(event.getMatchId())) {
-      matchCreate(event.getMatchId());
+    synchronized (games) {
+      if (!games.containsKey(event.getMatchId())) {
+        log.info("Create game processor for match " + event.getMatchId());
+        matchCreate(event.getMatchId());
+      }
+      log.info("Join match " + event.getMatchId());
+      matchJoin(event.getMatchId(), event.getToken(), event.getConnection());
     }
-    matchJoin(event.getMatchId(), event.getToken(), event.getConnection());
   }
 
   @EventSubscriber

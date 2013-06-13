@@ -86,8 +86,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public GameProcessor(Match match) {
     super("match-" + match.getId());
-    this.match = match;
     this.gameId = match.getId();
+    this.match = match;
     this.map = match.getMap();
     AnnotationProcessor.process(this);
     this.registerPlugins();
