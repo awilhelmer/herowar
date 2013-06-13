@@ -19,6 +19,7 @@ public class MatchResultSimpleSerializer extends BaseSerializer<MatchResult> {
       writeNumberField(jgen, "cdate", value.getMatch().getCdate().getTime());
       writeNumberField(jgen, "lives", value.getMatch().getLives());
       writeStringField(jgen, "state", value.getMatch().getState().name());
+      writeBooleanField(jgen, "victory", value.getMatch().getVictory());
       if (value.getMatch().getMap() != null) {
         Map map = value.getMatch().getMap();
         jgen.writeObjectFieldStart("map");
