@@ -31,6 +31,7 @@ import controllers.api.BaseAPI;
 import dao.game.MapDAO;
 import dao.game.MatchDAO;
 import dao.game.MatchResultDAO;
+import dao.game.MatchTokenDAO;
 
 /**
  * The Matches controller handle api requests for the Match model.
@@ -47,7 +48,24 @@ public class Matches extends BaseAPI<Long, Match> {
   public static final Matches instance = new Matches();
 
   @Transactional
+  public static Result find() {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
+    MatchToken token = MatchTokenDAO.findValid(user.getPlayer());
+    if (token != null) {
+      return ok(toJson(token));
+    }
+    return ok("{}");
+  }
+
+  @Transactional
   public static Result show(Long id) {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
     Match match = MatchDAO.getInstance().getById(id);
     ObjectMapper mapper = new ObjectMapper();
     mapper.getSerializationConfig().addMixInAnnotations(Player.class, PlayerWithUsernameMixin.class);

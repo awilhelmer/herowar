@@ -35,6 +35,7 @@ PUT			/api/news/:id												controllers.api.News.update(id: Long)
 DELETE	/api/news/:id												controllers.api.News.delete(id: Long)
 POST		/api/news														controllers.api.News.add()
 
+GET			/api/game/match/find        				controllers.api.game.Matches.find()
 GET			/api/game/match/create/:mapId				controllers.api.game.Matches.create(mapId: Long)
 GET			/api/game/match/join/:id						controllers.api.game.Matches.join(id: Long)
 GET			/api/game/match/start/:id						controllers.api.game.Matches.start(id: Long)

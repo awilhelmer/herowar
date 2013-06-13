@@ -14,12 +14,23 @@ class MatchMakerView extends BaseView
 	events:
 		'click .start' : 'matchStart'
 		'click .quit' : 'matchQuit'
-	
+
+	initialize: (options) ->
+		@matchOpen = db.get 'api/matchOpen'
+		super options
+
 	bindEvents: ->
+		@listenTo @matchOpen, 'change:token', @render
 		@listenTo @model, 'change:id', @updateMatch
 		@listenTo @model, 'change:state', @joinMatch
 		super()
-			
+
+	getTemplateData: ->
+		json = super()
+		json.matchOpen = @matchOpen.has 'token'
+		console.log 'getTemplateData', json
+		return json
+		
 	updateMatch: =>
 		if @model.has 'id'
 			@xhr = @model.fetch merge: true

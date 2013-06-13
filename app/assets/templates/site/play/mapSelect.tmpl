@@ -1,10 +1,12 @@
-{{#unless matchMaker}}
-	<div class="header">Solo Play</div>
-	<div class="body">
-		<ul>
-			{{#each []}}
-				<li data-id="{{id}}"><span>{{name}}</span></li>
-			{{/each}}
-		</ul>
-	</div>
+{{#unless matchOpen}}
+	{{#unless matchMaker}}
+		<div class="header">Solo Play</div>
+		<div class="body">
+			<ul>
+				{{#each []}}
+					<li data-id="{{id}}"><span>{{name}}</span></li>
+				{{/each}}
+			</ul>
+		</div>
+	{{/unless}}
 {{/unless}}

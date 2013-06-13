@@ -1,26 +1,28 @@
-<div class="header">Coop</div>
-<div class="body">
-	{{#unless id}}
-		<ul>
-			<li data-view="views/play/matchCreate"></li>
-			<li data-view="views/play/matchJoin"></li>
-		</ul>
-	{{else}}
-		<p>Map: {{map.name}}</p>
-		{{#if playerResults}}
-			<p>Players:</p>
-			{{#each playerResults}}
-				<div>{{player.username}}</div>
-			{{/each}}
-			<div class="buttons">
-				{{#if host}}
-					<a class="btn quit">Quit</a>&nbsp;<a class="btn btn-primary start">Start Game</a>
-				{{else}}
-					<span>Waiting for Host</span>
-				{{/if}}
-			</div>
+{{#unless matchOpen}}
+	<div class="header">Coop</div>
+	<div class="body">
+		{{#unless id}}
+			<ul>
+				<li data-view="views/play/matchCreate"></li>
+				<li data-view="views/play/matchJoin"></li>
+			</ul>
 		{{else}}
-			<p>Creating game...</p>
-		{{/if}}
-	{{/unless}}
-</div>
+			<p>Map: {{map.name}}</p>
+			{{#if playerResults}}
+				<p>Players:</p>
+				{{#each playerResults}}
+					<div>{{player.username}}</div>
+				{{/each}}
+				<div class="buttons">
+					{{#if host}}
+						<a class="btn quit">Quit</a>&nbsp;<a class="btn btn-primary start">Start Game</a>
+					{{else}}
+						<span>Waiting for Host</span>
+					{{/if}}
+				</div>
+			{{else}}
+				<p>Creating game...</p>
+			{{/if}}
+		{{/unless}}
+	</div>
+{{/unless}}
