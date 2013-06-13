@@ -30,6 +30,7 @@ public class GameSession implements Serializable {
   private WebSocketConnection connection;
   private GameProcessor game;
 
+  private boolean preloading = true;
   private long latency;
 
   public GameSession(Match match, Player player, MatchToken token, WebSocketConnection connection) {
@@ -72,6 +73,14 @@ public class GameSession implements Serializable {
 
   public void setLatency(long latency) {
     this.latency = latency;
+  }
+
+  public boolean isPreloading() {
+    return preloading;
+  }
+
+  public void setPreloading(boolean preloading) {
+    this.preloading = preloading;
   }
 
   public GameProcessor getGame() {

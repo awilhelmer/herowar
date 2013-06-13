@@ -47,6 +47,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
     if (GameProcessor.State.PRELOAD.equals(session.getGame().getState())) {
       if (progress == 100) {
         log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getPlayer().getUser().getUsername());
+        session.setPreloading(false);
       }
       session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
     } else if (progress == 100) {
@@ -61,6 +62,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
         log.info("Send player info about tower " + tower.getId() + " at " + position.toString());
         session.getConnection().send(Json.toJson(new TowerBuildPacket(tower.getId(), tower.getDbId(), tower.getSession().getPlayerId(), position)).toString());
       }
+      session.setPreloading(false);
     }
   }
 

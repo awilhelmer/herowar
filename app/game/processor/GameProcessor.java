@@ -125,16 +125,36 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     super.stop();
   }
 
+  /**
+   * Add a new player to this game.
+   * 
+   * @param session
+   *          The session to set
+   */
   public void addPlayer(GameSession session) {
     synchronized (sessions) {
       sessions.add(session);
     }
-    long playerId = session.getPlayer().getId();
-    if (!playerCache.containsKey(playerId)) {
-      playerCache.put(playerId, new ConcurrentHashMap<String, Object>());
-      playerCache.get(playerId).put(CacheConstants.SCORE, 0L);
-      playerCache.get(playerId).put(CacheConstants.KILLS, 0L);
+
+    // Change session on tower if player reconnects
+    synchronized (towerCache) {
+      Iterator<TowerModel> iter = towerCache.values().iterator();
+      while (iter.hasNext()) {
+        TowerModel model = iter.next();
+        if (model.getSession().getPlayerId() == session.getPlayerId()) {
+          model.setSession(session);
+        }
+      }
     }
+
+    // Create score and kills for player if not exists
+    if (!playerCache.containsKey(session.getPlayerId())) {
+      playerCache.put(session.getPlayerId(), new ConcurrentHashMap<String, Object>());
+      playerCache.get(session.getPlayerId()).put(CacheConstants.SCORE, 0L);
+      playerCache.get(session.getPlayerId()).put(CacheConstants.KILLS, 0L);
+    }
+
+    // Add the session to all plugins
     for (Set<IPlugin> statePlugins : plugins.values()) {
       for (IPlugin plugin : statePlugins) {
         plugin.addPlayer(session);
@@ -142,6 +162,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     }
   }
 
+  /**
+   * Remove a player from this game.
+   * 
+   * @param connection
+   *          The connection to set
+   */
   public void removePlayer(WebSocketConnection connection) {
     GameSession player = null;
     synchronized (sessions) {
@@ -163,8 +189,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   }
 
   public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
-    for (GameSession session : sessions) {
-      if (sendSelf || !connection.equals(session.getConnection())) {
+    Iterator<GameSession> iter = sessions.iterator();
+    while (iter.hasNext()) {
+      GameSession session = iter.next();
+      if (!session.isPreloading() && (sendSelf || !connection.equals(session.getConnection()))) {
         session.getConnection().send(Json.toJson(message).toString());
       }
     }

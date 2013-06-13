@@ -27,29 +27,31 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void processSession(GameSession session, double delta, long now) {
-    Date date = new Date();
+    if (session.isPreloading()) {
+      return;
+    }
     ConcurrentHashMap<String, Object> playerCache = getPlayerCache(session.getPlayerId());
     if (playerCache.containsKey(CacheConstants.GOLD)) {
       synchronized (playerCache) {
         // Update gold value
         if (getProcessor().isUpdateGold() && playerCache.containsKey(CacheConstants.GOLD_UPDATE)) {
-          Long dif = date.getTime() - ((Date) playerCache.get(CacheConstants.GOLD_UPDATE)).getTime();
+          Long dif = now - Long.parseLong(playerCache.get(CacheConstants.GOLD_UPDATE).toString());
           double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
           setPlayerCacheValue(playerCache, CacheConstants.GOLD, newGold);
         }
         // Update time update value
-        setPlayerCacheValue(playerCache, CacheConstants.GOLD_UPDATE, date);
+        setPlayerCacheValue(playerCache, CacheConstants.GOLD_UPDATE, now);
         // Send info to client
         if (!hashInitPacket(session.getPlayerId())) {
           sendPacket(session, new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
           getInitPacket().replace(session.getPlayerId(), true);
-          setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, date);
+          setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, now);
         } else {
-          Long dif = date.getTime() - ((Date) playerCache.get(CacheConstants.GOLD_SYNC)).getTime();
+          Long dif = now - Long.parseLong(playerCache.get(CacheConstants.GOLD_SYNC).toString());
           if (dif >= SYNC_PERIOD) {
             sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(CacheConstants.SCORE), getMap().getLives().longValue(),
                 getRoundedGoldValue(playerCache), null, null, null));
-            setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, date);
+            setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, now);
           }
         }
       }

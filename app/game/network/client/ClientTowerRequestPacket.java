@@ -71,7 +71,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
     synchronized (playerCache) {
       playerCache.replace(GOLD_VALUE, currentGold - entity.getPrice());
-      playerCache.replace(GOLD_SYNC, new Date());
+      playerCache.replace(GOLD_SYNC, (new Date().getTime()));
     }
     session.getConnection().send(
         Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, new Long(entity.getPrice() * -1)))

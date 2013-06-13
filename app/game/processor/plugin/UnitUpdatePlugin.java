@@ -89,7 +89,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
         newGold = ((double) playerCache.get(CacheConstants.GOLD)) + KILL_REWARD_GOLD;
         playerCache.replace(CacheConstants.KILLS, Long.parseLong(playerCache.get(CacheConstants.KILLS).toString()) + 1L);
         playerCache.replace(CacheConstants.GOLD, newGold);
-        playerCache.replace(CacheConstants.GOLD_SYNC, new Date());
+        playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
       }
       session.getConnection().send(
           Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());
