@@ -65,9 +65,11 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
       if (preloadProgress.get(data.getPlayerId()) == 100 && data.getProgress() < 100) {
         // Player finished preloaded before but seems reconnected and need
         // to load again
+        log.info("Player " + data.getPlayerId() + " has reconnected");
         preloadPlayerMissing++;
       } else if (preloadProgress.get(data.getPlayerId()) < 100 && data.getProgress() == 100) {
         // Player fully preloaded and waiting for starting game
+        log.info("Player " + data.getPlayerId() + " finished preloading");
         preloadPlayerMissing--;
       }
       preloadProgress.replace(data.getPlayerId(), data.getProgress());

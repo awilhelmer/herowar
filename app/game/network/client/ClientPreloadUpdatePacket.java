@@ -38,7 +38,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
     if (progress == 100) {
       log.info("Send preload complete event to " + session.getGame().getTopicName() + " for " + session.getPlayer().getUser().getUsername());
     }
-    session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayer().getId(), progress));
+    session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
   }
 
   public Integer getProgress() {

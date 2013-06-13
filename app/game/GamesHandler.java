@@ -98,8 +98,9 @@ public class GamesHandler implements Serializable {
   private void matchJoin(final long matchId, final MatchToken token, final WebSocketConnection connection) {
     final GameProcessor game = games.get(matchId);
     GameSession session = new GameSession(game.getMatch(), token.getPlayer(), token, connection);
-    session.setGame(game);
     connections.put(connection, session);
+    session.setGame(game);
+    game.addPlayer(session);
     log.info(String.format("Player '<%s>' attempt to join game '<%s>'", token.getPlayer().getUser().getUsername(), game.getTopicName()));
     JPA.withTransaction(new play.libs.F.Callback0() {
       @Override

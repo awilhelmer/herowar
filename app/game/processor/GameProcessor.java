@@ -85,15 +85,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   public GameProcessor(Match match) {
     super("match-" + match.getId());
     this.match = match;
+    this.gameId = match.getId();
     this.map = match.getMap();
     AnnotationProcessor.process(this);
-  }
-
-  public GameProcessor(Match match, GameSession session) {
-    this(match);
     this.registerPlugins();
     this.updateState(State.PRELOAD);
-    this.addPlayer(session);
     this.start();
   }
 
@@ -112,6 +108,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   @Override
   public int getUpdateTimer() {
     return 150;
+  }
+
+  @Override
+  public void start() {
+    log.debug(this.toString() + " started");
+    super.start();
   }
 
   @Override
@@ -223,6 +225,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     STATE, PRELOAD, UNIT
   }
 
+  @Override
+  public String toString() {
+    return "GameProcessor-" + gameId;
+  }
+
   // GETTER && SETTER //
 
   public synchronized Long getNextObjectId() {
@@ -248,7 +255,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   public Long getGameId() {
     return gameId;
   }
-  
+
   public Match getMatch() {
     return match;
   }
