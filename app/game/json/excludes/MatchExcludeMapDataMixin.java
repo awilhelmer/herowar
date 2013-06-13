@@ -15,7 +15,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * 
  * @author Sebastian Sachtleben
  */
-public class GameResultExcludeMapDataMixin extends MapDataExcludeMixin {
+public class MatchExcludeMapDataMixin extends MapDataExcludeMixin {
 
   @JsonIgnore
   String description;

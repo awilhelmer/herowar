@@ -10,6 +10,10 @@ class MatchesRecentView extends BaseView
 	
 	template: templates.get 'play/matchesRecent.tmpl'
 
+	initialize: (options) ->
+		super options
+		@model.fetch()
+
 	getTemplateData: ->
 		json = super()
 		entry.formattedCdate = DateFormat.format new Date(entry.cdate), 'ddd mmm dd hh:nn:ss' for entry in json

@@ -1,9 +1,11 @@
 package controllers.api.game;
 
 import static play.libs.Json.toJson;
-import game.json.excludes.GameResultExcludeMapDataMixin;
+import game.json.excludes.MatchExcludeMapDataMixin;
+import game.json.excludes.MatchResultSimpleMixin;
 
 import java.io.IOException;
+import java.util.List;
 
 import models.api.error.NotLoggedInError;
 import models.entity.User;
@@ -14,6 +16,7 @@ import models.entity.game.MatchState;
 import models.entity.game.MatchToken;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import play.Logger;
@@ -24,6 +27,7 @@ import play.mvc.Result;
 import controllers.Application;
 import dao.game.MapDAO;
 import dao.game.MatchDAO;
+import dao.game.MatchResultDAO;
 
 /**
  * The Matches controller handle api requests for the Match model.
@@ -47,12 +51,18 @@ public class Matches extends Controller {
       return badRequest(toJson(new NotLoggedInError()));
     }
 
+    Map map = MapDAO.getMapById(mapId);
+    if (map == null) {
+      return badRequest();
+    }
+
     Match match = new Match();
-    match.setMap(MapDAO.getMapById(mapId));
+    match.setMap(map);
+    match.setLives(map.getLives());
     JPA.em().persist(match);
 
     ObjectMapper mapper = new ObjectMapper();
-    mapper.getSerializationConfig().addMixInAnnotations(Map.class, GameResultExcludeMapDataMixin.class);
+    mapper.getSerializationConfig().addMixInAnnotations(Map.class, MatchExcludeMapDataMixin.class);
     try {
       return ok(mapper.writeValueAsString(match));
     } catch (IOException e) {
@@ -93,5 +103,27 @@ public class Matches extends Controller {
     token.setResult(result);
 
     return ok(toJson(token));
+  }
+
+  /**
+   * Get the history of current logged in player.
+   * 
+   * @return The game history
+   */
+  @Transactional
+  public static Result history() {
+    User user = Application.getLocalUser();
+    if (user == null) {
+      return badRequest(toJson(new NotLoggedInError()));
+    }
+    List<MatchResult> results = MatchResultDAO.getHistory(user.getPlayer());
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(MatchResult.class, MatchResultSimpleMixin.class);
+    try {
+      return ok(mapper.writeValueAsString(results));
+    } catch (IOException e) {
+      log.error("Failed to create history json:", e);
+    }
+    return badRequest();
   }
 }

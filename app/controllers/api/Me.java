@@ -1,14 +1,14 @@
 package controllers.api;
 
 import static play.libs.Json.toJson;
-import game.json.excludes.GameResultExcludeMapDataMixin;
+import game.json.excludes.MatchResultSimpleMixin;
 
 import java.io.IOException;
 
 import models.api.error.AuthenticationError;
 import models.api.error.FormValidationError;
 import models.entity.User;
-import models.entity.game.Map;
+import models.entity.game.MatchResult;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -40,7 +40,7 @@ public class Me extends Controller {
     User user = getLoggedInUser();
     if (user != null) {
       ObjectMapper mapper = new ObjectMapper();
-      mapper.getSerializationConfig().addMixInAnnotations(Map.class, GameResultExcludeMapDataMixin.class);
+      mapper.getSerializationConfig().addMixInAnnotations(MatchResult.class, MatchResultSimpleMixin.class);
       try {
         return ok(mapper.writeValueAsString(user));
       } catch (IOException e) {

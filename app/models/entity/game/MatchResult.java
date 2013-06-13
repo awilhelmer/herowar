@@ -40,7 +40,6 @@ public class MatchResult implements Serializable {
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "match_id")
-  @JsonIgnore
   private Match match;
 
   public Long getId() {
@@ -81,5 +80,10 @@ public class MatchResult implements Serializable {
 
   public void setMatch(Match match) {
     this.match = match;
+  }
+
+  @Override
+  public String toString() {
+    return "MatchResult [id=" + id + ", score=" + score + "]";
   }
 }

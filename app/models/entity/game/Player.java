@@ -42,13 +42,12 @@ public class Player implements Serializable {
   private Long assists = 0L;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "player", cascade = { CascadeType.ALL })
-  private Set<GameResult> gameResults = new HashSet<GameResult>();
-  
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "player", cascade = { CascadeType.ALL })
+  @JsonIgnore
   private Set<MatchResult> matchResults = new HashSet<MatchResult>();
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @PrimaryKeyJoinColumn
+  @JsonIgnore
   private PlayerSettings settings;
 
   // CONSTRUCTOR //
@@ -128,14 +127,6 @@ public class Player implements Serializable {
     this.assists = assists;
   }
 
-  public Set<GameResult> getGameResults() {
-    return gameResults;
-  }
-
-  public void setGameResults(Set<GameResult> gameResults) {
-    this.gameResults = gameResults;
-  }
-  
   public Set<MatchResult> getMatchResults() {
     return matchResults;
   }

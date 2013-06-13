@@ -63,7 +63,7 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
         match.setState(MatchState.FINISH);
         match.setVictory(victory);
         match.setLives(lives);
-        match.setGameTime(new Date().getTime() - match.getPreloadTime());
+        match.setGameTime(new Date().getTime() - (match.getCdate().getTime() + match.getPreloadTime()));
         Iterator<MatchResult> results = match.getPlayerResults().iterator();
         while (results.hasNext()) {
           MatchResult result = results.next();

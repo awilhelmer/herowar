@@ -67,7 +67,6 @@ class Me extends Backbone.Model
 	###
 	parse: (resp) ->
 		db.add 'db/users', resp if resp
-		db.add 'ui/matchesRecent', resp.player.gameResults if resp.player?.gameResults
 		return resp
 	
 	###

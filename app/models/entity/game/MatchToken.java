@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 
 import models.entity.BaseModel;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 /**
@@ -30,9 +31,11 @@ public class MatchToken extends BaseModel {
 
   @ManyToOne(cascade = { CascadeType.REFRESH })
   @JoinColumn(name = "player_id")
+  @JsonIgnore
   private Player player;
 
   @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
+  @JsonIgnore
   private MatchResult result;
 
   public MatchToken() {

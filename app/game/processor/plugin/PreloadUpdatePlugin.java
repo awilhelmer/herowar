@@ -10,11 +10,18 @@ import game.processor.GameProcessor.Topic;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+
+import models.entity.game.Match;
+import models.entity.game.MatchState;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
+import dao.game.MatchDAO;
+
 import play.Logger;
+import play.db.jpa.JPA;
 
 /**
  * The PreloadUpdatePlugin sends informations about the preload state of every
@@ -40,6 +47,14 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   public void process(double delta, long now) {
     if (preloadProgress.size() > 0 && preloadPlayerMissing == 0) {
       log.info("All player finshed preloading - switching game state to " + State.GAME);
+      JPA.withTransaction(new play.libs.F.Callback0() {
+        @Override
+        public void invoke() throws Throwable {
+          Match match = MatchDAO.getInstance().getById(getMatch().getId());
+          match.setState(MatchState.GAME);
+          match.setPreloadTime(new Date().getTime() - match.getCdate().getTime());
+        }
+      });
       getProcessor().publish(Topic.STATE, new GameStateEvent(State.GAME));
       getProcessor().broadcast(new GameStartPacket());
     }
