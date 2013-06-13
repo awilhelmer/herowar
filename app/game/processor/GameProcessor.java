@@ -47,8 +47,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   private final static Logger.ALogger log = Logger.of(GameProcessor.class);
 
-  private Long gameId;
-  private Long objectId;
+  private long gameId;
+  private long objectId = 0l;
   private Match match;
   private Map map;
 
@@ -232,8 +232,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   // GETTER && SETTER //
 
-  public synchronized Long getNextObjectId() {
-    return new Long(objectId++);
+  public long getGameId() {
+    return gameId;
+  }
+
+  public synchronized long getNextObjectId() {
+    return objectId++;
   }
 
   public Set<GameSession> getSessions() {
@@ -250,10 +254,6 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public ConcurrentHashMap<Long, TowerModel> getTowerCache() {
     return towerCache;
-  }
-
-  public Long getGameId() {
-    return gameId;
   }
 
   public Match getMatch() {
