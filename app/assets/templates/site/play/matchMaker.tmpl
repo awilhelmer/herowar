@@ -6,12 +6,13 @@
 			<li data-view="views/play/matchJoin"></li>
 		</ul>
 	{{else}}
+		<p>Map: {{map.name}}</p>
 		<p>Players:</p>
 		{{#each playerResults}}
 			Player #{{player.id}}
 		{{/each}}
 		<div class="buttons">
-			<a class="btn btn-primary">Start Game</a>
+			<a class="btn quit">Quit</a>&nbsp;<a class="btn btn-primary start">Start Game</a>
 		</div>
 	{{/unless}}
 </div>

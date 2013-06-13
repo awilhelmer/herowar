@@ -20,17 +20,14 @@ class MatchCreateView extends BaseView
 	gameCreate: (event) ->
 		@model.clear()
 		@model.set 'mapId', 102 # TODO: map id should be dynamic ... but we have just one map right now ;)
+		console.log 'Create match for', @model
 		@model.fetch()
 
 	joinOwnGame: ->
-		@matchToken = db.get 'api/matchToken'
-		@matchToken.set 'id', @model.get 'id'
-		@matchToken.fetch()
+		if @model.has 'id'
+			@matchToken = db.get 'api/matchToken'
+			@matchToken.set 'id', @model.get 'id'
+			@matchToken.fetch()
 		@render()
-		setTimeout @checkOwnGame, 1000
-	
-	checkOwnGame: =>
-		@model.fetch()
-		setTimeout @checkOwnGame, 1000
 		
 return MatchCreateView
