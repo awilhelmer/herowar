@@ -7,12 +7,9 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
-import models.entity.game.Map;
 import models.entity.game.MatchToken;
-import models.entity.game.Wave;
 
 import org.bushe.swing.event.EventBus;
-import org.hibernate.Hibernate;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
@@ -40,17 +37,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
       log.info("Found " + matchToken.toString());
       log.info("Auth connection " + connection.httpRequest().id() + " granted for " + matchToken.getPlayer().toString());
       log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
-      // TODO: Load waves since the map is detached after but a optimized query
-      // should be faster then this?!?
-      Hibernate.initialize(matchToken.getResult().getMatch().getPlayerResults());
-      Map map = matchToken.getResult().getMatch().getMap();
-      Hibernate.initialize(map.getWaves());
-      for (Wave wave : map.getWaves()) {
-        Hibernate.initialize(wave.getPath().getDbWaypoints());
-        Hibernate.initialize(wave.getUnits());
-        Hibernate.initialize(wave.getPath());
-      }
-      EventBus.publish(new GameJoinEvent(matchToken.getResult().getMatch(), matchToken, connection));
+      EventBus.publish(new GameJoinEvent(matchToken.getResult().getMatch().getId(), matchToken, connection));
       connection.send(Json.toJson(new AccessGrantedPacket()).toString());
     } else {
       connection.send(Json.toJson(new AccessDeniedPacket()).toString());

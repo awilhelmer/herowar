@@ -94,6 +94,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     this.registerPlugins();
     this.updateState(State.PRELOAD);
     this.addPlayer(session);
+    this.start();
   }
 
   @Override

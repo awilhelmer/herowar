@@ -14,17 +14,20 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Match;
+import models.entity.game.MatchToken;
 import models.entity.game.Tower;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
 
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
+import org.hibernate.Hibernate;
 import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
 import play.db.jpa.JPA;
 import play.libs.Json;
+import dao.game.MatchDAO;
 import dao.game.TowerDAO;
 
 /**
@@ -55,17 +58,10 @@ public class GamesHandler implements Serializable {
 
   @EventSubscriber
   public void observePlayerJoinEvent(final GameJoinEvent event) {
-    GameSession session = new GameSession(event.getMatch(), event.getToken().getPlayer(), event.getToken(), event.getConnection());
-    final GameProcessor game = findGame(event.getMatch(), session);
-    session.setGame(game);
-    connections.put(event.getConnection(), session);
-    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", event.getToken().getPlayer().getUser().getUsername(), game.getTopicName()));
-    JPA.withTransaction(new play.libs.F.Callback0() {
-      @Override
-      public void invoke() throws Throwable {
-        sendPreloadDataPacket(event.getConnection(), game);
-      }
-    });
+    if (!games.contains(event.getMatchId())) {
+      matchCreate(event.getMatchId());
+    }
+    matchJoin(event.getMatchId(), event.getToken(), event.getConnection());
   }
 
   @EventSubscriber
@@ -81,26 +77,39 @@ public class GamesHandler implements Serializable {
     }
   }
 
-  private GameProcessor findGame(Match match, GameSession session) {
-    GameProcessor game = getOpenGame(match);
-    if (game != null) {
-      game.addPlayer(session);
-    } else {
-      game = new GameProcessor(match, session);
-      game.start();
-      games.put(match.getId(), game);
-    }
-    return game;
+  private void matchCreate(final long matchId) {
+    JPA.withTransaction(new play.libs.F.Callback0() {
+      @Override
+      public void invoke() throws Throwable {
+        Match match = MatchDAO.getInstance().getById(matchId);
+        Hibernate.initialize(match.getPlayerResults());
+        Hibernate.initialize(match.getMap().getWaves());
+        for (Wave wave : match.getMap().getWaves()) {
+          Hibernate.initialize(wave.getPath().getDbWaypoints());
+          Hibernate.initialize(wave.getUnits());
+          Hibernate.initialize(wave.getPath());
+        }
+        GameProcessor game = new GameProcessor(match);
+        games.put(matchId, game);
+      }
+    });
   }
 
-  private GameProcessor getOpenGame(Match match) {
-    if (games.containsKey(match.getId())) {
-      return games.get(match.getId());
-    }
-    return null;
+  private void matchJoin(final long matchId, final MatchToken token, final WebSocketConnection connection) {
+    final GameProcessor game = games.get(matchId);
+    GameSession session = new GameSession(game.getMatch(), token.getPlayer(), token, connection);
+    session.setGame(game);
+    connections.put(connection, session);
+    log.info(String.format("Player '<%s>' attempt to join game '<%s>'", token.getPlayer().getUser().getUsername(), game.getTopicName()));
+    JPA.withTransaction(new play.libs.F.Callback0() {
+      @Override
+      public void invoke() throws Throwable {
+        sendPreloadDataPacket(connection, game);
+      }
+    });
   }
 
-  private void sendPreloadDataPacket(WebSocketConnection connection, GameProcessor game) {
+  private void sendPreloadDataPacket(final WebSocketConnection connection, final GameProcessor game) {
     // TODO: replace hardcoded preload data
     java.util.Map<String, String> images = new HashMap<String, String>();
     images.put("explosion", "assets/images/game/textures/effects/explosion.png");
