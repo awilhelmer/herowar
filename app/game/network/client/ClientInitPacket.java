@@ -42,6 +42,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
       log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
       // TODO: Load waves since the map is detached after but a optimized query
       // should be faster then this?!?
+      Hibernate.initialize(matchToken.getResult().getMatch().getPlayerResults());
       Map map = matchToken.getResult().getMatch().getMap();
       Hibernate.initialize(map.getWaves());
       for (Wave wave : map.getWaves()) {
