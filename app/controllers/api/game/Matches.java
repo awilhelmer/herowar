@@ -3,6 +3,7 @@ package controllers.api.game;
 import static play.libs.Json.toJson;
 import game.json.excludes.MatchExcludeMapDataMixin;
 import game.json.excludes.MatchResultSimpleMixin;
+import game.json.excludes.PlayerWithUsernameMixin;
 
 import java.io.IOException;
 import java.util.Date;
@@ -16,6 +17,7 @@ import models.entity.game.Match;
 import models.entity.game.MatchResult;
 import models.entity.game.MatchState;
 import models.entity.game.MatchToken;
+import models.entity.game.Player;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -48,6 +50,7 @@ public class Matches extends BaseAPI<Long, Match> {
   public static Result show(Long id) {
     Match match = MatchDAO.getInstance().getById(id);
     ObjectMapper mapper = new ObjectMapper();
+    mapper.getSerializationConfig().addMixInAnnotations(Player.class, PlayerWithUsernameMixin.class);
     mapper.getSerializationConfig().addMixInAnnotations(Map.class, MatchExcludeMapDataMixin.class);
     try {
       return ok(mapper.writeValueAsString(match));

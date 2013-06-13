@@ -14,13 +14,20 @@ class MapSelectView extends BaseView
 		'click li' : 'requestSoloMatch'
 	
 	initialize: (options) ->
+		@matchMaker = db.get 'api/matchMaker'
 		@match = db.get 'api/match'
 		super options
 
 	bindEvents: ->
+		@listenTo @matchMaker, 'change:id', @render
 		@listenTo @match, 'change:id', @joinGame
 		@listenTo @match, 'change:token', @redirect
 		super()
+		
+	getTemplateData: ->
+		json = super()
+		json.matchMaker = @matchMaker.has 'id'
+		return json
 		
 	requestSoloMatch: (event) ->
 		unless event then return
