@@ -42,6 +42,9 @@
 
 // MAIN Style
 @import "site/play/_head.less";
+@import "site/play/_mapSelect.less";
+@import "site/play/_matchesRecent.less";
+@import "site/play/_matchMaker.less";
 
 body {
 	padding-top:40px;
@@ -96,112 +99,6 @@ body {
 
 #play .panel .body {
     margin: 10px 5px 0 5px;
-}
-
-
-#play .map-select {
-    float: left;
-    width: 600px;
-    background-color: #575757;
-    margin: 10px 0px 10px 10px;
-}
-
-#play .map-select ul {
-    list-style: none;
-    margin: 0px;
-    
-    .clearfix()
-}
-
-#play .map-select ul li {
-    display: inline-block;
-    position: relative;
-    width: 200px;
-    height: 100px;
-    border: 1px solid #ffffff;
-    margin-left: 10px;
-    cursor: pointer;
-    
-    &:first-child {
-        margin-left: 0;
-    }
-}
-
-#play .map-select ul li span {
-    display: block;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    margin: 5px 10px;
-}
-
-#play .matches-recent {
-    float: right;
-    width: 290px;
-    margin: 10px 10px 10px 0px;
-}
-
-#play .matches-recent .entry {
-    margin-bottom: 10px;
-    
-    .clearfix()
-}
-
-#play .matches-recent .entry .left {
-    float: left; 
-}
-
-#play .matches-recent .entry .right {
-    float: right; 
-    text-align: right;
-}
-
-#play .matches-recent .entry .victory {
-    color: rgb(0, 199, 0);
-    font-weight: bold;
-    font-size: 160%;
-    line-height: 120%;
-}
-
-#play .matches-recent .entry .defeat {
-    color: rgb(226, 53, 53);
-    font-weight: bold;
-    font-size: 160%;
-    line-height: 120%;
-}
-
-#play .matches-recent .entry .icon-heart {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-    background:url(../images/site/play/heart.png);
-}
-
-#play .matches-recent .entry .icon-skull {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-    background:url(../images/site/play/skull.png);
-}
-
-#play .matches-recent .entry .icon-star {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-    background:url(../images/site/play/star.png);
-}
-
-#play .matches-recent .entry span {
-    font-size: 120%;
-    font-weight: bold;
-}
-
-
-#play .matches-recent p {
-    margin: 0;
 }
 
 .footer {

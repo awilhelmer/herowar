@@ -11,7 +11,7 @@ class MapSelectView extends BaseView
 	template: templates.get 'play/mapSelect.tmpl'
 	
 	events:
-		'click li' : 'requestMatch'
+		'click li' : 'requestSoloMatch'
 	
 	initialize: (options) ->
 		@match = db.get 'api/match'
@@ -22,11 +22,12 @@ class MapSelectView extends BaseView
 		@listenTo @match, 'change:token', @redirect
 		super()
 		
-	requestMatch: (event) ->
+	requestSoloMatch: (event) ->
 		unless event then return
 		$currentTarget = $ event.currentTarget
 		id = $currentTarget.data 'id'
 		unless id then return
+		@match.clear()
 		@match.set 'mapId', id
 		@match.fetch()
 
