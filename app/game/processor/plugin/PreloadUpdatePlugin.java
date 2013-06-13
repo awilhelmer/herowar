@@ -18,10 +18,9 @@ import models.entity.game.MatchState;
 
 import org.bushe.swing.event.annotation.RuntimeTopicEventSubscriber;
 
-import dao.game.MatchDAO;
-
 import play.Logger;
 import play.db.jpa.JPA;
+import dao.game.MatchDAO;
 
 /**
  * The PreloadUpdatePlugin sends informations about the preload state of every
@@ -30,12 +29,13 @@ import play.db.jpa.JPA;
  * @author Sebastian Sachtleben
  */
 public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
-
   private final static Logger.ALogger log = Logger.of(PreloadUpdatePlugin.class);
+  private final static int timeout = 1000 * 60 * 5;
 
   private ConcurrentHashMap<Long, Integer> preloadProgress = new ConcurrentHashMap<Long, Integer>();
 
   private Integer preloadPlayerMissing = 0;
+  private long startTime = new Date().getTime();
 
   public PreloadUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -45,8 +45,12 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void process(double delta, long now) {
-    if (preloadProgress.size() > 0 && preloadPlayerMissing == 0) {
-      log.info("All player finshed preloading - switching game state to " + State.GAME);
+    if (startTime + timeout < now) {
+      log.info("Preload timeout reached for " + getProcessor().toString());
+      preloadPlayerMissing = 0;
+    }
+    if (preloadPlayerMissing == 0) {
+      log.info("All player finshed preloading for " + getProcessor().toString() + " switching game state to " + State.GAME);
       JPA.withTransaction(new play.libs.F.Callback0() {
         @Override
         public void invoke() throws Throwable {
