@@ -1,5 +1,6 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
+app = require 'application'
 db = require 'database'
 
 class MatchMakerView extends BaseView
@@ -21,13 +22,15 @@ class MatchMakerView extends BaseView
 	updateMatch: =>
 		if @model.has 'id'
 			console.log 'Update match id=', @model.get('id')
-			@model.fetch()
+			@xhr = @model.fetch merge: true
 			setTimeout @updateMatch, 2000
 		return
 
 	matchQuit: ->
-		@model.quit()
+		@xhr?.abort()
 		@model.clear()
+		$.ajax
+			url: "#{app.resourcePath()}game/match/quit"
 		console.log 'Quit match', @model.attributes
 		return
 		

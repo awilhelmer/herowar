@@ -151,12 +151,19 @@ public class Matches extends BaseAPI<Long, Match> {
     while (iter.hasNext()) {
       MatchResult result = iter.next();
       Match match = result.getMatch();
+      MatchToken token = result.getToken();
       match.getPlayerResults().remove(result);
+      token.setPlayer(null);
+      token.setResult(null);
+      result.setMatch(null);
+      result.setPlayer(null);
+      result.setToken(null);
+      JPA.em().remove(result);
+      JPA.em().remove(token);
       if (match.getPlayerResults().size() == 0) {
+        match.setMap(null);
         JPA.em().remove(match);
       }
-      result.getToken().setInvalid(true);
-      JPA.em().remove(result);
     }
     return ok();
   }
