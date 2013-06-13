@@ -3,6 +3,7 @@ package game.processor.plugin;
 import game.GameSession;
 import game.network.server.GameDefeatPacket;
 import game.network.server.GameVictoryPacket;
+import game.processor.CacheConstants;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
@@ -72,7 +73,8 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
         while (results.hasNext()) {
           MatchResult result = results.next();
           ConcurrentHashMap<String, Object> cache = getPlayerCache(result.getPlayer().getId());
-          result.setScore(Math.round(Double.parseDouble(cache.get("score").toString())));
+          result.setScore(Math.round(Double.parseDouble(cache.get(CacheConstants.SCORE).toString())));
+          result.setKills(Long.parseLong(cache.get(CacheConstants.KILLS).toString()));
           result.getToken().setInvalid(true);
         }
       }

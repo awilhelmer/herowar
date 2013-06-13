@@ -15,6 +15,7 @@ public class MatchResultSimpleSerializer extends BaseSerializer<MatchResult> {
   public void serialize(MatchResult value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
     jgen.writeStartObject();
     writeNumberField(jgen, "score", value.getScore());
+    writeNumberField(jgen, "kills", value.getKills());
     if (value.getMatch() != null) {
       writeNumberField(jgen, "cdate", value.getMatch().getCdate().getTime());
       writeNumberField(jgen, "lives", value.getMatch().getLives());

@@ -5,6 +5,7 @@ import game.models.UnitModel;
 import game.network.server.ObjectOutPacket;
 import game.network.server.PlayerLivesUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
+import game.processor.CacheConstants;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
@@ -34,10 +35,6 @@ import com.ardor3d.math.type.ReadOnlyVector3;
  */
 public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(UnitUpdatePlugin.class);
-
-  private final static String SCORE_VALUE = "score";
-  private final static String GOLD_VALUE = "gold";
-  private final static String GOLD_SYNC = "gold_sync";
 
   private final static long KILL_REWARD_SCORE = 200;
   private final static double KILL_REWARD_GOLD = 50;
@@ -87,11 +84,12 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       long newScore = 0L;
       double newGold = 0L;
       synchronized (playerCache) {
-        newScore = ((long) playerCache.get(SCORE_VALUE)) + KILL_REWARD_SCORE;
-        playerCache.replace(SCORE_VALUE, newScore);
-        newGold = ((double) playerCache.get(GOLD_VALUE)) + KILL_REWARD_GOLD;
-        playerCache.replace(GOLD_VALUE, newGold);
-        playerCache.replace(GOLD_SYNC, new Date());
+        newScore = ((long) playerCache.get(CacheConstants.SCORE)) + KILL_REWARD_SCORE;
+        playerCache.replace(CacheConstants.SCORE, newScore);
+        newGold = ((double) playerCache.get(CacheConstants.GOLD)) + KILL_REWARD_GOLD;
+        playerCache.replace(CacheConstants.KILLS, Long.parseLong(playerCache.get(CacheConstants.KILLS).toString()) + 1L);
+        playerCache.replace(CacheConstants.GOLD, newGold);
+        playerCache.replace(CacheConstants.GOLD_SYNC, new Date());
       }
       session.getConnection().send(
           Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());

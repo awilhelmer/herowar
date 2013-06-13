@@ -27,6 +27,7 @@ public class MatchResult implements Serializable {
   private Long id;
 
   private Long score = 0L;
+  private Long kills = 0L;
 
   @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
   @JoinColumn(name = "player_id")
@@ -56,6 +57,14 @@ public class MatchResult implements Serializable {
 
   public void setScore(Long score) {
     this.score = score;
+  }
+  
+  public Long getKills() {
+    return kills;
+  }
+
+  public void setKills(Long kills) {
+    this.kills = kills;
   }
 
   public Player getPlayer() {
