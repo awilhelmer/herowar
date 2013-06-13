@@ -11,7 +11,6 @@ import models.entity.game.Waypoint;
 @SuppressWarnings("serial")
 public class UnitModel extends BaseModel<Unit> {
 
-  private Unit entity;
   private UnitType type;
   private long currentHealth;
   private long maxHealth;
@@ -95,14 +94,6 @@ public class UnitModel extends BaseModel<Unit> {
 
   public Path getActivePath() {
     return activePath;
-  }
-
-  public Unit getEntity() {
-    return entity;
-  }
-
-  public void setEntity(Unit entity) {
-    this.entity = entity;
   }
 
   public long getCurrentHealth() {

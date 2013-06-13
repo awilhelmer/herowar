@@ -30,8 +30,6 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
 
   @Override
   public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-    log.info("Process " + this.toString());
-    // TODO: we should wait here untill all users finished preloading ...
     GameSession session = GamesHandler.getInstance().getConnections().get(connection);
     if (session == null) {
       // TODO: disconnect user here ...
