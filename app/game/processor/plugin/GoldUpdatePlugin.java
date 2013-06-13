@@ -3,6 +3,7 @@ package game.processor.plugin;
 import game.GameSession;
 import game.network.server.PlayerStatsInitPacket;
 import game.network.server.PlayerStatsUpdatePacket;
+import game.processor.CacheConstants;
 import game.processor.GameProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
@@ -18,41 +19,37 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
-  private final static String SCORE_VALUE = "score";
-  private final static String GOLD_VALUE = "gold";
-  private final static String GOLD_UPDATE = "gold_update";
-  private final static String GOLD_SYNC = "gold_sync";
   private final static long SYNC_PERIOD = 30000;
 
   public GoldUpdatePlugin(GameProcessor processor) {
     super(processor);
   }
-  
+
   @Override
   public void processSession(GameSession session, double delta, long now) {
     Date date = new Date();
     ConcurrentHashMap<String, Object> playerCache = getPlayerCache(session.getPlayerId());
-    if (playerCache.containsKey(GOLD_VALUE)) {
+    if (playerCache.containsKey(CacheConstants.GOLD)) {
       synchronized (playerCache) {
         // Update gold value
-        if (getProcessor().isUpdateGold() && playerCache.containsKey(GOLD_UPDATE)) {
-          Long dif = date.getTime() - ((Date) playerCache.get(GOLD_UPDATE)).getTime();
+        if (getProcessor().isUpdateGold() && playerCache.containsKey(CacheConstants.GOLD_UPDATE)) {
+          Long dif = date.getTime() - ((Date) playerCache.get(CacheConstants.GOLD_UPDATE)).getTime();
           double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
-          setPlayerCacheValue(playerCache, GOLD_VALUE, newGold);
+          setPlayerCacheValue(playerCache, CacheConstants.GOLD, newGold);
         }
         // Update time update value
-        setPlayerCacheValue(playerCache, GOLD_UPDATE, date);
+        setPlayerCacheValue(playerCache, CacheConstants.GOLD_UPDATE, date);
         // Send info to client
         if (!hashInitPacket(session.getPlayerId())) {
           sendPacket(session, new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap().getGoldPerTick()));
           getInitPacket().replace(session.getPlayerId(), true);
-          setPlayerCacheValue(playerCache, GOLD_SYNC, date);
+          setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, date);
         } else {
-          Long dif = date.getTime() - ((Date) playerCache.get(GOLD_SYNC)).getTime();
+          Long dif = date.getTime() - ((Date) playerCache.get(CacheConstants.GOLD_SYNC)).getTime();
           if (dif >= SYNC_PERIOD) {
-            sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(SCORE_VALUE), getMap().getLives().longValue(),
+            sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(CacheConstants.SCORE), getMap().getLives().longValue(),
                 getRoundedGoldValue(playerCache), null, null, null));
-            setPlayerCacheValue(playerCache, GOLD_SYNC, date);
+            setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, date);
           }
         }
       }
@@ -61,9 +58,9 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void addPlayer(GameSession session) {
-    if (!getPlayerCache(session.getPlayerId()).containsKey(GOLD_VALUE)) {
+    if (!getPlayerCache(session.getPlayerId()).containsKey(CacheConstants.GOLD)) {
       double startValue = getProcessor().getMap().getGoldStart().doubleValue();
-      getPlayerCache(session.getPlayerId()).put(GOLD_VALUE, startValue);
+      getPlayerCache(session.getPlayerId()).put(CacheConstants.GOLD, startValue);
     }
     getInitPacket().put(session.getPlayerId(), false);
   }
@@ -80,7 +77,7 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private double getGoldValue(ConcurrentHashMap<String, Object> playerCache) {
-    return Double.parseDouble(playerCache.get(GOLD_VALUE).toString());
+    return Double.parseDouble(playerCache.get(CacheConstants.GOLD).toString());
   }
 
   private long getRoundedGoldValue(ConcurrentHashMap<String, Object> playerCache) {

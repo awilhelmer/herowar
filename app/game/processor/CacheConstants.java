@@ -10,6 +10,7 @@ public class CacheConstants {
   public final static String KILLS = "kills";
   public final static String GOLD = "gold";
   public final static String GOLD_SYNC = "gold_sync";
+  public final static String GOLD_UPDATE = "gold_update";
   public final static String SCORE = "score";
   
 }

@@ -13,8 +13,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-import play.Logger;
-
 /**
  * The TowerUpdatePlugin handles all tower on the map and calculates the current
  * target and handle shots.
@@ -22,7 +20,6 @@ import play.Logger;
  * @author Sebastian Sachtleben
  */
 public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
-  private final static Logger.ALogger log = Logger.of(TowerUpdatePlugin.class);
 
   public TowerUpdatePlugin(GameProcessor processor) {
     super(processor);
