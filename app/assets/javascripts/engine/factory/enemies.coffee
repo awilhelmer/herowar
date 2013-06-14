@@ -5,25 +5,33 @@ db = require 'database'
 enemies =
 
 	create: (opts) ->
-		dynObj = @_createModel opts, @_getWaypoints opts.path
+		dynObj = @_createModel opts
 		scenegraph.addDynObject dynObj, opts.id
 		return dynObj
 
-	_createModel: (opts, waypoints) ->
+	_createModel: (opts) ->
 		model = new Enemy opts
-		if _.isArray waypoints
-			model.waypoints = waypoints
-			model.getMainObject().position = new THREE.Vector3 waypoints[0].position.x, 0, waypoints[0].position.z if waypoints.length > 0
+		model.waypoints = @_getWaypoints opts
+		model.getMainObject().position.set opts.position.x, 0, opts.position.z if opts.position
 		return model
 	
-	_getWaypoints: (id) ->
-		path = @_getPathById id
-		return _.clone path.get 'waypoints' if path
+	_getWaypoints: (opts) ->
+		currentWaypoint = opts.waypoint || -1
+		currentPath = @_getPath opts
+		allWaypoints = db.get 'db/waypoints'
+		waypointModels = allWaypoints.where path : currentPath.id
+		if waypointModels?.length > 0
+			waypoints = []
+			for waypoint in waypointModels
+				if waypoint.get('dbId') is currentWaypoint or currentWaypoint is -1
+					waypoints.push waypoint.toJSON()
+					currentWaypoint = -1 if currentWaypoint isnt -1
+			return waypoints
 		return []
 	
-	_getPathById: (id) ->
+	_getPath: (opts) ->
 		allPaths = db.get 'db/paths'
-		foundPaths = allPaths.where dbId : id
-		return foundPaths[0] unless foundPaths.length is 0
+		foundPaths = allPaths.where dbId : opts.path
+		return foundPaths[0]
 
 return enemies
