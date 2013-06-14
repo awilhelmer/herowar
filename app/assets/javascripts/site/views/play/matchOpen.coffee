@@ -14,4 +14,14 @@ class MatchOpenView extends BaseView
 		super options
 		@model.fetch()
 	
+	afterRender: =>
+		if @model.get 'token'
+			$('.map-select').addClass 'hidden'
+			$('.match-maker').addClass 'hidden'
+			@$el.removeClass 'hidden'
+		else
+			$('.map-select').removeClass 'hidden'
+			$('.match-maker').removeClass 'hidden'
+			@$el.addClass 'hidden'
+	
 return MatchOpenView
