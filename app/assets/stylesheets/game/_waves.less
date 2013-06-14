@@ -7,9 +7,15 @@
     position: absolute;
     width: 64px;
     height: 64px;
-    background:url(../images/game/ui/skull.png);
+    background: url(../images/game/ui/skull.png) no-repeat center center;
+    -webkit-background-size: 65%; /*for webKit*/
+    -moz-background-size: 65%; /*Mozilla*/
+    -o-background-size: 65%; /*opera*/
+    background-size: 65%; /*generic*/
+    z-index: 3;
     
     &.hidden {
-        left: -2000;
+        left: 0;
+        opacity: 0;
     }
 }

@@ -107,6 +107,7 @@ class Viewport extends Backbone.Model
 		@updateOrthographic cameraScene, cameraProperties.size, cameraProperties.offset, aspect if cameraScene instanceof THREE.OrthographicCamera
 		cameraScene.aspect = aspect
 		cameraScene.updateProjectionMatrix()
+		cameraScene.updateMatrixWorld()
 		cameraSkybox = @get 'cameraSkybox'
 		cameraSkybox.aspect = cameraScene.aspect
 		cameraSkybox.updateProjectionMatrix()

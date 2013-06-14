@@ -24,11 +24,12 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			viewportHeightHalf = @canvas.height / 2
 			viewPosition = viewUtils.positionToScreen positionVec, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 			containerPosition = @$container.position()
+			@_drawCircle viewPosition.x + 32, viewPosition.y + 32
 			if containerPosition.top isnt viewPosition.x or containerPosition.left isnt viewPosition.y
-				#console.log 'Draw new wave position', viewPosition
+				#console.log 'Draw new wave position', positionVec, viewPosition
 				@$container.css
-					'top' : "#{viewPosition.x}px"
-					'left' : "#{viewPosition.y}px"
+					'left' : "#{viewPosition.x}px"
+					'top' : "#{viewPosition.y}px"
 			@$container.removeClass 'hidden' if @$container.hasClass 'hidden'
 		else
 			if not @$container.hasClass 'hidden'
@@ -37,5 +38,15 @@ class WaveIncomingHUDElement extends BaseHUDElement
 					'top' : ''
 					'left' : ''
 		return
+
+	_drawCircle: (centerX, centerY) ->
+		radius = 30
+		@ctx.beginPath()
+		@ctx.arc centerX, centerY, radius, 0, 2 * Math.PI, false
+		@ctx.fillStyle = '#111111'
+		@ctx.fill()
+		@ctx.lineWidth = 4
+		@ctx.strokeStyle = '#FF0000'
+		@ctx.stroke()
 	
 return WaveIncomingHUDElement

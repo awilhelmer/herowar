@@ -138,7 +138,7 @@ class RTSControls
 				camera.position[0] += 1 if scrollRight
 				camera.position[2] -= 1 if scrollUp
 				camera.position[2] += 1 if scrollDown
-				
+				console.log 'Camera Update', camera.position, cameraScene.left, cameraScene.right, cameraScene.top, cameraScene.bottom
 			else
 				camera.position[0] -= 1 if scrollLeft
 				camera.position[0] += 1 if scrollRight

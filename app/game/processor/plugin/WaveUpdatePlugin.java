@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import models.entity.game.Path;
 import models.entity.game.Unit;
@@ -23,6 +22,7 @@ import models.entity.game.Vector3;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
 import play.Logger;
+import dao.game.PathDAO;
 
 /**
  * The WaveUpdatePlugin controls the wave behaviors and update all units.
@@ -32,7 +32,7 @@ import play.Logger;
 public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(WaveUpdatePlugin.class);
 
-  private Set<Wave> waves;
+  private List<Wave> waves;
   private Wave current;
   private Wave next;
   private int index;
@@ -47,7 +47,10 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   public WaveUpdatePlugin(GameProcessor processor) {
     super(processor);
-    waves = getProcessor().getMap().getWaves();
+    waves = new ArrayList<Wave>(getProcessor().getMap().getWaves());
+    if (waves.size() > 0) {
+      Collections.sort(waves, new WaveComparator());
+    }
   }
 
   @Override
@@ -100,8 +103,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   private List<Vector3> getNextWavePositions() {
     List<Vector3> positions = new ArrayList<Vector3>();
-    if (next != null && next.isRequestable() && next.getPath().getDbWaypoints().size() > 0) {
-      Iterator<Waypoint> iter = next.getPath().getDbWaypoints().iterator();
+    if (next != null && next.isRequestable() && next.getPath().getWaypoints().size() > 0) {
+      Iterator<Waypoint> iter = next.getPath().getWaypoints().iterator();
       Waypoint waypoint = iter.next();
       positions.add(waypoint.getPosition());
     }
@@ -123,6 +126,9 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private void loadNextWave() {
     current = next;
     next = getNextWave();
+    if (next.getPath().getWaypoints() == null) {
+      PathDAO.mapWaypoints(next.getPath());
+    }
     if (current != null) {
       index++;
       if (index == 1) {
@@ -139,10 +145,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private Wave getNextWave() {
-    List<Wave> sortedWaves = new ArrayList<Wave>(waves);
-    if (sortedWaves.size() > 0) {
-      Collections.sort(sortedWaves, new WaveComparator());
-      Wave wave = sortedWaves.get(0);
+    if (waves.size() > 0) {
+      Wave wave = waves.get(0);
       log.debug("Next wave: " + wave.getName());
       waves.remove(wave);
       return wave;

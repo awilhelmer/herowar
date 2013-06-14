@@ -96,9 +96,6 @@ public class UnitModel extends BaseModel<Unit> {
    * Update position from waypoints.
    */
   public void updatePositionFromWaypoints() {
-    if (getActivePath().getWaypoints() == null) {
-      PathDAO.mapWaypoints(getActivePath());
-    }
     if (!getActivePath().getWaypoints().isEmpty()) {
       Waypoint waypoint = getActivePath().getWaypoints().get(0);
       setActiveWaypoint(waypoint);
