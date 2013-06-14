@@ -2,7 +2,7 @@ package game.processor.plugin;
 
 import game.GameSession;
 import game.models.UnitModel;
-import game.network.server.ObjectInPacket;
+import game.network.server.UnitInPacket;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
@@ -23,7 +23,6 @@ import models.entity.game.Vector3;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
 import play.Logger;
-import dao.game.PathDAO;
 
 /**
  * The WaveUpdatePlugin controls the wave behaviors and update all units.
@@ -163,8 +162,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
       Date now = new Date();
       if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
-        Iterator<Unit> iter2 = current.getUnits().iterator();
-        Unit unit = iter2.next();
+        Iterator<Unit> iter = current.getUnits().iterator();
+        Unit unit = iter.next();
         log.debug("Create enemy for " + current.getName());
         createUnit(current.getPath(), unit);
         lastSpawnDate = now;
@@ -175,28 +174,13 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   public void createUnit(Path path, Unit entity) {
-    Long id = getProcessor().getNextObjectId();
-    UnitModel model = new UnitModel(id, entity.getId(), entity);
-    model.setActivePath(path);
-    if (path.getWaypoints() == null) {
-      PathDAO.mapWaypoints(path);
-    }
-    if (!path.getWaypoints().isEmpty()) {
-      Waypoint waypoint = path.getWaypoints().get(0);
-      model.setActiveWaypoint(waypoint);
-      com.ardor3d.math.Vector3 position = waypoint.getPosition().getArdorVector().clone();
-      position.setY(0d);
-      model.setTranslation(position);
-      model.updateWorldTransform(false);
-    } else {
-      log.warn("No Waypoint found!");
-    }
+    UnitModel model = new UnitModel(getProcessor().getNextObjectId(), entity, path);
+    model.updatePositionFromWaypoints();
     synchronized (getProcessor().getUnits()) {
       getProcessor().getUnits().add(model);
     }
     log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), path.getId()));
-    ObjectInPacket packet = new ObjectInPacket(id, entity, path.getId());
-    broadcast(packet);
+    broadcast(new UnitInPacket(model));
   }
 
   @Override

@@ -1,8 +1,8 @@
 package game.network;
 
-import models.entity.game.Vector3;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import com.ardor3d.math.type.ReadOnlyVector3;
 
 /**
  * Abstract ObjectPacket class for several object packets.
@@ -14,9 +14,9 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public abstract class ObjectPacket extends BasePacket {
 
   protected long id;
-  protected Vector3 position;
+  protected ReadOnlyVector3 position;
 
-  public ObjectPacket(long id, Vector3 position) {
+  public ObjectPacket(long id, ReadOnlyVector3 position) {
     super();
     this.id = id;
     this.position = position;
@@ -30,11 +30,11 @@ public abstract class ObjectPacket extends BasePacket {
     this.id = id;
   }
 
-  public Vector3 getPosition() {
+  public ReadOnlyVector3 getPosition() {
     return position;
   }
 
-  public void setPosition(Vector3 position) {
+  public void setPosition(ReadOnlyVector3 position) {
     this.position = position;
   }
 }

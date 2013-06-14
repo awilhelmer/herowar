@@ -18,6 +18,7 @@ class Enemies extends PacketModel
 			if packet.type is PacketType.SERVER_OBJECT_IN
 				quantity = if @get('quantity') then @get('quantity') else 0
 				# TODO: we need here the info how much enemies are on the field for late joiner
+				console.log 'Create enemy', packet
 				enemiesFactory.create packet
 				@set 
 					'current': ++current

@@ -28,8 +28,8 @@ public class BaseModel<T extends Serializable> extends Mesh implements Serializa
     // empty
   }
 
-  public BaseModel(Long id, Long dbId, T entity) {
-    super();
+  public BaseModel(Long id, Long dbId, T entity, String name) {
+    super(name);
     this.id = id;
     this.dbId = dbId;
     this.entity = entity;
@@ -131,7 +131,7 @@ public class BaseModel<T extends Serializable> extends Mesh implements Serializa
       return false;
     if (getClass() != obj.getClass())
       return false;
-    BaseModel other = (BaseModel) obj;
+    BaseModel<?> other = (BaseModel<?>) obj;
     if (id == null) {
       if (other.id != null)
         return false;

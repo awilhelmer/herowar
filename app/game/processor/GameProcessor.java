@@ -6,9 +6,9 @@ import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.BasePacket;
-import game.network.server.ObjectInPacket;
 import game.network.server.TowerBuildPacket;
 import game.network.server.TowerTargetPacket;
+import game.network.server.UnitInPacket;
 import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
@@ -235,7 +235,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     while (iter.hasNext()) {
       UnitModel unit = iter.next();
       log.info("Send player info about unit " + unit.getId() + " at " + unit.getTranslation().toString());
-      session.getConnection().send(Json.toJson(new ObjectInPacket(unit.getId(), unit.getEntity(), unit.getActivePath().getId())).toString());
+      session.getConnection().send(Json.toJson(new UnitInPacket(unit)).toString());
     }
     Iterator<TowerModel> iter2 = session.getGame().getTowerCache().values().iterator();
     while (iter2.hasNext()) {

@@ -21,7 +21,7 @@ public class PacketType {
   public static final Integer AccessGrantedPacket = 12;
   public static final Integer GameStartPacket = 13;
   // public static final Integer ObjectDamagePacket = 19;
-  public static final Integer ObjectInPacket = 16;
+  public static final Integer UnitInPacket = 16;
   public static final Integer ObjectOutPacket = 17;
   // public static final Integer PlayerJoinPacket = 20;
   public static final Integer PlayerLeavePacket = 21;

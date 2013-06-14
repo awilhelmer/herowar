@@ -39,7 +39,7 @@ class SocketClient
 		if event and event.data
 			packet = JSON.parse event.data
 			if (packet.type and @appActive) or (packet.type is 11 || packet.type is 12 || packet.type is 13 || packet.type is 35 || packet.type is 50 ||  packet.type is 60)
-				log.debug "[SocketClient] Trigger 'retrieve:packet:#{packet.type}' event for packet '#{event.data}'"
+				#log.debug "[SocketClient] Trigger 'retrieve:packet:#{packet.type}' event for packet '#{event.data}'"
 				events.trigger "retrieve:packet:#{packet.type}", packet
 			else
 				@packetsOnHold.push packet

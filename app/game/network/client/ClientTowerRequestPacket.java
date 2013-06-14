@@ -9,6 +9,7 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
+import game.processor.CacheConstants;
 
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,9 +34,6 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 
   private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);
 
-  private final static String GOLD_VALUE = "gold";
-  private final static String GOLD_SYNC = "gold_sync";
-
   private Long id;
   private Vector3 position;
 
@@ -51,8 +49,8 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     // position.
     double currentGold = 0;
     ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
-    if (playerCache.containsKey(GOLD_VALUE)) {
-      currentGold = (double) playerCache.get(GOLD_VALUE);
+    if (playerCache.containsKey(CacheConstants.GOLD)) {
+      currentGold = (double) playerCache.get(CacheConstants.GOLD);
     }
     Tower entity = JPA.em().find(Tower.class, id);
     if (entity == null) {
@@ -62,7 +60,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
       // TODO: not enough gold ...
       return;
     }
-    TowerModel tower = new TowerModel(session.getGame().getNextObjectId(), id, entity);
+    TowerModel tower = new TowerModel(session.getGame().getNextObjectId(), entity);
     com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
     tower.setTranslation(position);
     tower.updateWorldTransform(false);
@@ -70,8 +68,8 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
     synchronized (playerCache) {
-      playerCache.replace(GOLD_VALUE, currentGold - entity.getPrice());
-      playerCache.replace(GOLD_SYNC, (new Date().getTime()));
+      playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());
+      playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
     }
     session.getConnection().send(
         Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, new Long(entity.getPrice() * -1)))

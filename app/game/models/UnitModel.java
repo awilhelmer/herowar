@@ -4,6 +4,7 @@ import models.entity.game.Path;
 import models.entity.game.Unit;
 import models.entity.game.UnitType;
 import models.entity.game.Waypoint;
+import dao.game.PathDAO;
 
 /**
  * @author Sebastian Sachtleben
@@ -22,14 +23,15 @@ public class UnitModel extends BaseModel<Unit> {
   private TowerModel lastHitTower;
   private boolean endPointReached = false;
 
-  public UnitModel(Long id, Long dbId, Unit entity) {
-    super(id, dbId, entity);
+  public UnitModel(Long id, Unit entity, Path activePath) {
+    super(id, entity.getId(), entity, entity.getName());
     this.type = entity.getType();
     this.currentHealth = entity.getHealth();
     this.maxHealth = entity.getHealth();
     this.currentShield = entity.getShield();
     this.maxShield = entity.getShield();
     this.movespeed = entity.getMoveSpeed();
+    this.activePath = activePath;
   }
 
   /**
@@ -88,6 +90,23 @@ public class UnitModel extends BaseModel<Unit> {
    */
   public boolean isDeath() {
     return getCurrentHealth() <= 0;
+  }
+
+  /**
+   * Update position from waypoints.
+   */
+  public void updatePositionFromWaypoints() {
+    if (getActivePath().getWaypoints() == null) {
+      PathDAO.mapWaypoints(getActivePath());
+    }
+    if (!getActivePath().getWaypoints().isEmpty()) {
+      Waypoint waypoint = getActivePath().getWaypoints().get(0);
+      setActiveWaypoint(waypoint);
+      com.ardor3d.math.Vector3 position = waypoint.getPosition().getArdorVector().clone();
+      position.setY(0d);
+      setTranslation(position);
+      updateWorldTransform(false);
+    }
   }
 
   // GETTER & SETTER //
@@ -171,5 +190,4 @@ public class UnitModel extends BaseModel<Unit> {
   public void setType(UnitType type) {
     this.type = type;
   }
-
 }

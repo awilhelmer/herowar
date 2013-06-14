@@ -6,12 +6,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
-import play.Logger;
-
-import com.ardor3d.math.MathUtils;
-
 import models.entity.game.Tower;
 import models.entity.game.UnitType;
+
+import com.ardor3d.math.MathUtils;
 
 /**
  * The Tower is placed somewhere on the map by any player.
@@ -25,8 +23,8 @@ public class TowerModel extends BaseModel<Tower> {
   private GameSession session;
   private Date lastShot;
 
-  public TowerModel(Long id, Long dbId, Tower entity) {
-    super(id, dbId, entity);
+  public TowerModel(Long id, Tower entity) {
+    super(id, entity.getId(), entity, entity.getName());
     lastShot = new Date();
   }
 
@@ -59,7 +57,7 @@ public class TowerModel extends BaseModel<Tower> {
     }
     return false;
   }
-  
+
   public int calculateDamage(UnitModel target) {
     UnitType type = target.getType();
     float multipler = 1;
@@ -151,10 +149,11 @@ public class TowerModel extends BaseModel<Tower> {
   public double distance(UnitModel model) {
     return getTranslation().distance(model.getTranslation());
   }
-  
+
   private boolean allowToTarget(UnitModel unit) {
     UnitType type = unit.getType();
-    return (type == UnitType.TROOPER && getEntity().getDamageTrooper() > 0) || (type == UnitType.TANK && getEntity().getDamageTank() > 0) || (type == UnitType.AIRPLANE && getEntity().getDamageAirplane() > 0);
+    return (type == UnitType.TROOPER && getEntity().getDamageTrooper() > 0) || (type == UnitType.TANK && getEntity().getDamageTank() > 0)
+        || (type == UnitType.AIRPLANE && getEntity().getDamageAirplane() > 0);
   }
 
   // GETTER & SETTER
