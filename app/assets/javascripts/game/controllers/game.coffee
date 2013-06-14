@@ -9,6 +9,7 @@ class GameController extends ApplicationController
 
 	views:
 		'views/build'       : ''
+		'views/chat'        : ''
 		'views/stats'       : ''
 		'views/viewport'    : ''
 		'views/debug'       : ''
