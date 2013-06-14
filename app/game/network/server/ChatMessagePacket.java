@@ -12,12 +12,22 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class ChatMessagePacket extends BasePacket {
 
+  private Layout layout;
   private String message;
 
-  public ChatMessagePacket(String message) {
+  public ChatMessagePacket(Layout layout, String message) {
     super();
     this.type = PacketType.ChatMessagePacket;
+    this.layout = layout;
     this.message = message;
+  }
+
+  public Layout getLayout() {
+    return layout;
+  }
+
+  public void setLayout(Layout layout) {
+    this.layout = layout;
   }
 
   public String getMessage() {
@@ -28,8 +38,7 @@ public class ChatMessagePacket extends BasePacket {
     this.message = message;
   }
 
-  @Override
-  public String toString() {
-    return "ChatMessagePacket [type=" + type + "]";
+  public enum Layout {
+    SYSTEM, USER
   }
 }

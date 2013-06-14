@@ -8,10 +8,13 @@ import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.ChatMessagePacket;
+import game.network.server.ChatMessagePacket.Layout;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
 import game.processor.CacheConstants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -68,7 +71,8 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
-    session.getGame().broadcast(new ChatMessagePacket(session.getUsername() + " build " + tower.getName()));
+    DateFormat df = new SimpleDateFormat("hh:mm");
+    session.getGame().broadcast(new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + session.getUsername() + " build " + tower.getName()));
     synchronized (playerCache) {
       playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());
       playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));

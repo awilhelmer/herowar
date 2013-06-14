@@ -21,7 +21,7 @@ class PacketCollection extends Backbone.Collection
 		values = _.extend _.omit(packet, 'type', 'createdTime'), { retrieveTime: packet.createdTime }
 		delete values[key] for own key, value of values when value is null
 		console.log 'Parse message:', values
-		@parse values
+		@add values
 		return
 
 return PacketCollection
