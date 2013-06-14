@@ -24,7 +24,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			viewportHeightHalf = @canvas.height / 2
 			viewPosition = viewUtils.positionToScreen positionVec, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 			containerPosition = @$container.position()
-			@_drawCircle viewPosition.x + 32, viewPosition.y + 32
+			viewPosition.x = 150 if viewPosition.x < 150
+			viewPosition.x = @canvas.width - 150 if viewPosition.x > @canvas.width - 150
+			viewPosition.y = 150 if viewPosition.y < 150
+			viewPosition.y = @canvas.height - 150 if viewPosition.y > @canvas.height - 150
+			@_drawCircle viewPosition.x, viewPosition.y
 			if containerPosition.top isnt viewPosition.x or containerPosition.left isnt viewPosition.y
 				#console.log 'Draw new wave position', positionVec, viewPosition
 				@$container.css
