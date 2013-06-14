@@ -7,6 +7,7 @@ import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
+import game.network.server.ChatMessagePacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
 import game.processor.CacheConstants;
@@ -67,6 +68,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
+    session.getGame().broadcast(new ChatMessagePacket(session.getUsername() + " build " + tower.getName()));
     synchronized (playerCache) {
       playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());
       playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
@@ -83,7 +85,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
   public void setId(Long id) {
     this.id = id;
   }
-
+  
   public Vector3 getPosition() {
     return position;
   }

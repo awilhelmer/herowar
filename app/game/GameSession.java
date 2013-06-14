@@ -20,6 +20,7 @@ public class GameSession implements Serializable {
 
   private long matchId = -1;
   private long playerId = -1;
+  private String username = null;
 
   private Match match;
   private Player player;
@@ -38,6 +39,7 @@ public class GameSession implements Serializable {
     this.matchId = match.getId();
     this.player = player;
     this.playerId = player.getId();
+    this.username = player.getUser().getUsername();
     this.token = token;
     this.connection = connection;
     this.clock = new GameClock();
@@ -49,6 +51,10 @@ public class GameSession implements Serializable {
 
   public long getPlayerId() {
     return playerId;
+  }
+
+  public String getUsername() {
+    return username;
   }
 
   public Match getMatch() {

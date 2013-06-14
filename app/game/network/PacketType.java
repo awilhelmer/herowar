@@ -1,7 +1,9 @@
 package game.network;
 
 /**
- * Several packet type ids.
+ * The PacketType class contains all packet type declarations from client and
+ * server. The value should be unique because the packet handler needs something
+ * to identify the packet.
  * 
  * @author Sebastian Sachtleben
  */
@@ -12,31 +14,22 @@ public class PacketType {
   public static final Integer ClientPreloadUpdatePacket = 10;
   public static final Integer ClientTowerRequestPacket = 80;
   public static final Integer ClientWaveRequestPacket = 95;
-  // public static final Integer ClientRotationPacket = 2;
-  // public static final Integer ClientShot1Packet = 5;
-  // public static final Integer ClientInputKeyPacket = 6;
 
   // Server
   public static final Integer AccessDeniedPacket = 11;
   public static final Integer AccessGrantedPacket = 12;
   public static final Integer GameStartPacket = 13;
-  // public static final Integer ObjectDamagePacket = 19;
   public static final Integer UnitInPacket = 16;
   public static final Integer ObjectOutPacket = 17;
-  // public static final Integer PlayerJoinPacket = 20;
   public static final Integer PlayerLeavePacket = 21;
   public static final Integer PlayerInitPacket = 22;
   public static final Integer PlayerStatsInitPacket = 35;
   public static final Integer PlayerStatsUpdatePacket = 36;
   public static final Integer PlayerLivesUpdatePacket = 37;
-  // public static final Integer ObjectPositionPacket = 26;
-  // public static final Integer PlayerInputPacket = 23;
-  // public static final Integer ObjectRotationPacket = 30;
-  // public static final Integer ObjectShotPacket = 31;
   public static final Integer PreloadDataPacket = 50;
-  // public static final Integer ChatMessagePacket = 70;
   public static final Integer WaveInitPacket = 60;
   public static final Integer WaveUpdatePacket = 61;
+  public static final Integer ChatMessagePacket = 70;
   public static final Integer TowerBuildPacket = 81;
   public static final Integer TowerTargetPacket = 82;
   public static final Integer TowerAttackPacket = 83;

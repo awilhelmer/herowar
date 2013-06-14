@@ -5,7 +5,7 @@ db = require 'database'
 towers =
 
 	create: (opts) ->
-		console.log 'Create tower', opts
+		#console.log 'Create tower', opts
 		dynObj = @_createModel opts
 		scenegraph.addDynObject dynObj, opts.id
 		return dynObj
