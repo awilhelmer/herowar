@@ -115,37 +115,39 @@ public class GamesHandler implements Serializable {
   }
 
   private void sendPreloadDataPacket(final WebSocketConnection connection, final GameProcessor game) {
-    // TODO: replace hardcoded preload data
-    java.util.Map<String, String> images = new HashMap<String, String>();
-    images.put("explosion", "assets/images/game/textures/effects/explosion.png");
-    java.util.Map<String, String> textures = new HashMap<String, String>();
-    textures.put("ground-rock", "assets/images/game/textures/ground/rock.jpg");
-    textures.put("ground-grass", "assets/images/game/textures/ground/grass.jpg");
-    textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
-    textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
-    textures.put("particle001", "assets/images/game/textures/effects/particle001.png");
-    textures.put("cloud10", "assets/images/game/textures/effects/cloud10.png");
-    java.util.Map<String, String> texturesCube = new HashMap<String, String>();
-    texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
-    java.util.Map<String, String> geometries = new HashMap<String, String>();
-    geometries.put("rocket", "assets/geometries/weapons/rocket.js");
-    Iterator<Wave> iter = game.getMap().getWaves().iterator();
-    while (iter.hasNext()) {
-      Wave wave = iter.next();
-      Iterator<Unit> iter2 = wave.getUnits().iterator();
-      while (iter2.hasNext()) {
-        Unit unit = iter2.next();
-        geometries.put(unit.getName(), "api/game/geometry/unit/" + unit.getId());
+    if (game.getPreloadPacket() == null) {
+      // TODO: replace hardcoded preload data
+      java.util.Map<String, String> images = new HashMap<String, String>();
+      images.put("explosion", "assets/images/game/textures/effects/explosion.png");
+      java.util.Map<String, String> textures = new HashMap<String, String>();
+      textures.put("ground-rock", "assets/images/game/textures/ground/rock.jpg");
+      textures.put("ground-grass", "assets/images/game/textures/ground/grass.jpg");
+      textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
+      textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
+      textures.put("particle001", "assets/images/game/textures/effects/particle001.png");
+      textures.put("cloud10", "assets/images/game/textures/effects/cloud10.png");
+      java.util.Map<String, String> texturesCube = new HashMap<String, String>();
+      texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
+      java.util.Map<String, String> geometries = new HashMap<String, String>();
+      geometries.put("rocket", "assets/geometries/weapons/rocket.js");
+      Iterator<Wave> iter = game.getMap().getWaves().iterator();
+      while (iter.hasNext()) {
+        Wave wave = iter.next();
+        Iterator<Unit> iter2 = wave.getUnits().iterator();
+        while (iter2.hasNext()) {
+          Unit unit = iter2.next();
+          geometries.put(unit.getName(), "api/game/geometry/unit/" + unit.getId());
+        }
       }
+      List<Tower> towers = TowerDAO.getInstance().getAll();
+      Iterator<Tower> iter3 = towers.iterator();
+      while (iter3.hasNext()) {
+        Tower tower = iter3.next();
+        geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());
+      }
+      game.setPreloadPacket(new PreloadDataPacket(game.getMap().getId(), new PreloadData(images, textures, texturesCube, geometries)));
     }
-    List<Tower> towers = TowerDAO.getInstance().getAll();
-    Iterator<Tower> iter3 = towers.iterator();
-    while (iter3.hasNext()) {
-      Tower tower = iter3.next();
-      geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());
-    }
-    PreloadDataPacket packet = new PreloadDataPacket(game.getMap().getId(), new PreloadData(images, textures, texturesCube, geometries));
-    connection.send(Json.toJson(packet).toString());
+    connection.send(Json.toJson(game.getPreloadPacket()).toString());
   }
 
   private void removePlayer(GameSession session, WebSocketConnection connection) {

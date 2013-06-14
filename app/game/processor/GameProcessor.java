@@ -6,6 +6,7 @@ import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.BasePacket;
+import game.network.server.PreloadDataPacket;
 import game.network.server.TowerBuildPacket;
 import game.network.server.TowerTargetPacket;
 import game.network.server.UnitInPacket;
@@ -57,6 +58,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private Map map;
 
   private GameClock clock = new GameClock();
+  private PreloadDataPacket preloadPacket = null;
+
   private boolean wavesFinished = false;
   private boolean unitsFinished = false;
   private boolean waveRequest = false;
@@ -389,6 +392,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public void setUpdateGold(boolean updateGold) {
     this.updateGold = updateGold;
+  }
+
+  public PreloadDataPacket getPreloadPacket() {
+    return preloadPacket;
+  }
+
+  public void setPreloadPacket(PreloadDataPacket preloadPacket) {
+    this.preloadPacket = preloadPacket;
   }
 
   public enum State {

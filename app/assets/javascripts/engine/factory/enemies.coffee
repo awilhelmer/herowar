@@ -5,6 +5,7 @@ db = require 'database'
 enemies =
 
 	create: (opts) ->
+		console.log 'Create enemy', opts
 		dynObj = @_createModel opts
 		scenegraph.addDynObject dynObj, opts.id
 		return dynObj
