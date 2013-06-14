@@ -25,7 +25,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			viewPosition = viewUtils.positionToScreen positionVec, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 			containerPosition = @$container.position()
 			if containerPosition.top isnt viewPosition.x or containerPosition.left isnt viewPosition.y
-				console.log 'Draw new wave position', viewPosition
+				#console.log 'Draw new wave position', viewPosition
 				@$container.css
 					'top' : "#{viewPosition.x}px"
 					'left' : "#{viewPosition.y}px"
