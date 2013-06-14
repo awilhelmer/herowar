@@ -126,7 +126,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private void loadNextWave() {
     current = next;
     next = getNextWave();
-    if (next.getPath().getWaypoints() == null) {
+    if (next != null && next.getPath() != null && next.getPath().getWaypoints() == null) {
       PathDAO.mapWaypoints(next.getPath());
     }
     if (current != null) {
