@@ -14,7 +14,6 @@ class Sidebar extends BaseView
 		@model.set 'active', 'sidebar-properties-world'
 
 	getTemplateData: ->
-		console.log 'Sidebar getTemplateData()'
 		json = super()
 		json.isActivePropertiesWorld = if json.active is 'sidebar-properties-world' then true else false
 		json.isActivePropertiesTerrain = if json.active is 'sidebar-properties-terrain' then true else false
