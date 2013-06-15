@@ -74,11 +74,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		switch limitedTo
 			when 'top'
 				@ctx.moveTo position.x - 20, position.y
-				@ctx.lineTo position.x, position.y + 60
+				@ctx.lineTo position.x, position.y - 60
 				@ctx.lineTo position.x + 20, position.y
 			when 'bottom'
 				@ctx.moveTo position.x - 20, position.y
-				@ctx.lineTo position.x, position.y - 60
+				@ctx.lineTo position.x, position.y + 60
 				@ctx.lineTo position.x + 20, position.y
 			when 'left'
 				@ctx.moveTo position.x, position.y - 20
