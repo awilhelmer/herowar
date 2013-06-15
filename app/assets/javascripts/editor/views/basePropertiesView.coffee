@@ -1,10 +1,23 @@
 BaseView = require 'views/baseView'
+db = require 'database'
 
 class BasePropertiesView extends BaseView
 
 	initialize: (options) ->
+		@sidebar = db.get 'ui/sidebar'
 		@sliderCreated = false
 		super options
+
+	bindEvents: ->
+		@listenTo @sidebar, 'change:active', @changeActiveView
+		super()
+
+	changeActiveView: ->
+		setTimeout =>
+			if not @sliderCreated and @sidebar.get('active') is @$el.attr('id') 
+				@createSliders()
+				@sliderCreated = true
+		, 100
 
 	createSliders: ->
 		# Should be overridden
@@ -18,12 +31,6 @@ class BasePropertiesView extends BaseView
 			callbacks:
 				update:
 					[callbackFunc]
-
-	render: ->
-		super()
-		unless @sliderCreated
-			@createSliders()
-			@sliderCreated = true
 
 	onChangedString: (event) ->
 		unless event then return

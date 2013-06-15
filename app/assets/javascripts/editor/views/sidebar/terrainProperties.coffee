@@ -33,16 +33,21 @@ class TerrainProperties extends BasePropertiesView
 
 	bindEvents: ->
 		@listenTo @model, 'change:materials', @render if @model
+		@listenTo @sidebar, 'change:active', @changeActiveView
+		return
 
 	createSliders: ->
+		console.log 'Create slider for terrain properties'
 		@createSlider @$el.find('#inputWidth').get(0), Constants.TERRAIN_MIN_WIDTH, Constants.TERRAIN_MAX_WIDTH, Constants.TERRAIN_STEPS_WIDTH, @changeTerrain
 		@createSlider @$el.find('#inputHeight').get(0), Constants.TERRAIN_MIN_HEIGHT, Constants.TERRAIN_MAX_HEIGHT, Constants.TERRAIN_STEPS_HEIGHT, @changeTerrain
 		@createSlider @$el.find('#inputSmoothness').get(0), Constants.TERRAIN_MIN_SMOOTHNESS, Constants.TERRAIN_MAX_SMOOTHNESS, Constants.TERRAIN_STEPS_SMOOTHNESS, @changeTerrain
 		@createSlider @$el.find('#inputZScale').get(0), Constants.TERRAIN_MIN_ZSCALE, Constants.TERRAIN_MAX_ZSCALE, Constants.TERRAIN_STEPS_ZSCALE, @changeTerrain
+		return
 
 	changeTerrain: (event) =>
 		log.debug 'CHANGE TERRAIN !!!!'
 		EditorEventbus.dispatch 'changeTerrain', @$el.find('input[name="width"]').val(), @$el.find('input[name="height"]').val(), @$el.find('input[name="smoothness"]').val(), @$el.find('input[name="zScale"]').val()
+		return
 
 	validateTerrainWidth: (event) =>
 		unless event then return
@@ -51,6 +56,7 @@ class TerrainProperties extends BasePropertiesView
 		if val <= Constants.TERRAIN_MIN_WIDTH or val >= Constants.TERRAIN_MAX_WIDTH
 			$currentTarget.val @terrainWidth 
 			fdSlider.updateSlider $currentTarget.attr 'id'
+		return
 			
 	validateTerrainHeight: (event) =>
 		unless event then return
@@ -59,14 +65,17 @@ class TerrainProperties extends BasePropertiesView
 		if val <= Constants.TERRAIN_MIN_HEIGHT or val >= Constants.TERRAIN_MAX_HEIGHT
 			$currentTarget.val @terrainHeight 
 			fdSlider.updateSlider $currentTarget.attr 'id'
+		return
 
 	changeWireframe: (event) =>
 		unless event then return
 		$currentTarget = $ event.currentTarget
 		EditorEventbus.dispatch 'changeTerrainWireframe', $currentTarget.is ':checked'
+		return
 
 	resetTerrainPool: =>
 		EditorEventbus.dispatch 'resetTerrainPool'
+		return
 
 	loadMaterial: (event) =>
 		unless event then return
@@ -75,5 +84,6 @@ class TerrainProperties extends BasePropertiesView
 		if modelId
 			@terrain.set 'brushMaterialId', modelId
 			@sidebar.set 'active', 'sidebar-properties-material'
+		return
 
 return TerrainProperties
