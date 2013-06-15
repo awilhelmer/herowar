@@ -22,7 +22,8 @@ class Editor extends ApplicationController
 		type: Variables.VIEWPORT_TYPE_EDITOR
 		camera:
 			type: Variables.CAMERA_TYPE_PERSPECTIVE
-			position: [ 300, 150, 300 ]	
+			position: [ 0, 300, 300 ]
+			rotation: [ THREE.Math.degToRad(-70), 0, 0 ]
 	]
 
 	initialize: (options) ->
