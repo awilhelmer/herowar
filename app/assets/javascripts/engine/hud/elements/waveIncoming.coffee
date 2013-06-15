@@ -7,9 +7,15 @@ class WaveIncomingHUDElement extends BaseHUDElement
 	
 	constructor: (canvas, view) ->
 		super canvas, view
+		@initialize()
+		
+	initialize: ->
 		@waves = db.get 'ui/waves'
 		@$container = $ '<div class="wave-position"></div>'
 		$('body').append @$container
+		@scale = 1
+		@scaleType = 1
+		return
 	
 	update: (delta, now) ->
 		return unless @waves.get '_active'
@@ -25,9 +31,10 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			viewportHeightHalf = @canvas.height / 2
 			viewPosition = viewUtils.positionToScreen positionVec, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 			limitedTo = @_limitToScreen viewPosition
+			@_updateScale delta
+			@_drawStartInfo viewPosition, limitedTo
 			@_drawDirection viewPosition, limitedTo if limitedTo isnt ''
 			@_drawIcon viewPosition, limitedTo
-			@_drawStartInfo viewPosition, limitedTo
 			containerPosition = @$container.position()
 			if containerPosition.left isnt viewPosition.x or containerPosition.top isnt viewPosition.y
 				#console.log 'Draw new wave position', limitedTo, positionVec, viewPosition
@@ -58,6 +65,19 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			position.x = @canvas.width - 150 
 			limitedTo = if limitedTo is '' then 'right' else "#{limitedTo}-right"
 		return limitedTo
+
+	_updateScale: (delta) ->
+		if @scaleType is 1
+			@scale += delta / 7.5
+			if @scale > 1.05
+				@scale = 1.05
+				@scaleType = 2
+		else
+			@scale -= delta / 2
+			if @scale < 1
+				@scale = 1
+				@scaleType = 1		
+		return		
 
 	_drawDirection: (position, limitedTo) ->
 		@ctx.beginPath()
@@ -111,26 +131,29 @@ class WaveIncomingHUDElement extends BaseHUDElement
 
 	_drawStartInfo: (position, limitedTo) ->
 		align = if limitedTo.indexOf('left') != -1 then 'left' else 'right'
-		left = if align is 'left' then position.x + 250 else position.x - 250
-		top = position.y - 35
+		size =
+			x: if align is 'left' then position.x + 225 else position.x - 225
+			y: position.y - 30
+			w: 175
+			h: 60
 		@ctx.beginPath()
 		@ctx.fillStyle = '#ffffff'
 		@ctx.strokeStyle = '#000000'
 		@ctx.lineWidth = 1
 		canvasUtils.drawBubble @ctx,
-			x: left
-			y: top
-			w: 200
-			h: 70
+			x: size.x - (size.w * @scale - size.w) / 2
+			y: size.y - (size.h * @scale - size.h) / 2
+			w: size.w * @scale
+			h: size.h * @scale
 			position: align
 		@ctx.fill()
 		@ctx.stroke()
 		@ctx.fillStyle = '#000000'
 		@ctx.textAlign = 'left'
-		@ctx.font = 'bold 20px Arial'
-		@ctx.fillText 'START BATTLE!', left + 10, top + 10
-		@ctx.font = 'bold 16px Arial'
-		@ctx.fillText 'CLICK TO CALL WAVE', left + 10, top + 40
+		@ctx.font = 'bold 19px Arial'
+		@ctx.fillText 'START BATTLE!', size.x + 10, size.y + 10
+		@ctx.font = 'bold 14px Arial'
+		@ctx.fillText 'CLICK TO CALL WAVE', size.x + 10, size.y + 35
 		return
 	
 return WaveIncomingHUDElement
