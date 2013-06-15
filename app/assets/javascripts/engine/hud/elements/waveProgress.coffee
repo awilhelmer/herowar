@@ -17,6 +17,7 @@ class WaveProgressHUDElement extends BaseHUDElement
 		return
 	
 	_drawGameStartInfo: (delta) ->
+		@ctx.textAlign = 'center'
 		if @waves.get('current') is 0 and @waves.get('total') isnt 0 and @waves.get('positions').length is 0
 			# Preparing game
 			width = @canvas.height / 5

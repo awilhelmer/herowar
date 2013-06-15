@@ -26,6 +26,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			limitedTo = @_limitToScreen viewPosition
 			@_drawDirection viewPosition, limitedTo if limitedTo isnt ''
 			@_drawIcon viewPosition, limitedTo
+			@_drawStartInfo viewPosition, limitedTo
 			containerPosition = @$container.position()
 			if containerPosition.left isnt viewPosition.x or containerPosition.top isnt viewPosition.y
 				#console.log 'Draw new wave position', limitedTo, positionVec, viewPosition
@@ -56,17 +57,6 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			position.x = @canvas.width - 150 
 			limitedTo = if limitedTo is '' then 'right' else "#{limitedTo}-right"
 		return limitedTo
-
-	_drawIcon: (position) ->
-		radius = 30
-		@ctx.beginPath()
-		@ctx.arc position.x, position.y, radius, 0, 2 * Math.PI, false
-		@ctx.fillStyle = '#111111'
-		@ctx.fill()
-		@ctx.lineWidth = 4
-		@ctx.strokeStyle = '#FF0000'
-		@ctx.stroke()
-		return
 
 	_drawDirection: (position, limitedTo) ->
 		@ctx.beginPath()
@@ -105,6 +95,35 @@ class WaveIncomingHUDElement extends BaseHUDElement
 				@ctx.lineTo position.x + 40, position.y + 40
 				@ctx.lineTo position.x, position.y + 20
 		@ctx.fill()
+		return
+
+	_drawIcon: (position) ->
+		radius = 30
+		@ctx.beginPath()
+		@ctx.fillStyle = '#111111'
+		@ctx.strokeStyle = '#FF0000'
+		@ctx.lineWidth = 4
+		@ctx.arc position.x, position.y, radius, 0, 2 * Math.PI, false
+		@ctx.fill()
+		@ctx.stroke()
+		return
+
+	_drawStartInfo: (position, limitedTo) ->
+		left = if limitedTo is 'left' or limitedTo is 'top-left' or limitedTo is 'bottom-left' then position.x + 245 else position.x - 245
+		top = position.y - 35
+		@ctx.beginPath()
+		@ctx.fillStyle = '#ffffff'
+		@ctx.rect left, top, 200, 70
+		@ctx.fill()
+		@ctx.lineWidth = 1
+		@ctx.strokeStyle = '#000000'
+		@ctx.stroke()
+		@ctx.fillStyle = '#000000'
+		@ctx.textAlign = 'left'
+		@ctx.font = 'bold 20px Arial'
+		@ctx.fillText 'START BATTLE!', left + 10, top + 10
+		@ctx.font = 'bold 16px Arial'
+		@ctx.fillText 'CLICK TO CALL WAVE', left + 10, top + 40
 		return
 	
 return WaveIncomingHUDElement
