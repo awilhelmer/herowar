@@ -29,7 +29,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			viewPosition.y = 150 if viewPosition.y < 150
 			viewPosition.y = @canvas.height - 150 if viewPosition.y > @canvas.height - 150
 			@_drawCircle viewPosition.x, viewPosition.y
-			if containerPosition.top isnt viewPosition.x or containerPosition.left isnt viewPosition.y
+			if containerPosition.left isnt viewPosition.x or containerPosition.top isnt viewPosition.y
 				#console.log 'Draw new wave position', positionVec, viewPosition
 				@$container.css
 					'left' : "#{viewPosition.x}px"
