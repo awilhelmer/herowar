@@ -55,11 +55,12 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   @Override
   public void process(double delta, long now) {
-    waveUpdated = checkWaveUpdate();
+    waveUpdated = checkWaveUpdate(now);
     checkForUnitSpawn();
     super.process(delta, now);
     waveUpdated = false;
-    if (!getProcessor().isWavesFinished() && waves.size() == 0 && getWaveEta() <= now) {
+    if (!getProcessor().isWavesFinished() && waves.size() == 0
+        && (next == null || ((next.isAutostart() && getWaveEta() <= now) || (next.isRequestable() && getProcessor().isWaveRequest())))) {
       getProcessor().setWavesFinished(true);
       log.debug("Waves finished!!!!");
     }
@@ -111,10 +112,9 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     return positions;
   }
 
-  private boolean checkWaveUpdate() {
-    Date now = new Date();
+  private boolean checkWaveUpdate(long now) {
     if (next != null) {
-      if ((next.isAutostart() && getWaveEta() <= now.getTime()) || (next.isRequestable() && getProcessor().isWaveRequest())) {
+      if ((next.isAutostart() && getWaveEta() <= now) || (next.isRequestable() && getProcessor().isWaveRequest())) {
         getProcessor().setWaveRequest(false);
         loadNextWave();
         return true;
