@@ -32,35 +32,30 @@ import dao.game.PathDAO;
 public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(WaveUpdatePlugin.class);
 
+  private List<WaveSpawner> spawners = new ArrayList<WaveSpawner>();
   private List<Wave> waves;
+
   private Wave current;
   private Wave next;
+
   private int index;
   private int total;
 
-  private double spawnRate;
-  private int spawnCurrent;
-  private int spawnTotal;
-  private Date lastSpawnDate;
-  private Date waveStartDate;
-  private boolean waveUpdated;
+  private long waveStartDate;
+  private boolean waveUpdated = false;
 
   public WaveUpdatePlugin(GameProcessor processor) {
     super(processor);
-    waves = new ArrayList<Wave>(getProcessor().getMap().getWaves());
-    if (waves.size() > 0) {
-      Collections.sort(waves, new WaveComparator());
-    }
+    sortWaves();
   }
 
   @Override
   public void process(double delta, long now) {
     waveUpdated = checkWaveUpdate(now);
-    checkForUnitSpawn();
+    checkForUnitSpawn(delta, now);
     super.process(delta, now);
     waveUpdated = false;
-    if (!getProcessor().isWavesFinished() && waves.size() == 0
-        && (next == null || ((next.isAutostart() && getWaveEta() <= now) || (next.isRequestable() && getProcessor().isWaveRequest())))) {
+    if (!getProcessor().isWavesFinished() && next == null && spawners.size() == 0) {
       getProcessor().setWavesFinished(true);
       log.debug("Waves finished!!!!");
     }
@@ -88,7 +83,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     current = null;
     next = null;
     total = waves.size();
-    loadNextWave();
+    Date now = new Date();
+    loadNextWave(now.getTime());
   }
 
   @Override
@@ -116,14 +112,14 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (next != null) {
       if ((next.isAutostart() && getWaveEta() <= now) || (next.isRequestable() && getProcessor().isWaveRequest())) {
         getProcessor().setWaveRequest(false);
-        loadNextWave();
+        loadNextWave(now);
         return true;
       }
     }
     return false;
   }
 
-  private void loadNextWave() {
+  private void loadNextWave(long now) {
     current = next;
     next = getNextWave();
     if (next != null && next.getPath() != null && next.getPath().getWaypoints() == null) {
@@ -137,11 +133,11 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     } else {
       index = 0;
     }
-    spawnRate = current != null ? current.getWaveTime().doubleValue() * 1000 / current.getQuantity().doubleValue() : 0;
-    spawnCurrent = 0;
-    lastSpawnDate = new Date();
-    waveStartDate = new Date();
     log.debug("Load wave " + index + " / " + total + ": " + (current != null ? current.getName() : ""));
+    if (current != null) {
+      spawners.add(new WaveSpawner(current, now));
+    }
+    waveStartDate = now;
   }
 
   private Wave getNextWave() {
@@ -155,24 +151,20 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private long getWaveEta() {
-    long startTime = waveStartDate.getTime();
+    long startTime = waveStartDate;
     if (current != null) {
       startTime += current.getWaveTime() * 1000;
     }
     return next != null ? startTime + (next.getPrepareTime() * 1000) : startTime;
   }
 
-  private void checkForUnitSpawn() {
-    if (current != null && spawnRate > 0 && spawnCurrent < current.getQuantity()) {
-      Date now = new Date();
-      if (lastSpawnDate.getTime() + spawnRate <= now.getTime()) {
-        Iterator<Unit> iter = current.getUnits().iterator();
-        Unit unit = iter.next();
-        log.debug("Create enemy for " + current.getName());
-        createUnit(current.getPath(), unit);
-        lastSpawnDate = now;
-        spawnCurrent++;
-        spawnTotal++;
+  private void checkForUnitSpawn(double delta, long now) {
+    Iterator<WaveSpawner> iter = spawners.iterator();
+    while (iter.hasNext()) {
+      WaveSpawner spawner = iter.next();
+      spawner.process(delta, now);
+      if (spawner.spawnCurrent == spawner.wave.getQuantity()) {
+        iter.remove();
       }
     }
   }
@@ -187,6 +179,13 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     broadcast(new UnitInPacket(model));
   }
 
+  private void sortWaves() {
+    waves = new ArrayList<Wave>(getProcessor().getMap().getWaves());
+    if (waves.size() > 0) {
+      Collections.sort(waves, new WaveComparator());
+    }
+  }
+
   @Override
   public String toString() {
     return "WaveUpdatePlugin";
@@ -196,6 +195,33 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     @Override
     public int compare(Wave w1, Wave w2) {
       return w1.getSortOder().compareTo(w2.getSortOder());
+    }
+  }
+
+  public class WaveSpawner {
+
+    private Wave wave;
+    private double spawnRate;
+    private int spawnCurrent = 0;
+    private long lastSpawnDate;
+
+    public WaveSpawner(Wave wave, long now) {
+      this.wave = wave;
+      this.lastSpawnDate = now;
+      this.spawnRate = wave != null ? wave.getWaveTime().doubleValue() * 1000 / wave.getQuantity().doubleValue() : 0;
+    }
+
+    public void process(double delta, long now) {
+      if (wave != null && spawnRate > 0 && spawnCurrent < wave.getQuantity()) {
+        if (lastSpawnDate + spawnRate <= now) {
+          Iterator<Unit> iter = wave.getUnits().iterator();
+          Unit unit = iter.next();
+          log.debug("Create enemy for " + wave.getName());
+          createUnit(wave.getPath(), unit);
+          lastSpawnDate = now;
+          spawnCurrent++;
+        }
+      }
     }
   }
 }
