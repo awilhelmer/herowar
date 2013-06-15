@@ -1,4 +1,5 @@
 BaseHUDElement = require 'hud/elements/baseHudElement'
+canvasUtils = require 'util/canvasUtils'
 viewUtils = require 'util/viewUtils'
 db = require 'database'
 
@@ -109,14 +110,20 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		return
 
 	_drawStartInfo: (position, limitedTo) ->
-		left = if limitedTo is 'left' or limitedTo is 'top-left' or limitedTo is 'bottom-left' then position.x + 245 else position.x - 245
+		align = if limitedTo.indexOf('left') != -1 then 'left' else 'right'
+		left = if align is 'left' then position.x + 250 else position.x - 250
 		top = position.y - 35
 		@ctx.beginPath()
 		@ctx.fillStyle = '#ffffff'
-		@ctx.rect left, top, 200, 70
-		@ctx.fill()
-		@ctx.lineWidth = 1
 		@ctx.strokeStyle = '#000000'
+		@ctx.lineWidth = 1
+		canvasUtils.drawBubble @ctx,
+			x: left
+			y: top
+			w: 200
+			h: 70
+			position: align
+		@ctx.fill()
 		@ctx.stroke()
 		@ctx.fillStyle = '#000000'
 		@ctx.textAlign = 'left'
