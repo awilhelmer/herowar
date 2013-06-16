@@ -67,13 +67,15 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     if (!hashInitPacket(playerId)) {
       long eta = getWaveEta();
       List<Vector3> positions = getNextWavePositions();
-      sendPacket(session, new WaveInitPacket(index, eta, total, positions));
+      List<String> units = getNextWaveUnits();
+      sendPacket(session, new WaveInitPacket(index, eta, total, positions, units));
       getInitPacket().replace(playerId, true);
     }
     if (waveUpdated) {
       long eta = getWaveEta();
       List<Vector3> positions = getNextWavePositions();
-      sendPacket(session, new WaveUpdatePacket(index, eta, positions));
+      List<String> units = getNextWaveUnits();
+      sendPacket(session, new WaveUpdatePacket(index, eta, positions, units));
     }
   }
 
@@ -106,6 +108,16 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       positions.add(waypoint.getPosition());
     }
     return positions;
+  }
+  
+  private List<String> getNextWaveUnits() {
+    List<String> names = new ArrayList<String>();
+    if (next != null && next.isRequestable() && next.getPath().getWaypoints().size() > 0) {
+      Iterator<Unit> iter = next.getUnits().iterator();
+      Unit unit = iter.next();
+      names.add(unit.getName() + " x" + next.getQuantity());
+    }
+    return names;
   }
 
   private boolean checkWaveUpdate(long now) {

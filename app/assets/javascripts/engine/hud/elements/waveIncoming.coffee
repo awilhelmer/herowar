@@ -38,8 +38,8 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			@_drawDirection position, limitedTo if limitedTo isnt ''
 			@_drawIcon position
 			@_drawStartInfo position, limitedTo
+			@_updateHovering position, limitedTo
 			@_updateScale delta
-			@_updateHovering position
 		return
 
 	_convertWaypointToCanvasCoords: (position) ->
@@ -156,11 +156,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.fillText 'CLICK TO CALL WAVE', size.x + size.w / 2, size.y + 35
 		return
 
-	_drawWaveInfo: (position, limitedTo) ->
-		height = 70 + @nextWaveEnemies.length * 20
+	_drawWaveInfo: (position, limitedTo, units) ->
+		height = 65 + units.length * 20
 		size = 
-			x: position.x - 225
-			y: position.y - (height + 35)
+			x: if limitedTo.indexOf('left') != -1 then position.x + 225 else position.x - 225
+			y: if limitedTo.indexOf('top') != -1 then position.y + @iconRadius + 5 else position.y - (height + @iconRadius + 5)
 			w: 175
 			h: height
 		@ctx.beginPath()
@@ -173,17 +173,18 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		newY = size.y + 10
 		@ctx.fillText 'INCOMING WAVE', size.x + size.w / 2, newY
 		newY += 5
-		for wave in @nextWaveEnemies
+		for wave in units
 			newY += 20
 			@ctx.fillText wave, size.x + size.w / 2, newY 
 		@ctx.font = 'bold 12px Arial'
-		@ctx.fillText 'CLICK TO CALL IT EARLY', size.x + size.w / 2, newY + 30
+		@ctx.fillText 'CLICK TO CALL IT EARLY', size.x + size.w / 2, newY + 25
 		return
 
-	_updateHovering: (position) ->
+	_updateHovering: (position, limitedTo) ->
 		if @_isHovering position
-			@_drawWaveInfo position, limitedTo if @nextWaveEnemies?.length isnt 0
-			events.trigger 'call:wave' if @input.get('mouse_pressed_left')
+			units = @waves.get 'units'
+			@_drawWaveInfo position, limitedTo, units if units?.length isnt 0
+			events.trigger 'call:wave' if @input.get 'mouse_pressed_left'
 			unless @isHovering
 				document.body.style.cursor = 'pointer' 
 				@isHovering = true
