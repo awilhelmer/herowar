@@ -11,6 +11,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		
 	initialize: ->
 		@waves = db.get 'ui/waves'
+		@input = db.get 'input'
 		@$container = $ '<div class="wave-position"></div>'
 		$('body').append @$container
 		@skullImageLoaded = false
@@ -20,6 +21,8 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@skullImage.src = 'assets/images/game/ui/skull.png'
 		@scale = 1
 		@scaleType = 1
+		@iconRadius = 30
+		@isHovering = false
 		return
 	
 	update: (delta, now) ->
@@ -36,19 +39,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			@_drawIcon position
 			@_drawStartInfo position, limitedTo
 			@_updateScale delta
-			containerPosition = @$container.position()
-			if containerPosition.left isnt position.x or containerPosition.top isnt position.y
-				#console.log 'Draw new wave position', limitedTo, positionVec, viewPosition
-				@$container.css
-					'left' : "#{position.x}px"
-					'top' : "#{position.y}px"
-			@$container.removeClass 'hidden' if @$container.hasClass 'hidden'
-		else
-			if not @$container.hasClass 'hidden'
-				@$container.addClass 'hidden' 
-				@$container.css
-					'top' : ''
-					'left' : ''
+			console.log 'Is Hovering !!!!' if @_isHovering position
 		return
 
 	_convertWaypointToCanvasCoords: (position) ->
@@ -127,16 +118,15 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		return
 
 	_drawIcon: (position) ->
-		radius = 30
 		@ctx.beginPath()
 		@ctx.fillStyle = '#111111'
 		@ctx.strokeStyle = '#FF0000'
 		@ctx.lineWidth = 4
-		@ctx.arc position.x, position.y, radius, 0, 2 * Math.PI
+		@ctx.arc position.x, position.y, @iconRadius, 0, 2 * Math.PI
 		@ctx.closePath()
 		@ctx.fill()
 		@ctx.stroke()
-		@ctx.drawImage @skullImage, position.x - radius * 0.75, position.y - radius * 0.75, radius * 1.5, radius * 1.5 if @skullImageLoaded
+		@ctx.drawImage @skullImage, position.x - @iconRadius * 0.75, position.y - @iconRadius * 0.75, @iconRadius * 1.5, @iconRadius * 1.5 if @skullImageLoaded
 		return
 
 	_drawStartInfo: (position, limitedTo) ->
@@ -166,5 +156,8 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.font = 'bold 14px Arial'
 		@ctx.fillText 'CLICK TO CALL WAVE', size.x + 10, size.y + 35
 		return
-	
+
+	_isHovering: (position) ->
+		return @input.get('mouse_position_x') >= position.x - @iconRadius and @input.get('mouse_position_x') <= position.x + @iconRadius and @input.get('mouse_position_y') >= position.y - @iconRadius and @input.get('mouse_position_y') <= position.y + @iconRadius
+
 return WaveIncomingHUDElement
