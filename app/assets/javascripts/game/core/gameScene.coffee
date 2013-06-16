@@ -19,7 +19,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
-		$('body').on 'click', '.wave-position', @onWaveCall
+		events.on 'call:wave', @onWaveCall, @
 	
 	onChatMessage: (packet) ->
 		console.log 'Message: ', packet.message

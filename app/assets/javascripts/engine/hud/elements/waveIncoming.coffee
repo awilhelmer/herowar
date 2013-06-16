@@ -1,6 +1,7 @@
 BaseHUDElement = require 'hud/elements/baseHudElement'
 canvasUtils = require 'util/canvasUtils'
 viewUtils = require 'util/viewUtils'
+events = require 'events'
 db = require 'database'
 
 class WaveIncomingHUDElement extends BaseHUDElement
@@ -12,8 +13,6 @@ class WaveIncomingHUDElement extends BaseHUDElement
 	initialize: ->
 		@waves = db.get 'ui/waves'
 		@input = db.get 'input'
-		@$container = $ '<div class="wave-position"></div>'
-		$('body').append @$container
 		@skullImageLoaded = false
 		@skullImage = new Image()
 		@skullImage.onload = () =>
@@ -23,6 +22,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@scaleType = 1
 		@iconRadius = 30
 		@isHovering = false
+		@nextWaveEnemies = []
 		return
 	
 	update: (delta, now) ->
@@ -39,7 +39,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			@_drawIcon position
 			@_drawStartInfo position, limitedTo
 			@_updateScale delta
-			console.log 'Is Hovering !!!!' if @_isHovering position
+			@_updateHovering position
 		return
 
 	_convertWaypointToCanvasCoords: (position) ->
@@ -150,11 +150,47 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.fill()
 		@ctx.stroke()
 		@ctx.fillStyle = '#000000'
-		@ctx.textAlign = 'left'
 		@ctx.font = 'bold 19px Arial'
-		@ctx.fillText 'START BATTLE!', size.x + 10, size.y + 10
+		@ctx.fillText 'START BATTLE!', size.x + size.w / 2, size.y + 10
 		@ctx.font = 'bold 14px Arial'
-		@ctx.fillText 'CLICK TO CALL WAVE', size.x + 10, size.y + 35
+		@ctx.fillText 'CLICK TO CALL WAVE', size.x + size.w / 2, size.y + 35
+		return
+
+	_drawWaveInfo: (position, limitedTo) ->
+		height = 70 + @nextWaveEnemies.length * 20
+		size = 
+			x: position.x - 225
+			y: position.y - (height + 35)
+			w: 175
+			h: height
+		@ctx.beginPath()
+		@ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
+		@ctx.rect size.x, size.y, size.w, size.h
+		@ctx.closePath()
+		@ctx.fill()
+		@ctx.fillStyle = '#ffffff'
+		@ctx.font = 'bold 14px Arial'
+		newY = size.y + 10
+		@ctx.fillText 'INCOMING WAVE', size.x + size.w / 2, newY
+		newY += 5
+		for wave in @nextWaveEnemies
+			newY += 20
+			@ctx.fillText wave, size.x + size.w / 2, newY 
+		@ctx.font = 'bold 12px Arial'
+		@ctx.fillText 'CLICK TO CALL IT EARLY', size.x + size.w / 2, newY + 30
+		return
+
+	_updateHovering: (position) ->
+		if @_isHovering position
+			@_drawWaveInfo position, limitedTo if @nextWaveEnemies?.length isnt 0
+			events.trigger 'call:wave' if @input.get('mouse_pressed_left')
+			unless @isHovering
+				document.body.style.cursor = 'pointer' 
+				@isHovering = true
+		else
+			if @isHovering
+				document.body.style.cursor = 'default' 
+				@isHovering = false		
 		return
 
 	_isHovering: (position) ->
