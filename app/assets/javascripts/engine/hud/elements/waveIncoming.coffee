@@ -164,7 +164,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			w: 175
 			h: height
 		@ctx.beginPath()
-		@ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
+		@ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
 		@ctx.rect size.x, size.y, size.w, size.h
 		@ctx.closePath()
 		@ctx.fill()

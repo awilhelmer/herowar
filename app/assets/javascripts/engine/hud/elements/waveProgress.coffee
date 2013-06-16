@@ -29,7 +29,7 @@ class WaveProgressHUDElement extends BaseHUDElement
 			width = @canvas.height / 5
 			canvasUtils.setShadow @ctx, width / 50, width / 50, width / 15
 			@ctx.fillStyle = "rgba(255, 255, 255, #{@alpha})"
-			canvasUtils.drawText @ctx, "GAME START", @getHalfWidth(), @getHalfHeight() / 2, ((1 - @alpha) * width * 4) + width * 2
+			canvasUtils.drawText @ctx, "GAME START", @getHalfWidth(), @getHalfHeight() / 2, ((1 - @alpha) * width * 2) + width * 2
 			@alpha = @alpha - delta if delta
 			@startInfo = false if @alpha <= 0
 	
