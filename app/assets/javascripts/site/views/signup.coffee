@@ -15,7 +15,7 @@ class Signup extends FormView
 	
 	template: templates.get 'signup.tmpl'
 	
-	url: "#{app.resourcePath()}signup"
+	url: "/signup"
 	
 	events:
 		'submit form'									: 'submitForm'
@@ -47,7 +47,7 @@ class Signup extends FormView
 				$.ajax
 					dataType: @dataType
 					type: @type
-					url: "#{app.resourcePath()}checkUsername/#{username}"
+					url: "/checkUsername/#{username}"
 					success: (data, textStatus, jqXHR) =>
 						@setInputState $CurrentTarget, 'success', 'This username looks great.' unless data
 						@setInputState $CurrentTarget, 'error', 'This username is already taken.' if data
@@ -73,7 +73,7 @@ class Signup extends FormView
 				$.ajax
 					dataType: @dataType
 					type: @type
-					url: "#{app.resourcePath()}checkEmail/#{email}"
+					url: "/checkEmail/#{email}"
 					success: (data, textStatus, jqXHR) =>
 						@setInputState $CurrentTarget, 'success', 'Email is ok' unless data
 						@setInputState $CurrentTarget, 'error', 'Email is taken' if data

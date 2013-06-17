@@ -42,7 +42,7 @@ class TableEntry extends BaseView
 		if confirm("Do you really want to delete the #{@entityType} \"#{@model.get(@deleteField)}\"?")
 			$.ajax
 				type: 'DELETE'
-				url: "#{app.resourcePath()}#{@entityType}/#{@model.id}"
+				url: "/#{@entityType}/#{@model.id}"
 				success: (data, textStatus, jqXHR) =>
 					$.gritter.add
 						title: "Delete #{@entityType}",

@@ -3,6 +3,6 @@ app = require 'application'
 class News extends Backbone.Model 
 
 	url: ->
-		"#{app.resourcePath()}news/#{@id}"
+		"/news/#{@id}"
 	
 return News

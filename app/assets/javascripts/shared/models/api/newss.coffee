@@ -8,7 +8,7 @@ class APINews extends Backbone.Collection
 		super models, options
 
 	url: ->
-		"#{app.resourcePath()}news/all"
+		"/news/all"
 
 	parse: (resp) ->
 		db.add "db/newss", entry for entry in resp

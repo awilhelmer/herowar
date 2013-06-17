@@ -8,7 +8,7 @@ class APIObjects extends Backbone.Collection
 		super models, options
 
 	url: ->
-		"#{app.resourcePath()}object/all"
+		"/object/all"
 
 	parse: (resp) ->
 		db.add "db/objects", entry for entry in resp

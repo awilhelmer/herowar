@@ -5,7 +5,7 @@ app = require 'application'
 class Users extends BaseCollection
 
 	url: ->
-		"#{app.resourcePath()}user/#{@id}"
+		"/user/#{@id}"
 
 	model: UserModel
 

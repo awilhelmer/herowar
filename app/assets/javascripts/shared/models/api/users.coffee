@@ -8,7 +8,7 @@ class APIUsers extends Backbone.Collection
 		super models, options
 
 	url: ->
-		"#{app.resourcePath()}user/all"
+		"/user/all"
 
 	parse: (resp) ->
 		db.add "db/users", entry for entry in resp

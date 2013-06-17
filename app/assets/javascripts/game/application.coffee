@@ -3,8 +3,6 @@ GameRouter = require 'gameRouter'
 db = require 'database'
 
 app =
-	resourcePath: -> "http://localhost:9000/api/"	
-
 	views: {}
 	
 	history: []

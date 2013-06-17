@@ -4,7 +4,7 @@ db = require 'database'
 class APIMatchJoin extends Backbone.Model
 
 	url: ->
-		return "#{app.resourcePath()}game/match/join"
+		return "/game/match/join"
 
 	parse: (resp) ->
 		matchMaker = db.get 'api/matchMaker'
