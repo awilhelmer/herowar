@@ -121,13 +121,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		# Incoming eta
 		@ctx.beginPath()
 		@ctx.fillStyle = '#FF0000'
-		radius = 2 * Math.PI
-		if @waves.get('eta')
-			perc = (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start'))
-			if perc <= 1
-				console.log 'Now', Date.now() - @waves.get('start'), 'Eta', @waves.get('eta') - @waves.get('start'), 'Value', (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start'))
-				radius *= perc
-		@ctx.arc position.x, position.y, @iconRadius, 0, radius
+		s = 1.5 * Math.PI
+		perc = 1
+		perc = (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start')) if @waves.get('eta')
+		radians = THREE.Math.degToRad if perc <= 1 then perc * 360 else 360 
+		@ctx.arc position.x, position.y, @iconRadius, s, s + radians
 		@ctx.closePath()
 		@ctx.fill()
 		# Incoming eta border
