@@ -106,12 +106,18 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   public void process() {
     double delta = clock.getDelta();
     long now = clock.getCurrentTime();
-    Iterator<IPlugin> iter = plugins.get(state).iterator();
-    while (iter.hasNext()) {
-      IPlugin plugin = iter.next();
-      plugin.process(delta, now);
+    try {
+      Iterator<IPlugin> iter = plugins.get(state).iterator();
+      while (iter.hasNext()) {
+        IPlugin plugin = iter.next();
+        plugin.process(delta, now);
+      }
+      checkGameState();
+    } catch (Exception e) {
+      log.error("Unexpected Error during game process occured:", e);
+      log.error("Stopping " + this.toString());
+      shutdown();
     }
-    checkGameState();
   }
 
   @Override
@@ -130,6 +136,18 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     log.debug(this.toString() + " stopped");
     AnnotationProcessor.unprocess(this);
     super.stop();
+  }
+  
+  /**
+   * Shutdown game processor.
+   */
+  private void shutdown() {
+    Iterator<GameSession> iter = sessions.iterator();
+    while(iter.hasNext()) {
+      GameSession session = iter.next();
+      session.getConnection().close();
+    }
+    stop();
   }
 
   /**

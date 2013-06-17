@@ -13,7 +13,7 @@ INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, ge
 	(101, 300, 0.1, 500, true, 0, 114);
 
 INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
-	(101, now(), now(), 3, '', 5, 2000, 20, 'Tutorial', 500, 'default', 1, 101, null);
+	(101, now(), now(), 3, '', 5, 500, 20, 'Tutorial', 500, 'default', 1, 101, null);
 
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES 
 	(101, 107), 
@@ -29,24 +29,26 @@ INSERT IGNORE INTO path (id, name, map_id) VALUES
 
 INSERT IGNORE INTO `waypoint` (`name`, `position_x`, `position_y`, `position_z`, `sortOder`, `path_id`) VALUES
 	('Waypoint 1 - 235 x 1 x -5', 235, 1, -5, 0, 1),
-	('Waypoint 7 - -135 x 1 x -5', -135, 1, -5, 6, 1),
-	('Waypoint 6 - -125 x 1 x 45', -125, 1, 45, 5, 1),
-	('Waypoint 5 - -115 x 1 x 65', -115, 1, 65, 4, 1),
-	('Waypoint 4 - 115 x 1 x 65', 115, 1, 65, 3, 1),
-	('Waypoint 3 - 125 x 1 x 45', 125, 1, 45, 2, 1),
 	('Waypoint 2 - 135 x 1 x -5', 135, 1, -5, 1, 1),
-	('Waypoint 8 - -235 x 1 x -5', -235, 1, -5, 7, 1),
-	('Waypoint 14 - -125 x 1 x -55', -125, 1, -55, 5, 2),
-	('Waypoint 12 - 115 x 1 x -75', 115, 1, -75, 3, 2),
-	('Waypoint 9 - 235 x 1 x -5', 235, 1, -5, 0, 2),
-	('Waypoint 11 - 125 x 1 x -55', 125, 1, -55, 2, 2),
-	('Waypoint 13 - -115 x 1 x -75', -115, 1, -75, 4, 2),
-	('Waypoint 15 - -135 x 1 x -5', -135, 1, -5, 6, 2),
-	('Waypoint 16 - -235 x 1 x -5', -235, 1, -5, 7, 2),
-	('Waypoint 10 - 135 x 1 x -5', 135, 1, -5, 1, 2);
-
+	('Waypoint 3 - 115 x 1 x 65', 115, 1, 65, 2, 1),
+	('Waypoint 4 - -115 x 1 x 65', -115, 1, 65, 3, 1),
+	('Waypoint 5 - -135 x 1 x -5', -135, 1, -5, 4, 1),
+	('Waypoint 6 - -235 x 1 x -5', -235, 1, -5, 5, 1),
+	('Waypoint 7 - 235 x 1 x -5', 235, 1, -5, 0, 2),
+	('Waypoint 8 - 135 x 1 x -5', 135, 1, -5, 1, 2),
+	('Waypoint 9 - 115 x 1 x -75', 115, 1, -75, 2, 2),
+	('Waypoint 10 - -115 x 1 x -75', -115, 1, -75, 3, 2),
+	('Waypoint 11 - -135 x 1 x -5', -135, 1, -5, 4, 2),
+	('Waypoint 12 - -235 x 1 x -5', -235, 1, -5, 5, 2);
+	
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES 
-	(200, 'Wave-1', 5, 12, 12, 101, 1, 0, 'n', 'y');
+	(201, 'Wave-1', 5,  3, 12, 101, 1, 0, 'n', 'y'),
+	(202, 'Wave-2', 0, 12, 12, 101, 2, 1, 'n', 'y'),
+	(203, 'Wave-3', 0, 20, 12, 101, 1, 2, 'y', 'n');
 
 insert into wave_units (Wave_id, units_id)
-(select 200, u.id from unit u where u.name = "Ratamahatta");
+(select 201, u.id from unit u where u.name = "Ratamahatta");
+insert into wave_units (Wave_id, units_id)
+(select 202, u.id from unit u where u.name = "Ratamahatta");
+insert into wave_units (Wave_id, units_id)
+(select 203, u.id from unit u where u.name = "Ratamahatta");
