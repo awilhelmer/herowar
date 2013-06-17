@@ -80,15 +80,16 @@ INSERT IGNORE INTO waypoint (name, position_x, position_y, position_z, path_id, 
 INSERT IGNORE INTO waypoint (name, position_x, position_y, position_z, path_id, sortOder) VALUES ('Waypoint 3 - 145 x 1 x -45', 145.0, 1.0, -45.0, 3, 2);
 INSERT IGNORE INTO waypoint (name, position_x, position_y, position_z, path_id, sortOder) VALUES ('Waypoint 4 - 105 x 1 x 5', 105.0, 1.0, 5.0, 3, 3);
 
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (1, 'Wave-1', 5, 12, 12, 102, 3, 0, 'n', 'y');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (2, 'Wave-2', 0, 14, 30, 102, 3, 1, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (3, 'Wave-3', 0, 12, 12, 102, 3, 2, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (4, 'Wave-4', 0,  3, 10, 102, 3, 3, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (5, 'Wave-5', 0, 20, 30, 102, 3, 4, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (6, 'Wave-6', 0, 30, 12, 102, 3, 5, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (7, 'Wave-7', 0, 40, 50, 102, 3, 6, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (8, 'Wave-8', 0, 30, 12, 102, 3, 7, 'y', 'n');
-INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES (9, 'Wave-9', 0, 45, 50, 102, 3, 8, 'y', 'n');
+INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES 
+	(1, 'Wave-1', 5, 12, 12, 102, 3, 0, 'n', 'y'),
+	(2, 'Wave-2', 0, 14, 30, 102, 3, 1, 'y', 'y'),
+	(3, 'Wave-3', 0, 12, 12, 102, 3, 2, 'y', 'y'),
+	(4, 'Wave-4', 0,  3, 10, 102, 3, 3, 'y', 'y'),
+	(5, 'Wave-5', 0, 20, 30, 102, 3, 4, 'y', 'y'),
+	(6, 'Wave-6', 0, 30, 12, 102, 3, 5, 'y', 'y'),
+	(7, 'Wave-7', 0, 40, 50, 102, 3, 6, 'y', 'y'),
+	(8, 'Wave-8', 0, 30, 12, 102, 3, 7, 'y', 'y'),
+	(9, 'Wave-9', 0, 45, 50, 102, 3, 8, 'y', 'y');
 
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
 (select 1, u.id from unit u where u.name = "Ratamahatta");

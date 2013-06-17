@@ -16,14 +16,16 @@ import game.network.PacketType;
 public class WaveUpdatePacket extends BasePacket {
 
   protected int current;
+  protected long start;
   protected long eta;
   protected List<Vector3> positions;
   protected List<String> units;
 
-  public WaveUpdatePacket(int current, long eta, List<Vector3> positions, List<String> units) {
+  public WaveUpdatePacket(int current, long start, long eta, List<Vector3> positions, List<String> units) {
     super();
     this.type = PacketType.WaveUpdatePacket;
     this.current = current;
+    this.start = start;
     this.eta = eta;
     this.positions = positions;
     this.units = units;
@@ -35,6 +37,14 @@ public class WaveUpdatePacket extends BasePacket {
 
   public void setCurrent(int current) {
     this.current = current;
+  }
+  
+  public long getStart() {
+    return start;
+  }
+
+  public void setStart(long start) {
+    this.start = start;
   }
 
   public long getEta() {

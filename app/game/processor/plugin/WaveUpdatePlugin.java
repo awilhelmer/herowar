@@ -68,14 +68,14 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
       long eta = getWaveEta();
       List<Vector3> positions = getNextWavePositions();
       List<String> units = getNextWaveUnits();
-      sendPacket(session, new WaveInitPacket(index, eta, total, positions, units));
+      sendPacket(session, new WaveInitPacket(index, waveStartDate, eta, total, positions, units));
       getInitPacket().replace(playerId, true);
     }
     if (waveUpdated) {
       long eta = getWaveEta();
       List<Vector3> positions = getNextWavePositions();
       List<String> units = getNextWaveUnits();
-      sendPacket(session, new WaveUpdatePacket(index, eta, positions, units));
+      sendPacket(session, new WaveUpdatePacket(index, waveStartDate, eta, positions, units));
     }
   }
 

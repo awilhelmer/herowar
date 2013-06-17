@@ -27,10 +27,10 @@ class WaveIncomingHUDElement extends BaseHUDElement
 	
 	update: (delta, now) ->
 		return unless @waves.get '_active'
-		@_showWaveIncoming delta
+		@_showWaveIncoming delta, now
 		return
 	
-	_showWaveIncoming: (delta) ->
+	_showWaveIncoming: (delta, now) ->
 		positions = @waves.get 'positions'
 		if positions?.length isnt 0
 			position = @_convertWaypointToCanvasCoords positions[0] # TODO: show other positions also since it could be more than one start point for the next wave...
@@ -38,7 +38,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			@_drawDirection position, limitedTo if limitedTo isnt ''
 			@_drawIcon position
 			@_drawStartInfo position, limitedTo if @waves.get('current') is 0
-			@_updateHovering position, limitedTo
+			@_updateHovering now, position, limitedTo
 			@_updateScale delta
 		return
 
@@ -118,14 +118,32 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		return
 
 	_drawIcon: (position) ->
+		# Incoming eta
 		@ctx.beginPath()
-		@ctx.fillStyle = '#111111'
-		@ctx.strokeStyle = '#FF0000'
-		@ctx.lineWidth = 4
-		@ctx.arc position.x, position.y, @iconRadius, 0, 2 * Math.PI
+		@ctx.fillStyle = '#FF0000'
+		radius = 2 * Math.PI
+		if @waves.get('eta')
+			perc = (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start'))
+			if perc <= 1
+				console.log 'Now', Date.now() - @waves.get('start'), 'Eta', @waves.get('eta') - @waves.get('start'), 'Value', (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start'))
+				radius *= perc
+		@ctx.arc position.x, position.y, @iconRadius, 0, radius
 		@ctx.closePath()
 		@ctx.fill()
+		# Incoming eta border
+		@ctx.beginPath()
+		@ctx.strokeStyle = '#000000'
+		@ctx.lineWidth = 1
+		@ctx.arc position.x, position.y, @iconRadius, 0, 2 * Math.PI
+		@ctx.closePath()
 		@ctx.stroke()
+		# Icon background
+		@ctx.beginPath()
+		@ctx.fillStyle = '#111111'
+		@ctx.arc position.x, position.y, @iconRadius - 4, 0, 2 * Math.PI
+		@ctx.closePath()
+		@ctx.fill()
+		
 		@ctx.drawImage @skullImage, position.x - @iconRadius * 0.75, position.y - @iconRadius * 0.75, @iconRadius * 1.5, @iconRadius * 1.5 if @skullImageLoaded
 		return
 
@@ -180,11 +198,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.fillText 'CLICK TO CALL IT EARLY', size.x + size.w / 2, newY + 25
 		return
 
-	_updateHovering: (position, limitedTo) ->
+	_updateHovering: (now, position, limitedTo) ->
 		if @_isHovering position
 			units = @waves.get 'units'
 			@_drawWaveInfo position, limitedTo, units if units?.length isnt 0
-			events.trigger 'call:wave' if @input.get 'mouse_pressed_left'
+			events.trigger 'call:wave' if @input.get('mouse_pressed_left') and now - @waves.get('start') > 2000
 			unless @isHovering
 				document.body.style.cursor = 'pointer' 
 				@isHovering = true

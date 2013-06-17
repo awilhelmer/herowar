@@ -18,8 +18,8 @@ public class WaveInitPacket extends WaveUpdatePacket {
 
   private int total;
 
-  public WaveInitPacket(int current, long eta, int total, List<Vector3> positions, List<String> units) {
-    super(current, eta, positions, units);
+  public WaveInitPacket(int current, long start, long eta, int total, List<Vector3> positions, List<String> units) {
+    super(current, start, eta, positions, units);
     this.type = PacketType.WaveInitPacket;
     this.total = total;
   }
