@@ -37,7 +37,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			limitedTo = @_limitToScreen position
 			@_drawDirection position, limitedTo if limitedTo isnt ''
 			@_drawIcon position
-			@_drawStartInfo position, limitedTo
+			@_drawStartInfo position, limitedTo if @waves.get('current') is 0
 			@_updateHovering position, limitedTo
 			@_updateScale delta
 		return
