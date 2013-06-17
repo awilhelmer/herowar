@@ -21,9 +21,9 @@ class EditFormView extends FormView
 		throw 'The entityType should be set.' unless @entityType
 		throw 'The formType should be set.' unless @formType
 		if @formType is 'new'
-			@url = "/#{@entityType}"
+			@url = "/api/#{@entityType}"
 		else 
-			@url = "/#{@entityType}/#{@model.id}"
+			@url = "/api/#{@entityType}/#{@model.id}"
 			@type = 'PUT'
 	
 	getTemplateData: ->

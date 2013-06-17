@@ -7,8 +7,7 @@ class APIObjects extends Backbone.Collection
 		@model = require 'models/db/object'
 		super models, options
 
-	url: ->
-		"/object/all"
+	url: '/api/object/all'
 
 	parse: (resp) ->
 		db.add "db/objects", entry for entry in resp

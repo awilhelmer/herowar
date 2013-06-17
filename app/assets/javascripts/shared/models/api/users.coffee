@@ -7,8 +7,7 @@ class APIUsers extends Backbone.Collection
 		@model = require 'models/db/user'
 		super models, options
 
-	url: ->
-		"/user/all"
+	url: '/api/user/all'
 
 	parse: (resp) ->
 		db.add "db/users", entry for entry in resp

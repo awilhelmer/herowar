@@ -4,6 +4,6 @@ db = require 'database'
 class APIMatchMaker extends Backbone.Model
 
 	url: ->
-		return "/game/match/#{@get('id')}"			
+		return "/api/game/match/#{@get('id')}"			
 
 return APIMatchMaker

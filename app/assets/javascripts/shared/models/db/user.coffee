@@ -3,6 +3,6 @@ app = require 'application'
 class Account extends Backbone.Model 
 
 	url: ->
-		"/user/#{@id}"
+		"/api/user/#{@id}"
 	
 return Account

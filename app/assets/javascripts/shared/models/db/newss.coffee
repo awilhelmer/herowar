@@ -5,7 +5,7 @@ app = require 'application'
 class Newss extends BaseCollection
 
 	url: ->
-		"/news/#{@id}"
+		"/api/news/#{@id}"
 
 	model: NewsModel
 

@@ -5,7 +5,7 @@ app = require 'application'
 class Objects extends BaseCollection
 
 	url: ->
-		"/object/#{@id}"
+		"/api/object/#{@id}"
 
 	model: ObjectModel
 

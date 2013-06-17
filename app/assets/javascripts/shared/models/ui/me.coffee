@@ -28,8 +28,7 @@ class Me extends Backbone.Model
 
 		@return {String} The me resource url.
 	###
-	url: ->
-		"/me"
+	url: '/api/me'
 
 	###
 		Enable credentials to send user cookies.

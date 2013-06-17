@@ -5,7 +5,7 @@ app = require 'application'
 class Users extends BaseCollection
 
 	url: ->
-		"/user/#{@id}"
+		"/api/user/#{@id}"
 
 	model: UserModel
 

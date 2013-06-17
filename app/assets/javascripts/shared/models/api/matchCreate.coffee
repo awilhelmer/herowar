@@ -4,7 +4,7 @@ db = require 'database'
 class APIMatchCreate extends Backbone.Model
 
 	url: ->
-		return "/game/match/create/#{@get('mapId')}" unless @has 'id'
+		return "/api/game/match/create/#{@get('mapId')}" unless @has 'id'
 
 	parse: (resp) ->
 		matchMaker = db.get 'api/matchMaker'
