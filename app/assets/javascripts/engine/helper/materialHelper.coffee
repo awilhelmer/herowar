@@ -134,6 +134,7 @@ materialHelper =
 	transformMaterial:(material, materialId) ->
 		if @isShader material.attributes
 			result = new THREE.ShaderMaterial()
+			result.map = true
 		else
 			result = new THREE.MeshBasicMaterial()
 		params = {}
@@ -164,8 +165,9 @@ materialHelper =
 					params.attributes = eval.call @, "(#{value})"
 				when 'uniforms'
 					params.uniforms = eval.call @, "(#{value})"
-					for key, u of params.uniforms when u.value
+					for key, u of params.uniforms when u.value and u.type is "t"
 						u.value = db.data().textures[u.value].clone()
+						u.value.wrapS = u.value.wrapT = THREE.RepeatWrapping
 						u.value.needsUpdate = true
 				when 'vertexShader'
 					params.vertexShader = value
