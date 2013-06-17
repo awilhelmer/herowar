@@ -95,6 +95,8 @@ class BaseEmitterEffect extends BaseEffect
 
 	setSpritePosition: (sprite) ->
 		sprite.position.copy @getPosition()
+		sprite.position.y	+= 10
+		sprite.rotation.x = THREE.Math.degToRad -90
 		sprite.position.x	+= (Math.random() - 0.5) * 0.1
 		sprite.position.y	+= (Math.random() - 0.5) * 0.0001
 		sprite.position.z	+= (Math.random() - 0.5) * 0.1
