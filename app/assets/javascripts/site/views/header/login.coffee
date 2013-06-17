@@ -13,7 +13,7 @@ class Login extends FormView
 	
 	template: templates.get 'header/login.tmpl'
 
-	url: "#{app.resourcePath()}login"
+	url: '/api/login'
 	
 	validateForm: ($Form) ->
 		isValid = true

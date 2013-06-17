@@ -3,7 +3,6 @@ db = require 'database'
 
 class APIMatchOpen extends Backbone.Model
 
-	url: ->
-		return "#{app.resourcePath()}game/match/find"			
+	url: '/api/game/match/find'			
 
 return APIMatchOpen

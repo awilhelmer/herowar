@@ -7,8 +7,7 @@ class APINews extends Backbone.Collection
 		@model = require 'models/db/news'
 		super models, options
 
-	url: ->
-		"#{app.resourcePath()}news/all"
+	url: '/api/news/all'
 
 	parse: (resp) ->
 		db.add "db/newss", entry for entry in resp

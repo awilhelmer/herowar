@@ -4,8 +4,7 @@ class MatchesRecent extends Backbone.Collection
 
 	model: require 'models/ui/match'
 
-	url: ->
-		"#{app.resourcePath()}game/match/history"
+	url: '/api/game/match/history'
 
 	###
 	comparator: (match) ->

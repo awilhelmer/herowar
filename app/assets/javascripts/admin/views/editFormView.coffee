@@ -8,7 +8,7 @@ class EditFormView extends FormView
 	
 	formType: ''
 	
-	url: '#{app.resourcePath()}dummy'
+	url: '/dummy'
 	
 	events:
 		'click .cancel-button'	: 'cancel'
@@ -21,9 +21,9 @@ class EditFormView extends FormView
 		throw 'The entityType should be set.' unless @entityType
 		throw 'The formType should be set.' unless @formType
 		if @formType is 'new'
-			@url = "#{app.resourcePath()}#{@entityType}"
+			@url = "/api/#{@entityType}"
 		else 
-			@url = "#{app.resourcePath()}#{@entityType}/#{@model.id}"
+			@url = "/api/#{@entityType}/#{@model.id}"
 			@type = 'PUT'
 	
 	getTemplateData: ->

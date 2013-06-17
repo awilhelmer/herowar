@@ -24,25 +24,19 @@ class BaseHUD
 		@$canvas = $ @canvas
 		@$canvas.addClass 'hud'
 		@font = 'Arial'
+		@ctx = @canvas.getContext '2d'
 		@resize()
 		return
 		
 	resize: ->
 		@canvas.width = @$canvas.parent().width()
 		@canvas.height = @$canvas.parent().height()
-		#console.log 'Set hud canvas size', @canvas.width, @canvas.height
-		@initCtx()
-		@update()
-		return
-
-	initCtx: ->
-		@ctx = @canvas.getContext '2d'
-		@ctx.textAlign = 'center'
-		@ctx.textBaseline = 'top'
 		return
 
 	update: (delta, now) ->
 		@ctx.clearRect 0, 0, @canvas.width, @canvas.height
+		@ctx.textAlign = 'center'
+		@ctx.textBaseline = 'top'
 		@elements.forEach (element) =>
 			if element.active
 				element.update delta, now

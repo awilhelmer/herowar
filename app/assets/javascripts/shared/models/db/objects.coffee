@@ -5,7 +5,7 @@ app = require 'application'
 class Objects extends BaseCollection
 
 	url: ->
-		"#{app.resourcePath()}object/#{@id}"
+		"/api/object/#{@id}"
 
 	model: ObjectModel
 

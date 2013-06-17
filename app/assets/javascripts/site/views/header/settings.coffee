@@ -27,7 +27,7 @@ class Settings extends BaseView
 			$CurrentTarget.addClass 'disabled'
 		$.ajax
 			type: 'POST'
-			url: "#{app.resourcePath()}logout"
+			url: '/api/logout'
 			success: (data, textStatus, jqXHR) =>
 				console.log 'Reset model'
 				@model.reset()

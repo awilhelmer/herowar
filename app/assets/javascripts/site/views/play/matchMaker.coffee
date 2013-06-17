@@ -40,7 +40,7 @@ class MatchMakerView extends BaseView
 		@xhr?.abort()
 		@model.clear()
 		$.ajax
-			url: "#{app.resourcePath()}game/match/quit"
+			url: '/api/game/match/quit'
 		return
 		
 	matchStart: ->
@@ -48,7 +48,7 @@ class MatchMakerView extends BaseView
 		@$('.start').addClass 'disabled'
 		@$('.quit').addClass 'disabled'
 		$.ajax
-			url: "#{app.resourcePath()}game/match/start/#{@model.get('id')}"		
+			url: "/api/game/match/start/#{@model.get('id')}"		
 		return
 
 	joinMatch: ->

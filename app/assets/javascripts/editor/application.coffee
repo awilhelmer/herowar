@@ -1,8 +1,6 @@
 EditorRouter = require 'editorRouter'
 
 app =
-	resourcePath: -> "http://localhost:9000/api/"	
-
 	views: {}
 	
 	start: ->

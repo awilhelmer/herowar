@@ -15,6 +15,7 @@ class AddTowerTool extends AddObject
 		events.on "retrieve:packet:#{PacketType.SERVER_BUILD_TOWER}", @onBuildTower, @
 	
 	onSelectTower: (id) ->
+		@_removeObject()
 		tower = db.get 'db/towers', id
 		name = tower.get 'name'
 		data = db.data().geometries[name]
@@ -42,10 +43,8 @@ class AddTowerTool extends AddObject
 		return
 
 	onLeaveTool: ->
-		model = @tool.get 'currentObject'
-		if model
-			model.dispose()
-			@tool.unset 'currentObject'
+		@_removeObject()
+		return
 
 	addMesh: ->
 
@@ -78,5 +77,12 @@ class AddTowerTool extends AddObject
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
+
+	_removeObject: ->
+		model = @tool.get 'currentObject'
+		if model
+			model.dispose()
+			@tool.unset 'currentObject'
+		return
 	
 return AddTowerTool
