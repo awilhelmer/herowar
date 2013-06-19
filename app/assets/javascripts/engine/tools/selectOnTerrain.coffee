@@ -1,7 +1,8 @@
+BaseTool = require 'tools/baseTool'
 scenegraph = require 'scenegraph'
 db = require 'database'
 
-class SelectOnTerrain
+class SelectOnTerrain extends BaseTool
 	
 	constructor: (@intersectHelper) ->
 		@initialize()
@@ -9,19 +10,20 @@ class SelectOnTerrain
 	initialize: ->
 		@radius = 0.5
 		@bindEvents()
+		return
 	
 	bindEvents: ->
-
-	onLeaveTool: ->
+		return
 
 	onIntersect: ->
+		return
 
 	onNonIntersect: ->
+		return
 
 	update: (position, intersect) ->
+		return
 
-	onMouseUp: (event) =>
-		
 	onMouseMove: (event) =>
 		radius = @radius
 		if radius > 1
@@ -35,5 +37,6 @@ class SelectOnTerrain
 			@update @lastPosition, @lastIntersect
 		else
 			@onNonIntersect()
+		return
 
 return SelectOnTerrain

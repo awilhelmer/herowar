@@ -1,17 +1,18 @@
-AddTower = require 'tools/addTower'
 Tools = require 'core/tools'
 events = require 'events'
 
 class GameTools extends Tools
 	
-	tools: [ 'tools/addTower', 'tools/selectTower' ]
+	defaultTools: [ 'selectTower' ]
+	
+	tools: [ 'selectTower', 'addTower' ]
 	
 	addListeners: ->
 		events.on 'select:tower', @onSelectTower, @
 		super()
 	
 	createTools: ->
-		@[tool.substring(tool.lastIndexOf('/') + 1)] = new (require tool) @intersectHelper for tool in @tools
+		@[tool] = new (require "tools/#{tool}") @intersectHelper for tool in @tools
 		return
 
 	onSelectTower: ->

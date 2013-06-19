@@ -15,7 +15,8 @@ class MeshModel extends BaseModel
 		@attributes = _.defaults {}, attributes
 		@id = @attributes.id
 		@name = @attributes.name
-		@meshBody = @attributes.meshBody	
+		@meshBody = @attributes.meshBody
+		@meshBody.userData.model = @ if @meshBody?.userData
 		obj = null
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
 			@_calculateGeometry @meshBody.geometry

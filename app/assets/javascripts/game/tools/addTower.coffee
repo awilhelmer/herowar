@@ -52,8 +52,10 @@ class AddTowerTool extends AddObject
 		return
 
 	placeMesh: ->
-		console.log 'Place tower', @tool.get('currentObject').getMainObject()
-		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position
+		obj = @tool.get 'currentObject'
+		position = obj.getMainObject().position
+		console.log 'Request placing tower', obj.name, position
+		events.trigger 'send:packet', new TowerRequestPacket @towerId, position
 		return
 	
 	onLoadGeometry: (geometry, materials, json) =>
