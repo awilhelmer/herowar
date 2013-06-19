@@ -27,7 +27,7 @@ class EditorInput extends Input
 			@model.set 'mouse_pressed_right', false if event.which is 3
 		events.trigger 'mouse:up', event
 		EditorEventbus.mouseup.dispatch event
-		unless @tool.get('active') is Constants.TOOL_BRUSH
+		unless _.has @tool.get('active'), Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', false unless @model.get('mouse_pressed_left') or @model.get('mouse_pressed_middle') or @model.get('mouse_pressed_right')
 		
@@ -38,7 +38,7 @@ class EditorInput extends Input
 			@model.set 'mouse_pressed_right', true if event.which is 3
 		events.trigger 'mouse:down', event
 		EditorEventbus.mousedown.dispatch event
-		unless @tool.get('active') is Constants.TOOL_BRUSH
+		unless _.has @tool.get('active'), Constants.TOOL_BRUSH
 			Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', false
 		
@@ -50,7 +50,7 @@ class EditorInput extends Input
 		events.trigger 'mouse:move', event
 		EditorEventbus.mousemove.dispatch event
 		#TODO check if a Tool isSelected - keyshortcut for deselecting tool for good camerahandling
-		if @tool.get('active') isnt Constants.TOOL_BRUSH and (@model.get('mouse_pressed_left') or @model.get('mouse_pressed_right'))
+		unless _.has(@tool.get('active'), Constants.TOOL_BRUSH) and (@model.get('mouse_pressed_left') or @model.get('mouse_pressed_right'))
 			Eventbus.controlsChanged.dispatch event
 		@model.set 'mouse_moved', true
 	

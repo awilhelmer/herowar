@@ -3,6 +3,7 @@ BasePropertiesView = require 'views/basePropertiesView'
 templates = require 'templates'
 Constants = require 'constants'
 log = require 'util/logger'
+events = require 'events'
 db = require 'database'
 
 class PathingProperties extends BasePropertiesView
@@ -19,14 +20,16 @@ class PathingProperties extends BasePropertiesView
 
 	bindEvents: ->
 		EditorEventbus.selectPathUI.add @selectItem
+		return
 
 	selectItem: (value) =>
 		@model = db.get 'db/paths', value
 		@render()
+		return
 
 	createWaypoint: ->
 		log.debug 'Set Tool Waypoint'
-		tool = db.get 'ui/tool'
-		tool.set 'active', Constants.TOOL_WAYPOINT
+		events.trigger 'tools:switch', Constants.TOOL_WAYPOINT
+		return
 
 return PathingProperties

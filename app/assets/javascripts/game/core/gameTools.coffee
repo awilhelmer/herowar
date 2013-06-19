@@ -6,7 +6,7 @@ class GameTools extends Tools
 	
 	tools: [ 'tools/addTower', 'tools/selectTower' ]
 	
-	addEventListeners: ->
+	addListeners: ->
 		events.on 'select:tower', @onSelectTower, @
 		super()
 	
@@ -15,7 +15,7 @@ class GameTools extends Tools
 		return
 
 	onSelectTower: ->
-		@switchTool 'addTower'
+		@addTool 'addTower', @addTower
 		return
 
 return GameTools

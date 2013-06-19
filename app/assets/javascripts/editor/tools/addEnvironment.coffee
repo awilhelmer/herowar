@@ -5,6 +5,7 @@ Constants = require 'constants'
 log = require 'util/logger'
 AddObject = require 'tools/addObject'
 engine = require 'engine'
+events = require 'events'
 db = require 'database'
 
 class AddEnvironment extends AddObject
@@ -33,8 +34,8 @@ class AddEnvironment extends AddObject
 		scenegraph = require 'scenegraph'
 		if id is 'sidebar-environment-geometries-list' and @tool.get('currentObjectId') isnt value
 			log.debug 'Set Tool Build'
+			events.trigger 'tools:switch', Constants.TOOL_BUILD
 			@tool.set
-				'active'					: Constants.TOOL_BUILD
 				'currentObjectId' 	: value
 				'currentObjectName'	: name
 			unless scenegraph.hasStaticObject @tool.get 'currentObjectId'

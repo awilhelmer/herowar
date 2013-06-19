@@ -5,7 +5,7 @@ db = require 'database'
 
 class Tools
 
-	defaultTool: null
+	defaultTools: []
 
 	constructor: ->
 		@initialize()
@@ -15,30 +15,73 @@ class Tools
 		@tool = db.get 'ui/tool'
 		@input = db.get 'input'
 		log.debug 'Set Tool Selection'
-		@tool.set 'active', @defaultTool
+		@tool.set 'active', {}
 		@createHelpers()
 		@createTools()
-		@addEventListeners()
+		@addListeners()
+		@reset()
+		return
+	
+	addListeners: ->
+		events.on 'tools:add', @addTool, @
+		events.on 'tools:switch', @switchTool, @
+		events.on 'tools:remove', @removeTool, @
+		events.on 'mouse:up', @_onMouseUp, @
+		events.on 'mouse:move', @_onMouseMove, @
+		return
 	
 	createHelpers: ->
 		@intersectHelper = new IntersectHelper()
+		return
 	
 	createTools: ->
-	
-	addEventListeners: ->
-		events.on 'mouse:up', @onMouseUp, @
-		events.on 'mouse:move', @onMouseMove, @
-	
-	onMouseUp: (event) ->
-		@[@tool.get('active')].onMouseUp event if @tool.get('active')
-		@switchTool @defaultTool if event.which is 3
-	
-	onMouseMove: ->
-		@[@tool.get('active')].onMouseMove() if @tool.get('active')
+		return
 
-	switchTool: (tool) ->
-		if @tool.get('active') isnt tool
-			@[@tool.get('active')].onLeaveTool() if @tool.get('active')
-			@tool.set 'active', tool
+	addTool: (key, tool) ->
+		console.log 'addTool', key, tool
+		activeTools = @tool.get 'active'
+		return if _.has activeTools, key
+		activeTools[key] = if _.isUndefined tool then @[key] else tool
+		console.log 'addTool done', @tool.get 'active'
+		return
+	
+	switchTool: (key, tool) ->
+		console.log 'switchTool', key, tool
+		@_leaveTool activeKey, activeTool for activeKey, activeTool of @tool.get 'active'
+		@tool.set 'active', {}
+		@addTool key, tool
+		console.log 'switchTool done', @tool.get 'active'
+		return
+	
+	removeTool: (key) ->
+		console.log 'removeTool', key
+		activeTools = @tool.get 'active'
+		return unless _.has activeTools, key
+		@_leaveTool key, activeTools[key]
+		delete activeTools[key]
+		console.log 'removeTool done', @tool.get 'active'
+		return
+	
+	reset: ->
+		activeTools = @tool.get 'active'
+		@_leaveTool key, tool for key, tool of activeTools when @defaultTools.indexOf(key) is -1
+		@tool.set 'active', _.pick activeTools, @defaultTools
+		@tool.get('active')[tool] = @[tool] for tool in @defaultTools when not _.has @tool.get('active'), tool
+		console.log 'Tools reset', @tool.get 'active'
+		return
+
+	_leaveTool: (key, tool) ->
+		console.log 'Remove tool', key, tool
+		tool.onLeaveTool()
+		return
+	
+	_onMouseUp: (event) ->
+		tool.onMouseUp event for key, tool of @tool.get 'active'
+		@reset() if event.which is 3
+		return
+	
+	_onMouseMove: ->
+		tool.onMouseMove() for key, tool of @tool.get 'active'
+		return
 
 return Tools

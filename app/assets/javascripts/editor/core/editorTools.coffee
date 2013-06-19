@@ -11,7 +11,7 @@ log = require 'util/logger'
 
 class EditorTools extends Tools
 	
-	defaultTool: Constants.TOOL_SELECTION
+	defaultTools: [ Constants.TOOL_SELECTION ]
 
 	bindEvents: ->
 		EditorEventbus.initIdChanged.add @setStartId

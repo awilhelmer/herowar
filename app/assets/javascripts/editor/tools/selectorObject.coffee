@@ -1,11 +1,12 @@
 EditorEventbus = require 'editorEventbus'
 materialHelper = require 'helper/materialHelper'
-Variables = require 'variables'
+BaseTool = require 'tools/baseTool'
 scenegraph = require 'scenegraph'
+Variables = require 'variables'
 engine = require 'engine'
 db = require 'database'
 
-class SelectorObject
+class SelectorObject extends BaseTool
 
 	constructor: (@objectHelper, @intersectHelper) ->
 		@input = db.get 'input'

@@ -3,6 +3,7 @@ BaseView = require 'views/baseView'
 Constants = require 'constants'
 templates = require 'templates'
 log = require 'util/logger'
+events = require 'events'
 db = require 'database'
 
 class ScenebarTerrainEditView extends BaseView
@@ -26,7 +27,7 @@ class ScenebarTerrainEditView extends BaseView
 		unless event then return
 		event.preventDefault()
 		log.debug 'Set Tool Brush'
-		@tool.set 'active', Constants.TOOL_BRUSH
+		events.trigger 'tools:switch', Constants.TOOL_BRUSH
 		unless @terrain.get 'brushMaterialId'
 			col = db.get 'materials'
 			mat = col.at 0
