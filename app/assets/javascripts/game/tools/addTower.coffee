@@ -13,6 +13,7 @@ class AddTowerTool extends AddObject
 	bindEvents: ->
 		events.on 'select:tower', @onSelectTower, @
 		events.on "retrieve:packet:#{PacketType.SERVER_BUILD_TOWER}", @onBuildTower, @
+		return
 	
 	onSelectTower: (id) ->
 		@_removeObject()
@@ -24,6 +25,7 @@ class AddTowerTool extends AddObject
 			'currentObjectId' 	: @internalId++
 			'currentObjectName'	: name
 		@onLoadGeometry data[0], data[1], data[2]
+		return
 
 	onBuildTower: (packet) ->
 		console.log 'onBuildTower()', packet
@@ -47,10 +49,12 @@ class AddTowerTool extends AddObject
 		return
 
 	addMesh: ->
+		return
 
 	placeMesh: ->
 		console.log 'Place tower', @tool.get('currentObject').getMainObject()
 		events.trigger 'send:packet', new TowerRequestPacket @towerId, @tool.get('currentObject').getMainObject().position
+		return
 	
 	onLoadGeometry: (geometry, materials, json) =>
 		tower = db.get 'db/towers', @towerId
@@ -63,26 +67,29 @@ class AddTowerTool extends AddObject
 		@tool.set 'currentObject', model
 		console.log 'onLoadGeometry', model
 		@addMesh()
+		return
 
 	onNonIntersect: ->
 		model = @tool.get 'currentObject'
 		model.visible false if model.visible()
+		return
 
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
-		if model
-			# position.y = 200
-			model.getMainObject().position = position
-			model.visible true unless model.visible()
+		return unless model
+		model.getMainObject().position = position
+		model.visible true unless model.visible()
+		return
 
 	onMouseUp: (event) ->
 		@placeMesh() if @tool.get('currentObject')?.visible() and !@input.get('mouse_moved') if event.which is 1
+		return
 
 	_removeObject: ->
 		model = @tool.get 'currentObject'
-		if model
-			model.dispose()
-			@tool.unset 'currentObject'
+		return unless model
+		model.dispose()
+		@tool.unset 'currentObject'
 		return
 	
 return AddTowerTool
