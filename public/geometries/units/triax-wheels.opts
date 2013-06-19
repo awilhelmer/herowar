@@ -2,6 +2,8 @@
     "health" : 1000,
 	"shield" : 500,
 	"moveSpeed" : 45,
+	"rewardScore" : 100,
+	"rewardGold" : 25,
 	"type" : "TANK",
 	"burning" : true,
 	"explode" : true,

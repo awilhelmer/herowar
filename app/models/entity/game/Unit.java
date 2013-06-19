@@ -41,6 +41,8 @@ public class Unit implements Serializable {
   private Integer health = 0;
   private Integer shield = 0;
   private Integer moveSpeed = 0;
+  private Integer rewardScore = 0;
+  private Integer rewardGold = 0;
   private Double scaleGlow = 1d;
   private UnitType type;
   private Boolean burning = false;
@@ -102,6 +104,22 @@ public class Unit implements Serializable {
 
   public void setMoveSpeed(Integer moveSpeed) {
     this.moveSpeed = moveSpeed;
+  }
+  
+  public Integer getRewardScore() {
+    return rewardScore;
+  }
+
+  public void setRewardScore(Integer rewardScore) {
+    this.rewardScore = rewardScore;
+  }
+
+  public Integer getRewardGold() {
+    return rewardGold;
+  }
+
+  public void setRewardGold(Integer rewardGold) {
+    this.rewardGold = rewardGold;
   }
 
   public Double getScaleGlow() {

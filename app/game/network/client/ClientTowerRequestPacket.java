@@ -72,14 +72,14 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
     DateFormat df = new SimpleDateFormat("hh:mm");
-    session.getGame().broadcast(new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + session.getUsername() + " build " + tower.getName()));
+    session.getGame().broadcast(
+        new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + session.getUsername() + " build " + tower.getName()));
     synchronized (playerCache) {
       playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());
       playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
     }
     session.getConnection().send(
-        Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, new Long(entity.getPrice() * -1)))
-            .toString());
+        Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, entity.getPrice() * -1)).toString());
   }
 
   public Long getId() {
@@ -89,7 +89,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public Vector3 getPosition() {
     return position;
   }

@@ -14,11 +14,11 @@ public class PlayerStatsUpdatePacket extends BasePacket {
   protected Long score;
   protected Long lives;
   protected Long gold;
-  protected Long changedScore;
-  protected Long changedLives;
-  protected Long changedGold;
-  
-  public PlayerStatsUpdatePacket(Long score, Long lives, Long gold, Long changedScore, Long changedLives, Long changedGold) {
+  protected Integer changedScore;
+  protected Integer changedLives;
+  protected Integer changedGold;
+
+  public PlayerStatsUpdatePacket(Long score, Long lives, Long gold, Integer changedScore, Integer changedLives, Integer changedGold) {
     super();
     this.type = PacketType.PlayerStatsUpdatePacket;
     this.score = score;
@@ -32,7 +32,7 @@ public class PlayerStatsUpdatePacket extends BasePacket {
   public Long getScore() {
     return score;
   }
-  
+
   public void setScore(Long score) {
     this.score = score;
   }
@@ -53,27 +53,27 @@ public class PlayerStatsUpdatePacket extends BasePacket {
     this.gold = gold;
   }
 
-  public Long getChangedScore() {
+  public Integer getChangedScore() {
     return changedScore;
   }
 
-  public void setChangedScore(Long changedScore) {
+  public void setChangedScore(Integer changedScore) {
     this.changedScore = changedScore;
   }
 
-  public Long getChangedLives() {
+  public Integer getChangedLives() {
     return changedLives;
   }
 
-  public void setChangedLives(Long changedLives) {
+  public void setChangedLives(Integer changedLives) {
     this.changedLives = changedLives;
   }
 
-  public Long getChangedGold() {
+  public Integer getChangedGold() {
     return changedGold;
   }
 
-  public void setChangedGold(Long changedGold) {
+  public void setChangedGold(Integer changedGold) {
     this.changedGold = changedGold;
   }
 

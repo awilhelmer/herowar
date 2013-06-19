@@ -2,6 +2,8 @@
     "health" : 2000,
 	"shield" : 1000,
 	"moveSpeed" : 40,
+	"rewardScore" : 200,
+	"rewardGold" : 50,
 	"type" : "AIRPLANE",
 	"burning" : true,
 	"explode" : true,

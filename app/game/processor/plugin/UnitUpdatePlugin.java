@@ -32,12 +32,10 @@ import com.ardor3d.math.type.ReadOnlyVector3;
  * 1.Build Unit Object (Ardor3D model)
  * 
  * @author Alexander Wilhelmer
+ * @author Sebastian Sachtleben
  */
 public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   private final static Logger.ALogger log = Logger.of(UnitUpdatePlugin.class);
-
-  private final static long KILL_REWARD_SCORE = 200;
-  private final static double KILL_REWARD_GOLD = 50;
 
   public UnitUpdatePlugin(GameProcessor processor) {
     super(processor);
@@ -84,15 +82,17 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
       long newScore = 0L;
       double newGold = 0L;
       synchronized (playerCache) {
-        newScore = ((long) playerCache.get(CacheConstants.SCORE)) + KILL_REWARD_SCORE;
+        newScore = ((long) playerCache.get(CacheConstants.SCORE)) + unit.getEntity().getRewardScore();
         playerCache.replace(CacheConstants.SCORE, newScore);
-        newGold = ((double) playerCache.get(CacheConstants.GOLD)) + KILL_REWARD_GOLD;
+        newGold = ((double) playerCache.get(CacheConstants.GOLD)) + unit.getEntity().getRewardGold();
         playerCache.replace(CacheConstants.KILLS, Long.parseLong(playerCache.get(CacheConstants.KILLS).toString()) + 1L);
         playerCache.replace(CacheConstants.GOLD, newGold);
         playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
       }
       session.getConnection().send(
-          Json.toJson(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), KILL_REWARD_SCORE, null, Math.round(KILL_REWARD_GOLD))).toString());
+          Json.toJson(
+              new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), unit.getEntity().getRewardScore(), null, unit.getEntity().getRewardGold()))
+              .toString());
     }
   }
 

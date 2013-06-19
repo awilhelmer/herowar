@@ -2,6 +2,8 @@
     "health" : 15000,
 	"shield" : 0,
 	"moveSpeed" : 30,
+	"rewardScore" : 200,
+	"rewardGold" : 50,
 	"type" : "TROOPER",
 	"rotation" : {
 		"x": 0,
