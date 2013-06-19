@@ -38,28 +38,22 @@ class Tools
 		return
 
 	addTool: (key, tool) ->
-		console.log 'addTool', key, tool
 		activeTools = @tool.get 'active'
 		return if _.has activeTools, key
 		activeTools[key] = if _.isUndefined tool then @[key] else tool
-		console.log 'addTool done', @tool.get 'active'
 		return
 	
 	switchTool: (key, tool) ->
-		console.log 'switchTool', key, tool
 		@_leaveTool activeKey, activeTool for activeKey, activeTool of @tool.get 'active'
 		@tool.set 'active', {}
 		@addTool key, tool
-		console.log 'switchTool done', @tool.get 'active'
 		return
 	
 	removeTool: (key) ->
-		console.log 'removeTool', key
 		activeTools = @tool.get 'active'
 		return unless _.has activeTools, key
 		@_leaveTool key, activeTools[key]
 		delete activeTools[key]
-		console.log 'removeTool done', @tool.get 'active'
 		return
 	
 	reset: ->
@@ -67,11 +61,9 @@ class Tools
 		@_leaveTool key, tool for key, tool of activeTools when @defaultTools.indexOf(key) is -1
 		@tool.set 'active', _.pick activeTools, @defaultTools
 		@tool.get('active')[tool] = @[tool] for tool in @defaultTools when not _.has @tool.get('active'), tool
-		console.log 'Tools reset', @tool.get 'active'
 		return
 
 	_leaveTool: (key, tool) ->
-		console.log 'Remove tool', key, tool
 		tool.onLeaveTool()
 		return
 	
