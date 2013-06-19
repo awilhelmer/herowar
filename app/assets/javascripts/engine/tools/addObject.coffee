@@ -1,10 +1,10 @@
-SelectorTerrain = require 'tools/selectorTerrain'
+SelectOnTerrain = require 'tools/selectOnTerrain'
 materialHelper = require 'helper/materialHelper'
 meshesFactory = require 'factory/meshes'
 scenegraph = require 'scenegraph'
 db = require 'database'
 
-class AddObject extends SelectorTerrain
+class AddObject extends SelectOnTerrain
 
 	constructor: (@intersectHelper) ->
 		@input = db.get 'input'

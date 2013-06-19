@@ -44,7 +44,7 @@ class BaseModel # extends Backbone.Model
 		return @getMainObject().position
 	
 	visible: (value) ->
-		obj.visible = value for scene, obj of @root if value
+		obj.traverse((child) -> child.visible = value) for scene, obj of @root unless _.isUndefined value
 		return @getMainObject().visible
 	
 	kill: ->

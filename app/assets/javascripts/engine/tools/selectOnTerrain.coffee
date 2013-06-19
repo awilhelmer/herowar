@@ -1,7 +1,7 @@
 scenegraph = require 'scenegraph'
 db = require 'database'
 
-class SelectorTerrain
+class SelectOnTerrain
 	
 	constructor: (@intersectHelper) ->
 		@initialize()
@@ -36,4 +36,4 @@ class SelectorTerrain
 		else
 			@onNonIntersect()
 
-return SelectorTerrain
+return SelectOnTerrain

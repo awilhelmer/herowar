@@ -1,8 +1,8 @@
-SelectorTerrain = require 'tools/selectorTerrain'
+SelectOnTerrain = require 'tools/selectOnTerrain'
 scenegraph = require 'scenegraph'
 engine = require 'engine'
 
-class SelectorPlane extends SelectorTerrain
+class SelectorPlane extends SelectOnTerrain
 	
 	color: 0xFF0000
 	

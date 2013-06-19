@@ -66,17 +66,17 @@ class AddTowerTool extends AddObject
 
 	onNonIntersect: ->
 		model = @tool.get 'currentObject'
-		model.visible = false if model.visible
+		model.visible false if model.visible()
 
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
 		if model
 			# position.y = 200
 			model.getMainObject().position = position
-			model.visible = true unless model.visible
+			model.visible true unless model.visible()
 
 	onMouseUp: (event) ->
-		@placeMesh() if @tool.get('currentObject')?.visible and !@input.get('mouse_moved') if event.which is 1
+		@placeMesh() if @tool.get('currentObject')?.visible() and !@input.get('mouse_moved') if event.which is 1
 
 	_removeObject: ->
 		model = @tool.get 'currentObject'
