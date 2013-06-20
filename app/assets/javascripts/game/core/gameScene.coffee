@@ -32,11 +32,11 @@ class GameScene extends Scene
 		return
 	
 	onUnitOut: (packet) ->
-		#console.log 'onUnitOut', packet
 		victim = scenegraph.getDynObject packet.id
 		unless packet.killedBy is null
 			killer = scenegraph.getDynObject packet.killedBy
 			killer.attributes.kills += 1
+			killer.attributes.rewardGold += packet.rewardGold
 		setTimeout =>
 			victim.kill() if victim
 		, 500
@@ -53,7 +53,6 @@ class GameScene extends Scene
 		target = owner.target
 		return unless owner and target
 		owner.attack target, packet.damage unless target.isSoonDead()
-		#console.log 'onTowerAttack', target.id, packet.damage, target.isSoonDead()
 		return
 	
 	onWaveCall: (event) ->

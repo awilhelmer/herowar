@@ -184,11 +184,12 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.font = 'bold 14px Arial'
 		newY = size.y + 10
 		@ctx.fillText 'INCOMING WAVE', size.x + size.w / 2, newY
+		@ctx.font = '14px Arial'
 		newY += 5
 		for wave in units
 			newY += 20
 			@ctx.fillText wave, size.x + size.w / 2, newY 
-		@ctx.font = 'bold 12px Arial'
+		@ctx.font = '12px Arial'
 		@ctx.fillText 'CLICK TO CALL IT EARLY', size.x + size.w / 2, newY + 25
 		return
 

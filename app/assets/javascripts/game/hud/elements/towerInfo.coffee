@@ -6,7 +6,7 @@ class TowerInfoHUDElement extends BaseHUDElement
 	
 	initialize: ->
 		@bindEvents()
-		@size = w : 160, h : 80
+		@size = w : 160, h : 100
 		return
 	
 	bindEvents: ->
@@ -40,9 +40,10 @@ class TowerInfoHUDElement extends BaseHUDElement
 		@ctx.fillStyle = '#ffffff'
 		@ctx.font = 'bold 19px Arial'
 		@ctx.fillText @tower.name, offset.x + @size.w / 2, offset.y + 10
-		@ctx.font = 'bold 14px Arial'
+		@ctx.font = '14px Arial'
 		@ctx.fillText "Owner: #{@tower.attributes.owner.name}", offset.x + @size.w / 2, offset.y + 35
 		@ctx.fillText "Kills: #{@tower.attributes.kills}", offset.x + @size.w / 2, offset.y + 55
+		@ctx.fillText "Gold:  #{@tower.attributes.rewardGold}", offset.x + @size.w / 2, offset.y + 75
 		return
 	
 	_calculateOffset: (position) ->

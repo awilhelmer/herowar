@@ -13,6 +13,7 @@ import game.network.PacketType;
 public class UnitOutPacket extends ObjectOutPacket {
 
   private Long killedBy = null;
+  private Integer rewardGold = null;
 
   public UnitOutPacket(UnitModel unit) {
     super(unit.getId());
@@ -20,6 +21,7 @@ public class UnitOutPacket extends ObjectOutPacket {
     this.position = unit.getTranslation();
     if (unit.getLastHitTower() != null) {
       this.killedBy = unit.getLastHitTower().getId();
+      this.rewardGold = unit.getEntity().getRewardGold();
     }
   }
 
@@ -29,5 +31,13 @@ public class UnitOutPacket extends ObjectOutPacket {
 
   public void setKilledBy(Long killedBy) {
     this.killedBy = killedBy;
+  }
+
+  public Integer getRewardGold() {
+    return rewardGold;
+  }
+
+  public void setRewardGold(Integer rewardGold) {
+    this.rewardGold = rewardGold;
   }
 }
