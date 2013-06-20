@@ -49,7 +49,7 @@ INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, ge
 	(102, 500, 0.1, 500, true, 0, 113);
 
 INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
-	(102,now(), now(), 3, '', 0, 800, 20, 'Path of Evil', 500, 'default', 1, 102, null);
+	(102,now(), now(), 3, '', 0, 600, 20, 'Path of Evil', 500, 'default', 1, 102, null);
 
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 105);
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 106);

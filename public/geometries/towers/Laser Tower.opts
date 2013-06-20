@@ -1,6 +1,6 @@
 {
 	"description" : "The Laser Tower provides protection against all unit types and with moderate damage.",
-    "price" : 200,
+    "price" : 150,
 	"coverage" : 100,
 	"reload" : 600,
 	"damageMin" : 100,
