@@ -22,7 +22,7 @@ class TowerInfoHUDElement extends BaseHUDElement
 	_drawTowerInfo: ->
 		viewportWidthHalf = @canvas.width / 2
 		viewportHeightHalf = @canvas.height / 2
-		position = objectUtils.positionToScreen @tower, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
+		position = objectUtils.positionCenterToScreen @tower, viewportWidthHalf, viewportHeightHalf, @view.get 'cameraScene'
 		offset = @_calculateOffset position
 		@_drawBackground offset
 		@_drawInfoText offset
@@ -47,7 +47,7 @@ class TowerInfoHUDElement extends BaseHUDElement
 		return
 	
 	_calculateOffset: (position) ->
-		return x: position.x - @size.w / 2, y: position.y - @size.h
+		return x: position.x - @size.w / 2, y: position.y - @size.h - 50
 	
 	_select: (@tower) ->
 		return

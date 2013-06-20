@@ -70,6 +70,10 @@ objectUtils =
 		position.y += (boundaryBox.max.y - boundaryBox.min.y) * obj.meshBody.scale.y
 		return viewUtils.positionToScreen position, viewportWidthHalf, viewportHeightHalf, camera
 
+	positionCenterToScreen: (obj, viewportWidthHalf, viewportHeightHalf, camera) ->
+		position = obj.getMainObject().position.clone()
+		return viewUtils.positionToScreen position, viewportWidthHalf, viewportHeightHalf, camera
+
 	_disposeMaterial: (material) ->
 		if _.isArray material.materials
 			@_disposeMaterial child for child in material.materials
