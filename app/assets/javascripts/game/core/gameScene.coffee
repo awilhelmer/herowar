@@ -14,7 +14,6 @@ class GameScene extends Scene
 		@addEventListeners()
 		
 	addEventListeners: ->
-		events.on "retrieve:packet:#{PacketType.SERVER_CHAT_MESSAGE}", @onChatMessage, @
 		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_IN}", @onUnitIn, @
 		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_OUT}", @onUnitOut, @
 		events.on "retrieve:packet:#{PacketType.SERVER_TARGET_TOWER}", @onTowerTarget, @
@@ -22,11 +21,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 		events.on 'call:wave', @onWaveCall, @
-	
-	onChatMessage: (packet) ->
-		console.log 'Message: ', packet.message
-		return
-	
+		
 	onUnitIn: (packet) ->
 		enemiesFactory.create packet
 		return
@@ -56,7 +51,6 @@ class GameScene extends Scene
 		return
 	
 	onWaveCall: (event) ->
-		console.log 'onWaveCall...'
 		events.trigger 'send:packet', new WaveRequestPacket()
 		return
 	
