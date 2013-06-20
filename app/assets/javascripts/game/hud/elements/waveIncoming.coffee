@@ -19,6 +19,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@iconRadius = 30
 		@isHovering = false
 		@nextWaveEnemies = []
+		@alpha = 1.0
 		return
 	
 	update: (delta, now) ->
@@ -29,13 +30,21 @@ class WaveIncomingHUDElement extends BaseHUDElement
 	_showWaveIncoming: (delta, now) ->
 		positions = @waves.get 'positions'
 		if positions?.length isnt 0
-			position = @_convertWaypointToCanvasCoords positions[0] # TODO: show other positions also since it could be more than one start point for the next wave...
-			limitedTo = @_limitToScreen position
-			@_drawDirection position, limitedTo if limitedTo isnt ''
-			@_drawIcon position
-			@_drawStartInfo position, limitedTo if @waves.get('current') is 0
-			@_updateHovering now, position, limitedTo
-			@_updateScale delta
+			if @clickedTime and now - @clickedTime > 2000
+				delete @clickedTime
+				@alpha = 1.0
+			else if @clickedTime and @alpha > 0
+				@alpha -= delta * 1.5
+				console.log 'Alpha', @alpha
+				@alpha = 0 if @alpha < 0
+			if @alpha isnt 0
+				position = @_convertWaypointToCanvasCoords positions[0] # TODO: show other positions also since it could be more than one start point for the next wave...
+				limitedTo = @_limitToScreen position
+				@_drawDirection position, limitedTo if limitedTo isnt ''
+				@_drawIcon position
+				@_drawStartInfo position, limitedTo if @waves.get('current') is 0
+				@_updateHovering now, position, limitedTo
+				@_updateScale delta
 		return
 
 	_convertWaypointToCanvasCoords: (position) ->
@@ -75,7 +84,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 
 	_drawDirection: (position, limitedTo) ->
 		@ctx.beginPath()
-		@ctx.fillStyle = '#111111'
+		@ctx.fillStyle = "rgba(17, 17, 17, #{@alpha})"
 		switch limitedTo
 			when 'top'
 				@ctx.moveTo position.x - 20, position.y
@@ -116,7 +125,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 	_drawIcon: (position) ->
 		# Incoming eta
 		@ctx.beginPath()
-		@ctx.fillStyle = '#FF0000'
+		@ctx.fillStyle = "rgba(255, 0, 0, #{@alpha})"
 		s = 1.5 * Math.PI
 		perc = 1
 		perc = (Date.now() - @waves.get('start')) / (@waves.get('eta') - @waves.get('start')) if @waves.get('eta')
@@ -126,19 +135,19 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.fill()
 		# Incoming eta border
 		@ctx.beginPath()
-		@ctx.strokeStyle = '#000000'
+		@ctx.strokeStyle = "rgba(0, 0, 0, #{@alpha})"
 		@ctx.lineWidth = 1
 		@ctx.arc position.x, position.y, @iconRadius, 0, 2 * Math.PI
 		@ctx.closePath()
 		@ctx.stroke()
 		# Icon background
 		@ctx.beginPath()
-		@ctx.fillStyle = '#111111'
+		@ctx.fillStyle = "rgba(17, 17, 17, #{@alpha})"
 		@ctx.arc position.x, position.y, @iconRadius - 4, 0, 2 * Math.PI
 		@ctx.closePath()
 		@ctx.fill()
 		# Icon skull image / TODO: preload this image ...
-		@ctx.drawImage @skullImage, position.x - @iconRadius * 0.75, position.y - @iconRadius * 0.75, @iconRadius * 1.5, @iconRadius * 1.5 if @skullImageLoaded
+		@ctx.drawImage @skullImage, position.x - @iconRadius * 0.75, position.y - @iconRadius * 0.75, @iconRadius * 1.5, @iconRadius * 1.5 if @alpha is 1.0 and @skullImageLoaded 
 		return
 
 	_drawStartInfo: (position, limitedTo) ->
@@ -149,8 +158,8 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			w: 175
 			h: 60
 		@ctx.beginPath()
-		@ctx.fillStyle = '#ffffff'
-		@ctx.strokeStyle = '#000000'
+		@ctx.fillStyle = "rgba(255, 255, 255, #{@alpha})"
+		@ctx.strokeStyle = "rgba(0, 0, 0, #{@alpha})"
 		@ctx.lineWidth = 1
 		canvasUtils.drawBubble @ctx,
 			x: size.x - (size.w * @scale - size.w) / 2
@@ -161,7 +170,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.closePath()
 		@ctx.fill()
 		@ctx.stroke()
-		@ctx.fillStyle = '#000000'
+		@ctx.fillStyle = "rgba(0, 0, 0, #{@alpha})"
 		@ctx.font = 'bold 19px Arial'
 		@ctx.fillText 'START BATTLE!', size.x + size.w / 2, size.y + 10
 		@ctx.font = 'bold 14px Arial'
@@ -176,11 +185,11 @@ class WaveIncomingHUDElement extends BaseHUDElement
 			w: 175
 			h: height
 		@ctx.beginPath()
-		@ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+		@ctx.fillStyle = "rgba(0, 0, 0, #{@alpha / 2})"
 		@ctx.rect size.x, size.y, size.w, size.h
 		@ctx.closePath()
 		@ctx.fill()
-		@ctx.fillStyle = '#ffffff'
+		@ctx.fillStyle = "rgba(255, 255, 255, #{@alpha})"
 		@ctx.font = 'bold 14px Arial'
 		newY = size.y + 10
 		@ctx.fillText 'INCOMING WAVE', size.x + size.w / 2, newY
@@ -197,7 +206,9 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		if @_isHovering position
 			units = @waves.get 'units'
 			@_drawWaveInfo position, limitedTo, units if units?.length isnt 0
-			events.trigger 'call:wave' if @input.get('mouse_pressed_left') and now - @waves.get('start') > 2000
+			if not @clickedTime and @input.get 'mouse_pressed_left'
+				@clickedTime = now 
+				events.trigger 'call:wave'
 			unless @isHovering
 				document.body.style.cursor = 'pointer' 
 				@isHovering = true
