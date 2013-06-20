@@ -35,7 +35,6 @@ class WaveIncomingHUDElement extends BaseHUDElement
 				@alpha = 1.0
 			else if @clickedTime and @alpha > 0
 				@alpha -= delta * 1.5
-				console.log 'Alpha', @alpha
 				@alpha = 0 if @alpha < 0
 			if @alpha isnt 0
 				position = @_convertWaypointToCanvasCoords positions[0] # TODO: show other positions also since it could be more than one start point for the next wave...
