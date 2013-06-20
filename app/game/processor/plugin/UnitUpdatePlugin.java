@@ -5,6 +5,7 @@ import game.models.UnitModel;
 import game.network.server.ObjectOutPacket;
 import game.network.server.PlayerLivesUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
+import game.network.server.UnitOutPacket;
 import game.processor.CacheConstants;
 import game.processor.GameProcessor;
 import game.processor.meta.AbstractPlugin;
@@ -67,7 +68,7 @@ public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
   }
 
   private void handleUnitDeath(UnitModel unit) {
-    ObjectOutPacket packet = new ObjectOutPacket(unit.getId());
+    UnitOutPacket packet = new UnitOutPacket(unit);
     broadcast(packet);
     if (unit.isEndPointReached()) {
       if (getProcessor().getMap().getLives() > 0) {

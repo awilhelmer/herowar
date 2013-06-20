@@ -1,5 +1,6 @@
 WaveRequestPacket = require 'network/packets/waveRequestPacket'
 PacketType = require 'network/packets/packetType'
+enemiesFactory = require 'factory/enemies'
 scenegraph = require 'scenegraph'
 Scene = require 'core/scene'
 events = require 'events'
@@ -14,7 +15,8 @@ class GameScene extends Scene
 		
 	addEventListeners: ->
 		events.on "retrieve:packet:#{PacketType.SERVER_CHAT_MESSAGE}", @onChatMessage, @
-		events.on "retrieve:packet:#{PacketType.SERVER_OBJECT_OUT}", @onObjectOut, @
+		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_IN}", @onUnitIn, @
+		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_OUT}", @onUnitOut, @
 		events.on "retrieve:packet:#{PacketType.SERVER_TARGET_TOWER}", @onTowerTarget, @
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
@@ -25,8 +27,12 @@ class GameScene extends Scene
 		console.log 'Message: ', packet.message
 		return
 	
-	onObjectOut: (packet) ->
-		#console.log 'onObjectOut', packet.id
+	onUnitIn: (packet) ->
+		enemiesFactory.create packet
+		return
+	
+	onUnitOut: (packet) ->
+		#console.log 'onUnitOut', packet
 		obj = scenegraph.getDynObject packet.id
 		setTimeout =>
 			obj.kill() if obj
