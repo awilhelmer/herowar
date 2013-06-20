@@ -3,12 +3,12 @@ canvasUtils = require 'util/canvasUtils'
 db = require 'database'
 
 class WaveProgressHUDElement extends BaseHUDElement
-	
-	constructor: (canvas, view) ->
-		super canvas, view
+			
+	initialize: ->
 		@waves = db.get 'ui/waves'
 		@alpha = 1.0
 		@startInfo = true
+		return
 	
 	update: (delta, now) ->
 		return unless @waves.get '_active'

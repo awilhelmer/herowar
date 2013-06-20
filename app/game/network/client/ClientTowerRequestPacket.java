@@ -70,7 +70,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.updateWorldTransform(false);
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
-    session.getGame().broadcast(new TowerBuildPacket(tower.getId(), tower.getDbId(), session.getPlayer().getId(), this.position));
+    session.getGame().broadcast(new TowerBuildPacket(tower, this.position));
     DateFormat df = new SimpleDateFormat("hh:mm");
     session.getGame().broadcast(
         new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + session.getUsername() + " build " + tower.getName()));

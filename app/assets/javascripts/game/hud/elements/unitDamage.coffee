@@ -8,10 +8,13 @@ class UnitDamageHudElement extends BaseHUDElement
 	
 	constructor: (canvas, view, @unit, @damage) ->
 		super canvas, view
+		
+	initialize: ->
 		@positionWorld = @unit.getMainObject().position
-		@positionScreen = objectUtils.positionToScreen @unit, @getHalfWidth(), @getHalfHeight(), view.get 'cameraScene'
+		@positionScreen = objectUtils.positionToScreen @unit, @getHalfWidth(), @getHalfHeight(), @view.get 'cameraScene'
 		@birthDate	= Date.now()
 		@color = if @unit.currentShield > 0 then '32,124,202' else '205,24,31'
+		return
 
 	update: (delta, now) ->
 		age	= now - @birthDate

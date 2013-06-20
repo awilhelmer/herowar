@@ -1,5 +1,6 @@
 SelectObject = require 'tools/selectObject'
 TowerModel = require 'models/scene/tower'
+events = require 'events'
 
 class SelectTower extends SelectObject
 
@@ -12,12 +13,14 @@ class SelectTower extends SelectObject
 
 	onNoResultFound: ->
 		@currentSelected.selected false if @currentSelected
+		events.trigger 'tower:deselect'
 		return
 
 	onResultFound: (object) ->
 		@currentSelected.selected false if @currentSelected
 		@currentSelected = object.userData.model
 		@currentSelected.selected true
+		events.trigger 'tower:select', @currentSelected
 		console.log 'Tower selection detected', @currentSelected
 		return
 

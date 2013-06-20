@@ -266,7 +266,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
       position.setY(tower.getTranslation().getY());
       position.setZ(tower.getTranslation().getZ());
       log.info("Send player info about tower " + tower.getId() + " at " + position.toString());
-      session.getConnection().send(Json.toJson(new TowerBuildPacket(tower.getId(), tower.getDbId(), tower.getSession().getPlayerId(), position)).toString());
+      session.getConnection().send(Json.toJson(new TowerBuildPacket(tower, position)).toString());
       if (tower.getTarget() != null) {
         log.info("Send player info about tower " + tower.getId() + " target unit " + tower.getTarget().getId());
         session.getConnection().send(Json.toJson(new TowerTargetPacket(tower.getId(), tower.getTarget().getId())).toString());

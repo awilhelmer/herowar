@@ -6,10 +6,6 @@ db = require 'database'
 
 class WaveIncomingHUDElement extends BaseHUDElement
 	
-	constructor: (canvas, view) ->
-		super canvas, view
-		@initialize()
-		
 	initialize: ->
 		@waves = db.get 'ui/waves'
 		@input = db.get 'input'
@@ -141,7 +137,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@ctx.arc position.x, position.y, @iconRadius - 4, 0, 2 * Math.PI
 		@ctx.closePath()
 		@ctx.fill()
-		
+		# Icon skull image / TODO: preload this image ...
 		@ctx.drawImage @skullImage, position.x - @iconRadius * 0.75, position.y - @iconRadius * 0.75, @iconRadius * 1.5, @iconRadius * 1.5 if @skullImageLoaded
 		return
 

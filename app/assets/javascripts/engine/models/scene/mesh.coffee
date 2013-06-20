@@ -12,7 +12,8 @@ class MeshModel extends BaseModel
 	boundingBoxMesh: null
 		
 	constructor: (attributes) ->
-		attributes = _.defaults { selected: false }, attributes
+		attributes = _.defaults {}, attributes,
+			selected: false
 		@id = attributes.id
 		@name = attributes.name
 		@meshBody = attributes.meshBody

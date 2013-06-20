@@ -38,6 +38,7 @@ class AddTowerTool extends AddObject
 				y: packet.position.y
 				z: packet.position.z
 			rotationSpeed: tower.get 'rotationSpeed'
+			owner: id: packet.playerId, name: packet.playerName
 		model.active = true
 		model.range = tower.get 'coverage'
 		model.reload = tower.get 'reload'

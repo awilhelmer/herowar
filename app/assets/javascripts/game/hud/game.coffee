@@ -7,9 +7,10 @@ __damage__ = {}
 class GameHUD extends BaseHUD
 	
 	default: [
+		'hud/elements/towerInfo'
+		'hud/elements/unitHealthBars'
 		'hud/elements/waveProgress'
 		'hud/elements/waveIncoming'
-		'hud/elements/unitHealthBars'
 	]
 
 	bindEvents: ->

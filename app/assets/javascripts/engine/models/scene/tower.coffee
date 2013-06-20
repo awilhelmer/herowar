@@ -15,6 +15,7 @@ class Tower extends AnimatedModel
 			range    : 0
 			weapons  : []
 			position : undefined
+			kills    : 0
 		@meshBody = opts.meshBody = meshesFactory.create opts.id, opts.name
 		super opts
 		@weapons = []

@@ -33,9 +33,12 @@ class GameScene extends Scene
 	
 	onUnitOut: (packet) ->
 		#console.log 'onUnitOut', packet
-		obj = scenegraph.getDynObject packet.id
+		victim = scenegraph.getDynObject packet.id
+		unless packet.killedBy is null
+			killer = scenegraph.getDynObject packet.killedBy
+			killer.attributes.kills += 1
 		setTimeout =>
-			obj.kill() if obj
+			victim.kill() if victim
 		, 500
 		return
 			
