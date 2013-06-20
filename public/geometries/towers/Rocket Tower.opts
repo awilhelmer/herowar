@@ -1,6 +1,6 @@
 {
 	"description" : "The Rocket Tower attack only airplanes but with high damage.",
-    "price" : 1000,
+    "price" : 200,
 	"coverage" : 180,
 	"reload" : 900,
 	"damageMin" : 250,
