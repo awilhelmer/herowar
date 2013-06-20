@@ -41,7 +41,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private int index;
   private int total;
 
-  private long waveStartDate;
+  private long waveStartDate = 0;
   private boolean waveUpdated = false;
 
   public WaveUpdatePlugin(GameProcessor processor) {
@@ -109,7 +109,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     }
     return positions;
   }
-  
+
   private List<String> getNextWaveUnits() {
     List<String> names = new ArrayList<String>();
     if (next != null && next.isRequestable() && next.getPath().getWaypoints().size() > 0) {
@@ -122,13 +122,17 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   private boolean checkWaveUpdate(long now) {
     if (next != null) {
-      if ((next.isAutostart() && getWaveEta() <= now) || (next.isRequestable() && getProcessor().isWaveRequest())) {
+      if ((next.isAutostart() && getWaveEta() <= now) || waveIsRequestable(now)) {
         getProcessor().setWaveRequest(false);
         loadNextWave(now);
         return true;
       }
     }
     return false;
+  }
+
+  private boolean waveIsRequestable(long now) {
+    return next.isRequestable() && getProcessor().isWaveRequest() && waveStartDate + 2000 <= now;
   }
 
   private void loadNextWave(long now) {
