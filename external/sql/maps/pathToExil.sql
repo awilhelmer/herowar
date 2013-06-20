@@ -42,11 +42,14 @@ INSERT IGNORE INTO material (id, attributes, blending, color, colorAmbient, colo
 \n        vPosition = position;
 \n        gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1) ;
 \n    }', null);
-INSERT IGNORE INTO material (id, blending, color, colorAmbient, colorDiffuse, colorSpecular, dbgColor, dbgIndex, dbgname, depthTest, depthWrite, mapDiffuse, mapDiffuseWrap, name, opacity, shading, sortIndex, specularCoef, transparency, transparent, vertexColors, texture_id) VALUES (106, null, '#ff9999', null, null, null, null, null, null, null, null, null, null, 'Mat.2', 1.0, null, 1, null, null, false, null, null);
+INSERT IGNORE INTO material (id, blending, color, colorAmbient, colorDiffuse, colorSpecular, dbgColor, dbgIndex, dbgname, depthTest, depthWrite, mapDiffuse, mapDiffuseWrap, name, opacity, shading, sortIndex, specularCoef, transparency, transparent, vertexColors, texture_id) VALUES 
+	(106, null, '#ff9999', null, null, null, null, null, null, null, null, null, null, 'Mat.2', 1.0, null, 1, null, null, false, null, null);
 
-INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, geometry_id) VALUES (102, 500, 0.1, 500, true, 0, 113);
+INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, geometry_id) VALUES 
+	(102, 500, 0.1, 500, true, 0, 113);
 
-INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES (102,now(), now(), 3, '', 5, 2000, 20, 'Path of Evil', 500, 'default', 1, 102, null);
+INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
+	(102,now(), now(), 3, '', 0, 800, 20, 'Path of Evil', 500, 'default', 1, 102, null);
 
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 105);
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 106);

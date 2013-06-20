@@ -62,6 +62,9 @@ public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   public void addPlayer(GameSession session) {
     if (!getPlayerCache(session.getPlayerId()).containsKey(CacheConstants.GOLD)) {
       double startValue = getProcessor().getMap().getGoldStart().doubleValue();
+      if (getMatch().getPlayerResults().size() > 1) {
+        startValue = Math.round(startValue / new Double(getMatch().getPlayerResults().size()) * 1.2);
+      }
       getPlayerCache(session.getPlayerId()).put(CacheConstants.GOLD, startValue);
     }
     getInitPacket().put(session.getPlayerId(), false);

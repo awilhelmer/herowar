@@ -132,6 +132,11 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private boolean waveIsRequestable(long now) {
+    // TODO: this is ugly but otherwise multiple waves will be requested with one click...
+    if (waveStartDate + 2000 > now && getProcessor().isWaveRequest()) {
+      getProcessor().setWaveRequest(false);
+      return false;
+    }
     return next.isRequestable() && getProcessor().isWaveRequest() && waveStartDate + 2000 <= now;
   }
 

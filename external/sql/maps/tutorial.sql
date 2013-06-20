@@ -13,7 +13,7 @@ INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, ge
 	(101, 300, 0.1, 500, true, 0, 114);
 
 INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
-	(101, now(), now(), 3, '', 5, 500, 20, 'Tutorial', 500, 'default', 1, 101, null);
+	(101, now(), now(), 3, '', 0, 200, 20, 'Tutorial', 500, 'default', 1, 101, null);
 
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES 
 	(101, 107), 

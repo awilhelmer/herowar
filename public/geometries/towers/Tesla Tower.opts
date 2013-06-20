@@ -1,6 +1,6 @@
 {
 	"description" : "The Telsa Tower provides a lot damage to all unit types but reload slowly.",
-    "price" : 500,
+    "price" : 1000,
 	"coverage" : 100,
 	"reload" : 1800,
 	"damageMin" : 500,
