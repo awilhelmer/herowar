@@ -54,6 +54,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
 
   @Transactional
   public static Result showByEnv(Long id) {
+    response().setHeader(EXPIRES, "Thu, 16 Feb 2023 20:00:00 GMT");
     Environment env = EnvironmentDAO.getInstance().getById(id);
     if (env == null || env.getGeometry() == null) {
       return badRequest("No result found");
@@ -66,6 +67,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
   
   @Transactional
   public static Result showByUnit(Long id) {
+    response().setHeader(EXPIRES, "Thu, 16 Feb 2023 20:00:00 GMT");
     Unit unit = UnitDAO.getInstance().getById(id);
     if (unit == null || unit.getGeometry() == null) {
       return badRequest("No result found");
@@ -78,6 +80,7 @@ public class Geometries extends BaseAPI<Long, Geometry> {
   
   @Transactional
   public static Result showByTower(Long id) {
+    response().setHeader(EXPIRES, "Thu, 16 Feb 2023 20:00:00 GMT");
     Tower tower = TowerDAO.getInstance().getById(id);
     if (tower == null || tower.getGeometry() == null) {
       return badRequest("No result found");
