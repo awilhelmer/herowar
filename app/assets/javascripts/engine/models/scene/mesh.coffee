@@ -12,10 +12,10 @@ class MeshModel extends BaseModel
 	boundingBoxMesh: null
 		
 	constructor: (attributes) ->
-		@attributes = _.defaults {}, attributes
-		@id = @attributes.id
-		@name = @attributes.name
-		@meshBody = @attributes.meshBody
+		attributes = _.defaults { selected: false }, attributes
+		@id = attributes.id
+		@name = attributes.name
+		@meshBody = attributes.meshBody
 		@meshBody.userData.model = @ if @meshBody?.userData
 		obj = null
 		if @meshBody instanceof THREE.Mesh or @meshBody instanceof THREE.MorphAnimMesh
@@ -33,6 +33,23 @@ class MeshModel extends BaseModel
 	update: (delta, now) ->
 		super delta, now
 		#@checkGroundCollision()
+
+	selected: (value) ->
+		unless _.isUndefined value
+			unless @meshSelection
+				scale = @meshBody.scale
+				boundingBox = @meshBody.geometry.boundingBox
+				innerRadius = Math.ceil Math.max((boundingBox.max.x - boundingBox.min.x) * scale.x, (boundingBox.max.z - boundingBox.min.z) * scale.z) / 2 + 2
+				outerRadius = innerRadius + 2
+				material = new THREE.MeshBasicMaterial color: '#00FF00', opacity: 0.3, transparent: true
+				geometry = new THREE.RingGeometry innerRadius, outerRadius, outerRadius * 2, innerRadius * 2
+				@meshSelection = new THREE.Mesh geometry, material
+				@meshSelection.name = 'selection'
+				@meshSelection.position.y += 1.5
+				@meshSelection.rotation.x = THREE.Math.degToRad -90
+				@getMainObject().add @meshSelection
+			@meshSelection.visible = value
+		return @attributes.selected
 
 	showGlow: (time) ->
 		return if @glowIsActive

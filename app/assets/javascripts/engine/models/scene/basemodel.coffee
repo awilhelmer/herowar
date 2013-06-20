@@ -1,6 +1,6 @@
 objectUtils = require 'util/objectUtils'
 
-class BaseModel # extends Backbone.Model
+class BaseModel
 
 	rotationMultipler: null
 
@@ -9,7 +9,7 @@ class BaseModel # extends Backbone.Model
 	glowColor: 0x88ccff
 	
 	constructor: (attributes) ->
-		@attributes = _.defaults {}, attributes,
+		@attributes = _.defaults {}, attributes, 
 			rotationSpeed : 0
 			moveSpeed     : 0
 			glowColor     : 0x88ccff

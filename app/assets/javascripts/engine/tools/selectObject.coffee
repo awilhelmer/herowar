@@ -18,5 +18,6 @@ class SelectObject extends BaseTool
 
 	_handleSearchResult: (resultList) ->
 		return @onResultFound result.object for result in resultList when @isResultValid result.object
+		return @onNoResultFound() 
 		
 return SelectObject

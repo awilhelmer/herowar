@@ -10,8 +10,15 @@ class SelectTower extends SelectObject
 	isResultValid: (object) ->
 		return object?.userData?.model instanceof TowerModel
 
+	onNoResultFound: ->
+		@currentSelected.selected false if @currentSelected
+		return
+
 	onResultFound: (object) ->
-		console.log 'Tower selection detected', object.userData.model
+		@currentSelected.selected false if @currentSelected
+		@currentSelected = object.userData.model
+		@currentSelected.selected true
+		console.log 'Tower selection detected', @currentSelected
 		return
 
 return SelectTower
