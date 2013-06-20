@@ -2,11 +2,14 @@ events = require 'events'
 
 class PacketModel extends Backbone.Model
 
-	type: null
+	types: null
 	
 	timeValues: {}
 
 	rate: 1000
+
+	defaultValues:
+		_active : false
 
 	initialize: (options) ->
 		super options
@@ -19,15 +22,14 @@ class PacketModel extends Backbone.Model
 		return
 	
 	setDefaultValues: ->
-		@set defaultValues: 
-			_active : false
+		@set @defaultValues
 		return
 	
 	bindPacketEvents: ->
-		if not _.isNull(@type) and _.isArray @type
-			@bindPacketEvent t for t in @type
-		else if not _.isNull @type
-			@bindPacketEvent @type
+		if not _.isNull(@types) and _.isArray @types
+			@bindPacketEvent t for t in @types
+		else if not _.isNull @types
+			@bindPacketEvent @types
 		return
 	
 	bindPacketEvent: (type) ->

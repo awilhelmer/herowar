@@ -202,11 +202,13 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		return
 
 	_updateHovering: (now, position, limitedTo) ->
-		if @_isHovering position
+		if not @clickedTime and @_isHovering position
 			units = @waves.get 'units'
 			@_drawWaveInfo position, limitedTo, units if units?.length isnt 0
 			if not @clickedTime and @input.get 'mouse_pressed_left'
 				@clickedTime = now 
+				document.body.style.cursor = 'default' 
+				@isHovering = false
 				events.trigger 'call:wave'
 			unless @isHovering
 				document.body.style.cursor = 'pointer' 
@@ -214,7 +216,7 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		else
 			if @isHovering
 				document.body.style.cursor = 'default' 
-				@isHovering = false		
+				@isHovering = false
 		return
 
 	_isHovering: (position) ->

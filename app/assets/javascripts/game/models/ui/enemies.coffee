@@ -3,7 +3,7 @@ PacketModel = require 'models/ui/packetModel'
 
 class Enemies extends PacketModel
 
-	type: [ PacketType.SERVER_UNIT_IN, PacketType.SERVER_UNIT_OUT ]
+	types: [ PacketType.SERVER_UNIT_IN, PacketType.SERVER_UNIT_OUT ]
 
 	defaultValues:
 		'_active' : true
@@ -13,7 +13,7 @@ class Enemies extends PacketModel
 	onPacket: (packet) ->
 		if packet 
 			current = if @get('current') then @get('current') else 0
-			if packet.type is PacketType.SERVER_OBJECT_IN
+			if packet.type is PacketType.SERVER_UNIT_IN
 				quantity = if @get('quantity') then @get('quantity') else 0
 				@set 
 					'current': ++current

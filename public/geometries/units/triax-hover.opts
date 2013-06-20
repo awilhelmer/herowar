@@ -1,5 +1,5 @@
 {
-    "health" : 25000,
+    "health" : 30000,
 	"shield" : 20000,
 	"moveSpeed" : 15,
 	"rewardScore" : 5000,

@@ -84,31 +84,34 @@ INSERT IGNORE INTO waypoint (name, position_x, position_y, position_z, path_id, 
 INSERT IGNORE INTO waypoint (name, position_x, position_y, position_z, path_id, sortOder) VALUES ('Waypoint 4 - 105 x 1 x 5', 105.0, 1.0, 5.0, 3, 3);
 
 INSERT IGNORE INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES 
-	(1, 'Wave-1', 5, 12, 12, 102, 3, 0, 'n', 'y'),
-	(2, 'Wave-2', 0, 14, 30, 102, 3, 1, 'y', 'y'),
-	(3, 'Wave-3', 0, 12, 12, 102, 3, 2, 'y', 'y'),
-	(4, 'Wave-4', 0,  3, 10, 102, 3, 3, 'y', 'y'),
-	(5, 'Wave-5', 0, 20, 30, 102, 3, 4, 'y', 'y'),
-	(6, 'Wave-6', 0, 30, 12, 102, 3, 5, 'y', 'y'),
-	(7, 'Wave-7', 0, 40, 50, 102, 3, 6, 'y', 'y'),
-	(8, 'Wave-8', 0, 30, 12, 102, 3, 7, 'y', 'y'),
-	(9, 'Wave-9', 0, 45, 50, 102, 3, 8, 'y', 'y');
+	(1,  'Wave-1',  0, 12, 12, 102, 3, 0, 'n', 'y'),
+	(2,  'Wave-2',  5, 14, 30, 102, 3, 1, 'y', 'y'),
+	(3,  'Wave-3',  0, 12, 12, 102, 3, 2, 'y', 'y'),
+	(4,  'Wave-4',  5,  3, 10, 102, 3, 3, 'y', 'y'),
+	(5,  'Wave-5',  0, 20, 30, 102, 3, 4, 'y', 'y'),
+	(6,  'Wave-6',  0, 30, 12, 102, 3, 5, 'y', 'y'),
+	(7,  'Wave-7',  0, 40, 50, 102, 3, 6, 'y', 'y'),
+	(8,  'Wave-8',  0, 30, 12, 102, 3, 7, 'y', 'y'),
+	(9,  'Wave-9',  0, 45, 50, 102, 3, 8, 'y', 'y'),
+	(10, 'Wave-10', 5,  1,  2, 102, 3, 9, 'y', 'y');
 
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 1, u.id from unit u where u.name = "Ratamahatta");
+(select  1, u.id from unit u where u.name = "Ratamahatta");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 2, u.id from unit u where u.name = "Triax-wheels");
+(select  2, u.id from unit u where u.name = "Triax-wheels");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 3, u.id from unit u where u.name = "Ratamahatta");
+(select  3, u.id from unit u where u.name = "Ratamahatta");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 4, u.id from unit u where u.name = "Spaceship-1-v1");
+(select  4, u.id from unit u where u.name = "Spaceship-1-v1");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 5, u.id from unit u where u.name = "Ratamahatta");
+(select  5, u.id from unit u where u.name = "Ratamahatta");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 6, u.id from unit u where u.name = "Ratamahatta");
+(select  6, u.id from unit u where u.name = "Ratamahatta");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 7, u.id from unit u where u.name = "Triax-wheels");
+(select  7, u.id from unit u where u.name = "Triax-wheels");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 8, u.id from unit u where u.name = "Ratamahatta");
+(select  8, u.id from unit u where u.name = "Ratamahatta");
 INSERT IGNORE INTO wave_units (Wave_id, units_id)
-(select 9, u.id from unit u where u.name = "Spaceship-1-v1");
+(select  9, u.id from unit u where u.name = "Spaceship-1-v1");
+INSERT IGNORE INTO wave_units (Wave_id, units_id)
+(select 10, u.id from unit u where u.name = "Triax-hover");

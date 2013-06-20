@@ -132,7 +132,8 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   private boolean waveIsRequestable(long now) {
-    // TODO: this is ugly but otherwise multiple waves will be requested with one click...
+    // TODO: this is ugly but otherwise multiple waves will be requested with
+    // one click...
     if (waveStartDate + 2000 > now && getProcessor().isWaveRequest()) {
       getProcessor().setWaveRequest(false);
       return false;
@@ -156,7 +157,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     }
     log.debug("Load wave " + index + " / " + total + ": " + (current != null ? current.getName() : ""));
     if (current != null) {
-      spawners.add(new WaveSpawner(current, now));
+      spawners.add(new WaveSpawner(this, current, now));
     }
     waveStartDate = now;
   }
@@ -184,7 +185,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     while (iter.hasNext()) {
       WaveSpawner spawner = iter.next();
       spawner.process(delta, now);
-      if (spawner.spawnCurrent == spawner.wave.getQuantity()) {
+      if (spawner.isDone()) {
         iter.remove();
       }
     }
@@ -196,7 +197,6 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
     synchronized (getProcessor().getUnits()) {
       getProcessor().getUnits().add(model);
     }
-    log.info(String.format("Sending new Unit to all Clients: Uitname %s PathId %s", entity.getName(), path.getId()));
     broadcast(new UnitInPacket(model));
   }
 
@@ -221,15 +221,17 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   public class WaveSpawner {
 
+    private WaveUpdatePlugin plugin;
     private Wave wave;
     private double spawnRate;
     private int spawnCurrent = 0;
     private long lastSpawnDate;
 
-    public WaveSpawner(Wave wave, long now) {
+    public WaveSpawner(WaveUpdatePlugin plugin, Wave wave, long now) {
+      this.plugin = plugin;
       this.wave = wave;
-      this.lastSpawnDate = now;
-      this.spawnRate = wave != null ? wave.getWaveTime().doubleValue() * 1000 / wave.getQuantity().doubleValue() : 0;
+      this.spawnRate = calculateSpawnRate();
+      this.lastSpawnDate = now - Math.round(this.spawnRate + 1);
     }
 
     public void process(double delta, long now) {
@@ -237,12 +239,20 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
         if (lastSpawnDate + spawnRate <= now) {
           Iterator<Unit> iter = wave.getUnits().iterator();
           Unit unit = iter.next();
-          log.debug("Create enemy for " + wave.getName());
-          createUnit(wave.getPath(), unit);
           lastSpawnDate = now;
           spawnCurrent++;
+          log.info(String.format("Wave %d/%d - Sending new unit: %s - Path %s - %d/%d", index, total, unit.getName(), wave.getPath().getId(), spawnCurrent, wave.getQuantity()));
+          plugin.createUnit(wave.getPath(), unit);
         }
       }
+    }
+    
+    public boolean isDone() {
+      return spawnCurrent >= wave.getQuantity();
+    }
+
+    private double calculateSpawnRate() {
+      return wave != null ? wave.getWaveTime().doubleValue() * 1000 / wave.getQuantity().doubleValue() : 0;
     }
   }
 }

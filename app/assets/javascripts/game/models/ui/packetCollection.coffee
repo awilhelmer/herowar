@@ -2,15 +2,17 @@ events = require 'events'
 
 class PacketCollection extends Backbone.Collection
 
+	types: null
+
 	initialize: (options) ->
 		super options
 		@bindPacketEvents()
 
 	bindPacketEvents: ->
-		if not _.isNull(@type) and _.isArray @type
-			@bindPacketEvent t for t in @type
-		else if not _.isNull @type
-			@bindPacketEvent @type
+		if not _.isNull(@types) and _.isArray @types
+			@bindPacketEvent t for t in @types
+		else if not _.isNull @types
+			@bindPacketEvent @types
 		return
 	
 	bindPacketEvent: (type) ->

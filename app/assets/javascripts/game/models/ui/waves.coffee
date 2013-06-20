@@ -3,7 +3,7 @@ PacketModel = require 'models/ui/packetModel'
 
 class Waves extends PacketModel
 
-	type: [ PacketType.SERVER_WAVE_INIT, PacketType.SERVER_WAVE_UPDATE ]
+	types: [ PacketType.SERVER_WAVE_INIT, PacketType.SERVER_WAVE_UPDATE ]
 
 	update: =>
 		if @get('_active') and not @has '_freeze'
