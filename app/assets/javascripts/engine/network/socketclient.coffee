@@ -36,6 +36,7 @@ class SocketClient
 		log.debug "Socket Status: #{@socket.readyState} (Closed)"
 		@isOpen = false
 		@isAuthenticated = false
+		Backbone.history.loadUrl 'game/interrupted'
 		return
 
 	onMessage: (event) =>
