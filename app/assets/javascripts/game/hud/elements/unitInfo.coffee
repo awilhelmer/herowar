@@ -12,7 +12,7 @@ class UnitInfoHUDElement extends ObjectHUDElement
 	
 	_drawObjectInfo: (delta, now) ->
 		super delta, now
-		if @object.currentHealth is 0 and @alpha > 0
+		if (@object.currentHealth is 0 or @object.isDisposed) and @alpha > 0
 			@alpha -= delta * 1.5
 			@alpha = 0 if @alpha < 0
 		return

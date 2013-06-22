@@ -19,7 +19,6 @@ class WaveIncomingHUDElement extends BaseHUDElement
 		@iconRadius = 30
 		@isHovering = false
 		@nextWaveEnemies = []
-		@alpha = 1.0
 		return
 	
 	update: (delta, now) ->
