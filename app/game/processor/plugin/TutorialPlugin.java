@@ -33,7 +33,16 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void process(double delta, long now) {
-    // TODO Auto-generated method stub
+    if (getProcessor().isTutorialUpdate()) {
+      state++;
+      getProcessor().setTutorialUpdate(false);
+      if (texts.length > state) {
+        getProcessor().broadcast(new TutorialUpdatePacket(state, texts[state]));
+      } else {
+        getProcessor().setWavesFinished(true);
+        getProcessor().setUnitsFinished(true);
+      }      
+    }
   }
 
   @Override

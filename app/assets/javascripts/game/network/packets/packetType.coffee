@@ -5,6 +5,7 @@ packetType =
 	CLIENT_PRELOAD_UPDATE	  		: 10
 	CLIENT_CHAT_MESSAGE         : 71
 	CLIENT_TOWER_REQUEST				: 80
+	CLIENT_TUTORIAL_UPDATE			: 86
 	CLIENT_WAVE_REQUEST         : 95
 
 	# Server Packets

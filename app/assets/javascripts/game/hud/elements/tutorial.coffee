@@ -1,3 +1,4 @@
+TutorialUpdatePacket = require 'network/packets/tutorialUpdatePacket'
 BaseHUDElement = require 'hud/elements/baseHudElement'
 PacketType = require 'network/packets/packetType'
 canvasUtils = require 'util/canvasUtils'
@@ -18,6 +19,7 @@ class TutorialHUDElement extends BaseHUDElement
 		@alpha = 0.0
 		@alphaContinue = 0.0
 		@texts = []
+		@newTexts = []
 		@bindEvents()
 		return
 		
@@ -27,7 +29,7 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 	
 	update: (delta, now) ->
-		@_drawInfo delta, now, @texts if @trooperImageLoaded and @texts.length isnt 0
+		@_drawInfo delta, now, @texts if @trooperImageLoaded and (@texts.length isnt 0 || @newTexts.length isnt 0)
 		return
 	
 	_drawInfo: (delta, now, texts) ->
@@ -41,14 +43,13 @@ class TutorialHUDElement extends BaseHUDElement
 
 	_updateAlpha: (delta) ->
 		if @changeState
-			if @alpha > 0
-				@alpha -= delta
-				if @alpha <= 0
-					@alpha = 0
-					@alphaContinue = 0.0
-					@alphaContinueType = 0
-					@state++
-					@changeState = false
+			@alpha -= delta
+			if @alpha <= 0
+				@alpha = 0
+				@alphaContinue = 0.0
+				@alphaContinueType = 0
+				@changeState = false
+				@texts = @newTexts
 		else
 			if @alpha < 1.0
 				@alpha += delta 
@@ -117,13 +118,20 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 
 	_onMouseDown: (event) =>
-		@changeState = true if @trooperImageLoaded and @alpha is 1.0 and not @changeState
+		if @trooperImageLoaded and @alpha is 1.0 and not @requestUpdate
+			events.trigger 'send:packet', new TutorialUpdatePacket() 
+			@requestUpdate = true
 		return
 
 	_onTutorialUpdate: (packet) ->
 		console.log '_onTutorialUpdate', packet
 		@state = packet.state if packet?.state
-		@texts = packet.texts if packet?.texts?.length isnt 0
+		if packet?.texts?.length isnt 0
+			@newTexts = packet.texts 
+		else
+			@newTexts = []
+		@changeState = true
+		@requestUpdate = false
 		return
 	
 return TutorialHUDElement

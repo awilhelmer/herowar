@@ -64,6 +64,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
   private boolean wavesFinished = false;
   private boolean unitsFinished = false;
   private boolean waveRequest = false;
+  private boolean tutorialUpdate = false;
   private boolean updateGold = false;
   private State state;
 
@@ -422,6 +423,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public void setPreloadPacket(PreloadDataPacket preloadPacket) {
     this.preloadPacket = preloadPacket;
+  }
+
+  public boolean isTutorialUpdate() {
+    return tutorialUpdate;
+  }
+
+  public void setTutorialUpdate(boolean tutorialUpdate) {
+    this.tutorialUpdate = tutorialUpdate;
   }
 
   public enum State {
