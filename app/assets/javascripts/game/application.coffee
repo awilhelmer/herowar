@@ -21,7 +21,5 @@ app =
 		db.get 'ui/waves'
 		settings = db.get 'db/settings'
 		settings.fetch()
-		towers = db.get 'db/towers'
-		towers.fetch()
 
 return app
