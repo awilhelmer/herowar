@@ -33,8 +33,7 @@ class GameHUD extends BaseHUD
 	terrainBuild: (map) ->
 		world = db.get 'world'
 		if world.get('name') is 'Tutorial'
-			tutorial = new (require 'hud/elements/tutorial') @canvas, @view
-			@elements.push tutorial
+			@addElement 'hud/elements/tutorial'
 			$('#build').css 'display', 'none'
 			$('#stats').css 'display', 'none'
 		else

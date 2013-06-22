@@ -11,6 +11,7 @@ class BaseHUD
 		@initialize()
 	
 	bindEvents: ->
+		events.on 'hud:element:add', @addElement, @
 		events.on 'engine:render', @update, @
 		events.on 'scene:terrain:build', @terrainBuild, @
 		return
@@ -44,8 +45,12 @@ class BaseHUD
 				@elements.splice @elements.indexOf(element), 1 unless element.active
 		return
 
+	addElement: (name) ->
+		@elements.push new (require name) @canvas, @view
+		return
+
 	terrainBuild: (map) ->
-		@elements.push new (require val) @canvas, @view  for val in @default
+		@addElement val for val in @default
 		return
 
 return BaseHUD
