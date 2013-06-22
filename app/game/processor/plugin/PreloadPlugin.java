@@ -28,8 +28,8 @@ import dao.game.MatchDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
-  private final static Logger.ALogger log = Logger.of(PreloadUpdatePlugin.class);
+public class PreloadPlugin extends AbstractPlugin implements IPlugin {
+  private final static Logger.ALogger log = Logger.of(PreloadPlugin.class);
   private final static int timeout = 1000 * 60 * 5;
 
   private ConcurrentHashMap<Long, Integer> preloadProgress = new ConcurrentHashMap<Long, Integer>();
@@ -37,7 +37,7 @@ public class PreloadUpdatePlugin extends AbstractPlugin implements IPlugin {
   private Integer preloadPlayerMissing = 0;
   private long startTime = new Date().getTime();
 
-  public PreloadUpdatePlugin(GameProcessor processor) {
+  public PreloadPlugin(GameProcessor processor) {
     super(processor);
     preloadPlayerMissing = getMatch().getPlayerResults().size();
     log.info("Start preloading phase for " + preloadPlayerMissing + " players");

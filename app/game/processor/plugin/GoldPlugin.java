@@ -17,11 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Sebastian Sachtleben
  */
-public class GoldUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
+public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
 
   private final static long SYNC_PERIOD = 30000;
 
-  public GoldUpdatePlugin(GameProcessor processor) {
+  public GoldPlugin(GameProcessor processor) {
     super(processor);
   }
 

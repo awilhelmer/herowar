@@ -29,8 +29,8 @@ import dao.game.PathDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
-  private final static Logger.ALogger log = Logger.of(WaveUpdatePlugin.class);
+public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
+  private final static Logger.ALogger log = Logger.of(WavePlugin.class);
 
   private List<WaveSpawner> spawners = new ArrayList<WaveSpawner>();
   private List<Wave> waves;
@@ -44,7 +44,7 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
   private long waveStartDate = 0;
   private boolean waveUpdated = false;
 
-  public WaveUpdatePlugin(GameProcessor processor) {
+  public WavePlugin(GameProcessor processor) {
     super(processor);
     sortWaves();
   }
@@ -221,13 +221,13 @@ public class WaveUpdatePlugin extends UpdateSessionPlugin implements IPlugin {
 
   public class WaveSpawner {
 
-    private WaveUpdatePlugin plugin;
+    private WavePlugin plugin;
     private Wave wave;
     private double spawnRate;
     private int spawnCurrent = 0;
     private long lastSpawnDate;
 
-    public WaveSpawner(WaveUpdatePlugin plugin, Wave wave, long now) {
+    public WaveSpawner(WavePlugin plugin, Wave wave, long now) {
       this.plugin = plugin;
       this.wave = wave;
       this.spawnRate = calculateSpawnRate();

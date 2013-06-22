@@ -14,11 +14,11 @@ import game.processor.meta.AbstractProcessor;
 import game.processor.meta.IPlugin;
 import game.processor.meta.IProcessor;
 import game.processor.plugin.FinishPlugin;
-import game.processor.plugin.GoldUpdatePlugin;
-import game.processor.plugin.PreloadUpdatePlugin;
-import game.processor.plugin.TowerUpdatePlugin;
-import game.processor.plugin.UnitUpdatePlugin;
-import game.processor.plugin.WaveUpdatePlugin;
+import game.processor.plugin.GoldPlugin;
+import game.processor.plugin.PreloadPlugin;
+import game.processor.plugin.TowerPlugin;
+import game.processor.plugin.UnitPlugin;
+import game.processor.plugin.WavePlugin;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -279,11 +279,11 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     for (State state : State.values()) {
       plugins.put(state, new HashSet<IPlugin>());
     }
-    plugins.get(State.PRELOAD).add(new PreloadUpdatePlugin(this));
-    plugins.get(State.GAME).add(new GoldUpdatePlugin(this));
-    plugins.get(State.GAME).add(new TowerUpdatePlugin(this));
-    plugins.get(State.GAME).add(new UnitUpdatePlugin(this));
-    plugins.get(State.GAME).add(new WaveUpdatePlugin(this));
+    plugins.get(State.PRELOAD).add(new PreloadPlugin(this));
+    plugins.get(State.GAME).add(new GoldPlugin(this));
+    plugins.get(State.GAME).add(new TowerPlugin(this));
+    plugins.get(State.GAME).add(new UnitPlugin(this));
+    plugins.get(State.GAME).add(new WavePlugin(this));
     plugins.get(State.FINISH).add(new FinishPlugin(this));
   }
 

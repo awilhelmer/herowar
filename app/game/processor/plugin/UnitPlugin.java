@@ -35,10 +35,10 @@ import com.ardor3d.math.type.ReadOnlyVector3;
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
-public class UnitUpdatePlugin extends AbstractPlugin implements IPlugin {
-  private final static Logger.ALogger log = Logger.of(UnitUpdatePlugin.class);
+public class UnitPlugin extends AbstractPlugin implements IPlugin {
+  private final static Logger.ALogger log = Logger.of(UnitPlugin.class);
 
-  public UnitUpdatePlugin(GameProcessor processor) {
+  public UnitPlugin(GameProcessor processor) {
     super(processor);
   }
 

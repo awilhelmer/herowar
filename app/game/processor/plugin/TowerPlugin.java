@@ -19,9 +19,9 @@ import java.util.Set;
  * 
  * @author Sebastian Sachtleben
  */
-public class TowerUpdatePlugin extends AbstractPlugin implements IPlugin {
+public class TowerPlugin extends AbstractPlugin implements IPlugin {
 
-  public TowerUpdatePlugin(GameProcessor processor) {
+  public TowerPlugin(GameProcessor processor) {
     super(processor);
   }
 
