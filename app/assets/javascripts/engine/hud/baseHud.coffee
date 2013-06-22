@@ -9,10 +9,10 @@ class BaseHUD
 		@bindEvents()
 		@createCanvas()
 		@initialize()
-		@elements.push new (require val) @canvas, @view  for val in @default
 	
 	bindEvents: ->
 		events.on 'engine:render', @update, @
+		events.on 'scene:terrain:build', @terrainBuild, @
 		return
 
 	initialize: ->
@@ -42,6 +42,10 @@ class BaseHUD
 				element.update delta, now
 			else
 				@elements.splice @elements.indexOf(element), 1 unless element.active
+		return
+
+	terrainBuild: (map) ->
+		@elements.push new (require val) @canvas, @view  for val in @default
 		return
 
 return BaseHUD
