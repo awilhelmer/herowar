@@ -87,6 +87,7 @@ public class GamesHandler implements Serializable {
       public void invoke() throws Throwable {
         Match match = MatchDAO.getInstance().getById(matchId);
         Hibernate.initialize(match.getPlayerResults());
+        Hibernate.initialize(match.getMap().getTowers());
         Hibernate.initialize(match.getMap().getWaves());
         for (Wave wave : match.getMap().getWaves()) {
           Hibernate.initialize(wave.getPath().getDbWaypoints());
@@ -139,8 +140,7 @@ public class GamesHandler implements Serializable {
           geometries.put(unit.getName(), "api/game/geometry/unit/" + unit.getId());
         }
       }
-      List<Tower> towers = TowerDAO.getInstance().getAll();
-      Iterator<Tower> iter3 = towers.iterator();
+      Iterator<Tower> iter3 = game.getMap().getTowers().iterator();
       while (iter3.hasNext()) {
         Tower tower = iter3.next();
         geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());

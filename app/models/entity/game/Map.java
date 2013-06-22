@@ -46,19 +46,24 @@ public class Map extends BaseModel implements Serializable {
   @OneToOne(cascade = CascadeType.ALL)
   private Terrain terrain;
 
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(name = "map_towers")
+  @JsonIgnore
+  private Set<Tower> towers = new HashSet<Tower>();
+  
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map", orphanRemoval = true)
-  private Set<Wave> waves;
+  private Set<Wave> waves = new HashSet<Wave>();
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "map", orphanRemoval = true)
-  private Set<Mesh> objects;
+  private Set<Mesh> objects = new HashSet<Mesh>();
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name = "map_materials")
   @JsonIgnore
-  private Set<Material> allMaterials;
+  private Set<Material> allMaterials = new HashSet<Material>();
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "map", orphanRemoval = true)
-  private Set<Path> paths;
+  private Set<Path> paths = new HashSet<Path>();
 
   @Transient
   private List<Material> materials;
@@ -163,6 +168,14 @@ public class Map extends BaseModel implements Serializable {
 
   public void setTerrain(Terrain terrain) {
     this.terrain = terrain;
+  }
+  
+  public Set<Tower> getTowers() {
+    return towers;
+  }
+
+  public void setTowers(Set<Tower> towers) {
+    this.towers = towers;
   }
 
   public Set<Wave> getWaves() {
