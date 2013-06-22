@@ -27,5 +27,6 @@ packetType =
 	SERVER_TUTORIAL_UPDATE			: 85
 	SERVER_GAME_DEFEAT					: 90
 	SERVER_GAME_VICTORY					: 91
+	SERVER_GUI_UPDATE						: 99
 
 return packetType

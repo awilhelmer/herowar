@@ -1,6 +1,7 @@
 package game.processor.plugin;
 
 import game.GameSession;
+import game.network.server.GUIElementUpdatePacket;
 import game.network.server.TutorialUpdatePacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
@@ -36,6 +37,9 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
     if (getProcessor().isTutorialUpdate()) {
       state++;
       getProcessor().setTutorialUpdate(false);
+      if (state == 2) {
+        getProcessor().broadcast(new GUIElementUpdatePacket("stats", true, true));
+      }
       if (texts.length > state) {
         getProcessor().broadcast(new TutorialUpdatePacket(state, texts[state]));
       } else {

@@ -38,5 +38,6 @@ public class PacketType {
   public static final Integer TutorialUpdatePacket = 85;
   public static final Integer GameDefeatPacket = 90;
   public static final Integer GameVictoryPacket = 91;
+  public static final Integer GUIElementUpdatePacket = 99;
 
 }

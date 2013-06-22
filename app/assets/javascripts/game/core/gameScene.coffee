@@ -20,6 +20,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
+		events.on "retrieve:packet:#{PacketType.SERVER_GUI_UPDATE}", @_onGUIUpdate, @
 		events.on 'call:wave', @onWaveCall, @
 		
 	onUnitIn: (packet) ->
@@ -68,6 +69,14 @@ class GameScene extends Scene
 		waves = db.get 'ui/waves'
 		waves.set '_freeze', true
 		Backbone.history.loadUrl url
+		return
+
+	_onGUIUpdate: (packet) ->
+		console.log '_onGUIUpdate', packet
+		$guiElement = $ "##{packet.name}"
+		if $guiElement.length is 1
+			$guiElement.css 'display', '' if packet.visible
+			$guiElement.css 'display', 'none' unless packet.visible
 		return
 	
 return GameScene
