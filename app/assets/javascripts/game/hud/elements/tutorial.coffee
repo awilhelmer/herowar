@@ -9,7 +9,6 @@ class TutorialHUDElement extends BaseHUDElement
 
 	initialize: ->
 		@input = db.get 'input'
-		@state = -1
 		@changeState = false
 		@trooper = @createTrooper()
 		@alpha = 0.0
@@ -36,16 +35,12 @@ class TutorialHUDElement extends BaseHUDElement
 		return trooper
 	
 	update: (delta, now) ->
-		@_drawInfo delta, now, @texts if @trooper.loaded and (@texts.length isnt 0 || @newTexts.length isnt 0)
-		return
-	
-	_drawInfo: (delta, now, texts) ->
-		if @state isnt 8
+		if @trooper.loaded and (@texts.length isnt 0 || @newTexts.length isnt 0)
 			@_drawBackground delta, now
 			@_drawTrooper delta, now
-			@_drawTutorialText delta, now, texts
-			@_drawContinueText delta, now, texts
-		@_updateAlpha delta
+			@_drawTutorialText delta, now, @texts
+			@_drawContinueText delta, now, @texts
+			@_updateAlpha delta
 		return
 
 	_updateAlpha: (delta) ->
@@ -138,7 +133,6 @@ class TutorialHUDElement extends BaseHUDElement
 
 	_onTutorialUpdate: (packet) ->
 		console.log '_onTutorialUpdate', packet
-		@state = packet.state if packet?.state
 		if packet?.texts?.length isnt 0
 			@newTexts = packet.texts 
 		else
