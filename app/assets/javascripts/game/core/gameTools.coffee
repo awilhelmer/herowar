@@ -3,9 +3,9 @@ events = require 'events'
 
 class GameTools extends Tools
 	
-	defaultTools: [ 'selectTower' ]
+	defaultTools: [ 'selectTower', 'selectUnit' ]
 	
-	tools: [ 'selectTower', 'addTower' ]
+	tools: [ 'addTower', 'selectTower', 'selectUnit' ]
 	
 	addListeners: ->
 		events.on 'select:tower', @onSelectTower, @

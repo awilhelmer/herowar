@@ -9,8 +9,9 @@ class GameHUD extends BaseHUD
 	default: [
 		'hud/elements/towerInfo'
 		'hud/elements/unitHealthBars'
-		'hud/elements/waveProgress'
+		'hud/elements/unitInfo'
 		'hud/elements/waveIncoming'
+		'hud/elements/waveProgress'
 	]
 
 	bindEvents: ->

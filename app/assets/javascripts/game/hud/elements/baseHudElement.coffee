@@ -3,6 +3,7 @@ class BaseHUDElement
 	constructor: (@canvas, @view) ->
 		@ctx = @canvas.getContext '2d'
 		@active = true
+		@alpha = 1.0
 		@initialize()
 		
 	initialize: ->
