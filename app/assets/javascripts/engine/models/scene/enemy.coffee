@@ -10,7 +10,8 @@ class Enemy extends AnimatedModel
 	glowing: false
 
 	constructor: (opts) ->
-		opts = _.extend {}, opts
+		opts = _.defaults {}, opts, 
+			selectedColor: '#FF0000'
 		@meshBody = opts.meshBody = meshesFactory.create opts.id, opts.name
 		@initialize opts
 		super opts

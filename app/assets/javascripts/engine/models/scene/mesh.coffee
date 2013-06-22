@@ -14,6 +14,7 @@ class MeshModel extends BaseModel
 	constructor: (attributes) ->
 		attributes = _.defaults {}, attributes,
 			selected: false
+			selectedColor: '#000000'
 		@id = attributes.id
 		@name = attributes.name
 		@meshBody = attributes.meshBody
@@ -42,7 +43,7 @@ class MeshModel extends BaseModel
 				boundingBox = @meshBody.geometry.boundingBox
 				innerRadius = Math.ceil Math.max((boundingBox.max.x - boundingBox.min.x) * scale.x, (boundingBox.max.z - boundingBox.min.z) * scale.z) / 2 + 2
 				outerRadius = innerRadius + 2
-				material = new THREE.MeshBasicMaterial color: '#00FF00', opacity: 0.3, transparent: true
+				material = new THREE.MeshBasicMaterial color: @attributes.selectedColor, opacity: 0.3, transparent: true
 				geometry = new THREE.RingGeometry innerRadius, outerRadius, outerRadius * 2, innerRadius * 2
 				@meshSelection = new THREE.Mesh geometry, material
 				@meshSelection.name = 'selection'

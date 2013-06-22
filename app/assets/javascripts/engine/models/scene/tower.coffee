@@ -11,12 +11,13 @@ class Tower extends AnimatedModel
 	
 	constructor: (opts) ->
 		opts = _.defaults {}, opts, 
-			active     : false
-			range      : 0
-			weapons    : []
-			position   : undefined
-			kills      : 0
-			rewardGold : 0
+			active        : false
+			range         : 0
+			weapons       : []
+			position      : undefined
+			kills         : 0
+			rewardGold    : 0
+			selectedColor : '#00FF00'
 		@meshBody = opts.meshBody = meshesFactory.create opts.id, opts.name
 		super opts
 		@weapons = []
