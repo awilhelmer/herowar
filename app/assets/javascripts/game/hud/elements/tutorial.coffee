@@ -1,4 +1,5 @@
 BaseHUDElement = require 'hud/elements/baseHudElement'
+PacketType = require 'network/packets/packetType'
 canvasUtils = require 'util/canvasUtils'
 events = require 'events'
 db = require 'database'
@@ -7,7 +8,7 @@ class TutorialHUDElement extends BaseHUDElement
 
 	initialize: ->
 		@input = db.get 'input'
-		@state = 1
+		@state = -1
 		@changeState = false
 		@trooperImageLoaded = false
 		@trooperImage = new Image()
@@ -16,33 +17,17 @@ class TutorialHUDElement extends BaseHUDElement
 		@trooperImage.src = 'assets/images/game/tutorial/trooper.png'
 		@alpha = 0.0
 		@alphaContinue = 0.0
+		@texts = []
 		@bindEvents()
 		return
 		
 	bindEvents: ->
 		events.listenTo @input, 'mouse:down', @_onMouseDown
+		events.on "retrieve:packet:#{PacketType.SERVER_TUTORIAL_UPDATE}", @_onTutorialUpdate, @
 		return
 	
 	update: (delta, now) ->
-		if @trooperImageLoaded 
-			switch @state
-				when 1
-					@_drawInfo delta, now, ['Hello Rekrut and Welcome to Herowar. I will help', 'you a bit to understand how to play this game.']
-				when 2
-					@_drawInfo delta, now, ['First lets checkout the interface and I will', 'explain each part.']
-				when 3
-					$('#stats').css 'display', ''
-					@_drawInfo delta, now, ['On the top left cornor you will see your score,', 'lives and gold. Its important to have allways', 'lives left.', '', 'It is possible to earn gold for killing creeps', 'or on some maps you gain gold over time.']
-				when 4
-					$('#build').css 'display', ''
-					@_drawInfo delta, now, ['On the bottom left cornor you have access to', 'the build menu so you can place new towers on', 'the map.', '', 'Depending on the mission you can choose', 'between different towers. Each tower has its own', 'unique abilities. Check the build menu tooltips for', 'detailed informations.']
-				when 5
-					#events.trigger 'hud:element:add', 'hud/elements/waveIncoming'
-					@state++
-				when 6
-					@_drawInfo delta, now, ['Now lets check out the map. The enemies will', 'try to pass the map on the grey path.', '', 'Sometimes there is a wave indicator. So you', 'see from which side the enemies will come.']
-				when 7
-					@_drawInfo delta, now, ['Ok its time to build your first tower. You', 'should place it on strategic important points.']
+		@_drawInfo delta, now, @texts if @trooperImageLoaded and @texts.length isnt 0
 		return
 	
 	_drawInfo: (delta, now, texts) ->
@@ -133,6 +118,12 @@ class TutorialHUDElement extends BaseHUDElement
 
 	_onMouseDown: (event) =>
 		@changeState = true if @trooperImageLoaded and @alpha is 1.0 and not @changeState
+		return
+
+	_onTutorialUpdate: (packet) ->
+		console.log '_onTutorialUpdate', packet
+		@state = packet.state if packet?.state
+		@texts = packet.texts if packet?.texts?.length isnt 0
 		return
 	
 return TutorialHUDElement

@@ -17,6 +17,7 @@ import game.processor.plugin.FinishPlugin;
 import game.processor.plugin.GoldPlugin;
 import game.processor.plugin.PreloadPlugin;
 import game.processor.plugin.TowerPlugin;
+import game.processor.plugin.TutorialPlugin;
 import game.processor.plugin.UnitPlugin;
 import game.processor.plugin.WavePlugin;
 
@@ -284,6 +285,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     plugins.get(State.GAME).add(new TowerPlugin(this));
     plugins.get(State.GAME).add(new UnitPlugin(this));
     plugins.get(State.GAME).add(new WavePlugin(this));
+    if ("Tutorial".equals(getMap().getName())) {
+      plugins.get(State.GAME).add(new TutorialPlugin(this));
+    }
     plugins.get(State.FINISH).add(new FinishPlugin(this));
   }
 
