@@ -11,11 +11,7 @@ class TutorialHUDElement extends BaseHUDElement
 		@input = db.get 'input'
 		@state = -1
 		@changeState = false
-		@trooperImageLoaded = false
-		@trooperImage = new Image()
-		@trooperImage.onload = () =>
-			@trooperImageLoaded = true
-		@trooperImage.src = 'assets/images/game/tutorial/trooper.png'
+		@trooper = @createTrooper()
 		@alpha = 0.0
 		@alphaContinue = 0.0
 		@texts = []
@@ -28,8 +24,19 @@ class TutorialHUDElement extends BaseHUDElement
 		events.on "retrieve:packet:#{PacketType.SERVER_TUTORIAL_UPDATE}", @_onTutorialUpdate, @
 		return
 	
+	createTrooper: ->
+		trooper = 
+			loaded   : false
+			image    : new Image()
+			position : 0
+		trooper.image.onload = () =>
+			trooper.loaded = true
+			trooper.position = @canvas.height
+		trooper.image.src = 'assets/images/game/tutorial/trooper.png'
+		return trooper
+	
 	update: (delta, now) ->
-		@_drawInfo delta, now, @texts if @trooperImageLoaded and (@texts.length isnt 0 || @newTexts.length isnt 0)
+		@_drawInfo delta, now, @texts if @trooper.loaded and (@texts.length isnt 0 || @newTexts.length isnt 0)
 		return
 	
 	_drawInfo: (delta, now, texts) ->
@@ -43,7 +50,7 @@ class TutorialHUDElement extends BaseHUDElement
 
 	_updateAlpha: (delta) ->
 		if @changeState
-			@alpha -= delta
+			@alpha -= delta * 2
 			if @alpha <= 0
 				@alpha = 0
 				@alphaContinue = 0.0
@@ -52,7 +59,7 @@ class TutorialHUDElement extends BaseHUDElement
 				@texts = @newTexts
 		else
 			if @alpha < 1.0
-				@alpha += delta 
+				@alpha += delta * 2
 				@alpha = 1.0 if @alpha > 1.0
 		return
 	
@@ -71,12 +78,18 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 	
 	_drawTrooper: (delta, now) ->
-		@ctx.drawImage @trooperImage, @canvas.width - @trooperImage.width + 250, @canvas.height - @trooperImage.height * 0.5
+		position = 
+			x: @canvas.width - @trooper.image.width + 250
+			y: @canvas.height - @trooper.image.height * 0.5
+		if @trooper.position > position.y
+			@trooper.position -= delta * @canvas.height
+			position.y = @trooper.position if @trooper.position > position.y
+		@ctx.drawImage @trooper.image, position.x, position.y
 		return
 
 	_drawTutorialText: (delta, now, texts) ->
 		size =
-			x: @canvas.width - @trooperImage.width + 200 - 400
+			x: @canvas.width - @trooper.image.width + 200 - 400
 			y: @canvas.height - texts.length * 20 - 100
 			w: 400
 			h: 20 + texts.length * 20
@@ -101,7 +114,7 @@ class TutorialHUDElement extends BaseHUDElement
 		alpha = if @alpha < @alphaContinue then @alpha else @alphaContinue
 		@ctx.fillStyle = "rgba(0, 0, 0, #{alpha})"
 		@ctx.font = 'bold 16px Arial'
-		@ctx.fillText 'Press any key to continue...', @canvas.width - @trooperImage.width, @canvas.height - 50
+		@ctx.fillText 'Press any key to continue...', @canvas.width - @trooper.image.width, @canvas.height - 50
 		return
 
 	_updateContinueAlpha: (delta) ->
@@ -118,7 +131,7 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 
 	_onMouseDown: (event) =>
-		if @trooperImageLoaded and @alpha is 1.0 and not @requestUpdate
+		if @trooper.loaded and @alpha is 1.0 and not @requestUpdate
 			events.trigger 'send:packet', new TutorialUpdatePacket() 
 			@requestUpdate = true
 		return
