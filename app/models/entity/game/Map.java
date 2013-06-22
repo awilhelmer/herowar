@@ -48,7 +48,6 @@ public class Map extends BaseModel implements Serializable {
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(name = "map_towers")
-  @JsonIgnore
   private Set<Tower> towers = new HashSet<Tower>();
   
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "map", orphanRemoval = true)

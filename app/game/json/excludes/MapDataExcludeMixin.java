@@ -6,6 +6,7 @@ import models.entity.game.Material;
 import models.entity.game.Mesh;
 import models.entity.game.Path;
 import models.entity.game.Terrain;
+import models.entity.game.Tower;
 import models.entity.game.Wave;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -21,6 +22,10 @@ public class MapDataExcludeMixin {
   @JsonIgnore
   private Terrain terrain;
 
+  @SuppressWarnings("unused")
+  @JsonIgnore
+  private Set<Tower> towers;
+  
   @SuppressWarnings("unused")
   @JsonIgnore
   private Set<Wave> waves;
