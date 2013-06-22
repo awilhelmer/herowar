@@ -10,7 +10,7 @@ class TutorialHUDElement extends BaseHUDElement
 		@trooperImage.onload = () =>
 			@trooperImageLoaded = true
 		@trooperImage.src = 'assets/images/game/tutorial/trooper.png'
-		#@alphaContinueType = 1
+		@alpha = 0.0
 		@alphaContinue = 0.0
 		return
 	
@@ -20,19 +20,23 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 	
 	_drawInfo: (delta, now, texts) ->
-		@_drawBackground delta, now
-		@_drawTrooper delta, now
-		@_drawTutorialText delta, now, texts
-		@_drawContinueText delta, now, texts
+		if @alpha isnt 0
+			@_drawBackground delta, now
+			@_drawTrooper delta, now
+			@_drawTutorialText delta, now, texts
+			@_drawContinueText delta, now, texts
+		if @alpha < 1.0
+			@alpha += delta 
+			@alpha = 1.0 if @alpha > 1.0
 		return
 	
 	_drawBackground: (delta, now) ->
-		@ctx.fillStyle = 'rgba(0, 104, 175, 0.5)'
-		@ctx.strokeStyle = 'rgb(141, 167, 204)'
+		@ctx.fillStyle = "rgba(0, 104, 175, #{@alpha / 2})"
+		@ctx.strokeStyle = "rgba(141, 167, 204, #{@alpha})"
 		@ctx.lineWidth = 4
 		@ctx.beginPath()
 		@ctx.moveTo @canvas.width + 10, @canvas.height + 10
-		@ctx.lineTo @canvas.width - 600, @canvas.height + 10
+		@ctx.lineTo @canvas.width - 500, @canvas.height + 10
 		@ctx.lineTo @canvas.width + 10, @canvas.height - 150
 		@ctx.lineTo @canvas.width + 10, @canvas.height + 10
 		@ctx.fill()
@@ -77,7 +81,8 @@ class TutorialHUDElement extends BaseHUDElement
 			if @alphaContinue >= 1
 				@alphaContinue = 1
 				@alphaContinueType = 1
-		@ctx.fillStyle = "rgba(0, 0, 0, #{@alphaContinue})"
+		alpha = if @alpha < @alphaContinue then @alpha else @alphaContinue
+		@ctx.fillStyle = "rgba(0, 0, 0, #{alpha})"
 		@ctx.font = 'bold 16px Arial'
 		@ctx.fillText 'Press any key to continue...', @canvas.width - @trooperImage.width, @canvas.height - 50
 		return
