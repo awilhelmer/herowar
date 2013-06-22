@@ -100,7 +100,12 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
+  public State onState() {
+    return State.PRELOAD;
+  }
+  
+  @Override
   public String toString() {
-    return "PreloadUpdatePlugin";
+    return "PreloadPlugin";
   }
 }

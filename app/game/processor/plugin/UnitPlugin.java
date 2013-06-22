@@ -8,6 +8,7 @@ import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.UnitOutPacket;
 import game.processor.CacheConstants;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.State;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
@@ -141,5 +142,15 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void removePlayer(GameSession player) {
     // Empty
+  }
+
+  @Override
+  public State onState() {
+    return State.GAME;
+  }
+  
+  @Override
+  public String toString() {
+    return "UnitPlugin";
   }
 }

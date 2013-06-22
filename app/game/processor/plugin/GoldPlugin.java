@@ -5,6 +5,7 @@ import game.network.server.PlayerStatsInitPacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.processor.CacheConstants;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.State;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
@@ -76,16 +77,21 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
     // Maybe he returns after while...
   }
 
-  @Override
-  public String toString() {
-    return "GoldUpdatePlugin";
-  }
-
   private double getGoldValue(ConcurrentHashMap<String, Object> playerCache) {
     return Double.parseDouble(playerCache.get(CacheConstants.GOLD).toString());
   }
 
   private long getRoundedGoldValue(ConcurrentHashMap<String, Object> playerCache) {
     return Math.round(getGoldValue(playerCache));
+  }
+
+  @Override
+  public State onState() {
+    return State.GAME;
+  }
+  
+  @Override
+  public String toString() {
+    return "GoldPlugin";
   }
 }

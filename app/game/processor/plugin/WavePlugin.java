@@ -6,6 +6,7 @@ import game.network.server.UnitInPacket;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.State;
 import game.processor.meta.IPlugin;
 import game.processor.meta.UpdateSessionPlugin;
 
@@ -208,6 +209,11 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
+  public State onState() {
+    return State.GAME;
+  }
+
+  @Override
   public String toString() {
     return "WaveUpdatePlugin";
   }
@@ -241,12 +247,13 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
           Unit unit = iter.next();
           lastSpawnDate = now;
           spawnCurrent++;
-          log.info(String.format("Wave %d/%d - Sending new unit: %s - Path %s - %d/%d", index, total, unit.getName(), wave.getPath().getId(), spawnCurrent, wave.getQuantity()));
+          log.info(String.format("Wave %d/%d - Sending new unit: %s - Path %s - %d/%d", index, total, unit.getName(), wave.getPath().getId(), spawnCurrent,
+              wave.getQuantity()));
           plugin.createUnit(wave.getPath(), unit);
         }
       }
     }
-    
+
     public boolean isDone() {
       return spawnCurrent >= wave.getQuantity();
     }

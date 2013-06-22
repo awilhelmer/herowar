@@ -5,6 +5,7 @@ import game.network.server.GameDefeatPacket;
 import game.network.server.GameVictoryPacket;
 import game.processor.CacheConstants;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.State;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
@@ -89,5 +90,15 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void removePlayer(GameSession player) {
     // TODO Auto-generated method stub
+  }
+
+  @Override
+  public State onState() {
+    return State.FINISH;
+  }
+
+  @Override
+  public String toString() {
+    return "FinishPlugin";
   }
 }

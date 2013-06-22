@@ -6,6 +6,7 @@ import game.models.UnitModel;
 import game.network.server.TowerAttackPacket;
 import game.network.server.TowerTargetPacket;
 import game.processor.GameProcessor;
+import game.processor.GameProcessor.State;
 import game.processor.meta.AbstractPlugin;
 import game.processor.meta.IPlugin;
 
@@ -64,5 +65,15 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void removePlayer(GameSession player) {
     // Empty
+  }
+
+  @Override
+  public State onState() {
+    return State.GAME;
+  }
+
+  @Override
+  public String toString() {
+    return "TowerPlugin";
   }
 }

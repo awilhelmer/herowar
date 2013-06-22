@@ -20,7 +20,7 @@ import play.libs.Json;
  * 
  * @author Sebastian Sachtleben
  */
-public class AbstractPlugin {
+public abstract class AbstractPlugin {
 
   /**
    * The game processor where this plugin runs.
