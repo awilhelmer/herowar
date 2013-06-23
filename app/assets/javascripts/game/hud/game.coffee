@@ -36,6 +36,9 @@ class GameHUD extends BaseHUD
 		if world.get('name') is 'Tutorial'
 			@addElement 'hud/elements/globalMessage'
 			@addElement 'hud/elements/tutorial'
+			@addElement 'hud/elements/towerInfo'
+			@addElement 'hud/elements/unitHealthBars'
+			@addElement 'hud/elements/unitInfo'
 			$('#build').css 'display', 'none'
 			$('#stats').css 'display', 'none'
 		else

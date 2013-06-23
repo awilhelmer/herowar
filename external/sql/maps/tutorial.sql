@@ -45,7 +45,7 @@ INSERT IGNORE INTO `waypoint` (`name`, `position_x`, `position_y`, `position_z`,
 	('Waypoint 12 - -235 x 1 x -5', -235, 1, -5, 5, 2);
 	
 insert into wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, sortOder, autostart, requestable) VALUES 
-	(201, 'Wave-1', 5,  3, 12, 101, 1, 0, 'n', 'y'),
+	(201, 'Wave-1', 5,  3, 14, 101, 1, 0, 'n', 'y'),
 	(202, 'Wave-2', 0, 12, 12, 101, 2, 1, 'n', 'y'),
 	(203, 'Wave-3', 0, 20, 12, 101, 1, 2, 'y', 'n');
 
