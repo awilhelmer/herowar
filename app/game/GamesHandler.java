@@ -10,7 +10,6 @@ import game.processor.ProcessorHandler;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Match;
@@ -28,7 +27,6 @@ import play.Logger;
 import play.db.jpa.JPA;
 import play.libs.Json;
 import dao.game.MatchDAO;
-import dao.game.TowerDAO;
 
 /**
  * The GamesHandler control all current running games.
