@@ -126,9 +126,8 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 
 	_onMouseDown: (event) =>
-		if @trooper.loaded and @alpha is 1.0 and not @requestUpdate
+		if @trooper.loaded and @alpha is 1.0 
 			events.trigger 'send:packet', new TutorialUpdatePacket() 
-			@requestUpdate = true
 		return
 
 	_onTutorialUpdate: (packet) ->

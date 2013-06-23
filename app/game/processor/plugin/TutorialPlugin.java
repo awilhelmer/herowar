@@ -2,7 +2,9 @@ package game.processor.plugin;
 
 import game.GameSession;
 import game.network.server.GUIElementUpdatePacket;
+import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TutorialUpdatePacket;
+import game.processor.CacheConstants;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
 import game.processor.meta.AbstractPlugin;
@@ -11,6 +13,9 @@ import game.processor.meta.IPlugin;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import models.entity.game.Tower;
 
 /**
  * The tutorial plugin handles the state for the tutorial map.
@@ -20,6 +25,7 @@ import java.util.List;
 public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
   private List<TutorialStep> steps = createTutorialSteps();
+  private TutorialStep current = null;
 
   public TutorialPlugin(GameProcessor processor) {
     super(processor);
@@ -29,7 +35,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
   public void process(double delta, long now) {
     if (getProcessor().isTutorialUpdate()) {
       getProcessor().setTutorialUpdate(false);
-      updateTutorial();
+      updateTutorial(delta, now);
     }
   }
 
@@ -59,18 +65,21 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
     return "TutorialPlugin";
   }
 
-  private void updateTutorial() {
-    Iterator<TutorialStep> iter = steps.iterator();
-    if (iter.hasNext()) {
-      TutorialStep currentStep = iter.next();
-      if (currentStep.isCompleted()) {
-        getProcessor().broadcast(new TutorialUpdatePacket(currentStep.getTexts()));
-        currentStep.onChange();
-        iter.remove();
+  private void updateTutorial(double delta, long now) {
+    if (current == null) {
+      Iterator<TutorialStep> iter = steps.iterator();
+      if (iter.hasNext()) {
+        current = iter.next();
+        getProcessor().broadcast(new TutorialUpdatePacket(current.getTexts()));
+        current.onChange(delta, now);
+      } else {
+        getProcessor().setWavesFinished(true);
+        getProcessor().setUnitsFinished(true);
       }
-    } else {
-      getProcessor().setWavesFinished(true);
-      getProcessor().setUnitsFinished(true);
+    }
+    if (current != null && current.isCompleted(delta, now)) {
+      steps.remove(current);
+      current = null;
     }
   }
 
@@ -83,12 +92,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
         // empty
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
@@ -99,12 +108,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
         // empty
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
@@ -116,12 +125,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
         getProcessor().broadcast(new GUIElementUpdatePacket("stats", true, true));
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
@@ -134,12 +143,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
         getProcessor().broadcast(new GUIElementUpdatePacket("build", true, true));
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
@@ -151,28 +160,53 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
         // empty
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
     steps.add(new TutorialStep() {
       @Override
       public String[] getTexts() {
-        return new String[] { "Ok its time to build your first tower. You", "should place it on strategic important points." };
+        return new String[] { "Ok its time to build your first tower. I give you", "some credits. Build a tower on the marked ",
+            "area. Its a strategic important point." };
       }
 
       @Override
-      public void onChange() {
+      public void onChange(double delta, long now) {
+        Tower tower = getProcessor().getMap().getTowers().iterator().next();
+        Iterator<ConcurrentHashMap<String, Object>> iter = getProcessor().getPlayerCache().values().iterator();
+        while (iter.hasNext()) {
+          ConcurrentHashMap<String, Object> entry = iter.next();
+          entry.replace(CacheConstants.GOLD, tower.getPrice().doubleValue());
+          entry.replace(CacheConstants.GOLD_UPDATE, now);
+          entry.replace(CacheConstants.GOLD_SYNC, now);
+        }
+        getProcessor().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
+      }
+
+      @Override
+      public boolean isCompleted(double delta, long now) {
+        return !getProcessor().getTowerCache().isEmpty();
+      }
+    });
+    steps.add(new TutorialStep() {
+      @Override
+      public String[] getTexts() {
+        return new String[] { "Nice work!" };
+      }
+
+      @Override
+      public void onChange(double delta, long now) {
         // empty
       }
 
       @Override
-      public boolean isCompleted() {
+      public boolean isCompleted(double delta, long now) {
         return true;
       }
     });
@@ -183,9 +217,9 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
     public abstract String[] getTexts();
 
-    public abstract void onChange();
+    public abstract void onChange(double delta, long now);
 
-    public abstract boolean isCompleted();
+    public abstract boolean isCompleted(double delta, long now);
 
   }
 }

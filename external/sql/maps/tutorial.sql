@@ -13,7 +13,7 @@ INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, ge
 	(101, 300, 0.1, 500, true, 0, 114);
 
 INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
-	(101, now(), now(), 3, '', 0, 150, 20, 'Tutorial', 500, null, 1, 101, null);
+	(101, now(), now(), 3, '', 0, 0, 20, 'Tutorial', 500, null, 1, 101, null);
 
 INSERT IGNORE INTO map_towers (Map_id, towers_id) 
 	(select 101, t.id from tower t where t.name = "Laser Tower");
