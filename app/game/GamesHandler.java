@@ -88,6 +88,9 @@ public class GamesHandler implements Serializable {
         Match match = MatchDAO.getInstance().getById(matchId);
         Hibernate.initialize(match.getPlayerResults());
         Hibernate.initialize(match.getMap().getTowers());
+        for (Tower tower : match.getMap().getTowers()) {
+          Hibernate.initialize(tower.getWeapons());
+        }
         Hibernate.initialize(match.getMap().getWaves());
         for (Wave wave : match.getMap().getWaves()) {
           Hibernate.initialize(wave.getPath().getDbWaypoints());
