@@ -33,8 +33,8 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
   @Override
   public void process(double delta, long now) {
-    if (getProcessor().isTutorialUpdate()) {
-      getProcessor().setTutorialUpdate(false);
+    if (current != null && current.isCompleted(delta, now)) {
+      steps.remove(current);
       updateTutorial(delta, now);
     }
   }
@@ -42,7 +42,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
   @Override
   public void load() {
     super.load();
-    getProcessor().setTutorialUpdate(true);
+    updateTutorial(0d, 0l);
   }
 
   @Override
@@ -66,21 +66,16 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
   }
 
   private void updateTutorial(double delta, long now) {
-    if (current == null) {
-      Iterator<TutorialStep> iter = steps.iterator();
-      if (iter.hasNext()) {
-        current = iter.next();
-        getProcessor().broadcast(new TutorialUpdatePacket(current.getTexts()));
-        current.onChange(delta, now);
-      } else {
-        getProcessor().setWavesFinished(true);
-        getProcessor().setUnitsFinished(true);
-      }
+    Iterator<TutorialStep> iter = steps.iterator();
+    if (iter.hasNext()) {
+      current = iter.next();
+      getProcessor().broadcast(new TutorialUpdatePacket(current.getTexts()));
+      current.onChange(delta, now);
+    } else {
+      getProcessor().setWavesFinished(true);
+      getProcessor().setUnitsFinished(true);
     }
-    if (current != null && current.isCompleted(delta, now)) {
-      steps.remove(current);
-      current = null;
-    }
+    getProcessor().setTutorialUpdate(false);
   }
 
   private List<TutorialStep> createTutorialSteps() {
@@ -98,7 +93,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     steps.add(new TutorialStep() {
@@ -114,7 +109,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     steps.add(new TutorialStep() {
@@ -131,7 +126,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     steps.add(new TutorialStep() {
@@ -149,7 +144,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     steps.add(new TutorialStep() {
@@ -166,7 +161,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     steps.add(new TutorialStep() {
@@ -207,7 +202,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
       @Override
       public boolean isCompleted(double delta, long now) {
-        return true;
+        return getProcessor().isTutorialUpdate();
       }
     });
     return steps;
