@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import models.entity.game.Match;
 import models.entity.game.MatchToken;
 import models.entity.game.Tower;
+import models.entity.game.TowerWeapon;
+import models.entity.game.TowerWeaponType;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
 
@@ -115,20 +117,21 @@ public class GamesHandler implements Serializable {
 
   private void sendPreloadDataPacket(final WebSocketConnection connection, final GameProcessor game) {
     if (game.getPreloadPacket() == null) {
-      // TODO: replace hardcoded preload data
       java.util.Map<String, String> images = new HashMap<String, String>();
       images.put("explosion", "assets/images/game/textures/effects/explosion.png");
       java.util.Map<String, String> textures = new HashMap<String, String>();
       textures.put("ground-rock", "assets/images/game/textures/ground/rock.jpg");
       textures.put("ground-grass", "assets/images/game/textures/ground/grass.jpg");
-      textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
-      textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
+      //textures.put("stone-natural-001", "assets/images/game/textures/stone/natural-001.jpg");
+      //textures.put("stone-rough-001", "assets/images/game/textures/stone/rough-001.jpg");
       textures.put("particle001", "assets/images/game/textures/effects/particle001.png");
       textures.put("cloud10", "assets/images/game/textures/effects/cloud10.png");
       java.util.Map<String, String> texturesCube = new HashMap<String, String>();
-      texturesCube.put("default", "assets/images/game/skybox/default/%1.jpg");
+      if (game.getMap().getSkybox() != null && !"".equals(game.getMap().getSkybox())) {
+        String skybox = game.getMap().getSkybox();
+        texturesCube.put(skybox, "assets/images/game/skybox/" + skybox + "/%1.jpg");
+      }
       java.util.Map<String, String> geometries = new HashMap<String, String>();
-      geometries.put("rocket", "assets/geometries/weapons/rocket.js");
       Iterator<Wave> iter = game.getMap().getWaves().iterator();
       while (iter.hasNext()) {
         Wave wave = iter.next();
@@ -142,6 +145,11 @@ public class GamesHandler implements Serializable {
       while (iter3.hasNext()) {
         Tower tower = iter3.next();
         geometries.put(tower.getName(), "api/game/geometry/tower/" + tower.getId());
+        for (TowerWeapon weapon : tower.getWeapons()) {
+          if (TowerWeaponType.ROCKET.equals(weapon.getType()) && !geometries.containsKey("rocket")) {
+            geometries.put("rocket", "assets/geometries/weapons/rocket.js");
+          }
+        }
       }
       game.setPreloadPacket(new PreloadDataPacket(game.getMap().getId(), new PreloadData(images, textures, texturesCube, geometries)));
     }
