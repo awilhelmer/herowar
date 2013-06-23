@@ -8,7 +8,7 @@ db = require 'database'
 
 class AddTowerTool extends AddObject
 	
-	internalId: 200
+	internalId: 45000
 	
 	bindEvents: ->
 		events.on 'select:tower', @onSelectTower, @
