@@ -1,8 +1,10 @@
 package game.processor.plugin;
 
 import game.GameSession;
+import game.models.TowerRestriction;
 import game.network.server.GUIElementUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
+import game.network.server.TowerAreaRestrictionPacket;
 import game.network.server.TutorialUpdatePacket;
 import game.processor.CacheConstants;
 import game.processor.GameProcessor;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Tower;
+import models.entity.game.Vector3;
 
 /**
  * The tutorial plugin handles the state for the tutorial map.
@@ -181,6 +184,9 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
           entry.replace(CacheConstants.GOLD_UPDATE, now);
           entry.replace(CacheConstants.GOLD_SYNC, now);
         }
+        TowerRestriction restriction = new TowerRestriction(new Vector3(80d, 1d, 0d), 10);
+        getProcessor().getTowerRestrictions().add(restriction);
+        getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
         getProcessor().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
       }
 

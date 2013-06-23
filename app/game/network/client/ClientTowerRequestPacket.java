@@ -3,6 +3,7 @@ package game.network.client;
 import game.GameSession;
 import game.GamesHandler;
 import game.models.TowerModel;
+import game.models.TowerRestriction;
 import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.handler.PacketHandler;
@@ -96,11 +97,28 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
   }
 
   private boolean isPlaceAllowed(GameSession session, com.ardor3d.math.Vector3 position) {
+    if (!checkRestrictions(session, position)) {
+      return false;
+    }
     if (!checkWaypoints(session, position)) {
       return false;
     }
     if (!checkTowers(session, position)) {
       return false;
+    }
+    return true;
+  }
+
+  private boolean checkRestrictions(GameSession session, com.ardor3d.math.Vector3 position) {
+    Iterator<TowerRestriction> iter = session.getGame().getTowerRestrictions().iterator();
+    while (iter.hasNext()) {
+      TowerRestriction restriction = iter.next();
+      if (position.distance(restriction.getPosition().getX(), restriction.getPosition().getY(), restriction.getPosition().getZ()) >= restriction.getRadius()) {
+        session.getConnection().send(Json.toJson(new GlobalMessagePacket("Tower must be build in marked area")).toString());
+        log.info("Tower build request denied - Distance to marked area is "
+            + position.distance(restriction.getPosition().getX(), restriction.getPosition().getY(), restriction.getPosition().getZ()));
+        return false;
+      }
     }
     return true;
   }

@@ -10,6 +10,7 @@ class GameScene extends Scene
 		
 	initialize: ->
 		@enemyWaypointTargets = []
+		@towerAreaRescritions = []
 		@addEventListeners()
 		return
 		
@@ -18,6 +19,7 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_OUT}", @onUnitOut, @
 		events.on "retrieve:packet:#{PacketType.SERVER_TARGET_TOWER}", @onTowerTarget, @
 		events.on "retrieve:packet:#{PacketType.SERVER_ATTACK_TOWER}", @onTowerAttack, @
+		events.on "retrieve:packet:#{PacketType.SERVER_TOWER_RESTRICTION}", @_onTowerRestriction, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GUI_UPDATE}", @_onGUIUpdate, @
@@ -52,6 +54,19 @@ class GameScene extends Scene
 		target = owner.target
 		return unless target
 		owner.attack target, packet.damage unless target.isSoonDead()
+		return
+	
+	_onTowerRestriction: (packet) ->
+		console.log '_onTowerRestriction', packet
+		outerRadius = packet.radius + 2
+		material = new THREE.MeshBasicMaterial color: '#000000', opacity: 0.75, transparent: true
+		geometry = new THREE.RingGeometry packet.radius, outerRadius, outerRadius * 2, packet.radius * 2
+		target = new THREE.Mesh geometry, material
+		target.name = 'towerAreaRestriction'
+		target.position.copy packet.position
+		target.rotation.x = THREE.Math.degToRad -90
+		@towerAreaRescritions.push target
+		scenegraph.scene().add target
 		return
 	
 	onWaveCall: (event) ->

@@ -4,6 +4,7 @@ import game.GameClock;
 import game.GameSession;
 import game.event.GameStateEvent;
 import game.models.TowerModel;
+import game.models.TowerRestriction;
 import game.models.UnitModel;
 import game.network.BasePacket;
 import game.network.server.PreloadDataPacket;
@@ -93,6 +94,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
    */
   private ConcurrentHashMap<Long, TowerModel> towerCache = new ConcurrentHashMap<Long, TowerModel>();
 
+  private Set<TowerRestriction> towerRestrictions = Collections.synchronizedSet(new HashSet<TowerRestriction>());
+
   public GameProcessor(Match match) {
     super("match-" + match.getId());
     this.gameId = match.getId();
@@ -139,13 +142,13 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
     AnnotationProcessor.unprocess(this);
     super.stop();
   }
-  
+
   /**
    * Shutdown game processor.
    */
   private void shutdown() {
     Iterator<GameSession> iter = sessions.iterator();
-    while(iter.hasNext()) {
+    while (iter.hasNext()) {
       GameSession session = iter.next();
       session.getConnection().close();
     }
@@ -431,6 +434,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
   public void setTutorialUpdate(boolean tutorialUpdate) {
     this.tutorialUpdate = tutorialUpdate;
+  }
+
+  public Set<TowerRestriction> getTowerRestrictions() {
+    return towerRestrictions;
+  }
+
+  public void setTowerRestrictions(Set<TowerRestriction> towerRestrictions) {
+    this.towerRestrictions = towerRestrictions;
   }
 
   public enum State {
