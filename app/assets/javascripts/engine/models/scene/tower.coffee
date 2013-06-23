@@ -78,9 +78,6 @@ class Tower extends AnimatedModel
 		@meshRange.visible = false if @meshRange
 
 	_rotateToTarget: (delta) ->
-		@rotateTo @target.getMainObject().position, delta if @_isValidTarget()
-
-	_isValidTarget: ->
-		return if @target and not @target.isDead() and @target.getMainObject().position.distanceTo(@getMainObject().position) <= @range then true else false
+		@rotateTo @target.getMainObject().position, delta if @target and not @target.isDead()
 
 return Tower

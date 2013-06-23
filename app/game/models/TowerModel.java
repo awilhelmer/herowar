@@ -125,7 +125,7 @@ public class TowerModel extends BaseModel<Tower> {
    * @return boolean If model is in range.
    */
   public boolean inRange(UnitModel model) {
-    return getTranslation().distance(model.getTranslation()) <= getEntity().getCoverage() ? true : false;
+    return distance(model) <= getEntity().getCoverage() ? true : false;
   }
 
   /**
@@ -136,7 +136,7 @@ public class TowerModel extends BaseModel<Tower> {
    * @return boolean If model is in view range.
    */
   public boolean inViewRange(UnitModel model) {
-    return getTranslation().distance(model.getTranslation()) <= getEntity().getCoverage() * 1.2 ? true : false;
+    return distance(model) <= getEntity().getCoverage() * 1.3 ? true : false;
   }
 
   /**

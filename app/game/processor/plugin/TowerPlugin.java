@@ -53,7 +53,6 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
         }
       }
       tower.setTarget(target);
-
     }
   }
 
