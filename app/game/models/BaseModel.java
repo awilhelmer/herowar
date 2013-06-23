@@ -23,6 +23,7 @@ public class BaseModel<T extends Serializable> extends Mesh implements Serializa
   private Long dbId;
   private T entity;
   protected double movespeed = 30;
+  protected double lastRotationDifference = 0;
 
   public BaseModel() {
     // empty
@@ -43,9 +44,12 @@ public class BaseModel<T extends Serializable> extends Mesh implements Serializa
     position.setY(0D);
     Quaternion qStart = new Quaternion();
     qStart.fromRotationMatrix(getRotation().clone());
+    double[] eulersStart = qStart.toEulerAngles(null);
     lookAt(position);
     Quaternion qEnd = new Quaternion();
     qEnd.fromRotationMatrix(getRotation());
+    double[] eulersEnd = qEnd.toEulerAngles(null);
+    lastRotationDifference = eulersStart[0] > eulersEnd[0] ? eulersStart[0] - eulersEnd[0] : eulersEnd[0] - eulersStart[0];
     Quaternion qFinal = new Quaternion();
     qStart.slerp(qEnd, delta * (movespeed / 10), qFinal);
     setRotation(qFinal);

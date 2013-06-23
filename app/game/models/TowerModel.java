@@ -18,6 +18,7 @@ import com.ardor3d.math.MathUtils;
  */
 @SuppressWarnings("serial")
 public class TowerModel extends BaseModel<Tower> {
+  public static double SHOOT_ANGLE = 15 * MathUtils.DEG_TO_RAD;
 
   private UnitModel target;
   private GameSession session;
@@ -51,7 +52,7 @@ public class TowerModel extends BaseModel<Tower> {
     Date now = new Date();
     // TODO: only shot if towers looks in the proper direction (dunno how to
     // check this yet...)
-    if (target != null && inRange(target) && (now.getTime() - getEntity().getReload() >= getLastShot().getTime())) {
+    if (target != null && inRange(target) && lastRotationDifference <= SHOOT_ANGLE && (now.getTime() - getEntity().getReload() >= getLastShot().getTime())) {
       setLastShot(now);
       return true;
     }

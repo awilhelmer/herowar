@@ -45,7 +45,7 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
           broadcast(packet);
         }
         tower.rotateTo(target, delta);
-        if (tower.inRange(target) && tower.shoot(target)) {
+        if (tower.shoot(target)) {
           long damage = tower.calculateDamage(target);
           target.hit(tower, damage);
           TowerAttackPacket packet = new TowerAttackPacket(tower.getId(), damage);
