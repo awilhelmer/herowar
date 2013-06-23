@@ -250,6 +250,7 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
           log.info(String.format("Wave %d/%d - Sending new unit: %s - Path %s - %d/%d", index, total, unit.getName(), wave.getPath().getId(), spawnCurrent,
               wave.getQuantity()));
           plugin.createUnit(wave.getPath(), unit);
+          plugin.getProcessor().setUnitsFinished(false);
         }
       }
     }

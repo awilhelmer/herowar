@@ -62,7 +62,7 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
         }
       }
     }
-    if (!getProcessor().isUnitsFinished() && getProcessor().isWavesFinished() && units.size() == 0) {
+    if (!getProcessor().isUnitsFinished() && units.size() == 0) {
       getProcessor().setUnitsFinished(true);
       log.debug("Units finished!!!!");
     }

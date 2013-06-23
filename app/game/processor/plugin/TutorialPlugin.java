@@ -198,7 +198,23 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
     steps.add(new TutorialStep() {
       @Override
       public String[] getTexts() {
-        return new String[] { "Nice work!" };
+        return new String[] { "Nice work! Lets start a wave of enemies." };
+      }
+
+      @Override
+      public void onChange(double delta, long now) {
+        getProcessor().setWaveRequest(true);
+      }
+
+      @Override
+      public boolean isCompleted(double delta, long now) {
+        return getProcessor().isUnitsFinished();
+      }
+    });
+    steps.add(new TutorialStep() {
+      @Override
+      public String[] getTexts() {
+        return new String[] { "Awesome. I think you are ready for real action!" };
       }
 
       @Override
