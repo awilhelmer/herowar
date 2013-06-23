@@ -20,6 +20,7 @@ class Scene
 		@createStaticObjects() if @world.has('staticGeometries') and @world.get('staticGeometries').length isnt 0
 		@createPaths()
 		@createWaves()
+		events.trigger 'scene:created'
 		
 	# Override for custom initialize
 	initialize: ->

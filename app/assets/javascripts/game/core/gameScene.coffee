@@ -9,7 +9,9 @@ db = require 'database'
 class GameScene extends Scene
 		
 	initialize: ->
+		@enemyWaypointTargets = []
 		@addEventListeners()
+		return
 		
 	addEventListeners: ->
 		events.on "retrieve:packet:#{PacketType.SERVER_UNIT_IN}", @onUnitIn, @
@@ -19,7 +21,9 @@ class GameScene extends Scene
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_DEFEAT}", @onGameDefeat, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GAME_VICTORY}", @onGameVictory, @
 		events.on "retrieve:packet:#{PacketType.SERVER_GUI_UPDATE}", @_onGUIUpdate, @
+		events.on 'scene:created', @_onSceneCreated, @
 		events.on 'call:wave', @onWaveCall, @
+		return
 		
 	onUnitIn: (packet) ->
 		enemiesFactory.create packet
@@ -70,6 +74,11 @@ class GameScene extends Scene
 		Backbone.history.loadUrl url
 		return
 
+	_onSceneCreated: ->
+		paths = db.get 'db/paths'
+		@_createEnemyWaypointTarget path for path in paths.models when path.get('waypoints')?.length isnt 0
+		return
+
 	_onGUIUpdate: (packet) ->
 		console.log '_onGUIUpdate', packet
 		$guiElement = $ "##{packet.name}"
@@ -77,5 +86,20 @@ class GameScene extends Scene
 			$guiElement.css 'display', '' if packet.visible
 			$guiElement.css 'display', 'none' unless packet.visible
 		return
-	
+
+	_createEnemyWaypointTarget: (path) ->
+		position = path.get('waypoints')[path.get('waypoints').length - 1].position
+		return for pos in @enemyWaypointTargets when pos.x is position.x and pos.y is position.y and pos.z is position.z				
+		@enemyWaypointTargets.push position
+		innerRadius = 5
+		outerRadius = innerRadius + 2
+		material = new THREE.MeshBasicMaterial color: '#3366FF', opacity: 0.75, transparent: true
+		geometry = new THREE.RingGeometry innerRadius, outerRadius, outerRadius * 2, innerRadius * 2
+		target = new THREE.Mesh geometry, material
+		target.name = "enemyWaypointTarget-#{path.get('id')}"
+		target.position.copy position
+		target.rotation.x = THREE.Math.degToRad -90
+		scenegraph.scene().add target
+		return
+
 return GameScene
