@@ -58,6 +58,11 @@ class GameScene extends Scene
 	
 	_onTowerRestriction: (packet) ->
 		console.log '_onTowerRestriction', packet
+		unless @towerAreaRescritions.length is 0
+			res = @towerAreaRescritions[0]
+			scenegraph.scene().remove res
+			@towerAreaRescritions.length = 0
+		return unless packet.position
 		outerRadius = packet.radius + 2
 		material = new THREE.MeshBasicMaterial color: '#000000', opacity: 0.75, transparent: true
 		geometry = new THREE.RingGeometry packet.radius, outerRadius, outerRadius * 2, packet.radius * 2

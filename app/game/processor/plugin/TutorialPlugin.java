@@ -198,12 +198,43 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
     steps.add(new TutorialStep() {
       @Override
       public String[] getTexts() {
+        return new String[] { "Perfect. Lets build a tower on the opposite side." };
+      }
+
+      @Override
+      public void onChange(double delta, long now) {
+        Tower tower = getProcessor().getMap().getTowers().iterator().next();
+        Iterator<ConcurrentHashMap<String, Object>> iter = getProcessor().getPlayerCache().values().iterator();
+        while (iter.hasNext()) {
+          ConcurrentHashMap<String, Object> entry = iter.next();
+          entry.replace(CacheConstants.GOLD, tower.getPrice().doubleValue());
+          entry.replace(CacheConstants.GOLD_UPDATE, now);
+          entry.replace(CacheConstants.GOLD_SYNC, now);
+        }
+        TowerRestriction restriction = new TowerRestriction(new Vector3(-75d, 1d, 0d), 10);
+        getProcessor().getTowerRestrictions().clear();
+        getProcessor().getTowerRestrictions().add(restriction);
+        getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
+        getProcessor().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
+      }
+
+      @Override
+      public boolean isCompleted(double delta, long now) {
+        return getProcessor().getTowerCache().size() >= 2;
+      }
+    });
+    steps.add(new TutorialStep() {
+      @Override
+      public String[] getTexts() {
         return new String[] { "Nice work! Lets start a wave of enemies." };
       }
 
       @Override
       public void onChange(double delta, long now) {
         getProcessor().setWaveRequest(true);
+        TowerRestriction restriction = new TowerRestriction(null, 10);
+        getProcessor().getTowerRestrictions().clear();
+        getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
       }
 
       @Override
