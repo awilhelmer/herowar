@@ -8,6 +8,7 @@ __damage__ = {}
 class GameHUD extends BaseHUD
 	
 	default: [
+		'hud/elements/globalMessage'
 		'hud/elements/towerInfo'
 		'hud/elements/unitHealthBars'
 		'hud/elements/unitInfo'
@@ -33,6 +34,7 @@ class GameHUD extends BaseHUD
 	terrainBuild: (map) ->
 		world = db.get 'world'
 		if world.get('name') is 'Tutorial'
+			@addElement 'hud/elements/globalMessage'
 			@addElement 'hud/elements/tutorial'
 			$('#build').css 'display', 'none'
 			$('#stats').css 'display', 'none'

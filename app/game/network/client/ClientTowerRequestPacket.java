@@ -9,11 +9,11 @@ import game.network.handler.PacketHandler;
 import game.network.handler.WebSocketHandler;
 import game.network.server.ChatMessagePacket;
 import game.network.server.ChatMessagePacket.Layout;
+import game.network.server.GlobalMessagePacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
 import game.network.server.TowerBuildRejectedPacket;
 import game.processor.CacheConstants;
-import game.processor.GameProcessor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,7 +65,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
       return;
     }
     com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
-    if (currentGold < entity.getPrice() || !isPlaceAllowed(session.getGame(), position)) {
+    if (!hasEnoughGold(session, currentGold, entity.getPrice()) || !isPlaceAllowed(session, position)) {
       session.getConnection().send(Json.toJson(new TowerBuildRejectedPacket()).toString());
       return;
     }
@@ -75,9 +75,10 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     tower.setSession(session);
     session.getGame().getTowerCache().put(tower.getId(), tower);
     session.getGame().broadcast(new TowerBuildPacket(tower, this.position));
+    String message = session.getUsername() + " build " + tower.getName();
+    session.getGame().broadcast(new GlobalMessagePacket(message));
     DateFormat df = new SimpleDateFormat("hh:mm");
-    session.getGame().broadcast(
-        new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + session.getUsername() + " build " + tower.getName()));
+    session.getGame().broadcast(new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + message));
     synchronized (playerCache) {
       playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());
       playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
@@ -86,24 +87,33 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
         Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, entity.getPrice() * -1)).toString());
   }
 
-  private boolean isPlaceAllowed(GameProcessor game, com.ardor3d.math.Vector3 position) {
-    if (!checkWaypoints(game, position)) {
-      return false;
-    }
-    if (!checkTowers(game, position)) {
+  private boolean hasEnoughGold(GameSession session, double currentGold, int price) {
+    if (currentGold < price) {
+      session.getConnection().send(Json.toJson(new GlobalMessagePacket("Insufficient gold to build the tower")).toString());
       return false;
     }
     return true;
   }
 
-  private boolean checkWaypoints(GameProcessor game, com.ardor3d.math.Vector3 position) {
-    Iterator<Wave> iter = game.getMap().getWaves().iterator();
+  private boolean isPlaceAllowed(GameSession session, com.ardor3d.math.Vector3 position) {
+    if (!checkWaypoints(session, position)) {
+      return false;
+    }
+    if (!checkTowers(session, position)) {
+      return false;
+    }
+    return true;
+  }
+
+  private boolean checkWaypoints(GameSession session, com.ardor3d.math.Vector3 position) {
+    Iterator<Wave> iter = session.getGame().getMap().getWaves().iterator();
     while (iter.hasNext()) {
       Wave wave = iter.next();
       Iterator<Waypoint> iter2 = wave.getPath().getDbWaypoints().iterator();
       while (iter2.hasNext()) {
         Waypoint waypoint = iter2.next();
         if (waypoint.getPosition().getArdorVector().distance(position) < 50) {
+          session.getConnection().send(Json.toJson(new GlobalMessagePacket("Tower cant be build next to enemy paths")).toString());
           log.info("Tower build request denied - Distance to waypoint " + waypoint.toString() + " is "
               + waypoint.getPosition().getArdorVector().distance(position));
           return false;
@@ -113,11 +123,12 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     return true;
   }
 
-  private boolean checkTowers(GameProcessor game, com.ardor3d.math.Vector3 position) {
-    Iterator<TowerModel> iter = game.getTowerCache().values().iterator();
+  private boolean checkTowers(GameSession session, com.ardor3d.math.Vector3 position) {
+    Iterator<TowerModel> iter = session.getGame().getTowerCache().values().iterator();
     while (iter.hasNext()) {
       TowerModel towerModel = iter.next();
       if (towerModel.getTranslation().distance(position) < 25) {
+        session.getConnection().send(Json.toJson(new GlobalMessagePacket("Tower cant be build next to other towers")).toString());
         log.info("Tower build request denied - Distance to tower " + towerModel.toString() + " is " + towerModel.getTranslation().distance(position));
         return false;
       }

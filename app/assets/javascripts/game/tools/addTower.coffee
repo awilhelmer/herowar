@@ -49,7 +49,7 @@ class AddTowerTool extends AddObject
 	onBuildRejected: (packet) ->
 		console.log 'onBuildRejected()', packet
 		obj = @tool.get 'currentObject'
-		obj.showShield()
+		obj.showGlow 250
 		return
 
 	onLeaveTool: ->

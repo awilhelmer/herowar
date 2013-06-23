@@ -77,6 +77,10 @@ class Enemy extends AnimatedModel
 	
 	isSoonDead: ->
 		return @currentHealth <= 0 or @currentHealth + @currentShield + @maxHealth * 0.1 <= @damageIncoming
+
+	showShield: ->
+		@showGlow 100
+		return
 	
 	kill: ->
 		unless @dead
