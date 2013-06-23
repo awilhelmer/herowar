@@ -97,10 +97,6 @@ class Enemy extends AnimatedModel
 	setShield: (@currentShield, max) ->
 		if max then @maxShield = max else @maxShield = @currentShield
 		return
-
-	showShield: ->
-		@showGlow 100
-		return
 		
 	_waypointArrivalCheck: ->
 		waypoint = @waypoints[0]

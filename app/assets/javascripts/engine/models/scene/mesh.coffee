@@ -53,6 +53,10 @@ class MeshModel extends BaseModel
 			@meshSelection.visible = value
 		return @attributes.selected
 
+	showShield: ->
+		@showGlow 100
+		return
+
 	showGlow: (time) ->
 		return if @glowIsActive
 		@glowIsActive = true

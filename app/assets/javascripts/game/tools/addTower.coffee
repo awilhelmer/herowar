@@ -13,6 +13,7 @@ class AddTowerTool extends AddObject
 	bindEvents: ->
 		events.on 'select:tower', @onSelectTower, @
 		events.on "retrieve:packet:#{PacketType.SERVER_BUILD_TOWER}", @onBuildTower, @
+		events.on "retrieve:packet:#{PacketType.SERVER_TOWER_REJECTED}", @onBuildRejected, @
 		return
 	
 	onSelectTower: (id) ->
@@ -45,6 +46,12 @@ class AddTowerTool extends AddObject
 		model.weapons = tower.get 'weapons'
 		return
 
+	onBuildRejected: (packet) ->
+		console.log 'onBuildRejected()', packet
+		obj = @tool.get 'currentObject'
+		obj.showShield()
+		return
+
 	onLeaveTool: ->
 		@_removeObject()
 		return
@@ -64,6 +71,7 @@ class AddTowerTool extends AddObject
 		model = towers.create
 			id: @tool.get 'currentObjectId'
 			name: tower.get 'name'
+		model.glowColor = 0xff0000
 		model.range = tower.get 'coverage'
 		model.showRange()
 		model.visible false
@@ -80,7 +88,7 @@ class AddTowerTool extends AddObject
 	update: (position, intersect) ->
 		model = @tool.get 'currentObject'
 		return unless model
-		model.getMainObject().position = position
+		model.position position
 		model.visible true unless model.visible()
 		return
 

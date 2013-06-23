@@ -11,15 +11,20 @@ import game.network.server.ChatMessagePacket;
 import game.network.server.ChatMessagePacket.Layout;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerBuildPacket;
+import game.network.server.TowerBuildRejectedPacket;
 import game.processor.CacheConstants;
+import game.processor.GameProcessor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Tower;
 import models.entity.game.Vector3;
+import models.entity.game.Wave;
+import models.entity.game.Waypoint;
 
 import org.webbitserver.WebSocketConnection;
 
@@ -35,7 +40,6 @@ import play.libs.Json;
  */
 @SuppressWarnings("serial")
 public class ClientTowerRequestPacket extends BasePacket implements InputPacket {
-
   private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);
 
   private Long id;
@@ -60,12 +64,12 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     if (entity == null) {
       return;
     }
-    if (currentGold < entity.getPrice()) {
-      // TODO: not enough gold ...
+    com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
+    if (currentGold < entity.getPrice() || !isPlaceAllowed(session.getGame(), position)) {
+      session.getConnection().send(Json.toJson(new TowerBuildRejectedPacket()).toString());
       return;
     }
     TowerModel tower = new TowerModel(session.getGame().getNextObjectId(), entity);
-    com.ardor3d.math.Vector3 position = new com.ardor3d.math.Vector3(this.position.getX(), 0, this.position.getZ());
     tower.setTranslation(position);
     tower.updateWorldTransform(false);
     tower.setSession(session);
@@ -80,6 +84,45 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
     }
     session.getConnection().send(
         Json.toJson(new PlayerStatsUpdatePacket(null, null, Math.round(currentGold - entity.getPrice()), null, null, entity.getPrice() * -1)).toString());
+  }
+
+  private boolean isPlaceAllowed(GameProcessor game, com.ardor3d.math.Vector3 position) {
+    if (!checkWaypoints(game, position)) {
+      return false;
+    }
+    if (!checkTowers(game, position)) {
+      return false;
+    }
+    return true;
+  }
+
+  private boolean checkWaypoints(GameProcessor game, com.ardor3d.math.Vector3 position) {
+    Iterator<Wave> iter = game.getMap().getWaves().iterator();
+    while (iter.hasNext()) {
+      Wave wave = iter.next();
+      Iterator<Waypoint> iter2 = wave.getPath().getDbWaypoints().iterator();
+      while (iter2.hasNext()) {
+        Waypoint waypoint = iter2.next();
+        if (waypoint.getPosition().getArdorVector().distance(position) < 50) {
+          log.info("Tower build request denied - Distance to waypoint " + waypoint.toString() + " is "
+              + waypoint.getPosition().getArdorVector().distance(position));
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private boolean checkTowers(GameProcessor game, com.ardor3d.math.Vector3 position) {
+    Iterator<TowerModel> iter = game.getTowerCache().values().iterator();
+    while (iter.hasNext()) {
+      TowerModel towerModel = iter.next();
+      if (towerModel.getTranslation().distance(position) < 25) {
+        log.info("Tower build request denied - Distance to tower " + towerModel.toString() + " is " + towerModel.getTranslation().distance(position));
+        return false;
+      }
+    }
+    return true;
   }
 
   public Long getId() {

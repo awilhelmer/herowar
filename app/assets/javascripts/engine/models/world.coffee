@@ -9,7 +9,6 @@ class World extends Backbone.Model
 		super options
 		
 	onChangeTowers: ->
-		console.log 'Update towers...'
 		towers = db.get 'db/towers'
 		towers.reset()
 		towers.add @get 'towers'
