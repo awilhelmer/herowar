@@ -51,11 +51,14 @@ INSERT IGNORE INTO terrain (id, height, smoothness, width, wireframe, zScale, ge
 INSERT IGNORE INTO map (id, cdate, udate, version, description, goldPerTick, goldStart, lives, name, prepareTime, skybox, teamSize, terrain_id, allMaterials_id) VALUES 
 	(102,now(), now(), 3, '', 0, 600, 20, 'Path of Evil', 500, null, 1, 102, null);
 
-INSERT IGNORE INTO map_towers (Map_id, towers_id) VALUES 
-	(102, 1),
-	(102, 2),
-	(102, 3),
-	(102, 4);
+INSERT IGNORE INTO map_towers (Map_id, towers_id) 
+	(select 102, t.id from tower t where t.name = "Laser Tower");
+INSERT IGNORE INTO map_towers (Map_id, towers_id) 
+	(select 102, t.id from tower t where t.name = "Rocket Tower");
+INSERT IGNORE INTO map_towers (Map_id, towers_id) 
+	(select 102, t.id from tower t where t.name = "Fire Tower");
+INSERT IGNORE INTO map_towers (Map_id, towers_id) 
+	(select 102, t.id from tower t where t.name = "Tesla Tower");
 	
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 105);
 INSERT IGNORE INTO map_materials (Map_id, allMaterials_id) VALUES (102, 106);
