@@ -73,7 +73,8 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
     broadcast(packet);
     if (unit.isEndPointReached()) {
       if (getProcessor().getMap().getLives() > 0) {
-        getProcessor().getMap().setLives(getProcessor().getMap().getLives() - 1);
+        int newLives = getProcessor().getMap().getLives() - unit.getEntity().getReduceLives();
+        getProcessor().getMap().setLives(newLives >= 0 ? newLives : 0);
         PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(getProcessor().getMap().getLives());
         broadcast(packet2);
       }

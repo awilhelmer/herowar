@@ -43,6 +43,7 @@ public class Unit implements Serializable {
   private Integer moveSpeed = 0;
   private Integer rewardScore = 0;
   private Integer rewardGold = 0;
+  private Integer reduceLives = 1;
   private Double scaleGlow = 1d;
   private UnitType type;
   private Boolean burning = false;
@@ -120,6 +121,14 @@ public class Unit implements Serializable {
 
   public void setRewardGold(Integer rewardGold) {
     this.rewardGold = rewardGold;
+  }
+
+  public Integer getReduceLives() {
+    return reduceLives;
+  }
+
+  public void setReduceLives(Integer reduceLives) {
+    this.reduceLives = reduceLives;
   }
 
   public Double getScaleGlow() {

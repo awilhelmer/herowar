@@ -4,6 +4,7 @@
 	"moveSpeed" : 15,
 	"rewardScore" : 5000,
 	"rewardGold" : 1000,
+	"reduceLives" : 5,
 	"type" : "TANK",
 	"burning" : true,
 	"explode" : true,
