@@ -7,9 +7,7 @@ events = require 'events'
 db = require 'database'
 
 class GameScene extends Scene
-	
-	customId: 1000
-	
+		
 	initialize: ->
 		@addEventListeners()
 		
@@ -46,8 +44,9 @@ class GameScene extends Scene
 		
 	onTowerAttack: (packet) ->
 		owner = scenegraph.getDynObject packet.tower
+		return unless owner
 		target = owner.target
-		return unless owner and target
+		return unless target
 		owner.attack target, packet.damage unless target.isSoonDead()
 		return
 	

@@ -5,7 +5,7 @@ scenegraph = require 'scenegraph'
 
 class Tower extends AnimatedModel
 	
-	shotId: 5000 # TODO: this must be dynamic somehow
+	shotId: 50000 # TODO: this must be dynamic somehow
 	
 	glowColor: 0xffa500
 	
