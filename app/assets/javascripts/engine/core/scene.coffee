@@ -17,7 +17,7 @@ class Scene
 		@initialize()
 		@reset()
 		@createTextures()
-		@createStaticObjects()
+		@createStaticObjects() if @world.has('staticGeometries') and @world.get('staticGeometries').length isnt 0
 		@createPaths()
 		@createWaves()
 		
@@ -26,7 +26,8 @@ class Scene
 		
 	reset: =>
 		@createTerrainMaterial()
-		scenegraph.addSkybox @world.get 'skybox'
+		skybox = @world.get 'skybox'
+		scenegraph.addSkybox skybox if skybox
 		@buildTerrain()
 
 	createTerrainMaterial: ->
@@ -53,8 +54,7 @@ class Scene
 			map.children[0].geometry.computeVertexNormals()
 			scenegraph.setMap map
 			events.trigger 'scene:terrain:build', map
-		if !map
-			throw 'Map is undefined'
+		throw 'Map is undefined' if !map
 		map
 
 	createTextures: ->
@@ -73,28 +73,27 @@ class Scene
 		texture
 
 	createStaticObjects: ->
-		if @world.attributes.staticGeometries
-			mesh = null
-			for instance in @world.attributes.objects
-				unless scenegraph.hasStaticObject instance.geoId 
-					for staticMesh in @world.attributes.staticGeometries
-						if staticMesh.userData.id is instance.geoId
-							mesh = staticMesh
-							mesh.name = instance.name
-							break
-				else
-					mesh = scenegraph.staticObjects[instance.geoId][0]
-					mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
-				#add position to mesh ... 
-				if mesh
-					mesh.position = new THREE.Vector3 instance.position.x,instance.position.y,instance.position.z
-					mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
-					mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
-					mesh.userData.meshId = instance.id
-					scenegraph.addStaticObject mesh, mesh.userData.dbId
-					id = scenegraph.getNextId()
-					environmentsStatic = db.get 'environmentsStatic'
-					environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
+		mesh = null
+		for instance in @world.attributes.objects
+			unless scenegraph.hasStaticObject instance.geoId 
+				for staticMesh in @world.attributes.staticGeometries
+					if staticMesh.userData.id is instance.geoId
+						mesh = staticMesh
+						mesh.name = instance.name
+						break
+			else
+				mesh = scenegraph.staticObjects[instance.geoId][0]
+				mesh = materialHelper.createMesh mesh.geometry, mesh.material.materials, instance.name, id:mesh.userData.dbId
+			#add position to mesh ... 
+			if mesh
+				mesh.position = new THREE.Vector3 instance.position.x,instance.position.y,instance.position.z
+				mesh.rotation = new THREE.Vector3 instance.rotation.x,instance.rotation.y,instance.rotation.z
+				mesh.scale = new THREE.Vector3 instance.scale.x,instance.scale.y,instance.scale.z
+				mesh.userData.meshId = instance.id
+				scenegraph.addStaticObject mesh, mesh.userData.dbId
+				id = scenegraph.getNextId()
+				environmentsStatic = db.get 'environmentsStatic'
+				environmentsStatic.add @createModelFromMesh id, mesh, mesh.name
 		engine.render()
 		null
 
