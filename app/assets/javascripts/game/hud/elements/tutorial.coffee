@@ -12,6 +12,7 @@ class TutorialHUDElement extends BaseHUDElement
 		@changeState = false
 		@trooper = @createTrooper()
 		@alpha = 0.0
+		@alphaBackground = 0.0
 		@alphaContinue = 0.0
 		@texts = []
 		@newTexts = []
@@ -19,7 +20,8 @@ class TutorialHUDElement extends BaseHUDElement
 		return
 		
 	bindEvents: ->
-		events.listenTo @input, 'mouse:down', @_onMouseDown
+		events.listenTo @input, 'key:down', @_onTutorialContinue
+		events.listenTo @input, 'mouse:down', @_onTutorialContinue
 		events.on "retrieve:packet:#{PacketType.SERVER_TUTORIAL_UPDATE}", @_onTutorialUpdate, @
 		return
 	
@@ -46,21 +48,24 @@ class TutorialHUDElement extends BaseHUDElement
 	_updateAlpha: (delta) ->
 		if @changeState
 			@alpha -= delta * 2
+			@alphaBackground -= @alpha if @newTextslength is 0
 			if @alpha <= 0
 				@alpha = 0
 				@alphaContinue = 0.0
-				@alphaContinueType = 0
+				@alphaBackground -= 0.0 if @newTextslength is 0
+				@alphaContinueType = 0.0
 				@changeState = false
 				@texts = @newTexts
 		else
 			if @alpha < 1.0
 				@alpha += delta * 2
 				@alpha = 1.0 if @alpha > 1.0
+			@alphaBackground = @alpha if @alphaBackground < 1.0
 		return
 	
 	_drawBackground: (delta, now) ->
-		@ctx.fillStyle = "rgba(0, 104, 175, #{@alpha / 2})"
-		@ctx.strokeStyle = "rgba(141, 167, 204, #{@alpha})"
+		@ctx.fillStyle = "rgba(0, 104, 175, #{@alphaBackground / 2})"
+		@ctx.strokeStyle = "rgba(141, 167, 204, #{@alphaBackground})"
 		@ctx.lineWidth = 4
 		@ctx.beginPath()
 		@ctx.moveTo @canvas.width + 10, @canvas.height + 10
@@ -125,7 +130,7 @@ class TutorialHUDElement extends BaseHUDElement
 				@alphaContinueType = 1
 		return
 
-	_onMouseDown: (event) =>
+	_onTutorialContinue: (event) =>
 		if @trooper.loaded and @alpha is 1.0 
 			events.trigger 'send:packet', new TutorialUpdatePacket() 
 		return

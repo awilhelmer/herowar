@@ -92,12 +92,14 @@ class RTSControls
 	onKeyDown: (event) =>
 		return unless event
 		@keysPressed.push event.keyCode if event.keyCode and _.indexOf(@keysPressed, event.keyCode) is -1
+		@input.trigger 'key:down', event
 		#console.log 'onKeyUp() Active keys pressed: ', @keysPressed
 		return
 		
 	onKeyUp: (event) =>
 		return unless event
 		@keysPressed.splice _.indexOf(@keysPressed, event.keyCode), 1 if event.keyCode and _.indexOf(@keysPressed, event.keyCode) isnt -1
+		@input.trigger 'key:up', event
 		#console.log 'onKeyUp() Active keys pressed: ', @keysPressed
 		return
 

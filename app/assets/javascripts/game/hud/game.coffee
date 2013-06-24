@@ -13,6 +13,7 @@ class GameHUD extends BaseHUD
 		'hud/elements/unitHealthBars'
 		'hud/elements/unitInfo'
 		'hud/elements/waveIncoming'
+		'hud/elements/towerRestriction'
 		'hud/elements/waveProgress'
 	]
 
@@ -39,6 +40,7 @@ class GameHUD extends BaseHUD
 			@addElement 'hud/elements/towerInfo'
 			@addElement 'hud/elements/unitHealthBars'
 			@addElement 'hud/elements/unitInfo'
+			@addElement 'hud/elements/towerRestriction'
 			$('#build').css 'display', 'none'
 			$('#stats').css 'display', 'none'
 		else
