@@ -35,6 +35,7 @@ public class MatchToken extends BaseModel {
   private Player player;
 
   @OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
+  @JoinColumn(name = "result_id")
   @JsonIgnore
   private MatchResult result;
 

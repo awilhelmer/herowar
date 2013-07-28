@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -33,8 +34,7 @@ public class MatchResult implements Serializable {
   @JoinColumn(name = "player_id")
   private Player player;
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "token_id")
+  @OneToOne(cascade = { CascadeType.REFRESH }, mappedBy = "result")
   @JsonIgnore
   private MatchToken token;
 
