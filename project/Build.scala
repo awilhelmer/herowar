@@ -21,6 +21,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val appSettings = Seq[Setting[_]](
     EclipseKeys.skipParents in ThisBuild := false,
     ebeanEnabled := false,
+	resolvers += Resolver.url("ssachtleben repository (snapshots)", url("http://ssachtleben.github.io/play-plugins/repository/snapshots/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("Objectify Play Repository (release)", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("Objectify Play Repository (snapshot)", url("http://schaloner.github.com/snapshots/"))(Resolver.ivyStylePatterns),
     resolvers += Resolver.url("play-easymail (release)", url("http://joscha.github.com/play-easymail/repo/releases/"))(Resolver.ivyStylePatterns),
@@ -53,6 +54,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     javaCore,
     javaJdbc,
     javaJpa,
+	"com.ssachtleben" %% "play-auth-plugin" % "0.1-SNAPSHOT",
     "commons-beanutils" % "commons-beanutils" % "1.8.3",
     "mysql" % "mysql-connector-java" % "5.1.24",
     "org.hibernate" % "hibernate-entitymanager" % "3.6.9.Final",
