@@ -231,7 +231,7 @@ window.onload = function() {
 		new THREE.ShaderMaterial({
 			uniforms: {
 				texture_grass: { type: "t", value: THREE.ImageUtils.loadTexture( 'assets/images/game/textures/ground/texture_ground_grass.jpg' ) },
-				texture_bare: { type: "t", value  THREE.ImageUtils.loadTexture( 'assets/images/game/textures/ground/texture_ground_bare.jpg' ) },
+				texture_bare: { type: "t", value:  THREE.ImageUtils.loadTexture( 'assets/images/game/textures/ground/texture_ground_bare.jpg' ) },
 				texture_snow: { type: "t", value: THREE.ImageUtils.loadTexture( 'assets/images/game/textures/ground/texture_ground_snow.jpg' ) },
 				show_ring: { type: 'i', value: true },
 				ring_width: { type: 'f', value: 0.15 },
@@ -472,7 +472,7 @@ window.onload = function() {
 		var vector = new THREE.Vector3((mouse_info.x / 800) * 2 - 1, - (mouse_info.y / 640) * 2 + 1, 0.5);
 		projector.unprojectVector(vector, camera);
 		
-		var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+		var ray = new THREE.Ray( camera.position, vector.sub( camera.position ).normalize() );
 		
 		var intersection = ray.intersectObject(ground);
 		if (intersection.length === 0) {
