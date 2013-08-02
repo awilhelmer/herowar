@@ -134,7 +134,8 @@ materialHelper =
 	transformMaterial:(material, materialId) ->
 		if @isShader material.attributes
 			result = new THREE.ShaderMaterial()
-			result.map = true
+			result.side = THREE.DoubleSide
+			#result.map = true
 		else
 			result = new THREE.MeshBasicMaterial()
 		params = {}
