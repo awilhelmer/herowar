@@ -17,8 +17,9 @@ class Settings extends BaseView
 		@listenTo @model, 'change:isGuest change:isUser', @render if @model
 	
 	events:
-		'click .logout-link'	: 'logout'
-		'click .login-link'		: 'toggleTooltip'
+		'click .logout-link'	  : 'logout'
+		'click .login-link'		  : 'toggleTooltip'
+		'click .connect-google' : 'connectGoogle'
 		
 	logout: (event) ->
 		if event
@@ -37,5 +38,11 @@ class Settings extends BaseView
 		$Tooltip.toggleClass 'visible'
 		$UsernameInput = $ '.login-form input[name="username"]'
 		$UsernameInput.focus() if $UsernameInput?.length > 0
+
+	connectGoogle: (event) ->
+		event?.preventDefault()
+		console.log 'Connect with google'
+		window.open '/login/google', 'GoogleConnect', 'width=655,height=380,left=100,top=200,toolbar=no,scrollbars=no,menubar=no'
+		return
 
 return Settings

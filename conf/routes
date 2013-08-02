@@ -5,6 +5,7 @@
 ########## SITE ###########
 
 GET			/																		controllers.Application.index()
+GET			/login/:provider										controllers.Authentication.login(provider: String)
 GET			/signup															controllers.Application.signup()
 GET			/play																controllers.Application.goPlay()
 
