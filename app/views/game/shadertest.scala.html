@@ -1,10 +1,10 @@
-@(title: String)(content: Html)
+@()
 
 <!DOCTYPE html>
 
 <html>
 <head>
-<title>@title</title>
+<title>ShaderTest</title>
 <style type="text/css">
 body {
 width: 800px;
@@ -538,9 +538,6 @@ window.onload = function() {
 </script>
 </head>
 <body>
-	<div id="viewport">
-		<canvas width="800" height="640"></canvas>
-	</div>
-	@content
+	<div id="viewport"></div>
 </body>
 </html>
