@@ -239,12 +239,12 @@ window.onload = function() {
 		})
 	);
 	ground.dynamic = true;
-	ground.displacement = ground.materials[0].attributes.displacement;
+	ground.displacement = ground.material.attributes.displacement;
 	for (var i = 0; i < ground.geometry.vertices.length; i++) {
-		ground.materials[0].attributes.displacement.value.push(0);
+		ground.material.attributes.displacement.value.push(0);
 	}
 	ground.rotation.x = Degrees2Radians(-90);
-	scene.addChild(ground);
+	scene.add(ground);
 	
 	// Water
 	ground.water = new THREE.Mesh(
@@ -263,12 +263,12 @@ window.onload = function() {
 		})
 	);
 	ground.water.dynamic = true;
-	ground.water.displacement = ground.water.materials[0].attributes.displacement;
+	ground.water.displacement = ground.water.material.attributes.displacement;
 	for (var i = 0; i < ground.water.geometry.vertices.length; i++) {
-		ground.water.materials[0].attributes.displacement.value.push(0);
+		ground.water.material.attributes.displacement.value.push(0);
 	}
 	ground.water.position.z = -2;
-	ground.addChild(ground.water);
+	ground.add(ground.water);
 	
 	
 	/** VERTEX POINTS **/
@@ -517,7 +517,7 @@ window.onload = function() {
 	
 	var main = function main() {
 		
-		ground.water.materials[0].uniforms.time.value = new Date().getTime() % 10000;
+		ground.water.material.uniforms.time.value = new Date().getTime() % 10000;
 		
 		render();
 		window.requestAnimFrame(main);
