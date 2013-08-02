@@ -93,6 +93,8 @@ GET			/api/editor/environment/:id					controllers.api.Editor.envShow(id: Long)
 
 GET			/game																controllers.Game.index()
 GET			/test																controllers.Game.test()
+GET			/shadertest													controllers.ShaderTest.index()
+
 
 ########## EDITOR ###########
 
