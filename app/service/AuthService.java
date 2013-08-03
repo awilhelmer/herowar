@@ -1,5 +1,7 @@
 package service;
 
+import java.util.Date;
+
 import models.entity.LinkedAccount;
 import models.entity.User;
 
@@ -7,10 +9,10 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.JsonNode;
 
 import play.Logger;
+import play.db.jpa.JPA;
 import play.mvc.Http.Context;
 
 import com.ssachtleben.play.plugin.auth.annotations.Authenticates;
-import com.ssachtleben.play.plugin.auth.models.AuthUser;
 import com.ssachtleben.play.plugin.auth.models.FacebookAuthUser;
 import com.ssachtleben.play.plugin.auth.models.GoogleAuthUser;
 import com.ssachtleben.play.plugin.auth.models.Identity;
@@ -68,10 +70,20 @@ public class AuthService {
 
 	@Observer(topic = EventKeys.AUTHENTICATION_SUCCESSFUL)
 	public static void handleAuthenticationSuccessful(final String provider, final Long authUser) {
-		log.info(String.format("~~~ post authentication via async event [provider=%s, authUser=%s]  !!!! ~~~", provider, authUser));
+		log.info(String.format("Authentication successful event [provider=%s, authUser=%s]", provider, authUser));
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				User user = UserDAO.instance().findUnique(authUser);
+				user.setLastLogin(new Date());
+				log.info(String.format("Last login date updated for %s", user));
+			}
+		});
+
 	}
 
 	public static Object handleLogin(final Identity identity, final String email, final String username, final String password) {
+		log.info(String.format("handleLogin [identity=%s, email=%s, username=%s, password=%s]", identity, email, username, password));
 		User user = null;
 		LinkedAccount linkedAccount = LinkedAccountDAO.find(identity.provider(), identity.id());
 		log.info(String.format("Found LinkedAccount: %s", linkedAccount));
