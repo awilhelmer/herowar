@@ -15,7 +15,7 @@ class Settings extends BaseView
 	template: templates.get 'header/settings.tmpl'
 	
 	bindEvents: ->
-		@listenTo @model, 'change:isGuest change:isUser', @render
+		@listenTo @model, 'change:isFetched change:isGuest change:isUser', @render
 		events.on 'googleLogin facebookLogin', @oauthLogin, @
 	
 	events:
