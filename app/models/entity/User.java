@@ -52,7 +52,7 @@ public class User extends BaseModel implements Serializable {
 	@JsonIgnore
 	private List<SecurityRole> roles;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<LinkedAccount> linkedAccounts;
 

@@ -27,6 +27,9 @@ import play.GlobalSettings;
 import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
+
+import com.ssachtleben.play.plugin.auth.models.PasswordUsernameAuthUser;
+
 import dao.NewsDAO;
 import dao.SecurityRoleDAO;
 import dao.UserDAO;
@@ -92,7 +95,7 @@ public class Global extends GlobalSettings {
 			return;
 		}
 		Logger.info("Creating admin user");
-		UserDAO.create("admin", "admin", "admin@herowar.com");
+		UserDAO.create(new PasswordUsernameAuthUser("admin", "admin"), "admin@herowar.com", "admin", "admin");
 	}
 
 	private void createDummyNews() {

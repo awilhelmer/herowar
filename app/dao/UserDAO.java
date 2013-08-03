@@ -6,6 +6,9 @@ import java.util.Date;
 import models.entity.User;
 import play.Logger;
 import play.db.jpa.JPA;
+
+import com.ssachtleben.play.plugin.auth.models.Identity;
+
 import controllers.Application;
 
 public class UserDAO extends BaseDAO<Long, User> {
@@ -43,16 +46,16 @@ public class UserDAO extends BaseDAO<Long, User> {
 		return instance().countSingleByPropertyValue("username", username) > 0;
 	}
 
-	public static User create(String username, String clearPassword, String email) {
+	public static User create(final Identity identity, final String email, final String username, final String password) {
 		final User user = new User();
 		user.setRoles(Collections.singletonList(SecurityRoleDAO.findByRoleName(Application.USER_ROLE)));
 		user.setActive(true);
 		user.setLastLogin(new Date());
-		// user.setLinkedAccounts(Collections.singletonList(LinkedAccount.create(authUser)));
 		user.setEmail(email);
 		user.setEmailValidated(false);
 		user.setUsername(username);
 		JPA.em().persist(user);
+		user.setLinkedAccounts(Collections.singletonList(LinkedAccountDAO.create(identity, user)));
 		Logger.info("Saved new user " + user.getUsername());
 		return user;
 	}

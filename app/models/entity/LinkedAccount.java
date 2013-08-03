@@ -26,13 +26,6 @@ public class LinkedAccount implements Serializable {
   private String providerUserId;
   private String providerKey;
 
-  public static LinkedAccount create(final LinkedAccount acc) {
-    final LinkedAccount ret = new LinkedAccount();
-    ret.providerKey = acc.providerKey;
-    ret.providerUserId = acc.providerUserId;
-    return ret;
-  }
-
   // GETTER & SETTER //
 
   public Long getId() {

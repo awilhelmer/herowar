@@ -41,6 +41,7 @@ public class Me extends Controller {
 	}
 
 	@Transactional
+	@Deprecated
 	public static Result login() {
 		Logger.info("login called");
 		// com.feth.play.module.pa.controllers.Authenticate.noCache(response());
@@ -67,6 +68,7 @@ public class Me extends Controller {
 		return badRequest();
 	}
 
+	@Deprecated
 	public static Result logout() {
 		// Authenticate.logout();
 		return badRequest();
