@@ -10,13 +10,16 @@ import play.Logger;
 import play.mvc.Http.Context;
 
 import com.ssachtleben.play.plugin.auth.annotations.Authenticates;
+import com.ssachtleben.play.plugin.auth.models.AuthUser;
 import com.ssachtleben.play.plugin.auth.models.FacebookAuthUser;
 import com.ssachtleben.play.plugin.auth.models.GoogleAuthUser;
 import com.ssachtleben.play.plugin.auth.models.Identity;
 import com.ssachtleben.play.plugin.auth.models.PasswordUsernameAuthUser;
+import com.ssachtleben.play.plugin.auth.providers.BaseProvider.EventKeys;
 import com.ssachtleben.play.plugin.auth.providers.Facebook;
 import com.ssachtleben.play.plugin.auth.providers.Google;
 import com.ssachtleben.play.plugin.auth.providers.PasswordUsername;
+import com.ssachtleben.play.plugin.event.annotations.Observer;
 
 import dao.LinkedAccountDAO;
 import dao.UserDAO;
@@ -61,6 +64,11 @@ public class AuthService {
 		log.info("Account: " + account);
 		log.info("Check PW: " + PasswordUsernameAuthUser.checkPassword(account.getProviderUserId(), identity.clearPassword()));
 		return PasswordUsernameAuthUser.checkPassword(account.getProviderUserId(), identity.clearPassword()) ? account.getUser().getId() : null;
+	}
+
+	@Observer(topic = EventKeys.AUTHENTICATION_SUCCESSFUL)
+	public static void handleAuthenticationSuccessful(final String provider, final Long authUser) {
+		log.info(String.format("~~~ post authentication via async event [provider=%s, authUser=%s]  !!!! ~~~", provider, authUser));
 	}
 
 	public static Object handleLogin(final Identity identity, final String email, final String username, final String password) {
