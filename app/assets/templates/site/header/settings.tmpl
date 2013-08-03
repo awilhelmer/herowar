@@ -3,12 +3,7 @@
 		{{#if isGuest}}
 			<a class="btn login-link">Login</a>
 			<div class="tooltip login-tooltip" data-view="views/header/login"></div>
-			<a class="connect connect-facebook" href="/login/facebook">
-				<img src="/assets/images/site/connect/facebook.gif" />
-			</a>
-			<a class="connect connect-google" href="/login/google">
-				<img src="/assets/images/site/connect/google.png" />
-			</a>
+			<div class="login-small" data-view="views/login/small"></div>
 		{{/if}}
 		{{#if isUser}}
 			<a class="btn logout-link">Logout</a>
