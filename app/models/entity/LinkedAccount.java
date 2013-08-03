@@ -11,8 +11,6 @@ import javax.persistence.ManyToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.feth.play.module.pa.user.AuthUser;
-
 @Entity
 @SuppressWarnings("serial")
 public class LinkedAccount implements Serializable {
@@ -27,17 +25,6 @@ public class LinkedAccount implements Serializable {
 
   private String providerUserId;
   private String providerKey;
-
-  public static LinkedAccount create(final AuthUser authUser) {
-    final LinkedAccount ret = new LinkedAccount();
-    ret.update(authUser);
-    return ret;
-  }
-
-  public void update(final AuthUser authUser) {
-    this.providerKey = authUser.getProvider();
-    this.providerUserId = authUser.getId();
-  }
 
   public static LinkedAccount create(final LinkedAccount acc) {
     final LinkedAccount ret = new LinkedAccount();

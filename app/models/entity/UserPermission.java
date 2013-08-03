@@ -7,37 +7,31 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import be.objectify.deadbolt.core.models.Permission;
-
 @Entity
 @SuppressWarnings("serial")
-public class UserPermission implements Permission, Serializable {
+public class UserPermission implements Serializable {
 
-  public UserPermission() {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  }
+	private String value;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	public String getValue() {
+		return value;
+	}
 
-  private String value;
+	// GETTER & SETTER //
 
-  public String getValue() {
-    return value;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  // GETTER & SETTER //
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
+	public void setValue(String value) {
+		this.value = value;
+	}
 }

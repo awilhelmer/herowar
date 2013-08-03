@@ -22,7 +22,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
 import play.data.format.Formats;
-import be.objectify.deadbolt.core.models.Subject;
 
 /**
  * The User represents each Player for our application.
@@ -32,140 +31,142 @@ import be.objectify.deadbolt.core.models.Subject;
 @Entity
 @Table(name = "users")
 @SuppressWarnings("serial")
-public class User extends BaseModel implements Subject, Serializable {
+public class User extends BaseModel implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @Email
-  private String email;
+	@Email
+	private String email;
 
-  private String username;
-  private boolean newsletter = false;
-  private boolean active = true;
-  private boolean emailValidated = false;
+	private String username;
+	private boolean newsletter = false;
+	private boolean active = true;
+	private boolean emailValidated = false;
 
-  @Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
-  private Date lastLogin;
+	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date lastLogin;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
-  private List<SecurityRole> roles;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<SecurityRole> roles;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
-  private List<LinkedAccount> linkedAccounts;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<LinkedAccount> linkedAccounts;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JsonIgnore
-  private List<UserPermission> permissions;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<UserPermission> permissions;
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @PrimaryKeyJoinColumn
-  private Player player;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@PrimaryKeyJoinColumn
+	private Player player;
 
-  // CONSTRUCTOR //
-  
-  public User() {
-    this.player = new Player(this);
-  }
-  
-  // METHODS //
-  
-  @Override
-  public String getIdentifier() {
-    // TODO Auto-generated method stub
-    return null;
-  }
+	// CONSTRUCTOR //
 
-  // GETTER & SETTER //
+	public User() {
+		this.player = new Player(this);
+	}
 
-  public Long getId() {
-    return id;
-  }
+	// GETTER & SETTER //
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public String getUsername() {
-    return username;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+	public String getUsername() {
+		return username;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public boolean isNewsletter() {
-    return newsletter;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setNewsletter(boolean newsletter) {
-    this.newsletter = newsletter;
-  }
+	public boolean isNewsletter() {
+		return newsletter;
+	}
 
-  public Date getLastLogin() {
-    return lastLogin;
-  }
+	public void setNewsletter(boolean newsletter) {
+		this.newsletter = newsletter;
+	}
 
-  public void setLastLogin(Date lastLogin) {
-    this.lastLogin = lastLogin;
-  }
+	public Date getLastLogin() {
+		return lastLogin;
+	}
 
-  public boolean isActive() {
-    return active;
-  }
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
+	public boolean isActive() {
+		return active;
+	}
 
-  public boolean isEmailValidated() {
-    return emailValidated;
-  }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-  public void setEmailValidated(boolean emailValidated) {
-    this.emailValidated = emailValidated;
-  }
+	public boolean isEmailValidated() {
+		return emailValidated;
+	}
 
-  public List<LinkedAccount> getLinkedAccounts() {
-    return linkedAccounts;
-  }
+	public void setEmailValidated(boolean emailValidated) {
+		this.emailValidated = emailValidated;
+	}
 
-  public void setLinkedAccounts(List<LinkedAccount> linkedAccounts) {
-    this.linkedAccounts = linkedAccounts;
-  }
+	public List<LinkedAccount> getLinkedAccounts() {
+		return linkedAccounts;
+	}
 
-  public List<SecurityRole> getRoles() {
-    return roles;
-  }
+	public void setLinkedAccounts(List<LinkedAccount> linkedAccounts) {
+		this.linkedAccounts = linkedAccounts;
+	}
 
-  public void setRoles(List<SecurityRole> roles) {
-    this.roles = roles;
-  }
+	public List<SecurityRole> getRoles() {
+		return roles;
+	}
 
-  public List<UserPermission> getPermissions() {
-    return permissions;
-  }
+	public void setRoles(List<SecurityRole> roles) {
+		this.roles = roles;
+	}
 
-  public void setPermissions(List<UserPermission> permissions) {
-    this.permissions = permissions;
-  }
+	public List<UserPermission> getPermissions() {
+		return permissions;
+	}
 
-  public Player getPlayer() {
-    return player;
-  }
+	public void setPermissions(List<UserPermission> permissions) {
+		this.permissions = permissions;
+	}
 
-  public void setPlayer(Player player) {
-    this.player = player;
-  }
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", username=" + username + "]";
+	}
 }

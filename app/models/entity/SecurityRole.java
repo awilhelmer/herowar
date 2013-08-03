@@ -7,11 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import be.objectify.deadbolt.core.models.Role;
-
 @Entity
 @SuppressWarnings("serial")
-public class SecurityRole implements Role, Serializable {
+public class SecurityRole implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +17,6 @@ public class SecurityRole implements Role, Serializable {
 
   private String roleName;
 
-  @Override
   public String getName() {
     return roleName;
   }

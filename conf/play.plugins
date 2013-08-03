@@ -1,5 +1,1 @@
 1400:com.ssachtleben.play.plugin.auth.AuthPlugin
-1500:com.typesafe.plugin.CommonsMailerPlugin
-10000:be.objectify.deadbolt.java.DeadboltPlugin
-10005:service.UserServicePlugin
-10040:providers.UsernamePasswordAuthProvider

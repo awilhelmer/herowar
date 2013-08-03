@@ -17,9 +17,10 @@ class Settings extends BaseView
 		@listenTo @model, 'change:isGuest change:isUser', @render if @model
 	
 	events:
-		'click .logout-link'	  : 'logout'
-		'click .login-link'		  : 'toggleTooltip'
-		'click .connect-google' : 'connectGoogle'
+		'click .logout-link'	    : 'logout'
+		'click .login-link'		    : 'toggleTooltip'
+		'click .connect-google'   : 'connectGoogle'
+		'click .connect-facebook' : 'connectFacebook'
 		
 	logout: (event) ->
 		if event
@@ -27,8 +28,8 @@ class Settings extends BaseView
 			$CurrentTarget = $ event.currentTarget
 			$CurrentTarget.addClass 'disabled'
 		$.ajax
-			type: 'POST'
-			url: '/api/logout'
+			type: 'GET'
+			url: '/logout'
 			success: (data, textStatus, jqXHR) =>
 				console.log 'Reset model'
 				@model.reset()
@@ -42,7 +43,13 @@ class Settings extends BaseView
 	connectGoogle: (event) ->
 		event?.preventDefault()
 		console.log 'Connect with google'
-		window.open '/login/google', 'GoogleConnect', 'width=655,height=380,left=100,top=200,toolbar=no,scrollbars=no,menubar=no'
+		window.open '/login/google', 'Connect', 'width=655,height=380,left=100,top=200,toolbar=no,scrollbars=no,menubar=no'
+		return
+		
+	connectFacebook: (event) ->
+		event?.preventDefault()
+		console.log 'Connect with facebook'
+		window.open '/login/facebook', 'Connect', 'width=655,height=380,left=100,top=200,toolbar=no,scrollbars=no,menubar=no'
 		return
 
 return Settings
