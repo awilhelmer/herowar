@@ -1,6 +1,7 @@
 BaseView = require 'views/baseView'
 templates = require 'templates'
 app = require 'application'
+events = require 'events'
 
 ###
     The Settings shows currently just Login and Logout Buttons.
@@ -14,7 +15,8 @@ class Settings extends BaseView
 	template: templates.get 'header/settings.tmpl'
 	
 	bindEvents: ->
-		@listenTo @model, 'change:isGuest change:isUser', @render if @model
+		@listenTo @model, 'change:isGuest change:isUser', @render
+		events.on 'googleLogin facebookLogin', @oauthLogin, @
 	
 	events:
 		'click .logout-link'	    : 'logout'
@@ -50,6 +52,11 @@ class Settings extends BaseView
 		event?.preventDefault()
 		console.log 'Connect with facebook'
 		window.open '/login/facebook', 'Connect', 'width=655,height=380,left=100,top=200,toolbar=no,scrollbars=no,menubar=no'
+		return
+
+	oauthLogin: ->
+		console.log 'Authenticated via oauth provider'
+		@model.fetch()
 		return
 
 return Settings
