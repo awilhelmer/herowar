@@ -5,10 +5,10 @@
 ########## SITE ###########
 
 GET			/																		controllers.Application.index()
-GET			/login/:provider										controllers.Authentication.url(provider: String)
-GET			/login/:provider/success  					controllers.Authentication.login(provider: String)
-POST		/login/:provider/success  					controllers.Authentication.login(provider: String)
-GET			/login/:provider/close    					controllers.Authentication.close(provider: String)
+GET			/login/:provider      							controllers.Authentication.url(provider: String)
+GET			/login/:provider/auth  			    		controllers.Authentication.auth(provider: String)
+POST		/login/:provider/auth  	    				controllers.Authentication.auth(provider: String)
+GET			/login/:provider/success  					controllers.Authentication.success(provider: String)
 GET			/logout                    					controllers.Authentication.logout()
 GET			/signup															controllers.Application.signup()
 GET			/play																controllers.Application.goPlay()

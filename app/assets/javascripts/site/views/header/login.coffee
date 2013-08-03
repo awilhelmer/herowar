@@ -13,7 +13,7 @@ class Login extends FormView
 	
 	template: templates.get 'header/login.tmpl'
 
-	url: '/login/email/success'
+	url: '/login/username/auth'
 	
 	validateForm: ($Form) ->
 		isValid = true

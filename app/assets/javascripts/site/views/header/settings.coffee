@@ -56,7 +56,8 @@ class Settings extends BaseView
 
 	oauthLogin: ->
 		console.log 'Authenticated via oauth provider'
-		@model.fetch()
+		@model.initialize()
+		app.navigate 'play', true
 		return
 
 return Settings

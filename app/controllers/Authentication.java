@@ -9,6 +9,9 @@ import com.ssachtleben.play.plugin.auth.Providers;
 import com.ssachtleben.play.plugin.auth.providers.BaseOAuthProvider;
 import com.ssachtleben.play.plugin.auth.providers.Facebook;
 import com.ssachtleben.play.plugin.auth.providers.Google;
+import com.ssachtleben.play.plugin.auth.providers.UsernamePassword;
+
+import controllers.api.Me;
 
 public class Authentication extends Controller {
 
@@ -18,7 +21,7 @@ public class Authentication extends Controller {
 	}
 
 	@Transactional
-	public static Result login(final String provider) {
+	public static Result auth(final String provider) {
 		return Auth.login(ctx(), provider);
 	}
 
@@ -26,12 +29,15 @@ public class Authentication extends Controller {
 		return Auth.logout(session());
 	}
 
-	public static Result close(final String provider) {
+	@Transactional
+	public static Result success(final String provider) {
 		if (Facebook.KEY.equals(provider)) {
 			return ok(views.html.login.callback.facebook.render());
 		} else if (Google.KEY.equals(provider)) {
 			return ok(views.html.login.callback.google.render());
+		} else if (UsernamePassword.KEY.equals(provider)) {
+			return Me.show();
 		}
 		return badRequest();
-	}	
+	}
 }

@@ -12,9 +12,10 @@ import com.ssachtleben.play.plugin.auth.annotations.Authenticates;
 import com.ssachtleben.play.plugin.auth.models.EmailPasswordAuthUser;
 import com.ssachtleben.play.plugin.auth.models.FacebookAuthUser;
 import com.ssachtleben.play.plugin.auth.models.GoogleAuthUser;
-import com.ssachtleben.play.plugin.auth.providers.EmailPassword;
+import com.ssachtleben.play.plugin.auth.models.UsernamePasswordAuthUser;
 import com.ssachtleben.play.plugin.auth.providers.Facebook;
 import com.ssachtleben.play.plugin.auth.providers.Google;
+import com.ssachtleben.play.plugin.auth.providers.UsernamePassword;
 
 import dao.UserDAO;
 
@@ -45,7 +46,7 @@ public class AuthService {
 		log.info("Email: " + email);
 		log.info("Username: " + username);
 		log.info("Password: " + password);
-		return handleLogin(ctx, email, username, password);
+		return handleOAuthLogin(ctx, email, username, password);
 	}
 
 	/**
@@ -67,11 +68,11 @@ public class AuthService {
 		log.info("Email: " + email);
 		log.info("Username: " + username);
 		log.info("Password: " + password);
-		return handleLogin(ctx, email, username, password);
+		return handleOAuthLogin(ctx, email, username, password);
 	}
 
 	/**
-	 * Handles authentication via {@link EmailPassword} provider.
+	 * Handles authentication via {@link UsernamePassword} provider.
 	 * 
 	 * @param ctx
 	 *          The {@link Context} to set.
@@ -79,12 +80,15 @@ public class AuthService {
 	 *          The {@link EmailPasswordAuthUser} to set.
 	 * @return The user id as object.
 	 */
-	@Authenticates(provider = EmailPassword.KEY)
-	public static Object handleEmailLogin(final Context ctx, final EmailPasswordAuthUser identity) {
-		log.info(String.format("~~~ handleEmailLogin() [ctx=%s, identity=%s] ~~~", ctx, identity));
-		log.info("Email: " + identity.id());
+	@Authenticates(provider = UsernamePassword.KEY)
+	public static Object handleUsernameLogin(final Context ctx, final UsernamePasswordAuthUser identity) {
+		log.info(String.format("~~~ handleUsernameLogin() [ctx=%s, identity=%s] ~~~", ctx, identity));
+		log.info("Username: " + identity.id());
 		log.info("Password: " + identity.clearPassword());
-		return handleLogin(ctx, identity.id(), "User", identity.clearPassword());
+		User user = UserDAO.findByUsername(identity.id());
+		// TODO: Check if password is valid for this user ...
+		log.warn("Password compare not implemented yet...");
+		return user != null ? user.getId() : null;
 	}
 
 	/**
@@ -103,7 +107,7 @@ public class AuthService {
 	 *          The password to set.
 	 * @return The user id as object.
 	 */
-	public static Object handleLogin(final Context ctx, final String email, final String username, final String password) {
+	public static Object handleOAuthLogin(final Context ctx, final String email, final String username, final String password) {
 		User user = UserDAO.findByEmail(email);
 		log.info(String.format("Found user: %s", user));
 		if (user == null) {
