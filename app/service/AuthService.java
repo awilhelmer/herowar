@@ -79,7 +79,6 @@ public class AuthService {
 				log.info(String.format("Last login date updated for %s", user));
 			}
 		});
-
 	}
 
 	public static Object handleLogin(final Identity identity, final String email, final String username, final String password) {
