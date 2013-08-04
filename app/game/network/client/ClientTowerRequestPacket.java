@@ -1,6 +1,6 @@
 package game.network.client;
 
-import game.GameSession;
+import game.Session;
 import game.Sessions;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
@@ -47,7 +47,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 
 	@Override
 	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		GameSession session = Sessions.get(connection);
+		Session session = Sessions.get(connection);
 		if (session == null) {
 			// TODO: disconnect user here ...
 			log.error("GameSession should not be null");
@@ -89,7 +89,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 						.toString());
 	}
 
-	private boolean hasEnoughGold(GameSession session, double currentGold, int price) {
+	private boolean hasEnoughGold(Session session, double currentGold, int price) {
 		if (currentGold < price) {
 			session.getConnection().send(Json.toJson(new GlobalMessagePacket("Insufficient gold to build the tower")).toString());
 			return false;
@@ -97,7 +97,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 		return true;
 	}
 
-	private boolean isPlaceAllowed(GameSession session, com.ardor3d.math.Vector3 position) {
+	private boolean isPlaceAllowed(Session session, com.ardor3d.math.Vector3 position) {
 		if (!checkRestrictions(session, position)) {
 			return false;
 		}
@@ -110,7 +110,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 		return true;
 	}
 
-	private boolean checkRestrictions(GameSession session, com.ardor3d.math.Vector3 position) {
+	private boolean checkRestrictions(Session session, com.ardor3d.math.Vector3 position) {
 		Iterator<TowerRestriction> iter = session.getGame().getTowerRestrictions().iterator();
 		while (iter.hasNext()) {
 			TowerRestriction restriction = iter.next();
@@ -125,7 +125,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 		return true;
 	}
 
-	private boolean checkWaypoints(GameSession session, com.ardor3d.math.Vector3 position) {
+	private boolean checkWaypoints(Session session, com.ardor3d.math.Vector3 position) {
 		Iterator<Wave> iter = session.getGame().getMap().getWaves().iterator();
 		while (iter.hasNext()) {
 			Wave wave = iter.next();
@@ -143,7 +143,7 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 		return true;
 	}
 
-	private boolean checkTowers(GameSession session, com.ardor3d.math.Vector3 position) {
+	private boolean checkTowers(Session session, com.ardor3d.math.Vector3 position) {
 		Iterator<TowerModel> iter = session.getGame().getTowerCache().values().iterator();
 		while (iter.hasNext()) {
 			TowerModel towerModel = iter.next();

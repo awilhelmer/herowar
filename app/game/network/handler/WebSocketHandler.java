@@ -1,7 +1,7 @@
 package game.network.handler;
 
-import game.GameSession;
-import game.GamesHandler;
+import game.Session;
+import game.Games;
 import game.Sessions;
 import game.event.GameLeaveEvent;
 
@@ -43,12 +43,12 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	}
 
 	public void init() {
-		GamesHandler.getInstance();
+		Games.getInstance();
 		log.info("WebSocketHandler started");
 	}
 
 	public void destroy() {
-		GamesHandler.getInstance().stop();
+		Games.getInstance().stop();
 		log.info("WebSocketHandler stopped");
 	}
 
@@ -62,7 +62,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 		if (authConnections.containsKey(connection)) {
 			log.info("Auth connection " + connection.httpRequest().id() + " closed");
 			authConnections.remove(connection);
-			Events.instance().publish(GamesHandler.EVENT_TOPIC, new GameLeaveEvent(connection));
+			Events.instance().publish(Games.EVENT_TOPIC, new GameLeaveEvent(connection));
 		}
 	}
 
@@ -79,7 +79,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	@Override
 	public void onPong(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPong(connection, msg);
-		GameSession session = Sessions.get(connection);
+		Session session = Sessions.get(connection);
 		if (session != null) {
 			Long latency = Long.parseLong(new String(msg));
 			latency = (System.currentTimeMillis() - latency) / 2;

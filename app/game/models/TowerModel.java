@@ -1,6 +1,7 @@
 package game.models;
 
-import game.GameSession;
+
+import game.Session;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -21,7 +22,7 @@ public class TowerModel extends BaseModel<Tower> {
   public static double SHOOT_ANGLE = 15 * MathUtils.DEG_TO_RAD;
 
   private UnitModel target;
-  private GameSession session;
+  private Session session;
   private Date lastShot;
 
   public TowerModel(Long id, Tower entity) {
@@ -167,11 +168,11 @@ public class TowerModel extends BaseModel<Tower> {
     this.target = target;
   }
 
-  public GameSession getSession() {
+  public Session getSession() {
     return session;
   }
 
-  public void setSession(GameSession session) {
+  public void setSession(Session session) {
     this.session = session;
   }
 

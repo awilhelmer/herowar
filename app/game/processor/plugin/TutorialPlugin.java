@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.models.TowerRestriction;
 import game.network.server.GUIElementUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
@@ -49,12 +49,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession session) {
+  public void addPlayer(Session session) {
     // Empty
   }
 
   @Override
-  public void removePlayer(GameSession session) {
+  public void removePlayer(Session session) {
     // Empty
   }
 

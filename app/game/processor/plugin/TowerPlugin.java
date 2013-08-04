@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.models.TowerModel;
 import game.models.UnitModel;
 import game.network.server.TowerAttackPacket;
@@ -57,12 +57,12 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
+  public void addPlayer(Session player) {
     // Empty
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(Session player) {
     // Empty
   }
 

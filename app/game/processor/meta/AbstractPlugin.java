@@ -1,6 +1,6 @@
 package game.processor.meta;
 
-import game.GameSession;
+import game.Session;
 import game.network.BasePacket;
 import game.processor.GameProcessor;
 
@@ -89,7 +89,7 @@ public abstract class AbstractPlugin {
 	 * @param packet
 	 *          The packet to send.
 	 */
-	public void sendPacket(GameSession session, BasePacket packet) {
+	public void sendPacket(Session session, BasePacket packet) {
 		session.getConnection().send(Json.toJson(packet).toString());
 	}
 
@@ -98,7 +98,7 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @return The game sessions
 	 */
-	public Set<GameSession> getSessions() {
+	public Set<Session> getSessions() {
 		return getProcessor().getSessions();
 	}
 

@@ -1,6 +1,6 @@
 package game.network.client;
 
-import game.GamesHandler;
+import game.Games;
 import game.event.GameJoinEvent;
 import game.network.BasePacket;
 import game.network.InputPacket;
@@ -40,7 +40,7 @@ public class ClientInitPacket extends BasePacket implements InputPacket {
 			log.info("Found " + matchToken.toString());
 			log.info("Auth connection " + connection.httpRequest().id() + " granted for " + matchToken.getPlayer().toString());
 			log.info("Total No. of subscribers: " + socketHandler.getAuthConnections().size() + ".");
-			Events.instance().publish(GamesHandler.EVENT_TOPIC,
+			Events.instance().publish(Games.EVENT_TOPIC,
 					new GameJoinEvent(matchToken.getResult().getMatch().getId(), matchToken, connection));
 			connection.send(Json.toJson(new AccessGrantedPacket()).toString());
 		} else {

@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.network.server.PlayerStatsInitPacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.processor.CacheConstants;
@@ -27,7 +27,7 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void processSession(GameSession session, double delta, long now) {
+  public void processSession(Session session, double delta, long now) {
     if (session.isPreloading()) {
       return;
     }
@@ -60,7 +60,7 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession session) {
+  public void addPlayer(Session session) {
     if (!getPlayerCache(session.getPlayerId()).containsKey(CacheConstants.GOLD)) {
       double startValue = getProcessor().getMap().getGoldStart().doubleValue();
       if (getMatch().getPlayerResults().size() > 1) {
@@ -72,7 +72,7 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void removePlayer(GameSession session) {
+  public void removePlayer(Session session) {
     // Do nothing, the gold should still updated when the player disconnects.
     // Maybe he returns after while...
   }

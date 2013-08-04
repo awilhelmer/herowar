@@ -1,7 +1,7 @@
 package game.processor;
 
-import game.GameClock;
-import game.GameSession;
+import game.Clock;
+import game.Session;
 import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
@@ -57,7 +57,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	private Match match;
 	private Map map;
 
-	private GameClock clock = new GameClock();
+	private Clock clock = new Clock();
 	private PreloadDataPacket preloadPacket = null;
 	private EventBinding eventBinding;
 
@@ -73,7 +73,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	/**
 	 * The session set contains all sessions for this game.
 	 */
-	private Set<GameSession> sessions = Collections.synchronizedSet(new HashSet<GameSession>());
+	private Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
 	/**
 	 * The plugins map contains all running plugins for each game state.
@@ -106,8 +106,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
 	@Override
 	public void process() {
-		double delta = clock.getDelta();
-		long now = clock.getCurrentTime();
+		double delta = clock.delta();
+		long now = clock.currentTime();
 		try {
 			Iterator<IPlugin> iter = plugins.get(state).iterator();
 			while (iter.hasNext()) {
@@ -153,9 +153,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 * Shutdown game processor.
 	 */
 	private void shutdown() {
-		Iterator<GameSession> iter = sessions.iterator();
+		Iterator<Session> iter = sessions.iterator();
 		while (iter.hasNext()) {
-			GameSession session = iter.next();
+			Session session = iter.next();
 			session.getConnection().close();
 		}
 		stop();
@@ -167,7 +167,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 * @param session
 	 *          The session to set
 	 */
-	public void addPlayer(GameSession session) {
+	public void addPlayer(Session session) {
 		synchronized (sessions) {
 			sessions.add(session);
 		}
@@ -205,9 +205,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 *          The connection to set
 	 */
 	public void removePlayer(WebSocketConnection connection) {
-		GameSession player = null;
+		Session player = null;
 		synchronized (sessions) {
-			Iterator<GameSession> iter = sessions.iterator();
+			Iterator<Session> iter = sessions.iterator();
 			while (iter.hasNext()) {
 				player = iter.next();
 				if (player.getConnection().equals(connection)) {
@@ -235,9 +235,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 *          The sendSelf to set
 	 */
 	public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
-		Iterator<GameSession> iter = sessions.iterator();
+		Iterator<Session> iter = sessions.iterator();
 		while (iter.hasNext()) {
-			GameSession session = iter.next();
+			Session session = iter.next();
 			if (!session.isPreloading() && (sendSelf || !connection.equals(session.getConnection()))) {
 				session.getConnection().send(Json.toJson(message).toString());
 			}
@@ -260,7 +260,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 * @param session
 	 *          The session to set
 	 */
-	public void syncronizePlayer(GameSession session) {
+	public void syncronizePlayer(Session session) {
 		log.info("Start sycronizing for player " + session.getPlayerId());
 		Iterator<UnitModel> iter = session.getGame().getUnits().iterator();
 		while (iter.hasNext()) {
@@ -352,7 +352,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		return objectId++;
 	}
 
-	public Set<GameSession> getSessions() {
+	public Set<Session> getSessions() {
 		return sessions;
 	}
 

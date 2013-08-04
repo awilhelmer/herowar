@@ -1,6 +1,6 @@
 package game.network.client;
 
-import game.GameSession;
+import game.Session;
 import game.Sessions;
 import game.network.BasePacket;
 import game.network.InputPacket;
@@ -23,7 +23,7 @@ public class ClientWaveRequestPacket extends BasePacket implements InputPacket {
 	@Override
 	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
 		log.info("Request next wave...");
-		GameSession session = Sessions.get(connection);
+		Session session = Sessions.get(connection);
 		if (session == null) {
 			// TODO: disconnect user here ...
 			log.error("GameSession should not be null");

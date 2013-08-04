@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.event.GameStateEvent;
 import game.event.PreloadUpdateEvent;
 import game.network.server.GameStartPacket;
@@ -84,14 +84,14 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(GameSession session) {
+	public void addPlayer(Session session) {
 		if (!preloadProgress.containsKey(session.getPlayerId())) {
 			preloadProgress.put(session.getPlayerId(), 0);
 		}
 	}
 
 	@Override
-	public void removePlayer(GameSession session) {
+	public void removePlayer(Session session) {
 		// Do nothing, the preload state should not change when a user disconnects.
 		// Once the timeout will be reached the game should start automatically...
 	}

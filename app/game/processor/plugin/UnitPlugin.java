@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.models.UnitModel;
 import game.network.server.ObjectOutPacket;
 import game.network.server.PlayerLivesUpdatePacket;
@@ -80,7 +80,7 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
       }
     }
     if (unit.isDeath()) {
-      GameSession session = unit.getLastHitTower().getSession();
+      Session session = unit.getLastHitTower().getSession();
       ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
       long newScore = 0L;
       double newGold = 0L;
@@ -136,12 +136,12 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
+  public void addPlayer(Session player) {
     // Empty
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(Session player) {
     // Empty
   }
 

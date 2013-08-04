@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.models.UnitModel;
 import game.network.server.UnitInPacket;
 import game.network.server.WaveInitPacket;
@@ -63,7 +63,7 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void processSession(GameSession session, double delta, long now) {
+  public void processSession(Session session, double delta, long now) {
     long playerId = session.getPlayer().getId();
     if (!hashInitPacket(playerId)) {
       long eta = getWaveEta();
@@ -91,13 +91,13 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession session) {
+  public void addPlayer(Session session) {
     long playerId = session.getPlayer().getId();
     getInitPacket().put(playerId, false);
   }
 
   @Override
-  public void removePlayer(GameSession session) {
+  public void removePlayer(Session session) {
     // TODO Auto-generated method stub
   }
 

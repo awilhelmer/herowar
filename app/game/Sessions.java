@@ -1,8 +1,5 @@
 package game;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.webbitserver.WebSocketConnection;
 
 /**
@@ -10,12 +7,7 @@ import org.webbitserver.WebSocketConnection;
  * 
  * @author Sebastian Sachtleben
  */
-public class Sessions {
-
-	/**
-	 * Contains all {@link WebSocketConnection} connections and the matching {@link GameSession}.
-	 */
-	private ConcurrentHashMap<WebSocketConnection, GameSession> connections = new ConcurrentHashMap<WebSocketConnection, GameSession>();
+public class Sessions extends Cache<WebSocketConnection, Session> {
 
 	/**
 	 * Keep private instance of {@link Sessions}.
@@ -27,7 +19,7 @@ public class Sessions {
 	 * 
 	 * @return The {@link Sessions} instance.
 	 */
-	private static Sessions getInstance() {
+	private static Sessions instance() {
 		return instance;
 	}
 
@@ -39,14 +31,14 @@ public class Sessions {
 	}
 
 	/**
-	 * Get {@link GameSession} for given {@link WebSocketConnection}.
+	 * Get {@link Session} for given {@link WebSocketConnection}.
 	 * 
 	 * @param connection
 	 *          The {@link WebSocketConnection} connection.
-	 * @return The matching {@link GameSession}.
+	 * @return The matching {@link Session}.
 	 */
-	public static GameSession get(final WebSocketConnection connection) {
-		return getInstance().getConnections().get(connection);
+	public static Session get(final WebSocketConnection connection) {
+		return instance().cache().get(connection);
 	}
 
 	/**
@@ -57,43 +49,38 @@ public class Sessions {
 	 * @return The success boolean.
 	 */
 	public static boolean contains(final WebSocketConnection connection) {
-		return getInstance().getConnections().containsKey(connection);
+		return instance().cache().containsKey(connection);
 	}
 
 	/**
-	 * Adds new {@link WebSocketConnection} and {@link GameSession}.
+	 * Adds new {@link WebSocketConnection} and {@link Session}.
 	 * 
 	 * @param connection
 	 *          The {@link WebSocketConnection} connection.
-	 * @return The previous associated {@link GameSession}.
+	 * @param session
+	 *          The {@link Session} session.
+	 * @return The previous associated {@link Session}.
 	 */
-	public static GameSession add(final WebSocketConnection connection, final GameSession session) {
-		return getInstance().getConnections().put(connection, session);
+	public static Session add(final WebSocketConnection connection, final Session session) {
+		return instance().cache().put(connection, session);
 	}
 
 	/**
-	 * Removes the {@link GameSession} for given {@link WebSocketConnection}.
+	 * Removes the {@link Session} for given {@link WebSocketConnection}.
 	 * 
 	 * @param connection
 	 *          The {@link WebSocketConnection} connection.
-	 * @return The removed {@link GameSession}.
+	 * @return The removed {@link Session}.
 	 */
-	public static GameSession remove(final WebSocketConnection connection) {
-		return getInstance().getConnections().remove(connection);
+	public static Session remove(final WebSocketConnection connection) {
+		return instance().cache().remove(connection);
 	}
 
 	/**
 	 * Removes all sessions.
 	 */
 	public static void clear() {
-		getInstance().getConnections().clear();
-	}
-
-	/**
-	 * @return the connections
-	 */
-	public Map<WebSocketConnection, GameSession> getConnections() {
-		return connections;
+		instance().cache().clear();
 	}
 
 }

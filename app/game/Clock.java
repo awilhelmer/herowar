@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class GameClock implements Serializable {
+public class Clock implements Serializable {
 
   private long lastTime;
   private long currentTime;
@@ -19,7 +19,7 @@ public class GameClock implements Serializable {
   /**
    * Create a new game clock instances and start the time calculation.
    */
-  public GameClock() {
+  public Clock() {
     reset();
   }
 
@@ -36,7 +36,7 @@ public class GameClock implements Serializable {
    * 
    * @return Double The delta.
    */
-  public double getDelta() {
+  public double delta() {
     double diff = 0d;
     currentTime = System.currentTimeMillis();
     diff = 0.001 * (currentTime - lastTime);
@@ -49,7 +49,7 @@ public class GameClock implements Serializable {
    * 
    * @return Long The current timestamp.
    */
-  public long getCurrentTime() {
+  public long currentTime() {
     return currentTime;
   }
 }

@@ -5,12 +5,9 @@ import game.event.GameLeaveEvent;
 import game.network.server.PreloadData;
 import game.network.server.PreloadDataPacket;
 import game.processor.GameProcessor;
-import game.processor.ProcessorHandler;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Match;
 import models.entity.game.MatchToken;
@@ -32,27 +29,37 @@ import com.ssachtleben.play.plugin.event.Events;
 import dao.game.MatchDAO;
 
 /**
- * The GamesHandler control all current running games.
+ * Controls all running games and allows to create new and shutdown existing games.
  * 
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
-@SuppressWarnings("serial")
-public class GamesHandler implements Serializable {
-	private static final Logger.ALogger log = Logger.of(GamesHandler.class);
+public class Games extends Cache<Long, GameProcessor> {
+	private static final Logger.ALogger log = Logger.of(Games.class);
 
-	public static final String EVENT_TOPIC = GamesHandler.class.getSimpleName();
+	/**
+	 * Contains event topic name to publish join and leave events via {@link Events}.
+	 */
+	public static final String EVENT_TOPIC = Games.class.getSimpleName();
 
-	private ConcurrentHashMap<Long, GameProcessor> games = new ConcurrentHashMap<Long, GameProcessor>();
-	private ConcurrentHashMap<GameSession, ProcessorHandler> processors = new ConcurrentHashMap<GameSession, ProcessorHandler>();
+	/**
+	 * Keep private instance of {@link Games}.
+	 */
+	private static Games instance = new Games();
 
-	private static GamesHandler instance = new GamesHandler();
-
-	public static GamesHandler getInstance() {
+	/**
+	 * Returns {@link Games} instance.
+	 * 
+	 * @return The {@link Games} instance.
+	 */
+	public static Games getInstance() {
 		return instance;
 	}
 
-	private GamesHandler() {
+	/**
+	 * Private constructor to prevent class others from creating {@link Games} instance.
+	 */
+	private Games() {
 		try {
 			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerJoinEvent", GameJoinEvent.class));
 			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerLeaveEvent", GameLeaveEvent.class));
@@ -63,8 +70,8 @@ public class GamesHandler implements Serializable {
 	}
 
 	public void observePlayerJoinEvent(final GameJoinEvent event) {
-		synchronized (games) {
-			if (!games.containsKey(event.getMatchId())) {
+		synchronized (getGames()) {
+			if (!getGames().containsKey(event.getMatchId())) {
 				log.info("Create game processor for match " + event.getMatchId());
 				createMatch(event.getMatchId());
 			}
@@ -79,7 +86,7 @@ public class GamesHandler implements Serializable {
 			log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
 			return;
 		}
-		GameSession player = Sessions.get(event.getConnection());
+		Session player = Sessions.get(event.getConnection());
 		if (player != null) {
 			removePlayer(player, event.getConnection());
 		}
@@ -102,14 +109,14 @@ public class GamesHandler implements Serializable {
 					Hibernate.initialize(wave.getPath());
 				}
 				GameProcessor game = new GameProcessor(match);
-				games.put(matchId, game);
+				getGames().put(matchId, game);
 			}
 		});
 	}
 
 	private void joinMatch(final long matchId, final MatchToken token, final WebSocketConnection connection) {
-		final GameProcessor game = games.get(matchId);
-		GameSession session = new GameSession(game.getMatch(), token.getPlayer(), token, connection);
+		final GameProcessor game = getGames().get(matchId);
+		Session session = new Session(game.getMatch(), token.getPlayer(), token, connection);
 		Sessions.add(connection, session);
 		session.setGame(game);
 		game.addPlayer(session);
@@ -176,33 +183,21 @@ public class GamesHandler implements Serializable {
 		connection.send(Json.toJson(game.getPreloadPacket()).toString());
 	}
 
-	private void removePlayer(final GameSession session, final WebSocketConnection connection) {
-		ProcessorHandler handler = processors.get(session);
-		if (handler != null && handler.isStarted()) {
-			handler.stop();
-		}
-		GameProcessor game = session.getGame();
-		game.removePlayer(connection);
+	private void removePlayer(final Session session, final WebSocketConnection connection) {
+		session.getGame().removePlayer(connection);
 		Sessions.remove(connection);
-		processors.remove(session);
+		Processors.remove(session);
 	}
 
 	public void stop() {
-		for (ProcessorHandler handler : processors.values()) {
-			handler.stop();
-		}
 		Sessions.clear();
-		processors.clear();
-		games.clear();
+		Processors.clear();
+		getGames().clear();
 	}
 
 	// GETTER && SETTER //
 
 	public java.util.Map<Long, GameProcessor> getGames() {
-		return games;
-	}
-
-	public ConcurrentHashMap<GameSession, ProcessorHandler> getProcessors() {
-		return processors;
+		return cache();
 	}
 }

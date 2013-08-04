@@ -1,6 +1,6 @@
 package game.processor.meta;
 
-import game.GameSession;
+import game.Session;
 import game.processor.GameProcessor;
 
 /**
@@ -16,8 +16,8 @@ public interface IPlugin {
 
   public GameProcessor.State onState();
   
-  public void addPlayer(GameSession session);
+  public void addPlayer(Session session);
 
-  public void removePlayer(GameSession session);
+  public void removePlayer(Session session);
 
 }

@@ -1,6 +1,6 @@
 package game.network.client;
 
-import game.GameSession;
+import game.Session;
 import game.Sessions;
 import game.network.BasePacket;
 import game.network.InputPacket;
@@ -27,7 +27,7 @@ public class ClientChatMessagePacket extends BasePacket implements InputPacket {
 
 	@Override
 	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		GameSession session = Sessions.get(connection);
+		Session session = Sessions.get(connection);
 		DateFormat df = new SimpleDateFormat("hh:mm");
 		session.getGame().broadcast(
 				new ChatMessagePacket(Layout.USER, "[" + df.format(new Date()) + "] " + session.getUsername() + ": " + message));

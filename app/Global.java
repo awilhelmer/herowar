@@ -1,4 +1,4 @@
-import game.GamesHandler;
+import game.Games;
 import game.network.GameServer;
 import game.network.handler.WebSocketHandler;
 import importer.EnvironmentImporter;
@@ -53,7 +53,7 @@ public class Global extends GlobalSettings {
 				TowerImporter.getInstance().sync();
 				UnitImporter.getInstance().sync();
 				WebSocketHandler.getInstance();
-				GamesHandler.getInstance();
+				Games.getInstance();
 				createAdminUser();
 				createDummyNews();
 				createMaps();

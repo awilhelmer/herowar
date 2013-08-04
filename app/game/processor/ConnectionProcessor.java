@@ -1,6 +1,6 @@
 package game.processor;
 
-import game.GameSession;
+import game.Session;
 import game.Sessions;
 import game.network.BasePacket;
 import game.processor.meta.AbstractProcessor;
@@ -48,7 +48,7 @@ public abstract class ConnectionProcessor extends AbstractProcessor {
 	 * 
 	 * @return GameSession
 	 */
-	public GameSession getSession() {
+	public Session getSession() {
 		return Sessions.get(connection);
 	}
 

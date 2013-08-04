@@ -1,6 +1,6 @@
 package game.network.handler;
 
-import game.GamesHandler;
+import game.Games;
 import game.network.BasePacket;
 import game.network.InputPacket;
 import game.network.PacketType;
@@ -31,7 +31,7 @@ public class PacketHandler implements Serializable {
 
   private static final long serialVersionUID = 8096194902543478468L;
   private static PacketHandler instance = new PacketHandler();
-  private static final Logger.ALogger log = Logger.of(GamesHandler.class);
+  private static final Logger.ALogger log = Logger.of(Games.class);
 
   private Map<Integer, Class<? extends BasePacket>> packetTypeCache = new HashMap<Integer, Class<? extends BasePacket>>();
 

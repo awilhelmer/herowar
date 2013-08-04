@@ -1,6 +1,6 @@
 package game.network.client;
 
-import game.GameSession;
+import game.Session;
 import game.Sessions;
 import game.event.PreloadUpdateEvent;
 import game.network.BasePacket;
@@ -29,7 +29,7 @@ public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket
 
 	@Override
 	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		GameSession session = Sessions.get(connection);
+		Session session = Sessions.get(connection);
 		if (session == null) {
 			// TODO: disconnect user here ...
 			log.error("GameSession should not be null");

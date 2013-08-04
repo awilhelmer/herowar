@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.GameSession;
+import game.Session;
 import game.network.server.GameDefeatPacket;
 import game.network.server.GameVictoryPacket;
 import game.processor.CacheConstants;
@@ -83,12 +83,12 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
   }
 
   @Override
-  public void addPlayer(GameSession player) {
+  public void addPlayer(Session player) {
     // TODO Auto-generated method stub
   }
 
   @Override
-  public void removePlayer(GameSession player) {
+  public void removePlayer(Session player) {
     // TODO Auto-generated method stub
   }
 
