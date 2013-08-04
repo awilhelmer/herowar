@@ -2,20 +2,16 @@ package importer;
 
 import java.io.File;
 
+import models.entity.game.Unit;
+import play.Application;
 import play.Logger;
 import play.Logger.ALogger;
 
-import models.entity.game.Unit;
-
 public class UnitImporter extends TreeImporter<Unit> {
 	private static final Logger.ALogger log = Logger.of(UnitImporter.class);
-	private static UnitImporter instance;
 
-	public static UnitImporter getInstance() {
-		if (instance == null) {
-			instance = new UnitImporter();
-		}
-		return instance;
+	public UnitImporter(Application app) {
+		super(app);
 	}
 
 	@Override

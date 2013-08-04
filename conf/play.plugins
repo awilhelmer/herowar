@@ -1,3 +1,6 @@
 1300:com.ssachtleben.play.plugin.event.EventPlugin
 1400:com.ssachtleben.play.plugin.auth.AuthPlugin
+1500:importer.EnvironmentImporter
+1501:importer.TowerImporter
+1502:importer.UnitImporter
 2000:game.network.WebSocketServer

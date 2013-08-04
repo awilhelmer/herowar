@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 
 import models.entity.game.Environment;
+import play.Application;
 import play.Logger;
 import play.Logger.ALogger;
 
@@ -14,15 +15,10 @@ import play.Logger.ALogger;
  */
 @SuppressWarnings("serial")
 public class EnvironmentImporter extends TreeImporter<Environment> implements Serializable {
-
 	private static final Logger.ALogger log = Logger.of(EnvironmentImporter.class);
-	private static EnvironmentImporter instance;
 
-	public static EnvironmentImporter getInstance() {
-		if (instance == null) {
-			instance = new EnvironmentImporter();
-		}
-		return instance;
+	public EnvironmentImporter(Application app) {
+		super(app);
 	}
 
 	@Override
@@ -34,5 +30,4 @@ public class EnvironmentImporter extends TreeImporter<Environment> implements Se
 	protected ALogger getLogger() {
 		return log;
 	}
-
 }

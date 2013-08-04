@@ -24,8 +24,11 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import play.Application;
 import play.Logger.ALogger;
+import play.Plugin;
 import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
 import util.JsonUtils;
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
@@ -35,16 +38,31 @@ import dao.game.MaterialDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public abstract class AbstractImporter<E extends Serializable> {
+public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	private Class<E> clazz;
 	private boolean updateGeo;
 
-	public AbstractImporter() {
+	public AbstractImporter(final Application app) {
 		this.clazz = getTypeParameterClass();
 		BeanUtilsBean.setInstance(new BeanUtilsBean(new EnumAwareConvertUtilsBean()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see play.Plugin#onStart()
+	 */
+	@Override
+	public void onStart() {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				sync();
+			}
+		});
 	}
 
 	public void sync() {

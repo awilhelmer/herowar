@@ -1,7 +1,4 @@
 import game.Games;
-import importer.EnvironmentImporter;
-import importer.TowerImporter;
-import importer.UnitImporter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,9 +43,6 @@ public class Global extends GlobalSettings {
 			public void invoke() throws Throwable {
 				createLevelRanges();
 				initialSecurityRoles();
-				EnvironmentImporter.getInstance().sync();
-				TowerImporter.getInstance().sync();
-				UnitImporter.getInstance().sync();
 				createAdminUser();
 				createDummyNews();
 				createMaps();

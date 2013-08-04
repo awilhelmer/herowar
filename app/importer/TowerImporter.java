@@ -3,18 +3,15 @@ package importer;
 import java.io.File;
 
 import models.entity.game.Tower;
+import play.Application;
 import play.Logger;
 import play.Logger.ALogger;
 
 public class TowerImporter extends FolderImporter<Tower> {
 	private static final Logger.ALogger log = Logger.of(TowerImporter.class);
-	private static TowerImporter instance;
 
-	public static TowerImporter getInstance() {
-		if (instance == null) {
-			instance = new TowerImporter();
-		}
-		return instance;
+	public TowerImporter(Application app) {
+		super(app);
 	}
 
 	@Override
