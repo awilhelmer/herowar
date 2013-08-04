@@ -14,7 +14,7 @@ import org.webbitserver.WebSocketConnection;
 /**
  * @author Alexander Wilhelmer
  */
-public class GameSession implements Serializable {
+public class Session implements Serializable {
 	public final static long PING_INTERVAL = 2000l;
 	private static final long serialVersionUID = 7587205545547734770L;
 
@@ -24,7 +24,7 @@ public class GameSession implements Serializable {
 
 	private Match match;
 	private Player player;
-	private GameClock clock;
+	private Clock clock;
 	private MatchToken token;
 
 	private BaseModel<?> model;
@@ -34,7 +34,7 @@ public class GameSession implements Serializable {
 	private boolean preloading = true;
 	private long latency;
 
-	public GameSession(Match match, Player player, MatchToken token, WebSocketConnection connection) {
+	public Session(Match match, Player player, MatchToken token, WebSocketConnection connection) {
 		this.match = match;
 		this.matchId = match.getId();
 		this.player = player;
@@ -42,7 +42,7 @@ public class GameSession implements Serializable {
 		this.username = player.getUser().getUsername();
 		this.token = token;
 		this.connection = connection;
-		this.clock = new GameClock();
+		this.clock = new Clock();
 	}
 
 	public long getMatchId() {
@@ -97,11 +97,11 @@ public class GameSession implements Serializable {
 		this.game = game;
 	}
 
-	public GameClock getClock() {
+	public Clock getClock() {
 		return clock;
 	}
 
-	public void setClock(GameClock clock) {
+	public void setClock(Clock clock) {
 		this.clock = clock;
 	}
 

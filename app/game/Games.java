@@ -61,17 +61,23 @@ public class Games extends Cache<Long, GameProcessor> {
 	 */
 	private Games() {
 		try {
-			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerJoinEvent", GameJoinEvent.class));
-			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerLeaveEvent", GameLeaveEvent.class));
+			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("join", GameJoinEvent.class));
+			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("leave", GameLeaveEvent.class));
 			log.info(this.getClass().getSimpleName() + " initialized");
 		} catch (NoSuchMethodException | SecurityException e) {
 			log.error("Failed to register observer", e);
 		}
 	}
 
-	public void observePlayerJoinEvent(final GameJoinEvent event) {
-		synchronized (getGames()) {
-			if (!getGames().containsKey(event.getMatchId())) {
+	/**
+	 * Invokes during receiving new client init packet and creates a new game or join an existing match.
+	 * 
+	 * @param event
+	 *          The {@link GameJoinEvent} event.
+	 */
+	public void join(final GameJoinEvent event) {
+		synchronized (cache()) {
+			if (!cache().containsKey(event.getMatchId())) {
 				log.info("Create game processor for match " + event.getMatchId());
 				createMatch(event.getMatchId());
 			}
@@ -80,7 +86,13 @@ public class Games extends Cache<Long, GameProcessor> {
 		}
 	}
 
-	public void observePlayerLeaveEvent(final GameLeaveEvent event) {
+	/**
+	 * Invokes on disconnected websocket connection and remove player from match.
+	 * 
+	 * @param event
+	 *          The {@link GameLeaveEvent} event.
+	 */
+	public void leave(final GameLeaveEvent event) {
 		log.info("Remove player with connection " + event.getConnection().httpRequest().id());
 		if (!Sessions.contains(event.getConnection())) {
 			log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
@@ -109,13 +121,13 @@ public class Games extends Cache<Long, GameProcessor> {
 					Hibernate.initialize(wave.getPath());
 				}
 				GameProcessor game = new GameProcessor(match);
-				getGames().put(matchId, game);
+				cache().put(matchId, game);
 			}
 		});
 	}
 
 	private void joinMatch(final long matchId, final MatchToken token, final WebSocketConnection connection) {
-		final GameProcessor game = getGames().get(matchId);
+		final GameProcessor game = cache().get(matchId);
 		Session session = new Session(game.getMatch(), token.getPlayer(), token, connection);
 		Sessions.add(connection, session);
 		session.setGame(game);
@@ -192,12 +204,6 @@ public class Games extends Cache<Long, GameProcessor> {
 	public void stop() {
 		Sessions.clear();
 		Processors.clear();
-		getGames().clear();
-	}
-
-	// GETTER && SETTER //
-
-	public java.util.Map<Long, GameProcessor> getGames() {
-		return cache();
+		cache().clear();
 	}
 }
