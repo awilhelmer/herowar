@@ -24,7 +24,8 @@ import play.Logger;
 import play.db.jpa.JPA;
 import play.libs.Json;
 
-import com.ssachtleben.play.plugin.event.Events;
+import com.ssachtleben.play.plugin.event.ReferenceStrength;
+import com.ssachtleben.play.plugin.event.annotations.Observer;
 
 import dao.game.MatchDAO;
 
@@ -36,11 +37,6 @@ import dao.game.MatchDAO;
  */
 public class Games extends Cache<Long, GameProcessor> {
 	private static final Logger.ALogger log = Logger.of(Games.class);
-
-	/**
-	 * Contains event topic name to publish join and leave events via {@link Events}.
-	 */
-	public static final String EVENT_TOPIC = Games.class.getSimpleName();
 
 	/**
 	 * Keep private instance of {@link Games}.
@@ -60,13 +56,7 @@ public class Games extends Cache<Long, GameProcessor> {
 	 * Private constructor to prevent class others from creating {@link Games} instance.
 	 */
 	private Games() {
-		try {
-			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("join", GameJoinEvent.class));
-			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("leave", GameLeaveEvent.class));
-			log.info(this.getClass().getSimpleName() + " initialized");
-		} catch (NoSuchMethodException | SecurityException e) {
-			log.error("Failed to register observer", e);
-		}
+		log.info(this.getClass().getSimpleName() + " initialized");
 	}
 
 	/**
@@ -75,14 +65,16 @@ public class Games extends Cache<Long, GameProcessor> {
 	 * @param event
 	 *          The {@link GameJoinEvent} event.
 	 */
-	public void join(final GameJoinEvent event) {
-		synchronized (cache()) {
-			if (!cache().containsKey(event.getMatchId())) {
-				log.info("Create game processor for match " + event.getMatchId());
-				createMatch(event.getMatchId());
+	@Observer(topic = EventKeys.PLAYER_JOIN, referenceStrength = ReferenceStrength.STRONG)
+	public static void join(final MatchToken token, final WebSocketConnection connection) {
+		synchronized (getInstance().cache()) {
+			long matchId = token.getResult().getMatch().getId();
+			if (!getInstance().cache().containsKey(matchId)) {
+				log.info("Create game processor for match " + matchId);
+				getInstance().createMatch(matchId);
 			}
-			log.info("Join match " + event.getMatchId());
-			joinMatch(event.getMatchId(), event.getToken(), event.getConnection());
+			log.info("Join match " + matchId);
+			getInstance().joinMatch(matchId, token, connection);
 		}
 	}
 
@@ -92,15 +84,16 @@ public class Games extends Cache<Long, GameProcessor> {
 	 * @param event
 	 *          The {@link GameLeaveEvent} event.
 	 */
-	public void leave(final GameLeaveEvent event) {
-		log.info("Remove player with connection " + event.getConnection().httpRequest().id());
-		if (!Sessions.contains(event.getConnection())) {
-			log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
+	@Observer(topic = EventKeys.PLAYER_LEAVE, referenceStrength = ReferenceStrength.STRONG)
+	public static void leave(final WebSocketConnection connection) {
+		log.info("Remove player with connection " + connection.httpRequest().id());
+		if (!Sessions.contains(connection)) {
+			log.error("Couldn't find connection " + connection.httpRequest().id());
 			return;
 		}
-		Session player = Sessions.get(event.getConnection());
+		Session player = Sessions.get(connection);
 		if (player != null) {
-			removePlayer(player, event.getConnection());
+			getInstance().removePlayer(player, connection);
 		}
 	}
 

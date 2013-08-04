@@ -1,9 +1,9 @@
 package game.network.handler;
 
-import game.Session;
+import game.EventKeys;
 import game.Games;
+import game.Session;
 import game.Sessions;
-import game.event.GameLeaveEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +62,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 		if (authConnections.containsKey(connection)) {
 			log.info("Auth connection " + connection.httpRequest().id() + " closed");
 			authConnections.remove(connection);
-			Events.instance().publish(Games.EVENT_TOPIC, new GameLeaveEvent(connection));
+			Events.instance().publish(EventKeys.PLAYER_LEAVE, connection);
 		}
 	}
 
