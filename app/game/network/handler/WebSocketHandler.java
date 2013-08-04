@@ -2,6 +2,7 @@ package game.network.handler;
 
 import game.GameSession;
 import game.GamesHandler;
+import game.Sessions;
 import game.event.GameLeaveEvent;
 
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	@Override
 	public void onPong(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPong(connection, msg);
-		GameSession session = GamesHandler.getInstance().getConnections().get(connection);
+		GameSession session = Sessions.get(connection);
 		if (session != null) {
 			Long latency = Long.parseLong(new String(msg));
 			latency = (System.currentTimeMillis() - latency) / 2;

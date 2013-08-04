@@ -44,7 +44,6 @@ public class GamesHandler implements Serializable {
 	public static final String EVENT_TOPIC = GamesHandler.class.getSimpleName();
 
 	private ConcurrentHashMap<Long, GameProcessor> games = new ConcurrentHashMap<Long, GameProcessor>();
-	private ConcurrentHashMap<WebSocketConnection, GameSession> connections = new ConcurrentHashMap<WebSocketConnection, GameSession>();
 	private ConcurrentHashMap<GameSession, ProcessorHandler> processors = new ConcurrentHashMap<GameSession, ProcessorHandler>();
 
 	private static GamesHandler instance = new GamesHandler();
@@ -76,11 +75,11 @@ public class GamesHandler implements Serializable {
 
 	public void observePlayerLeaveEvent(final GameLeaveEvent event) {
 		log.info("Remove player with connection " + event.getConnection().httpRequest().id());
-		if (!connections.containsKey(event.getConnection())) {
+		if (!Sessions.contains(event.getConnection())) {
 			log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
 			return;
 		}
-		GameSession player = connections.get(event.getConnection());
+		GameSession player = Sessions.get(event.getConnection());
 		if (player != null) {
 			removePlayer(player, event.getConnection());
 		}
@@ -111,7 +110,7 @@ public class GamesHandler implements Serializable {
 	private void joinMatch(final long matchId, final MatchToken token, final WebSocketConnection connection) {
 		final GameProcessor game = games.get(matchId);
 		GameSession session = new GameSession(game.getMatch(), token.getPlayer(), token, connection);
-		connections.put(connection, session);
+		Sessions.add(connection, session);
 		session.setGame(game);
 		game.addPlayer(session);
 		log.info(String.format("Player '<%s>' attempt to join game '<%s>'", token.getPlayer().getUser().getUsername(), game.getTopicName()));
@@ -184,7 +183,7 @@ public class GamesHandler implements Serializable {
 		}
 		GameProcessor game = session.getGame();
 		game.removePlayer(connection);
-		connections.remove(connection);
+		Sessions.remove(connection);
 		processors.remove(session);
 	}
 
@@ -192,7 +191,7 @@ public class GamesHandler implements Serializable {
 		for (ProcessorHandler handler : processors.values()) {
 			handler.stop();
 		}
-		connections.clear();
+		Sessions.clear();
 		processors.clear();
 		games.clear();
 	}
@@ -201,10 +200,6 @@ public class GamesHandler implements Serializable {
 
 	public java.util.Map<Long, GameProcessor> getGames() {
 		return games;
-	}
-
-	public java.util.Map<WebSocketConnection, GameSession> getConnections() {
-		return connections;
 	}
 
 	public ConcurrentHashMap<GameSession, ProcessorHandler> getProcessors() {
