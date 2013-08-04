@@ -22,9 +22,8 @@ import play.Plugin;
 public class WebSocketServer extends Plugin {
 	private static final Logger.ALogger log = Logger.of(WebSocketServer.class);
 
-	private WebSocketHandler handler;
-	private WebServer server;
 	private Application app;
+	private WebServer server;
 
 	/**
 	 * Default constructor will be invoked during startup from play.
@@ -43,12 +42,11 @@ public class WebSocketServer extends Plugin {
 	 */
 	@Override
 	public void onStart() {
-		handler = WebSocketHandler.getInstance();
-		handler.init();
-		server = WebServers.createWebServer(app.configuration().getInt("webSocketServerPort", 9005));
-		server.add("/", handler);
-		log.info(String.format("Started %s on %s", getClass().getSimpleName(), server.getUri().toString()));
+		WebServer server = WebServers.createWebServer(app.configuration().getInt("webSocketServerPort", 9005));
+		server.add("/", new WebSocketHandler());
 		server.start();
+		log.info(String.format("Started %s on %s", getClass().getSimpleName(), server.getUri().toString()));
+		this.server = server;
 	}
 
 	/*
@@ -58,7 +56,8 @@ public class WebSocketServer extends Plugin {
 	 */
 	@Override
 	public void onStop() {
-		handler.destroy();
-		server.stop();
+		if (server != null) {
+			server.stop();
+		}
 	}
 }

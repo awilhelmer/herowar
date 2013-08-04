@@ -16,7 +16,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class BasePacket implements Serializable {
 
 	protected Integer type;
-
 	protected Long createdTime;
 
 	public BasePacket() {

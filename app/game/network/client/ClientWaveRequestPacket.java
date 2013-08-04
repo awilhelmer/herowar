@@ -1,14 +1,5 @@
 package game.network.client;
 
-import game.Session;
-import game.Sessions;
-import game.network.BasePacket;
-import game.network.InputPacket;
-import game.network.handler.PacketHandler;
-import game.network.handler.WebSocketHandler;
-
-import org.webbitserver.WebSocketConnection;
-
 import play.Logger;
 
 /**
@@ -17,18 +8,12 @@ import play.Logger;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class ClientWaveRequestPacket extends BasePacket implements InputPacket {
+public class ClientWaveRequestPacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientWaveRequestPacket.class);
 
 	@Override
-	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
+	public void process() {
 		log.info("Request next wave...");
-		Session session = Sessions.get(connection);
-		if (session == null) {
-			// TODO: disconnect user here ...
-			log.error("GameSession should not be null");
-			return;
-		}
 		session.getGame().setWaveRequest(true);
 	}
 

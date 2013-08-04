@@ -1,8 +1,5 @@
 package game.network;
 
-import game.network.handler.PacketHandler;
-import game.network.handler.WebSocketHandler;
-
 import org.webbitserver.WebSocketConnection;
 
 /**
@@ -13,6 +10,6 @@ import org.webbitserver.WebSocketConnection;
 
 public interface InputPacket {
 
-	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection);
+	public void process(WebSocketConnection connection);
 
 }

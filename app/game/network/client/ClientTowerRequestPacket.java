@@ -1,13 +1,8 @@
 package game.network.client;
 
 import game.Session;
-import game.Sessions;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
-import game.network.BasePacket;
-import game.network.InputPacket;
-import game.network.handler.PacketHandler;
-import game.network.handler.WebSocketHandler;
 import game.network.server.ChatMessagePacket;
 import game.network.server.ChatMessagePacket.Layout;
 import game.network.server.GlobalMessagePacket;
@@ -26,9 +21,6 @@ import models.entity.game.Tower;
 import models.entity.game.Vector3;
 import models.entity.game.Wave;
 import models.entity.game.Waypoint;
-
-import org.webbitserver.WebSocketConnection;
-
 import play.Logger;
 import play.db.jpa.JPA;
 import play.libs.Json;
@@ -39,22 +31,15 @@ import play.libs.Json;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class ClientTowerRequestPacket extends BasePacket implements InputPacket {
+public class ClientTowerRequestPacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);
+	private static final DateFormat df = new SimpleDateFormat("hh:mm");
 
 	private Long id;
 	private Vector3 position;
 
 	@Override
-	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		Session session = Sessions.get(connection);
-		if (session == null) {
-			// TODO: disconnect user here ...
-			log.error("GameSession should not be null");
-			return;
-		}
-		// TODO: validate and reduce player and and check if the tower has a valid
-		// position.
+	public void process() {
 		double currentGold = 0;
 		ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
 		if (playerCache.containsKey(CacheConstants.GOLD)) {
@@ -77,7 +62,6 @@ public class ClientTowerRequestPacket extends BasePacket implements InputPacket 
 		session.getGame().broadcast(new TowerBuildPacket(tower, this.position));
 		String message = session.getUsername() + " build " + tower.getName();
 		session.getGame().broadcast(new GlobalMessagePacket(message));
-		DateFormat df = new SimpleDateFormat("hh:mm");
 		session.getGame().broadcast(new ChatMessagePacket(Layout.SYSTEM, "[" + df.format(new Date()) + "] System: " + message));
 		synchronized (playerCache) {
 			playerCache.replace(CacheConstants.GOLD, currentGold - entity.getPrice());

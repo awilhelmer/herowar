@@ -1,18 +1,9 @@
 package game.network.client;
 
-import game.Session;
-import game.Sessions;
 import game.event.PreloadUpdateEvent;
-import game.network.BasePacket;
-import game.network.InputPacket;
-import game.network.handler.PacketHandler;
-import game.network.handler.WebSocketHandler;
 import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
-
-import org.webbitserver.WebSocketConnection;
-
 import play.Logger;
 import play.libs.Json;
 
@@ -22,19 +13,13 @@ import play.libs.Json;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class ClientPreloadUpdatePacket extends BasePacket implements InputPacket {
+public class ClientPreloadUpdatePacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientPreloadUpdatePacket.class);
 
 	private Integer progress;
 
 	@Override
-	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		Session session = Sessions.get(connection);
-		if (session == null) {
-			// TODO: disconnect user here ...
-			log.error("GameSession should not be null");
-			return;
-		}
+	public void process() {
 		if (GameProcessor.State.PRELOAD.equals(session.getGame().getState())) {
 			if (progress == 100) {
 				log.info("Send preload complete event to " + session.getGame().getTopicName() + " for "

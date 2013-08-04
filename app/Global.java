@@ -1,3 +1,4 @@
+import game.Games;
 import importer.EnvironmentImporter;
 import importer.TowerImporter;
 import importer.UnitImporter;
@@ -59,6 +60,7 @@ public class Global extends GlobalSettings {
 	@Override
 	public void onStop(Application app) {
 		log.info("Herowar shutdown...");
+		Games.shutdown();
 	}
 
 	private void initialSecurityRoles() {

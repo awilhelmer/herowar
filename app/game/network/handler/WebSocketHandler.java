@@ -1,14 +1,9 @@
 package game.network.handler;
 
 import game.EventKeys;
-import game.Games;
 import game.Session;
 import game.Sessions;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import models.entity.game.Player;
+import game.network.Connections;
 
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
@@ -24,57 +19,57 @@ import com.ssachtleben.play.plugin.event.Events;
  * @author Sebastian Sachtleben
  */
 public class WebSocketHandler extends BaseWebSocketHandler {
-
 	private final static Logger.ALogger log = Logger.of(WebSocketHandler.class);
 
-	private static WebSocketHandler instance = new WebSocketHandler();
-
-	private Map<WebSocketConnection, Player> authConnections = new HashMap<WebSocketConnection, Player>();
-
-	private WebSocketHandler() {
-	}
-
-	public static WebSocketHandler getInstance() {
-		return instance;
-	}
-
-	public Map<WebSocketConnection, Player> getAuthConnections() {
-		return authConnections;
-	}
-
-	public void init() {
-		log.info("WebSocketHandler started");
-	}
-
-	public void destroy() {
-		Games.shutdown();
-		log.info("WebSocketHandler stopped");
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.webbitserver.BaseWebSocketHandler#onOpen(org.webbitserver.WebSocketConnection)
+	 */
 	@Override
 	public void onOpen(final WebSocketConnection connection) {
-		log.debug("New connection " + connection.httpRequest().id() + " opend - waiting for auth packet");
+		log.debug("New connection " + connection.httpRequest().id() + " - waiting for auth packet");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.webbitserver.BaseWebSocketHandler#onClose(org.webbitserver.WebSocketConnection)
+	 */
 	@Override
 	public void onClose(final WebSocketConnection connection) {
-		if (authConnections.containsKey(connection)) {
-			log.info("Auth connection " + connection.httpRequest().id() + " closed");
-			authConnections.remove(connection);
+		if (Connections.contains(connection)) {
+			log.debug("Connection " + connection.httpRequest().id() + " closed");
 			Events.instance().publish(EventKeys.PLAYER_LEAVE, connection);
+			Connections.remove(connection);
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.webbitserver.BaseWebSocketHandler#onMessage(org.webbitserver.WebSocketConnection, java.lang.String)
+	 */
 	@Override
 	public void onMessage(final WebSocketConnection connection, final String msg) throws Throwable {
 		PacketHandler.getInstance().handle(this, connection, msg);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.webbitserver.BaseWebSocketHandler#onPing(org.webbitserver.WebSocketConnection, byte[])
+	 */
 	@Override
 	public void onPing(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPing(connection, msg);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.webbitserver.BaseWebSocketHandler#onPong(org.webbitserver.WebSocketConnection, byte[])
+	 */
 	@Override
 	public void onPong(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPong(connection, msg);

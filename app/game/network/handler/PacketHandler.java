@@ -45,22 +45,22 @@ public class PacketHandler implements Serializable {
 	public void handle(final WebSocketHandler handler, final WebSocketConnection connection, String data) {
 		BasePacket packetType = Json.fromJson(Json.parse(data), BasePacket.class);
 		if (packetType == null || !getPacketTypeCache().containsKey(packetType.getType())) {
-			log.error("Failed to get packet for type: " + (packetType != null ? packetType.getType() : null));
+			log.error(String.format("Failed to get packet class for type: %s", (packetType != null ? packetType.getType() : null)));
 			return;
 		}
 		try {
 			final InputPacket packet = (InputPacket) Json.fromJson(Json.parse(data), getPacketTypeCache().get(packetType.getType()));
 			if (packet != null) {
-				log.debug("Retrieved (connection " + connection.httpRequest().id() + "):" + packet.toString());
+				log.debug(String.format("Retrieved (connection %d): %s", connection.httpRequest().id(), packet.toString()));
 				JPA.withTransaction(new play.libs.F.Callback0() {
 					@Override
 					public void invoke() throws Throwable {
-						packet.process(instance, handler, connection);
+						packet.process(connection);
 					}
 				});
 			}
 		} catch (Exception e) {
-			log.error("Failed to parse input packet (connection=" + connection.httpRequest().id() + "): " + data, e);
+			log.error(String.format("Failed to parse input packet (connection=%d): %s", connection.httpRequest().id(), data), e);
 		}
 	}
 

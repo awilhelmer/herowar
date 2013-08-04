@@ -56,7 +56,6 @@ public class Games extends Cache<Long, GameProcessor> {
 	 */
 	public static void shutdown() {
 		Sessions.clear();
-		Processors.clear();
 		getInstance().cache().clear();
 	}
 
@@ -125,7 +124,6 @@ public class Games extends Cache<Long, GameProcessor> {
 		if (session != null) {
 			session.getGame().removePlayer(connection);
 			Sessions.remove(connection);
-			Processors.remove(session);
 		}
 	}
 }

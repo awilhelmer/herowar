@@ -1,14 +1,5 @@
 package game.network.client;
 
-import game.Session;
-import game.Sessions;
-import game.network.BasePacket;
-import game.network.InputPacket;
-import game.network.handler.PacketHandler;
-import game.network.handler.WebSocketHandler;
-
-import org.webbitserver.WebSocketConnection;
-
 import play.Logger;
 
 /**
@@ -17,17 +8,12 @@ import play.Logger;
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
-public class ClientTutorialUpdatePacket extends BasePacket implements InputPacket {
+public class ClientTutorialUpdatePacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientTutorialUpdatePacket.class);
 
 	@Override
-	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection) {
-		Session session = Sessions.get(connection);
-		if (session == null) {
-			// TODO: disconnect user here ...
-			log.error("GameSession should not be null");
-			return;
-		}
+	public void process() {
+		log.info("Request next tutorial step...");
 		session.getGame().setTutorialUpdate(true);
 	}
 
