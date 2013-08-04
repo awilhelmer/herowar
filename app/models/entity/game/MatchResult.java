@@ -14,8 +14,7 @@ import javax.persistence.OneToOne;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- * The PlayerMatchResult contains information about player specific details for
- * a match.
+ * The PlayerMatchResult contains information about player specific details for a match.
  * 
  * @author Sebastian Sachtleben
  */
@@ -23,76 +22,76 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @SuppressWarnings("serial")
 public class MatchResult implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  private Long score = 0L;
-  private Long kills = 0L;
+	private Long score = 0L;
+	private Long kills = 0L;
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "player_id")
-  private Player player;
+	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+	@JoinColumn(name = "player_id")
+	private Player player;
 
-  @OneToOne(cascade = { CascadeType.REFRESH }, mappedBy = "result")
-  @JsonIgnore
-  private MatchToken token;
+	@OneToOne(cascade = { CascadeType.REFRESH }, mappedBy = "result")
+	@JsonIgnore
+	private MatchToken token;
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "match_id")
-  @JsonIgnore
-  private Match match;
+	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+	@JoinColumn(name = "match_id")
+	@JsonIgnore
+	private Match match;
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Long getScore() {
-    return score;
-  }
+	public Long getScore() {
+		return score;
+	}
 
-  public void setScore(Long score) {
-    this.score = score;
-  }
-  
-  public Long getKills() {
-    return kills;
-  }
+	public void setScore(Long score) {
+		this.score = score;
+	}
 
-  public void setKills(Long kills) {
-    this.kills = kills;
-  }
+	public Long getKills() {
+		return kills;
+	}
 
-  public Player getPlayer() {
-    return player;
-  }
+	public void setKills(Long kills) {
+		this.kills = kills;
+	}
 
-  public void setPlayer(Player player) {
-    this.player = player;
-  }
+	public Player getPlayer() {
+		return player;
+	}
 
-  public MatchToken getToken() {
-    return token;
-  }
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
-  public void setToken(MatchToken token) {
-    this.token = token;
-  }
+	public MatchToken getToken() {
+		return token;
+	}
 
-  public Match getMatch() {
-    return match;
-  }
+	public void setToken(MatchToken token) {
+		this.token = token;
+	}
 
-  public void setMatch(Match match) {
-    this.match = match;
-  }
+	public Match getMatch() {
+		return match;
+	}
 
-  @Override
-  public String toString() {
-    return "MatchResult [id=" + id + ", score=" + score + "]";
-  }
+	public void setMatch(Match match) {
+		this.match = match;
+	}
+
+	@Override
+	public String toString() {
+		return "MatchResult [id=" + id + ", score=" + score + "]";
+	}
 }

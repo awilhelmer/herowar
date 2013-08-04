@@ -8,16 +8,16 @@ import game.processor.GameProcessor;
  */
 public interface IPlugin {
 
-  public void process(double delta, long now);
+	public void process(double delta, long now);
 
-  public void load();
+	public void load();
 
-  public void unload();
+	public void unload();
 
-  public GameProcessor.State onState();
-  
-  public void addPlayer(Session session);
+	public GameProcessor.State onState();
 
-  public void removePlayer(Session session);
+	public void addPlayer(Session session);
+
+	public void removePlayer(Session session);
 
 }

@@ -6,29 +6,29 @@ import models.entity.game.Path;
 
 public class GameUnitEvent {
 
-  public Path path;
-  public Unit unit;
+	public Path path;
+	public Unit unit;
 
-  public GameUnitEvent(Path path, Unit unit) {
-    super();
-    this.path = path;
-    this.unit = unit;
-  }
+	public GameUnitEvent(Path path, Unit unit) {
+		super();
+		this.path = path;
+		this.unit = unit;
+	}
 
-  public Path getPath() {
-    return path;
-  }
+	public Path getPath() {
+		return path;
+	}
 
-  public void setPath(Path path) {
-    this.path = path;
-  }
+	public void setPath(Path path) {
+		this.path = path;
+	}
 
-  public Unit getUnit() {
-    return unit;
-  }
+	public Unit getUnit() {
+		return unit;
+	}
 
-  public void setUnit(Unit unit) {
-    this.unit = unit;
-  }
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 
 }

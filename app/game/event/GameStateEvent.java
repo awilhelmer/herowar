@@ -9,17 +9,17 @@ import game.processor.GameProcessor.State;
  */
 public class GameStateEvent {
 
-  private State state;
-  
-  public GameStateEvent(State state) {
-    this.state = state;
-  }
+	private State state;
 
-  public State getState() {
-    return state;
-  }
+	public GameStateEvent(State state) {
+		this.state = state;
+	}
 
-  public void setState(State state) {
-    this.state = state;
-  }
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
 }

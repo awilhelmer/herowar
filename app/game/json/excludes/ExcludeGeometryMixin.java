@@ -11,8 +11,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 public class ExcludeGeometryMixin {
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Geometry geometry;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Geometry geometry;
 
 }

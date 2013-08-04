@@ -12,13 +12,13 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class AccessGrantedPacket extends BasePacket {
 
-  public AccessGrantedPacket() {
+	public AccessGrantedPacket() {
 		this.type = PacketType.AccessGrantedPacket;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AccessGrantedPacket [type=" + type + "]";
 	}
-	
+
 }

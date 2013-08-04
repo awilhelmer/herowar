@@ -10,25 +10,25 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class PlayerStatsInitPacket extends PlayerStatsUpdatePacket {
 
-  protected Integer goldPerTick;
+	protected Integer goldPerTick;
 
-  public PlayerStatsInitPacket(Long lives, Long gold, Integer goldPerTick) {
-    super(0L, lives, gold, 0, lives.intValue(), gold.intValue());
-    this.type = PacketType.PlayerStatsInitPacket;
-    this.goldPerTick = goldPerTick;
-  }
+	public PlayerStatsInitPacket(Long lives, Long gold, Integer goldPerTick) {
+		super(0L, lives, gold, 0, lives.intValue(), gold.intValue());
+		this.type = PacketType.PlayerStatsInitPacket;
+		this.goldPerTick = goldPerTick;
+	}
 
-  public Integer getGoldPerTick() {
-    return goldPerTick;
-  }
+	public Integer getGoldPerTick() {
+		return goldPerTick;
+	}
 
-  public void setGoldPerTick(Integer goldPerTick) {
-    this.goldPerTick = goldPerTick;
-  }
+	public void setGoldPerTick(Integer goldPerTick) {
+		this.goldPerTick = goldPerTick;
+	}
 
-  @Override
-  public String toString() {
-    return "PlayerStatsInitPacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + ", gold=" + gold + ", goldPerTick=" + goldPerTick
-        + "]";
-  }
+	@Override
+	public String toString() {
+		return "PlayerStatsInitPacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + ", gold=" + gold
+				+ ", goldPerTick=" + goldPerTick + "]";
+	}
 }

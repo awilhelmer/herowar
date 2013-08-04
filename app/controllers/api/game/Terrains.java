@@ -14,39 +14,39 @@ import controllers.api.BaseAPI;
  * @author Sebastian Sachtleben
  */
 public class Terrains extends BaseAPI<Long, Terrain> {
-  private static final Logger.ALogger log = Logger.of(Terrains.class);
+	private static final Logger.ALogger log = Logger.of(Terrains.class);
 
-  private Terrains() {
-    super(Long.class, Terrain.class);
-  }
+	private Terrains() {
+		super(Long.class, Terrain.class);
+	}
 
-  public static final Terrains instance = new Terrains();
+	public static final Terrains instance = new Terrains();
 
-  @Transactional
-  public static Result list() {
-    log.warn("called listAll without Excludes!");
-    return instance.listAll();
-  }
+	@Transactional
+	public static Result list() {
+		log.warn("called listAll without Excludes!");
+		return instance.listAll();
+	}
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 
-  @Transactional
-  public static Result update(Long id) {
-    Terrain terrain = instance.findUnique(id);
-    terrain = JPA.em().merge(terrain);
-    return ok(toJson(terrain));
-  }
+	@Transactional
+	public static Result update(Long id) {
+		Terrain terrain = instance.findUnique(id);
+		terrain = JPA.em().merge(terrain);
+		return ok(toJson(terrain));
+	}
 
-  @Transactional
-  public static Result delete(Long id) {
-    return instance.deleteEntry(id);
-  }
+	@Transactional
+	public static Result delete(Long id) {
+		return instance.deleteEntry(id);
+	}
 
-  @Transactional
-  public static Result add() {
-    return instance.addEntry();
-  }
+	@Transactional
+	public static Result add() {
+		return instance.addEntry();
+	}
 }

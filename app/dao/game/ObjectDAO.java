@@ -5,17 +5,17 @@ import dao.BaseDAO;
 
 public class ObjectDAO extends BaseDAO<Long, Object3D> {
 
-  private ObjectDAO() {
-    super(Long.class, Object3D.class);
-  }
+	private ObjectDAO() {
+		super(Long.class, Object3D.class);
+	}
 
-  private static final ObjectDAO instance = new ObjectDAO();
+	private static final ObjectDAO instance = new ObjectDAO();
 
-  public static void merge(Object3D object, Object3D object2) {
-    object = instance.merge(object);
-    object.setName(object2.getName());
-    object.setDescription(object2.getDescription());
+	public static void merge(Object3D object, Object3D object2) {
+		object = instance.merge(object);
+		object.setName(object2.getName());
+		object.setDescription(object2.getDescription());
 
-  }
+	}
 
 }

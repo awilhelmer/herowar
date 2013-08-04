@@ -29,87 +29,87 @@ import org.hibernate.annotations.Type;
 @SuppressWarnings("serial")
 public class Match extends BaseModel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private Long preloadTime;
-  private Long gameTime;
-  private Integer lives;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long preloadTime;
+	private Long gameTime;
+	private Integer lives;
 
-  @Type(type = "yes_no")
-  private Boolean victory;
+	@Type(type = "yes_no")
+	private Boolean victory;
 
-  @Enumerated(EnumType.STRING)
-  private MatchState state = MatchState.INIT;
+	@Enumerated(EnumType.STRING)
+	private MatchState state = MatchState.INIT;
 
-  @ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-  @JoinColumn(name = "map_id")
-  private Map map;
+	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+	@JoinColumn(name = "map_id")
+	private Map map;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
-  private Set<MatchResult> playerResults = new HashSet<MatchResult>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "match")
+	private Set<MatchResult> playerResults = new HashSet<MatchResult>();
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Long getPreloadTime() {
-    return preloadTime;
-  }
+	public Long getPreloadTime() {
+		return preloadTime;
+	}
 
-  public void setPreloadTime(Long preloadTime) {
-    this.preloadTime = preloadTime;
-  }
+	public void setPreloadTime(Long preloadTime) {
+		this.preloadTime = preloadTime;
+	}
 
-  public Long getGameTime() {
-    return gameTime;
-  }
+	public Long getGameTime() {
+		return gameTime;
+	}
 
-  public void setGameTime(Long gameTime) {
-    this.gameTime = gameTime;
-  }
+	public void setGameTime(Long gameTime) {
+		this.gameTime = gameTime;
+	}
 
-  public Integer getLives() {
-    return lives;
-  }
+	public Integer getLives() {
+		return lives;
+	}
 
-  public void setLives(Integer lives) {
-    this.lives = lives;
-  }
+	public void setLives(Integer lives) {
+		this.lives = lives;
+	}
 
-  public Boolean getVictory() {
-    return victory;
-  }
+	public Boolean getVictory() {
+		return victory;
+	}
 
-  public void setVictory(Boolean victory) {
-    this.victory = victory;
-  }
+	public void setVictory(Boolean victory) {
+		this.victory = victory;
+	}
 
-  public MatchState getState() {
-    return state;
-  }
+	public MatchState getState() {
+		return state;
+	}
 
-  public void setState(MatchState state) {
-    this.state = state;
-  }
+	public void setState(MatchState state) {
+		this.state = state;
+	}
 
-  public Map getMap() {
-    return map;
-  }
+	public Map getMap() {
+		return map;
+	}
 
-  public void setMap(Map map) {
-    this.map = map;
-  }
+	public void setMap(Map map) {
+		this.map = map;
+	}
 
-  public Set<MatchResult> getPlayerResults() {
-    return playerResults;
-  }
+	public Set<MatchResult> getPlayerResults() {
+		return playerResults;
+	}
 
-  public void setPlayerResults(Set<MatchResult> playerResults) {
-    this.playerResults = playerResults;
-  }
+	public void setPlayerResults(Set<MatchResult> playerResults) {
+		this.playerResults = playerResults;
+	}
 }

@@ -12,40 +12,40 @@ import org.webbitserver.WebSocketConnection;
  */
 public class GameJoinEvent {
 
-  private long matchId;
-  private MatchToken token;
-  private WebSocketConnection connection;
+	private long matchId;
+	private MatchToken token;
+	private WebSocketConnection connection;
 
-  public GameJoinEvent(long matchId, MatchToken token, WebSocketConnection connection) {
-    this.matchId = matchId;
-    this.token = token;
-    this.connection = connection;
-  }
+	public GameJoinEvent(long matchId, MatchToken token, WebSocketConnection connection) {
+		this.matchId = matchId;
+		this.token = token;
+		this.connection = connection;
+	}
 
-  public GameJoinEvent() {
-  }
+	public GameJoinEvent() {
+	}
 
-  public long getMatchId() {
-    return matchId;
-  }
+	public long getMatchId() {
+		return matchId;
+	}
 
-  public void setMatchId(long matchId) {
-    this.matchId = matchId;
-  }
+	public void setMatchId(long matchId) {
+		this.matchId = matchId;
+	}
 
-  public MatchToken getToken() {
-    return token;
-  }
+	public MatchToken getToken() {
+		return token;
+	}
 
-  public void setToken(MatchToken token) {
-    this.token = token;
-  }
+	public void setToken(MatchToken token) {
+		this.token = token;
+	}
 
-  public WebSocketConnection getConnection() {
-    return connection;
-  }
+	public WebSocketConnection getConnection() {
+		return connection;
+	}
 
-  public void setConnection(WebSocketConnection connection) {
-    this.connection = connection;
-  }
+	public void setConnection(WebSocketConnection connection) {
+		this.connection = connection;
+	}
 }

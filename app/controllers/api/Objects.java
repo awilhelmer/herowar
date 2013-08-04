@@ -14,36 +14,36 @@ import play.mvc.Result;
  */
 public class Objects extends BaseAPI<Long, Object3D> {
 
-  private Objects() {
-    super(Long.class, Object3D.class);
-  }
+	private Objects() {
+		super(Long.class, Object3D.class);
+	}
 
-  public static final Objects instance = new Objects();
+	public static final Objects instance = new Objects();
 
-  @Transactional
-  public static Result list() {
-    return instance.listAll(); 
-  }
+	@Transactional
+	public static Result list() {
+		return instance.listAll();
+	}
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 
-  @Transactional
-  public static Result update(Long id) {
-    // Object3D object = instance.findUnique(id);
-    Object3D object = JPA.em().merge(Form.form(Object3D.class).bindFromRequest().get());
-    return ok(toJson(object));
-  }
+	@Transactional
+	public static Result update(Long id) {
+		// Object3D object = instance.findUnique(id);
+		Object3D object = JPA.em().merge(Form.form(Object3D.class).bindFromRequest().get());
+		return ok(toJson(object));
+	}
 
-  @Transactional
-  public static Result delete(Long id) {
-    return instance.deleteEntry(id);
-  }
+	@Transactional
+	public static Result delete(Long id) {
+		return instance.deleteEntry(id);
+	}
 
-  @Transactional
-  public static Result add() {
-    return instance.addEntry();
-  }
+	@Transactional
+	public static Result add() {
+		return instance.addEntry();
+	}
 }

@@ -22,94 +22,95 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @Table(name = "waypoint")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Waypoint implements Serializable {
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  private String name;
-  
-  private Integer sortOder;
-  
-  @Embedded
-  @AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "position_x")),
-      @AttributeOverride(name = "y", column = @Column(name = "position_y")), @AttributeOverride(name = "z", column = @Column(name = "position_z")) })
-  private Vector3 position;
+	private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
-  @JsonIgnore
-  private Path path;
+	private Integer sortOder;
 
-  public Long getId() {
-    return id;
-  }
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "position_x")),
+			@AttributeOverride(name = "y", column = @Column(name = "position_y")),
+			@AttributeOverride(name = "z", column = @Column(name = "position_z")) })
+	private Vector3 position;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
+	@JsonIgnore
+	private Path path;
 
-  public String getName() {
-    return name;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Vector3 getPosition() {
-    return position;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setPosition(Vector3 position) {
-    this.position = position;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public Path getPath() {
-    return path;
-  }
+	public Vector3 getPosition() {
+		return position;
+	}
 
-  public void setPath(Path path) {
-    this.path = path;
-  }
+	public void setPosition(Vector3 position) {
+		this.position = position;
+	}
 
-  public Integer getSortOder() {
-    return sortOder;
-  }
+	public Path getPath() {
+		return path;
+	}
 
-  public void setSortOder(Integer sortOder) {
-    this.sortOder = sortOder;
-  }
+	public void setPath(Path path) {
+		this.path = path;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    return result;
-  }
+	public Integer getSortOder() {
+		return sortOder;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Waypoint other = (Waypoint) obj;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
-      return false;
-    return true;
-  }
+	public void setSortOder(Integer sortOder) {
+		this.sortOder = sortOder;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Waypoint other = (Waypoint) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 
 }

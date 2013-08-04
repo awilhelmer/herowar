@@ -1,4 +1,3 @@
-import game.Games;
 import game.network.GameServer;
 import game.network.handler.WebSocketHandler;
 import importer.EnvironmentImporter;

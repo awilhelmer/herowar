@@ -9,22 +9,22 @@ import org.webbitserver.WebSocketConnection;
  */
 public class GameLeaveEvent {
 
-  private WebSocketConnection connection;
+	private WebSocketConnection connection;
 
-  public GameLeaveEvent(WebSocketConnection connection) {
-    this.connection = connection;
-  }
+	public GameLeaveEvent(WebSocketConnection connection) {
+		this.connection = connection;
+	}
 
-  public GameLeaveEvent() {
-    // empty
-  }
+	public GameLeaveEvent() {
+		// empty
+	}
 
-  public WebSocketConnection getConnection() {
-    return connection;
-  }
+	public WebSocketConnection getConnection() {
+		return connection;
+	}
 
-  public void setConnection(WebSocketConnection connection) {
-    this.connection = connection;
-  }
+	public void setConnection(WebSocketConnection connection) {
+		this.connection = connection;
+	}
 
 }

@@ -12,14 +12,14 @@ import controllers.api.BaseAPI;
  */
 public class Players extends BaseAPI<Long, Player> {
 
-  private Players() {
-    super(Long.class, Player.class);
-  }
+	private Players() {
+		super(Long.class, Player.class);
+	}
 
-  public static final Players instance = new Players();
+	public static final Players instance = new Players();
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 }

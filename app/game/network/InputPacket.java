@@ -13,6 +13,6 @@ import org.webbitserver.WebSocketConnection;
 
 public interface InputPacket {
 
-  public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection);
-  
+	public void process(PacketHandler packetHandler, WebSocketHandler socketHandler, WebSocketConnection connection);
+
 }

@@ -18,28 +18,28 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 public class MapDataExcludeMixin {
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Terrain terrain;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Terrain terrain;
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Set<Tower> towers;
-  
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Set<Wave> waves;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Set<Tower> towers;
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Set<Mesh> objects;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Set<Wave> waves;
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Set<Material> allMaterials;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Set<Mesh> objects;
 
-  @SuppressWarnings("unused")
-  @JsonIgnore
-  private Set<Path> paths;
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Set<Material> allMaterials;
+
+	@SuppressWarnings("unused")
+	@JsonIgnore
+	private Set<Path> paths;
 
 }

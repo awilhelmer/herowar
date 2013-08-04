@@ -18,11 +18,11 @@ public class LevelRange implements Serializable {
 
 	public LevelRange() {
 	}
-	
+
 	public LevelRange(Long exp) {
 		this.exp = exp;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}

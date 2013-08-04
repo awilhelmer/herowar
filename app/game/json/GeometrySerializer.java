@@ -17,10 +17,10 @@ import dao.game.GeoMatId;
  */
 public class GeometrySerializer extends BaseSerializer<Geometry> {
 
-  @Override
-  public void serialize(Geometry geometry, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+	@Override
+	public void serialize(Geometry geometry, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
 
-    writeAll(jgen, geometry, GeoMetaData.class, Material.class, GeoMatId.class);
-    
-  }
+		writeAll(jgen, geometry, GeoMetaData.class, Material.class, GeoMatId.class);
+
+	}
 }

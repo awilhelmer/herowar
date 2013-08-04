@@ -11,19 +11,19 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class GlobalMessagePacket extends BasePacket {
 
-  private String message;
+	private String message;
 
-  public GlobalMessagePacket(String message) {
-    super();
-    this.type = PacketType.GlobalMessagePacket;
-    this.message = message;
-  }
+	public GlobalMessagePacket(String message) {
+		super();
+		this.type = PacketType.GlobalMessagePacket;
+		this.message = message;
+	}
 
-  public String getMessage() {
-    return message;
-  }
+	public String getMessage() {
+		return message;
+	}
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 }

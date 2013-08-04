@@ -11,24 +11,24 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class PlayerLivesUpdatePacket extends BasePacket {
 
-  protected Integer lives;
-  
-  public PlayerLivesUpdatePacket(Integer lives) {
-    super();
-    this.type = PacketType.PlayerLivesUpdatePacket;
-    this.lives = lives;
-  }
+	protected Integer lives;
 
-  public Integer getLives() {
-    return lives;
-  }
+	public PlayerLivesUpdatePacket(Integer lives) {
+		super();
+		this.type = PacketType.PlayerLivesUpdatePacket;
+		this.lives = lives;
+	}
 
-  public void setLives(Integer lives) {
-    this.lives = lives;
-  }
+	public Integer getLives() {
+		return lives;
+	}
 
-  @Override
-  public String toString() {
-    return "PlayerLivesUpdatePacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + "]";
-  }
+	public void setLives(Integer lives) {
+		this.lives = lives;
+	}
+
+	@Override
+	public String toString() {
+		return "PlayerLivesUpdatePacket [type=" + type + ", createdTime=" + createdTime + ", lives=" + lives + "]";
+	}
 }

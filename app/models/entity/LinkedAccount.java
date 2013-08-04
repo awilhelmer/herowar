@@ -15,49 +15,49 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @SuppressWarnings("serial")
 public class LinkedAccount implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  @ManyToOne(cascade = CascadeType.REFRESH)
-  @JsonIgnore
-  private User user;
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JsonIgnore
+	private User user;
 
-  private String providerUserId;
-  private String providerKey;
+	private String providerUserId;
+	private String providerKey;
 
-  // GETTER & SETTER //
+	// GETTER & SETTER //
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public User getUser() {
-    return user;
-  }
+	public User getUser() {
+		return user;
+	}
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-  public String getProviderUserId() {
-    return providerUserId;
-  }
+	public String getProviderUserId() {
+		return providerUserId;
+	}
 
-  public void setProviderUserId(String providerUserId) {
-    this.providerUserId = providerUserId;
-  }
+	public void setProviderUserId(String providerUserId) {
+		this.providerUserId = providerUserId;
+	}
 
-  public String getProviderKey() {
-    return providerKey;
-  }
+	public String getProviderKey() {
+		return providerKey;
+	}
 
-  public void setProviderKey(String providerKey) {
-    this.providerKey = providerKey;
-  }
+	public void setProviderKey(String providerKey) {
+		this.providerKey = providerKey;
+	}
 
 }

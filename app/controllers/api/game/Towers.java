@@ -21,45 +21,45 @@ import controllers.api.BaseAPI;
  * @author Sebastian Sachtleben
  */
 public class Towers extends BaseAPI<Long, Tower> {
-  private static final Logger.ALogger log = Logger.of(Towers.class);
+	private static final Logger.ALogger log = Logger.of(Towers.class);
 
-  private Towers() {
-    super(Long.class, Tower.class);
-  }
+	private Towers() {
+		super(Long.class, Tower.class);
+	}
 
-  public static final Towers instance = new Towers();
+	public static final Towers instance = new Towers();
 
-  @Transactional
-  public static Result list() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.getSerializationConfig().addMixInAnnotations(Tower.class, ExcludeGeometryMixin.class);
-    try {
-      return ok(mapper.writeValueAsString(instance.getAll()));
-    } catch (IOException e) {
-      log.error("Failed to serialize tower:", e);
-    }
-    return badRequest("Unexpected error occurred");
-  }
+	@Transactional
+	public static Result list() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.getSerializationConfig().addMixInAnnotations(Tower.class, ExcludeGeometryMixin.class);
+		try {
+			return ok(mapper.writeValueAsString(instance.getAll()));
+		} catch (IOException e) {
+			log.error("Failed to serialize tower:", e);
+		}
+		return badRequest("Unexpected error occurred");
+	}
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 
-  @Transactional
-  public static Result update(Long id) {
-    Tower tower = instance.findUnique(id);
-    tower = JPA.em().merge(tower);
-    return ok(toJson(tower));
-  }
+	@Transactional
+	public static Result update(Long id) {
+		Tower tower = instance.findUnique(id);
+		tower = JPA.em().merge(tower);
+		return ok(toJson(tower));
+	}
 
-  @Transactional
-  public static Result delete(Long id) {
-    return instance.deleteEntry(id);
-  }
+	@Transactional
+	public static Result delete(Long id) {
+		return instance.deleteEntry(id);
+	}
 
-  @Transactional
-  public static Result add() {
-    return instance.addEntry();
-  }
+	@Transactional
+	public static Result add() {
+		return instance.addEntry();
+	}
 }

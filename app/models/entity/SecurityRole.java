@@ -11,32 +11,32 @@ import javax.persistence.Id;
 @SuppressWarnings("serial")
 public class SecurityRole implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-  private String roleName;
+	private String roleName;
 
-  public String getName() {
-    return roleName;
-  }
+	public String getName() {
+		return roleName;
+	}
 
-  // GETTER & SETTER //
+	// GETTER & SETTER //
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public String getRoleName() {
-    return roleName;
-  }
+	public String getRoleName() {
+		return roleName;
+	}
 
-  public void setRoleName(String roleName) {
-    this.roleName = roleName;
-  }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
 }

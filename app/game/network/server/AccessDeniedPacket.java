@@ -11,10 +11,10 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class AccessDeniedPacket extends BasePacket {
 
-  public AccessDeniedPacket() {
+	public AccessDeniedPacket() {
 		this.type = PacketType.AccessDeniedPacket;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AccessDeniedPacket [type=" + type + "]";

@@ -12,50 +12,51 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class PreloadData implements Serializable {
 
-  private Map<String, String> images = new HashMap<String, String>();
-  private Map<String, String> textures = new HashMap<String, String>();
-  private Map<String, String> texturesCube = new HashMap<String, String>();
-  private Map<String, String> geometries = new HashMap<String, String>();
+	private Map<String, String> images = new HashMap<String, String>();
+	private Map<String, String> textures = new HashMap<String, String>();
+	private Map<String, String> texturesCube = new HashMap<String, String>();
+	private Map<String, String> geometries = new HashMap<String, String>();
 
-  public PreloadData(Map<String, String> images, Map<String, String> textures, Map<String, String> texturesCube, Map<String, String> geometries) {
-    this.images = images;
-    this.textures = textures;
-    this.texturesCube = texturesCube;
-    this.geometries = geometries;
-  }
+	public PreloadData(Map<String, String> images, Map<String, String> textures, Map<String, String> texturesCube,
+			Map<String, String> geometries) {
+		this.images = images;
+		this.textures = textures;
+		this.texturesCube = texturesCube;
+		this.geometries = geometries;
+	}
 
-  public PreloadData() {
-  }
+	public PreloadData() {
+	}
 
-  public Map<String, String> getImages() {
-    return images;
-  }
+	public Map<String, String> getImages() {
+		return images;
+	}
 
-  public void setImages(Map<String, String> images) {
-    this.images = images;
-  }
+	public void setImages(Map<String, String> images) {
+		this.images = images;
+	}
 
-  public Map<String, String> getTextures() {
-    return textures;
-  }
+	public Map<String, String> getTextures() {
+		return textures;
+	}
 
-  public void setTextures(Map<String, String> textures) {
-    this.textures = textures;
-  }
+	public void setTextures(Map<String, String> textures) {
+		this.textures = textures;
+	}
 
-  public Map<String, String> getTexturesCube() {
-    return texturesCube;
-  }
+	public Map<String, String> getTexturesCube() {
+		return texturesCube;
+	}
 
-  public void setTexturesCube(Map<String, String> texturesCube) {
-    this.texturesCube = texturesCube;
-  }
+	public void setTexturesCube(Map<String, String> texturesCube) {
+		this.texturesCube = texturesCube;
+	}
 
-  public Map<String, String> getGeometries() {
-    return geometries;
-  }
+	public Map<String, String> getGeometries() {
+		return geometries;
+	}
 
-  public void setGeometries(Map<String, String> geometries) {
-    this.geometries = geometries;
-  }
+	public void setGeometries(Map<String, String> geometries) {
+		this.geometries = geometries;
+	}
 }

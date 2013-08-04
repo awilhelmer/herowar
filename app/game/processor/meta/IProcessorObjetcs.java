@@ -4,17 +4,17 @@ import java.util.List;
 
 /**
  * @author Alexander Wilhelmer
- *
+ * 
  * @param <T>
  */
 public interface IProcessorObjetcs<T> extends IProcessor {
-  
-  public int getObjCount();
 
-  public List<T> getObjetcs(int size);
+	public int getObjCount();
 
-  public void add(T obj);
+	public List<T> getObjetcs(int size);
 
-  public void addObjects(List<T> list);
+	public void add(T obj);
+
+	public void addObjects(List<T> list);
 
 }

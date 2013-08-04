@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.SerializerProvider;
 
 public class MaterialSerializer extends BaseSerializer<Material> {
 
-  @Override
-  public void serialize(Material value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-    writeAll(jgen, value);
-  }
+	@Override
+	public void serialize(Material value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+		writeAll(jgen, value);
+	}
 
 }

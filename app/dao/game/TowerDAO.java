@@ -5,14 +5,14 @@ import dao.BaseDAO;
 
 public class TowerDAO extends BaseDAO<Long, Tower> {
 
-  private TowerDAO() {
-    super(Long.class, Tower.class);
-  }
+	private TowerDAO() {
+		super(Long.class, Tower.class);
+	}
 
-  private static final TowerDAO instance = new TowerDAO();
+	private static final TowerDAO instance = new TowerDAO();
 
-  public static TowerDAO getInstance() {
-    return instance;
-  }
-  
+	public static TowerDAO getInstance() {
+		return instance;
+	}
+
 }

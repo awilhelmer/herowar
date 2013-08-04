@@ -22,35 +22,35 @@ import dao.game.EnvironmentDAO;
  */
 public class Environments extends BaseAPI<Long, Environment> {
 
-  private static final Logger.ALogger log = Logger.of(Environments.class);
-  
-  private Environments() {
-    super(Long.class, Environment.class);
-  }
+	private static final Logger.ALogger log = Logger.of(Environments.class);
 
-  public static final Environments instance = new Environments();
+	private Environments() {
+		super(Long.class, Environment.class);
+	}
 
-  @Transactional
-  public static Result list() {
-    log.warn("called listAll without Excludes!");
-    return instance.listAll(); 
-  }
-  
-  @Transactional
-  public static Result root() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.getSerializationConfig().addMixInAnnotations(Environment.class, ExcludeGeometryMixin.class);
-    try {
-      return ok(mapper.writeValueAsString(EnvironmentDAO.getInstance().getRootEntity()));
-    } catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-      log.error("Failed to serialize root environment:", e);
-    }
-    return badRequest("Unexpected error occurred");
-  }
+	public static final Environments instance = new Environments();
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result list() {
+		log.warn("called listAll without Excludes!");
+		return instance.listAll();
+	}
+
+	@Transactional
+	public static Result root() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.getSerializationConfig().addMixInAnnotations(Environment.class, ExcludeGeometryMixin.class);
+		try {
+			return ok(mapper.writeValueAsString(EnvironmentDAO.getInstance().getRootEntity()));
+		} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+			log.error("Failed to serialize root environment:", e);
+		}
+		return badRequest("Unexpected error occurred");
+	}
+
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 
 }

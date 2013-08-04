@@ -13,36 +13,36 @@ import play.mvc.Result;
  */
 public class News extends BaseAPI<Long, models.entity.News> {
 
-  private News() {
-    super(Long.class, models.entity.News.class);
-  }
+	private News() {
+		super(Long.class, models.entity.News.class);
+	}
 
-  public static final News instance = new News();
+	public static final News instance = new News();
 
-  @Transactional
-  public static Result list() {
-    return instance.listAll(); 
-  }
+	@Transactional
+	public static Result list() {
+		return instance.listAll();
+	}
 
-  @Transactional
-  public static Result show(Long id) {
-    return instance.showEntry(id);
-  }
+	@Transactional
+	public static Result show(Long id) {
+		return instance.showEntry(id);
+	}
 
-  @Transactional
-  public static Result update(Long id) {
-    //models.entity.News news = instance.findUnique(id);
-    models.entity.News news = JPA.em().merge(Form.form(models.entity.News.class).bindFromRequest().get());
-    return ok(toJson(news));
-  }
+	@Transactional
+	public static Result update(Long id) {
+		// models.entity.News news = instance.findUnique(id);
+		models.entity.News news = JPA.em().merge(Form.form(models.entity.News.class).bindFromRequest().get());
+		return ok(toJson(news));
+	}
 
-  @Transactional
-  public static Result delete(Long id) {
-    return instance.deleteEntry(id);
-  }
+	@Transactional
+	public static Result delete(Long id) {
+		return instance.deleteEntry(id);
+	}
 
-  @Transactional
-  public static Result add() {
-    return instance.addEntry();
-  }
+	@Transactional
+	public static Result add() {
+		return instance.addEntry();
+	}
 }

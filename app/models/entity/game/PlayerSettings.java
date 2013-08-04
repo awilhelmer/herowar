@@ -16,80 +16,80 @@ import org.hibernate.annotations.Parameter;
 @SuppressWarnings("serial")
 public class PlayerSettings implements Serializable {
 
-  @Id
-  @GeneratedValue(generator = "playerSettingsGen")
-  @GenericGenerator(name = "playerSettingsGen", strategy = "foreign", parameters = @Parameter(name = "property", value="player"))
-  private Long id;
-  
-  @OneToOne(mappedBy = "settings")
-  @NotNull
-  @JsonIgnore
-  private Player player;
+	@Id
+	@GeneratedValue(generator = "playerSettingsGen")
+	@GenericGenerator(name = "playerSettingsGen", strategy = "foreign", parameters = @Parameter(name = "property", value = "player"))
+	private Long id;
 
-  // VIDEO SETTINGS //
+	@OneToOne(mappedBy = "settings")
+	@NotNull
+	@JsonIgnore
+	private Player player;
 
-  private Boolean displayFPS = true;
-  private Integer shadowsQuality = 2;
-  private Integer textureQuality = 2;
-  private Integer shaderQuality = 2;
+	// VIDEO SETTINGS //
 
-  // CONSTRUCTOR //
+	private Boolean displayFPS = true;
+	private Integer shadowsQuality = 2;
+	private Integer textureQuality = 2;
+	private Integer shaderQuality = 2;
 
-  public PlayerSettings() {
-  }
+	// CONSTRUCTOR //
 
-  public PlayerSettings(Player player) {
-    this();
-    this.player = player;
-  }
+	public PlayerSettings() {
+	}
 
-  // GETTER & SETTER //
+	public PlayerSettings(Player player) {
+		this();
+		this.player = player;
+	}
 
-  public Long getId() {
-    return id;
-  }
+	// GETTER & SETTER //
 
-  public void setId(Long id) {
-    this.id = id;
-  }  
-  
-  public Player getPlayer() {
-    return player;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setPlayer(Player player) {
-    this.player = player;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Boolean getDisplayFPS() {
-    return displayFPS;
-  }
+	public Player getPlayer() {
+		return player;
+	}
 
-  public void setDisplayFPS(Boolean displayFPS) {
-    this.displayFPS = displayFPS;
-  }
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
-  public Integer getShadowsQuality() {
-    return shadowsQuality;
-  }
+	public Boolean getDisplayFPS() {
+		return displayFPS;
+	}
 
-  public void setShadowsQuality(Integer shadowsQuality) {
-    this.shadowsQuality = shadowsQuality;
-  }
+	public void setDisplayFPS(Boolean displayFPS) {
+		this.displayFPS = displayFPS;
+	}
 
-  public Integer getTextureQuality() {
-    return textureQuality;
-  }
+	public Integer getShadowsQuality() {
+		return shadowsQuality;
+	}
 
-  public void setTextureQuality(Integer textureQuality) {
-    this.textureQuality = textureQuality;
-  }
+	public void setShadowsQuality(Integer shadowsQuality) {
+		this.shadowsQuality = shadowsQuality;
+	}
 
-  public Integer getShaderQuality() {
-    return shaderQuality;
-  }
+	public Integer getTextureQuality() {
+		return textureQuality;
+	}
 
-  public void setShaderQuality(Integer shaderQuality) {
-    this.shaderQuality = shaderQuality;
-  }
+	public void setTextureQuality(Integer textureQuality) {
+		this.textureQuality = textureQuality;
+	}
+
+	public Integer getShaderQuality() {
+		return shaderQuality;
+	}
+
+	public void setShaderQuality(Integer shaderQuality) {
+		this.shaderQuality = shaderQuality;
+	}
 }

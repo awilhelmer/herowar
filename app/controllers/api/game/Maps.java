@@ -22,53 +22,53 @@ import controllers.api.BaseAPI;
  * @author Sebastian Sachtleben
  */
 public class Maps extends BaseAPI<Long, Map> {
-  private static final Logger.ALogger log = Logger.of(Maps.class);
+	private static final Logger.ALogger log = Logger.of(Maps.class);
 
-  private Maps() {
-    super(Long.class, Map.class);
-  }
+	private Maps() {
+		super(Long.class, Map.class);
+	}
 
-  public static final Maps instance = new Maps();
+	public static final Maps instance = new Maps();
 
-  @Transactional
-  public static Result list() {
-    List<Map> result = instance.getAll();
-    for (Map map : result) {
-      JPA.em().detach(map);
-    }
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.getSerializationConfig().addMixInAnnotations(Map.class, MapDataExcludeMixin.class);
-    try {
-      return ok(mapper.writeValueAsString(result));
-    } catch (IOException e) {
-      log.error("Failed to serialize root environment:", e);
-    }
+	@Transactional
+	public static Result list() {
+		List<Map> result = instance.getAll();
+		for (Map map : result) {
+			JPA.em().detach(map);
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.getSerializationConfig().addMixInAnnotations(Map.class, MapDataExcludeMixin.class);
+		try {
+			return ok(mapper.writeValueAsString(result));
+		} catch (IOException e) {
+			log.error("Failed to serialize root environment:", e);
+		}
 
-    return badRequest("Unexpected error occurred");
+		return badRequest("Unexpected error occurred");
 
-  }
+	}
 
-  @Transactional
-  public static Result show(Long id) {
-    Map map = instance.findUnique(id);
+	@Transactional
+	public static Result show(Long id) {
+		Map map = instance.findUnique(id);
 
-    return ok(toJson(map));
-  }
+		return ok(toJson(map));
+	}
 
-  @Transactional
-  public static Result update(Long id) {
-    Map map = instance.findUnique(id);
-    map = JPA.em().merge(map);
-    return ok(toJson(map));
-  }
+	@Transactional
+	public static Result update(Long id) {
+		Map map = instance.findUnique(id);
+		map = JPA.em().merge(map);
+		return ok(toJson(map));
+	}
 
-  @Transactional
-  public static Result delete(Long id) {
-    return instance.deleteEntry(id);
-  }
+	@Transactional
+	public static Result delete(Long id) {
+		return instance.deleteEntry(id);
+	}
 
-  @Transactional
-  public static Result add() {
-    return instance.addEntry();
-  }
+	@Transactional
+	public static Result add() {
+		return instance.addEntry();
+	}
 }

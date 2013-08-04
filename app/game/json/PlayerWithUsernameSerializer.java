@@ -10,12 +10,12 @@ import org.codehaus.jackson.map.SerializerProvider;
 
 public class PlayerWithUsernameSerializer extends BaseSerializer<Player> {
 
-  @Override
-  public void serialize(Player player, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-    jgen.writeStartObject();
-    writeNumberField(jgen, "id", player.getId());
-    writeStringField(jgen, "username", player.getUser().getUsername());
-    jgen.writeEndObject();
-  }
+	@Override
+	public void serialize(Player player, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+		jgen.writeStartObject();
+		writeNumberField(jgen, "id", player.getId());
+		writeStringField(jgen, "username", player.getUser().getUsername());
+		jgen.writeEndObject();
+	}
 
 }

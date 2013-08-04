@@ -4,47 +4,46 @@ import game.network.BasePacket;
 import game.network.PacketType;
 
 /**
- * The GUIElementUpdatePacket will be send from server to client to update the
- * gui.
+ * The GUIElementUpdatePacket will be send from server to client to update the gui.
  * 
  * @author Sebastian Sachtleben
  */
 @SuppressWarnings("serial")
 public class GUIElementUpdatePacket extends BasePacket {
 
-  protected String name;
-  protected boolean visible;
-  protected boolean active;
+	protected String name;
+	protected boolean visible;
+	protected boolean active;
 
-  public GUIElementUpdatePacket(String name, boolean visible, boolean active) {
-    super();
-    this.type = PacketType.GUIElementUpdatePacket;
-    this.name = name;
-    this.visible = visible;
-    this.active = active;
-  }
+	public GUIElementUpdatePacket(String name, boolean visible, boolean active) {
+		super();
+		this.type = PacketType.GUIElementUpdatePacket;
+		this.name = name;
+		this.visible = visible;
+		this.active = active;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public boolean isVisible() {
-    return visible;
-  }
+	public boolean isVisible() {
+		return visible;
+	}
 
-  public void setVisible(boolean visible) {
-    this.visible = visible;
-  }
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 
-  public boolean isActive() {
-    return active;
-  }
+	public boolean isActive() {
+		return active;
+	}
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }

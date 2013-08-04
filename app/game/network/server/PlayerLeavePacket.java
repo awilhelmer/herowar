@@ -11,7 +11,7 @@ import game.network.PacketType;
 @SuppressWarnings("serial")
 public class PlayerLeavePacket extends BasePacket {
 
-  public PlayerLeavePacket() {
+	public PlayerLeavePacket() {
 		this.type = PacketType.PlayerLeavePacket;
 	}
 
@@ -19,5 +19,5 @@ public class PlayerLeavePacket extends BasePacket {
 	public String toString() {
 		return "PlayerLeavePacket [type=" + type + "]";
 	}
-	
+
 }

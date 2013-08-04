@@ -3,8 +3,6 @@ package game.json.excludes;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Transient;
-
 import models.entity.game.Geometry;
 import models.entity.game.Material;
 
@@ -17,37 +15,37 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 public class MatchExcludeMapDataMixin extends MapDataExcludeMixin {
 
-  @JsonIgnore
-  String description;
-  
-  @JsonIgnore
-  String skybox;
-  
-  @JsonIgnore
-  Integer teamSize;
-  
-  @JsonIgnore
-  Integer prepareTime;
-  
-  @JsonIgnore
-  Integer goldStart;
-  
-  @JsonIgnore
-  Integer goldPerTick;
-  
-  @JsonIgnore
-  Date cdate;
+	@JsonIgnore
+	String description;
 
-  @JsonIgnore
-  Date udate;
+	@JsonIgnore
+	String skybox;
 
-  @JsonIgnore
-  Long version;
+	@JsonIgnore
+	Integer teamSize;
 
-  @JsonIgnore
-  List<Material> materials;
+	@JsonIgnore
+	Integer prepareTime;
 
-  @JsonIgnore
-  List<Geometry> staticGeometries;
-  
+	@JsonIgnore
+	Integer goldStart;
+
+	@JsonIgnore
+	Integer goldPerTick;
+
+	@JsonIgnore
+	Date cdate;
+
+	@JsonIgnore
+	Date udate;
+
+	@JsonIgnore
+	Long version;
+
+	@JsonIgnore
+	List<Material> materials;
+
+	@JsonIgnore
+	List<Geometry> staticGeometries;
+
 }
