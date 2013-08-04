@@ -45,6 +45,7 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 
 	private Class<E> clazz;
 	private boolean updateGeo;
+	private boolean async = false;
 
 	public AbstractImporter(final Application app) {
 		this.clazz = getTypeParameterClass();
@@ -58,24 +59,38 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 	 */
 	@Override
 	public void onStart() {
-		Akka.future(new Callable<Void>() {
+		if (async) {
+			syncAsync();
+		} else {
+			sync();
+		}
+	}
+
+	/**
+	 * Syncronize data syncron.
+	 */
+	public void sync() {
+		JPA.withTransaction(new play.libs.F.Callback0() {
 			@Override
-			public Void call() throws Exception {
-				JPA.withTransaction(new play.libs.F.Callback0() {
-					@Override
-					public void invoke() throws Throwable {
-						sync();
-					}
-				});
-				return null;
+			public void invoke() throws Throwable {
+				getLogger().info("Starting synchronize between folder and database");
+				process();
+				getLogger().info("Finish synchronize between folder and database");
 			}
 		});
 	}
 
-	public void sync() {
-		getLogger().info("Starting synchronize between folder and database");
-		process();
-		getLogger().info("Finish synchronize between folder and database");
+	/**
+	 * Syncronize data asyncron.
+	 */
+	public void syncAsync() {
+		Akka.future(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				sync();
+				return null;
+			}
+		});
 	}
 
 	protected void readDirectory(File folder, E parent, boolean recursive) {
