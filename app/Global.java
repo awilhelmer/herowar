@@ -1,5 +1,3 @@
-import game.network.GameServer;
-import game.network.handler.WebSocketHandler;
 import importer.EnvironmentImporter;
 import importer.TowerImporter;
 import importer.UnitImporter;
@@ -47,49 +45,41 @@ public class Global extends GlobalSettings {
 			public void invoke() throws Throwable {
 				createLevelRanges();
 				initialSecurityRoles();
-				initGameServer();
 				EnvironmentImporter.getInstance().sync();
 				TowerImporter.getInstance().sync();
 				UnitImporter.getInstance().sync();
-				WebSocketHandler.getInstance();
 				createAdminUser();
 				createDummyNews();
 				createMaps();
-				Logger.info("Herowar has stated");
+				log.info("Herowar has stated");
 			}
 		});
 	}
 
-	private void initGameServer() {
-		GameServer.getInstance().start();
-		Logger.info("GameServer started");
-	}
-
 	@Override
 	public void onStop(Application app) {
-		Logger.info("Herowar shutdown...");
-		GameServer.getInstance().shutdown();
+		log.info("Herowar shutdown...");
 	}
 
 	private void initialSecurityRoles() {
 		if (SecurityRoleDAO.getSecurityRoleCount() != 0) {
 			return;
 		}
-		Logger.info("Creating security roles");
+		log.info("Creating security roles");
 		for (final String roleName : Arrays.asList(controllers.Application.ADMIN_ROLE, controllers.Application.USER_ROLE)) {
 			final SecurityRole role = new SecurityRole();
 			role.setRoleName(roleName);
 			JPA.em().persist(role);
-			Logger.info("Save role: " + role.getName());
+			log.info("Save role: " + role.getName());
 		}
 	}
 
 	private void createAdminUser() {
 		if (UserDAO.findByUsername("admin") != null) {
-			Logger.info("Admin already exists!");
+			log.info("Admin already exists!");
 			return;
 		}
-		Logger.info("Creating admin user");
+		log.info("Creating admin user");
 		UserDAO.create(new PasswordUsernameAuthUser("admin", "admin"), "admin@herowar.com", "admin", "admin");
 	}
 
@@ -97,7 +87,7 @@ public class Global extends GlobalSettings {
 		if (!Play.application().isDev() || NewsDAO.getNewsCount() != 0) {
 			return;
 		}
-		Logger.info("Creating dummy news");
+		log.info("Creating dummy news");
 		NewsDAO
 				.create(
 						"Lorem ipsum dolor sit amet",
@@ -160,7 +150,7 @@ public class Global extends GlobalSettings {
 		if (range != null) {
 			return;
 		}
-		Logger.info("Creating level ranges");
+		log.info("Creating level ranges");
 		JPA.em().persist(new LevelRange(5000L));
 		JPA.em().persist(new LevelRange(15000L));
 		JPA.em().persist(new LevelRange(50000L));
