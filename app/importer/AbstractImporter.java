@@ -8,6 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,7 +29,7 @@ import play.Application;
 import play.Logger.ALogger;
 import play.Plugin;
 import play.db.jpa.JPA;
-import play.db.jpa.Transactional;
+import play.libs.Akka;
 import util.JsonUtils;
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
@@ -57,10 +58,16 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 	 */
 	@Override
 	public void onStart() {
-		JPA.withTransaction(new play.libs.F.Callback0() {
+		Akka.future(new Callable<Void>() {
 			@Override
-			public void invoke() throws Throwable {
-				sync();
+			public Void call() throws Exception {
+				JPA.withTransaction(new play.libs.F.Callback0() {
+					@Override
+					public void invoke() throws Throwable {
+						sync();
+					}
+				});
+				return null;
 			}
 		});
 	}
