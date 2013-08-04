@@ -46,7 +46,7 @@ public class Global extends GlobalSettings {
 				createAdminUser();
 				createDummyNews();
 				createMaps();
-				log.info("Herowar has stated");
+				log.info("Herowar stated");
 			}
 		});
 	}

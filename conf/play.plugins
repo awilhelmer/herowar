@@ -1,6 +1,4 @@
 1300:com.ssachtleben.play.plugin.event.EventPlugin
 1400:com.ssachtleben.play.plugin.auth.AuthPlugin
-1500:importer.EnvironmentImporter
-1501:importer.TowerImporter
-1502:importer.UnitImporter
+1500:com.ssachtleben.play.plugin.cron.CronPlugin
 2000:game.network.WebSocketServer

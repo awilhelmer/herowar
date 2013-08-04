@@ -8,7 +8,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -25,12 +24,12 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import play.Application;
-import play.Logger.ALogger;
-import play.Plugin;
+import play.Logger;
 import play.db.jpa.JPA;
-import play.libs.Akka;
 import util.JsonUtils;
+
+import com.ssachtleben.play.plugin.cron.jobs.Job;
+
 import dao.game.GeometryDAO;
 import dao.game.MaterialDAO;
 
@@ -39,56 +38,30 @@ import dao.game.MaterialDAO;
  * 
  * @author Sebastian Sachtleben
  */
-public abstract class AbstractImporter<E extends Serializable> extends Plugin {
+public abstract class AbstractImporter<E extends Serializable> implements Job {
+	protected final Logger.ALogger log = Logger.of(getClass());
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	private Class<E> clazz;
 	private boolean updateGeo;
-	private boolean async = false;
 
-	public AbstractImporter(final Application app) {
+	public AbstractImporter() {
 		this.clazz = getTypeParameterClass();
 		BeanUtilsBean.setInstance(new BeanUtilsBean(new EnumAwareConvertUtilsBean()));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see play.Plugin#onStart()
-	 */
-	@Override
-	public void onStart() {
-		if (async) {
-			syncAsync();
-		} else {
-			sync();
-		}
 	}
 
 	/**
 	 * Syncronize data syncron.
 	 */
-	public void sync() {
+	@Override
+	public void run() {
 		JPA.withTransaction(new play.libs.F.Callback0() {
 			@Override
 			public void invoke() throws Throwable {
-				getLogger().info("Starting synchronize between folder and database");
+				log.info("Starting synchronize between folder and database");
 				process();
-				getLogger().info("Finish synchronize between folder and database");
-			}
-		});
-	}
-
-	/**
-	 * Syncronize data asyncron.
-	 */
-	public void syncAsync() {
-		Akka.future(new Callable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				sync();
-				return null;
+				log.info("Finish synchronize between folder and database");
 			}
 		});
 	}
@@ -99,18 +72,18 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 				E entity = createEntry(file, parent);
 				updateGeo = false;
 				if (file.isDirectory() && recursive) {
-					getLogger().info("Found directory: " + file.getAbsolutePath());
+					log.info("Found directory: " + file.getAbsolutePath());
 					readDirectory(file, entity, recursive);
 					updateGeo = true;
 				} else {
-					getLogger().info("Found geometry: " + file.getAbsolutePath());
+					log.info("Found geometry: " + file.getAbsolutePath());
 					updateEntity(file, entity);
 				}
 				saveEntity(entity, parent);
 			}
 
 		} catch (Exception e) {
-			getLogger().error("", e);
+			log.error("", e);
 		}
 	}
 
@@ -124,14 +97,14 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 				updateGeo = true;
 			}
 		} else {
-			getLogger().warn(String.format("Property geometry not found on class <%s>", model.getClass()));
+			log.warn(String.format("Property geometry not found on class <%s>", model.getClass()));
 		}
 		updateByOpts(file, model);
 	}
 
 	private void updateByOpts(File file, E model) throws JsonProcessingException, IOException {
 		File optsFile = new File(file.getAbsolutePath().replace(".js", ".opts"));
-		getLogger().info("Looking for opts file: " + optsFile);
+		log.info("Looking for opts file: " + optsFile);
 		if (!optsFile.exists() || !optsFile.isFile()) {
 			return;
 		}
@@ -153,13 +126,13 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 			children.add(entity);
 
 		} else if (!updateGeo) {
-			getLogger().warn(String.format("Property children not found on class <%s>", entity.getClass()));
+			log.warn(String.format("Property children not found on class <%s>", entity.getClass()));
 		}
 	}
 
 	private Geometry syncGeometry(Geometry geo, Geometry newGeo) {
 		if (geo != null && geo.getId() != null) {
-			getLogger().info("Sync geo Id: " + geo.getId());
+			log.info("Sync geo Id: " + geo.getId());
 			newGeo.setId(geo.getId());
 			newGeo.setVersion(geo.getVersion());
 			if (newGeo.getGeoMaterials().equals(geo.getGeoMaterials())) {
@@ -178,7 +151,7 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 		try {
 			return createEntry(WordUtils.capitalize(file.getName().replace(".js", "")), parent);
 		} catch (Exception e) {
-			getLogger().error("", e);
+			log.error("", e);
 		}
 		return null;
 	}
@@ -192,15 +165,15 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 				if (PropertyUtils.isReadable(entry, "name")) {
 					PropertyUtils.setProperty(entry, "name", name);
 				} else {
-					getLogger().warn(String.format("Property name not found on class <%s>", entry.getClass()));
+					log.warn(String.format("Property name not found on class <%s>", entry.getClass()));
 				}
 				if (parent != null && PropertyUtils.isReadable(entry, "parent")) {
 					PropertyUtils.setProperty(entry, "parent", parent);
 				} else {
-					getLogger().warn(String.format("Property parent not found on class <%s>", entry.getClass()));
+					log.warn(String.format("Property parent not found on class <%s>", entry.getClass()));
 				}
 			} catch (Exception e) {
-				getLogger().error("", e);
+				log.error("", e);
 			}
 		}
 		return entry;
@@ -232,7 +205,7 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 			GeometryDAO.createGeoMaterials(geo, matMap);
 			return geo;
 		} catch (IOException e) {
-			getLogger().error("Failed to parse geometry file:", e);
+			log.error("Failed to parse geometry file:", e);
 		}
 		return null;
 	}
@@ -247,8 +220,6 @@ public abstract class AbstractImporter<E extends Serializable> extends Plugin {
 	public abstract void process();
 
 	public abstract String getBaseFolder();
-
-	protected abstract ALogger getLogger();
 
 	protected abstract boolean accept(File file);
 

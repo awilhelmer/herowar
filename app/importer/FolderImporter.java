@@ -3,7 +3,6 @@ package importer;
 import java.io.File;
 import java.io.Serializable;
 
-import play.Application;
 import play.Play;
 import play.db.jpa.JPA;
 
@@ -16,10 +15,6 @@ import play.db.jpa.JPA;
  *          The entity which will be created.
  */
 public abstract class FolderImporter<E extends Serializable> extends AbstractImporter<E> {
-
-	public FolderImporter(Application app) {
-		super(app);
-	}
 
 	@Override
 	public void process() {
