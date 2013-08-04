@@ -53,7 +53,6 @@ public class Global extends GlobalSettings {
 				TowerImporter.getInstance().sync();
 				UnitImporter.getInstance().sync();
 				WebSocketHandler.getInstance();
-				Games.getInstance();
 				createAdminUser();
 				createDummyNews();
 				createMaps();

@@ -125,6 +125,8 @@ GET			/admin/news/new											controllers.Admin.newsNew()
 GET			/admin/news/:id											controllers.Admin.newsShow(id: Long)
 
 
+GET			/admin/events 											controllers.Admin.events()
+
 ########## OTHER ###########
 
 GET     /assets/*file												controllers.Assets.at(path="/public", file)

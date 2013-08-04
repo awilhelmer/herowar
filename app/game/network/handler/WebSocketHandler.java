@@ -43,12 +43,11 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	}
 
 	public void init() {
-		Games.getInstance();
 		log.info("WebSocketHandler started");
 	}
 
 	public void destroy() {
-		Games.getInstance().stop();
+		Games.shutdown();
 		log.info("WebSocketHandler stopped");
 	}
 

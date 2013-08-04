@@ -1,0 +1,21 @@
+@()
+
+@import dao._;
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Events Overview</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/admin.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+    </head>
+    <body style="margin-left: 10px">
+        <h1>Events Overview</h1>
+        <hr />
+        <h3>Observers:</h3>
+				@for((topic, list) <- EventsDAO.subscribers()){
+				  <p><b>@topic</b> @list</p>
+				}
+    </body>
+</html>
