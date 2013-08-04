@@ -9,8 +9,6 @@ import java.util.Map;
 
 import models.entity.game.Player;
 
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.ThreadSafeEventService;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
@@ -44,7 +42,6 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	}
 
 	public void init() {
-		System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
 		GamesHandler.getInstance();
 		log.info("WebSocketHandler started");
 	}
@@ -55,12 +52,12 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	}
 
 	@Override
-	public void onOpen(WebSocketConnection connection) {
+	public void onOpen(final WebSocketConnection connection) {
 		log.debug("New connection " + connection.httpRequest().id() + " opend - waiting for auth packet");
 	}
 
 	@Override
-	public void onClose(WebSocketConnection connection) {
+	public void onClose(final WebSocketConnection connection) {
 		if (authConnections.containsKey(connection)) {
 			log.info("Auth connection " + connection.httpRequest().id() + " closed");
 			authConnections.remove(connection);
@@ -69,17 +66,17 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	}
 
 	@Override
-	public void onMessage(WebSocketConnection connection, String msg) throws Throwable {
+	public void onMessage(final WebSocketConnection connection, final String msg) throws Throwable {
 		PacketHandler.getInstance().handle(this, connection, msg);
 	}
 
 	@Override
-	public void onPing(WebSocketConnection connection, byte[] msg) throws Throwable {
+	public void onPing(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPing(connection, msg);
 	}
 
 	@Override
-	public void onPong(WebSocketConnection connection, byte[] msg) throws Throwable {
+	public void onPong(final WebSocketConnection connection, final byte[] msg) throws Throwable {
 		super.onPong(connection, msg);
 		GameSession session = GamesHandler.getInstance().getConnections().get(connection);
 		if (session != null) {

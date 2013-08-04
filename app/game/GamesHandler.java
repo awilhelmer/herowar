@@ -57,11 +57,10 @@ public class GamesHandler implements Serializable {
 		try {
 			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerJoinEvent", GameJoinEvent.class));
 			Events.instance().register(EVENT_TOPIC, this, this.getClass().getMethod("observePlayerLeaveEvent", GameLeaveEvent.class));
+			log.info(this.getClass().getSimpleName() + " initialized");
 		} catch (NoSuchMethodException | SecurityException e) {
 			log.error("Failed to register observer", e);
-			e.printStackTrace();
 		}
-		log.info(this.getClass().getSimpleName() + " initialized");
 	}
 
 	public void observePlayerJoinEvent(final GameJoinEvent event) {
@@ -75,7 +74,7 @@ public class GamesHandler implements Serializable {
 		}
 	}
 
-	public void observePlayerLeaveEvent(GameLeaveEvent event) {
+	public void observePlayerLeaveEvent(final GameLeaveEvent event) {
 		log.info("Remove player with connection " + event.getConnection().httpRequest().id());
 		if (!connections.containsKey(event.getConnection())) {
 			log.error("Couldn't find connection " + event.getConnection().httpRequest().id());
@@ -178,7 +177,7 @@ public class GamesHandler implements Serializable {
 		connection.send(Json.toJson(game.getPreloadPacket()).toString());
 	}
 
-	private void removePlayer(GameSession session, WebSocketConnection connection) {
+	private void removePlayer(final GameSession session, final WebSocketConnection connection) {
 		ProcessorHandler handler = processors.get(session);
 		if (handler != null && handler.isStarted()) {
 			handler.stop();

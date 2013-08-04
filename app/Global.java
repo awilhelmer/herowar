@@ -17,8 +17,6 @@ import models.entity.SecurityRole;
 import models.entity.game.LevelRange;
 import models.entity.game.Map;
 
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.ThreadSafeEventService;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
@@ -65,7 +63,6 @@ public class Global extends GlobalSettings {
 	}
 
 	private void initGameServer() {
-		System.setProperty(EventServiceLocator.SERVICE_NAME_EVENT_BUS, ThreadSafeEventService.class.getName());
 		GameServer.getInstance().start();
 		Logger.info("GameServer started");
 	}
