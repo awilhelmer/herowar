@@ -3,6 +3,8 @@ package game.network.client;
 import game.Session;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
+import game.network.ClientPacket;
+import game.network.PacketType;
 import game.network.server.ChatMessagePacket;
 import game.network.server.ChatMessagePacket.Layout;
 import game.network.server.GlobalMessagePacket;
@@ -30,6 +32,7 @@ import play.libs.Json;
  * 
  * @author Sebastian Sachtleben
  */
+@ClientPacket(type = PacketType.ClientTowerRequestPacket)
 @SuppressWarnings("serial")
 public class ClientTowerRequestPacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientTowerRequestPacket.class);

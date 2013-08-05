@@ -1,6 +1,5 @@
 package game.network;
 
-import game.network.handler.WebSocketHandler;
 
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;

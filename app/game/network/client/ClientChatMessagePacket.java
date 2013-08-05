@@ -1,5 +1,7 @@
 package game.network.client;
 
+import game.network.ClientPacket;
+import game.network.PacketType;
 import game.network.server.ChatMessagePacket;
 import game.network.server.ChatMessagePacket.Layout;
 
@@ -12,6 +14,7 @@ import java.util.Date;
  * 
  * @author Sebastian Sachtleben
  */
+@ClientPacket(type = PacketType.ClientChatMessagePacket)
 @SuppressWarnings("serial")
 public class ClientChatMessagePacket extends BaseClientAuthPacket {
 	private static final DateFormat df = new SimpleDateFormat("hh:mm");

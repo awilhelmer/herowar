@@ -1,5 +1,7 @@
 package game.network.client;
 
+import game.network.ClientPacket;
+import game.network.PacketType;
 import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
@@ -11,6 +13,7 @@ import play.libs.Json;
  * 
  * @author Sebastian Sachtleben
  */
+@ClientPacket(type = PacketType.ClientPreloadUpdatePacket)
 @SuppressWarnings("serial")
 public class ClientPreloadUpdatePacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientPreloadUpdatePacket.class);

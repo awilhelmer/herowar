@@ -1,7 +1,9 @@
 package game.network.client;
 
 import game.EventKeys;
+import game.network.ClientPacket;
 import game.network.Connections;
+import game.network.PacketType;
 import game.network.server.AccessDeniedPacket;
 import game.network.server.AccessGrantedPacket;
 import models.entity.game.MatchToken;
@@ -18,6 +20,7 @@ import dao.game.MatchTokenDAO;
  * @author Alexander Wilhelmer
  * @author Sebastian Sachtleben
  */
+@ClientPacket(type = PacketType.ClientInitPacket)
 @SuppressWarnings("serial")
 public class ClientInitPacket extends BaseClientPacket {
 	private static final Logger.ALogger log = Logger.of(ClientInitPacket.class);

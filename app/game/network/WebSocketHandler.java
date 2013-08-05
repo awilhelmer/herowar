@@ -1,9 +1,8 @@
-package game.network.handler;
+package game.network;
 
 import game.EventKeys;
 import game.Session;
 import game.Sessions;
-import game.network.Connections;
 
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
@@ -52,7 +51,7 @@ public class WebSocketHandler extends BaseWebSocketHandler {
 	 */
 	@Override
 	public void onMessage(final WebSocketConnection connection, final String msg) throws Throwable {
-		PacketHandler.getInstance().handle(this, connection, msg);
+		Packets.handle(connection, msg);
 	}
 
 	/*

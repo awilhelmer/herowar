@@ -1,5 +1,7 @@
 package game.network.client;
 
+import game.network.ClientPacket;
+import game.network.PacketType;
 import play.Logger;
 
 /**
@@ -7,6 +9,7 @@ import play.Logger;
  * 
  * @author Sebastian Sachtleben
  */
+@ClientPacket(type = PacketType.ClientWaveRequestPacket)
 @SuppressWarnings("serial")
 public class ClientWaveRequestPacket extends BaseClientAuthPacket {
 	private static final Logger.ALogger log = Logger.of(ClientWaveRequestPacket.class);

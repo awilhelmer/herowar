@@ -48,6 +48,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     javaCore,
     javaJdbc,
     javaJpa,
+    "com.ssachtleben" %% "play-base-plugin" % "0.1-SNAPSHOT",
     "com.ssachtleben" %% "play-auth-plugin" % "0.1-SNAPSHOT",
     "com.ssachtleben" %% "play-cron-plugin" % "0.1-SNAPSHOT",
     "com.ssachtleben" %% "play-event-plugin" % "0.1-SNAPSHOT",
