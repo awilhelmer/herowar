@@ -1,1 +1,1 @@
-web: target/start -Dhttp.port=${PORT} -Dconfig.file=conf/heroku.conf
+web: target/start -Dhttp.port=${PORT} -Dsbt.boot.properties=$dir/framework/sbt/play.boot.properties -Dconfig.file=conf/heroku.conf
