@@ -7,11 +7,11 @@ import models.entity.game.Environment;
 import com.ssachtleben.play.plugin.cron.annotations.StartJob;
 
 /**
- * The EnvironmentHandler synchronize between our geometries environment folder and our database.
+ * Syncronizes javascript files from "public/geometries/environment" with {@link Environment} models.
  * 
  * @author Sebastian Sachtleben
  */
-@StartJob(async = true)
+@StartJob(async = true, active = false)
 public class EnvironmentImporter extends TreeImporter<Environment> {
 
 	@Override

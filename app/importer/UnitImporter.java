@@ -6,7 +6,12 @@ import models.entity.game.Unit;
 
 import com.ssachtleben.play.plugin.cron.annotations.StartJob;
 
-@StartJob(async = true)
+/**
+ * Syncronizes javascript files from "public/geometries/units" with {@link Unit} models.
+ * 
+ * @author Sebastian Sachtleben
+ */
+@StartJob(async = true, active = false)
 public class UnitImporter extends TreeImporter<Unit> {
 
 	@Override

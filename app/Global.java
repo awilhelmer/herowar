@@ -45,7 +45,7 @@ public class Global extends GlobalSettings {
 				initialSecurityRoles();
 				createAdminUser();
 				createDummyNews();
-				createMaps();
+				// createMaps();
 				log.info("Herowar stated");
 			}
 		});
