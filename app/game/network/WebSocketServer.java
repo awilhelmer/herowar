@@ -1,6 +1,5 @@
 package game.network;
 
-
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 
@@ -20,6 +19,16 @@ import play.Plugin;
  */
 public class WebSocketServer extends Plugin {
 	private static final Logger.ALogger log = Logger.of(WebSocketServer.class);
+
+	public abstract class SettingKeys {
+		public static final String START = "websocket.start";
+		public static final String PORT = "websocket.port";
+	}
+
+	public abstract class SettingDefault {
+		public static final boolean START = true;
+		public static final int PORT = 9005;
+	}
 
 	private Application app;
 	private WebServer server;
@@ -41,7 +50,11 @@ public class WebSocketServer extends Plugin {
 	 */
 	@Override
 	public void onStart() {
-		WebServer server = WebServers.createWebServer(app.configuration().getInt("webSocketServerPort", 9005));
+		if (!app.configuration().getBoolean(SettingKeys.START, SettingDefault.START)) {
+			log.warn(String.format("Prevent starting of %s because '%s' conf is 'false'", SettingKeys.START, getClass().getSimpleName()));
+			return;
+		}
+		WebServer server = WebServers.createWebServer(app.configuration().getInt(SettingKeys.PORT, SettingDefault.PORT));
 		server.add("/", new WebSocketHandler());
 		server.start();
 		log.info(String.format("Started %s on %s", getClass().getSimpleName(), server.getUri().toString()));
