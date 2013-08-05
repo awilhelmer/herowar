@@ -1,7 +1,5 @@
 package game;
 
-import game.event.GameJoinEvent;
-import game.event.GameLeaveEvent;
 import game.processor.GameProcessor;
 import models.entity.game.Match;
 import models.entity.game.MatchToken;
@@ -59,12 +57,6 @@ public class Games extends Cache<Long, GameProcessor> {
 		getInstance().cache().clear();
 	}
 
-	/**
-	 * Invokes during receiving new client init packet and creates a new game or join an existing match.
-	 * 
-	 * @param event
-	 *          The {@link GameJoinEvent} event.
-	 */
 	@Observer(topic = EventKeys.PLAYER_JOIN, referenceStrength = ReferenceStrength.STRONG)
 	public static void join(final MatchToken token, final WebSocketConnection connection) {
 		synchronized (getInstance().cache()) {
@@ -107,12 +99,6 @@ public class Games extends Cache<Long, GameProcessor> {
 		}
 	}
 
-	/**
-	 * Invokes on disconnected websocket connection and remove player from match.
-	 * 
-	 * @param event
-	 *          The {@link GameLeaveEvent} event.
-	 */
 	@Observer(topic = EventKeys.PLAYER_LEAVE, referenceStrength = ReferenceStrength.STRONG)
 	public static void leave(final WebSocketConnection connection) {
 		log.info("Remove player with connection " + connection.httpRequest().id());

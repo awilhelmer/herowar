@@ -1,8 +1,6 @@
 package game.processor.plugin;
 
 import game.Session;
-import game.event.GameStateEvent;
-import game.event.PreloadUpdateEvent;
 import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
@@ -47,9 +45,8 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 	@Override
 	public void load() {
 		try {
-			log.info("Register preload plugin event to " + getProcessor().getTopicName(Topic.PRELOAD));
 			eventBinding = Events.instance().register(getProcessor().getTopicName(Topic.PRELOAD), this,
-					this.getClass().getMethod("onPreloadUpdateEvent", PreloadUpdateEvent.class));
+					this.getClass().getMethod("update", Long.class, Integer.class));
 		} catch (NoSuchMethodException | SecurityException e) {
 			log.error("Failed to register observer", e);
 		}
@@ -78,7 +75,7 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 					match.setPreloadTime(new Date().getTime() - match.getCdate().getTime());
 				}
 			});
-			getProcessor().publish(Topic.STATE, new GameStateEvent(State.GAME));
+			getProcessor().publish(Topic.STATE, State.GAME);
 			getProcessor().broadcast(new GameStartPacket());
 		}
 	}
@@ -96,20 +93,20 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 		// Once the timeout will be reached the game should start automatically...
 	}
 
-	public void onPreloadUpdateEvent(PreloadUpdateEvent data) {
-		if (preloadProgress.containsKey(data.getPlayerId())) {
-			log.info("Update preload progress for user " + data.getPlayerId() + " with " + data.getProgress());
-			if (preloadProgress.get(data.getPlayerId()) == 100 && data.getProgress() < 100) {
+	public void update(Long playerId, Integer progress) {
+		if (preloadProgress.containsKey(playerId)) {
+			log.info("Update preload progress for user " + playerId + " with " + progress);
+			if (preloadProgress.get(playerId) == 100 && playerId < 100) {
 				// Player finished preloaded before but seems reconnected and need
 				// to load again
-				log.info("Player " + data.getPlayerId() + " has reconnected");
+				log.info("Player " + playerId + " has reconnected");
 				preloadPlayerMissing++;
-			} else if (preloadProgress.get(data.getPlayerId()) < 100 && data.getProgress() == 100) {
+			} else if (preloadProgress.get(playerId) < 100 && progress == 100) {
 				// Player fully preloaded and waiting for starting game
-				log.info("Player " + data.getPlayerId() + " finished preloading");
+				log.info("Player " + playerId + " finished preloading");
 				preloadPlayerMissing--;
 			}
-			preloadProgress.replace(data.getPlayerId(), data.getProgress());
+			preloadProgress.replace(playerId, progress);
 		}
 	}
 

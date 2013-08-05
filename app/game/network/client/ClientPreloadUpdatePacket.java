@@ -1,6 +1,5 @@
 package game.network.client;
 
-import game.event.PreloadUpdateEvent;
 import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.Topic;
@@ -26,7 +25,7 @@ public class ClientPreloadUpdatePacket extends BaseClientAuthPacket {
 						+ session.getPlayer().getUser().getUsername());
 				session.setPreloading(false);
 			}
-			session.getGame().publish(Topic.PRELOAD, new PreloadUpdateEvent(session.getPlayerId(), progress));
+			session.getGame().publish(Topic.PRELOAD, session.getPlayerId(), progress);
 		} else if (progress == 100) {
 			session.getConnection().send(Json.toJson(new GameStartPacket()).toString());
 			session.getGame().syncronizePlayer(session);

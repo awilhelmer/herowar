@@ -2,7 +2,6 @@ package game.processor;
 
 import game.Clock;
 import game.Session;
-import game.event.GameStateEvent;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
 import game.models.UnitModel;
@@ -130,9 +129,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	@Override
 	public void start() {
 		try {
-			log.info("Register state subscriber: " + getTopicName(Topic.STATE));
-			eventBinding = Events.instance().register(getTopicName(Topic.STATE), this,
-					this.getClass().getMethod("updateStateByEvent", GameStateEvent.class));
+			eventBinding = Events.instance().register(getTopicName(Topic.STATE), this, this.getClass().getMethod("updateState", State.class));
 		} catch (NoSuchMethodException | SecurityException e) {
 			log.error("Failed to register observer", e);
 		}
@@ -306,12 +303,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		}
 	}
 
-	public void updateStateByEvent(GameStateEvent event) {
-		updateState(event.getState());
-		clock.reset();
-	}
-
-	private void updateState(State state) {
+	public void updateState(State state) {
 		if (this.state != null) {
 			for (IPlugin plugin : plugins.get(this.state)) {
 				plugin.unload();
@@ -325,8 +317,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		this.state = state;
 	}
 
-	public void publish(Topic topic, Object obj) {
-		Events.instance().publish(getTopicName(topic), obj);
+	public void publish(Topic topic, Object payload) {
+		publish(topic, new Object[] { payload });
+	}
+
+	public void publish(Topic topic, Object... payload) {
+		Events.instance().publish(getTopicName(topic), payload);
 	}
 
 	public String getTopicName(Topic topic) {
