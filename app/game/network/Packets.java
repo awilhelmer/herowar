@@ -92,7 +92,7 @@ public class Packets {
 	private Map<Integer, Class<? extends BasePacket>> findTypes() {
 		log.debug("Search for client packet classes");
 		Map<Integer, Class<? extends BasePacket>> packetTypes = new HashMap<Integer, Class<? extends BasePacket>>();
-		Set<Class<?>> classes = ClassUtils.findAnnotated(ClientPacket.class);
+		Set<Class<?>> classes = (Set<Class<?>>) ClassUtils.findAnnotated(ClientPacket.class);
 		log.info(String.format("Found %d", classes.size()));
 		Iterator<Class<?>> iter = classes.iterator();
 		while (iter.hasNext()) {
