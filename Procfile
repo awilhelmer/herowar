@@ -1,1 +1,1 @@
-web: target/start -Dhttp.port=${PORT} -Dsbt.boot.properties=file:///e:/play-2.1.0/framework/sbt/play.boot.properties -Dconfig.file=conf/heroku.conf
+web: target/start -Dhttp.port=$PORT $JAVA_OPTS -Dconfig.file=conf/heroku.conf
