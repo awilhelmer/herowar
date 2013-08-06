@@ -21,6 +21,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
   val appSettings = Seq[Setting[_]](
     EclipseKeys.skipParents in ThisBuild := false,
     ebeanEnabled := false,
+    resolvers += "Theatr.us repository" at "http://repo.theatr.us/",
     resolvers += Resolver.url("ssachtleben repository (snapshots)", url("http://ssachtleben.github.io/play-plugins/repository/snapshots/"))(Resolver.ivyStylePatterns))
 
   val resourceSettings = buildInfoSettings ++ Seq[Setting[_]](
