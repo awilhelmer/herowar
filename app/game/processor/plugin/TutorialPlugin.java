@@ -1,7 +1,7 @@
 package game.processor.plugin;
 
-import game.Session;
 import game.models.TowerRestriction;
+import game.network.Connection;
 import game.network.server.GUIElementUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.TowerAreaRestrictionPacket;
@@ -49,12 +49,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session session) {
+	public void add(Connection connection) {
 		// Empty
 	}
 
 	@Override
-	public void removePlayer(Session session) {
+	public void remove(Connection connection) {
 		// Empty
 	}
 
@@ -72,13 +72,13 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 		Iterator<TutorialStep> iter = steps.iterator();
 		if (iter.hasNext()) {
 			current = iter.next();
-			getProcessor().broadcast(new TutorialUpdatePacket(current.getTexts()));
+			game().broadcast(new TutorialUpdatePacket(current.getTexts()));
 			current.onChange(delta, now);
 		} else {
-			getProcessor().setWavesFinished(true);
-			getProcessor().setUnitsFinished(true);
+			game().setWavesFinished(true);
+			game().setUnitsFinished(true);
 		}
-		getProcessor().setTutorialUpdate(false);
+		game().setTutorialUpdate(false);
 	}
 
 	private List<TutorialStep> createTutorialSteps() {
@@ -96,7 +96,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -112,7 +112,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -124,12 +124,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public void onChange(double delta, long now) {
-				getProcessor().broadcast(new GUIElementUpdatePacket("stats", true, true));
+				game().broadcast(new GUIElementUpdatePacket("stats", true, true));
 			}
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -142,12 +142,12 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public void onChange(double delta, long now) {
-				getProcessor().broadcast(new GUIElementUpdatePacket("build", true, true));
+				game().broadcast(new GUIElementUpdatePacket("build", true, true));
 			}
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -164,7 +164,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -176,8 +176,8 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public void onChange(double delta, long now) {
-				Tower tower = getProcessor().getMap().getTowers().iterator().next();
-				Iterator<ConcurrentHashMap<String, Object>> iter = getProcessor().getPlayerCache().values().iterator();
+				Tower tower = game().getMap().getTowers().iterator().next();
+				Iterator<ConcurrentHashMap<String, Object>> iter = game().getPlayerCache().values().iterator();
 				while (iter.hasNext()) {
 					ConcurrentHashMap<String, Object> entry = iter.next();
 					entry.replace(CacheConstants.GOLD, tower.getPrice().doubleValue());
@@ -185,14 +185,14 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 					entry.replace(CacheConstants.GOLD_SYNC, now);
 				}
 				TowerRestriction restriction = new TowerRestriction(new Vector3(80d, 1d, 0d), 10);
-				getProcessor().getTowerRestrictions().add(restriction);
-				getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
-				getProcessor().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
+				game().getTowerRestrictions().add(restriction);
+				game().broadcast(new TowerAreaRestrictionPacket(restriction));
+				game().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
 			}
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return !getProcessor().getTowerCache().isEmpty();
+				return !game().getTowerCache().isEmpty();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -203,8 +203,8 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public void onChange(double delta, long now) {
-				Tower tower = getProcessor().getMap().getTowers().iterator().next();
-				Iterator<ConcurrentHashMap<String, Object>> iter = getProcessor().getPlayerCache().values().iterator();
+				Tower tower = game().getMap().getTowers().iterator().next();
+				Iterator<ConcurrentHashMap<String, Object>> iter = game().getPlayerCache().values().iterator();
 				while (iter.hasNext()) {
 					ConcurrentHashMap<String, Object> entry = iter.next();
 					entry.replace(CacheConstants.GOLD, tower.getPrice().doubleValue());
@@ -212,15 +212,15 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 					entry.replace(CacheConstants.GOLD_SYNC, now);
 				}
 				TowerRestriction restriction = new TowerRestriction(new Vector3(-75d, 1d, 0d), 10);
-				getProcessor().getTowerRestrictions().clear();
-				getProcessor().getTowerRestrictions().add(restriction);
-				getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
-				getProcessor().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
+				game().getTowerRestrictions().clear();
+				game().getTowerRestrictions().add(restriction);
+				game().broadcast(new TowerAreaRestrictionPacket(restriction));
+				game().broadcast(new PlayerStatsUpdatePacket(null, null, tower.getPrice().longValue(), null, null, tower.getPrice()));
 			}
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().getTowerCache().size() >= 2;
+				return game().getTowerCache().size() >= 2;
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -231,15 +231,15 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public void onChange(double delta, long now) {
-				getProcessor().setWaveRequest(true);
+				game().setWaveRequest(true);
 				TowerRestriction restriction = new TowerRestriction(null, 10);
-				getProcessor().getTowerRestrictions().clear();
-				getProcessor().broadcast(new TowerAreaRestrictionPacket(restriction));
+				game().getTowerRestrictions().clear();
+				game().broadcast(new TowerAreaRestrictionPacket(restriction));
 			}
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isUnitsFinished();
+				return game().isUnitsFinished();
 			}
 		});
 		steps.add(new TutorialStep() {
@@ -255,7 +255,7 @@ public class TutorialPlugin extends AbstractPlugin implements IPlugin {
 
 			@Override
 			public boolean isCompleted(double delta, long now) {
-				return getProcessor().isTutorialUpdate();
+				return game().isTutorialUpdate();
 			}
 		});
 		return steps;

@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.Session;
+import game.network.Connection;
 import game.network.server.PlayerStatsInitPacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.processor.CacheConstants;
@@ -25,31 +25,31 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
 	}
 
 	@Override
-	public void processSession(Session session, double delta, long now) {
-		if (session.isPreloading()) {
+	public void processConnection(Connection connection, double delta, long now) {
+		if (connection.preloading()) {
 			return;
 		}
-		ConcurrentHashMap<String, Object> playerCache = getPlayerCache(session.getPlayerId());
+		ConcurrentHashMap<String, Object> playerCache = getPlayerCache(connection.id());
 		if (playerCache.containsKey(CacheConstants.GOLD)) {
 			synchronized (playerCache) {
 				// Update gold value
-				if (getProcessor().isUpdateGold() && playerCache.containsKey(CacheConstants.GOLD_UPDATE)) {
+				if (game().isUpdateGold() && playerCache.containsKey(CacheConstants.GOLD_UPDATE)) {
 					Long dif = now - Long.parseLong(playerCache.get(CacheConstants.GOLD_UPDATE).toString());
-					double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * getProcessor().getMap().getGoldPerTick());
+					double newGold = getGoldValue(playerCache) + (dif.doubleValue() / 1000 * game().getMap().getGoldPerTick());
 					setPlayerCacheValue(playerCache, CacheConstants.GOLD, newGold);
 				}
 				// Update time update value
 				setPlayerCacheValue(playerCache, CacheConstants.GOLD_UPDATE, now);
 				// Send info to client
-				if (!hashInitPacket(session.getPlayerId())) {
-					sendPacket(session, new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap()
+				if (!hashInitPacket(connection.id())) {
+					connection.send(new PlayerStatsInitPacket(getMap().getLives().longValue(), getRoundedGoldValue(playerCache), getMap()
 							.getGoldPerTick()));
-					getInitPacket().replace(session.getPlayerId(), true);
+					getInitPacket().replace(connection.id(), true);
 					setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, now);
 				} else {
 					Long dif = now - Long.parseLong(playerCache.get(CacheConstants.GOLD_SYNC).toString());
 					if (dif >= SYNC_PERIOD) {
-						sendPacket(session, new PlayerStatsUpdatePacket((long) playerCache.get(CacheConstants.SCORE), getMap().getLives().longValue(),
+						connection.send(new PlayerStatsUpdatePacket((long) playerCache.get(CacheConstants.SCORE), getMap().getLives().longValue(),
 								getRoundedGoldValue(playerCache), null, null, null));
 						setPlayerCacheValue(playerCache, CacheConstants.GOLD_SYNC, now);
 					}
@@ -59,19 +59,19 @@ public class GoldPlugin extends UpdateSessionPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session session) {
-		if (!getPlayerCache(session.getPlayerId()).containsKey(CacheConstants.GOLD)) {
-			double startValue = getProcessor().getMap().getGoldStart().doubleValue();
+	public void add(Connection connection) {
+		if (!getPlayerCache(connection.id()).containsKey(CacheConstants.GOLD)) {
+			double startValue = game().getMap().getGoldStart().doubleValue();
 			if (getMatch().getPlayerResults().size() > 1) {
 				startValue = Math.round(startValue / new Double(getMatch().getPlayerResults().size()) * 1.2);
 			}
-			getPlayerCache(session.getPlayerId()).put(CacheConstants.GOLD, startValue);
+			getPlayerCache(connection.id()).put(CacheConstants.GOLD, startValue);
 		}
-		getInitPacket().put(session.getPlayerId(), false);
+		getInitPacket().put(connection.id(), false);
 	}
 
 	@Override
-	public void removePlayer(Session session) {
+	public void remove(Connection connection) {
 		// Do nothing, the gold should still updated when the player disconnects.
 		// Maybe he returns after while...
 	}

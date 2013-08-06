@@ -1,4 +1,7 @@
 import game.Games;
+import importer.EnvironmentImporter;
+import importer.TowerImporter;
+import importer.UnitImporter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,7 +48,10 @@ public class Global extends GlobalSettings {
 				initialSecurityRoles();
 				createAdminUser();
 				createDummyNews();
-				// createMaps();
+				new EnvironmentImporter().process();
+				new TowerImporter().process();
+				new UnitImporter().process();
+				createMaps();
 				log.info("Herowar stated");
 			}
 		});

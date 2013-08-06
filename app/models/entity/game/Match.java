@@ -112,4 +112,14 @@ public class Match extends BaseModel {
 	public void setPlayerResults(Set<MatchResult> playerResults) {
 		this.playerResults = playerResults;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Match [id=" + id + "]";
+	}
 }

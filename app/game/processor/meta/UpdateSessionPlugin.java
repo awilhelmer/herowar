@@ -1,6 +1,6 @@
 package game.processor.meta;
 
-import game.Session;
+import game.network.Connection;
 import game.processor.GameProcessor;
 
 import java.util.Iterator;
@@ -17,12 +17,12 @@ public abstract class UpdateSessionPlugin extends AbstractPlugin {
 	}
 
 	public void process(double delta, long now) {
-		Iterator<Session> iter = getSessions().iterator();
+		Iterator<Connection> iter = connections().iterator();
 		while (iter.hasNext()) {
-			Session session = iter.next();
-			processSession(session, delta, now);
+			Connection connection = iter.next();
+			processConnection(connection, delta, now);
 		}
 	}
 
-	public abstract void processSession(Session session, double delta, long now);
+	public abstract void processConnection(Connection connection, double delta, long now);
 }

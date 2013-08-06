@@ -24,8 +24,8 @@ public class TowerBuildPacket extends BasePacket {
 		this.type = PacketType.TowerBuildPacket;
 		this.objectId = tower.getId();
 		this.towerId = tower.getDbId();
-		this.playerId = tower.getSession().getPlayer().getId();
-		this.playerName = tower.getSession().getPlayer().getUser().getUsername();
+		this.playerId = tower.getConnection().id();
+		this.playerName = tower.getConnection().user().getUsername();
 		this.position = position;
 	}
 

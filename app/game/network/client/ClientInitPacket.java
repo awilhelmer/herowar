@@ -1,18 +1,7 @@
 package game.network.client;
 
-import game.EventKeys;
 import game.network.ClientPacket;
-import game.network.Connections;
 import game.network.PacketType;
-import game.network.server.AccessDeniedPacket;
-import game.network.server.AccessGrantedPacket;
-import models.entity.game.MatchToken;
-import play.Logger;
-import play.libs.Json;
-
-import com.ssachtleben.play.plugin.event.Events;
-
-import dao.game.MatchTokenDAO;
 
 /**
  * Initial client packet contains game token.
@@ -23,24 +12,8 @@ import dao.game.MatchTokenDAO;
 @ClientPacket(type = PacketType.ClientInitPacket)
 @SuppressWarnings("serial")
 public class ClientInitPacket extends BaseClientPacket {
-	private static final Logger.ALogger log = Logger.of(ClientInitPacket.class);
 
 	private String token;
-
-	@Override
-	public void process() {
-		MatchToken matchToken = MatchTokenDAO.getTokenById(token);
-		if (matchToken != null) {
-			Connections.add(connection, matchToken.getPlayer());
-			log.info("Found " + matchToken.toString());
-			log.info("Auth connection " + connection.httpRequest().id() + " granted for " + matchToken.getPlayer().toString());
-			log.info("Total No. of subscribers: " + Connections.size() + ".");
-			Events.instance().publish(EventKeys.PLAYER_JOIN, matchToken, connection);
-			connection.send(Json.toJson(new AccessGrantedPacket()).toString());
-		} else {
-			connection.send(Json.toJson(new AccessDeniedPacket()).toString());
-		}
-	}
 
 	public String getToken() {
 		return token;

@@ -3,15 +3,13 @@ package game.network;
 import game.Cache;
 import models.entity.game.Player;
 
-import org.webbitserver.WebSocketConnection;
-
 /**
  * Handles all authorized connections.
  * 
  * @author Sebastian Sachtleben
  * 
  */
-public class Connections extends Cache<WebSocketConnection, Player> {
+public class Connections extends Cache<Long, Connection> {
 
 	/**
 	 * Keep private instance of {@link Connections}.
@@ -32,49 +30,49 @@ public class Connections extends Cache<WebSocketConnection, Player> {
 	}
 
 	/**
-	 * Get {@link Player} for given {@link WebSocketConnection}.
+	 * Get {@link Player} for given {@link Long} id.
 	 * 
-	 * @param connection
-	 *          The {@link WebSocketConnection} connection.
-	 * @return The matching {@link Player}.
+	 * @param id
+	 *          The {@link Long} id.
+	 * @return The matching {@link Connection}.
 	 */
-	public static Player get(final WebSocketConnection connection) {
-		return instance().cache().get(connection);
+	public static Connection get(final Long id) {
+		return instance().cache().get(id);
 	}
 
 	/**
-	 * Checks if given {@link WebSocketConnection} exists.
+	 * Checks if given {@link Long} id exists.
 	 * 
 	 * @param connection
-	 *          The {@link WebSocketConnection} connection.
+	 *          The {@link Long} connection.
 	 * @return The success boolean.
 	 */
-	public static boolean contains(final WebSocketConnection connection) {
-		return instance().cache().containsKey(connection);
+	public static boolean contains(final Long id) {
+		return instance().cache().containsKey(id);
 	}
 
 	/**
-	 * Adds new {@link WebSocketConnection} and {@link Player}.
+	 * Adds new {@link Long} id and {@link Connection} connection.
 	 * 
+	 * @param id
+	 *          The {@link Long} id.
 	 * @param connection
-	 *          The {@link WebSocketConnection} connection.
-	 * @param player
-	 *          The {@link Player} player.
-	 * @return The previous associated {@link Player}.
+	 *          The {@link Connection} connection.
+	 * @return The previous associated {@link Connection}.
 	 */
-	public static Player add(final WebSocketConnection connection, final Player player) {
-		return instance().cache().put(connection, player);
+	public static Connection add(final Long id, final Connection connection) {
+		return instance().cache().put(id, connection);
 	}
 
 	/**
-	 * Removes the {@link Player} for given {@link WebSocketConnection}.
+	 * Removes the {@link Connection} connection for given {@link Long} id.
 	 * 
-	 * @param connection
-	 *          The {@link WebSocketConnection} connection.
+	 * @param id
+	 *          The {@link Long} id.
 	 * @return The removed {@link Player}.
 	 */
-	public static Player remove(final WebSocketConnection connection) {
-		return instance().cache().remove(connection);
+	public static Connection remove(final Long id) {
+		return instance().cache().remove(id);
 	}
 
 	/**

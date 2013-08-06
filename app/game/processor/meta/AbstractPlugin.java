@@ -1,7 +1,7 @@
 package game.processor.meta;
 
-import game.Session;
 import game.network.BasePacket;
+import game.network.Connection;
 import game.processor.GameProcessor;
 
 import java.util.Set;
@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Map;
 import models.entity.game.Match;
-import play.libs.Json;
 
 /**
  * The AbstractPlugin provides useful functions and wrapper methods for the game processor used by any plugin.
@@ -21,7 +20,7 @@ public abstract class AbstractPlugin {
 	/**
 	 * The game processor where this plugin runs.
 	 */
-	protected GameProcessor processor;
+	protected GameProcessor game;
 
 	/**
 	 * The initPacket map contains the information if a user already get the init packet for this plugin.
@@ -31,11 +30,11 @@ public abstract class AbstractPlugin {
 	/**
 	 * Default constructor to set GameProcessor for this plugin.
 	 * 
-	 * @param processor
+	 * @param game
 	 *          The game processor
 	 */
-	public AbstractPlugin(GameProcessor processor) {
-		this.processor = processor;
+	public AbstractPlugin(GameProcessor game) {
+		this.game = game;
 	}
 
 	/**
@@ -57,8 +56,8 @@ public abstract class AbstractPlugin {
 	 * 
 	 * @return The game processor
 	 */
-	public GameProcessor getProcessor() {
-		return processor;
+	public GameProcessor game() {
+		return game;
 	}
 
 	/**
@@ -82,24 +81,12 @@ public abstract class AbstractPlugin {
 	}
 
 	/**
-	 * Send a packet to a specific game session.
-	 * 
-	 * @param session
-	 *          The game session.
-	 * @param packet
-	 *          The packet to send.
-	 */
-	public void sendPacket(Session session, BasePacket packet) {
-		session.getConnection().send(Json.toJson(packet).toString());
-	}
-
-	/**
 	 * Get all player sessions for GameProcessor.
 	 * 
 	 * @return The game sessions
 	 */
-	public Set<Session> getSessions() {
-		return getProcessor().getSessions();
+	public Set<Connection> connections() {
+		return game().getConnections();
 	}
 
 	/**
@@ -108,7 +95,7 @@ public abstract class AbstractPlugin {
 	 * @return The match
 	 */
 	public Match getMatch() {
-		return getProcessor().getMatch();
+		return game().getMatch();
 	}
 
 	/**
@@ -117,7 +104,7 @@ public abstract class AbstractPlugin {
 	 * @return The map
 	 */
 	public Map getMap() {
-		return getProcessor().getMap();
+		return game().getMap();
 	}
 
 	/**
@@ -127,7 +114,7 @@ public abstract class AbstractPlugin {
 	 *          The packet to broadcast.
 	 */
 	public void broadcast(BasePacket packet) {
-		getProcessor().broadcast(packet);
+		game().broadcast(packet);
 	}
 
 	/**
@@ -136,7 +123,7 @@ public abstract class AbstractPlugin {
 	 * @return The topic name
 	 */
 	public String getTopicName() {
-		return getProcessor().getTopicName();
+		return game().getTopicName();
 	}
 
 	/**
@@ -145,7 +132,7 @@ public abstract class AbstractPlugin {
 	 * @return The player cache
 	 */
 	public ConcurrentHashMap<Long, ConcurrentHashMap<String, Object>> getPlayerCache() {
-		return getProcessor().getPlayerCache();
+		return game().getPlayerCache();
 	}
 
 	/**
@@ -156,7 +143,7 @@ public abstract class AbstractPlugin {
 	 * @return Specific player cache
 	 */
 	public ConcurrentHashMap<String, Object> getPlayerCache(long playerId) {
-		return getProcessor().getPlayerCache().get(playerId);
+		return game().getPlayerCache().get(playerId);
 	}
 
 	/**

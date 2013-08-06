@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.Session;
+import game.network.Connection;
 import game.network.server.GameDefeatPacket;
 import game.network.server.GameVictoryPacket;
 import game.processor.CacheConstants;
@@ -46,16 +46,16 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
 			if (getMap().getLives() <= 0) {
 				GameDefeatPacket packet = new GameDefeatPacket();
 				broadcast(packet);
-				log.info("<" + getProcessor().getTopicName() + "> Game is defeated");
+				log.info("<" + game().getTopicName() + "> Game is defeated");
 			} else {
 				GameVictoryPacket packet = new GameVictoryPacket();
 				broadcast(packet);
-				log.info("<" + getProcessor().getTopicName() + "> Game is victory");
+				log.info("<" + game().getTopicName() + "> Game is victory");
 			}
 			saveResults();
 		} else if (done && finishTimer + 2000 <= now) {
 			// TODO: stop properly the game here and cleanup
-			getProcessor().stop();
+			game().stop();
 		}
 	}
 
@@ -83,12 +83,12 @@ public class FinishPlugin extends AbstractPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session player) {
+	public void add(Connection connection) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void removePlayer(Session player) {
+	public void remove(Connection connection) {
 		// TODO Auto-generated method stub
 	}
 

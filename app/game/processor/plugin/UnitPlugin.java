@@ -1,7 +1,7 @@
 package game.processor.plugin;
 
-import game.Session;
 import game.models.UnitModel;
+import game.network.Connection;
 import game.network.server.PlayerLivesUpdatePacket;
 import game.network.server.PlayerStatsUpdatePacket;
 import game.network.server.UnitOutPacket;
@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import models.entity.game.Waypoint;
 import play.Logger;
-import play.libs.Json;
 
 import com.ardor3d.math.type.ReadOnlyVector3;
 
@@ -42,7 +41,7 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
 
 	@Override
 	public void process(double delta, long now) {
-		Set<UnitModel> units = getProcessor().getUnits();
+		Set<UnitModel> units = game().getUnits();
 		synchronized (units) {
 			Iterator<UnitModel> iter = units.iterator();
 			while (iter.hasNext()) {
@@ -59,8 +58,8 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
 				}
 			}
 		}
-		if (!getProcessor().isUnitsFinished() && units.size() == 0) {
-			getProcessor().setUnitsFinished(true);
+		if (!game().isUnitsFinished() && units.size() == 0) {
+			game().setUnitsFinished(true);
 			log.debug("Units finished!!!!");
 		}
 	}
@@ -69,16 +68,16 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
 		UnitOutPacket packet = new UnitOutPacket(unit);
 		broadcast(packet);
 		if (unit.isEndPointReached()) {
-			if (getProcessor().getMap().getLives() > 0) {
-				int newLives = getProcessor().getMap().getLives() - unit.getEntity().getReduceLives();
-				getProcessor().getMap().setLives(newLives >= 0 ? newLives : 0);
-				PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(getProcessor().getMap().getLives());
+			if (game().getMap().getLives() > 0) {
+				int newLives = game().getMap().getLives() - unit.getEntity().getReduceLives();
+				game().getMap().setLives(newLives >= 0 ? newLives : 0);
+				PlayerLivesUpdatePacket packet2 = new PlayerLivesUpdatePacket(game().getMap().getLives());
 				broadcast(packet2);
 			}
 		}
 		if (unit.isDeath()) {
-			Session session = unit.getLastHitTower().getSession();
-			ConcurrentHashMap<String, Object> playerCache = session.getGame().getPlayerCache().get(session.getPlayer().getId());
+			Connection connection = unit.getLastHitTower().getConnection();
+			ConcurrentHashMap<String, Object> playerCache = connection.game().getPlayerCache().get(connection.id());
 			long newScore = 0L;
 			double newGold = 0L;
 			synchronized (playerCache) {
@@ -89,10 +88,8 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
 				playerCache.replace(CacheConstants.GOLD, newGold);
 				playerCache.replace(CacheConstants.GOLD_SYNC, (new Date().getTime()));
 			}
-			session.getConnection().send(
-					Json.toJson(
-							new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), unit.getEntity().getRewardScore(), null, unit.getEntity()
-									.getRewardGold())).toString());
+			connection.send(new PlayerStatsUpdatePacket(newScore, null, Math.round(newGold), unit.getEntity().getRewardScore(), null, unit
+					.getEntity().getRewardGold()));
 		}
 	}
 
@@ -133,12 +130,12 @@ public class UnitPlugin extends AbstractPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session player) {
+	public void add(Connection connection) {
 		// Empty
 	}
 
 	@Override
-	public void removePlayer(Session player) {
+	public void remove(Connection connection) {
 		// Empty
 	}
 

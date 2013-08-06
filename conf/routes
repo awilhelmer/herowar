@@ -97,9 +97,8 @@ GET			/api/editor/environment/:id					controllers.api.Editor.envShow(id: Long)
 ########## GAME ###########
 
 GET			/game																controllers.Game.index()
-GET			/test																controllers.Game.test()
+GET     /game/data                          controllers.Game.data()
 GET			/shadertest													controllers.ShaderTest.index()
-
 
 ########## EDITOR ###########
 

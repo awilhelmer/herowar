@@ -1,6 +1,6 @@
 package game.processor.plugin;
 
-import game.Session;
+import game.network.Connection;
 import game.network.server.GameStartPacket;
 import game.processor.GameProcessor;
 import game.processor.GameProcessor.State;
@@ -45,8 +45,8 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 	@Override
 	public void load() {
 		try {
-			eventBinding = Events.instance().register(getProcessor().getTopicName(Topic.PRELOAD), this,
-					this.getClass().getMethod("update", Long.class, Integer.class));
+			eventBinding = Events.instance().register(game().getTopicName(Topic.PRELOAD), this,
+					this.getClass().getMethod("update", Connection.class, Integer.class));
 		} catch (NoSuchMethodException | SecurityException e) {
 			log.error("Failed to register observer", e);
 		}
@@ -55,18 +55,18 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 	@Override
 	public void unload() {
 		if (eventBinding != null) {
-			Events.instance().unregister(getProcessor().getTopicName(Topic.PRELOAD), eventBinding);
+			Events.instance().unregister(game().getTopicName(Topic.PRELOAD), eventBinding);
 		}
 	}
 
 	@Override
 	public void process(double delta, long now) {
 		if (startTime + timeout < now) {
-			log.info("Preload timeout reached for " + getProcessor().toString());
+			log.info("Preload timeout reached for " + game().toString());
 			preloadPlayerMissing = 0;
 		}
 		if (preloadPlayerMissing == 0) {
-			log.info("All player finshed preloading for " + getProcessor().toString() + " switching game state to " + State.GAME);
+			log.info("All player finshed preloading for " + game().toString() + " switching game state to " + State.GAME);
 			JPA.withTransaction(new play.libs.F.Callback0() {
 				@Override
 				public void invoke() throws Throwable {
@@ -75,38 +75,38 @@ public class PreloadPlugin extends AbstractPlugin implements IPlugin {
 					match.setPreloadTime(new Date().getTime() - match.getCdate().getTime());
 				}
 			});
-			getProcessor().publish(Topic.STATE, State.GAME);
-			getProcessor().broadcast(new GameStartPacket());
+			game().publish(Topic.STATE, State.GAME);
+			game().broadcast(new GameStartPacket());
 		}
 	}
 
 	@Override
-	public void addPlayer(Session session) {
-		if (!preloadProgress.containsKey(session.getPlayerId())) {
-			preloadProgress.put(session.getPlayerId(), 0);
+	public void add(Connection connection) {
+		if (!preloadProgress.containsKey(connection.id())) {
+			preloadProgress.put(connection.id(), 0);
 		}
 	}
 
 	@Override
-	public void removePlayer(Session session) {
+	public void remove(Connection connection) {
 		// Do nothing, the preload state should not change when a user disconnects.
 		// Once the timeout will be reached the game should start automatically...
 	}
 
-	public void update(Long playerId, Integer progress) {
-		if (preloadProgress.containsKey(playerId)) {
-			log.info("Update preload progress for user " + playerId + " with " + progress);
-			if (preloadProgress.get(playerId) == 100 && playerId < 100) {
+	public void update(Connection connection, Integer progress) {
+		if (preloadProgress.containsKey(connection.id())) {
+			log.info("Update preload progress for user " + connection.id() + " with " + progress);
+			if (preloadProgress.get(connection.id()) == 100 && connection.id() < 100) {
 				// Player finished preloaded before but seems reconnected and need
 				// to load again
-				log.info("Player " + playerId + " has reconnected");
+				log.info("Player " + connection.id() + " has reconnected");
 				preloadPlayerMissing++;
-			} else if (preloadProgress.get(playerId) < 100 && progress == 100) {
+			} else if (preloadProgress.get(connection.id()) < 100 && progress == 100) {
 				// Player fully preloaded and waiting for starting game
-				log.info("Player " + playerId + " finished preloading");
+				log.info("Player " + connection.id() + " finished preloading");
 				preloadPlayerMissing--;
 			}
-			preloadProgress.replace(playerId, progress);
+			preloadProgress.replace(connection.id(), progress);
 		}
 	}
 

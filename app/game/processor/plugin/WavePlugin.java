@@ -1,7 +1,7 @@
 package game.processor.plugin;
 
-import game.Session;
 import game.models.UnitModel;
+import game.network.Connection;
 import game.network.server.UnitInPacket;
 import game.network.server.WaveInitPacket;
 import game.network.server.WaveUpdatePacket;
@@ -56,27 +56,26 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 		checkForUnitSpawn(delta, now);
 		super.process(delta, now);
 		waveUpdated = false;
-		if (!getProcessor().isWavesFinished() && next == null && spawners.size() == 0) {
-			getProcessor().setWavesFinished(true);
+		if (!game().isWavesFinished() && next == null && spawners.size() == 0) {
+			game().setWavesFinished(true);
 			log.debug("Waves finished!!!!");
 		}
 	}
 
 	@Override
-	public void processSession(Session session, double delta, long now) {
-		long playerId = session.getPlayer().getId();
-		if (!hashInitPacket(playerId)) {
+	public void processConnection(Connection connection, double delta, long now) {
+		if (!hashInitPacket(connection.id())) {
 			long eta = getWaveEta();
 			List<Vector3> positions = getNextWavePositions();
 			List<String> units = getNextWaveUnits();
-			sendPacket(session, new WaveInitPacket(index, waveStartDate, eta, total, positions, units));
-			getInitPacket().replace(playerId, true);
+			connection.send(new WaveInitPacket(index, waveStartDate, eta, total, positions, units));
+			getInitPacket().replace(connection.id(), true);
 		}
 		if (waveUpdated) {
 			long eta = getWaveEta();
 			List<Vector3> positions = getNextWavePositions();
 			List<String> units = getNextWaveUnits();
-			sendPacket(session, new WaveUpdatePacket(index, waveStartDate, eta, positions, units));
+			connection.send(new WaveUpdatePacket(index, waveStartDate, eta, positions, units));
 		}
 	}
 
@@ -91,13 +90,12 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session session) {
-		long playerId = session.getPlayer().getId();
-		getInitPacket().put(playerId, false);
+	public void add(Connection connection) {
+		getInitPacket().put(connection.id(), false);
 	}
 
 	@Override
-	public void removePlayer(Session session) {
+	public void remove(Connection connection) {
 		// TODO Auto-generated method stub
 	}
 
@@ -124,7 +122,7 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 	private boolean checkWaveUpdate(long now) {
 		if (next != null) {
 			if ((next.isAutostart() && getWaveEta() <= now) || waveIsRequestable(now)) {
-				getProcessor().setWaveRequest(false);
+				game().setWaveRequest(false);
 				loadNextWave(now);
 				return true;
 			}
@@ -135,11 +133,11 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 	private boolean waveIsRequestable(long now) {
 		// TODO: this is ugly but otherwise multiple waves will be requested with
 		// one click...
-		if (waveStartDate + 2000 > now && getProcessor().isWaveRequest()) {
-			getProcessor().setWaveRequest(false);
+		if (waveStartDate + 2000 > now && game().isWaveRequest()) {
+			game().setWaveRequest(false);
 			return false;
 		}
-		return next.isRequestable() && getProcessor().isWaveRequest() && waveStartDate + 2000 <= now;
+		return next.isRequestable() && game().isWaveRequest() && waveStartDate + 2000 <= now;
 	}
 
 	private void loadNextWave(long now) {
@@ -151,7 +149,7 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 		if (current != null) {
 			index++;
 			if (index == 1) {
-				getProcessor().setUpdateGold(true);
+				game().setUpdateGold(true);
 			}
 		} else {
 			index = 0;
@@ -193,16 +191,16 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 	}
 
 	public void createUnit(Path path, Unit entity) {
-		UnitModel model = new UnitModel(getProcessor().getNextObjectId(), entity, path);
+		UnitModel model = new UnitModel(game().getNextObjectId(), entity, path);
 		model.updatePositionFromWaypoints();
-		synchronized (getProcessor().getUnits()) {
-			getProcessor().getUnits().add(model);
+		synchronized (game().getUnits()) {
+			game().getUnits().add(model);
 		}
 		broadcast(new UnitInPacket(model));
 	}
 
 	private void sortWaves() {
-		waves = new ArrayList<Wave>(getProcessor().getMap().getWaves());
+		waves = new ArrayList<Wave>(game().getMap().getWaves());
 		if (waves.size() > 0) {
 			Collections.sort(waves, new WaveComparator());
 		}
@@ -250,7 +248,7 @@ public class WavePlugin extends UpdateSessionPlugin implements IPlugin {
 					log.info(String.format("Wave %d/%d - Sending new unit: %s - Path %s - %d/%d", index, total, unit.getName(), wave.getPath()
 							.getId(), spawnCurrent, wave.getQuantity()));
 					plugin.createUnit(wave.getPath(), unit);
-					plugin.getProcessor().setUnitsFinished(false);
+					plugin.game().setUnitsFinished(false);
 				}
 			}
 		}

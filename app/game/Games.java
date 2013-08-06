@@ -1,5 +1,7 @@
 package game;
 
+import game.network.Connection;
+import game.network.Connections;
 import game.processor.GameProcessor;
 import models.entity.game.Match;
 import models.entity.game.MatchToken;
@@ -7,11 +9,8 @@ import models.entity.game.Tower;
 import models.entity.game.Wave;
 
 import org.hibernate.Hibernate;
-import org.webbitserver.WebSocketConnection;
 
 import play.Logger;
-import play.db.jpa.JPA;
-import play.libs.Json;
 import util.PacketUtils;
 
 import com.ssachtleben.play.plugin.event.ReferenceStrength;
@@ -53,63 +52,57 @@ public class Games extends Cache<Long, GameProcessor> {
 	 * Shutdown all active games and remove processors and sessions.
 	 */
 	public static void shutdown() {
-		Sessions.clear();
+		Connections.clear();
 		getInstance().cache().clear();
 	}
 
 	@Observer(topic = EventKeys.PLAYER_JOIN, referenceStrength = ReferenceStrength.STRONG)
-	public static void join(final MatchToken token, final WebSocketConnection connection) {
+	public static void join(final Connection connection, final MatchToken token) {
 		synchronized (getInstance().cache()) {
 			final long matchId = token.getResult().getMatch().getId();
 			if (!getInstance().cache().containsKey(matchId)) {
-				log.info("Create game processor for match " + matchId);
-				JPA.withTransaction(new play.libs.F.Callback0() {
-					@Override
-					public void invoke() throws Throwable {
-						Match match = MatchDAO.getInstance().getById(matchId);
-						Hibernate.initialize(match.getPlayerResults());
-						Hibernate.initialize(match.getMap().getTowers());
-						for (Tower tower : match.getMap().getTowers()) {
-							Hibernate.initialize(tower.getWeapons());
-						}
-						Hibernate.initialize(match.getMap().getWaves());
-						for (Wave wave : match.getMap().getWaves()) {
-							Hibernate.initialize(wave.getPath().getDbWaypoints());
-							Hibernate.initialize(wave.getUnits());
-							Hibernate.initialize(wave.getPath());
-						}
-						final GameProcessor game = new GameProcessor(match);
-						getInstance().cache().put(matchId, game);
-					}
-				});
-			}
-			log.info("Join match " + matchId);
-			final GameProcessor game = getInstance().cache().get(matchId);
-			Session session = new Session(game.getMatch(), token.getPlayer(), token, connection);
-			session.setGame(game);
-			Sessions.add(connection, session);
-			game.addPlayer(session);
-			log.info(String.format("Player '<%s>' attempt to join game '<%s>'", token.getPlayer().getUser().getUsername(), game.getTopicName()));
-			JPA.withTransaction(new play.libs.F.Callback0() {
-				@Override
-				public void invoke() throws Throwable {
-					connection.send(Json.toJson(PacketUtils.createPreloadDataPacket(connection, game)).toString());
+				log.info(String.format("Create match %s ", matchId));
+				Match match = MatchDAO.getInstance().getById(matchId);
+				log.info(String.format("Found %s ", match));
+				Hibernate.initialize(match.getPlayerResults());
+				log.info(String.format("Found %s ", match.getPlayerResults()));
+				Hibernate.initialize(match.getMap().getTowers());
+				log.info(String.format("Found %s ", match.getMap().getTowers()));
+				for (Tower tower : match.getMap().getTowers()) {
+					Hibernate.initialize(tower.getWeapons());
+					log.info(String.format("Found %s ", tower.getWeapons()));
 				}
-			});
+				Hibernate.initialize(match.getMap().getWaves());
+				log.info(String.format("Found %s ", match.getMap().getWaves()));
+				for (Wave wave : match.getMap().getWaves()) {
+					Hibernate.initialize(wave.getPath().getDbWaypoints());
+					log.info(String.format("Found %s ", wave.getPath().getDbWaypoints()));
+					Hibernate.initialize(wave.getUnits());
+					log.info(String.format("Found %s ", wave.getUnits()));
+					Hibernate.initialize(wave.getPath());
+					log.info(String.format("Found %s ", wave.getPath()));
+				}
+				final GameProcessor game = new GameProcessor(match);
+				getInstance().cache().put(matchId, game);
+			}
+			log.info(String.format("Join match %s ", matchId));
+			final GameProcessor game = getInstance().cache().get(matchId);
+			connection.game(game);
+			game.add(connection);
+			log.info(String.format("Player '<%s>' attempt to join game '<%s>'", token.getPlayer().getUser().getUsername(), game.getTopicName()));
+			// JPA.withTransaction(new play.libs.F.Callback0() {
+			// @Override
+			// public void invoke() throws Throwable {
+			connection.send(PacketUtils.createPreloadDataPacket(game));
+			// }
+			// });
 		}
 	}
 
 	@Observer(topic = EventKeys.PLAYER_LEAVE, referenceStrength = ReferenceStrength.STRONG)
-	public static void leave(final WebSocketConnection connection) {
-		log.info("Remove player with connection " + connection.httpRequest().id());
-		if (!Sessions.contains(connection)) {
-			log.error("Couldn't find connection " + connection.httpRequest().id());
-			return;
-		}
-		Session session = Sessions.get(connection);
-		if (session != null) {
-			session.getGame().removePlayer(connection);
-			Sessions.remove(connection);
-		}
+	public static void leave(final Connection connection) {
+		log.info(String.format("Remove %s", connection));
+		connection.game().remove(connection);
+		connection.close();
 	}
 }

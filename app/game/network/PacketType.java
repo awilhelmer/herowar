@@ -8,15 +8,8 @@ package game.network;
  */
 public class PacketType {
 
-	// Client
-	public static final int ClientInitPacket = 1;
-	public static final int ClientPreloadUpdatePacket = 10;
-	public static final int ClientChatMessagePacket = 71;
-	public static final int ClientTowerRequestPacket = 80;
-	public static final int ClientTutorialUpdatePacket = 86;
-	public static final int ClientWaveRequestPacket = 95;
-
 	// Server
+	public static final int ServerInitPacket = 5;
 	public static final int AccessDeniedPacket = 11;
 	public static final int AccessGrantedPacket = 12;
 	public static final int GameStartPacket = 13;
@@ -41,5 +34,13 @@ public class PacketType {
 	public static final int GameDefeatPacket = 90;
 	public static final int GameVictoryPacket = 91;
 	public static final int GUIElementUpdatePacket = 99;
+
+	// Client
+	public static final int ClientInitPacket = 1;
+	public static final int ClientPreloadUpdatePacket = 10;
+	public static final int ClientChatMessagePacket = 71;
+	public static final int ClientTowerRequestPacket = 80;
+	public static final int ClientTutorialUpdatePacket = 86;
+	public static final int ClientWaveRequestPacket = 95;
 
 }

@@ -1,11 +1,11 @@
 package game.processor;
 
 import game.Clock;
-import game.Session;
 import game.models.TowerModel;
 import game.models.TowerRestriction;
 import game.models.UnitModel;
 import game.network.BasePacket;
+import game.network.Connection;
 import game.network.server.PreloadDataPacket;
 import game.network.server.TowerBuildPacket;
 import game.network.server.TowerTargetPacket;
@@ -31,13 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import models.entity.game.Map;
 import models.entity.game.Match;
 import models.entity.game.Vector3;
-
-import org.webbitserver.WebSocketConnection;
-
 import play.Logger;
-import play.libs.Json;
 
-import com.ardor3d.scenegraph.Node;
 import com.ssachtleben.play.plugin.event.EventBinding;
 import com.ssachtleben.play.plugin.event.Events;
 
@@ -67,18 +62,19 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	private boolean updateGold = false;
 	private State state;
 
-	private final Node rootNode = new Node();
-
 	/**
-	 * The session set contains all sessions for this game.
+	 * The {@link Set} contains a list of connections in this game.
 	 */
-	private Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
+	private Set<Connection> connections = Collections.synchronizedSet(new HashSet<Connection>());
 
 	/**
 	 * The plugins map contains all running plugins for each game state.
 	 */
 	private java.util.Map<State, Set<IPlugin>> plugins = new HashMap<State, Set<IPlugin>>();
 
+	/**
+	 * Contains all active {@link UnitModel} in this game.
+	 */
 	private Set<UnitModel> units = Collections.synchronizedSet(new HashSet<UnitModel>());
 
 	/**
@@ -91,6 +87,9 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 */
 	private ConcurrentHashMap<Long, TowerModel> towerCache = new ConcurrentHashMap<Long, TowerModel>();
 
+	/**
+	 * Contains a {@link Set} of {@link TowerRestriction}.
+	 */
 	private Set<TowerRestriction> towerRestrictions = Collections.synchronizedSet(new HashSet<TowerRestriction>());
 
 	public GameProcessor(Match match) {
@@ -147,68 +146,70 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	}
 
 	/**
-	 * Shutdown game processor.
+	 * Shutdown current {@link GameProcessor} thread.
 	 */
 	private void shutdown() {
-		Iterator<Session> iter = sessions.iterator();
-		while (iter.hasNext()) {
-			Session session = iter.next();
-			session.getConnection().close();
+		synchronized (connections) {
+			Iterator<Connection> iter = connections.iterator();
+			while (iter.hasNext()) {
+				Connection connection = iter.next();
+				connection.close();
+			}
 		}
 		stop();
 	}
 
 	/**
-	 * Add a new player to this game.
+	 * Add a new {@link Connection} to this {@link GameProcessor}.
 	 * 
-	 * @param session
-	 *          The session to set
+	 * @param connection
+	 *          The connection to set
 	 */
-	public void addPlayer(Session session) {
-		synchronized (sessions) {
-			sessions.add(session);
+	public void add(Connection connection) {
+		synchronized (connections) {
+			connections.add(connection);
 		}
 
-		// Change session on tower if player reconnects
+		// Change connection on tower if player reconnects
 		synchronized (towerCache) {
 			Iterator<TowerModel> iter = towerCache.values().iterator();
 			while (iter.hasNext()) {
 				TowerModel model = iter.next();
-				if (model.getSession().getPlayerId() == session.getPlayerId()) {
-					model.setSession(session);
+				if (model.getConnection().id() == connection.id()) {
+					model.setConnection(connection);
 				}
 			}
 		}
 
 		// Create score and kills for player if not exists
-		if (!playerCache.containsKey(session.getPlayerId())) {
-			playerCache.put(session.getPlayerId(), new ConcurrentHashMap<String, Object>());
-			playerCache.get(session.getPlayerId()).put(CacheConstants.SCORE, 0L);
-			playerCache.get(session.getPlayerId()).put(CacheConstants.KILLS, 0L);
+		if (!playerCache.containsKey(connection.id())) {
+			playerCache.put(connection.id(), new ConcurrentHashMap<String, Object>());
+			playerCache.get(connection.id()).put(CacheConstants.SCORE, 0L);
+			playerCache.get(connection.id()).put(CacheConstants.KILLS, 0L);
 		}
 
 		// Add the session to all plugins
 		for (Set<IPlugin> statePlugins : plugins.values()) {
 			for (IPlugin plugin : statePlugins) {
-				plugin.addPlayer(session);
+				plugin.add(connection);
 			}
 		}
 	}
 
 	/**
-	 * Remove a player from this game.
+	 * Remove a {@link Connection} from this {@link GameProcessor}.
 	 * 
 	 * @param connection
 	 *          The connection to set
 	 */
-	public void removePlayer(WebSocketConnection connection) {
-		Session player = null;
-		synchronized (sessions) {
-			Iterator<Session> iter = sessions.iterator();
+	public void remove(Connection connection) {
+		Connection con = null;
+		synchronized (connections) {
+			Iterator<Connection> iter = connections.iterator();
 			while (iter.hasNext()) {
-				player = iter.next();
-				if (player.getConnection().equals(connection)) {
-					rootNode.detachChild(player.getModel());
+				con = iter.next();
+				if (con.equals(connection)) {
+					// rootNode.detachChild(player.getModel());
 					iter.remove();
 					return;
 				}
@@ -216,7 +217,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		}
 		for (Set<IPlugin> statePlugins : plugins.values()) {
 			for (IPlugin plugin : statePlugins) {
-				plugin.removePlayer(player);
+				plugin.remove(connection);
 			}
 		}
 	}
@@ -231,12 +232,12 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 * @param sendSelf
 	 *          The sendSelf to set
 	 */
-	public void broadcast(WebSocketConnection connection, BasePacket message, boolean sendSelf) {
-		Iterator<Session> iter = sessions.iterator();
+	public void broadcast(Connection connection, BasePacket message, boolean sendSelf) {
+		Iterator<Connection> iter = connections.iterator();
 		while (iter.hasNext()) {
-			Session session = iter.next();
-			if (!session.isPreloading() && (sendSelf || !connection.equals(session.getConnection()))) {
-				session.getConnection().send(Json.toJson(message).toString());
+			Connection con = iter.next();
+			if (!con.preloading() && (sendSelf || !connection.id().equals(con.id()))) {
+				con.send(message);
 			}
 		}
 	}
@@ -257,15 +258,15 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 * @param session
 	 *          The session to set
 	 */
-	public void syncronizePlayer(Session session) {
-		log.info("Start sycronizing for player " + session.getPlayerId());
-		Iterator<UnitModel> iter = session.getGame().getUnits().iterator();
+	public void syncronize(Connection connection) {
+		log.info("Start sycronizing for player " + connection.id());
+		Iterator<UnitModel> iter = connection.game().getUnits().iterator();
 		while (iter.hasNext()) {
 			UnitModel unit = iter.next();
 			log.info("Send player info about unit " + unit.getId() + " at " + unit.getTranslation().toString());
-			session.getConnection().send(Json.toJson(new UnitInPacket(unit)).toString());
+			connection.send(new UnitInPacket(unit));
 		}
-		Iterator<TowerModel> iter2 = session.getGame().getTowerCache().values().iterator();
+		Iterator<TowerModel> iter2 = connection.game().getTowerCache().values().iterator();
 		while (iter2.hasNext()) {
 			TowerModel tower = iter2.next();
 			Vector3 position = new Vector3();
@@ -273,13 +274,13 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 			position.setY(tower.getTranslation().getY());
 			position.setZ(tower.getTranslation().getZ());
 			log.info("Send player info about tower " + tower.getId() + " at " + position.toString());
-			session.getConnection().send(Json.toJson(new TowerBuildPacket(tower, position)).toString());
+			connection.send(new TowerBuildPacket(tower, position));
 			if (tower.getTarget() != null) {
 				log.info("Send player info about tower " + tower.getId() + " target unit " + tower.getTarget().getId());
-				session.getConnection().send(Json.toJson(new TowerTargetPacket(tower.getId(), tower.getTarget().getId())).toString());
+				connection.send(new TowerTargetPacket(tower.getId(), tower.getTarget().getId()));
 			}
 		}
-		log.info("Finish sycronizing for player " + session.getPlayerId());
+		log.info("Finish sycronizing for player " + connection.id());
 	}
 
 	private void registerPlugins() {
@@ -348,8 +349,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		return objectId++;
 	}
 
-	public Set<Session> getSessions() {
-		return sessions;
+	public Set<Connection> getConnections() {
+		return connections;
 	}
 
 	public java.util.Map<State, Set<IPlugin>> getPlugins() {

@@ -1,8 +1,8 @@
 package game.processor.plugin;
 
-import game.Session;
 import game.models.TowerModel;
 import game.models.UnitModel;
+import game.network.Connection;
 import game.network.server.TowerAttackPacket;
 import game.network.server.TowerTargetPacket;
 import game.processor.GameProcessor;
@@ -27,9 +27,9 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
 
 	@Override
 	public void process(double delta, long now) {
-		Set<UnitModel> units = getProcessor().getUnits();
+		Set<UnitModel> units = game().getUnits();
 
-		Collection<TowerModel> towers = getProcessor().getTowerCache().values();
+		Collection<TowerModel> towers = game().getTowerCache().values();
 
 		Iterator<TowerModel> iter = towers.iterator();
 		while (iter.hasNext()) {
@@ -56,12 +56,12 @@ public class TowerPlugin extends AbstractPlugin implements IPlugin {
 	}
 
 	@Override
-	public void addPlayer(Session player) {
+	public void add(Connection connection) {
 		// Empty
 	}
 
 	@Override
-	public void removePlayer(Session player) {
+	public void remove(Connection connection) {
 		// Empty
 	}
 

@@ -1,8 +1,7 @@
 package game;
 
+import game.network.Connection;
 import models.entity.game.MatchToken;
-
-import org.webbitserver.WebSocketConnection;
 
 /**
  * Contains all used event keys.
@@ -12,12 +11,12 @@ import org.webbitserver.WebSocketConnection;
 public abstract class EventKeys {
 
 	/**
-	 * Published for new player with payload: {@link MatchToken}, {@link WebSocketConnection}
+	 * Published for new player with payload: {@link Connection}, {@link MatchToken}
 	 */
 	public static final String PLAYER_JOIN = "player-join";
 
 	/**
-	 * Published for leaving player with payload: {@link WebSocketConnection}
+	 * Published for leaving player with payload: {@link Connection}
 	 */
 	public static final String PLAYER_LEAVE = "player-leave";
 

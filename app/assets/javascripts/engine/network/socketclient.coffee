@@ -1,5 +1,4 @@
 BasePacket = require 'network/packets/basePacket'
-browserUtils = require 'util/browserUtils'
 log = require 'util/logger'
 events = require 'events'
 
@@ -7,9 +6,8 @@ class SocketClient
 
 	constructor: ->
 		throw 'Oh no, you need a browser that supports WebSockets. How about Google Chrome?' unless _.has window, 'WebSocket'
-		domain = browserUtils.getDomainName()
-		domain = domain.replace 'http://', '' if domain.indexOf('http://') >= -1
-		host = "ws://#{domain}:9005/"
+		port = if location.port then ":#{location.port}" else ''
+		host = "ws://#{location.hostname}#{port}/game/data"
 		@socket = new WebSocket host
 		@isOpen = false
 		@isAuthenticated = false

@@ -13,11 +13,9 @@ import models.entity.game.TowerWeaponType;
 import models.entity.game.Unit;
 import models.entity.game.Wave;
 
-import org.webbitserver.WebSocketConnection;
-
 public class PacketUtils {
 
-	public static PreloadDataPacket createPreloadDataPacket(final WebSocketConnection connection, final GameProcessor game) {
+	public static PreloadDataPacket createPreloadDataPacket(final GameProcessor game) {
 		if (game.getPreloadPacket() == null) {
 			java.util.Map<String, String> images = new HashMap<String, String>();
 			java.util.Map<String, String> textures = new HashMap<String, String>();
