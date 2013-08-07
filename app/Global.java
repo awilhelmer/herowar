@@ -48,7 +48,7 @@ public class Global extends GlobalSettings {
 				// new EnvironmentImporter().process();
 				// new TowerImporter().process();
 				// new UnitImporter().process();
-				createMaps();
+				// createMaps();
 				log.info("Herowar stated");
 			}
 		});
