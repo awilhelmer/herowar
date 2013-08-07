@@ -12,7 +12,7 @@ import com.ssachtleben.play.plugin.cron.annotations.StartJob;
  * @author Sebastian Sachtleben
  */
 @StartJob(async = true, active = false)
-public class EnvironmentImporter extends TreeImporter<Environment> {
+public class EnvironmentImporter extends EntityImporter<Environment> {
 
 	@Override
 	public String getBaseFolder() {

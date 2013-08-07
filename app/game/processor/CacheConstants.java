@@ -5,7 +5,7 @@ package game.processor;
  * 
  * @author Sebastian Sachtleben
  */
-public class CacheConstants {
+public abstract class CacheConstants {
 
 	public final static String KILLS = "kills";
 	public final static String GOLD = "gold";

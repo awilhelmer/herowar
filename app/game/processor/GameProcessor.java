@@ -46,6 +46,8 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 
 	private final static Logger.ALogger log = Logger.of(GameProcessor.class);
 
+	private GameData data;
+
 	private long gameId;
 	private long objectId = 0l;
 	private Match match;
@@ -92,8 +94,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	 */
 	private Set<TowerRestriction> towerRestrictions = Collections.synchronizedSet(new HashSet<TowerRestriction>());
 
+	/**
+	 * Creates new {@link GameProcessor} instance.
+	 * 
+	 * @param match
+	 */
 	public GameProcessor(Match match) {
 		super("match-" + match.getId());
+		this.data = new GameData(match);
 		this.gameId = match.getId();
 		this.match = match;
 		this.map = match.getMap();
@@ -102,31 +110,50 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		this.start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see game.processor.meta.AbstractProcessor#process()
+	 */
 	@Override
 	public void process() {
 		double delta = clock.delta();
 		long now = clock.currentTime();
-		try {
-			Iterator<IPlugin> iter = plugins.get(state).iterator();
-			while (iter.hasNext()) {
-				IPlugin plugin = iter.next();
-				plugin.process(delta, now);
+		synchronized (plugins) {
+			try {
+				Iterator<IPlugin> iter = plugins.get(state).iterator();
+				while (iter.hasNext()) {
+					IPlugin plugin = iter.next();
+					plugin.process(delta, now);
+				}
+				checkGameState();
+			} catch (Exception e) {
+				log.error("Unexpected Error during game process occured:", e);
+				log.error("Stopping " + this.toString());
+				shutdown();
 			}
-			checkGameState();
-		} catch (Exception e) {
-			log.error("Unexpected Error during game process occured:", e);
-			log.error("Stopping " + this.toString());
-			shutdown();
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see game.processor.meta.AbstractProcessor#getUpdateTimer()
+	 */
 	@Override
 	public int getUpdateTimer() {
 		return 150;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see game.processor.meta.AbstractProcessor#start()
+	 */
 	@Override
 	public void start() {
+		// Register dynamically new game state topic to fetch state change events. This is ugly at moment but there is no proper solution for
+		// this. We need to use the eventbus for game related communications.
 		try {
 			eventBinding = Events.instance().register(getTopicName(Topic.STATE), this, this.getClass().getMethod("updateState", State.class));
 		} catch (NoSuchMethodException | SecurityException e) {
@@ -136,8 +163,14 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 		super.start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see game.processor.meta.AbstractProcessor#stop()
+	 */
 	@Override
 	public void stop() {
+		// Unregister dynamically created event topic subscriber.
 		if (eventBinding != null) {
 			Events.instance().unregister(getTopicName(Topic.STATE), eventBinding);
 		}
@@ -146,7 +179,7 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	}
 
 	/**
-	 * Shutdown current {@link GameProcessor} thread.
+	 * Shutdown current {@link GameProcessor} thread. And close all running connections.
 	 */
 	private void shutdown() {
 		synchronized (connections) {
@@ -340,6 +373,10 @@ public class GameProcessor extends AbstractProcessor implements IProcessor {
 	}
 
 	// GETTER && SETTER //
+
+	public GameData data() {
+		return data;
+	}
 
 	public long getGameId() {
 		return gameId;

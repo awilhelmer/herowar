@@ -53,6 +53,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
     "com.ssachtleben" %% "play-auth-plugin" % "0.1-SNAPSHOT",
     "com.ssachtleben" %% "play-cron-plugin" % "0.1-SNAPSHOT",
     "com.ssachtleben" %% "play-event-plugin" % "0.1-SNAPSHOT",
+    "com.ssachtleben" %% "play-import-plugin" % "0.1-SNAPSHOT",
     "commons-beanutils" % "commons-beanutils" % "1.8.3",
     "mysql" % "mysql-connector-java" % "5.1.24",
     "postgresql" % "postgresql" % "9.1-901.jdbc4",

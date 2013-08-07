@@ -12,15 +12,11 @@ import com.ssachtleben.play.plugin.cron.annotations.StartJob;
  * @author Sebastian Sachtleben
  */
 @StartJob(async = true, active = false)
-public class TowerImporter extends FolderImporter<Tower> {
+public class TowerImporter extends EntityImporter<Tower> {
 
 	@Override
 	public String getBaseFolder() {
 		return "public" + File.separator + "geometries" + File.separator + "towers";
 	}
 
-	@Override
-	protected boolean accept(File file) {
-		return file.getName().toLowerCase().endsWith(".js");
-	}
 }
