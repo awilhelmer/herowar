@@ -83,7 +83,7 @@ public class Global extends GlobalSettings {
 	}
 
 	private void createDummyNews() {
-		if (!Play.application().isDev() || NewsDAO.getNewsCount() != 0) {
+		if (NewsDAO.getNewsCount() != 0) {
 			return;
 		}
 		log.info("Creating dummy news");
