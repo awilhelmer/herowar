@@ -1,4 +1,5 @@
-import game.Games;
+import com.herowar.game.Games;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
