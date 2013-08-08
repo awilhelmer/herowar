@@ -20,7 +20,9 @@ trait JavascriptTransformer {
     	val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
     	return nonJs ++ transformJs(classDirectory, js, cacheNumber)
     } catch {
-      case e: Exception => println("Exception during javascript transformation " + e.message)
+    	case r : java.lang.RuntimeException => println ("Runtime Exception: " + r.getStackTraceString)
+    	case e if (e.getMessage == null) => println ("Unknown exception occured")
+    	case e => println ("An unknown error has been caught:" + e.getMessage)
     }
     return original
   }
