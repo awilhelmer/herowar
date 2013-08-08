@@ -27,7 +27,7 @@ import dao.game.MapDAO;
  * 
  * @author Sebastian Sachtleben
  */
-@StartJob(async = true)
+@StartJob(async = true, active = false)
 @DependsOn(values = { ExampleDataImporter.class, EnvironmentImporter.class, TowerImporter.class, UnitImporter.class })
 public class ExampleMapImporter implements Job {
 	private static final Logger.ALogger log = Logger.of(ExampleMapImporter.class);
