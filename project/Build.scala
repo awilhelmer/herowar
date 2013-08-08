@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 import play.Project._
+import java.io.File
 import sbtbuildinfo.Plugin._
 import com.typesafe.sbteclipse.core.EclipsePlugin._
 
@@ -13,7 +14,7 @@ object ApplicationBuild extends Build with CustomAssetsCompiler with JavascriptT
 
   ////////// VARIABLES //////////
 
-  lazy val buildProperties = FileUtils.readProperties("project\\build.properties")
+  lazy val buildProperties = FileUtils.readProperties("project" + File.separator + "build.properties")
   val (appName, appVersion, handlebarsJS, buildMode) = (buildProperties.getProperty("appName"), buildProperties.getProperty("appVersion"), buildProperties.getProperty("handlebarsJS"), buildProperties.getProperty("buildMode"))
 
   ////////// DEPENDENCIES //////////

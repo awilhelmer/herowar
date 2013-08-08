@@ -1,4 +1,5 @@
 import sbt._
+import java.io.File
 import collection.mutable.Map
 
 /**
@@ -15,7 +16,7 @@ trait JavascriptFilter {
   }
 
   def filterResourceFolder(list: Seq[(java.io.File, java.io.File)], cacheNumber: String) = {
-    var (cutPath, distPath, vendorsContent) = ("javascripts\\vendors", "", Map[String, String]())
+    var (cutPath, distPath, vendorsContent) = ("javascripts" + File.separator + "vendors", "", Map[String, String]())
     for ((srcFile, destFile) <- list) {
       if (isSourceJsFile(destFile, cacheNumber)) {
         if (isVendorFile(destFile)) {
@@ -25,7 +26,7 @@ trait JavascriptFilter {
           }
           // TODO: This is ugly !!! End
           val relativePath = destFile.getAbsolutePath.substring(destFile.getAbsolutePath.indexOf(cutPath) + cutPath.length + 1)
-          val key = relativePath.substring(0, relativePath.indexOf("\\"))
+          val key = relativePath.substring(0, relativePath.indexOf(File.separator))
           vendorsContent.put(key, vendorsContent.get(key).getOrElse("") + FileUtils.fileToString(destFile, "UTF-8") + "\n")
         }
         if (!(destFile.delete))
@@ -41,12 +42,12 @@ trait JavascriptFilter {
 
   def isVendorFile(file: java.io.File): Boolean = {
     // TODO: we need application mode here !!!
-    file.getAbsolutePath.indexOf("javascripts\\vendors") != -1 && file.getAbsolutePath.indexOf(".min.") == -1
+    file.getAbsolutePath.indexOf("javascripts" + File.separator + "vendors") != -1 && file.getAbsolutePath.indexOf(".min.") == -1
   }
 
   def writeVendorsContent(path: String, content: Map[String, String], cacheNumber: String) = {
     for ((key, fileContent) <- content) {
-      val fileName = path.replace("\\vendors", "") + "\\" + key.substring(0, 1) + "v" + cacheNumber + ".js"
+      val fileName = path.replace("\\vendors", "") + File.separator + key.substring(0, 1) + "v" + cacheNumber + ".js"
       val file = new File(fileName)
       //TODO Bad expensive check ...
       if (!(file.exists)) {
