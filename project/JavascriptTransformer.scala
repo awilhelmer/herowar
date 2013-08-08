@@ -20,7 +20,7 @@ trait JavascriptTransformer {
     	val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
     	return nonJs ++ transformJs(classDirectory, js, cacheNumber)
     } catch {
-      case e: Exception => println("Exception during javascript transformation")
+      case e: Exception => println("Exception during javascript transformation " + e.message)
     }
     return original
   }
