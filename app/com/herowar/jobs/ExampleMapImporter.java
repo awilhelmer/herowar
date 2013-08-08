@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
@@ -21,13 +20,12 @@ import com.ssachtleben.play.plugin.cron.annotations.DependsOn;
 import com.ssachtleben.play.plugin.cron.annotations.StartJob;
 import com.ssachtleben.play.plugin.cron.jobs.Job;
 
-
 /**
  * Imports example maps.
  * 
  * @author Sebastian Sachtleben
  */
-@StartJob(async = true, active = false)
+@StartJob(async = true, active = true)
 @DependsOn(values = { ExampleDataImporter.class, EnvironmentImporter.class, TowerImporter.class, UnitImporter.class })
 public class ExampleMapImporter implements Job {
 	private static final Logger.ALogger log = Logger.of(ExampleMapImporter.class);

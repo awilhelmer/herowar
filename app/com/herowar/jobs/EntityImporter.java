@@ -15,7 +15,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.WordUtils;
@@ -31,7 +30,6 @@ import com.herowar.models.entity.game.Material;
 import com.herowar.util.JsonUtils;
 import com.ssachtleben.play.plugin.cron.jobs.Job;
 import com.ssachtleben.play.plugin.imports.PathImporter;
-
 
 /**
  * Provides important functions to import and update entity objects.
@@ -133,14 +131,16 @@ public abstract class EntityImporter<E extends Serializable> extends PathImporte
 	protected void saveEntity(E entity, E parent) {
 		try {
 			if (PropertyUtils.isReadable(entity, "children") && updateGeo) {
-				Collection<E> children = (Collection<E>) PropertyUtils.getProperty(parent, "children");
-				Object id = PropertyUtils.getProperty(entity, "id");
-				if (id != null && JPA.em().contains(entity)) {
-					entity = JPA.em().merge(entity);
-				} else if (JPA.em().contains(parent)) {
-					JPA.em().persist(entity);
+				if (parent != null) {
+					Collection<E> children = (Collection<E>) PropertyUtils.getProperty(parent, "children");
+					Object id = PropertyUtils.getProperty(entity, "id");
+					if (id != null && JPA.em().contains(entity)) {
+						entity = JPA.em().merge(entity);
+					} else if (JPA.em().contains(parent)) {
+						JPA.em().persist(entity);
+					}
+					children.add(entity);
 				}
-				children.add(entity);
 
 			} else if (!updateGeo) {
 				log().warn(String.format("Property children not found on class <%s>", entity.getClass()));
