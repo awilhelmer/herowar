@@ -1,8 +1,8 @@
 import sbt._
 import Keys._
-import java.io.File
 import play.Project._
 import collection.mutable.Map
+import java.io.File.{ separator => / }
 
 /**
  * JavascriptTransformer transforms javascript files and concat them to several big files.
@@ -28,7 +28,7 @@ trait JavascriptTransformer {
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
   // them to new files. The list of new files should be returned.
   def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
-    var (distPath, cutPath, content) = ("", "javascripts" + File.separator, Map[(String, String, String), String]())
+    var (distPath, cutPath, content) = ("", "javascripts" + /, Map[(String, String, String), String]())
     //content Map Keyorder: JS-Type, part of application, buildMode  
     jsFiles.map(f => {
       //TODO Check modifaction ...
@@ -89,7 +89,7 @@ trait JavascriptTransformer {
                 subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));                
               }
               if (subfolders.length > 0)
-                subfolders = subfolders.substring(1) + File.separator
+                subfolders = subfolders.substring(1) + /
               val functionName = subfolders.replaceAll("""\\""", "/") + f.getName().substring(0, f.getName().lastIndexOf("."))
               val mappedContent = mapContent(functionName, FileUtils.fileToString(f, "UTF-8"), preFixFunction);
               if (isModeFile(functionName)) {
@@ -143,7 +143,7 @@ trait JavascriptTransformer {
     val jsType = if (path.indexOf(templates_folder) == 0) templates_folder else if (path.indexOf(vendors_folder) == 0) vendors_folder else scripts_folder
     var key = "";
     if (jsType != "templates") {
-      key = path.substring(0, path.indexOf(File.separator))
+      key = path.substring(0, path.indexOf(/))
       if ((jsType == scripts_folder) && (key.indexOf(shared_folder) > -1)) {
         //Shared must be written into all areas
         result  :+= (jsType, "admin", ApplicationBuild.buildMode)
@@ -155,8 +155,8 @@ trait JavascriptTransformer {
         return result :+ (jsType, "game", ApplicationBuild.buildMode)
       }
     } else {
-      val tempPath = path.substring(path.indexOf(File.separator) + 1)
-      key = tempPath.substring(0, tempPath.indexOf(File.separator))
+      val tempPath = path.substring(path.indexOf(/) + 1)
+      key = tempPath.substring(0, tempPath.indexOf(/))
     }
     result :+ (jsType, key, ApplicationBuild.buildMode)
     

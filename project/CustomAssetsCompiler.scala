@@ -1,9 +1,11 @@
 import sbt._
 import Keys._
 import PlayKeys._
-import java.io.File
 import PlayExceptions._
 import play.api.PlayException
+
+import java.io.File
+import java.io.File.{ separator => / }
 
 /**
  * CustomAssetsCompiler handles assets which will not be covered by the custom build in PlayAssetsCompiler.
@@ -48,20 +50,20 @@ trait CustomAssetsCompiler {
               if (baseFolder ne null) {
                 val sourcePath = sourceFile.getAbsolutePath
                 val relativePath = sourcePath.substring(sourcePath.lastIndexOf(baseFolder) + baseFolder.length() + 1)
-                var foundLevel = relativePath.count(_ == File.separator)
+                var foundLevel = relativePath.count(_ == File.separatorChar)
                 if (foundLevel >= level) {
-                  val parentPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator))
+                  val parentPath = sourcePath.substring(0, sourcePath.lastIndexOf(/))
                   // state.log.info("Concat this folder: " + parentPath)
                   // concatFolders += new File(parentPath)
                 }
                 // state.log.info(relativePath + " - found level: " + foundLevel)
               }
               val (debug, min, dependencies) = compile(sourceFile, options)
-              val out = new File(resources, "public" + File.separator + naming(name, false))
-              val outMin = new File(resources, "public" + File.separator + naming(name, true))
+              val out = new File(resources, "public" + / + naming(name, false))
+              val outMin = new File(resources, "public" + / + naming(name, true))
               IO.write(out, debug)
               (dependencies ++ Seq(sourceFile)).toSet[File].map(_ -> out) ++ min.map { minified =>
-                val outMin = new File(resources, "public" + File.separator + naming(name, true))
+                val outMin = new File(resources, "public" + / + naming(name, true))
                 IO.write(outMin, minified)
                 (dependencies ++ Seq(sourceFile)).map(_ -> outMin)
               }.getOrElse(Nil)
@@ -87,7 +89,7 @@ trait CustomAssetsCompiler {
   def HandlebarsCompiler(handlebars: String) = {
     val compiler = new HandlebarsCompiler(handlebars);
     AdvancedAssetsCompiler("handlebars", "templates", 1, (_ ** "*.tmpl"), handlebarsEntryPoints,
-      { (name, min) => "javascripts" + File.separator + name + (if (min) ".min.js" else ".js") },
+      { (name, min) => "javascripts" + / + name + (if (min) ".min.js" else ".js") },
       { (file, options) =>
          val (jsSource, dependencies) = compiler.compileDir(file, options)
         (jsSource, None, dependencies)
