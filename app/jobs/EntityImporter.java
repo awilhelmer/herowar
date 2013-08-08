@@ -1,6 +1,7 @@
 package jobs;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import play.db.jpa.JPA;
 import util.JsonUtils;
 
+import com.ssachtleben.play.plugin.cron.jobs.Job;
 import com.ssachtleben.play.plugin.imports.PathImporter;
 
 import dao.game.GeometryDAO;
@@ -39,7 +41,7 @@ import dao.game.MaterialDAO;
  * @param <E>
  *          The entity to import.
  */
-public abstract class EntityImporter<E extends Serializable> extends PathImporter<E> {
+public abstract class EntityImporter<E extends Serializable> extends PathImporter<E> implements Job {
 
 	private static ObjectMapper mapper = new ObjectMapper();
 	private Class<E> clazz;
@@ -52,6 +54,44 @@ public abstract class EntityImporter<E extends Serializable> extends PathImporte
 		super();
 		this.clazz = getTypeParameterClass();
 		BeanUtilsBean.setInstance(new BeanUtilsBean(new EnumAwareConvertUtilsBean()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				log().info("Starting synchronize between folder and database");
+				process();
+				log().info("Finish synchronize between folder and database");
+			}
+		});
+	}
+
+	protected void readDirectory(File folder, E parent, boolean recursive) {
+		try {
+			for (File file : folder.listFiles(new JsFileFilter())) {
+				E entity = createEntry(file, parent);
+				updateGeo = false;
+				if (file.isDirectory() && recursive) {
+					log().info("Found directory: " + file.getAbsolutePath());
+					readDirectory(file, entity, recursive);
+					updateGeo = true;
+				} else {
+					log().info("Found geometry: " + file.getAbsolutePath());
+					updateEntity(file, entity);
+				}
+				saveEntity(entity, parent);
+			}
+
+		} catch (Exception e) {
+			log().error("", e);
+		}
 	}
 
 	protected void updateEntity(File file, E model) {
@@ -200,5 +240,19 @@ public abstract class EntityImporter<E extends Serializable> extends PathImporte
 	@Override
 	protected boolean accept(File file) {
 		return file.getName().toLowerCase().endsWith(".js");
+	}
+
+	/**
+	 * The JsFileFilter filters for js files.
+	 * 
+	 * @author Sebastian Sachtleben
+	 */
+	public class JsFileFilter implements FileFilter {
+
+		@Override
+		public boolean accept(File pathname) {
+			return EntityImporter.this.accept(pathname);
+		}
+
 	}
 }
