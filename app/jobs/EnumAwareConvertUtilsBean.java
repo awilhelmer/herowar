@@ -1,4 +1,4 @@
-package importer;
+package jobs;
 
 import org.apache.commons.beanutils.ConvertUtilsBean2;
 import org.apache.commons.beanutils.Converter;

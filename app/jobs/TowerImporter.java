@@ -1,4 +1,4 @@
-package importer;
+package jobs;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ import com.ssachtleben.play.plugin.cron.annotations.StartJob;
  * 
  * @author Sebastian Sachtleben
  */
-@StartJob(async = true, active = false)
+@StartJob(async = true, active = true)
 public class TowerImporter extends EntityImporter<Tower> {
 
 	@Override
