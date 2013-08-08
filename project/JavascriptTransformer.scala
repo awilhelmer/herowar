@@ -39,7 +39,6 @@ trait JavascriptTransformer {
         distPath = f.getAbsolutePath.substring(0, f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
       }
       val relativePath = f.getAbsolutePath.substring(f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
-      println("Found file: " + relativePath)
       relativePath match {
         case "loader.js" | "loader.min.js" => {
           //Loader is static and shouldnt change
