@@ -141,7 +141,6 @@ public abstract class EntityImporter<E extends Serializable> extends PathImporte
 					}
 					children.add(entity);
 				}
-
 			} else if (!updateGeo) {
 				log().warn(String.format("Property children not found on class <%s>", entity.getClass()));
 			}

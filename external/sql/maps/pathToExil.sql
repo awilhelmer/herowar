@@ -95,13 +95,13 @@ INSERT INTO map (id, cdate, udate, version, description, goldPerTick, goldStart,
 	(102,now(), now(), 3, '', 0, 600, 20, 'Path of Evil', 500, null, 1, 102, null);
 
 INSERT INTO map_towers (Map_id, towers_id) 
-	(select 102, t.id from tower t where t.name = "Laser Tower");
+	(select 102, t.id from tower t where t.name = 'Laser Tower');
 INSERT INTO map_towers (Map_id, towers_id) 
-	(select 102, t.id from tower t where t.name = "Rocket Tower");
+	(select 102, t.id from tower t where t.name = 'Rocket Tower');
 INSERT INTO map_towers (Map_id, towers_id) 
-	(select 102, t.id from tower t where t.name = "Fire Tower");
+	(select 102, t.id from tower t where t.name = 'Fire Tower');
 INSERT INTO map_towers (Map_id, towers_id) 
-	(select 102, t.id from tower t where t.name = "Tesla Tower");
+	(select 102, t.id from tower t where t.name = 'Tesla Tower');
 	
 INSERT INTO map_materials (Map_id, allMaterials_id) VALUES (102, 105);
 INSERT INTO map_materials (Map_id, allMaterials_id) VALUES (102, 106);
@@ -148,22 +148,22 @@ INSERT INTO wave (id, name, prepareTime, quantity, waveTime, map_id, path_id, so
 	(10, 'Wave-10', 5,  1,  2, 102, 3, 9, 'y', 'y');
 
 INSERT INTO wave_units (Wave_id, units_id)
-(select  1, u.id from unit u where u.name = "Ratamahatta");
+(select  1, u.id from unit u where u.name = 'Ratamahatta');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  2, u.id from unit u where u.name = "Triax-wheels");
+(select  2, u.id from unit u where u.name = 'Triax-wheels');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  3, u.id from unit u where u.name = "Ratamahatta");
+(select  3, u.id from unit u where u.name = 'Ratamahatta');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  4, u.id from unit u where u.name = "Spaceship-1-v1");
+(select  4, u.id from unit u where u.name = 'Spaceship-1-v1');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  5, u.id from unit u where u.name = "Ratamahatta");
+(select  5, u.id from unit u where u.name = 'Ratamahatta');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  6, u.id from unit u where u.name = "Ratamahatta");
+(select  6, u.id from unit u where u.name = 'Ratamahatta');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  7, u.id from unit u where u.name = "Triax-wheels");
+(select  7, u.id from unit u where u.name = 'Triax-wheels');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  8, u.id from unit u where u.name = "Ratamahatta");
+(select  8, u.id from unit u where u.name = 'Ratamahatta');
 INSERT INTO wave_units (Wave_id, units_id)
-(select  9, u.id from unit u where u.name = "Spaceship-1-v1");
+(select  9, u.id from unit u where u.name = 'Spaceship-1-v1');
 INSERT INTO wave_units (Wave_id, units_id)
-(select 10, u.id from unit u where u.name = "Triax-hover");
+(select 10, u.id from unit u where u.name = 'Triax-hover');
