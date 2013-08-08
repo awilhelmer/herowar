@@ -31,13 +31,15 @@ trait JavascriptTransformer {
   // them to new files. The list of new files should be returned.
   def transformJs(classDirectory: java.io.File, jsFiles: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
     var (distPath, cutPath, content) = ("", "javascripts" + /, Map[(String, String, String), String]())
-    //content Map Keyorder: JS-Type, part of application, buildMode  
-    jsFiles.map(f => {
+    //content Map Keyorder: JS-Type, part of application, buildMode
+    val jsFilesSorted = jsFiles.sortWith(_.getAbsolutePath < _.getAbsolutePath)
+    jsFilesSorted.map(f => {
       //TODO Check modifaction ...
       if (distPath == "") {
         distPath = f.getAbsolutePath.substring(0, f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
       }
       val relativePath = f.getAbsolutePath.substring(f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
+      println("Found file: " + relativePath)
       relativePath match {
         case "loader.js" | "loader.min.js" => {
           //Loader is static and shouldnt change
@@ -56,13 +58,9 @@ trait JavascriptTransformer {
       }
 
     })
-    jsFiles.map(f => {
+    jsFilesSorted.map(f => {
       //TODO: getting Path of actual Module from Build Task ?  
       val relativePath = f.getAbsolutePath.substring(f.getAbsolutePath.indexOf(cutPath) + cutPath.length)
-
-      // TODO: This is ugly !!! Start --Problem worng distPath
-
-      // TODO: This is ugly !!! End
 
       // Match relative path and save content
       relativePath match {
