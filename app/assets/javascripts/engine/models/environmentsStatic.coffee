@@ -1,3 +1,0 @@
-class EnvironmentsStatic extends Backbone.Collection
-
-return EnvironmentsStatic

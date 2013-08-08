@@ -15,8 +15,13 @@ trait JavascriptTransformer {
   // This takes the raw resources, which are the .css files and  the .js files from coffeescript and handlebars.  It separates
   //  the .js files from the .css files and transforms just the .js files.
   def transformResources(classDirectory: java.io.File, original: Seq[java.io.File], cacheNumber: String): Seq[java.io.File] = {
-    val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
-    nonJs ++ transformJs(classDirectory, js, cacheNumber)
+    try {
+    	val (js, nonJs) = original.partition(_.getName.endsWith(".js"))
+    	return nonJs ++ transformJs(classDirectory, js, cacheNumber)
+    } catch {
+      case e: Exception => println("Exception during javascript transformation")
+    }
+    return original
   }
 
   // This takes the list of all .js files.  It should transform them into new files, such as by concatenating them and writing 
