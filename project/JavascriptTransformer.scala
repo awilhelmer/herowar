@@ -84,11 +84,11 @@ trait JavascriptTransformer {
             if (!(FileCacheHandler.unchangedModules.contains(mapKey))) {
               var subfolders = ""
               if (relativePath.indexOf(shared_folder) > -1) {
-                subfolders = relativePath.substring(relativePath.indexOf(shared_folder) + shared_folder.length, relativePath.lastIndexOf('\\'));          
+                subfolders = relativePath.substring(relativePath.indexOf(shared_folder) + shared_folder.length, relativePath.lastIndexOf(/));          
               } else if (relativePath.indexOf(engine_folder) > -1) { 
-                subfolders = relativePath.substring(relativePath.indexOf(engine_folder) + engine_folder.length, relativePath.lastIndexOf('\\')); 
+                subfolders = relativePath.substring(relativePath.indexOf(engine_folder) + engine_folder.length, relativePath.lastIndexOf(/)); 
               } else {
-                subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf('\\'));                
+                subfolders = relativePath.substring(relativePath.indexOf(mapKey._2) + mapKey._2.length(), relativePath.lastIndexOf(/));                
               }
               if (subfolders.length > 0)
                 subfolders = subfolders.substring(1) + /
