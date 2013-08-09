@@ -195,6 +195,9 @@ public abstract class EntityImporter<E extends Serializable> extends PathImporte
 				log().error("", e);
 			}
 		}
+		if (!JPA.em().contains(entry)) {
+			JPA.em().persist(entry);
+		}
 		return entry;
 	}
 
