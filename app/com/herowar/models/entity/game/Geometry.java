@@ -27,11 +27,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.herowar.dao.game.GeoMatId;
-import com.herowar.game.json.GeometryDeserializer;
-import com.herowar.game.json.GeometrySerializer;
-import com.herowar.game.json.StringArray;
-import com.herowar.game.json.StringArray.ArrayType;
+import com.herowar.dao.GeoMatId;
+import com.herowar.json.GeometryDeserializer;
+import com.herowar.json.GeometrySerializer;
+import com.herowar.json.StringArray;
+import com.herowar.json.StringArray.ArrayType;
 import com.herowar.models.entity.BaseModel;
 
 

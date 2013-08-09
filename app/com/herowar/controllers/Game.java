@@ -3,8 +3,8 @@ package com.herowar.controllers;
 
 import org.codehaus.jackson.JsonNode;
 
-import com.herowar.game.network.Connection;
 import com.herowar.models.entity.User;
+import com.herowar.network.Connection;
 
 import play.Logger;
 import play.db.jpa.JPA;

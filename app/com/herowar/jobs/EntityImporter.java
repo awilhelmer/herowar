@@ -23,8 +23,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import play.db.jpa.JPA;
 
-import com.herowar.dao.game.GeometryDAO;
-import com.herowar.dao.game.MaterialDAO;
+import com.herowar.dao.GeometryDAO;
+import com.herowar.dao.MaterialDAO;
 import com.herowar.models.entity.game.Geometry;
 import com.herowar.models.entity.game.Material;
 import com.herowar.util.JsonUtils;

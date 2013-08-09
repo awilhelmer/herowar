@@ -18,7 +18,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.Hibernate;
 
-import com.herowar.game.json.JsonFieldName;
+import com.herowar.json.JsonFieldName;
 import com.herowar.models.entity.game.Vector3;
 
 import play.Logger;

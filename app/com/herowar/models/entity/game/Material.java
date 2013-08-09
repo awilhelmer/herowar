@@ -24,10 +24,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-import com.herowar.game.json.JsonFieldName;
-import com.herowar.game.json.MaterialDeserializer;
-import com.herowar.game.json.StringArray;
-import com.herowar.game.json.StringArray.ArrayType;
+import com.herowar.json.JsonFieldName;
+import com.herowar.json.MaterialDeserializer;
+import com.herowar.json.StringArray;
+import com.herowar.json.StringArray.ArrayType;
 
 /**
  * The mesh materials for the game models.

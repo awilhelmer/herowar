@@ -4,7 +4,6 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-import com.herowar.controllers.api.Me;
 import com.herowar.service.AuthService;
 import com.ssachtleben.play.plugin.auth.Auth;
 import com.ssachtleben.play.plugin.auth.Providers;

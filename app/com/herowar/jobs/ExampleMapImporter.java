@@ -14,7 +14,7 @@ import play.Logger;
 import play.Play;
 import play.db.jpa.JPA;
 
-import com.herowar.dao.game.MapDAO;
+import com.herowar.dao.MapDAO;
 import com.herowar.models.entity.game.Map;
 import com.ssachtleben.play.plugin.cron.annotations.DependsOn;
 import com.ssachtleben.play.plugin.cron.annotations.StartJob;
