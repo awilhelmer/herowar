@@ -11,7 +11,7 @@ import java.io.File.{ separator => / }
 trait JavascriptFilter {
 
   def filterResources(list1: Seq[(java.io.File, java.io.File)], list2: Seq[(java.io.File, java.io.File)], cacheNumber: String): Seq[(java.io.File, java.io.File)] = {
-    filterResourceFolder(list1 ++ list2, cacheNumber)
+    filterResourceFolder((list1 ++ list2).sortWith(_._1.getAbsolutePath < _._1.getAbsolutePath), cacheNumber)
     Seq.empty[(java.io.File, java.io.File)]
   }
 
